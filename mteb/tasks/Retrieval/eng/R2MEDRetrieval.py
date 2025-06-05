@@ -5,58 +5,39 @@ from collections import defaultdict
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-
-DOMAINS = [
-    "Biology",
-    "Bioinformatics",
-    "Medical-Sciences",
-    "MedXpertQA-Exam",
-    'MedQA-Diag',
-    "PMC-Treatment",
-    "PMC-Clinical",
-    "IIYi-Clinical",
-]
-
-DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
 
 def load_r2med_data(
     path: str,
-    domains: list,
     eval_splits: list,
     cache_dir: str,
     revision: str,
 ):
-    corpus = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
-    queries = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
-    relevant_docs = {
-        domain: {split: None for split in eval_splits} for domain in DOMAINS
+    eval_split = eval_splits[0]
+    corpus = {eval_split: None}
+    queries = {eval_split: None}
+    relevant_docs = {eval_split: None}
+    domain_corpus = datasets.load_dataset(
+        path, name="corpus", split="corpus", cache_dir=cache_dir, revision=revision
+    )
+    domain_queries = datasets.load_dataset(
+        path, name="query", split="query", cache_dir=cache_dir, revision=revision
+    )
+    domain_qrels = datasets.load_dataset(
+        path, name="qrels", split="qrels", cache_dir=cache_dir, revision=revision
+    )
+    corpus[eval_split] = {
+        e["id"]: {"text": e["text"]} for e in domain_corpus
     }
-
-    for domain in domains:
-        domain_corpus = datasets.load_dataset(
-            path, name=domain+"-corpus", split="corpus", cache_dir=cache_dir, revision=revision
-        )
-        domain_queries = datasets.load_dataset(
-            path, name=domain+"-query", split="query", cache_dir=cache_dir, revision=revision
-        )
-        domain_qrels = datasets.load_dataset(
-            path, name=domain+"-qrels", split="qrels", cache_dir=cache_dir, revision=revision
-        )
-        corpus[domain]["test"] = {
-            e["id"]: {"text": e["text"]} for e in domain_corpus
-        }
-        queries[domain]["test"] = {
-            e["id"]: e["text"] for e in domain_queries
-        }
-        relevant_docs[domain]["test"] = defaultdict(dict)
-        for e in domain_qrels:
-            qid = e["q_id"]
-            pid = e["p_id"]
-            relevant_docs[domain]["test"][qid][pid] = int(e["score"])
+    queries[eval_split] = {
+        e["id"]: e["text"] for e in domain_queries
+    }
+    relevant_docs[eval_split] = defaultdict(dict)
+    for e in domain_qrels:
+        qid = e["q_id"]
+        pid = e["p_id"]
+        relevant_docs[eval_split][qid][pid] = int(e["score"])
 
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
@@ -64,28 +45,26 @@ def load_r2med_data(
     return corpus, queries, relevant_docs
 
 
-
-
-class R2MEDRetrieval(MultilingualTask, AbsTaskRetrieval):
+class BiologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="R2MEDRetrieval",
+        name="BiologyRetrieval",
         dataset={
-            "path": "R2MED/R2MED",
-            "revision": "f7cf8ddcc9e5a9c971fa71d7582fab41611c8972",
+            "path": "R2MED/Biology",
+            "revision": "8b9fec2db9eda4b5742d03732213fbaee8169556",
         },
-        reference="https://huggingface.co/R2MED/R2MED",
-        description="R2MED retrieval dataset.",
+        reference="https://huggingface.co/R2MED/Biology",
+        description="Biology retrieval dataset.",
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=DOMAINS_langs,
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         domains=["Medical", "Written"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="found",
+        sample_creation=None,
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -96,14 +75,314 @@ class R2MEDRetrieval(MultilingualTask, AbsTaskRetrieval):
 }
 """,
     )
-    
+
     def load_data(self, **kwargs):
         if self.data_loaded:
-        return
+            return
 
-        self.corpus, self.queries, self.relevant_docs = self.load_r2med_data(
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
-            domains=DOMAINS,
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class BioinformaticsRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="BioinformaticsRetrieval",
+        dataset={
+            "path": "R2MED/Bioinformatics",
+            "revision": "6021fce366892cbfd7837fa85a4128ea93315e18",
+        },
+        reference="https://huggingface.co/R2MED/Bioinformatics",
+        description="Bioinformatics retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class MedicalSciencesRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MedicalSciencesRetrieval",
+        dataset={
+            "path": "R2MED/Medical-Sciences",
+            "revision": "7f11654e9aed0c6fa99784641c8880f87ad62930",
+        },
+        reference="https://huggingface.co/R2MED/Medical-Sciences",
+        description="Medical-Sciences retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class MedXpertQAExamRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MedXpertQAExamRetrieval",
+        dataset={
+            "path": "R2MED/MedXpertQA-Exam",
+            "revision": "b457ea43db9ae5db74c3a3e5be0a213d0f85ac3a",
+        },
+        reference="https://huggingface.co/R2MED/MedXpertQA-Exam",
+        description="MedXpertQA-Exam retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class MedQADiagRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MedQADiagRetrieval",
+        dataset={
+            "path": "R2MED/MedQA-Diag",
+            "revision": "78b585990279cc01a493f876c1b0cf09557fba57",
+        },
+        reference="https://huggingface.co/R2MED/MedQA-Diag",
+        description="MedQA-Diag retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class PMCTreatmentRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="PMCTreatmentRetrieval",
+        dataset={
+            "path": "R2MED/PMC-Treatment",
+            "revision": "53c489a44a3664ba352c07550b72b4525a5968d5",
+        },
+        reference="https://huggingface.co/R2MED/PMC-Treatment",
+        description="PMC-Treatment retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class PMCClinicalRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="PMCClinicalRetrieval",
+        dataset={
+            "path": "R2MED/PMC-Clinical",
+            "revision": "812829522f7eaa407ef82b96717be85788a50f7e",
+        },
+        reference="https://huggingface.co/R2MED/PMC-Clinical",
+        description="PMC-Clinical retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
+
+class IIYiClinicalRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="IIYiClinicalRetrieval",
+        dataset={
+            "path": "R2MED/IIYi-Clinical",
+            "revision": "974abbc9bc281c3169180a6aa5d7586cfd2f5877",
+        },
+        reference="https://huggingface.co/R2MED/IIYi-Clinical",
+        description="IIYi-Clinical retrieval dataset.",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        domains=["Medical", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation=None,
+        modalities=["text"],
+        bibtex_citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
+            path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
