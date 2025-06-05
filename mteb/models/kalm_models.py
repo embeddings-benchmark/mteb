@@ -87,7 +87,7 @@ kalm_training_data = {
     "MTOPIntentClassification": ["train"],
 }
 
-HIT_TMG__KaLM_embedding_multilingual_max_instruct_v1_5 = ModelMeta(
+KaLM-Team__KaLM_Embedding_X_0605 = ModelMeta(
     loader=partial(
         InstructSentenceTransformerWrapper,
         model_name_or_path="KaLM-Team/KaLM-Embedding-X-0605",
