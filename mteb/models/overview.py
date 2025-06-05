@@ -12,7 +12,6 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
-    xyz_models,
     align_models,
     ara_models,
     arctic_models,
@@ -90,6 +89,7 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
+    xyz_models,
 )
 
 logger = logging.getLogger(__name__)
