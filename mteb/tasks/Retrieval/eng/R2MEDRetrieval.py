@@ -45,9 +45,9 @@ def load_r2med_data(
     return corpus, queries, relevant_docs
 
 
-class BiologyRetrieval(AbsTaskRetrieval):
+class R2MEDBiologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BiologyRetrieval",
+        name="R2MEDBiologyRetrieval",
         dataset={
             "path": "R2MED/Biology",
             "revision": "8b9fec2db9eda4b5742d03732213fbaee8169556",
@@ -59,12 +59,12 @@ class BiologyRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -88,9 +88,9 @@ class BiologyRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class BioinformaticsRetrieval(AbsTaskRetrieval):
+class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BioinformaticsRetrieval",
+        name="R2MEDBioinformaticsRetrieval",
         dataset={
             "path": "R2MED/Bioinformatics",
             "revision": "6021fce366892cbfd7837fa85a4128ea93315e18",
@@ -102,12 +102,12 @@ class BioinformaticsRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -131,9 +131,9 @@ class BioinformaticsRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class MedicalSciencesRetrieval(AbsTaskRetrieval):
+class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MedicalSciencesRetrieval",
+        name="R2MEDMedicalSciencesRetrieval",
         dataset={
             "path": "R2MED/Medical-Sciences",
             "revision": "7f11654e9aed0c6fa99784641c8880f87ad62930",
@@ -145,12 +145,12 @@ class MedicalSciencesRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -174,9 +174,9 @@ class MedicalSciencesRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class MedXpertQAExamRetrieval(AbsTaskRetrieval):
+class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MedXpertQAExamRetrieval",
+        name="R2MEDMedXpertQAExamRetrieval",
         dataset={
             "path": "R2MED/MedXpertQA-Exam",
             "revision": "b457ea43db9ae5db74c3a3e5be0a213d0f85ac3a",
@@ -188,12 +188,12 @@ class MedXpertQAExamRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -217,9 +217,9 @@ class MedXpertQAExamRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class MedQADiagRetrieval(AbsTaskRetrieval):
+class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MedQADiagRetrieval",
+        name="R2MEDMedQADiagRetrieval",
         dataset={
             "path": "R2MED/MedQA-Diag",
             "revision": "78b585990279cc01a493f876c1b0cf09557fba57",
@@ -231,12 +231,12 @@ class MedQADiagRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -260,9 +260,9 @@ class MedQADiagRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class PMCTreatmentRetrieval(AbsTaskRetrieval):
+class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="PMCTreatmentRetrieval",
+        name="R2MEDPMCTreatmentRetrieval",
         dataset={
             "path": "R2MED/PMC-Treatment",
             "revision": "53c489a44a3664ba352c07550b72b4525a5968d5",
@@ -274,12 +274,12 @@ class PMCTreatmentRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -303,9 +303,9 @@ class PMCTreatmentRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class PMCClinicalRetrieval(AbsTaskRetrieval):
+class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="PMCClinicalRetrieval",
+        name="R2MEDPMCClinicalRetrieval",
         dataset={
             "path": "R2MED/PMC-Clinical",
             "revision": "812829522f7eaa407ef82b96717be85788a50f7e",
@@ -317,12 +317,12 @@ class PMCClinicalRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
@@ -346,9 +346,9 @@ class PMCClinicalRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
-class IIYiClinicalRetrieval(AbsTaskRetrieval):
+class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="IIYiClinicalRetrieval",
+        name="R2MEDIIYiClinicalRetrieval",
         dataset={
             "path": "R2MED/IIYi-Clinical",
             "revision": "974abbc9bc281c3169180a6aa5d7586cfd2f5877",
@@ -360,12 +360,12 @@ class IIYiClinicalRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        domains=["Medical", "Written"],
+        domains=["Medical"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
 @article{li2025r2med,
