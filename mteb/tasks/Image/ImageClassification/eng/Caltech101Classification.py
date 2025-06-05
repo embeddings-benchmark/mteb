@@ -15,7 +15,7 @@ class Caltech101Classification(AbsTaskAnyClassification):
         reference="https://ieeexplore.ieee.org/document/1384978",
         dataset={
             "path": "mteb/Caltech101",
-            "revision": "52439cf6d4f6ebf563d8cdc7f2c5371d9efd2686",
+            "revision": "20a80c5a6993dce5c2a5c3135f96c625477b34a2",
         },
         type="ImageClassification",
         category="i2c",
