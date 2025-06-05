@@ -19,7 +19,10 @@ import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.custom_validators import MODALITIES
-from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
+from mteb.leaderboard.benchmark_selector import (
+    BENCHMARK_ENTRIES,
+    make_selector,
+)
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
@@ -276,7 +279,6 @@ def get_leaderboard_app() -> gr.Blocks:
             visible=True,
             width="18%",
         ):
-            gr.Markdown("## Select Benchmark")
             benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
         gr.Markdown(
             """
