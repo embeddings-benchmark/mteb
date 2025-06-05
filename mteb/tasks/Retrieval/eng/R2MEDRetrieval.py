@@ -27,12 +27,8 @@ def load_r2med_data(
     domain_qrels = datasets.load_dataset(
         path, name="qrels", split="qrels", cache_dir=cache_dir, revision=revision
     )
-    corpus[eval_split] = {
-        e["id"]: {"text": e["text"]} for e in domain_corpus
-    }
-    queries[eval_split] = {
-        e["id"]: e["text"] for e in domain_queries
-    }
+    corpus[eval_split] = {e["id"]: {"text": e["text"]} for e in domain_corpus}
+    queries[eval_split] = {e["id"]: e["text"] for e in domain_queries}
     relevant_docs[eval_split] = defaultdict(dict)
     for e in domain_qrels:
         qid = e["q_id"]
@@ -88,6 +84,7 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
+
 class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDBioinformaticsRetrieval",
@@ -130,6 +127,7 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
+
 
 class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -174,6 +172,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
+
 class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDMedXpertQAExamRetrieval",
@@ -216,6 +215,7 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
+
 
 class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -260,6 +260,7 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
+
 class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDPMCTreatmentRetrieval",
@@ -303,6 +304,7 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         )
         self.data_loaded = True
 
+
 class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDPMCClinicalRetrieval",
@@ -345,6 +347,7 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
+
 
 class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
