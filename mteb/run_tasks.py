@@ -228,7 +228,7 @@ def run_tasks(
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
     if isinstance(model, (SentenceTransformer, CrossEncoder)):
-        model = SentenceTransformerWrapper(model) # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
+        model = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
     model = cast(Encoder, model)
 
     existing_results = None
@@ -244,7 +244,7 @@ def run_tasks(
     ):
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
-        missing_eval = {split: task.hf_subsets for split in task.eval_splits}
+        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
 
     if existing_results and not missing_eval and overwrite_strategy != "always":
         # if there are no missing evals we can just return the results

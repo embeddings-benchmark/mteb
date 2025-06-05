@@ -632,7 +632,10 @@ class TaskResult(BaseModel):
     def merge(
         self,
         new_results: TaskResult,
-        criteria: list[Literal["mteb_version", "dataset_revision"]] = ["mteb_version", "dataset_revision"],
+        criteria: list[Literal["mteb_version", "dataset_revision"]] = [
+            "mteb_version",
+            "dataset_revision",
+        ],
     ) -> TaskResult:
         """Merges two TaskResult objects.
 
