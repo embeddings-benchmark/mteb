@@ -12,6 +12,7 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    xyz_models,
     align_models,
     ara_models,
     arctic_models,
@@ -93,6 +94,7 @@ from mteb.models import (
 logger = logging.getLogger(__name__)
 
 model_modules = [
+    xyz_models,
     align_models,
     arctic_models,
     bedrock_models,
