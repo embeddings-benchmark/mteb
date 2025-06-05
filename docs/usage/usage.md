@@ -53,7 +53,7 @@ The fastest way to speed up downloads is by using Huggingface's [`xet`](https://
 pip install mteb[xet]
 ```
 
-When experimenting with this feature, we have seen notable speedups, especially for larger datasets. It took to download `MrTidyRetrieval` (weights 15gb) around 40 minutes, while using `xet` it took around 30 minutes.
+For one of the larger datasets, `MrTidyRetrieval` (~15 GB), we have seen speed-ups from ~40 minutes to ~30 minutes while using `xet`.
 
 ### Evaluating on Different Modalities
 MTEB is not only text evaluating, but also allow you to evaluate image and image-text embeddings.
