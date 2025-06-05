@@ -594,7 +594,7 @@ giga_embeddings = ModelMeta(
         model_name="ai-sage/Giga-Embeddings-instruct",
         revision="40b27667b9ad586d7812675df76e5062ccc80b0e",
         trust_remote_code=True,
-        instruction_template="{instruction} \nquery: ",
+        instruction_template="{instruction}\nquery: ",
         apply_instruction_to_passages=False,
         model_kwargs={
             "torch_dtype": torch.bfloat16,
@@ -612,7 +612,7 @@ giga_embeddings = ModelMeta(
     max_tokens=4096,
     reference="https://huggingface.co/ai-sage/Giga-Embeddings-instruct",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "Transformers", "PyTorch"],
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
