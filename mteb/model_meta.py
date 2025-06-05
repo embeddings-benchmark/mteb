@@ -36,6 +36,7 @@ FRAMEWORKS = Literal[
     "NumPy",
     "PyLate",
     "ColBERT",
+    "ColPali",
 ]
 
 
