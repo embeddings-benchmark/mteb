@@ -87,26 +87,21 @@ kalm_training_data = {
     "MTOPIntentClassification": ["train"],
 }
 
-KaLM-Team__KaLM_Embedding_X_0605 = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name_or_path="KaLM-Team/KaLM-Embedding-X-0605",
-        model_prompts=MODEL_PROMPTS,
-        max_seq_length=512,
-    ),
+KaLM_Embedding_X_0605 = ModelMeta(
     name="KaLM-Team/KaLM-Embedding-X-0605",
+    loader=None,
     languages=None,
     open_weights=False,
     revision="1",
     release_date="2025-06-05",
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=4096,
+    n_parameters=9.24 * 1e9,
+    memory_usage_mb=35254,
+    max_tokens=8192,
+    embed_dim=3584,
     license=None,
     reference="https://github.com/KaLM-Team/KaLM-Embedding-X",
     similarity_fn_name="cosine",
-    framework=["PyTorch"],
+    framework=["Sentence Transformers","PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/HITsz-TMG/KaLM-Embedding",
     public_training_data=None,
