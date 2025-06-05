@@ -13,7 +13,7 @@ class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://ieeexplore.ieee.org/document/1384978",
         dataset={
             "path": "mteb/Caltech101",
-            "revision": "20a80c5a6993dce5c2a5c3135f96c625477b34a2",
+            "revision": "011e51e5fb01f0c820824734edb7a539ab8e6650",
         },
         type="ZeroShotClassification",
         category="i2t",
