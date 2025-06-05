@@ -44,11 +44,7 @@ class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2004},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 6084},
-            "avg_character_length": {"test": 431.4},
-        },
-    )
+
 
     def get_candidate_labels(self) -> list[str]:
         return [
