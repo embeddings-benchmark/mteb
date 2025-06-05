@@ -2002,7 +2002,19 @@ VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
 
 R2MED = Benchmark(
     name="R2MED",
-    tasks=get_tasks(tasks=["R2MEDRetrieval"], eval_splits=["test"]),
+    display_name="Reasoning-driven medical retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "BiologyRetrieval",
+            "BioinformaticsRetrieval",
+            "MedicalSciencesRetrieval",
+            "MedXpertQAExamRetrieval",
+            'MedQADiagRetrieval',
+            "PMCTreatmentRetrieval",
+            "PMCClinicalRetrieval",
+            "IIYiClinicalRetrieval",
+        ]
+    ),
     description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
     R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios. 
     It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
