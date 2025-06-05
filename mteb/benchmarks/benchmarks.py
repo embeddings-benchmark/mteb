@@ -2022,10 +2022,10 @@ R2MED = Benchmark(
     reference="https://r2med.github.io/",
     citation=r"""
 @article{li2025r2med,
-  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal={arXiv preprint arXiv:2505.14558},
-  year={2025}
+  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal = {arXiv preprint arXiv:2505.14558},
+  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  year = {2025},
 }
 """,
 )
