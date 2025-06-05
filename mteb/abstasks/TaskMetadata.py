@@ -73,6 +73,7 @@ TASK_SUBTYPE = Literal[
     "Intent Classification",
     "Vehicle Clustering",
     "Environment Sound Clustering",
+    "Environment Sound Reranking",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
@@ -140,6 +141,7 @@ MIEB_TASK_TYPE = (
 MAEB_TASK_TYPE = (
     "AudioClustering",
     "AudioMultilabelClassification",
+    "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
