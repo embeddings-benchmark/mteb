@@ -134,7 +134,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         name="R2MEDMedicalSciencesRetrieval",
         dataset={
             "path": "R2MED/Medical-Sciences",
-            "revision": "7f11654e9aed0c6fa99784641c8880f87ad62930",
+            "revision": "1b48911514c80bf9182222d99752ad75e23b4b47",
         },
         reference="https://huggingface.co/R2MED/Medical-Sciences",
         description="Medical-Sciences retrieval dataset.",
