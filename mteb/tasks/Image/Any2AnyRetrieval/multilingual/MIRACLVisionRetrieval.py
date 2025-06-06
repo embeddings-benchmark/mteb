@@ -64,15 +64,7 @@ def _load_miracl_data(
             trust_remote_code=trust_remote_code,
         )
 
-        # For text data, it would look like this:
-        # corpus_data = corpus_data.map(
-        #     lambda x: {
-        #         "id": str(x["_id"]),
-        #         "modality": "text",
-        #     },
-        #     remove_columns=["_id", "image_id", "text_downloaded_from_Wikipedia"],
-        # )
-        # corpus[lang][split] = corpus_data[split]
+        # For text data, it would look like this, just use _id column
 
         imgid2docid = {
             str(ex["image_id"]): str(ex["_id"])
