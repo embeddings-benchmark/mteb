@@ -196,5 +196,3 @@ Qwen3_Embedding_8B = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
 )
-
-
