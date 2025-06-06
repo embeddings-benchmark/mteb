@@ -33,8 +33,8 @@ geoembedding = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code="",
-    public_training_data="",
+    public_training_code=None,
+    public_training_data=None,
     training_datasets={
         "ArguAna": ["test"],
         "FEVER": ["train"],
