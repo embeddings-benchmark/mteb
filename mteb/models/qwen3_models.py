@@ -116,7 +116,6 @@ def q3e_instruct_loader(model_name_or_path, **kwargs):
         revision=kwargs.pop("revision", None),
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        # model_kwargs=dict(torch_dtype=torch.float16),  # , attn_implementation="flash_attention_2"
         **kwargs,
     )
     encoder = model.model._first_module()
@@ -143,7 +142,7 @@ Qwen3_Embedding_0B6 = ModelMeta(
     license="apache-2.0",
     reference="https://huggingface.co/Qwen/Qwen3-Embedding-0.6B",
     similarity_fn_name="cosine",
-    framework=["PyTorch"],
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -199,31 +198,3 @@ Qwen3_Embedding_8B = ModelMeta(
 )
 
 
-def test_model():
-    import mteb
-
-    queries = [
-        "黑龙江的省会在哪儿",
-        "Where is the caption of Heilongjiang",
-        "阿里巴巴总部在杭州吗",
-    ]
-    documents = ["阿里巴巴", "黑龙江的省会是哈尔滨", " You are a hero"]
-    model_name, revision = (
-        "Qwen/Qwen3-Embedding-0.6B",
-        "b22da495047858cce924d27d76261e96be6febc0",
-    )
-    # model_name, revision = "Qwen/Qwen3-Embedding-4B", "636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff"
-    # model_name, revision = "Qwen/Qwen3-Embedding-8B", "4e423935c619ae4df87b646a3ce949610c66241c"
-    model = mteb.get_model(model_name, revision)
-    print(mteb.get_model_meta(model_name, revision))
-    vd = model.encode(documents, task_name="MSMARCO", prompt_type=PromptType.passage)
-    vq = model.encode(queries, task_name="MSMARCO", prompt_type=PromptType.query)
-    print("query outputs", vq)
-    print("doc outputs", vd)
-    scores = (vq @ vd.T) * 100
-    print(scores.tolist())
-    return
-
-
-if __name__ == "__main__":
-    test_model()
