@@ -1,4 +1,5 @@
 """Models for GeoGPT-Research-Project"""
+
 from __future__ import annotations
 
 from functools import partial
@@ -10,7 +11,7 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
-    languages=["eng-Latn"], # follows ISO 639-3 and BCP-47
+    languages=["eng-Latn"],  # follows ISO 639-3 and BCP-47
     open_weights=True,
     revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",
     loader=partial(
@@ -20,7 +21,7 @@ geoembedding = ModelMeta(
         instruction_template="Instruct: {instruction}\nQuery: ",
         apply_instruction_to_passages=False,
         model_kwargs={"torch_dtype": torch.bfloat16},
-        trust_remote_code=True
+        trust_remote_code=True,
     ),
     release_date="2025-04-22",
     n_parameters=7241732096,
@@ -35,15 +36,15 @@ geoembedding = ModelMeta(
     public_training_code="",
     public_training_data="",
     training_datasets={
-        "ArguAna": ["test"], 
-        "FEVER": ["train"], 
-        "MSMARCO":["train"], 
-        "FiQA2018": ["train"], 
-        "HotpotQA": ["train"], 
-        "NFCorpus": ["train"], 
-        "SciFact": ["train"], 
+        "ArguAna": ["test"],
+        "FEVER": ["train"],
+        "MSMARCO": ["train"],
+        "FiQA2018": ["train"],
+        "HotpotQA": ["train"],
+        "NFCorpus": ["train"],
+        "SciFact": ["train"],
         "AmazonCounterfactualClassification": ["train"],
-        "AmazonPolarityClassification":["train"],
+        "AmazonPolarityClassification": ["train"],
         "AmazonReviewsClassification": ["train"],
         "Banking77Classification": ["train"],
         "EmotionClassification": ["train"],
@@ -61,6 +62,6 @@ geoembedding = ModelMeta(
         "STS12": ["train"],
         "STS22": ["train"],
         "STSBenchmark": ["train"],
-        "StackOverflowDupQuestions": ["train"]
-    }
+        "StackOverflowDupQuestions": ["train"],
+    },
 )
