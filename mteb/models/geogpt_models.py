@@ -1,3 +1,6 @@
+"""Models for GeoGPT-Research-Project"""
+from __future__ import annotations
+
 from functools import partial
 
 import torch
@@ -61,4 +64,3 @@ geoembedding = ModelMeta(
         "StackOverflowDupQuestions": ["train"]
     }
 )
-
