@@ -16,12 +16,12 @@ xyz_zh_datasets = {
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
 }
-#not in mteb
-#"Covid-News":"NCPPolicies_train",
-#"cMedQA":"https://github.com/zhangsheng93/cMedQA",
-#"Multi-CPR":"http://github.com/Alibaba-NLP/Multi-CPR",
-#"retrieval_data_llm":"https://huggingface.co/datasets/infgrad/retrieval_data_llm",
-#"Huatuo26M-Lite":"https://huggingface.co/datasets/FreedomIntelligence/Huatuo26M-Lite"
+# not in mteb
+# "Covid-News":"NCPPolicies_train",
+# "cMedQA":"https://github.com/zhangsheng93/cMedQA",
+# "Multi-CPR":"http://github.com/Alibaba-NLP/Multi-CPR",
+# "retrieval_data_llm":"https://huggingface.co/datasets/infgrad/retrieval_data_llm",
+# "Huatuo26M-Lite":"https://huggingface.co/datasets/FreedomIntelligence/Huatuo26M-Lite"
 
 xyz_embedding = ModelMeta(
     name="fangxq/XYZ-embedding",
