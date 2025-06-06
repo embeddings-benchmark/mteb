@@ -3,8 +3,6 @@ from __future__ import annotations
 import os
 from functools import partial
 
-import torch
-
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
@@ -210,7 +208,10 @@ def test_model():
         "阿里巴巴总部在杭州吗",
     ]
     documents = ["阿里巴巴", "黑龙江的省会是哈尔滨", " You are a hero"]
-    model_name, revision = "Qwen/Qwen3-Embedding-0.6B", "b22da495047858cce924d27d76261e96be6febc0"
+    model_name, revision = (
+        "Qwen/Qwen3-Embedding-0.6B",
+        "b22da495047858cce924d27d76261e96be6febc0",
+    )
     # model_name, revision = "Qwen/Qwen3-Embedding-4B", "636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff"
     # model_name, revision = "Qwen/Qwen3-Embedding-8B", "4e423935c619ae4df87b646a3ce949610c66241c"
     model = mteb.get_model(model_name, revision)
