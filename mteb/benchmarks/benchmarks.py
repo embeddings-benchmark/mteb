@@ -274,6 +274,33 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
 """,
 )
 
+MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
+    name="IFIR",
+    display_name="IFIR",
+    tasks=get_tasks(
+        tasks=[
+            "IFIRAila",
+            "IFIRCds",
+            "IFIRFiQA",
+            "IFIRFire",
+            "IFIRNFCorpus",
+            "IFIRPm",
+            "IFIRScifact",
+        ]
+    ),
+    description="Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval",
+    reference="https://arxiv.org/abs/2503.04644",
+    citation=r"""
+@inproceedings{song2025ifir,
+  title={IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+  author={Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+  booktitle={Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+  pages={10186--10204},
+  year={2025}
+}
+""",
+)
+
 MTEB_RETRIEVAL_LAW = Benchmark(
     name="MTEB(Law, v1)",  # This benchmark is likely in the need of an update
     display_name="Legal",
