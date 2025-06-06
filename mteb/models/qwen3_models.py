@@ -136,8 +136,8 @@ Qwen3_Embedding_0B6 = ModelMeta(
     name="Qwen/Qwen3-Embedding-0.6B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="TODO",
-    release_date="2025-06-04",
+    revision="b22da495047858cce924d27d76261e96be6febc0",  # Commit of @tomaarsen
+    release_date="2025-06-05",
     n_parameters=595776512,
     memory_usage_mb=2272,
     embed_dim=1024,
@@ -160,8 +160,8 @@ Qwen3_Embedding_4B = ModelMeta(
     name="Qwen/Qwen3-Embedding-4B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="TODO",
-    release_date="2025-06-04",
+    revision="636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff",  # Commit of @tomaarsen
+    release_date="2025-06-05",
     n_parameters=4021774336,
     memory_usage_mb=15341,
     embed_dim=2560,
@@ -184,8 +184,8 @@ Qwen3_Embedding_8B = ModelMeta(
     name="Qwen/Qwen3-Embedding-8B",
     languages=multilingual_langs,
     open_weights=True,
-    revision="TODO",
-    release_date="2025-06-04",
+    revision="4e423935c619ae4df87b646a3ce949610c66241c",  # Commit of @tomaarsen
+    release_date="2025-06-05",
     n_parameters=7567295488,
     memory_usage_mb=28866,
     embed_dim=4096,
@@ -202,13 +202,19 @@ Qwen3_Embedding_8B = ModelMeta(
 
 
 def test_model():
+    import mteb
+
     queries = [
         "黑龙江的省会在哪儿",
         "Where is the caption of Heilongjiang",
         "阿里巴巴总部在杭州吗",
     ]
     documents = ["阿里巴巴", "黑龙江的省会是哈尔滨", " You are a hero"]
-    model = Qwen3_Embedding_0B6.load_model()
+    model_name, revision = "Qwen/Qwen3-Embedding-0.6B", "b22da495047858cce924d27d76261e96be6febc0"
+    # model_name, revision = "Qwen/Qwen3-Embedding-4B", "636cd9bf47d976946cdbb2b0c3ca0cb2f8eea5ff"
+    # model_name, revision = "Qwen/Qwen3-Embedding-8B", "4e423935c619ae4df87b646a3ce949610c66241c"
+    model = mteb.get_model(model_name, revision)
+    print(mteb.get_model_meta(model_name, revision))
     vd = model.encode(documents, task_name="MSMARCO", prompt_type=PromptType.passage)
     vq = model.encode(queries, task_name="MSMARCO", prompt_type=PromptType.query)
     print("query outputs", vq)
