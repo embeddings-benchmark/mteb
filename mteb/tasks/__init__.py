@@ -5,6 +5,7 @@ from .Audio.AudioClassification import *
 from .Audio.AudioMultilabelClassification import *
 from .Audio.AudioReranking import *
 from .Audio.AudioZeroshotClassification import *
+from .Audio.Audio2TextRetrieval import *
 from .Audio.Clustering import *
 from .BitextMining import *
 from .Classification import *
