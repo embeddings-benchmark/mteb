@@ -170,4 +170,4 @@ class AggregateTaskMetadata(TaskMetadata):
                 modalities.update(set(task.metadata.modalities))
         if modalities:
             return list(modalities)
-        return None
+        return []

@@ -5,11 +5,11 @@ from typing import Any
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
+from mteb.types import ScoresDict
 
 from ..evaluation.evaluators import BitextMiningEvaluator
-from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
