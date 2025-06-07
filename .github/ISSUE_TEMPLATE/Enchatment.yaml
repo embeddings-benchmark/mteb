@@ -1,6 +1,6 @@
-name: Enchatment
+name: ✨Enchantment
 description: Create a request for a new feature
-labels: ["enchatment"]
+labels: ["enchantment"]
 body:
   - type: textarea
     attributes:
