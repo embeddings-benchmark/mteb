@@ -261,7 +261,7 @@ class DenseRetrievalExactSearch:
                 logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
-                q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
+                q_results = dict.fromkeys(corpus.keys(), 0.0)
             else:
                 q_results = self.previous_results[qid]
             # take the top-k only

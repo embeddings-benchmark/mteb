@@ -54,7 +54,7 @@ def _load_xmarket_data(
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
         queries[lang][split] = {row["_id"]: row["text"] for row in query_rows}
         relevant_docs[lang][split] = {
-            row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+            row["_id"]: dict.fromkeys(row["text"].split(" "), 1) for row in qrels_rows
         }
 
     corpus = datasets.DatasetDict(corpus)
