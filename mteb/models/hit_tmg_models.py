@@ -1,9 +1,68 @@
 from __future__ import annotations
 
+import logging
+from collections.abc import Sequence
 from functools import partial
+from typing import Any
 
+import numpy as np
+import torch
+
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+
+logger = logging.getLogger(__name__)
+
+
+class KALMWrapper(InstructSentenceTransformerWrapper):
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        if self.add_eos_token:
+            sentences = [
+                example + self.model.tokenizer.eos_token for example in sentences
+            ]
+
+        instruction = self.get_task_instruction(
+            task_name, prompt_type, self.prompts_dict
+        )
+        from mteb import get_task
+
+        task = get_task(task_name)
+
+        # to passage prompts won't be applied to passages
+        if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
+            instruction = None
+            logger.info(
+                f"No instruction used, because prompt type = {prompt_type.passage}"
+            )
+
+        if task.metadata.type in ["STS", "PairClassification", "Summarization"]:
+            logger.info(
+                f"No instruction used, because task type = {task.metadata.type}"
+            )
+            instruction = None
+
+        if instruction:
+            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+
+        embeddings = self.model.encode(
+            sentences,
+            prompt=instruction,
+            **kwargs,
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
 
 kalm_training_data = {
     # from technical report
@@ -173,12 +232,12 @@ HIT_TMG_INSTRUCTION = "Instruct: {instruction} \n Query: "
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     loader=partial(  # type: ignore
-        InstructSentenceTransformerWrapper,
+        KALMWrapper,
         model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
         revision="45e42c89990c40aca042659133fc8b13c28634b5",
         instruction_template=HIT_TMG_INSTRUCTION,
         max_seq_length=512,
-        apply_instruction_to_passages=True,
+        apply_instruction_to_passages=False,
         prompts_dict=HIT_TMG_task_prompts,
     ),
     name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
@@ -226,12 +285,12 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
-        InstructSentenceTransformerWrapper,
+        KALMWrapper,
         model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5",
         revision="fcff2f8a54e4cd96b7766fef1ee960a43d42bb3c",
         instruction_template=HIT_TMG_INSTRUCTION,
         max_seq_length=512,
-        apply_instruction_to_passages=True,
+        apply_instruction_to_passages=False,
         prompts_dict=HIT_TMG_task_prompts,
     ),
     name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5",
@@ -254,3 +313,13 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
     superseded_by=None,
 )
+
+
+if __name__ == "__main__":
+    # Example usage
+    import mteb
+
+    task = mteb.get_task("Ocnli")
+    model = mteb.get_model("HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5")
+    evaluator = mteb.MTEB([task])
+    evaluator.run(model)
