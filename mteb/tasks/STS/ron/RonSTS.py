@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class RonSTS(AbsTaskSTS):
+class RonSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="RonSTS",
         dataset={
@@ -16,7 +16,7 @@ class RonSTS(AbsTaskSTS):
         description="High-quality Romanian translation of STSBenchmark.",
         reference="https://openreview.net/forum?id=JH61CD7afTv",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],
@@ -38,9 +38,5 @@ class RonSTS(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

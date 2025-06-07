@@ -1,24 +1,23 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_image_dependencies, requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 
-def mocov3_loader(**kwargs):
-    model_name = kwargs.get("model_name", "MOCOv3")
+def mocov3_loader(model_name, **kwargs):
     requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
     import timm
 
-    class MOCOv3Wrapper:
+    class MOCOv3Model(AbsEncoder):
         """A wrapper class for MOCOv3 models that supports image encoding.
         Text encoding and text-image fusion are not supported.
         """
@@ -53,91 +52,59 @@ def mocov3_loader(**kwargs):
 
         @staticmethod
         def get_text_embeddings(
-            texts: list[str],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            self,
+            texts: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             raise ValueError("MOCO models only support image encoding.")
 
         def get_image_embeddings(
             self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            images: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
-            import torchvision.transforms.functional as F
-
             all_image_embeddings = []
 
-            if isinstance(images, DataLoader):
-                with torch.no_grad():
-                    for batch in tqdm(images):
-                        inputs = torch.vstack(
-                            [
-                                self.processor(F.to_pil_image(b.to("cpu"))).unsqueeze(0)
-                                for b in batch
-                            ]
-                        )
-                        output = self.model(
-                            inputs
-                        )  # output is (batch_size, num_features) shaped tensor
-                        all_image_embeddings.append(output)
-            else:
-                with torch.no_grad():
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        inputs = torch.vstack(
-                            [self.processor(b).unsqueeze(0) for b in batch_images]
-                        )
-                        output = self.model(
-                            inputs
-                        )  # output is (batch_size, num_features) shaped tensor
-                        all_image_embeddings.append(output)
+            import torchvision.transforms.functional as F
 
+            with torch.no_grad():
+                for batch in tqdm(
+                    images, disable=not show_progress_bar, desc="Image Encoding"
+                ):
+                    inputs = torch.vstack(
+                        [
+                            self.processor(F.to_pil_image(b.to("cpu"))).unsqueeze(0)
+                            for b in batch["image"]
+                        ]
+                    )
+                    output = self.model(
+                        inputs
+                    )  # output is (batch_size, num_features) shaped tensor
+                    all_image_embeddings.append(output)
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        @staticmethod
-        def calculate_probs(text_embeddings, image_embeddings):
-            raise ValueError("MOCO models only support image encoding.")
-
-        def get_fused_embeddings(
+        def encode(
             self,
-            texts: list[str] | None = None,
-            images: list[Image.Image] | DataLoader | None = None,
+            inputs: DataLoader[BatchedInput],
             *,
-            task_name: str | None = None,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            fusion_mode="sum",
             **kwargs: Any,
-        ):
-            if texts is None and images is None:
-                raise ValueError("images must be provided for MOCO models")
+        ) -> Array:
+            if "text" in inputs.dataset.features:
+                raise ValueError(
+                    "MOCO models only support image encoding. Text encoding is not supported."
+                )
+            if "image" in inputs.dataset.features:
+                return self.get_image_embeddings(inputs, **kwargs)
+            raise ValueError
 
-            text_embeddings = None
-            image_embeddings = None
-
-            if texts is not None:
-                text_embeddings = self.get_text_embeddings(texts, batch_size)
-
-            if images is not None:
-                image_embeddings = self.get_image_embeddings(images, batch_size)
-
-            if text_embeddings is not None and image_embeddings is not None:
-                raise ValueError("MOCO models only support image encoding.")
-            elif text_embeddings is not None:
-                return text_embeddings
-            elif image_embeddings is not None:
-                return image_embeddings
-
-    return MOCOv3Wrapper(**kwargs)
+    return MOCOv3Model(model_name, **kwargs)
 
 
 mocov3_training_datasets = {
@@ -145,10 +112,7 @@ mocov3_training_datasets = {
 }
 
 mocov3_vit_base = ModelMeta(
-    loader=partial(
-        mocov3_loader,
-        model_name="nyu-visionx/moco-v3-vit-b",
-    ),
+    loader=mocov3_loader,  # type: ignore
     name="nyu-visionx/moco-v3-vit-b",
     languages=["eng-Latn"],
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
@@ -164,16 +128,13 @@ mocov3_vit_base = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://github.com/facebookresearch/moco-v3",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
 )
 
 mocov3_vit_large = ModelMeta(
-    loader=partial(
-        mocov3_loader,
-        model_name="nyu-visionx/moco-v3-vit-l",
-    ),
+    loader=mocov3_loader,  # type: ignore
     name="nyu-visionx/moco-v3-vit-l",
     languages=["eng-Latn"],
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",
@@ -189,7 +150,7 @@ mocov3_vit_large = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://github.com/facebookresearch/moco-v3",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
 )

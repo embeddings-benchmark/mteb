@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 sent_trf_training_dataset = {
     # derived from datasheets
@@ -83,19 +84,20 @@ m3e_dataset = {
 }
 
 m3e_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-base",
     languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="764b537a0e50e5c7d64db883f2d2e051cbe3c64c",
     release_date="2023-06-06",  # first commit
-    n_parameters=102 * 1e6,
+    n_parameters=int(102 * 1e6),
     memory_usage_mb=390,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
     license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -106,6 +108,7 @@ m3e_base = ModelMeta(
 )
 
 m3e_small = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-small",
     languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
@@ -118,7 +121,7 @@ m3e_small = ModelMeta(
     license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-small",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -129,6 +132,7 @@ m3e_small = ModelMeta(
 )
 
 m3e_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-large",
     languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
@@ -141,7 +145,7 @@ m3e_large = ModelMeta(
     license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

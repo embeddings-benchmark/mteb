@@ -3,10 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import *
 
 _LANGUAGES = {
     "ar": ["ara-Arab"],
@@ -32,9 +29,9 @@ def load_mldr_data(
     cache_dir: str = None,
     revision: str = None,
 ):
-    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
-    queries = {lang: {split: None for split in eval_splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
 
     for lang in langs:
         lang_corpus = datasets.load_dataset(
@@ -60,7 +57,7 @@ def load_mldr_data(
     return corpus, queries, relevant_docs
 
 
-class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MultiLongDocRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultiLongDocRetrieval",
         description="""Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wikipedia, Wudao and mC4 (see Table 7), and NarrativeQA (Kocˇisky ́ et al., 2018; Gu ̈nther et al., 2023), which is only for English.' (Chen et al., 2024).
@@ -71,7 +68,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "d67138e705d963e346253a80e59676ddb418810a",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev", "test"],
         eval_langs=_LANGUAGES,
@@ -109,10 +106,10 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_mldr_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True

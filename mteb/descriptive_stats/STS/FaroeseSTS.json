@@ -1,0 +1,18 @@
+{
+    "train": {
+        "num_samples": 729,
+        "number_of_characters": 63582,
+        "unique_pairs": 727,
+        "min_sentence1_length": 11,
+        "average_sentence1_len": 43.63374485596708,
+        "max_sentence1_length": 114,
+        "unique_sentence1": 672,
+        "min_sentence2_length": 8,
+        "average_sentence2_len": 43.584362139917694,
+        "max_sentence2_length": 115,
+        "unique_sentence2": 701,
+        "min_score": 0.0,
+        "avg_score": 2.342330589849108,
+        "max_score": 5.0
+    }
+}

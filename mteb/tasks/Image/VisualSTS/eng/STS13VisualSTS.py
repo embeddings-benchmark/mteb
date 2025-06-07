@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class STS13VisualSTS(AbsTaskVisualSTS):
+class STS13VisualSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STS13VisualSTS",
         dataset={
@@ -34,15 +34,4 @@ class STS13VisualSTS(AbsTaskVisualSTS):
   year = {2024},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1500},
-            "avg_character_length": {"dev": 1.0, "test": 1.0},
-        },
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

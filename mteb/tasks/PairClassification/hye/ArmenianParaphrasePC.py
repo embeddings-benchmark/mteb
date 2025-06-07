@@ -14,7 +14,7 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
             "revision": "f43b4f32987048043a8b31e5e26be4d360c2438f",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["hye-Armn"],

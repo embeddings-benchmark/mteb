@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaIsotopesFissionClassification(AbsTaskClassification):
+class WikipediaIsotopesFissionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaIsotopesFissionClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaIsotopesFissionClassification(AbsTaskClassification):
             "revision": "897743346c7c794264f7dbfadc3978aa2895e8e2",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

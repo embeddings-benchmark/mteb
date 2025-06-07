@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class JSTS(AbsTaskSTS):
+class JSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="JSTS",
         dataset={
@@ -16,7 +16,7 @@ class JSTS(AbsTaskSTS):
         + "(Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.",
         reference="https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],
@@ -59,9 +59,5 @@ Piperidis, Stelios},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

@@ -41,10 +41,6 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2021},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 21100},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     image_column_name: str = "jpg"

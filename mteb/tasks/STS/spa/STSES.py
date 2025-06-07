@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 _EVAL_SPLIT = "test"
 
 
-class STSES(AbsTaskSTS):
+class STSES(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STSES",
         dataset={
@@ -18,7 +18,7 @@ class STSES(AbsTaskSTS):
         description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
         reference="https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["spa-Latn"],
@@ -49,12 +49,8 @@ class STSES(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
     def dataset_transform(self):
         data = self.dataset[_EVAL_SPLIT]

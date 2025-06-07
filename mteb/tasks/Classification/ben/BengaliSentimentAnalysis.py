@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BengaliSentimentAnalysis(AbsTaskClassification):
+class BengaliSentimentAnalysis(AbsTaskAnyClassification):
     superseded_by = "BengaliSentimentAnalysis.v2"
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis",
@@ -15,7 +15,7 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
             "revision": "a4b3685b1854cc26c554dda4c7cb918a36a6fb6c",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],
@@ -44,7 +44,7 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         )
 
 
-class BengaliSentimentAnalysisV2(AbsTaskClassification):
+class BengaliSentimentAnalysisV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis.v2",
         description="""dataset contains 2854 Negative reviews and 7238 Positive reviews collected and manually annotated from Youtube Bengali drama.
@@ -55,7 +55,7 @@ class BengaliSentimentAnalysisV2(AbsTaskClassification):
             "revision": "23edb78a3dd297a4d92f9c011a0503be0c0949d0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ben-Beng"],

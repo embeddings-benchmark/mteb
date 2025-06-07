@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PatchCamelyonClassification(AbsTaskImageClassification):
+class PatchCamelyonClassification(AbsTaskAnyClassification):
+    input_column_name = "webp"
+    label_column_name = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="PatchCamelyon",
         description="""Histopathology diagnosis classification dataset.""",
@@ -14,7 +19,7 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
             "revision": "502695fe1a141108650e3c5b91c8b5e0ff84ed49",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -51,10 +56,4 @@ and Fichtinger, Gabor},
   year = {2018},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 32768},
-            "avg_character_length": {"test": 0},
-        },
     )
-    image_column_name = "webp"
-    label_column_name = "cls"

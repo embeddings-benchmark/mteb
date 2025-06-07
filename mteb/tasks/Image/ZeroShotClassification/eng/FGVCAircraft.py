@@ -43,10 +43,6 @@ class FGVCAircraftZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2013},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 3333},
-            "avg_character_length": {"test": 431.4},
-        },
     )
     label_column_name: str = "variant"  ## could be family, manufacturer, or variant. Variant has the higher number of classes.
 

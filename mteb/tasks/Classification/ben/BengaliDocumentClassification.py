@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BengaliDocumentClassification(AbsTaskClassification):
+class BengaliDocumentClassification(AbsTaskAnyClassification):
     superseded_by = "BengaliDocumentClassification.v2"
     metadata = TaskMetadata(
         name="BengaliDocumentClassification",
@@ -15,7 +15,7 @@ class BengaliDocumentClassification(AbsTaskClassification):
             "revision": "1c6e67433da618073295b7c90f1c55fa8e78f35c",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ben-Beng"],
@@ -54,7 +54,7 @@ Islam, Tanvir},
         )
 
 
-class BengaliDocumentClassificationV2(AbsTaskClassification):
+class BengaliDocumentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliDocumentClassification.v2",
         description="""Dataset for News Classification, categorized with 13 domains.
@@ -65,7 +65,7 @@ class BengaliDocumentClassificationV2(AbsTaskClassification):
             "revision": "c5427220bbc2bc0ab6e19dabdbbd6d4e82b4846a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ben-Beng"],

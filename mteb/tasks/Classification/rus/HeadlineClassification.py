@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class HeadlineClassification(AbsTaskClassification):
+class HeadlineClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HeadlineClassification",
         dataset={
@@ -14,7 +14,7 @@ class HeadlineClassification(AbsTaskClassification):
         description="Headline rubric classification based on the paraphraser plus dataset.",
         reference="https://aclanthology.org/2020.ngt-1.6/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

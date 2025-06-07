@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 COL_MAPPING = {
@@ -19,7 +18,7 @@ EVAL_LANGS = {
 }
 
 
-class PubChemSMILESBitextMining(MultilingualTask, AbsTaskBitextMining):
+class PubChemSMILESBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="PubChemSMILESBitextMining",
         dataset={
@@ -29,7 +28,7 @@ class PubChemSMILESBitextMining(MultilingualTask, AbsTaskBitextMining):
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=EVAL_LANGS,

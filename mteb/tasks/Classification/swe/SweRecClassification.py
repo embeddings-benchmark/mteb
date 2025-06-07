@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SweRecClassification(AbsTaskClassification):
+class SweRecClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SweRecClassification",
         description="A Swedish dataset for sentiment classification on review",
@@ -14,7 +14,7 @@ class SweRecClassification(AbsTaskClassification):
             "revision": "b07c6ce548f6a7ac8d546e1bbe197a0086409190",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],

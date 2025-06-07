@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -28,7 +28,7 @@ _LANGUAGES = [
 ]
 
 
-class HinDialectClassification(AbsTaskClassification):
+class HinDialectClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HinDialectClassification",
         dataset={
@@ -37,7 +37,7 @@ class HinDialectClassification(AbsTaskClassification):
         },
         description="HinDialect: 26 Hindi-related languages and dialects of the Indic Continuum in North India",
         reference="https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

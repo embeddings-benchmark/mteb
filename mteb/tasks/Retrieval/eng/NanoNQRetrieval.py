@@ -18,7 +18,7 @@ class NanoNQRetrieval(AbsTaskRetrieval):
             "revision": "77540146379abf95df8326a3c5bb9eb21c7146c3",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

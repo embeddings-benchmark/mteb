@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class InappropriatenessClassification(AbsTaskClassification):
+class InappropriatenessClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassification",
         dataset={
@@ -14,7 +14,7 @@ class InappropriatenessClassification(AbsTaskClassification):
         description="Inappropriateness identification in the form of binary classification",
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -65,7 +65,7 @@ Robnik-{\v{S}}ikonja, Marko},
         )
 
 
-class InappropriatenessClassificationv2(AbsTaskClassification):
+class InappropriatenessClassificationv2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassificationv2",
         dataset={

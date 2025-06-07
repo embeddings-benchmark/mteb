@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FinToxicityClassification(AbsTaskClassification):
+class FinToxicityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FinToxicityClassification",
         description="""
@@ -18,7 +18,7 @@ class FinToxicityClassification(AbsTaskClassification):
         },
         reference="https://aclanthology.org/2023.nodalida-1.68",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fin-Latn"],

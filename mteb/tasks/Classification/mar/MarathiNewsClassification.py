@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MarathiNewsClassification(AbsTaskClassification):
+class MarathiNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MarathiNewsClassification",
         description="A Marathi dataset for 3-class classification of Marathi news articles",
@@ -14,7 +14,7 @@ class MarathiNewsClassification(AbsTaskClassification):
             "revision": "7640cf8132cca1f99995ac71512a670e3c965cf1",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
-
-if TYPE_CHECKING:
-    pass
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -16,7 +13,7 @@ UrlString = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a URL
 
 
-MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
+MMTEB_CITATION = """@article{enevoldsen2025mmtebmassivemultilingualtext,
   author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
   doi = {10.48550/arXiv.2502.13595},
   journal = {arXiv preprint arXiv:2502.13595},
@@ -816,7 +813,7 @@ mteb_multilingual_tasks = get_tasks(
     ],
 )
 
-MTEB_multilingual = Benchmark(
+MTEB_multilingual_v1 = Benchmark(
     name="MTEB(Multilingual, v1)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -830,7 +827,7 @@ MTEB_multilingual = Benchmark(
 )
 
 
-MTEB_multilingual = Benchmark(
+MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -955,7 +952,7 @@ MTEB_INDIC = Benchmark(
         (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
-    reference="https://arxiv.org/abs/2502.13595",
+    reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -1089,7 +1086,7 @@ MTEB_EU = Benchmark(
         exclusive_language_filter=True,
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
-    reference="https://arxiv.org/abs/2502.13595",
+    reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -1847,6 +1844,76 @@ MIEB_IMG = Benchmark(
 }
 """,
     contacts=["gowitheflow-1998", "isaac-chung"],
+)
+
+BEIR_PL = Benchmark(
+    name="BEIR-PL",
+    tasks=get_tasks(
+        languages=["pol"],
+        tasks=[
+            "MSMARCO-PL",
+            "TRECCOVID-PL",
+            "NFCorpus-PL",
+            "NQ-PL",
+            "HotpotQA-PL",
+            "FiQA-PL",
+            "ArguAna-PL",
+            "Touche2020-PL",
+            "CQADupstackRetrieval-PL",
+            "Quora-PL",
+            "DBPedia-PL",
+            "SCIDOCS-PL",
+            "SciFact-PL",
+        ],
+        eval_splits=["test"],
+    ),
+    description="BEIR-PL is a benchmark for evaluating text embedding models on Polish language data.",
+    reference="https://arxiv.org/abs/2305.19840",
+    citation=r"""
+@misc{wojtasik2024beirplzeroshotinformation,
+  archiveprefix = {arXiv},
+  author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
+  eprint = {2305.19840},
+  primaryclass = {cs.IR},
+  title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
+  url = {https://arxiv.org/abs/2305.19840},
+  year = {2024},
+}
+""",
+)
+
+MTEB_LOTTE = Benchmark(
+    name="LoTTE",
+    tasks=MTEBTasks(get_tasks(tasks=["LoTTE"], eval_splits=["dev"])),
+    description=(
+        "LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models "
+        "on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and "
+        "passages from StackExchange (covering writing, recreation, science, technology, and lifestyle), providing "
+        "a challenging out-of-domain generalization benchmark."
+    ),
+    reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
+    citation=r"""
+@inproceedings{santhanam-etal-2022-colbertv2,
+  address = {Seattle, United States},
+  author = {Santhanam, Keshav  and
+Khattab, Omar  and
+Saad-Falcon, Jon  and
+Potts, Christopher  and
+Zaharia, Matei},
+  booktitle = {Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+  doi = {10.18653/v1/2022.naacl-main.272},
+  editor = {Carpuat, Marine  and
+de Marneffe, Marie-Catherine  and
+Meza Ruiz, Ivan Vladimir},
+  month = jul,
+  pages = {3715--3734},
+  publisher = {Association for Computational Linguistics},
+  title = {{C}ol{BERT}v2: Effective and Efficient Retrieval via Lightweight Late Interaction},
+  url = {https://aclanthology.org/2022.naacl-main.272/},
+  year = {2022},
+}
+""",
+    contacts=["agu18dec"],
 )
 
 BUILT_MTEB = Benchmark(

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class STS15STS(AbsTaskSTS):
+class STS15STS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STS15",
         dataset={
@@ -15,7 +15,7 @@ class STS15STS(AbsTaskSTS):
         description="SemEval STS 2015 dataset",
         reference="https://www.aclweb.org/anthology/S15-2010",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -47,9 +47,5 @@ Jurgens, David},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

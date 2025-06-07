@@ -20,7 +20,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "trust_remote_code": True,
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="lrap",
@@ -47,10 +47,6 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
   year = {2010},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 4952},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     # Override default column name in the subclass

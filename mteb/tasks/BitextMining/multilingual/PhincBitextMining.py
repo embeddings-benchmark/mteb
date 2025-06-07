@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -9,7 +8,7 @@ _LANGUAGES = {
 }
 
 
-class PhincBitextMining(AbsTaskBitextMining, MultilingualTask):
+class PhincBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="PhincBitextMining",
         dataset={
@@ -19,7 +18,7 @@ class PhincBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="Phinc is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.",
         reference="https://huggingface.co/datasets/veezbo/phinc",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

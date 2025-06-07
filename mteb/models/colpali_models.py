@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import torch
@@ -161,9 +160,8 @@ COLPALI_TRAINING_DATA = {
 }
 
 colpali_v1_1 = ModelMeta(
-    loader=partial(
-        ColPaliWrapper,
-        model_name="vidore/colpali-v1.1",
+    loader=ColPaliWrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.1",
@@ -181,15 +179,14 @@ colpali_v1_1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.1",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colpali_v1_2 = ModelMeta(
-    loader=partial(
-        ColPaliWrapper,
-        model_name="vidore/colpali-v1.2",
+    loader=ColPaliWrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.2",
@@ -207,15 +204,14 @@ colpali_v1_2 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.2",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colpali_v1_3 = ModelMeta(
-    loader=partial(
-        ColPaliWrapper,
-        model_name="vidore/colpali-v1.3",
+    loader=ColPaliWrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.3",
@@ -233,7 +229,7 @@ colpali_v1_3 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.3",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )

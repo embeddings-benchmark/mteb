@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TenKGnadClassification(AbsTaskClassification):
+class TenKGnadClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TenKGnadClassification",
         description="10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).",
@@ -14,7 +14,7 @@ class TenKGnadClassification(AbsTaskClassification):
             "revision": "ae9862bbcddc27b4bd93e2a7b463b7b5d05c6c55",
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

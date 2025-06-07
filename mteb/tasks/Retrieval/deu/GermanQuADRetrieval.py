@@ -37,7 +37,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
             "revision": "f5c87ae5a2e7a5106606314eef45255f03151bb3",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -66,6 +66,6 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"], self.metadata_dict["eval_splits"]
+            self.metadata.dataset["path"], self.metadata.eval_splits
         )
         self.data_loaded = True

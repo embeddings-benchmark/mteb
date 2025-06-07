@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SiswatiNewsClassification(AbsTaskClassification):
+class SiswatiNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SiswatiNewsClassification",
         description="Siswati News Classification Dataset",
@@ -14,7 +14,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
             "revision": "f5502326c4e48adc99b18b1582f68b8fb5e7ec30",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ssw-Latn"],

@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.models.sentence_transformers_models import sentence_transformers_loader
 
 cadet_training_data = {
     # we train with the corpora of FEVER, MSMARCO, and DBPEDIA. We only train with synthetic generated queries.
@@ -29,10 +28,8 @@ cadet_training_data = {
 
 
 cadet_embed = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="manveertamber/cadet-embed-base-v1",
-        revision="8056d118be37a566f20972a5f35cda815f6bc47e",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts={
             "query": "query: ",
             "passage": "passage: ",

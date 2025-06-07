@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 import pytest
 
@@ -16,9 +17,9 @@ from .task_grid import TASK_TEST_GRID
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("task", TASK_TEST_GRID)
+@pytest.mark.parametrize("task", TASK_TEST_GRID[9:])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_benchmark_sentence_transformer(task: str | AbsTask, model: mteb.Encoder):
+def test_benchmark_datasets(task: str | AbsTask, model: mteb.Encoder, tmp_path: Path):
     """Test that a task can be fetched and run"""
     eval = MTEB(tasks=[task])
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)

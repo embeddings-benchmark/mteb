@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining, MultilingualTask):
+class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="DanishMedicinesAgencyBitextMining",
         dataset={
@@ -15,10 +14,10 @@ class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.",
         reference="https://sprogteknologi.dk/dataset/bilingual-english-danish-parallel-corpus-from-the-danish-medicines-agency",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs={"default": ["dan-Latn", "eng-Latn"]},
+        eval_langs=["dan-Latn", "eng-Latn"],
         main_score="f1",
         date=("2016-01-01", "2019-02-24"),
         domains=["Medical", "Written"],

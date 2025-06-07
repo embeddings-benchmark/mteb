@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -16,7 +15,7 @@ _LANGS = {
 
 def _load_data(
     path: str,
-    splits: str,
+    splits: list[str],
     langs: list | None = None,
     cache_dir: str | None = None,
     revision: str | None = None,
@@ -99,7 +98,7 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="Vidore2ESGReportsRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -130,17 +129,6 @@ class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "num_documents": 30,
-                    "num_queries": 228,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -148,17 +136,17 @@ class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="Vidore2EconomicsReportsRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -189,17 +177,6 @@ class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "num_documents": 5,
-                    "num_queries": 232,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -207,17 +184,17 @@ class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="Vidore2BioMedicalLecturesRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -248,17 +225,6 @@ class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "num_documents": 27,
-                    "num_queries": 640,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -266,11 +232,11 @@ class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -307,17 +273,6 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "num_documents": 27,
-                    "num_queries": 640,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -325,10 +280,10 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

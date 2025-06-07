@@ -31,7 +31,7 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image", "text"],
+        modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{6033395,
@@ -46,10 +46,6 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2011},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 12630},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     image_column_name: str = "webp"

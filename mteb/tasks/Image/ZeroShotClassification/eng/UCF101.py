@@ -46,10 +46,6 @@ version train/test list.""",
   year = {2012},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 697222},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

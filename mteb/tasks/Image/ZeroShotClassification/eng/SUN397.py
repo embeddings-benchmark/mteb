@@ -43,10 +43,6 @@ class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2010},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 21750},
-            "avg_character_length": {"test": 256},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

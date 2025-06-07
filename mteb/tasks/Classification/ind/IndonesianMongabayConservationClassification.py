@@ -5,11 +5,11 @@ import ast
 import datasets
 import numpy as np
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class IndonesianMongabayConservationClassification(AbsTaskClassification):
+class IndonesianMongabayConservationClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndonesianMongabayConservationClassification",
         description="Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)",
@@ -19,7 +19,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
             "revision": "c9e9f2c09836bfec57c543ab65983f3398e9657a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2012-01-01", "2023-12-31"),
         eval_splits=["validation", "test"],
@@ -57,7 +57,7 @@ Purwarianti, Ayu},
     )
 
     def dataset_transform(self):
-        splits = self.metadata_dict["eval_splits"]
+        splits = self.metadata.eval_splits
         class_labels = ["positif", "netral", "negatif"]
 
         ds = {}

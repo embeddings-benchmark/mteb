@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -30,7 +29,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask):
+class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT21",
         dataset={
@@ -40,7 +39,7 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask
         description="Evaluate a multilingual embedding model based on its ability to discriminate against the original parallel pair against challenging distractors - spawning from WMT21 DE-FR test set",
         reference="https://huggingface.co/datasets/Andrianos/clsd_wmt19_21",
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
@@ -55,9 +54,7 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask
         bibtex_citation="",  # preprint_coming
     )
 
-    def __init__(self, **kwargs):
-        self.num_of_distractors = 4
-        super().__init__(**kwargs)
+    num_of_distractors = 4
 
     def load_data(self, **kwargs):
         """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
@@ -80,7 +77,7 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask
                 lang_pair = _build_lang_pair(langs)
                 dataset_raw[lang_pair] = datasets.load_dataset(
                     name=hf_subset,
-                    **self.metadata_dict["dataset"],
+                    **self.metadata.dataset,
                 )[split]
 
                 queries[lang_pair] = {}

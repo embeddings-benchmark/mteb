@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import time
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -11,9 +10,9 @@ import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models import AbsEncoder
 from mteb.models.bge_models import bge_chinese_training_data
 from mteb.models.nvidia_models import nvidia_training_datasets
-from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
@@ -33,7 +32,7 @@ seed_1_5_training_data = (
 )
 
 
-class SeedWrapper(Wrapper):
+class SeedTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -240,8 +239,8 @@ seed_embedding = ModelMeta(
         "eng-Latn",
         "zho-Hans",
     ],
-    loader=partial(
-        SeedWrapper,
+    loader=SeedTextEmbeddingModel,  # type: ignore[call-arg]
+    loader_kwargs=dict(
         model_name="doubao-embedding-large-text-250515",
         max_tokens=32000,  # tiktoken
         available_embed_dims=[2048, 1024, 512, 256],
@@ -253,7 +252,7 @@ seed_embedding = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://seed1-5-embedding.github.io/",
-    similarity_fn_name="cosine",
+    similarity_fn_name="cosine",  # type: ignore[arg-type]
     framework=["API"],
     use_instructions=True,
     training_datasets=seed_1_5_training_data,

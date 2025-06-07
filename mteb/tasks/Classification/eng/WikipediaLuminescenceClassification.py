@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaLuminescenceClassification(AbsTaskClassification):
+class WikipediaLuminescenceClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaLuminescenceClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaLuminescenceClassification(AbsTaskClassification):
             "revision": "21c4dcebe2c5b36a35292e6441e7a10b59bf4896",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

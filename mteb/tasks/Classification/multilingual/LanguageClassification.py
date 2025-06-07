@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -27,7 +27,7 @@ _LANGUAGES = [
 ]
 
 
-class LanguageClassification(AbsTaskClassification):
+class LanguageClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="LanguageClassification",
         dataset={
@@ -36,7 +36,7 @@ class LanguageClassification(AbsTaskClassification):
         },
         description="A language identification dataset for 20 languages.",
         reference="https://huggingface.co/datasets/papluca/language-identification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

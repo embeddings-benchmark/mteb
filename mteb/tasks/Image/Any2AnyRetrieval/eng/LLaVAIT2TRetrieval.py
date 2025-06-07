@@ -49,16 +49,4 @@ Srikumar, Vivek},
         prompt={
             "query": "Provide a specific decription of the image along with the following question."
         },
-        descriptive_stats={
-            "n_samples": {"test": 5120},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 546.1925258591925,
-                    "average_query_length": 59.580859375,
-                    "num_documents": 5994,
-                    "num_queries": 5120,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

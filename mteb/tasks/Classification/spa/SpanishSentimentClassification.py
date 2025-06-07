@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SpanishSentimentClassification(AbsTaskClassification):
+class SpanishSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SpanishSentimentClassification",
         description="A Spanish dataset for sentiment classification.",
@@ -14,7 +14,7 @@ class SpanishSentimentClassification(AbsTaskClassification):
             "revision": "2a6e340e4b59b7c0a78c03a0b79ac27e1b4a2662",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2022-08-16", "2022-08-16"),
         eval_splits=["validation", "test"],

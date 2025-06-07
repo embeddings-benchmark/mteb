@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UkrFormalityClassification(AbsTaskClassification):
+class UkrFormalityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
         description="""
@@ -20,7 +20,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train", "test"],
         eval_langs=["ukr-Cyrl"],

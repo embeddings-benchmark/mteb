@@ -8,12 +8,12 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -57,33 +57,33 @@ class AbsTaskClustering(AbsTask):
     """Abstract class for Clustering tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         sentences: list of str
         labels: list of str
     """
 
     abstask_prompt = "Identify categories in user passages."
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _evaluate_subset(
         self,
         model: Encoder,
         dataset: Dataset,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
         v_measures = []
         for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
+            clustering_dataset = Dataset.from_dict(cluster_set).rename_column(
+                original_column_name="sentences", new_column_name="text"
+            )
             evaluator = ClusteringEvaluator(
-                cluster_set["sentences"],  # type: ignore
-                cluster_set["labels"],  # type: ignore
-                task_name=self.metadata.name,
+                clustering_dataset,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 **kwargs,
             )
             metrics = evaluator(model, encode_kwargs=encode_kwargs)
@@ -141,3 +141,6 @@ class AbsTaskClustering(AbsTask):
                 for label, value in label_counter.items()
             },
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentences", "labels"])

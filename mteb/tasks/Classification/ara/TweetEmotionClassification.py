@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TweetEmotionClassification(AbsTaskClassification):
+class TweetEmotionClassification(AbsTaskAnyClassification):
     superseded_by = "TweetEmotionClassification.v2"
     metadata = TaskMetadata(
         name="TweetEmotionClassification",
@@ -15,7 +15,7 @@ class TweetEmotionClassification(AbsTaskClassification):
         description="A dataset of 10,000 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
@@ -40,7 +40,7 @@ class TweetEmotionClassification(AbsTaskClassification):
     )
 
 
-class TweetEmotionClassificationV2(AbsTaskClassification):
+class TweetEmotionClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetEmotionClassification.v2",
         dataset={
@@ -51,7 +51,7 @@ class TweetEmotionClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RestaurantReviewSentimentClassification(AbsTaskClassification):
+class RestaurantReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "RestaurantReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
@@ -15,7 +15,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         description="Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysis",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
@@ -47,7 +47,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         )
 
 
-class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
+class RestaurantReviewSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification.v2",
         dataset={
@@ -58,7 +58,7 @@ class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

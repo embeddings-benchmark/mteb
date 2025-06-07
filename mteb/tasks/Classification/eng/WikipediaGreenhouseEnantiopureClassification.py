@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaGreenhouseEnantiopureClassification(AbsTaskClassification):
+class WikipediaGreenhouseEnantiopureClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaGreenhouseEnantiopureClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaGreenhouseEnantiopureClassification(AbsTaskClassification):
             "revision": "0cfc1a83b6ed832454e8f4f93f7a0e26208274d9",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

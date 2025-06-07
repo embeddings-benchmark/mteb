@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 xlm_roberta_ua_distilled = ModelMeta(
     name="panalexeu/xlm-roberta-ua-distilled",
+    loader=sentence_transformers_loader,
     n_parameters=278_000_000,
     memory_usage_mb=1061,
     max_tokens=512,

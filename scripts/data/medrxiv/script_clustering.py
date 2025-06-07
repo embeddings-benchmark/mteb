@@ -9,7 +9,7 @@ import jsonlines
 import numpy as np
 from tqdm import tqdm
 
-np.random.seed(28042000)
+np.random.seed(28042000)  # noqa: NPY002
 
 d = datasets.load_dataset("mteb/raw_medrxiv")["train"]
 

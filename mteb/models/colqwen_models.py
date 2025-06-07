@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
 import torch
 from transformers.utils.import_utils import is_flash_attn_2_available
@@ -66,9 +65,8 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):
 
 
 colqwen2 = ModelMeta(
-    loader=partial(
-        ColQwen2Wrapper,
-        model_name="vidore/colqwen2-v1.0",
+    loader=ColQwen2Wrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -89,15 +87,14 @@ colqwen2 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colqwen2-v1.0",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colqwen2_5 = ModelMeta(
-    loader=partial(
-        ColQwen2_5Wrapper,
-        model_name="vidore/colqwen2.5-v0.2",
+    loader=ColQwen2_5Wrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -118,15 +115,14 @@ colqwen2_5 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colqwen2.5-v0.2",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colnomic_7b = ModelMeta(
-    loader=partial(
-        ColQwen2_5Wrapper,
-        model_name="nomic-ai/colnomic-embed-multimodal-7b",
+    loader=ColQwen2_5Wrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -147,7 +143,7 @@ colnomic_7b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
@@ -162,9 +158,8 @@ COLNOMIC_LANGUAGES = [
 ]
 
 colnomic_3b = ModelMeta(
-    loader=partial(
-        ColQwen2_5Wrapper,
-        model_name="nomic-ai/colnomic-embed-multimodal-3b",
+    loader=ColQwen2_5Wrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -185,15 +180,14 @@ colnomic_3b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-3b",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
 )
 
 colnomic_7b = ModelMeta(
-    loader=partial(
-        ColQwen2_5Wrapper,
-        model_name="nomic-ai/colnomic-embed-multimodal-7b",
+    loader=ColQwen2Wrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -214,7 +208,7 @@ colnomic_7b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
 )

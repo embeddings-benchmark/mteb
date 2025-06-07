@@ -15,7 +15,7 @@ class SciFactNL(AbsTaskRetrieval):
         description="SciFactNL verifies scientific claims in Dutch using evidence from the research literature containing scientific paper abstracts.",
         reference="https://huggingface.co/datasets/clips/beir-nl-scifact",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

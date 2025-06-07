@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DKHateClassification(AbsTaskClassification):
+class DKHateClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DKHateClassification",
         dataset={
@@ -14,7 +14,7 @@ class DKHateClassification(AbsTaskClassification):
         description="Danish Tweets annotated for Hate Speech either being Offensive or not",
         reference="https://aclanthology.org/2020.lrec-1.430/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

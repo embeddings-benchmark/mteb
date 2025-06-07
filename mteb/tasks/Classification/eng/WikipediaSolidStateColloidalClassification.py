@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaSolidStateColloidalClassification(AbsTaskClassification):
+class WikipediaSolidStateColloidalClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaSolidStateColloidalClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaSolidStateColloidalClassification(AbsTaskClassification):
             "revision": "7d8df44e588b6143d4856c781f72f919fa0599a7",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

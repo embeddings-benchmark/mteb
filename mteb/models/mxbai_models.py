@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 mixedbread_training_data = {
     # from correspondance:
@@ -14,10 +16,8 @@ mixedbread_training_data = {
 }
 
 mxbai_embed_large_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="mixedbread-ai/mxbai-embed-large-v1",
-        revision="990580e27d329c7408b3741ecff85876e128e203",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
         },
@@ -33,16 +33,31 @@ mxbai_embed_large_v1 = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation="""
+    @online{emb2024mxbai,
+      title={Open Source Strikes Bread - New Fluffy Embeddings Model},
+      author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
+      year={2024},
+      url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
+    }
+
+    @article{li2023angle,
+      title={AnglE-optimized Text Embeddings},
+      author={Li, Xianming and Li, Jing},
+      journal={arXiv preprint arXiv:2309.12871},
+      year={2023}
+    }
+    """,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=mixedbread_training_data,
+    training_datasets=None,
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
-    loader=None,
+    loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -54,19 +69,19 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/mixedbread-ai/mxbai-embed-2d-large-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=mixedbread_training_data,
+    training_datasets=None,
 )
 
 
 mxbai_embed_xsmall_v1 = ModelMeta(
-    loader=None,
+    loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -78,7 +93,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/mixedbread-ai/mxbai-embed-xsmall-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
