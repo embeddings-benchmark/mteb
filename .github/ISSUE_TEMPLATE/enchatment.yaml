@@ -1,0 +1,11 @@
+name: Enchatment
+description: Create a request for a new feature
+labels: ["enchatment"]
+body:
+  - type: textarea
+    attributes:
+      label: Description of the feature
+      description: Please provide a clear and concise description of the feature you would like to see added.
+    validations:
+      required: true
+  
