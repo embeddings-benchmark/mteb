@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.models.sentence_transformers_models import sentence_transformers_loader
 
 cadet_training_data = {
     # we train with the corpora of FEVER, MSMARCO, and DBPEDIA. We only train with synthetic generated queries.

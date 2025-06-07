@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-import os
-from functools import partial
-
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 
 
 def instruction_template(
@@ -110,10 +107,10 @@ training_data = {
 }
 
 
-def q3e_instruct_loader(model_name_or_path, **kwargs):
-    model = InstructSentenceTransformerWrapper(
+def q3e_instruct_loader(model_name_or_path: str, revision: str, **kwargs) -> Encoder:
+    model = InstructSentenceTransformerModel(
         model_name_or_path,
-        revision=kwargs.pop("revision", None),
+        revision=revision,
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
         **kwargs,
@@ -126,10 +123,7 @@ def q3e_instruct_loader(model_name_or_path, **kwargs):
 
 
 Qwen3_Embedding_0B6 = ModelMeta(
-    loader=partial(  # type: ignore
-        q3e_instruct_loader,
-        model_name_or_path=os.environ.get("Q3E_0B6_PATH", "Qwen/Qwen3-Embedding-0.6B"),
-    ),
+    loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-0.6B",
     languages=multilingual_langs,
     open_weights=True,
@@ -150,10 +144,7 @@ Qwen3_Embedding_0B6 = ModelMeta(
 )
 
 Qwen3_Embedding_4B = ModelMeta(
-    loader=partial(  # type: ignore
-        q3e_instruct_loader,
-        model_name_or_path=os.environ.get("Q3E_4B_PATH", "Qwen/Qwen3-Embedding-4B"),
-    ),
+    loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-4B",
     languages=multilingual_langs,
     open_weights=True,
@@ -174,10 +165,7 @@ Qwen3_Embedding_4B = ModelMeta(
 )
 
 Qwen3_Embedding_8B = ModelMeta(
-    loader=partial(  # type: ignore
-        q3e_instruct_loader,
-        model_name_or_path=os.environ.get("Q3E_8B_PATH", "Qwen/Qwen3-Embedding-8B"),
-    ),
+    loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-8B",
     languages=multilingual_langs,
     open_weights=True,
