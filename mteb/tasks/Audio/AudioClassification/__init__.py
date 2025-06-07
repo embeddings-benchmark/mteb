@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .eng.AESDD import *
 from .eng.AmbientAcousticContext import *
 from .eng.BeijingOpera import *
 from .eng.CommonLanguageAgeDetection import *
