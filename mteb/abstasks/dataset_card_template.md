@@ -27,15 +27,15 @@ You can evaluate an embedding model on this dataset using the following code:
 ```python
 import mteb
 
-task = mteb.get_tasks(["{{ dataset_task_name }}"])
-evaluator = mteb.MTEB(task)
+task = mteb.get_task("{{ dataset_task_name }}")
+evaluator = mteb.MTEB([task])
 
 model = mteb.get_model(YOUR_MODEL)
 evaluator.run(model)
 ```
 
 <!-- Datasets want link to arxiv in readme to autolink dataset with paper -->
-To learn more about how to run models on `mteb` task check out the [GitHub repitory](https://github.com/embeddings-benchmark/mteb). 
+To learn more about how to run models on `mteb` task check out the [GitHub repitory](https://github.com/embeddings-benchmark/mteb).
 
 ## Citation
 
