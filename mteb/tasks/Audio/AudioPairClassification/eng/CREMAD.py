@@ -72,6 +72,7 @@ voice expression},
   year = {2014},
 }
 """,
+        descriptive_stats={"n_samples": {"test": 7440}},
     )
 
     # Override default column name in the subclass
