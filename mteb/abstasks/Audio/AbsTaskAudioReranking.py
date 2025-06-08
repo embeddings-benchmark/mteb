@@ -119,10 +119,10 @@ class AbsTaskAudioReranking(AbsTask):
             num_positive=len(positive),
             num_negative=len(negative),
             unique_query=len(
-                set([str(q) for q in query])
+                {str(q) for q in query}
             ),  # Use string representation for uniqueness
-            unique_positive=len(set([str(p) for p in positive])),
-            unique_negative=len(set([str(n) for n in negative])),
+            unique_positive=len({str(p) for p in positive}),
+            unique_negative=len({str(n) for n in negative}),
         )
 
 
