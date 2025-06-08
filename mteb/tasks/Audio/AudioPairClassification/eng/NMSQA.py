@@ -26,9 +26,12 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
+        date=("2016-01-01", "2016-12-31"),
         domains=["Spoken"],
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""

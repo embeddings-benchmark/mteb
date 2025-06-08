@@ -28,9 +28,12 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
+        date=("2014-01-01", "2014-12-31"),
         domains=["Spoken"],
         task_subtypes=["Emotion classification"],
-        license="odc-by",
+        license="http://opendatacommons.org/licenses/odbl/1.0/",
+        annotations_creators="human-annotated",
+        dialect=[],
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""

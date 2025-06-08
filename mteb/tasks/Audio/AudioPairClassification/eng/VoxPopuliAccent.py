@@ -27,13 +27,42 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         type="AudioPairClassification",
         category="a2a",
         eval_splits=["test"],
-        eval_langs=["eng-latn"],
+        eval_langs=["eng-Latn"],
         main_score="max_ap",
+        date=("2021-01-01", "2021-08-01"),
         domains=["Spoken"],
         task_subtypes=["Emotion classification"],
         license="cc0-1.0",
+        annotations_creators="human-annotated",
+        dialect=[],
         modalities=["audio"],
         sample_creation="created",
+        bibtex_citation=r"""
+@inproceedings{wang-etal-2021-voxpopuli,
+  address = {Online},
+  author = {Wang, Changhan  and
+Riviere, Morgane  and
+Lee, Ann  and
+Wu, Anne  and
+Talnikar, Chaitanya  and
+Haziza, Daniel  and
+Williamson, Mary  and
+Pino, Juan  and
+Dupoux, Emmanuel},
+  booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2021.acl-long.80},
+  editor = {Zong, Chengqing  and
+Xia, Fei  and
+Li, Wenjie  and
+Navigli, Roberto},
+  month = aug,
+  pages = {993--1003},
+  publisher = {Association for Computational Linguistics},
+  title = {{V}ox{P}opuli: A Large-Scale Multilingual Speech Corpus for Representation Learning, Semi-Supervised Learning and Interpretation},
+  url = {https://aclanthology.org/2021.acl-long.80/},
+  year = {2021},
+}
+""",
         descriptive_stats={"n_samples": {"train": 4200}},
     )
 
