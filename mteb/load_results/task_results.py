@@ -5,10 +5,11 @@ import logging
 from argparse import Namespace
 from collections import defaultdict
 from collections.abc import Iterable
+from enum import Enum
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import Any, Callable
 
 import numpy as np
 from packaging.version import Version
@@ -22,6 +23,20 @@ from mteb.model_meta import ScoringFunction
 Score = Any
 
 logger = logging.getLogger(__name__)
+
+
+class Criterias(str, Enum):
+    MTEB_VERSION = "mteb_version"
+    DATASET_REVISION = "dataset_revision"
+
+    @classmethod
+    def from_str(cls, value: str) -> Criterias:
+        try:
+            return cls(value)
+        except ValueError:
+            raise ValueError(
+                f"'{value}' is not a valid {cls.__name__} value, must be one of {[e.value for e in cls]}"
+            )
 
 
 class ScalaNbClassificationDummy:
@@ -593,10 +608,11 @@ class TaskResult(BaseModel):
     def is_mergeable(
         self,
         result: TaskResult | AbsTask,
-        criteria: list[Literal["mteb_version", "dataset_revision"]] = [
+        criteria: list[str] | list[Criterias] = [
             "mteb_version",
             "dataset_revision",
         ],
+        raise_error: bool = False,
     ) -> bool:
         """Checks if the TaskResult object can be merged with another TaskResult or Task.
 
@@ -604,10 +620,14 @@ class TaskResult(BaseModel):
             result: The TaskResult or Task object to check against.
             criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
                 It will always check that the task name match.
+            raise_error: If True, raises an error if the objects cannot be merged. If False, returns False.
 
         Returns:
             True if the TaskResult object can be merged with the other object, False otherwise.
         """
+        criteria = [
+            Criterias.from_str(c) if isinstance(c, str) else c for c in criteria
+        ]
         if isinstance(result, TaskResult):
             name = result.task_name
             revision = result.dataset_revision
@@ -619,20 +639,33 @@ class TaskResult(BaseModel):
         else:
             return False
 
-        if self.task_name == name:
-            if "mteb_version" in criteria:
-                if self.mteb_version != mteb_version:
-                    return False
-            if "dataset_revision" in criteria:
-                if self.dataset_revision != revision:
-                    return False
-            return True
-        return False
+        if self.task_name != name:
+            if raise_error:
+                raise ValueError(
+                    f"Cannot merge TaskResult objects as they are derived from different tasks ({self.task_name} and {name})"
+                )
+            return False
+
+        if Criterias.MTEB_VERSION in criteria and self.mteb_version != mteb_version:
+            if raise_error:
+                raise ValueError(
+                    f"Cannot merge TaskResult objects as they are derived from different MTEB versions ({self.mteb_version} and {mteb_version})"
+                )
+            return False
+
+        if Criterias.DATASET_REVISION in criteria and self.dataset_revision != revision:
+            if raise_error:
+                raise ValueError(
+                    f"Cannot merge TaskResult objects as they are derived from different dataset revisions ({self.dataset_revision} and {revision})"
+                )
+            return False
+
+        return True
 
     def merge(
         self,
         new_results: TaskResult,
-        criteria: list[Literal["mteb_version", "dataset_revision"]] = [
+        criteria: list[str] | list[Criterias] = [
             "mteb_version",
             "dataset_revision",
         ],
@@ -647,22 +680,8 @@ class TaskResult(BaseModel):
         Returns:
             A new TaskResult object with the merged scores.
         """
-        if not self.is_mergeable(new_results, criteria=[]):
-            raise ValueError(
-                f"Cannot merge TaskResult objects as they are derived from different tasks ({self.task_name} and {new_results.task_name})"
-            )
-        if "mteb_version" in criteria and not self.is_mergeable(
-            new_results, criteria=["mteb_version"]
-        ):
-            raise ValueError(
-                f"Cannot merge TaskResult objects as they are derived from different MTEB versions ({self.mteb_version} and {new_results.mteb_version})"
-            )
-        if "dataset_revision" in criteria and not self.is_mergeable(
-            new_results, criteria=["dataset_revision"]
-        ):
-            raise ValueError(
-                f"Cannot merge TaskResult objects as they are derived from different dataset revisions ({self.dataset_revision} and {new_results.dataset_revision})"
-            )
+        self.is_mergeable(new_results, criteria=criteria, raise_error=True)
+
 
         merged_scores = self.scores.copy()
 
