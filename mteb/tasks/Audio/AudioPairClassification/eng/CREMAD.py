@@ -24,7 +24,7 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
             "revision": "5a172780c79bbddb9b326a2c830447c550a216a4",
         },
         type="AudioPairClassification",
-        category="t2t",
+        category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",

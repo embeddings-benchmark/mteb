@@ -25,7 +25,7 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioPairClassification",
-        category="t2t",
+        category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-latn"],
         main_score="max_ap",

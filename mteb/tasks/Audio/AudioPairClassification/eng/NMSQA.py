@@ -22,7 +22,7 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
             "revision": "39b80eb7f5135c0571db23049a2ba4837b41b0cf",
         },
         type="AudioPairClassification",
-        category="t2t",  # no audio category yet
+        category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",

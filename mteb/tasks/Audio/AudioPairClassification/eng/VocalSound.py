@@ -24,7 +24,7 @@ class VocalSoundPairClassification(AbsTaskAudioPairClassification):
             "revision": "beb7fe456e01f1a9959daae8dd507fa7790f4b62",
         },
         type="AudioPairClassification",
-        category="t2t",  # no audio category yet
+        category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
