@@ -120,9 +120,15 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
         cache_dir = kwargs.get("cache_dir", None)
 
         # Iterate over splits and languages
-        corpus = {language: dict.fromkeys(eval_splits) for language in languages}
-        queries = {language: dict.fromkeys(eval_splits) for language in languages}
-        relevant_docs = {language: dict.fromkeys(eval_splits) for language in languages}
+        corpus = {
+            language: {split: None for split in eval_splits} for language in languages
+        }
+        queries = {
+            language: {split: None for split in eval_splits} for language in languages
+        }
+        relevant_docs = {
+            language: {split: None for split in eval_splits} for language in languages
+        }
         for split in eval_splits:
             # Since this is a cross-lingual dataset, the corpus and the relevant documents do not depend on the language
             split_corpus = self._load_corpus(split=split, cache_dir=cache_dir)

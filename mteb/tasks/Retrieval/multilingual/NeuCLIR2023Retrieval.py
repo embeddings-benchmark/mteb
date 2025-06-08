@@ -24,9 +24,9 @@ def load_neuclir_data(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
+    queries = {lang: {split: None for split in eval_splits} for lang in langs}
+    relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
 
     for lang in langs:
         lang_corpus = datasets.load_dataset(
@@ -113,9 +113,9 @@ def load_neuclir_data_hard_negatives(
     revision: str | None = None,
 ):
     split = "test"
-    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
+    queries = {lang: {split: None for split in eval_splits} for lang in langs}
+    relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
 
     for lang in langs:
         corpus_identifier = f"corpus-{lang}"

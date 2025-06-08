@@ -84,7 +84,7 @@ class GermanDPR(AbsTaskRetrieval):
                 existing_docs=all_docs,
             )
             corpus.update(neg_docs)
-            relevant_docs[q_id] = dict.fromkeys(pos_docs, 1)
+            relevant_docs[q_id] = {k: 1 for k in pos_docs}
         corpus = {
             key: doc.get("title", "") + " " + doc["text"] for key, doc in corpus.items()
         }
