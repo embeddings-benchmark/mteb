@@ -11,6 +11,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb import SentenceTransformerWrapper
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.TaskMetadata import HFSubset, Splitname
 from mteb.cache import ResultCache
 from mteb.encoder_interface import Encoder
@@ -210,6 +211,25 @@ def run_tasks(
         >>> cache.download_from_remote()
         >>> result = mteb.run_tasks(model_meta, task, cache=cache)
     """
+    # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
+    if isinstance(tasks, AbsTaskAggregate):
+        task = cast(AbsTaskAggregate, tasks)
+        results = run_tasks(
+            model,
+            task.metadata.tasks,
+            co2_tracker=co2_tracker,
+            raise_error=raise_error,
+            encode_kwargs=encode_kwargs,
+            cache=cache,
+            overwrite_strategy=overwrite_strategy,
+        )
+        result = task.combine_task_results(results.task_results)
+        return ModelResult(
+            model_name=results.model_name,
+            model_revision=results.model_revision,
+            task_results=[result],
+        )
+
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
