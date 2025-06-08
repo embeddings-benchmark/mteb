@@ -63,7 +63,6 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         rng = np.random.default_rng(self.seed)
         similar_pairs = []
 
-        logger.info("Generating similar pairs:")
         for label, indices in tqdm.tqdm(label2indices.items()):
             indices = np.array(indices)
             rng.shuffle(indices)
@@ -75,7 +74,6 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         num_similar = len(similar_pairs)
         logger.info(f"Found similar pairs: {num_similar}")
 
-        logger.info("Generating dissimilar pairs:")
         labels = list(label2indices.keys())
         dissimilar_pairs = []
 
@@ -106,8 +104,9 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         similar_pairs = similar_pairs[:min_pairs]
         dissimilar_pairs = dissimilar_pairs[:min_pairs]
 
-        logger.info(f"Using {len(dissimilar_pairs)} dissimilar pairs")
-        logger.info(f"Using {len(similar_pairs)} similar pairs")
+        logger.info(
+            f"Using {len(dissimilar_pairs)} dissimilar pairs, {len(similar_pairs)} similar pairs"
+        )
 
         pairs = similar_pairs + dissimilar_pairs
         rng.shuffle(pairs)
@@ -116,11 +115,8 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
         label = [[lbl] for _, _, lbl in pairs]
 
-        logger.info("Creating dataset...")
         HF_ds = datasets.Dataset.from_dict(
             {"audio1": audio1, "audio2": audio2, "label": label}
         )
 
-        logger.info("Generating final dataset...")
         self.dataset = datasets.DatasetDict({"test": HF_ds})
-        logger.info("done!")

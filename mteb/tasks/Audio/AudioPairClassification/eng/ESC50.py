@@ -86,7 +86,6 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         num_similar = len(similar_pairs)
         logger.info(f"Number of similar pairs: {num_similar}")
 
-        logger.info("Generating dissimilar pairs:")
         labels = list(label2indices.keys())
         dissimilar_pairs = []
 
@@ -126,11 +125,8 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
         label = [[lbl] for _, _, lbl in pairs]
 
-        logger.info("Creating dataset...")
         HF_ds = datasets.Dataset.from_dict(
             {"audio1": audio1, "audio2": audio2, "label": label}
         )
 
-        logger.info("Generating final dataset...")
         self.dataset = datasets.DatasetDict({"test": HF_ds})
-        logger.info("done!")
