@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-import random
-from collections import defaultdict
-from datasets import Dataset, DatasetDict
+import logging
+
+import datasets
 import numpy as np
+from tqdm import tqdm
+
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
 )
-from tqdm import tqdm
-import datasets
-import gc
-import logging
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
+
 
 class CREMADPairClassification(AbsTaskAudioPairClassification):
     metadata = TaskMetadata(
@@ -34,44 +33,45 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
         license="odc-by",
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@ARTICLE{Cao2014-ih,
-  title     = "{CREMA-D}: Crowd-sourced emotional multimodal actors dataset",
-  author    = "Cao, Houwei and Cooper, David G and Keutmann, Michael K and Gur,
-               Ruben C and Nenkova, Ani and Verma, Ragini",
-  abstract  = "People convey their emotional state in their face and voice. We
-               present an audio-visual data set uniquely suited for the study
-               of multi-modal emotion expression and perception. The data set
-               consists of facial and vocal emotional expressions in sentences
-               spoken in a range of basic emotional states (happy, sad, anger,
-               fear, disgust, and neutral). 7,442 clips of 91 actors with
-               diverse ethnic backgrounds were rated by multiple raters in
-               three modalities: audio, visual, and audio-visual. Categorical
-               emotion labels and real-value intensity values for the perceived
-               emotion were collected using crowd-sourcing from 2,443 raters.
-               The human recognition of intended emotion for the audio-only,
-               visual-only, and audio-visual data are 40.9\%, 58.2\% and 63.6\%
-               respectively. Recognition rates are highest for neutral,
-               followed by happy, anger, disgust, fear, and sad. Average
-               intensity levels of emotion are rated highest for visual-only
-               perception. The accurate recognition of disgust and fear
-               requires simultaneous audio-visual cues, while anger and
-               happiness can be well recognized based on evidence from a single
-               modality. The large dataset we introduce can be used to probe
-               other questions concerning the audio-visual perception of
-               emotion.",
-  journal   = "IEEE Trans. Affect. Comput.",
-  publisher = "Institute of Electrical and Electronics Engineers (IEEE)",
-  volume    =  5,
-  number    =  4,
-  pages     = "377--390",
-  month     =  oct,
-  year      =  2014,
-  keywords  = "Emotional corpora; facial expression; multi-modal recognition;
-               voice expression",
-  copyright = "https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html",
-  language  = "en"
+        bibtex_citation=r"""
+@article{Cao2014-ih,
+  abstract = {People convey their emotional state in their face and voice. We
+present an audio-visual data set uniquely suited for the study
+of multi-modal emotion expression and perception. The data set
+consists of facial and vocal emotional expressions in sentences
+spoken in a range of basic emotional states (happy, sad, anger,
+fear, disgust, and neutral). 7,442 clips of 91 actors with
+diverse ethnic backgrounds were rated by multiple raters in
+three modalities: audio, visual, and audio-visual. Categorical
+emotion labels and real-value intensity values for the perceived
+emotion were collected using crowd-sourcing from 2,443 raters.
+The human recognition of intended emotion for the audio-only,
+visual-only, and audio-visual data are 40.9\%, 58.2\% and 63.6\%
+respectively. Recognition rates are highest for neutral,
+followed by happy, anger, disgust, fear, and sad. Average
+intensity levels of emotion are rated highest for visual-only
+perception. The accurate recognition of disgust and fear
+requires simultaneous audio-visual cues, while anger and
+happiness can be well recognized based on evidence from a single
+modality. The large dataset we introduce can be used to probe
+other questions concerning the audio-visual perception of
+emotion.},
+  author = {Cao, Houwei and Cooper, David G and Keutmann, Michael K and Gur,
+Ruben C and Nenkova, Ani and Verma, Ragini},
+  copyright = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html},
+  journal = {IEEE Trans. Affect. Comput.},
+  keywords = {Emotional corpora; facial expression; multi-modal recognition;
+voice expression},
+  language = {en},
+  month = oct,
+  number = {4},
+  pages = {377--390},
+  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},
+  title = {{CREMA-D}: Crowd-sourced emotional multimodal actors dataset},
+  volume = {5},
+  year = {2014},
 }
-        """,
+""",
         descriptive_stats={"n_samples": {"train": 7440}},
     )
 
@@ -83,14 +83,13 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
     samples_per_label: int = 2
 
     def dataset_transform(self):
-
         ds = self.dataset["train"]
         logger.info(f"Starting dataset transformation with seed {self.seed}...")
 
         ds = ds.rename_column("major_emotion", "label")
 
         # convert string labels to int
-        unique_labels = list(sorted(set(ds["label"])))
+        unique_labels = sorted(set(ds["label"]))
         label2int = {label: idx for idx, label in enumerate(unique_labels)}
         ds = ds.map(lambda x: {"label": label2int[x["label"]]})
 
@@ -114,7 +113,6 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
         num_similar = len(similar_pairs)
         logger.info(f"Found similar pairs: {num_similar}")
 
-
         logger.info("Generating dissimilar pairs:")
         labels = list(label2indices.keys())
         dissimilar_pairs = []
@@ -126,7 +124,6 @@ class CREMADPairClassification(AbsTaskAudioPairClassification):
             label_candidates[label] = []
             for other_label in other_labels:
                 label_candidates[label].extend(label2indices[other_label])
-
 
         for label, indices in tqdm(label2indices.items()):
             candidates = label_candidates[label]

@@ -1,14 +1,9 @@
 from __future__ import annotations
 
-import random
-import os
 import logging
 
-from collections import defaultdict
-from datasets import Dataset, DatasetDict, concatenate_datasets
-import numpy as np
-import pandas as pd
 import datasets
+import numpy as np
 import tqdm
 
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
@@ -17,6 +12,7 @@ from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
+
 
 class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
     metadata = TaskMetadata(
@@ -48,16 +44,14 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
     label_column_name: str = "label"
     samples_per_label: int = 2
 
-
     def dataset_transform(self):
-
         ds = self.dataset["test"]
         logger.info(f"Starting dataset transformation with seed {self.seed}...")
 
         ds = ds.rename_column("accent", "label")
 
         # convert string labels to int
-        unique_labels = list(sorted(set(ds["label"])))
+        unique_labels = sorted(set(ds["label"]))
         label2int = {label: idx for idx, label in enumerate(unique_labels)}
         ds = ds.map(lambda x: {"label": label2int[x["label"]]})
 
@@ -81,7 +75,6 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         num_similar = len(similar_pairs)
         logger.info(f"Found similar pairs: {num_similar}")
 
-
         logger.info("Generating dissimilar pairs:")
         labels = list(label2indices.keys())
         dissimilar_pairs = []
@@ -93,7 +86,6 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
             label_candidates[label] = []
             for other_label in other_labels:
                 label_candidates[label].extend(label2indices[other_label])
-
 
         for label, indices in tqdm.tqdm(label2indices.items()):
             candidates = label_candidates[label]

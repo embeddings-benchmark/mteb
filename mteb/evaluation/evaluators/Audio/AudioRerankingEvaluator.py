@@ -45,7 +45,6 @@ class AudioDataset(torch.utils.data.Dataset):
         else:
             # Assume it's already a tensor or in a usable format
             waveform = audio
-            sample_rate = 16000  # Default sample rate if not specified
 
         if self.transform is not None:
             waveform = self.transform(waveform)

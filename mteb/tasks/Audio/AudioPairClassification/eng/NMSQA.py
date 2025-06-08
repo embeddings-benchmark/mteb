@@ -1,20 +1,17 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-import random
-from collections import defaultdict
-from datasets import Dataset, DatasetDict
-import numpy as np
+import logging
+
+import datasets
+import pandas as pd
+
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
 )
-from tqdm import tqdm
-import datasets
-import pandas as pd
-import gc
-import logging
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
+
 
 class NMSQAPairClassification(AbsTaskAudioPairClassification):
     metadata = TaskMetadata(
@@ -35,16 +32,17 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         license="cc-by-sa-4.0",
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@misc{lin2022dualdiscretespokenunit,
-      title={DUAL: Discrete Spoken Unit Adaptive Learning for Textless Spoken Question Answering},
-      author={Guan-Ting Lin and Yung-Sung Chuang and Ho-Lam Chung and Shu-wen Yang and Hsuan-Jui Chen and Shuyan Dong and Shang-Wen Li and Abdelrahman Mohamed and Hung-yi Lee and Lin-shan Lee},
-      year={2022},
-      eprint={2203.04911},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2203.04911},
+        bibtex_citation=r"""
+@misc{lin2022dualdiscretespokenunit,
+  archiveprefix = {arXiv},
+  author = {Guan-Ting Lin and Yung-Sung Chuang and Ho-Lam Chung and Shu-wen Yang and Hsuan-Jui Chen and Shuyan Dong and Shang-Wen Li and Abdelrahman Mohamed and Hung-yi Lee and Lin-shan Lee},
+  eprint = {2203.04911},
+  primaryclass = {cs.CL},
+  title = {DUAL: Discrete Spoken Unit Adaptive Learning for Textless Spoken Question Answering},
+  url = {https://arxiv.org/abs/2203.04911},
+  year = {2022},
 }
-        """,
+""",
         descriptive_stats={"n_samples": {"test": 171}},
     )
 
@@ -67,7 +65,6 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
     def dataset_transform(self):
         ds = self.dataset["test"]
 
-
         ds = ds.shuffle(self.seed)
 
         # split into similar and dissimilar halves
@@ -82,7 +79,9 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         ds_sim = ds_sim.map(
             lambda row: {
                 "question_audio_path": row["question_audio_path"]["array"],
-                "content_segment_audio_path": row["content_segment_audio_path"]["array"],
+                "content_segment_audio_path": row["content_segment_audio_path"][
+                    "array"
+                ],
             },
             batched=False,
         )
@@ -92,14 +91,17 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
             n = len(batch["question_audio_path"])
             return {
                 "question_audio_path": batch["question_audio_path"],
-                "content_segment_audio_path": batch["content_segment_audio_path"][1:] + batch["content_segment_audio_path"][:1],
+                "content_segment_audio_path": batch["content_segment_audio_path"][1:]
+                + batch["content_segment_audio_path"][:1],
                 "label": [0] * n,
             }
 
         ds_dissim = ds_dissim.map(
             lambda row, idx: {
                 "question_audio_path": row["question_audio_path"]["array"],
-                "content_segment_audio_path": ds_dissim[(idx + 1) % len(ds_dissim)]["content_segment_audio_path"]["array"],
+                "content_segment_audio_path": ds_dissim[(idx + 1) % len(ds_dissim)][
+                    "content_segment_audio_path"
+                ]["array"],
                 "label": 0,
             },
             with_indices=True,
@@ -109,10 +111,9 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
 
         ds_combined = ds_combined.shuffle(seed=self.seed)
 
-        ds_combined = ds_combined.rename_columns({
-            "question_audio_path": "audio1",
-            "content_segment_audio_path": "audio2"
-        })
+        ds_combined = ds_combined.rename_columns(
+            {"question_audio_path": "audio1", "content_segment_audio_path": "audio2"}
+        )
 
         # wrap in DatasetDict
         self.dataset = datasets.DatasetDict({"test": ds_combined})

@@ -1,22 +1,18 @@
 from __future__ import annotations
 
-import random
+import logging
 
 import datasets
-import pandas as pd
+import numpy as np
 from tqdm import tqdm
 
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import logging
-import numpy as np
-
-from collections import defaultdict
-from datasets import Dataset, DatasetDict
 
 logger = logging.getLogger(__name__)
+
 
 class VocalSoundPairClassification(AbsTaskAudioPairClassification):
     metadata = TaskMetadata(
@@ -37,15 +33,16 @@ class VocalSoundPairClassification(AbsTaskAudioPairClassification):
         license="cc-by-sa-4.0",
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{inproceedings,
-author = {Gong, Yuan and Yu, Jin and Glass, James},
-year = {2022},
-month = {05},
-pages = {151-155},
-title = {Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition},
-doi = {10.1109/ICASSP43922.2022.9746828}
+        bibtex_citation=r"""
+@inproceedings{inproceedings,
+  author = {Gong, Yuan and Yu, Jin and Glass, James},
+  doi = {10.1109/ICASSP43922.2022.9746828},
+  month = {05},
+  pages = {151-155},
+  title = {Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition},
+  year = {2022},
 }
-        """,
+""",
         descriptive_stats={"n_samples": {"train": 6400}},
     )
 
@@ -57,12 +54,11 @@ doi = {10.1109/ICASSP43922.2022.9746828}
     samples_per_label: int = 2
 
     def dataset_transform(self):
-
         ds = self.dataset["test"]
         logger.info(f"Starting dataset transformation with seed {self.seed}...")
 
         # convert string labels to int
-        unique_labels = list(sorted(set(ds["label"])))
+        unique_labels = sorted(set(ds["label"]))
         label2int = {label: idx for idx, label in enumerate(unique_labels)}
         ds = ds.map(lambda x: {"label": label2int[x["label"]]})
 
@@ -86,7 +82,6 @@ doi = {10.1109/ICASSP43922.2022.9746828}
         num_similar = len(similar_pairs)
         logger.info(f"Found similar pairs: {num_similar}")
 
-
         logger.info("Generating dissimilar pairs:")
         labels = list(label2indices.keys())
         dissimilar_pairs = []
@@ -98,7 +93,6 @@ doi = {10.1109/ICASSP43922.2022.9746828}
             label_candidates[label] = []
             for other_label in other_labels:
                 label_candidates[label].extend(label2indices[other_label])
-
 
         for label, indices in tqdm(label2indices.items()):
             candidates = label_candidates[label]

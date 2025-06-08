@@ -1,20 +1,17 @@
 from __future__ import annotations
 
-import random
-from collections import defaultdict
-from datasets import Dataset, DatasetDict
+import logging
+
+import datasets
 import numpy as np
+from tqdm import tqdm
+
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
 )
-from tqdm import tqdm
-import datasets
-import pandas as pd
-import gc
-import logging
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
-
 
 
 class ESC50PairClassification(AbsTaskAudioPairClassification):
@@ -39,18 +36,20 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{piczak2015dataset,
-        title = {{ESC}: {Dataset} for {Environmental Sound Classification}},
-        author = {Piczak, Karol J.},
-        booktitle = {Proceedings of the 23rd {Annual ACM Conference} on {Multimedia}},
-        date = {2015-10-13},
-        url = {http://dl.acm.org/citation.cfm?doid=2733373.2806390},
-        doi = {10.1145/2733373.2806390},
-        location = {{Brisbane, Australia}},
-        isbn = {978-1-4503-3459-4},
-        publisher = {{ACM Press}},
-        pages = {1015--1018}
-    }""",
+        bibtex_citation=r"""
+@inproceedings{piczak2015dataset,
+  author = {Piczak, Karol J.},
+  booktitle = {Proceedings of the 23rd {Annual ACM Conference} on {Multimedia}},
+  date = {2015-10-13},
+  doi = {10.1145/2733373.2806390},
+  isbn = {978-1-4503-3459-4},
+  location = {{Brisbane, Australia}},
+  pages = {1015--1018},
+  publisher = {{ACM Press}},
+  title = {{ESC}: {Dataset} for {Environmental Sound Classification}},
+  url = {http://dl.acm.org/citation.cfm?doid=2733373.2806390},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 2000},
         },
@@ -87,7 +86,6 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         num_similar = len(similar_pairs)
         logger.info(f"Number of similar pairs: {num_similar}")
 
-
         logger.info("Generating dissimilar pairs:")
         labels = list(label2indices.keys())
         dissimilar_pairs = []
@@ -99,7 +97,6 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
             label_candidates[label] = []
             for other_label in other_labels:
                 label_candidates[label].extend(label2indices[other_label])
-
 
         for label, indices in tqdm(label2indices.items()):
             candidates = label_candidates[label]
