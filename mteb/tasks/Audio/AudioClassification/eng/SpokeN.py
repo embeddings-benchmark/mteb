@@ -29,13 +29,13 @@ class SpokeNEnglishClassification(AbsTaskAudioClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation="""@misc{groh2024spoken100crosslingualbenchmarkingdataset,
-            title={SpokeN-100: A Cross-Lingual Benchmarking Dataset for The Classification of Spoken Numbers in Different Languages}, 
+            title={SpokeN-100: A Cross-Lingual Benchmarking Dataset for The Classification of Spoken Numbers in Different Languages},
             author={René Groh and Nina Goes and Andreas M. Kist},
             year={2024},
             eprint={2403.09753},
             archivePrefix={arXiv},
             primaryClass={cs.SD},
-            url={https://arxiv.org/abs/2403.09753}, 
+            url={https://arxiv.org/abs/2403.09753},
         }""",
         descriptive_stats={
             "n_samples": {"train": 3200},
@@ -44,4 +44,5 @@ class SpokeNEnglishClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 32
+    samples_per_label: int = 8
+    is_cross_validation: bool = True
