@@ -35,13 +35,15 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{keung2020multilingual,
-      title={The Multilingual Amazon Reviews Corpus},
-      author={Phillip Keung and Yichao Lu and György Szarvas and Noah A. Smith},
-      year={2020},
-      eprint={2010.02573},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{keung2020multilingual,
+  archiveprefix = {arXiv},
+  author = {Phillip Keung and Yichao Lu and György Szarvas and Noah A. Smith},
+  eprint = {2010.02573},
+  primaryclass = {cs.CL},
+  title = {The Multilingual Amazon Reviews Corpus},
+  year = {2020},
+}
+""",
         prompt="Classify the given Amazon review into its appropriate rating category",
     )

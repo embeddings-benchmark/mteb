@@ -7,7 +7,7 @@ import os
 import pandas as pd
 
 import mteb
-from mteb.leaderboard.table import scores_to_tables
+from mteb.leaderboard.table import create_tables
 from mteb.load_results import load_results
 
 logging.basicConfig(level=logging.INFO)
@@ -64,7 +64,7 @@ def load_leaderboard(
     scores_long = benchmark_results_filtered.get_scores(format="long")
 
     # Convert scores into leaderboard tables
-    summary_gr_df, per_task_gr_df = scores_to_tables(scores_long=scores_long)
+    summary_gr_df, per_task_gr_df = create_tables(scores_long=scores_long)
 
     # Convert Gradio DataFrames to Pandas
     summary_df = pd.DataFrame(

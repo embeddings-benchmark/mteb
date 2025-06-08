@@ -26,13 +26,15 @@ class NIGHTSI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@article{fu2024dreamsim,
-  title={DreamSim: Learning New Dimensions of Human Visual Similarity using Synthetic Data},
-  author={Fu, Stephanie and Tamir, Netanel and Sundaram, Shobhita and Chai, Lucy and Zhang, Richard and Dekel, Tali and Isola, Phillip},
-  journal={Advances in Neural Information Processing Systems},
-  volume={36},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{fu2024dreamsim,
+  author = {Fu, Stephanie and Tamir, Netanel and Sundaram, Shobhita and Chai, Lucy and Zhang, Richard and Dekel, Tali and Isola, Phillip},
+  journal = {Advances in Neural Information Processing Systems},
+  title = {DreamSim: Learning New Dimensions of Human Visual Similarity using Synthetic Data},
+  volume = {36},
+  year = {2024},
+}
+""",
         prompt={
             "query": "Find a day-to-day image that looks similar to the provided image."
         },

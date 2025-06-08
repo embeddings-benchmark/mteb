@@ -28,16 +28,17 @@ class GunshotTriangulation(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@misc{raponi2021soundgunsdigitalforensics,
-                title={Sound of Guns: Digital Forensics of Gun Audio Samples meets Artificial Intelligence}, 
-                author={Simone Raponi and Isra Ali and Gabriele Oligeri},
-                year={2021},
-                eprint={2004.07948},
-                archivePrefix={arXiv},
-                primaryClass={eess.AS},
-                url={https://arxiv.org/abs/2004.07948}, 
-            }
-        }""",
+        bibtex_citation=r"""
+@misc{raponi2021soundgunsdigitalforensics,
+  archiveprefix = {arXiv},
+  author = {Simone Raponi and Isra Ali and Gabriele Oligeri},
+  eprint = {2004.07948},
+  primaryclass = {eess.AS},
+  title = {Sound of Guns: Digital Forensics of Gun Audio Samples meets Artificial Intelligence},
+  url = {https://arxiv.org/abs/2004.07948},
+  year = {2021},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 88},
         },

@@ -26,13 +26,14 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @article{dhananjaya2022,
-            author    = {Dhananjaya et al.},
-            title     = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
-            journal   = {Year of Publication},
-            year      = {2022},
-            }""",
+        bibtex_citation=r"""
+@article{dhananjaya2022,
+  author = {Dhananjaya et al.},
+  journal = {Year of Publication},
+  title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):

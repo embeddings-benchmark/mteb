@@ -26,7 +26,19 @@ class CExaPPC(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=r"""
+@inproceedings{9786243,
+  author = {Sadeghi, Reyhaneh and Karbasi, Hamed and Akbari, Ahmad},
+  booktitle = {2022 8th International Conference on Web Research (ICWR)},
+  doi = {10.1109/ICWR54782.2022.9786243},
+  keywords = {Data mining;Task analysis;Paraphrase Identification;Semantic Similarity;Deep Learning;Paraphrasing Corpora},
+  number = {},
+  pages = {168-175},
+  title = {ExaPPC: a Large-Scale Persian Paraphrase Detection Corpus},
+  volume = {},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -214,13 +226,23 @@ class ParsinluEntail(AbsTaskPairClassification):
         eval_langs=["fas-Arab"],
         main_score="max_ap",
         date=("2024-09-01", "2024-12-31"),
-        domains=[],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=r"""
+@misc{khashabi2021parsinlusuitelanguageunderstanding,
+  archiveprefix = {arXiv},
+  author = {Daniel Khashabi and Arman Cohan and Siamak Shakeri and Pedram Hosseini and Pouya Pezeshkpour and Malihe Alikhani and Moin Aminnaseri and Marzieh Bitaab and Faeze Brahman and Sarik Ghazarian and Mozhdeh Gheini and Arman Kabiri and Rabeeh Karimi Mahabadi and Omid Memarrast and Ahmadreza Mosallanezhad and Erfan Noury and Shahab Raji and Mohammad Sadegh Rasooli and Sepideh Sadeghi and Erfan Sadeqi Azer and Niloofar Safi Samghabadi and Mahsa Shafaei and Saber Sheybani and Ali Tazarv and Yadollah Yaghoobzadeh},
+  eprint = {2012.06154},
+  primaryclass = {cs.CL},
+  title = {ParsiNLU: A Suite of Language Understanding Challenges for Persian},
+  url = {https://arxiv.org/abs/2012.06154},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -257,13 +279,23 @@ class ParsinluQueryParaphPC(AbsTaskPairClassification):
         eval_langs=["fas-Arab"],
         main_score="max_ap",
         date=("2024-09-01", "2024-12-31"),
-        domains=[],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=r"""
+@misc{khashabi2021parsinlusuitelanguageunderstanding,
+  archiveprefix = {arXiv},
+  author = {Daniel Khashabi and Arman Cohan and Siamak Shakeri and Pedram Hosseini and Pouya Pezeshkpour and Malihe Alikhani and Moin Aminnaseri and Marzieh Bitaab and Faeze Brahman and Sarik Ghazarian and Mozhdeh Gheini and Arman Kabiri and Rabeeh Karimi Mahabadi and Omid Memarrast and Ahmadreza Mosallanezhad and Erfan Noury and Shahab Raji and Mohammad Sadegh Rasooli and Sepideh Sadeghi and Erfan Sadeqi Azer and Niloofar Safi Samghabadi and Mahsa Shafaei and Saber Sheybani and Ali Tazarv and Yadollah Yaghoobzadeh},
+  eprint = {2012.06154},
+  primaryclass = {cs.CL},
+  title = {ParsiNLU: A Suite of Language Understanding Challenges for Persian},
+  url = {https://arxiv.org/abs/2012.06154},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):

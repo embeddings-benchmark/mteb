@@ -29,14 +29,16 @@ class ArEntail(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{obeidat2024arentail,
-        title={ArEntail: manually-curated Arabic natural language inference dataset from news headlines},
-        author={Obeidat, Rasha and Al-Harahsheh, Yara and Al-Ayyoub, Mahmoud and Gharaibeh, Maram},
-        journal={Language Resources and Evaluation},
-        pages={1--27},
-        year={2024},
-        publisher={Springer}
-        }""",
+        bibtex_citation=r"""
+@article{obeidat2024arentail,
+  author = {Obeidat, Rasha and Al-Harahsheh, Yara and Al-Ayyoub, Mahmoud and Gharaibeh, Maram},
+  journal = {Language Resources and Evaluation},
+  pages = {1--27},
+  publisher = {Springer},
+  title = {ArEntail: manually-curated Arabic natural language inference dataset from news headlines},
+  year = {2024},
+}
+""",
     )
 
     def dataset_transform(self):

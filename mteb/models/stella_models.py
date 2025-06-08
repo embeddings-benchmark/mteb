@@ -42,17 +42,17 @@ stella_zh_datasets = {
 # https://huggingface.co/datasets/m-a-p/Matrix
 
 stella_en_400M = ModelMeta(
-    # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
+    # https://huggingface.co/NovaSearch/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
     loader=partial(  # type: ignore
         instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_400M_v5",
+        model_name_or_path="NovaSearch/stella_en_400M_v5",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
         torch_dtype="auto",
     ),
-    name="dunzhang/stella_en_400M_v5",
-    languages=["eng_Latn"],
+    name="NovaSearch/stella_en_400M_v5",
+    languages=["eng-Latn"],
     open_weights=True,
     use_instructions=True,
     revision="1bb50bc7bb726810eac2140e62155b88b0df198f",
@@ -64,7 +64,7 @@ stella_en_400M = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
-    reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
+    reference="https://huggingface.co/NovaSearch/stella_en_400M_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
@@ -73,14 +73,14 @@ stella_en_400M = ModelMeta(
 stella_en_1_5b = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_1.5B_v5",
+        model_name_or_path="NovaSearch/stella_en_1.5B_v5",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
         torch_dtype="auto",
     ),
-    name="dunzhang/stella_en_1.5B_v5",
-    languages=["eng_Latn"],
+    name="NovaSearch/stella_en_1.5B_v5",
+    languages=["eng-Latn"],
     open_weights=True,
     use_instructions=True,
     revision="d03be74b361d4eb24f42a2fe5bd2e29917df4604",
@@ -92,7 +92,7 @@ stella_en_1_5b = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
-    reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
+    reference="https://huggingface.co/NovaSearch/stella_en_1.5B_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
@@ -100,7 +100,7 @@ stella_en_1_5b = ModelMeta(
 
 stella_large_zh_v3_1792d = ModelMeta(
     name="dunzhang/stella-large-zh-v3-1792d",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="d5d39eb8cd11c80a63df53314e59997074469f09",
     release_date="2024-02-17",
@@ -127,7 +127,7 @@ stella_large_zh_v3_1792d = ModelMeta(
 
 stella_base_zh_v3_1792d = ModelMeta(
     name="infgrad/stella-base-zh-v3-1792d",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="82254892a0fba125aa2abf3a4800d2dd12821343",
     release_date="2024-02-17",
@@ -155,7 +155,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 
 stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="17bb1c32a93a8fc5f6fc9e91d5ea86da99983cfe",
     release_date="2024-02-27",
@@ -164,7 +164,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     embed_dim=1792,
     license="mit",
     max_tokens=512,
-    reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
+    reference="https://huggingface.co/dunzhang/stella-mrl-large-zh-v3.5-1792d",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
@@ -177,7 +177,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
 
 zpoint_large_embedding_zh = ModelMeta(
     name="iampanda/zpoint_large_embedding_zh",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="b1075144f440ab4409c05622c1179130ebd57d03",
     release_date="2024-06-04",

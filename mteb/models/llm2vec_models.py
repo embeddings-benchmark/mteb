@@ -9,6 +9,7 @@ import torch
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package, suggest_package
 
 logger = logging.getLogger(__name__)
 
@@ -56,21 +57,21 @@ class LLM2VecWrapper(Wrapper):
         *args,
         **kwargs,
     ):
-        try:
-            from llm2vec import LLM2Vec
-        except ImportError:
-            raise ImportError(
-                "To use the LLM2Vec models `llm2vec` is required. Please install it with `pip install llm2vec`."
-            )
+        model_name = kwargs.get("model_name", "LLM2Vec")
+        requires_package(self, "llm2vec", model_name, "pip install 'mteb[llm2vec]'")
+        from llm2vec import LLM2Vec
+
         extra_kwargs = {}
-        try:
-            import flash_attn  # noqa
+        if suggest_package(
+            self,
+            "flash_attn",
+            model_name,
+            "pip install flash-attn --no-build-isolation",
+        ):
+            import flash_attn  # noqa: F401
 
             extra_kwargs["attn_implementation"] = "flash_attention_2"
-        except ImportError:
-            logger.warning(
-                "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
-            )
+
         self.model_prompts = (
             self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
@@ -115,7 +116,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="baa8ebf04a1c2500e61288e7dad65e8ae42601a7",
     # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
@@ -143,7 +144,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="1cb7b735326d13a8541db8f57f35da5373f5e9c6",
     release_date="2024-04-09",
@@ -170,7 +171,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="0ae69bdd5816105778b971c3138e8f8a18eaa3ae",
     release_date="2024-04-09",
@@ -197,7 +198,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="2c055a5d77126c0d3dc6cd8ffa30e2908f4f45f8",
     release_date="2024-04-09",
@@ -224,7 +225,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="2c055a5d77126c0d3dc6cd8ffa30e2908f4f45f8",
     release_date="2024-04-09",
@@ -251,7 +252,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="a76944871d169ebe7c97eb921764cd063afed785",
     release_date="2024-04-09",
@@ -278,7 +279,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="a5943d406c6b016fef3f07906aac183cf1a0b47d",
     release_date="2024-04-09",
@@ -305,7 +306,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
         torch_dtype=torch.bfloat16,
     ),
     name="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="a5943d406c6b016fef3f07906aac183cf1a0b47d",
     release_date="2024-04-09",

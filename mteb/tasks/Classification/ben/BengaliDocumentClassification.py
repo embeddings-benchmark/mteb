@@ -26,22 +26,22 @@ class BengaliDocumentClassification(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{akash-etal-2023-shironaam,
-            title = "Shironaam: {B}engali News Headline Generation using Auxiliary Information",
-            author = "Akash, Abu Ubaida  and
-            Nayeem, Mir Tafseer  and
-            Shohan, Faisal Tareque  and
-            Islam, Tanvir",
-            booktitle = "Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics",
-            month = may,
-            year = "2023",
-            address = "Dubrovnik, Croatia",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/2023.eacl-main.4",
-            pages = "52--67"
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{akash-etal-2023-shironaam,
+  address = {Dubrovnik, Croatia},
+  author = {Akash, Abu Ubaida  and
+Nayeem, Mir Tafseer  and
+Shohan, Faisal Tareque  and
+Islam, Tanvir},
+  booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
+  month = may,
+  pages = {52--67},
+  publisher = {Association for Computational Linguistics},
+  title = {Shironaam: {B}engali News Headline Generation using Auxiliary Information},
+  url = {https://aclanthology.org/2023.eacl-main.4},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

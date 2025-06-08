@@ -85,13 +85,15 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{shen2023xpqa,
-        title={xPQA: Cross-Lingual Product Question Answering in 12 Languages},
-        author={Shen, Xiaoyu and Asai, Akari and Byrne, Bill and De Gispert, Adria},
-        booktitle={Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 5: Industry Track)},
-        pages={103--115},
-        year={2023}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{shen2023xpqa,
+  author = {Shen, Xiaoyu and Asai, Akari and Byrne, Bill and De Gispert, Adria},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 5: Industry Track)},
+  pages = {103--115},
+  title = {xPQA: Cross-Lingual Product Question Answering in 12 Languages},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs):
