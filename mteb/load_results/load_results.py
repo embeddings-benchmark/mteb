@@ -60,8 +60,6 @@ def load_results(
             splits from the results object that are not default in the task metadata. Defaults to True.
         only_main_score: If True, only the main score will be loaded.
     """
-    # TODO: we want to allow results_repo (the first argument) to be a local path
-    # TODO: in v2 we can rename it to "path" to align with load_dataset
     cache = ResultCache()
     if download_latest:
         cache.download_from_remote(remote=results_repo, download_latest=download_latest)
