@@ -28,16 +28,18 @@ class VocalSoundClassification(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{Gong_2022,
-            title={Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition},
-            url={http://dx.doi.org/10.1109/ICASSP43922.2022.9746828},
-            DOI={10.1109/icassp43922.2022.9746828},
-            booktitle={ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
-            publisher={IEEE},
-            author={Gong, Yuan and Yu, Jin and Glass, James},
-            year={2022},
-            month=may }
-                }""",
+        bibtex_citation=r"""
+@inproceedings{Gong_2022,
+  author = {Gong, Yuan and Yu, Jin and Glass, James},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9746828},
+  month = may,
+  publisher = {IEEE},
+  title = {Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition},
+  url = {http://dx.doi.org/10.1109/ICASSP43922.2022.9746828},
+  year = {2022},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 3594},
         },
