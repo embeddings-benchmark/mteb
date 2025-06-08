@@ -5,7 +5,7 @@ from collections.abc import Iterable
 from copy import deepcopy
 from enum import Enum
 from time import time
-from typing import Any, Literal, cast
+from typing import Any, cast
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -264,7 +264,11 @@ def run_tasks(
     else:
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
 
-    if existing_results and not missing_eval and overwrite_strategy != OverwriteStrategy.ALWAYS:
+    if (
+        existing_results
+        and not missing_eval
+        and overwrite_strategy != OverwriteStrategy.ALWAYS
+    ):
         # if there are no missing evals we can just return the results
         logger.debug(
             f"Results for {task.metadata.name} already exist in cache. Skipping evaluation."
@@ -274,7 +278,10 @@ def run_tasks(
             model_revision=model_revision,
             task_results=[existing_results],
         )
-    if missing_eval and overwrite_strategy in [OverwriteStrategy.NEVER, OverwriteStrategy.ONLY_CACHE]:
+    if missing_eval and overwrite_strategy in [
+        OverwriteStrategy.NEVER,
+        OverwriteStrategy.ONLY_CACHE,
+    ]:
         raise ValueError(
             f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
         )

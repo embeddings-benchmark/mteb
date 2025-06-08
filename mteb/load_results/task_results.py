@@ -682,7 +682,6 @@ class TaskResult(BaseModel):
         """
         self.is_mergeable(new_results, criteria=criteria, raise_error=True)
 
-
         merged_scores = self.scores.copy()
 
         for split, scores in new_results.scores.items():

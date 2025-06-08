@@ -195,7 +195,7 @@ class ResultCache:
                     f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
                 )
             return results_directory
-        
+
         logger.info(
             f"No results repository found in {results_directory}, cloning it from {remote}"
         )
