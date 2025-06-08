@@ -1,12 +1,12 @@
 name: 🗃 New dataset
 description: Create a request for a new dataset to be added to MTEB
-title: "dataset: "
+title: "Add dataset: {dataset_name}"
 labels: ["new dataset"]
 body:
   - type: input
     attributes:
       label: dataset link on Hugging dataset
-      description: Please provide a link to the dataset on Hugging Face.
+      description: Please provide a link to the dataset, ideally to Hugging Face.
     validations:
       required: true
   - type: input

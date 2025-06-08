@@ -1,6 +1,6 @@
 name: 🤖 New model
 description: Create a request for a new model to be added to MTEB
-title: "model: "
+title: "Add model: {model_id}"
 labels: ["new model"]
 body:
   - type: input
