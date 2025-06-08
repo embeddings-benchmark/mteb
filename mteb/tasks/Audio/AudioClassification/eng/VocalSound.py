@@ -39,7 +39,7 @@ class VocalSoundClassification(AbsTaskAudioClassification):
             month=may }
                 }""",
         descriptive_stats={
-            "n_samples": {"validation": 1860, "test": 3594},
+            "n_samples": {"test": 3594},
         },
     )
 
