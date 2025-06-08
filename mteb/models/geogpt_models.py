@@ -11,7 +11,7 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
-    languages=["eng-Latn"],  # follows ISO 639-3 and BCP-47
+    languages=["eng-Latn"],
     open_weights=True,
     revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",
     loader=partial(
