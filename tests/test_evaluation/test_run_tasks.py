@@ -101,7 +101,7 @@ def test_run_task_w_missing_splits(
 
 @pytest.mark.parametrize(
     "model, task, expected_score",
-    [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.0)],
+    [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.63093)],
     ids=["mock_retrieval"],
 )
 def test_run_task_w_missing_subset(
@@ -126,7 +126,7 @@ def test_run_task_w_missing_subset(
     assert set(updated.hf_subsets) == set(task.metadata.hf_subsets)
 
     assert updated.task_name == task.metadata.name, "results should match the task"
-    assert updated.get_score() == 0.63093, (
+    assert updated.get_score() == expected_score, (
         "main score should match the expected value"
     )
 
