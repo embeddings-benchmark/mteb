@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import logging
 
-import datasets
-import pandas as pd
+from datasets import DatasetDict, concatenate_datasets
 
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
@@ -55,7 +54,7 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
 
     def _extract_waveform_from_df(
         self,
-        df: pd.DataFrame,
+        df,
         audio1_name: str = "question_audio_path",
         audio2_name: str = "content_segment_audio_path",
     ):
@@ -107,7 +106,7 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
             with_indices=True,
         )
 
-        ds_combined = datasets.concatenate_datasets([ds_sim, ds_dissim])
+        ds_combined = concatenate_datasets([ds_sim, ds_dissim])
 
         ds_combined = ds_combined.shuffle(seed=self.seed)
 
@@ -116,4 +115,4 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         )
 
         # wrap in DatasetDict
-        self.dataset = datasets.DatasetDict({"test": ds_combined})
+        self.dataset = DatasetDict({"test": ds_combined})
