@@ -232,12 +232,14 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
         annotations_creators="expert-annotated",  # expert annotated for English --> human translations
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""@article{adelani2023sib,
-            title={SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-            author={Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-            journal={arXiv preprint arXiv:2309.07445},
-            year={2023}
-        }""",
+        bibtex_citation=r"""
+@article{adelani2023sib,
+  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
+  journal = {arXiv preprint arXiv:2309.07445},
+  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

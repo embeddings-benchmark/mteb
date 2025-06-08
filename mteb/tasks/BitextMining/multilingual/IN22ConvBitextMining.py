@@ -91,15 +91,17 @@ class IN22ConvBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{gala2023indictrans,
-title={IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
-author={Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
-journal={Transactions on Machine Learning Research},
-issn={2835-8856},
-year={2023},
-url={https://openreview.net/forum?id=vfT4YuzAYA},
-note={}
-}""",
+        bibtex_citation=r"""
+@article{gala2023indictrans,
+  author = {Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {},
+  title = {IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
+  url = {https://openreview.net/forum?id=vfT4YuzAYA},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs: Any) -> None:

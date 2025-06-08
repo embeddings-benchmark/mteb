@@ -27,11 +27,11 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{holm2024gllms,
-  title={Are GLLMs Danoliterate? Benchmarking Generative NLP in Danish},
-  author={Holm, Soren Vejlgaard},
-  year={2024}
+  author = {Holm, Soren Vejlgaard},
+  title = {Are GLLMs Danoliterate? Benchmarking Generative NLP in Danish},
+  year = {2024},
 }
 """,
         prompt={"query": "Retrieve answers to questions asked in Danish tweets"},

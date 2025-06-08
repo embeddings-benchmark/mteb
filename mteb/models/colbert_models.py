@@ -11,6 +11,7 @@ import torch
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -34,12 +35,8 @@ class ColBERTWrapper(Wrapper):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the model.
         """
-        try:
-            from pylate import models as colbert_model
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`."
-            ) from e
+        requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
+        from pylate import models as colbert_model
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
@@ -148,7 +145,7 @@ colbert_v2 = ModelMeta(
         model_name="colbert-ir/colbertv2.0",
     ),
     name="colbert-ir/colbertv2.0",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
     public_training_code=None,

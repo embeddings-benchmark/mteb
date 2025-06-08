@@ -16,9 +16,9 @@ from sklearn.metrics import (
 from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder
+from mteb.requires_package import requires_image_dependencies
 
 from ..Evaluator import Evaluator
 
@@ -29,7 +29,11 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
     return -np.dot(a, b)
 
 
-transform = transforms.Compose([transforms.PILToTensor()])
+def get_default_transform():
+    requires_image_dependencies()
+    from torchvision import transforms
+
+    return transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -71,13 +75,18 @@ class ImagekNNClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
+        default_transform = get_default_transform()
         self.dataset_train = ImageDataset(
-            dataset_train, image_column_name=image_column_name, transform=transform
+            dataset_train,
+            image_column_name=image_column_name,
+            transform=default_transform,
         )
         self.y_train = dataset_train[label_column_name]
 
         self.dataset_test = ImageDataset(
-            dataset_test, image_column_name=image_column_name, transform=transform
+            dataset_test,
+            image_column_name=image_column_name,
+            transform=default_transform,
         )
         self.y_test = dataset_test[label_column_name]
         self.task_name = task_name
@@ -155,13 +164,18 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
+        default_transform = get_default_transform()
         self.dataset_train = ImageDataset(
-            dataset_train, image_column_name=image_column_name, transform=transform
+            dataset_train,
+            image_column_name=image_column_name,
+            transform=default_transform,
         )
         self.y_train = dataset_train[label_column_name]
 
         self.dataset_test = ImageDataset(
-            dataset_test, image_column_name=image_column_name, transform=transform
+            dataset_test,
+            image_column_name=image_column_name,
+            transform=default_transform,
         )
         self.y_test = dataset_test[label_column_name]
         self.task_name = task_name
@@ -322,12 +336,17 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
+        default_transform = get_default_transform()
         self.dataset_train = ImageDataset(
-            dataset_train, image_column_name=image_column_name, transform=transform
+            dataset_train,
+            image_column_name=image_column_name,
+            transform=default_transform,
         )
         self.y_train = dataset_train[label_column_name]
         self.dataset_test = ImageDataset(
-            dataset_test, image_column_name=image_column_name, transform=transform
+            dataset_test,
+            image_column_name=image_column_name,
+            transform=default_transform,
         )
         self.y_test = dataset_test[label_column_name]
 

@@ -27,12 +27,14 @@ class KorSTS(AbsTaskSTS):
         annotations_creators=None,
         dialect=[],
         sample_creation="machine-translated and localized",
-        bibtex_citation="""@article{ham2020kornli,
-  title={KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding},
-  author={Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
-  journal={arXiv preprint arXiv:2004.03289},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@article{ham2020kornli,
+  author = {Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
+  journal = {arXiv preprint arXiv:2004.03289},
+  title = {KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding},
+  year = {2020},
+}
+""",
     )
 
     @property

@@ -9,27 +9,28 @@ import tqdm
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
-    "arb_Arab",
-    "ben_Beng",
-    "eng_Latn",
-    "spa_Latn",
-    "deu_Latn",
-    "pes_Arab",
-    "fin_Latn",
-    "fra_Latn",
-    "hin_Deva",
-    "ind_Latn",
-    "jpn_Jpan",
-    "kor_Hang",
-    "rus_Cyrl",
-    "swh_Latn",
-    "tel_Telu",
-    "tha_Thai",
-    "yor_Latn",
-    "zho_Hant",
-    "zho_Hans",
+    "arb-Arab",
+    "ben-Beng",
+    "eng-Latn",
+    "spa-Latn",
+    "deu-Latn",
+    "pes-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "hin-Deva",
+    "ind-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "rus-Cyrl",
+    "swh-Latn",
+    "tel-Telu",
+    "tha-Thai",
+    "yor-Latn",
+    "zho-Hant",
+    "zho-Hans",
 ]
 
 MODEL_PROMPTS = {
@@ -74,12 +75,11 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
-        try:
-            from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
-        except ImportError:
-            raise ImportError(
-                "The `vertexai` package is required to run the google API, please install it using `pip install vertexai`"
-            )
+        requires_package(
+            self, "vertexai", self.model_name, "pip install 'mteb[vertexai]'"
+        )
+        from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
+
         model = TextEmbeddingModel.from_pretrained(self.model_name)
         if titles:
             # Allow title-only embeddings by replacing text with a space

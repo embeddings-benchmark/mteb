@@ -26,13 +26,15 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{inproceedings,
-            author = {Bazilinskyy, Pavlo and Aa, Arne and Schoustra, Michael and Spruit, John and Staats, Laurens and van der Vlist, Klaas Jan and de Winter, Joost},
-            year = {2018},
-            month = {05},
-            pages = {},
-            title = {An auditory dataset of passing vehicles recorded with a smartphone}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{inproceedings,
+  author = {Bazilinskyy, Pavlo and Aa, Arne and Schoustra, Michael and Spruit, John and Staats, Laurens and van der Vlist, Klaas Jan and de Winter, Joost},
+  month = {05},
+  pages = {},
+  title = {An auditory dataset of passing vehicles recorded with a smartphone},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 1705},
         },

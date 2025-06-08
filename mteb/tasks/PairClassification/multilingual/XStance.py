@@ -35,17 +35,17 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""
-            @inproceedings{vamvas2020xstance,
-                author    = "Vamvas, Jannis and Sennrich, Rico",
-                title     = "{X-Stance}: A Multilingual Multi-Target Dataset for Stance Detection",
-                booktitle = "Proceedings of the 5th Swiss Text Analytics Conference (SwissText)  16th Conference on Natural Language Processing (KONVENS)",
-                address   = "Zurich, Switzerland",
-                year      = "2020",
-                month     = "jun",
-                url       = "http://ceur-ws.org/Vol-2624/paper9.pdf"
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{vamvas2020xstance,
+  address = {Zurich, Switzerland},
+  author = {Vamvas, Jannis and Sennrich, Rico},
+  booktitle = {Proceedings of the 5th Swiss Text Analytics Conference (SwissText)  16th Conference on Natural Language Processing (KONVENS)},
+  month = {jun},
+  title = {{X-Stance}: A Multilingual Multi-Target Dataset for Stance Detection},
+  url = {http://ceur-ws.org/Vol-2624/paper9.pdf},
+  year = {2020},
+}
+""",
         # length of`sent1` + `sent2`
     )
 

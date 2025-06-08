@@ -11,13 +11,16 @@ from huggingface_hub.errors import (
     NotASafetensorsRepoError,
     SafetensorsParsingError,
 )
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from .languages import ISO_LANGUAGE_SCRIPT
+from .languages import (
+    ISO_LANGUAGE_SCRIPT,
+    check_language_code,
+)
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -63,7 +66,7 @@ class ModelMeta(BaseModel):
 
     Attributes:
         loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
-        name: The name of the model, ideally the name on huggingface.
+        name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
@@ -123,6 +126,27 @@ class ModelMeta(BaseModel):
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
 
+    @field_validator("languages")
+    @classmethod
+    def languages_are_valid(cls, languages: list[ISO_LANGUAGE_SCRIPT] | None) -> None:
+        if languages is None:
+            return None
+
+        for code in languages:
+            check_language_code(code)
+        return languages
+
+    @field_validator("name")
+    @classmethod
+    def check_name(cls, v: str | None) -> str | None:
+        if v is None or v == "bm25s":
+            return v
+        if "/" not in v:
+            raise ValueError(
+                "Model name must be in the format 'organization/model_name'"
+            )
+        return v
+
     def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
             logger.warning(
@@ -180,7 +204,7 @@ class ModelMeta(BaseModel):
         if self.adapted_from is not None:
             try:
                 adapted_from_model = mteb.get_model_meta(
-                    self.adapted_from, fetch_from_hf=True
+                    self.adapted_from, fetch_from_hf=False
                 )
                 adapted_training_datasets = adapted_from_model.get_training_datasets()
                 if adapted_training_datasets is not None:

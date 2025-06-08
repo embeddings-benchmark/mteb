@@ -32,12 +32,14 @@ class SummEvalSummarization(AbsTaskSummarization):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{fabbri2020summeval,
-  title={SummEval: Re-evaluating Summarization Evaluation},
-  author={Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
-  journal={arXiv preprint arXiv:2007.12626},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@article{fabbri2020summeval,
+  author = {Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
+  journal = {arXiv preprint arXiv:2007.12626},
+  title = {SummEval: Re-evaluating Summarization Evaluation},
+  year = {2020},
+}
+""",
     )
 
     @property
@@ -70,12 +72,14 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{fabbri2020summeval,
-  title={SummEval: Re-evaluating Summarization Evaluation},
-  author={Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
-  journal={arXiv preprint arXiv:2007.12626},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@article{fabbri2020summeval,
+  author = {Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
+  journal = {arXiv preprint arXiv:2007.12626},
+  title = {SummEval: Re-evaluating Summarization Evaluation},
+  year = {2020},
+}
+""",
         adapted_from=["SummEvalSummarization"],
     )
 

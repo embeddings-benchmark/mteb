@@ -97,14 +97,16 @@ class XFlickr30kCoT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{bugliarello2022iglue,
-  title={IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
-  author={Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
-  booktitle={International Conference on Machine Learning},
-  pages={2370--2392},
-  year={2022},
-  organization={PMLR}
-}""",
+        bibtex_citation=r"""
+@inproceedings{bugliarello2022iglue,
+  author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
+  booktitle = {International Conference on Machine Learning},
+  organization = {PMLR},
+  pages = {2370--2392},
+  title = {IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
+  year = {2022},
+}
+""",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

@@ -23,7 +23,7 @@ mxbai_embed_large_v1 = ModelMeta(
         },
     ),
     name="mixedbread-ai/mxbai-embed-large-v1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="990580e27d329c7408b3741ecff85876e128e203",
     release_date="2024-03-07",  # initial commit of hf model.
@@ -44,7 +44,7 @@ mxbai_embed_large_v1 = ModelMeta(
 mxbai_embed_2d_large_v1 = ModelMeta(
     loader=None,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="7e639ca8e344af398876ead3b19ec3c0b9068f49",
     release_date="2024-03-04",  # initial commit of hf model.
@@ -68,7 +68,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
 mxbai_embed_xsmall_v1 = ModelMeta(
     loader=None,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="2f741ec33328bb57e4704e1238fc59a4a5745705",
     release_date="2024-08-13",  # initial commit of hf model.

@@ -1,0 +1,39 @@
+{
+    "dataset_revision": "3389cc78b2ffcbd33639e91dfc57e6b6b6496241",
+    "evaluation_time": 0.8038129806518555,
+    "kg_co2_emissions": null,
+    "mteb_version": "1.12.75",
+    "scores": {
+        "test": [
+            {
+                "accuracy": 0.49448897795591185,
+                "ap": 0.5072290593742705,
+                "ap_weighted": 0.5072290593742705,
+                "f1": 0.38022739586494403,
+                "f1_weighted": 0.3765539215198198,
+                "hf_subset": "as",
+                "languages": [
+                    "asm-Beng"
+                ],
+                "main_score": 0.49448897795591185,
+                "scores_per_experiment": [
+                    {
+                        "accuracy": 0.49298597194388777,
+                        "ap": 0.5070140280561122,
+                        "ap_weighted": 0.5070140280561122,
+                        "f1": 0.3302013422818792,
+                        "f1_weighted": 0.3255692593240172
+                    },
+                    {
+                        "accuracy": 0.49599198396793587,
+                        "ap": 0.5074440906924288,
+                        "ap_weighted": 0.5074440906924288,
+                        "f1": 0.4302534494480088,
+                        "f1_weighted": 0.4275385837156225
+                    }
+                ]
+            }
+        ]
+    },
+    "task_name": "IndicSentimentClassification"
+}

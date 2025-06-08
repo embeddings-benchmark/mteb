@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import warnings
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
@@ -21,21 +22,71 @@ from mteb.abstasks.TaskMetadata import (
 from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
-from mteb.models.overview import get_model_metas
+from mteb.models.overview import ModelMeta, get_model_metas
 
 Split = str
 Score = Any
 
 
+logger = logging.getLogger(__name__)
+
+
+def _aggregate_and_pivot(
+    df: pd.DataFrame,
+    columns: list[str],
+    aggregation_level: Literal["subset", "split", "task"],
+    format: Literal["wide", "long"],
+    aggregation_fn: Callable[[list[Score]], Any] | None,
+) -> pd.DataFrame:
+    if aggregation_level == "subset":
+        index_columns = ["task_name", "split", "subset"]
+
+    elif aggregation_level == "split":
+        index_columns = ["task_name", "split"]
+
+    elif aggregation_level == "task":
+        index_columns = ["task_name"]
+
+    # perform aggregation
+    if aggregation_fn is None:
+        aggregation_fn = np.mean
+
+    if format == "wide":
+        return df.pivot_table(
+            index=index_columns,
+            columns=columns,
+            values="score",
+            aggfunc=aggregation_fn,
+        ).reset_index()
+    elif format == "long":
+        return (
+            df.groupby(columns + index_columns)
+            .agg(score=("score", aggregation_fn))
+            .reset_index()
+        )
+
+
 class ModelResult(BaseModel):
+    """Data class to hold the results of a model on a set of tasks.
+
+    Attributes:
+        model_name: Name of the model.
+        model_revision: Revision of the model.
+        task_results: List of TaskResult objects.
+    """
+
+    # TODO: v2, move to its own file model_result.py
+
     model_name: str
     model_revision: str | None
     task_results: list[TaskResult]
     default_modalities: list[MODALITIES] = Field(
         default_factory=lambda: ["text"], alias="modalities"
     )
-    model_config = ConfigDict(
-        protected_namespaces=(),
+    model_config = (
+        ConfigDict(  # to free up the name model_* which is otherwise protected
+            protected_namespaces=(),
+        )
     )
 
     def __repr__(self) -> str:
@@ -57,6 +108,7 @@ class ModelResult(BaseModel):
         task_types: list[TASK_TYPE] | None = None,
         modalities: list[MODALITIES] | None = None,
     ) -> ModelResult:
+        # TODO: v2 see filter_tasks in BenchmarkResults - but can be moved to a private function or removed
         new_task_results = []
         for task_result in self.task_results:
             if (task_names is not None) and (task_result.task_name not in task_names):
@@ -104,6 +156,7 @@ class ModelResult(BaseModel):
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> dict | list:
+        # TODO: Convert to private function in v2 - potentially remove
         if (getter is not None) or (aggregation is not None) or (scripts is not None):
             use_fast = False
             getter = (
@@ -140,14 +193,15 @@ class ModelResult(BaseModel):
                 try:
                     if use_fast:
                         score = task_res.get_score_fast(
-                            splits=splits, languages=languages
+                            splits=splits,
+                            languages=languages,  # type: ignore
                         )
                     else:
                         score = task_res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,
-                            getter=getter,
+                            aggregation=aggregation,  # type: ignore
+                            getter=getter,  # type: ignore
                             scripts=scripts,
                         )
                     entry = dict(  # noqa
@@ -167,7 +221,88 @@ class ModelResult(BaseModel):
                     )
             return entries
 
-    def __iter__(self):
+    def _get_score_for_table(self) -> list[dict[str, str | float]]:
+        scores_data = []
+        model_name = self.model_name
+        for task_result in self.task_results:
+            task_name = task_result.task_name
+            for split, scores_list in task_result.scores.items():
+                for score_item in scores_list:
+                    row = {
+                        "model_name": model_name,
+                        "model_revision": self.model_revision,
+                        "task_name": task_name,
+                        "split": split,
+                        "subset": score_item.get("hf_subset", "default"),
+                        "score": score_item.get("main_score", None),
+                    }
+
+                    scores_data.append(row)
+
+        return scores_data
+
+    def to_dataframe(
+        self,
+        aggregation_level: Literal["subset", "split", "task"] = "task",
+        aggregation_fn: Callable[[list[Score]], Any] | None = None,
+        include_model_revision: bool = False,
+        format: Literal["wide", "long"] = "wide",
+    ) -> pd.DataFrame:
+        """Get a DataFrame with the scores for all models and tasks.
+        The DataFrame will have the following columns in addition to the metadata columns:
+
+        - model_name: The name of the model.
+        - task_name: The name of the task.
+        - score: The main score of the model on the task.
+
+        In addition, the DataFrame can have the following columns depending on the aggregation level:
+
+        - split: The split of the task. E.g. "test", "train", "validation".
+        - subset: The subset of the task. E.g. "en", "fr-en".
+
+        Afterwards, the DataFrame will be aggregated according to the aggregation method and pivoted to either a wide format.
+
+        Args:
+            aggregation_level: The aggregation to use. Can be one of:
+                - "subset"/None: No aggregation will be done. The DataFrame will have one row per model, task, split and subset.
+                - "split": Aggregates the scores by split. The DataFrame will have one row per model, task and split.
+                - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
+            aggregation_fn: The function to use for aggregation. If None, the mean will be used.
+            include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
+            format: The format of the DataFrame. Can be one of:
+                - "wide": The DataFrame will be of shape (number of tasks, number of models). Scores will be in the cells.
+                - "long": The DataFrame will of length (number of tasks * number of model). Scores will be in columns.
+
+        Returns:
+            A DataFrame with the scores for all models and tasks.
+        """
+        scores_data = self._get_score_for_table()
+
+        if not scores_data:
+            logger.warning("No scores data available. Returning empty DataFrame.")
+            return pd.DataFrame()
+
+        # Create DataFrame
+        df = pd.DataFrame(scores_data)
+
+        _columns = ["model_name"]
+        if include_model_revision is False:
+            df = df.drop(columns=["model_revision"])
+        else:
+            _columns.append("model_revision")
+
+        return _aggregate_and_pivot(
+            df,
+            columns=_columns,
+            aggregation_level=aggregation_level,
+            format=format,
+            aggregation_fn=aggregation_fn,
+        )
+
+    def __hash__(self) -> int:
+        return id(self)
+
+    def __iter__(self) -> Iterable[TaskResult]:
         return iter(self.task_results)
 
     def __getitem__(self, index) -> TaskResult:
@@ -175,6 +310,11 @@ class ModelResult(BaseModel):
 
     @property
     def languages(self) -> list[str]:
+        """Get all languages in the model results.
+
+        Returns:
+            A list of languages in the model results.
+        """
         langs = []
         for task_res in self.task_results:
             langs.extend(task_res.languages)
@@ -182,6 +322,12 @@ class ModelResult(BaseModel):
 
     @property
     def domains(self) -> list[str]:
+        """Get all domains in the model results.
+
+        Returns:
+            A list of domains in the model results.
+
+        """
         ds = []
         for task_res in self.task_results:
             ds.extend(task_res.domains)
@@ -189,14 +335,29 @@ class ModelResult(BaseModel):
 
     @property
     def task_types(self) -> list[str]:
+        """Get all task types in the model results.
+
+        Returns:
+            A list of task types in the model results.
+        """
         return list({task_res.task_type for task_res in self.task_results})
 
     @property
     def task_names(self) -> list[str]:
+        """Get all task names in the model results.
+
+        Returns:
+            A list of task names in the model results.
+        """
         return [task_res.task_name for task_res in self.task_results]
 
     @property
     def modalities(self) -> list[str]:
+        """Get all modalities in the task results.
+
+        Returns:
+            A list of modalities in the task results.
+        """
         mods = []
         for task_res in self.task_results:
             task_modalities = getattr(task_res, "modalities", [])
@@ -207,9 +368,17 @@ class ModelResult(BaseModel):
 
 
 class BenchmarkResults(BaseModel):
+    """Data class to hold the benchmark results of a model.
+
+    Attributes:
+        model_results: List of ModelResult objects.
+    """
+
     model_results: list[ModelResult]
-    model_config = ConfigDict(
-        protected_namespaces=(),
+    model_config = (
+        ConfigDict(  # to free up the name model_results which is otherwise protected
+            protected_namespaces=(),
+        )
     )
 
     def __repr__(self) -> str:
@@ -224,9 +393,10 @@ class BenchmarkResults(BaseModel):
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
-        task_types: list[TASK_TYPE] | None = None,
+        task_types: list[TASK_TYPE] | None = None,  # type: ignore
         modalities: list[MODALITIES] | None = None,
     ) -> BenchmarkResults:
+        # TODO: Same as filter_models
         model_results = [
             res.filter_tasks(
                 task_names=task_names,
@@ -242,10 +412,51 @@ class BenchmarkResults(BaseModel):
         )
 
     def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
+        """Select tasks from the benchmark results.
+
+        Args:
+            tasks: List of tasks to select. Can be a list of AbsTask objects or task names.
+        """
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]
         return type(self).model_construct(model_results=new_model_results)
+
+    def select_models(
+        self,
+        names: list[str] | list[ModelMeta],
+        revisions: list[str | None] | None = None,
+    ) -> BenchmarkResults:
+        """Get models by name and revision.
+
+        Args:
+            names: List of model names to filter by. Can also be a list of ModelMeta objects. In which case, the revision is ignored.
+            revisions: List of model revisions to filter by. If None, all revisions are returned.
+        """
+        models_res = []
+        _revisions = revisions if revisions is not None else [None] * len(names)
+
+        name_rev = {}
+
+        if len(names) != len(_revisions):
+            raise ValueError(
+                "The length of names and revisions must be the same or revisions must be None."
+            )
+
+        for name, revision in zip(names, _revisions):
+            if isinstance(name, ModelMeta):
+                name_rev[name.name] = name.revision
+            else:
+                name_rev[name] = revision
+
+        for model_res in self.model_results:
+            model_name = model_res.model_name
+            revision = model_res.model_revision
+            if model_name in name_rev:
+                if name_rev[model_name] is None or revision == name_rev[model_name]:
+                    models_res.append(model_res)
+
+        return type(self).model_construct(model_results=models_res)
 
     def filter_models(
         self,
@@ -257,8 +468,10 @@ class BenchmarkResults(BaseModel):
         use_instructions: bool | None = None,
         zero_shot_on: list[AbsTask] | None = None,
     ) -> BenchmarkResults:
-        # if model_names is None:
-        #     model_names = [model_res.model_name for model_res in self]
+        # TODO: This seems like mostly a utility function for the benchmark
+        # I would probably move the filtering of the models outside of this call. No need to call get_model_metas inside the filter.
+        # interface would then be the same as the get_models function
+
         model_metas = get_model_metas(
             model_names=model_names,
             languages=languages,
@@ -274,9 +487,19 @@ class BenchmarkResults(BaseModel):
         for model_res in self:
             if model_res.model_name in models:
                 new_model_results.append(model_res)
+
         return type(self).model_construct(model_results=new_model_results)
 
-    def join_revisions(self):
+    def join_revisions(self) -> BenchmarkResults:
+        """Join revisions of the same model.
+
+        In case of conflicts, the following rules are applied:
+        - If the main revision is present, it is kept. The main revision is the defined in the models ModelMeta object.
+        - If there is multiple revisions and some of them are None or na, they are filtered out.
+        - If there is no main revision, we prefer the one run using the latest mteb version.
+        """
+        # TODO: In v2 we should probably have this be the default when loading. We could probably even reduce loading times by only loading what we need
+
         def parse_version(version_str: str) -> Version | None:
             try:
                 return Version(version_str)
@@ -293,8 +516,10 @@ class BenchmarkResults(BaseModel):
             unique_revisions = group["revision"].unique()
 
             # ensure None/NA/"external" revisions is filtered out
-            group["revision"][group["revision"].isna()] = "no_revision_available"
-            group["revision"][group["revision"] == "external"] = "no_revision_available"
+            group.loc[group["revision"].isna(), "revision"] = "no_revision_available"
+            group.loc[group["revision"] == "external", "revision"] = (
+                "no_revision_available"
+            )
 
             # Filtering out no_revision_available if other revisions are present
             if (len(unique_revisions) > 1) and (
@@ -310,7 +535,7 @@ class BenchmarkResults(BaseModel):
 
         records = []
         for model_result in self:
-            for task_result in model_result:
+            for task_result in model_result.task_results:
                 records.append(
                     dict(
                         model=model_result.model_name,
@@ -327,8 +552,8 @@ class BenchmarkResults(BaseModel):
         model_to_main_revision = {
             meta.name: meta.revision for meta in get_model_metas()
         }
-        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)
-        task_df["mteb_version"] = task_df["mteb_version"].map(parse_version)
+        task_df["main_revision"] = task_df["model"].map(model_to_main_revision)  # type: ignore
+        task_df["mteb_version"] = task_df["mteb_version"].map(parse_version)  # type: ignore
         task_df = (
             task_df.groupby(["model", "task_name"])
             .apply(keep_best)
@@ -353,6 +578,7 @@ class BenchmarkResults(BaseModel):
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> list[dict]:
+        # TODO: Convert to private function in v2
         entries = []
         if format == "wide":
             for model_res in self:
@@ -369,7 +595,7 @@ class BenchmarkResults(BaseModel):
                         {
                             "model": model_res.model_name,
                             "revision": model_res.model_revision,
-                            **model_scores,
+                            **model_scores,  # type: ignore
                         }
                     )
                 except Exception as e:
@@ -395,6 +621,72 @@ class BenchmarkResults(BaseModel):
                     )
         return entries
 
+    def to_dataframe(
+        self,
+        aggregation_level: Literal["subset", "split", "task"] = "task",
+        aggregation_fn: Callable[[list[Score]], Any] | None = None,
+        include_model_revision: bool = False,
+        format: Literal["wide", "long"] = "wide",
+    ) -> pd.DataFrame:
+        """Get a DataFrame with the scores for all models and tasks.
+        The DataFrame will have the following columns in addition to the metadata columns:
+
+        - model_name: The name of the model.
+        - task_name: The name of the task.
+        - score: The main score of the model on the task.
+
+        In addition, the DataFrame can have the following columns depending on the aggregation level:
+
+        - split: The split of the task. E.g. "test", "train", "validation".
+        - subset: The subset of the task. E.g. "en", "fr-en".
+
+        Afterwards, the DataFrame will be aggregated according to the aggregation method and pivoted to either a wide format.
+
+        Args:
+            aggregation_level: The aggregation to use. Can be one of:
+                - "subset"/None: No aggregation will be done. The DataFrame will have one row per model, task, split and subset.
+                - "split": Aggregates the scores by split. The DataFrame will have one row per model, task and split.
+                - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
+            aggregation_fn: The function to use for aggregation. If None, the mean will be used.
+            include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
+                If there are multiple revisions for the same model, they will be joined using the `join_revisions` method.
+            format: The format of the DataFrame. Can be one of:
+                - "wide": The DataFrame will be of shape (number of tasks, number of models). Scores will be in the cells.
+                - "long": The DataFrame will of length (number of tasks * number of model). Scores will be in columns.
+
+        Returns:
+            A DataFrame with the scores for all models and tasks.
+        """
+        bench_results = self
+        if include_model_revision is False:
+            bench_results = bench_results.join_revisions()
+
+        scores_data = []
+        for model_result in bench_results:
+            scores_data.extend(model_result._get_score_for_table())
+
+        if not scores_data:
+            logger.warning("No scores data available. Returning empty DataFrame.")
+            return pd.DataFrame()
+
+        # Create DataFrame
+        df = pd.DataFrame(scores_data)
+
+        _columns = ["model_name"]
+        if include_model_revision is False:
+            df = df.drop(columns=["model_revision"])
+        else:
+            _columns.append("model_revision")
+
+        # Aggregation
+        return _aggregate_and_pivot(
+            df,
+            columns=_columns,
+            aggregation_level=aggregation_level,
+            aggregation_fn=aggregation_fn,
+            format=format,
+        )
+
     def __iter__(self):
         return iter(self.model_results)
 
@@ -402,6 +694,7 @@ class BenchmarkResults(BaseModel):
         return self.model_results[index]
 
     def to_legacy_dict(self) -> dict[str, dict[str, list[TaskResult]]]:
+        # TODO: Make private or remove in v2
         res = defaultdict(dict)
         for model_res in self:
             res[model_res.model_name][model_res.model_revision] = model_res.task_results
@@ -409,6 +702,7 @@ class BenchmarkResults(BaseModel):
 
     @classmethod
     def from_legacy_dict(cls, legacy: dict[str, dict[str, list[TaskResult]]]):
+        # TODO: Make private or remove in v2
         model_results = []
         for model_name, revisions in legacy.items():
             for model_revision, results in revisions.items():
@@ -449,6 +743,11 @@ class BenchmarkResults(BaseModel):
 
     @property
     def languages(self) -> list[str]:
+        """Get all languages in the benchmark results.
+
+        Returns:
+            A list of languages in ISO 639-1 format.
+        """
         langs = []
         for model_res in self.model_results:
             langs.extend(model_res.languages)
@@ -456,6 +755,11 @@ class BenchmarkResults(BaseModel):
 
     @property
     def domains(self) -> list[str]:
+        """Get all domains in the benchmark results.
+
+        Returns:
+            A list of domains in ISO 639-1 format.
+        """
         ds = []
         for model_res in self.model_results:
             ds.extend(model_res.domains)
@@ -463,6 +767,12 @@ class BenchmarkResults(BaseModel):
 
     @property
     def task_types(self) -> list[str]:
+        """Get all task types in the benchmark results.
+
+        Returns:
+            A list of task types.
+        """
+        # TODO: V2: Task types vs task categories - we should probably be consistent
         ts = []
         for model_res in self.model_results:
             ts.extend(model_res.task_types)
@@ -470,6 +780,11 @@ class BenchmarkResults(BaseModel):
 
     @property
     def task_names(self) -> list[str]:
+        """Get all task names in the benchmark results.
+
+        Returns:
+            A list of task names.
+        """
         names = []
         for model_res in self.model_results:
             names.extend(model_res.task_names)
@@ -477,7 +792,33 @@ class BenchmarkResults(BaseModel):
 
     @property
     def modalities(self) -> list[str]:
+        """Get all modalities in the benchmark results.
+
+        Returns:
+            A list of modalities.
+        """
         mod = []
         for model_res in self.model_results:
             mod.extend(model_res.modalities)
         return list(set(mod))
+
+    @property
+    def model_names(self) -> list[str]:
+        """Get all model names in the benchmark results.
+
+        Returns:
+            A list of model names.
+        """
+        return [model_res.model_name for model_res in self.model_results]
+
+    @property
+    def model_revisions(self) -> list[dict[str, str | None]]:
+        """Get all model revisions in the benchmark results.
+
+        Returns:
+            A list of dictionaries with model names and revisions.
+        """
+        return [
+            {"model_name": model_res.model_name, "revision": model_res.model_revision}
+            for model_res in self.model_results
+        ]
