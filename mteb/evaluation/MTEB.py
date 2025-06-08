@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import sys
 import traceback
 from collections.abc import Iterable
 from copy import deepcopy
@@ -11,6 +12,11 @@ from itertools import chain
 from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any
+
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 import datasets
 from codecarbon import EmissionsTracker
@@ -37,6 +43,10 @@ class MTEB:
     _tasks: Iterable[str | AbsTask] | None
     tasks: list[AbsTask]
 
+    @deprecated(
+        "MTEB is deprecated and will be removed in future versions. "
+        "Please use the `mteb.run_tasks` function instead."
+    )
     def __init__(
         self,
         tasks: Iterable[AbsTask | Benchmark],
