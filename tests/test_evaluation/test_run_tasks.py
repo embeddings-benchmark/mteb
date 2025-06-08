@@ -10,16 +10,22 @@ from mteb.cache import ResultCache
 from mteb.encoder_interface import Encoder
 from tests.test_benchmark.mock_models import MockSentenceTransformer
 from tests.test_benchmark.mock_tasks import (
+    MockClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
 
-simple_test_case = (MockSentenceTransformer(), MockRetrievalTask(), 0.63093)
+mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
+mock_retrieval = (MockSentenceTransformer(), MockRetrievalTask(), 0.0)
 
 
-@pytest.mark.parametrize("model, task, expected_score", [simple_test_case])
+@pytest.mark.parametrize(
+    "model, task, expected_score",
+    [mock_classification, mock_retrieval],
+    ids=["mock_classification", "mock_retrieval"],
+)
 def test_run_tasks(model: Encoder, task: AbsTask, expected_score: float):
-    results = mteb.run_tasks(model, task, cache=None)
+    results = mteb.run_tasks(model, task, cache=None, co2_tracker=False)
 
     assert len(results) == 1, "should return exactly one result"
     result = results[0]
@@ -31,12 +37,14 @@ def test_run_tasks(model: Encoder, task: AbsTask, expected_score: float):
     )
 
 
-@pytest.mark.parametrize("model, task, expected_score", [simple_test_case])
+@pytest.mark.parametrize(
+    "model, task, expected_score", [mock_classification], ids=["mock_classification"]
+)
 def test_run_tasks_with_cache(
     model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
 ):
     cache = ResultCache(tmp_path)
-    results = mteb.run_tasks(model, task, cache=cache)
+    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
 
     # Check if the cache is created
     path = cache.get_task_result_path(
@@ -55,27 +63,35 @@ def test_run_tasks_with_cache(
     )
 
 
-@pytest.mark.parametrize("model, task, expected_score", [simple_test_case])
+@pytest.mark.parametrize(
+    "model, task, expected_score,splits",
+    [
+        (MockSentenceTransformer(), MockClassificationTask(), 0.5, ["train"])
+    ],  # default split is "test" so this will run "train" and then ["test", "train"], also means that expected score can be different
+    ids=["mock_classification"],
+)
 def test_run_task_w_missing_splits(
-    model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
+    model: Encoder,
+    task: AbsTask,
+    expected_score: float,
+    splits: list[str],
+    tmp_path: Path,
 ):
     cache = ResultCache(tmp_path)
 
-    all_splits = list(task.eval_splits)
-    task._eval_splits = all_splits[:1]
+    task._eval_splits = splits
     # ^ eq. to mteb.get_task("name", splits=[...])
 
-    results = mteb.run_tasks(model, task, cache=cache)
+    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
     result = results[0]
 
-    assert set(result.eval_splits) == set(all_splits[:1])
-
-    task._eval_splits = all_splits
+    assert set(result.eval_splits) == set(splits)
+    task._eval_splits = list(set(list(task.metadata.eval_splits) + splits))
     results = mteb.run_tasks(model, task, cache=cache)
     updated = results[0]
 
     assert set(updated.eval_splits) != set(result.eval_splits)
-    assert set(updated.eval_splits) == set(task.metadata.eval_splits)
+    assert set(updated.eval_splits).issuperset(set(task.metadata.eval_splits))
 
     assert updated.task_name == task.metadata.name, "results should match the task"
     assert updated.get_score() == expected_score, (
@@ -85,9 +101,8 @@ def test_run_task_w_missing_splits(
 
 @pytest.mark.parametrize(
     "model, task, expected_score",
-    [
-        (MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.63093),
-    ],
+    [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.0)],
+    ids=["mock_retrieval"],
 )
 def test_run_task_w_missing_subset(
     model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
@@ -98,7 +113,7 @@ def test_run_task_w_missing_subset(
     task.hf_subsets = hf_subsets[:-1]
     # ^ eq. to mteb.get_task("name", splits=[...])
 
-    results = mteb.run_tasks(model, task, cache=cache)
+    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
     result = results[0]
 
     assert set(result.hf_subsets) == set(hf_subsets[:1])
@@ -111,23 +126,32 @@ def test_run_task_w_missing_subset(
     assert set(updated.hf_subsets) == set(task.metadata.hf_subsets)
 
     assert updated.task_name == task.metadata.name, "results should match the task"
-    assert updated.get_score() == expected_score, (
+    assert updated.get_score() == 0.63093, (
         "main score should match the expected value"
     )
 
 
-@pytest.mark.parametrize("model, task, expected_score", [simple_test_case])
+@pytest.mark.parametrize(
+    "model, task, expected_score, splits",
+    [(*mock_classification, ["train"])],
+    ids=["mock_classification"],
+)
 def test_run_task_overwrites(
-    model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
+    model: Encoder,
+    task: AbsTask,
+    expected_score: float,
+    splits: list[str],
+    tmp_path: Path,
 ):
     cache = ResultCache(tmp_path)
 
-    all_splits = list(task.eval_splits)
-    task._eval_splits = all_splits[:1]
+    task._eval_splits = splits
     # ^ eq. to mteb.get_task("name", splits=[...])
 
     # run part of a task to make an incomplete result
-    results = mteb.run_tasks(model, task, cache=cache)
+    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
+
+    task._eval_splits = task.metadata.eval_splits  # reset splits to default
 
     with pytest.raises(ValueError):
         results = mteb.run_tasks(

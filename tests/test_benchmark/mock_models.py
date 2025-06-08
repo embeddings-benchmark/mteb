@@ -147,6 +147,7 @@ class MockSentenceTransformer(SentenceTransformer):
     )
 
     def __init__(self):
+        self._modules = {}
         pass
 
     def encode(

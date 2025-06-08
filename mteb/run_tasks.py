@@ -162,7 +162,7 @@ def run_tasks(
         co2_tracker: If True, track the CO₂ emissions of the evaluation. If none is passed co2 tracking will be run if codecarbon is installed.
         encode_kwargs: Additional keyword arguments passed to the models `encode` method.
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
-        cache: The cache to use for loading the results. If None, the default cache will be used. The default cache saved the cache in the
+        cache: The cache to use for loading the results. If None, then no cache will be used. The default cache saved the cache in the
             `~/.cache/mteb` directory. It can be overridden by setting the `MTEB_CACHE` environment variable to a different directory or by directly
             passing a `ResultCache` object.
         overwrite_strategy: The strategy to use for run a task and overwrite the results. Can be:
@@ -262,6 +262,9 @@ def run_tasks(
         )
 
     if isinstance(model, ModelMeta):
+        logger.info(
+            f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+        )
         model = model.load_model()
     if raise_error is False:
         try:
