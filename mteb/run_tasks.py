@@ -3,13 +3,13 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterable
 from copy import deepcopy
-from enum import Enum
 from time import time
 from typing import Any, cast
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb import SentenceTransformerWrapper
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.TaskMetadata import HFSubset, Splitname
@@ -25,21 +25,9 @@ from mteb.models import (
 
 logger = logging.getLogger(__name__)
 
-
-class OverwriteStrategy(str, Enum):
-    ALWAYS = "always"
-    NEVER = "never"
-    ONLY_MISSING = "only-missing"
-    ONLY_CACHE = "only-cache"
-
-    @classmethod
-    def from_str(cls, value: str) -> OverwriteStrategy:
-        try:
-            return cls(value)
-        except ValueError:
-            raise ValueError(
-                f"'{value}' is not a valid {cls.__name__} value, must be one of {[e.value for e in cls]}"
-            )
+OverwriteStrategy = HelpfulStrEnum(
+    "OverwriteStrategy", ["always", "never", "only-missing", "only-cache"]
+)
 
 
 empty_model_meta = ModelMeta(

@@ -5,7 +5,6 @@ import logging
 from argparse import Namespace
 from collections import defaultdict
 from collections.abc import Iterable
-from enum import Enum
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
@@ -15,6 +14,7 @@ import numpy as np
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset, Splitname
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
@@ -25,18 +25,7 @@ Score = Any
 logger = logging.getLogger(__name__)
 
 
-class Criterias(str, Enum):
-    MTEB_VERSION = "mteb_version"
-    DATASET_REVISION = "dataset_revision"
-
-    @classmethod
-    def from_str(cls, value: str) -> Criterias:
-        try:
-            return cls(value)
-        except ValueError:
-            raise ValueError(
-                f"'{value}' is not a valid {cls.__name__} value, must be one of {[e.value for e in cls]}"
-            )
+Criterias = HelpfulStrEnum("Criterias", ["mteb_version", "dataset_revision"])
 
 
 class ScalaNbClassificationDummy:
