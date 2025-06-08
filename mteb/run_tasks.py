@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterable
 from copy import deepcopy
+from enum import Enum
 from time import time
 from typing import Any, Literal, cast
 
@@ -22,6 +23,23 @@ from mteb.models import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+class OverwriteStrategy(str, Enum):
+    ALWAYS = "always"
+    NEVER = "never"
+    ONLY_MISSING = "only-missing"
+    ONLY_CACHE = "only-cache"
+
+    @classmethod
+    def from_str(cls, value: str) -> OverwriteStrategy:
+        try:
+            return cls(value)
+        except ValueError:
+            raise ValueError(
+                f"'{value}' is not a valid {cls.__name__} value, must be one of {[e.value for e in cls]}"
+            )
+
 
 empty_model_meta = ModelMeta(
     loader=None,
@@ -150,9 +168,7 @@ def run_tasks(
     raise_error: bool = True,
     encode_kwargs: dict[str, Any] | None = None,
     cache: ResultCache | None = ResultCache(),
-    overwrite_strategy: Literal[
-        "always", "never", "only-missing", "only-cache"
-    ] = "only-missing",
+    overwrite_strategy: str | OverwriteStrategy = "only-missing",
 ) -> ModelResult:
     """This function runs a model on a a given task and returns the results.
 
@@ -215,6 +231,7 @@ def run_tasks(
             task_results=results,
         )
 
+    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
     if encode_kwargs is None:
         encode_kwargs = {}
 
@@ -240,13 +257,14 @@ def run_tasks(
     if (
         existing_results
         and overwrite_strategy == "only-missing"
+        and overwrite_strategy == OverwriteStrategy.ONLY_MISSING
         and existing_results.is_mergeable(task)
     ):
         missing_eval = existing_results.get_missing_evaluations(task)
     else:
         missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
 
-    if existing_results and not missing_eval and overwrite_strategy != "always":
+    if existing_results and not missing_eval and overwrite_strategy != OverwriteStrategy.ALWAYS:
         # if there are no missing evals we can just return the results
         logger.debug(
             f"Results for {task.metadata.name} already exist in cache. Skipping evaluation."
@@ -256,9 +274,9 @@ def run_tasks(
             model_revision=model_revision,
             task_results=[existing_results],
         )
-    if missing_eval and overwrite_strategy in ["never", "only-cache"]:
+    if missing_eval and overwrite_strategy in [OverwriteStrategy.NEVER, OverwriteStrategy.ONLY_CACHE]:
         raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
         )
 
     if isinstance(model, ModelMeta):
