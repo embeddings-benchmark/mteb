@@ -74,7 +74,6 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         rng = np.random.default_rng(self.seed)
         similar_pairs = []
 
-        logger.info("Generating similar pairs:")
         for label, indices in tqdm(label2indices.items()):
             indices = np.array(indices)
             rng.shuffle(indices)

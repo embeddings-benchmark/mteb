@@ -34,7 +34,6 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         license="cc0-1.0",
         modalities=["audio"],
         sample_creation="created",
-        descriptive_stats={"n_samples": {"train": 4200}},
     )
 
     # Override default column name in the subclass

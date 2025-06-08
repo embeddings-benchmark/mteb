@@ -85,16 +85,6 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
             batched=False,
         )
 
-        # for dissimilar pairs, mismatch the answer audio
-        def make_dissimilar_pairs(batch):
-            n = len(batch["question_audio_path"])
-            return {
-                "question_audio_path": batch["question_audio_path"],
-                "content_segment_audio_path": batch["content_segment_audio_path"][1:]
-                + batch["content_segment_audio_path"][:1],
-                "label": [0] * n,
-            }
-
         ds_dissim = ds_dissim.map(
             lambda row, idx: {
                 "question_audio_path": row["question_audio_path"]["array"],
