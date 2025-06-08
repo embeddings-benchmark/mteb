@@ -45,4 +45,3 @@ class VocalSoundClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "answer"
-    samples_per_label: int = 32
