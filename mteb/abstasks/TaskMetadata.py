@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import json
 import logging
-from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 from huggingface_hub import (
     DatasetCard,
@@ -24,6 +23,7 @@ import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
     ISO_LANGUAGE_SCRIPT,
+    LANGUAGES,
     LICENSES,
     MODALITIES,
     STR_DATE,
@@ -164,9 +164,6 @@ ANNOTATOR_TYPE = Literal[
 
 Splitname = str
 HFSubset = str
-LANGUAGES = Union[
-    list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
-]
 
 
 class PromptDict(TypedDict, total=False):

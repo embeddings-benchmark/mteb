@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing_extensions import Literal
 
 LICENSES = (  # this list can be extended as needed

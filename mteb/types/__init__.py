@@ -7,7 +7,7 @@ from ._encoder_io import (
     ConversationTurn,
     PromptType,
 )
-from ._language import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, ISO_SCRIPT
+from ._language import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, ISO_SCRIPT, LANGUAGES
 from ._licenses import LICENSES
 from ._metadata_validators import STR_DATE, STR_URL
 from ._modalities import MODALITIES
@@ -23,6 +23,7 @@ __all__ = [
     "ISO_LANGUAGE",
     "ISO_LANGUAGE_SCRIPT",
     "ISO_SCRIPT",
+    "LANGUAGES",
     "LICENSES",
     "MODALITIES",
     "STR_DATE",
