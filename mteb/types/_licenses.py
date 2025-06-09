@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing_extensions import Literal
 
-LICENSES = (  # this list can be extended as needed
+Licenses = (  # this list can be extended as needed
     Literal[  # we use lowercase for the licenses similar to the huggingface datasets
         "not specified",  # or none found
         "mit",

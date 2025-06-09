@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from mteb.load_results.load_results import load_results
-from mteb.types import STR_URL
+from mteb.types import StrURL
 
 if TYPE_CHECKING:
     from mteb.abstasks.AbsTask import AbsTask
@@ -38,7 +38,7 @@ class Benchmark:
     name: str
     tasks: Sequence[AbsTask]
     description: str | None = None
-    reference: STR_URL | None = None
+    reference: StrURL | None = None
     citation: str | None = None
     contacts: list[str] | None = None
     display_on_leaderboard: bool = True

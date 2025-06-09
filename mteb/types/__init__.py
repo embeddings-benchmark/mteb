@@ -7,12 +7,12 @@ from ._encoder_io import (
     ConversationTurn,
     PromptType,
 )
-from ._language import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, ISO_SCRIPT, LANGUAGES
-from ._licenses import LICENSES
-from ._metadata import MODEL_NAME, REVISION
-from ._modalities import MODALITIES
+from ._language import ISOLanguage, ISOLanguageScript, ISOScript, Languages
+from ._licenses import Licenses
+from ._metadata import ModelName, Revision
+from ._modalities import Modalities
 from ._result import HFSubset, Score, ScoresDict, SplitName
-from ._string_validators import STR_DATE, STR_URL
+from ._string_validators import StrDate, StrURL
 
 __all__ = [
     "Array",
@@ -21,17 +21,17 @@ __all__ = [
     "Conversation",
     "ScoresDict",
     "ConversationTurn",
-    "ISO_LANGUAGE",
-    "ISO_LANGUAGE_SCRIPT",
-    "ISO_SCRIPT",
-    "LANGUAGES",
-    "LICENSES",
-    "MODALITIES",
-    "STR_DATE",
-    "STR_URL",
+    "ISOLanguage",
+    "ISOLanguageScript",
+    "ISOScript",
+    "Languages",
+    "Licenses",
+    "Modalities",
+    "StrDate",
+    "StrURL",
     "Score",
     "SplitName",
     "HFSubset",
-    "MODEL_NAME",
-    "REVISION",
+    "ModelName",
+    "Revision",
 ]

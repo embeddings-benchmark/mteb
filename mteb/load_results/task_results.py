@@ -19,9 +19,9 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.languages import LanguageScripts
 from mteb.model_meta import ScoringFunction
 from mteb.types import (
-    ISO_LANGUAGE,
-    ISO_LANGUAGE_SCRIPT,
     HFSubset,
+    ISOLanguage,
+    ISOLanguageScript,
     Score,
     ScoresDict,
     SplitName,
@@ -449,8 +449,8 @@ class TaskResult(BaseModel):
     def get_score(
         self,
         splits: list[SplitName] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], Any] = np.mean,
     ) -> Any:

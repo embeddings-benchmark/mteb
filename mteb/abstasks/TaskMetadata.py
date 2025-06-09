@@ -22,14 +22,14 @@ from typing_extensions import Literal, TypedDict
 import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
-    ISO_LANGUAGE_SCRIPT,
-    LANGUAGES,
-    LICENSES,
-    MODALITIES,
-    STR_DATE,
-    STR_URL,
     HFSubset,
+    ISOLanguageScript,
+    Languages,
+    Licenses,
+    Modalities,
     PromptType,
+    StrDate,
+    StrURL,
 )
 from mteb.types.statistics import DescriptiveStatistics
 
@@ -237,18 +237,18 @@ class TaskMetadata(BaseModel):
     description: str
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[MODALITIES] = ["text"]
+    modalities: list[Modalities] = ["text"]
     category: TASK_CATEGORY | None = None
-    reference: STR_URL | None = None
+    reference: StrURL | None = None
 
     eval_splits: list[str] = ["test"]
-    eval_langs: LANGUAGES
+    eval_langs: Languages
     main_score: str
 
-    date: tuple[STR_DATE, STR_DATE] | None = None
+    date: tuple[StrDate, StrDate] | None = None
     domains: list[TASK_DOMAIN] | None = None
     task_subtypes: list[TASK_SUBTYPE] | None = None
-    license: LICENSES | STR_URL | None = None
+    license: Licenses | StrURL | None = None
 
     annotations_creators: ANNOTATOR_TYPE | None = None
     dialect: list[str] | None = None
@@ -309,7 +309,7 @@ class TaskMetadata(BaseModel):
                 dataset["path"],
             )
 
-    def eval_langs_are_valid(self, eval_langs: LANGUAGES) -> None:
+    def eval_langs_are_valid(self, eval_langs: Languages) -> None:
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -320,7 +320,7 @@ class TaskMetadata(BaseModel):
                 check_language_code(code)
 
     @property
-    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+    def bcp47_codes(self) -> list[ISOLanguageScript]:
         """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
         if isinstance(self.eval_langs, dict):
             return sorted(
@@ -363,7 +363,7 @@ class TaskMetadata(BaseModel):
         )
 
     @property
-    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
+    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs

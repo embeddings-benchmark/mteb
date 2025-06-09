@@ -16,12 +16,12 @@ from mteb.abstasks.TaskMetadata import (
     TaskMetadata,
 )
 from mteb.types import (
-    ISO_LANGUAGE_SCRIPT,
-    LANGUAGES,
-    LICENSES,
-    MODALITIES,
-    STR_DATE,
     HFSubset,
+    ISOLanguageScript,
+    Languages,
+    Licenses,
+    Modalities,
+    StrDate,
 )
 
 logger = logging.getLogger(__name__)
@@ -54,13 +54,13 @@ class AggregateTaskMetadata(TaskMetadata):
     main_score: str
     type: TASK_TYPE
     eval_splits: list[str]
-    eval_langs: LANGUAGES = []
+    eval_langs: Languages = []
     prompt: None = None
     reference: str | None = None
     bibtex_citation: str | None = None
 
     @property
-    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
+    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
@@ -89,13 +89,13 @@ class AggregateTaskMetadata(TaskMetadata):
 
         return self
 
-    def compute_eval_langs(self) -> list[ISO_LANGUAGE_SCRIPT]:
+    def compute_eval_langs(self) -> list[ISOLanguageScript]:
         langs = set()
         for task in self.tasks:
             langs.update(set(task.metadata.bcp47_codes))
         return list(langs)
 
-    def compute_date(self) -> tuple[STR_DATE, STR_DATE] | None:
+    def compute_date(self) -> tuple[StrDate, StrDate] | None:
         # get min max date from tasks
         dates = []
         for task in self.tasks:
@@ -128,7 +128,7 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(subtypes)
         return None
 
-    def compute_license(self) -> LICENSES | None:
+    def compute_license(self) -> Licenses | None:
         licenses = set()
         for task in self.tasks:
             if task.metadata.license:
@@ -166,7 +166,7 @@ class AggregateTaskMetadata(TaskMetadata):
             return "multiple"
         return None
 
-    def compute_modalities(self) -> list[MODALITIES]:
+    def compute_modalities(self) -> list[Modalities]:
         modalities = set()
         for task in self.tasks:
             if task.metadata.modalities:

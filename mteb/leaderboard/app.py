@@ -22,7 +22,7 @@ from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
-from mteb.types import MODALITIES
+from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -252,7 +252,7 @@ def get_leaderboard_app() -> gr.Blocks:
         info="Select specific tasks to include",
     )
     modality_select = gr.Dropdown(
-        sorted(get_args(MODALITIES)),
+        sorted(get_args(Modalities)),
         value=sorted(default_results.modalities),
         multiselect=True,
         label="Modality",

@@ -11,7 +11,6 @@ from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
 from mteb.load_results.benchmark_results import BenchmarkResults
-from mteb.types import MODEL_NAME, REVISION
 
 METRIC = Callable[[list[float], list[float]], float]
 

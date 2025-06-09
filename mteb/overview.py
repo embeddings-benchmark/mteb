@@ -21,7 +21,7 @@ from mteb.languages import (
     path_to_lang_scripts,
 )
 from mteb.tasks import *  # import all tasks
-from mteb.types import MODALITIES
+from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -142,7 +142,7 @@ def filter_task_by_categories(
 
 def filter_tasks_by_modalities(
     tasks: list[AbsTask],
-    modalities: list[MODALITIES],
+    modalities: list[Modalities],
     exclude_modality_filter: bool = False,
 ) -> list[AbsTask]:
     _modalities = set(modalities)
@@ -303,7 +303,7 @@ def get_tasks(
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[MODALITIES] | None = None,
+    modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_aggregate: bool = False,
 ) -> MTEBTasks:
@@ -394,7 +394,7 @@ def get_task(
     eval_splits: list[str] | None = None,
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[MODALITIES] | None = None,
+    modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.

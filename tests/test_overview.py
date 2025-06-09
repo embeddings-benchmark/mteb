@@ -7,7 +7,7 @@ from mteb import get_task, get_tasks
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.overview import MTEBTasks
-from mteb.types import MODALITIES
+from mteb.types import Modalities
 
 
 def test_get_tasks_size_differences():
@@ -38,7 +38,7 @@ def test_get_tasks_size_differences():
 def test_get_task(
     task_name: str,
     eval_splits: list[str] | None,
-    modalities: list[MODALITIES] | None,
+    modalities: list[Modalities] | None,
     exclusive_modality_filter: bool,
 ):
     task = get_task(
@@ -79,7 +79,7 @@ def test_get_tasks(
     domains: list[TASK_DOMAIN],
     task_types: list[TASK_TYPE] | None,
     exclude_superseded_datasets: bool,
-    modalities: list[MODALITIES] | None,
+    modalities: list[Modalities] | None,
     exclusive_modality_filter: bool,
     exclude_aggregate: bool,
 ):
@@ -143,7 +143,7 @@ def test_get_tasks_filtering():
 def test_MTEBTasks(
     script: list[str],
     task_types: list[TASK_TYPE] | None,
-    modalities: list[MODALITIES] | None,
+    modalities: list[Modalities] | None,
 ):
     tasks = mteb.get_tasks(script=script, task_types=task_types, modalities=modalities)
     assert isinstance(tasks, MTEBTasks)

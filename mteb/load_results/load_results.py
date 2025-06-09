@@ -10,14 +10,14 @@ from mteb.cache import ResultCache
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
-from mteb.types import MODEL_NAME, REVISION
+from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
 
 def _model_name_and_revision(
     revision_path: Path, fallback_to_path: bool
-) -> tuple[MODEL_NAME, REVISION] | None:
+) -> tuple[ModelName, Revision] | None:
     model_meta = revision_path / "model_meta.json"
     model_path = revision_path.parent
     if not model_meta.exists() and fallback_to_path:
