@@ -35,7 +35,7 @@ evaluator.run(model)
 ```
 
 <!-- Datasets want link to arxiv in readme to autolink dataset with paper -->
-To learn more about how to run models on `mteb` task check out the [GitHub repitory](https://github.com/embeddings-benchmark/mteb).
+To learn more about how to run models on `mteb` task check out the [GitHub repository](https://github.com/embeddings-benchmark/mteb).
 
 ## Citation
 
