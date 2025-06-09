@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
