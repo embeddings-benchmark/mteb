@@ -9,6 +9,7 @@ description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
     { name = "MTEB Contributors", email = "niklas@huggingface.co" },
+    { email = "kenneth.enevoldsen@cas.au.dk" },
     { email = "nouamane@huggingface.co" },
     { email = "info@nils-reimers.de" },
 ]
@@ -40,7 +41,7 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "codecarbon>=2.0.0",
+    "codecarbon>=2.0.0,<3.0.0",
 ]
 
 
@@ -220,6 +221,9 @@ override-dependencies = [
 ]
 conflicts = [
     [{ extra = "timm" }, { extra = "blip2" }],
+    [{ extra = "llm2vec" }, { extra = "model2vec" }],
+    # conflicting versions of transformers:
     [{ extra = "llm2vec" }, { extra = "pylate" }],
-    [{ extra = "llm2vec" }, { extra = "model2vec" }]
+    [{ extra = "colpali-engine" }, { extra = "pylate" }],
+    [{ extra = "colpali-engine" }, { extra = "llm2vec" }]
 ]

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import sys
 import traceback
 from collections.abc import Iterable
 from copy import deepcopy
@@ -12,22 +13,25 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any
 
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
+
 import datasets
 from codecarbon import EmissionsTracker
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
-from mteb.abstasks.AbsTask import ScoresDict
+from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.encoder_interface import Encoder
+from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )
-
-from ..abstasks.AbsTask import AbsTask
-from ..load_results.task_results import TaskResult
-from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 if TYPE_CHECKING:
     from mteb.benchmarks import Benchmark
@@ -39,6 +43,10 @@ class MTEB:
     _tasks: Iterable[str | AbsTask] | None
     tasks: list[AbsTask]
 
+    @deprecated(
+        "MTEB is deprecated and will be removed in future versions. "
+        "Please use the `mteb.run_tasks` function instead."
+    )
     def __init__(
         self,
         tasks: Iterable[AbsTask | Benchmark],

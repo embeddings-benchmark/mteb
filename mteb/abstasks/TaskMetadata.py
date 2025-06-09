@@ -159,7 +159,7 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
 ]
 
-SPLIT_NAME = str
+Splitname = str
 HFSubset = str
 LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
