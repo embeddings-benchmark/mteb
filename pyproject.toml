@@ -189,8 +189,12 @@ tag_format = "{version}"
 [tool.semantic_release.commit_parser_options]
 major_types = ["breaking"]
 minor_types = ["feat"]
-patch_types = ["fix", "perf"]
-
+patch_types = [
+    "fix",
+    "perf",
+    "model",
+    "dataset",
+]
 
 [tool.pytest.ini_options]
 addopts = """
