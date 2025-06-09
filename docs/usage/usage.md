@@ -456,12 +456,15 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 
 ```python
 # define your task(s) and model above as normal
-...
+task = mteb.get_task("LccSentimentClassification")
+model = mteb.get_model("minishlab/M2V_base_glove_subword")
+evaluation = mteb.MTEB(tasks=[task])
+
 # wrap the model with the cache wrapper
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
-model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='<path_to_cache_dir>')
+model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
 # run as normal
-evaluation.run(model, ...)
+evaluation.run(model_with_cached_emb)
 ```
 
 If you want to directly access the cached embeddings (e.g. for subsequent analyses) follow this example:
@@ -471,8 +474,8 @@ import numpy as np
 from mteb.models.cache_wrapper import TextVectorMap
 
 # Access the memory-mapped file and convert to array
-vector_map = TextVectorMap("<path_to_cache_dir>/AppsRetrieval")
-vector_map.load(name="AppsRetrieval")
+vector_map = TextVectorMap("path_to_cache_dir/LccSentimentClassification")
+vector_map.load(name="LccSentimentClassification")
 vectors = np.asarray(vector_map.vectors)
 
 # Remove all "placeholders" in the embedding cache
