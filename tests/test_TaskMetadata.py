@@ -12,7 +12,6 @@ from mteb.overview import get_tasks
 _HISTORIC_DATASETS = [
     "PolEmo2.0-IN",
     "PolEmo2.0-OUT",
-    "AllegroReviews",
     "PAC",
     "TNews",
     "IFlyTek",
@@ -26,7 +25,6 @@ _HISTORIC_DATASETS = [
     "TenKGnadClusteringS2S",
     "ArxivClusteringP2P",
     "ArxivClusteringS2S",
-    "BigPatentClustering",
     "RedditClustering",
     "RedditClusteringP2P",
     "StackExchangeClustering",

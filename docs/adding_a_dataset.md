@@ -236,8 +236,9 @@ Once you are finished create a PR to the [MTEB](https://github.com/embeddings-be
 The PR will be reviewed by one of the organizers or contributors who might ask you to change things. Once the PR is approved the dataset will be added into the main repository.
 
 
-Before you commit here is a checklist you should consider completing before submitting:
+Before you commit, here is a checklist you should complete before submitting:
 
+- [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
 
 An easy way to test it is using:
@@ -257,5 +258,3 @@ evaluation = MTEB(tasks=[YourNewTask()])
   - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
-- [ ] Run tests locally to make sure nothing is broken using `make test`.
-- [ ] Run the formatter to format the code using `make lint`.

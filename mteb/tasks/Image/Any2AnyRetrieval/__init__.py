@@ -61,7 +61,15 @@ from .eng import (
     WebQAT2ITRetrieval,
     WebQAT2TRetrieval,
 )
-from .multilingual import WITT2IRetrieval, XFlickr30kCoT2IRetrieval, XM3600T2IRetrieval
+from .multilingual import (
+    Vidore2BioMedicalLecturesRetrieval,
+    Vidore2EconomicsReportsRetrieval,
+    Vidore2ESGReportsHLRetrieval,
+    Vidore2ESGReportsRetrieval,
+    WITT2IRetrieval,
+    XFlickr30kCoT2IRetrieval,
+    XM3600T2IRetrieval,
+)
 
 __all__ = [
     "BLINKIT2IRetrieval",
@@ -108,6 +116,10 @@ __all__ = [
     "StanfordCarsI2I",
     "TUBerlinT2IRetrieval",
     "VQA2IT2TRetrieval",
+    "Vidore2BioMedicalLecturesRetrieval",
+    "Vidore2ESGReportsHLRetrieval",
+    "Vidore2ESGReportsRetrieval",
+    "Vidore2EconomicsReportsRetrieval",
     "VidoreArxivQARetrieval",
     "VidoreDocVQARetrieval",
     "VidoreInfoVQARetrieval",

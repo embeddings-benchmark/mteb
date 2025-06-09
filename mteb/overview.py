@@ -384,6 +384,9 @@ def get_tasks(
     return MTEBTasks(_tasks)
 
 
+_TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
+
+
 def get_task(
     task_name: str,
     languages: list[str] | None = None,
@@ -417,6 +420,12 @@ def get_task(
     Examples:
         >>> get_task("BornholmBitextMining")
     """
+    if task_name in _TASK_RENAMES:
+        _task_name = _TASK_RENAMES[task_name]
+        logger.warning(
+            f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
+        )
+
     if task_name not in TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
         if close_matches:
