@@ -314,6 +314,7 @@ def get_model_meta(
     if model_name in model_names_no_org:
         close_matches = [model_names_no_org[model_name]] + close_matches
 
+    suggestion = ""
     if close_matches:
         if len(close_matches) > 1:
             suggestion = f" Did you mean: '{close_matches[0]}' or {close_matches[1]}?"
