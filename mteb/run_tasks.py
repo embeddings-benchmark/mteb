@@ -25,9 +25,12 @@ from mteb.models import (
 
 logger = logging.getLogger(__name__)
 
-OverwriteStrategy = HelpfulStrEnum(
-    "OverwriteStrategy", ["always", "never", "only-missing", "only-cache"]
-)
+
+class OverwriteStrategy(HelpfulStrEnum):
+    ALWAYS = "always"
+    NEVER = "never"
+    ONLY_MISSING = "only-missing"
+    ONLY_CACHE = "only-cache"
 
 
 empty_model_meta = ModelMeta(
