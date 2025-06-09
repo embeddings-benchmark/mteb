@@ -90,12 +90,14 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
+    xyz_models,
     geogpt_models,
 )
 
 logger = logging.getLogger(__name__)
 
 model_modules = [
+    xyz_models,
     align_models,
     arctic_models,
     bedrock_models,
