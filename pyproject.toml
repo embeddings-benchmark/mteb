@@ -41,7 +41,6 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "codecarbon>=2.0.0,<3.0.0",
 ]
 
 
@@ -55,6 +54,7 @@ mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
+codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 dev = [
     "ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
     "pytest>=8.3.4",
