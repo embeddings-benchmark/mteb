@@ -12,9 +12,9 @@ from mteb.abstasks.TaskMetadata import (
     TextStatistics,
 )
 from mteb.encoder_interface import Encoder
+from mteb.types import ScoresDict
 
 from ..evaluation.evaluators import AnySTSEvaluator
-from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

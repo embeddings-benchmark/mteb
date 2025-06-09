@@ -14,7 +14,6 @@ from mteb.abstasks import (
 )
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
-from mteb.custom_validators import MODALITIES
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
@@ -22,6 +21,7 @@ from mteb.languages import (
     path_to_lang_scripts,
 )
 from mteb.tasks import *  # import all tasks
+from mteb.types import MODALITIES
 
 logger = logging.getLogger(__name__)
 

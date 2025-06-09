@@ -14,10 +14,11 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
+from mteb.types import ScoresDict
 
 from ...create_dataloaders import create_image_dataloader
 from ...encoder_interface import Encoder
-from ..AbsTask import AbsTask, ScoresDict
+from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

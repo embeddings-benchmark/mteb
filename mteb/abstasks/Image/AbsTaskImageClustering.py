@@ -7,10 +7,11 @@ from typing import Any
 from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
+from mteb.types import ScoresDict
 
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageClusteringEvaluator
-from ..AbsTask import AbsTask, ScoresDict
+from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

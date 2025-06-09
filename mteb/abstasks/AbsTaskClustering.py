@@ -10,7 +10,7 @@ from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
-from mteb.load_results.task_results import ScoresDict
+from mteb.types import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask

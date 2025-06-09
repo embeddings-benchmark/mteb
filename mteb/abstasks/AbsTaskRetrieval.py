@@ -11,10 +11,10 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
+from mteb.types import ScoresDict
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
-from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
 

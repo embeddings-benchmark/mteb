@@ -14,8 +14,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
     from mteb.encoder_interface import Encoder
     from mteb.load_results.task_results import TaskResult
-
-    from .AbsTask import ScoresDict
+    from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
 

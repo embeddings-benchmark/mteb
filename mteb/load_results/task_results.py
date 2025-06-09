@@ -15,12 +15,11 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset, Splitname
-from mteb.languages import ISO_LANGUAGE, LanguageScripts
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.TaskMetadata import HFSubset, Splitname
+from mteb.languages import LanguageScripts
 from mteb.model_meta import ScoringFunction
-
-Score = Any
+from mteb.types import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, Score, ScoresDict
 
 logger = logging.getLogger(__name__)
 

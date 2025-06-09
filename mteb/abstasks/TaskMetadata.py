@@ -21,12 +21,15 @@ from pydantic import (
 from typing_extensions import Literal, TypedDict
 
 import mteb
-from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from mteb.languages import (
+from mteb.languages import check_language_code
+from mteb.types import (
     ISO_LANGUAGE_SCRIPT,
-    check_language_code,
+    LICENSES,
+    MODALITIES,
+    STR_DATE,
+    STR_URL,
+    PromptType,
 )
-from mteb.types import PromptType
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",

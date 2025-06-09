@@ -13,20 +13,21 @@ import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, Field
 
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import (
-    ISO_LANGUAGE_SCRIPT,
     TASK_DOMAIN,
     TASK_TYPE,
 )
-from mteb.custom_validators import MODALITIES
-from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import ModelMeta, get_model_metas
-
-Split = str
-Score = Any
-
+from mteb.types import (
+    ISO_LANGUAGE,
+    ISO_LANGUAGE_SCRIPT,
+    MODALITIES,
+    Score,
+    ScoresDict,
+    Split,
+)
 
 logger = logging.getLogger(__name__)
 

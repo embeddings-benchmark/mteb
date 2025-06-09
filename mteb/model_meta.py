@@ -16,12 +16,8 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
-
-from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from .languages import (
-    ISO_LANGUAGE_SCRIPT,
-    check_language_code,
-)
+from mteb.languages import check_language_code
+from mteb.types import ISO_LANGUAGE_SCRIPT, LICENSES, MODALITIES, STR_DATE, STR_URL
 
 logger = logging.getLogger(__name__)
 

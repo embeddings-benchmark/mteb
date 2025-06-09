@@ -18,8 +18,7 @@ from mteb.abstasks.TaskMetadata import (
     HFSubset,
     TaskMetadata,
 )
-from mteb.custom_validators import LICENSES, STR_DATE
-from mteb.languages import ISO_LANGUAGE_SCRIPT
+from mteb.types import ISO_LANGUAGE_SCRIPT, LICENSES, STR_DATE
 
 logger = logging.getLogger(__name__)
 

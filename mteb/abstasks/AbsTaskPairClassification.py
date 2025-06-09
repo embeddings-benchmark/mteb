@@ -6,10 +6,10 @@ from collections import Counter, defaultdict
 from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.types import ScoresDict
 
 from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
-from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
