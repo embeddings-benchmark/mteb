@@ -182,9 +182,10 @@ build_command = "python -m pip install build; python -m build"
 tag_format = "{version}"
 
 [tool.semantic_release.commit_parser_options]
-major_types = ["breaking"]
-minor_types = ["feat"]
-patch_types = [
+major_tags = ["breaking"]
+minor_tags = ["minor", "feat"]
+patch_tags = [
+    "patch",
     "fix",
     "perf",
     "model",
