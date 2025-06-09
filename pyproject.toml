@@ -71,7 +71,6 @@ docs = [
   "mkdocstrings[python]>=0.18",
   "mkdocs-bibtex>=2.16.2",
 ]
-peft = ["peft>=0.11.0"]
 leaderboard = [
     "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
     "gradio_rangeslider>=0.0.8",
@@ -79,6 +78,9 @@ leaderboard = [
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
 ]
+
+# model specific optional dependencies:
+peft = ["peft>=0.11.0"]
 flagembedding = ["FlagEmbedding==1.3.4"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
@@ -149,19 +151,20 @@ select = [
 ]
 
 
-ignore = ["E501",   # line too long
-        "E741",     # ambiguous variable name
-        "F403",     # undefined import
-        "D100",     # Missing docstring in public module
-        "D101",     # Missing docstring in public class
-        "D102",     # Missing docstring in public method
-        "D103",     # Missing docstring in public function
-        "D105",     # Missing docstring in magic method
-        "D104",     # Missing docstring in public package
-        "D107",     # Missing docstring in __init__
-        "D205",     # 1 blank line required between summary line and description
-        "D415",     # First line should end with a period
-        "C408",     # don't use unecc. collection call, e.g. dict over {}
+ignore = [
+    "E501",   # line too long
+    "E741",     # ambiguous variable name
+    "F403",     # undefined import
+    "D100",     # Missing docstring in public module
+    "D101",     # Missing docstring in public class
+    "D102",     # Missing docstring in public method
+    "D103",     # Missing docstring in public function
+    "D105",     # Missing docstring in magic method
+    "D104",     # Missing docstring in public package
+    "D107",     # Missing docstring in __init__
+    "D205",     # 1 blank line required between summary line and description
+    "D415",     # First line should end with a period
+    "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
