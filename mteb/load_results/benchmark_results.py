@@ -26,7 +26,7 @@ from mteb.types import (
     MODALITIES,
     Score,
     ScoresDict,
-    Split,
+    SplitName,
 )
 
 logger = logging.getLogger(__name__)
@@ -150,7 +150,7 @@ class ModelResult(BaseModel):
 
     def get_scores(
         self,
-        splits: list[Split] | None = None,
+        splits: list[SplitName] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
@@ -575,7 +575,7 @@ class BenchmarkResults(BaseModel):
 
     def get_scores(
         self,
-        splits: list[Split] | None = None,
+        splits: list[SplitName] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,

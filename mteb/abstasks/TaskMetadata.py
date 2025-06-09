@@ -162,7 +162,6 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
 ]
 
-Splitname = str
 HFSubset = str
 
 
