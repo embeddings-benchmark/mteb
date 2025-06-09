@@ -7,10 +7,16 @@ from ._encoder_io import (
     ConversationTurn,
     PromptType,
 )
-from ._language import ISOLanguage, ISOLanguageScript, ISOScript, Languages
-from ._licenses import Licenses
-from ._metadata import ModelName, Revision
-from ._modalities import Modalities
+from ._metadata import (
+    ISOLanguage,
+    ISOLanguageScript,
+    ISOScript,
+    Languages,
+    Licenses,
+    Modalities,
+    ModelName,
+    Revision,
+)
 from ._result import HFSubset, Score, ScoresDict, SplitName
 from ._string_validators import StrDate, StrURL
 
