@@ -243,7 +243,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     training_datasets=kalm_training_data,
-    adapted_from="/mnt/shgeminicephfs/wx-dc-plt-hpc/xinshuohu/Output/Embedding/Qwen2-0.5B-eos_mean_pretrain_0806_1e-4_uen_sft_1022_filtered_v2_inst_3node_g8_1e-5_sin-0.1_mrl",
+    adapted_from="Qwen/Qwen2-0.5B",
     superseded_by=None,
 )
 HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
@@ -265,7 +265,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     training_datasets=kalm_training_data,
-    adapted_from="/mnt/shgeminicephfs/wx-dc-plt-hpc/xinshuohu/Output/Embedding/Qwen2-0.5B-eos_mean_pretrain_0806_1e-4_uen_sft_0902_filtered_v2_3node_g8_1e-5_sin-0.1",
+    adapted_from="Qwen/Qwen2-0.5B",
     superseded_by=None,
 )
 Hum_Works__lodestone_base_4096_v1 = ModelMeta(
