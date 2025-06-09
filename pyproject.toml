@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.23"
+version = "1.38.27"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -54,7 +54,7 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 dev = [
-"ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
+"ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
 "pytest>=8.3.4",
 "pytest-xdist>=3.6.1",
 "pytest-coverage>=0.0",
@@ -94,6 +94,7 @@ vertexai = ["vertexai==1.71.1"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
+xet = ["huggingface_hub>=0.32.0"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.10"]
 
@@ -183,7 +184,12 @@ tag_format = "{version}"
 [tool.semantic_release.commit_parser_options]
 major_types = ["breaking"]
 minor_types = ["feat"]
-patch_types = ["fix", "perf"]
+patch_types = [
+    "fix",
+    "perf",
+    "model",
+    "dataset",
+]
 
 
 [tool.pytest.ini_options]
