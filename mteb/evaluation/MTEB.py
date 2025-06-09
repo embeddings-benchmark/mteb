@@ -468,7 +468,7 @@ class MTEB:
                                 "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
                             )
                         logger.warning(
-                            "Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results"
+                            "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
                         )
                         with EmissionsTracker(
                             save_to_file=False,
