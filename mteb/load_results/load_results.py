@@ -10,10 +10,9 @@ from mteb.cache import ResultCache
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
+from mteb.types import MODEL_NAME, REVISION
 
 logger = logging.getLogger(__name__)
-MODEL_NAME = str
-REVISION = str
 
 
 def _model_name_and_revision(
