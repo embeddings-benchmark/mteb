@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Self
 
 
 class HelpfulStrEnum(str, Enum):
     """StrEnum that provides a method to create an instance from a string value, which allows for more user-friendly error messages."""
 
     @classmethod
-    def from_str(cls, value: str) -> Self:
+    def from_str(cls, value: str) -> HelpfulStrEnum:
         try:
             return cls(value)
         except ValueError:
