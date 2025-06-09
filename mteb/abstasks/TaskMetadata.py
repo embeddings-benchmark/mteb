@@ -168,9 +168,6 @@ LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
 
-METRIC_NAME = str
-METRIC_VALUE = Union[int, float, dict[str, Any]]
-
 
 class PromptDict(TypedDict, total=False):
     """A dictionary containing the prompt used for the task.
