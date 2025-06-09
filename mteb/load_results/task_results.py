@@ -25,7 +25,9 @@ Score = Any
 logger = logging.getLogger(__name__)
 
 
-Criterias = HelpfulStrEnum("Criterias", ["mteb_version", "dataset_revision"])
+class Criterias(HelpfulStrEnum):
+    MTEB_VERSION = "mteb_version"
+    DATASET_REVISION = "dataset_revision"
 
 
 class ScalaNbClassificationDummy:
