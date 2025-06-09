@@ -11,10 +11,10 @@ from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
-    from mteb.abstasks.TaskMetadata import DescriptiveStatistics
     from mteb.encoder_interface import Encoder
     from mteb.load_results.task_results import TaskResult
-    from mteb.types import ScoresDict, HFSubset
+    from mteb.types import HFSubset, ScoresDict
+    from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 

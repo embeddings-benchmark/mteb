@@ -9,9 +9,9 @@ from ._encoder_io import (
 )
 from ._language import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, ISO_SCRIPT, LANGUAGES
 from ._licenses import LICENSES
-from ._metadata_validators import STR_DATE, STR_URL
 from ._modalities import MODALITIES
 from ._result import HFSubset, Score, ScoresDict, SplitName
+from ._string_validators import STR_DATE, STR_URL
 
 __all__ = [
     "Array",

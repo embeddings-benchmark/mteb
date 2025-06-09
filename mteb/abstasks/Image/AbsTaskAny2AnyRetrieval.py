@@ -12,8 +12,8 @@ import tqdm
 from datasets import Dataset, Features, Value, concatenate_datasets, load_dataset
 from PIL import Image
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.types import ScoresDict
+from mteb.types.statistics import DescriptiveStatistics
 
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
 from ..AbsTask import AbsTask

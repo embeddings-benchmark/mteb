@@ -5,8 +5,8 @@ from collections import Counter, defaultdict
 
 from datasets import Dataset
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.types import ScoresDict
+from mteb.types.statistics import DescriptiveStatistics
 
 from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator

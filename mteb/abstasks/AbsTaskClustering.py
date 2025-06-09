@@ -8,9 +8,9 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 from mteb.types import ScoresDict
+from mteb.types.statistics import DescriptiveStatistics
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask

@@ -5,14 +5,14 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.abstasks.TaskMetadata import (
+from mteb.encoder_interface import Encoder
+from mteb.types import ScoresDict
+from mteb.types.statistics import (
     DescriptiveStatistics,
     ImageStatistics,
     ScoreStatistics,
     TextStatistics,
 )
-from mteb.encoder_interface import Encoder
-from mteb.types import ScoresDict
 
 from ..evaluation.evaluators import AnySTSEvaluator
 from .AbsTask import AbsTask

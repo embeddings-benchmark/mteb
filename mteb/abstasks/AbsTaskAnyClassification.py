@@ -10,14 +10,14 @@ from PIL import ImageFile
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks.TaskMetadata import (
+from mteb.encoder_interface import Encoder
+from mteb.types import HFSubset, ScoresDict
+from mteb.types.statistics import (
     DescriptiveStatistics,
     ImageStatistics,
     LabelStatistics,
     TextStatistics,
 )
-from mteb.encoder_interface import Encoder
-from mteb.types import HFSubset, ScoresDict
 
 from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
 from .AbsTask import AbsTask
