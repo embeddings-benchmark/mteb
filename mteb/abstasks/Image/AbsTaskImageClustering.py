@@ -6,8 +6,8 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
-from mteb.types import ScoresDict
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.types import ScoresDict, HFSubset
 
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageClusteringEvaluator

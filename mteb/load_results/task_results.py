@@ -16,10 +16,16 @@ from pydantic import BaseModel, field_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import HFSubset
 from mteb.languages import LanguageScripts
 from mteb.model_meta import ScoringFunction
-from mteb.types import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, Score, ScoresDict, SplitName
+from mteb.types import (
+    ISO_LANGUAGE,
+    ISO_LANGUAGE_SCRIPT,
+    HFSubset,
+    Score,
+    ScoresDict,
+    SplitName,
+)
 
 logger = logging.getLogger(__name__)
 

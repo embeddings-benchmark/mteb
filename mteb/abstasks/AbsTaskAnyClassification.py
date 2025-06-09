@@ -12,13 +12,12 @@ from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.TaskMetadata import (
     DescriptiveStatistics,
-    HFSubset,
     ImageStatistics,
     LabelStatistics,
     TextStatistics,
 )
 from mteb.encoder_interface import Encoder
-from mteb.types import ScoresDict
+from mteb.types import HFSubset, ScoresDict
 
 from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
 from .AbsTask import AbsTask

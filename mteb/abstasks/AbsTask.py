@@ -17,10 +17,10 @@ from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset, TaskMetadata
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
-from mteb.types import ScoresDict
+from mteb.types import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 

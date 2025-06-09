@@ -28,6 +28,7 @@ from mteb.types import (
     MODALITIES,
     STR_DATE,
     STR_URL,
+    HFSubset,
     PromptType,
 )
 
@@ -161,8 +162,6 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
 ]
-
-HFSubset = str
 
 
 class PromptDict(TypedDict, total=False):

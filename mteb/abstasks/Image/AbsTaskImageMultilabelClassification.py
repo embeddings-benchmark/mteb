@@ -13,8 +13,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
-from mteb.types import ScoresDict
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.types import ScoresDict, HFSubset
 
 from ...create_dataloaders import create_image_dataloader
 from ...encoder_interface import Encoder

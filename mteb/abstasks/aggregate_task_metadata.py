@@ -13,10 +13,16 @@ from mteb.abstasks.TaskMetadata import (
     TASK_DOMAIN,
     TASK_SUBTYPE,
     TASK_TYPE,
-    HFSubset,
     TaskMetadata,
 )
-from mteb.types import ISO_LANGUAGE_SCRIPT, LANGUAGES, LICENSES, MODALITIES, STR_DATE
+from mteb.types import (
+    ISO_LANGUAGE_SCRIPT,
+    LANGUAGES,
+    LICENSES,
+    MODALITIES,
+    STR_DATE,
+    HFSubset,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -11,7 +11,7 @@ from ._language import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, ISO_SCRIPT, LANGUAGES
 from ._licenses import LICENSES
 from ._metadata_validators import STR_DATE, STR_URL
 from ._modalities import MODALITIES
-from ._result import Score, ScoresDict, SplitName
+from ._result import HFSubset, Score, ScoresDict, SplitName
 
 __all__ = [
     "Array",
@@ -30,4 +30,5 @@ __all__ = [
     "STR_URL",
     "Score",
     "SplitName",
+    "HFSubset",
 ]
