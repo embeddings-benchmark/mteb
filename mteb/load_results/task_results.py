@@ -24,7 +24,9 @@ from mteb.types import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, Score, ScoresDict
 logger = logging.getLogger(__name__)
 
 
-Criterias = HelpfulStrEnum("Criterias", ["mteb_version", "dataset_revision"])
+class Criterias(HelpfulStrEnum):
+    MTEB_VERSION = "mteb_version"
+    DATASET_REVISION = "dataset_revision"
 
 
 class ScalaNbClassificationDummy:
