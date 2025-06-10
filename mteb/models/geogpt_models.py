@@ -59,6 +59,7 @@ geoembedding = ModelMeta(
         "MedrixvClusteringP2P": ["test"],
         "BiorxivClusteringS2S": ["test"],
         "BiorxivClusteringP2P": ["test"],
+        "TwentyNewsgroupsClustering": ["test"], 
         "STS12": ["train"],
         "STS22": ["train"],
         "STSBenchmark": ["train"],
