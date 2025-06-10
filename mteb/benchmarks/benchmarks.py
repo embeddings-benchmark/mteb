@@ -178,7 +178,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
     """,
     citation=r"""
 @article{muennighoff2022mteb,
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
   doi = {10.48550/ARXIV.2210.07316},
   journal = {arXiv preprint arXiv:2210.07316},
   publisher = {arXiv},
