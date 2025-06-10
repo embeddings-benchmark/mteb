@@ -55,7 +55,7 @@ If you use this dataset, please cite the dataset as well as [mteb](https://githu
 }
 
 @article{muennighoff2022mteb,
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
   journal={arXiv preprint arXiv:2210.07316},
