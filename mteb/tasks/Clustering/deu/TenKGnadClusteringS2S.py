@@ -23,7 +23,6 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=["News", "Non-fiction", "Written"],
         task_subtypes=["Topic classification"],
         license=None,
