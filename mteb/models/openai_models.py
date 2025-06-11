@@ -27,7 +27,7 @@ class OpenAIWrapper(Wrapper):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        client: None | Any = None,
+        client: Any | None = None,  # OpenAI
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
