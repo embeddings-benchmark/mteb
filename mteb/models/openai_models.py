@@ -50,10 +50,6 @@ class OpenAIWrapper(Wrapper):
         )
         import tiktoken
 
-        if client is None:
-            self._client = OpenAI()
-        else:
-            self._client = client  # use client from args (e.g., already initialized AzureOpenAI client)
 
         self._model_name = model_name
         if embed_dim is None:
