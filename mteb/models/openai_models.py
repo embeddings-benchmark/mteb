@@ -27,6 +27,7 @@ class OpenAIWrapper(Wrapper):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
+        client: Any | None = None,  # OpenAI
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
@@ -49,7 +50,7 @@ class OpenAIWrapper(Wrapper):
         )
         import tiktoken
 
-        self._client = OpenAI()
+        self._client = OpenAI() if client is None else client
 
         self._model_name = model_name
         if embed_dim is None:
