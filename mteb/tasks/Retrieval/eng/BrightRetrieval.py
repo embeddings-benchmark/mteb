@@ -105,7 +105,7 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         name="BrightRetrieval",
         dataset={
             "path": "xlangai/BRIGHT",
-            "revision": "a75a0eb",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Bright retrieval dataset.",
