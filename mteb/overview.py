@@ -13,8 +13,7 @@ from mteb.abstasks import (
     AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
-from mteb.custom_validators import MODALITIES
+from mteb.abstasks.TaskMetadata import TaskCategory, TaskDomain, TaskType
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
@@ -22,6 +21,7 @@ from mteb.languages import (
     path_to_lang_scripts,
 )
 from mteb.tasks import *  # import all tasks
+from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -112,11 +112,11 @@ def filter_tasks_by_script(tasks: list[AbsTask], script: list[str]) -> list[AbsT
 
 
 def filter_tasks_by_domains(
-    tasks: list[AbsTask], domains: list[TASK_DOMAIN]
+    tasks: list[AbsTask], domains: list[TaskDomain]
 ) -> list[AbsTask]:
     domains_to_keep = set(domains)
 
-    def _convert_to_set(domain: list[TASK_DOMAIN] | None) -> set:
+    def _convert_to_set(domain: list[TaskDomain] | None) -> set:
         return set(domain) if domain is not None else set()
 
     return [
@@ -127,14 +127,14 @@ def filter_tasks_by_domains(
 
 
 def filter_tasks_by_task_types(
-    tasks: list[AbsTask], task_types: list[TASK_TYPE]
+    tasks: list[AbsTask], task_types: list[TaskType]
 ) -> list[AbsTask]:
     _task_types = set(task_types)
     return [t for t in tasks if t.metadata.type in _task_types]
 
 
 def filter_task_by_categories(
-    tasks: list[AbsTask], categories: list[TASK_CATEGORY]
+    tasks: list[AbsTask], categories: list[TaskCategory]
 ) -> list[AbsTask]:
     _categories = set(categories)
     return [t for t in tasks if t.metadata.category in _categories]
@@ -142,7 +142,7 @@ def filter_task_by_categories(
 
 def filter_tasks_by_modalities(
     tasks: list[AbsTask],
-    modalities: list[MODALITIES],
+    modalities: list[Modalities],
     exclude_modality_filter: bool = False,
 ) -> list[AbsTask]:
     _modalities = set(modalities)
@@ -297,13 +297,13 @@ def get_tasks(
     *,
     languages: list[str] | None = None,
     script: list[str] | None = None,
-    domains: list[TASK_DOMAIN] | None = None,
-    task_types: list[TASK_TYPE] | None = None,
-    categories: list[TASK_CATEGORY] | None = None,
+    domains: list[TaskDomain] | None = None,
+    task_types: list[TaskType] | None = None,
+    categories: list[TaskCategory] | None = None,
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[MODALITIES] | None = None,
+    modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_aggregate: bool = False,
 ) -> MTEBTasks:
@@ -394,7 +394,7 @@ def get_task(
     eval_splits: list[str] | None = None,
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[MODALITIES] | None = None,
+    modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.

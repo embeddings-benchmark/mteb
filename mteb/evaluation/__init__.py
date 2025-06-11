@@ -12,7 +12,6 @@ from .evaluators import (
     RetrievalEvaluator,
     SummarizationEvaluator,
 )
-from .LangMapping import LANG_MAPPING
 from .MTEB import MTEB
 
 __all__ = [
@@ -25,7 +24,6 @@ __all__ = [
     "ClusteringEvaluator",
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",
-    "LANG_MAPPING",
     "MTEB",
     "ClassificationEvaluator",
 ]

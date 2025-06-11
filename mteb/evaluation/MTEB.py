@@ -22,7 +22,7 @@ import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
@@ -34,6 +34,7 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 if TYPE_CHECKING:
     from mteb.benchmarks import Benchmark
+    from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
 

@@ -12,8 +12,6 @@ from tqdm import tqdm
 
 from mteb.load_results.benchmark_results import BenchmarkResults
 
-MODEL_NAME = str
-REVISION = str
 METRIC = Callable[[list[float], list[float]], float]
 
 

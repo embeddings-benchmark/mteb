@@ -15,12 +15,17 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset, Splitname
-from mteb.languages import ISO_LANGUAGE, LanguageScripts
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.languages import LanguageScripts
 from mteb.model_meta import ScoringFunction
-
-Score = Any
+from mteb.types import (
+    HFSubset,
+    ISOLanguage,
+    ISOLanguageScript,
+    Score,
+    ScoresDict,
+    SplitName,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -113,7 +118,7 @@ class TaskResult(BaseModel):
         task_name: The name of the MTEB task.
         dataset_revision: The revision dataset for the task on HuggingFace dataset hub.
         mteb_version: The version of the MTEB used to evaluate the model.
-        scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[Splitname, list[Scores]].
+        scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[SplitName, list[Scores]].
             Where Scores is a dictionary with the following structure; dict[str, Any]. Where the keys and values are scores. Split is the split of
             the dataset.
         evaluation_time: The time taken to evaluate the model.
@@ -149,7 +154,7 @@ class TaskResult(BaseModel):
     dataset_revision: str
     task_name: str
     mteb_version: str | None
-    scores: dict[Splitname, list[ScoresDict]]
+    scores: dict[SplitName, list[ScoresDict]]
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
@@ -157,7 +162,7 @@ class TaskResult(BaseModel):
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[Splitname, dict[HFSubset, ScoresDict]],
+        scores: dict[SplitName, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
     ) -> TaskResult:
@@ -185,8 +190,8 @@ class TaskResult(BaseModel):
 
     @field_validator("scores")
     def _validate_scores(
-        cls, v: dict[Splitname, list[ScoresDict]]
-    ) -> dict[Splitname, list[ScoresDict]]:
+        cls, v: dict[SplitName, list[ScoresDict]]
+    ) -> dict[SplitName, list[ScoresDict]]:
         for split, hf_subset_scores in v.items():
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
@@ -255,7 +260,7 @@ class TaskResult(BaseModel):
     def from_dict(cls, data: dict) -> TaskResult:
         return cls.model_validate(data)
 
-    def _round_scores(self, scores: dict[Splitname, list[ScoresDict]], n: int) -> None:
+    def _round_scores(self, scores: dict[SplitName, list[ScoresDict]], n: int) -> None:
         """Recursively round scores to n decimal places"""
         for key, value in scores.items():
             if isinstance(value, dict):
@@ -443,9 +448,9 @@ class TaskResult(BaseModel):
 
     def get_score(
         self,
-        splits: list[Splitname] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
+        splits: list[SplitName] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], Any] = np.mean,
     ) -> Any:
