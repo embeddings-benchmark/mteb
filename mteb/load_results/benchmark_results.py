@@ -13,20 +13,21 @@ import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, Field
 
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import (
-    ISO_LANGUAGE_SCRIPT,
-    TASK_DOMAIN,
-    TASK_TYPE,
+    TaskDomain,
+    TaskType,
 )
-from mteb.custom_validators import MODALITIES
-from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import ModelMeta, get_model_metas
-
-Split = str
-Score = Any
-
+from mteb.types import (
+    ISOLanguage,
+    ISOLanguageScript,
+    Modalities,
+    Score,
+    ScoresDict,
+    SplitName,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +81,7 @@ class ModelResult(BaseModel):
     model_name: str
     model_revision: str | None
     task_results: list[TaskResult]
-    default_modalities: list[MODALITIES] = Field(
+    default_modalities: list[Modalities] = Field(
         default_factory=lambda: ["text"], alias="modalities"
     )
     model_config = (
@@ -104,9 +105,9 @@ class ModelResult(BaseModel):
         self,
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
-        domains: list[TASK_DOMAIN] | None = None,
-        task_types: list[TASK_TYPE] | None = None,
-        modalities: list[MODALITIES] | None = None,
+        domains: list[TaskDomain] | None = None,
+        task_types: list[TaskType] | None = None,
+        modalities: list[Modalities] | None = None,
     ) -> ModelResult:
         # TODO: v2 see filter_tasks in BenchmarkResults - but can be moved to a private function or removed
         new_task_results = []
@@ -149,9 +150,9 @@ class ModelResult(BaseModel):
 
     def get_scores(
         self,
-        splits: list[Split] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
+        splits: list[SplitName] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
@@ -395,9 +396,9 @@ class BenchmarkResults(BaseModel):
         self,
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
-        domains: list[TASK_DOMAIN] | None = None,
-        task_types: list[TASK_TYPE] | None = None,  # type: ignore
-        modalities: list[MODALITIES] | None = None,
+        domains: list[TaskDomain] | None = None,
+        task_types: list[TaskType] | None = None,  # type: ignore
+        modalities: list[Modalities] | None = None,
     ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
@@ -574,9 +575,9 @@ class BenchmarkResults(BaseModel):
 
     def get_scores(
         self,
-        splits: list[Split] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
+        splits: list[SplitName] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",

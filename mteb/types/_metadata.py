@@ -1,22 +1,19 @@
 from __future__ import annotations
 
-from datetime import date
-from typing import Annotated
+from collections.abc import Mapping
+from typing import Literal, Union
 
-from pydantic import AnyUrl, BeforeValidator, TypeAdapter
-from typing_extensions import Literal
+from ._result import HFSubset
 
-MODALITIES = Literal[
-    "text",
-    "image",
-]
+## LANGUAGE TYPES ##
+ISOLanguageScript = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+ISOLanguage = str  # a 3-letter ISO 639-3 language code
+ISOScript = str  # a 4-letter ISO 15924 script code
 
-http_url_adapter = TypeAdapter(AnyUrl)
-STR_URL = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
+Languages = Union[list[ISOLanguageScript], Mapping[HFSubset, list[ISOLanguageScript]]]
 
-LICENSES = (  # this list can be extended as needed
+## LICENSE TYPES ##
+Licenses = (  # this list can be extended as needed
     Literal[  # we use lowercase for the licenses similar to the huggingface datasets
         "not specified",  # or none found
         "mit",
@@ -45,11 +42,17 @@ LICENSES = (  # this list can be extended as needed
         "mpl-2.0",
         "msr-la-nc",
         "multiple",
-        "openrail",
     ]
 )
 
-pastdate_adapter = TypeAdapter(date)
-STR_DATE = Annotated[
-    str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
+
+## MODEL TYPES ##
+ModelName = str
+Revision = str
+
+
+## MODALITY TYPES ##
+Modalities = Literal[
+    "text",
+    "image",
+]
