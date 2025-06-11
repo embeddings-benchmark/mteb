@@ -52,7 +52,6 @@ class SpeechCommandsZeroshotClassification(AbsTaskAudioZeroshotClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 8
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
