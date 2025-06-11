@@ -15,8 +15,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import (
-    TASK_DOMAIN,
-    TASK_TYPE,
+    TaskDomain,
+    TaskType,
 )
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import ModelMeta, get_model_metas
@@ -105,8 +105,8 @@ class ModelResult(BaseModel):
         self,
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
-        domains: list[TASK_DOMAIN] | None = None,
-        task_types: list[TASK_TYPE] | None = None,
+        domains: list[TaskDomain] | None = None,
+        task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
     ) -> ModelResult:
         # TODO: v2 see filter_tasks in BenchmarkResults - but can be moved to a private function or removed
@@ -396,8 +396,8 @@ class BenchmarkResults(BaseModel):
         self,
         task_names: list[str] | None = None,
         languages: list[str] | None = None,
-        domains: list[TASK_DOMAIN] | None = None,
-        task_types: list[TASK_TYPE] | None = None,  # type: ignore
+        domains: list[TaskDomain] | None = None,
+        task_types: list[TaskType] | None = None,  # type: ignore
         modalities: list[Modalities] | None = None,
     ) -> BenchmarkResults:
         # TODO: Same as filter_models

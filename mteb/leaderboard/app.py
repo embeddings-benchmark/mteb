@@ -16,7 +16,7 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import TaskDomain, TaskType
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
@@ -230,14 +230,14 @@ def get_leaderboard_app() -> gr.Blocks:
         info="Select languages to include.",
     )
     type_select = gr.Dropdown(
-        sorted(get_args(TASK_TYPE)),
+        sorted(get_args(TaskType)),
         value=sorted(default_results.task_types),
         multiselect=True,
         label="Task Type",
         info="Select task types to include.",
     )
     domain_select = gr.Dropdown(
-        sorted(get_args(TASK_DOMAIN)),
+        sorted(get_args(TaskDomain)),
         value=sorted(default_results.domains),
         multiselect=True,
         label="Domain",

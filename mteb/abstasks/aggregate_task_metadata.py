@@ -8,12 +8,12 @@ from pydantic import ConfigDict, model_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import (
-    ANNOTATOR_TYPE,
-    SAMPLE_CREATION_METHOD,
-    TASK_DOMAIN,
-    TASK_SUBTYPE,
-    TASK_TYPE,
+    AnnotatorType,
+    SampleCreationMethod,
+    TaskDomain,
     TaskMetadata,
+    TaskSubtype,
+    TaskType,
 )
 from mteb.types import (
     HFSubset,
@@ -52,7 +52,7 @@ class AggregateTaskMetadata(TaskMetadata):
 
     tasks: list[AbsTask]
     main_score: str
-    type: TASK_TYPE
+    type: TaskType
     eval_splits: list[str]
     eval_langs: Languages = []
     prompt: None = None
@@ -110,7 +110,7 @@ class AggregateTaskMetadata(TaskMetadata):
         max_date = max(dates)
         return min_date.isoformat(), max_date.isoformat()
 
-    def compute_domains(self) -> list[TASK_DOMAIN] | None:
+    def compute_domains(self) -> list[TaskDomain] | None:
         domains = set()
         for task in self.tasks:
             if task.metadata.domains:
@@ -119,7 +119,7 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(domains)
         return None
 
-    def compute_task_subtypes(self) -> list[TASK_SUBTYPE] | None:
+    def compute_task_subtypes(self) -> list[TaskSubtype] | None:
         subtypes = set()
         for task in self.tasks:
             if task.metadata.task_subtypes:
@@ -137,7 +137,7 @@ class AggregateTaskMetadata(TaskMetadata):
             return "multiple"
         return None
 
-    def compute_annotations_creators(self) -> ANNOTATOR_TYPE | None:
+    def compute_annotations_creators(self) -> AnnotatorType | None:
         creators = set()
         for task in self.tasks:
             if task.metadata.annotations_creators:
@@ -157,7 +157,7 @@ class AggregateTaskMetadata(TaskMetadata):
             return list(dialects)
         return None
 
-    def compute_sample_creation(self) -> SAMPLE_CREATION_METHOD | None:
+    def compute_sample_creation(self) -> SampleCreationMethod | None:
         sample_creations = set()
         for task in self.tasks:
             if task.metadata.sample_creation:

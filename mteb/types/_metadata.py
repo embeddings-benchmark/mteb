@@ -5,7 +5,6 @@ from typing import Literal, Union
 
 from ._result import HFSubset
 
-
 ## LANGUAGE TYPES ##
 ISOLanguageScript = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
 ISOLanguage = str  # a 3-letter ISO 639-3 language code
@@ -43,7 +42,6 @@ Licenses = (  # this list can be extended as needed
         "mpl-2.0",
         "msr-la-nc",
         "multiple",
-        "openrail",
     ]
 )
 

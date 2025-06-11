@@ -5,7 +5,7 @@ import pytest
 import mteb
 from mteb import get_task, get_tasks
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import TaskDomain, TaskType
 from mteb.overview import MTEBTasks
 from mteb.types import Modalities
 
@@ -76,8 +76,8 @@ def test_get_task(
 def test_get_tasks(
     languages: list[str],
     script: list[str],
-    domains: list[TASK_DOMAIN],
-    task_types: list[TASK_TYPE] | None,
+    domains: list[TaskDomain],
+    task_types: list[TaskType] | None,
     exclude_superseded_datasets: bool,
     modalities: list[Modalities] | None,
     exclusive_modality_filter: bool,
@@ -142,7 +142,7 @@ def test_get_tasks_filtering():
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
 def test_MTEBTasks(
     script: list[str],
-    task_types: list[TASK_TYPE] | None,
+    task_types: list[TaskType] | None,
     modalities: list[Modalities] | None,
 ):
     tasks = mteb.get_tasks(script=script, task_types=task_types, modalities=modalities)

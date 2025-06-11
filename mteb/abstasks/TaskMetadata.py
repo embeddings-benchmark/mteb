@@ -35,7 +35,7 @@ from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
-TASK_SUBTYPE = Literal[
+TaskSubtype = Literal[
     "Article retrieval",
     "Conversational retrieval",
     "Dialect pairing",
@@ -72,7 +72,7 @@ TASK_SUBTYPE = Literal[
     "Intent classification",
 ]
 
-TASK_DOMAIN = Literal[
+TaskDomain = Literal[
     "Academic",
     "Blog",
     "Constructed",
@@ -99,7 +99,7 @@ TASK_DOMAIN = Literal[
     "Entertainment",
 ]
 
-SAMPLE_CREATION_METHOD = Literal[
+SampleCreationMethod = Literal[
     "found",
     "created",
     "human-translated and localized",
@@ -141,10 +141,10 @@ _TASK_TYPE = (
     "InstructionReranking",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[_TASK_TYPE]
+TaskType = Literal[_TASK_TYPE]
 
 
-TASK_CATEGORY = Literal[
+TaskCategory = Literal[
     "t2t",
     "t2c",  # text-to-category
     "i2i",  # image-to-image
@@ -158,7 +158,7 @@ TASK_CATEGORY = Literal[
     "it2it",  # image+text-to-image+text
 ]
 
-ANNOTATOR_TYPE = Literal[
+AnnotatorType = Literal[
     "expert-annotated",
     "human-annotated",
     "derived",
@@ -236,9 +236,9 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     prompt: str | PromptDict | None = None
-    type: TASK_TYPE
+    type: TaskType
     modalities: list[Modalities] = ["text"]
-    category: TASK_CATEGORY | None = None
+    category: TaskCategory | None = None
     reference: StrURL | None = None
 
     eval_splits: list[str] = ["test"]
@@ -246,14 +246,14 @@ class TaskMetadata(BaseModel):
     main_score: str
 
     date: tuple[StrDate, StrDate] | None = None
-    domains: list[TASK_DOMAIN] | None = None
-    task_subtypes: list[TASK_SUBTYPE] | None = None
+    domains: list[TaskDomain] | None = None
+    task_subtypes: list[TaskSubtype] | None = None
     license: Licenses | StrURL | None = None
 
-    annotations_creators: ANNOTATOR_TYPE | None = None
+    annotations_creators: AnnotatorType | None = None
     dialect: list[str] | None = None
 
-    sample_creation: SAMPLE_CREATION_METHOD | None = None
+    sample_creation: SampleCreationMethod | None = None
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
 
