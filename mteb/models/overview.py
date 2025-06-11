@@ -303,6 +303,7 @@ def get_model_meta(
         try:
             meta = model_meta_from_hf_hub(model_name)
             meta.revision = revision
+            return meta
         except RepositoryNotFoundError:
             pass
 
@@ -328,11 +329,14 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     card = ModelCard.load(model_name)
     card_data = card.data.to_dict()
     frameworks = ["PyTorch"]
+    loader = None
     if card_data.get("library_name", None) == "sentence-transformers":
         frameworks.append("Sentence Transformers")
+        loader = sentence_transformers_loader
     revision = card_data.get("base_model_revision", None)
     license = card_data.get("license", None)
     return ModelMeta(
+        loader=loader,
         name=model_name,
         revision=revision,
         release_date=None,
