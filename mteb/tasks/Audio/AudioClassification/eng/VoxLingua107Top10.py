@@ -28,15 +28,17 @@ class VoxLingua107Top10(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",  # from youtube
-        bibtex_citation="""@misc{valk2020voxlingua107datasetspokenlanguage,
-            title={VoxLingua107: a Dataset for Spoken Language Recognition}, 
-            author={Jörgen Valk and Tanel Alumäe},
-            year={2020},
-            eprint={2011.12998},
-            archivePrefix={arXiv},
-            primaryClass={eess.AS},
-            url={https://arxiv.org/abs/2011.12998}, 
-        }""",
+        bibtex_citation=r"""
+@misc{valk2020voxlingua107datasetspokenlanguage,
+  archiveprefix = {arXiv},
+  author = {Jörgen Valk and Tanel Alumäe},
+  eprint = {2011.12998},
+  primaryclass = {eess.AS},
+  title = {VoxLingua107: a Dataset for Spoken Language Recognition},
+  url = {https://arxiv.org/abs/2011.12998},
+  year = {2020},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 972},
         },

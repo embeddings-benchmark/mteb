@@ -39,23 +39,23 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{kulshreshtha-etal-2021-back,
-                title = "Back-Training excels Self-Training at Unsupervised Domain Adaptation of Question Generation and Passage Retrieval",
-                author = "Kulshreshtha, Devang  and
-                Belfer, Robert  and
-                Serban, Iulian Vlad  and
-                Reddy, Siva",
-                booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
-                month = nov,
-                year = "2021",
-                address = "Online and Punta Cana, Dominican Republic",
-                publisher = "Association for Computational Linguistics",
-                url = "https://aclanthology.org/2021.emnlp-main.566",
-                pages = "7064--7078",
-                abstract = "In this work, we introduce back-training, an alternative to self-training for unsupervised domain adaptation (UDA). While self-training generates synthetic training data where natural inputs are aligned with noisy outputs, back-training results in natural outputs aligned with noisy inputs. This significantly reduces the gap between target domain and synthetic data distribution, and reduces model overfitting to source domain. We run UDA experiments on question generation and passage retrieval from the Natural Questions domain to machine learning and biomedical domains. We find that back-training vastly outperforms self-training by a mean improvement of 7.8 BLEU-4 points on generation, and 17.6{\%} top-20 retrieval accuracy across both domains. We further propose consistency filters to remove low-quality synthetic data before training. We also release a new domain-adaptation dataset - MLQuestions containing 35K unaligned questions, 50K unaligned passages, and 3K aligned question-passage pairs.",
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{kulshreshtha-etal-2021-back,
+  abstract = {In this work, we introduce back-training, an alternative to self-training for unsupervised domain adaptation (UDA). While self-training generates synthetic training data where natural inputs are aligned with noisy outputs, back-training results in natural outputs aligned with noisy inputs. This significantly reduces the gap between target domain and synthetic data distribution, and reduces model overfitting to source domain. We run UDA experiments on question generation and passage retrieval from the Natural Questions domain to machine learning and biomedical domains. We find that back-training vastly outperforms self-training by a mean improvement of 7.8 BLEU-4 points on generation, and 17.6{\%} top-20 retrieval accuracy across both domains. We further propose consistency filters to remove low-quality synthetic data before training. We also release a new domain-adaptation dataset - MLQuestions containing 35K unaligned questions, 50K unaligned passages, and 3K aligned question-passage pairs.},
+  address = {Online and Punta Cana, Dominican Republic},
+  author = {Kulshreshtha, Devang  and
+Belfer, Robert  and
+Serban, Iulian Vlad  and
+Reddy, Siva},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  month = nov,
+  pages = {7064--7078},
+  publisher = {Association for Computational Linguistics},
+  title = {Back-Training excels Self-Training at Unsupervised Domain Adaptation of Question Generation and Passage Retrieval},
+  url = {https://aclanthology.org/2021.emnlp-main.566},
+  year = {2021},
+}
+""",
     )
 
     def load_data(self, **kwargs):

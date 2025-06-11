@@ -63,18 +63,18 @@ class JasperWrapper(Wrapper):
 jasper_en_v1 = ModelMeta(
     loader=partial(  # type: ignore
         JasperWrapper,
-        model_name="infgrad/jasper_en_vision_language_v1",
+        model_name="NovaSearch/jasper_en_vision_language_v1",
         revision="d6330ce98f8a0d741e781df845904c9484f00efa",
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={
             "attn_implementation": "sdpa",
-            "torch_dtype": torch.float16,
+            "torch_dtype": torch.bfloat16,
         },
         trust_remote_code=True,
         max_seq_length=2048,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
-    name="infgrad/jasper_en_vision_language_v1",
+    name="NovaSearch/jasper_en_vision_language_v1",
     languages=["eng-Latn"],
     open_weights=True,
     revision="d6330ce98f8a0d741e781df845904c9484f00efa",
@@ -84,7 +84,7 @@ jasper_en_v1 = ModelMeta(
     max_tokens=131072,
     embed_dim=8960,
     license="apache-2.0",
-    reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1/tree/main",
+    reference="https://huggingface.co/NovaSearch/jasper_en_vision_language_v1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
@@ -92,7 +92,7 @@ jasper_en_v1 = ModelMeta(
     superseded_by=None,
     training_datasets={
         # stage 1, 2, 3
-        #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/infgrad/jasper_en_vision_language_v1
+        #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/NovaSearch/jasper_en_vision_language_v1
         **nvidia_training_datasets,
         # fineweb-edu
         # https://huggingface.co/datasets/sentence-transformers/embedding-training-data

@@ -36,22 +36,24 @@ class BigPatentClustering(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@article{DBLP:journals/corr/abs-1906-03741,
-  author    = {Eva Sharma and
-               Chen Li and
-               Lu Wang},
-  title     = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
-               Summarization},
-  journal   = {CoRR},
-  volume    = {abs/1906.03741},
-  year      = {2019},
-  url       = {http://arxiv.org/abs/1906.03741},
+        bibtex_citation=r"""
+@article{DBLP:journals/corr/abs-1906-03741,
+  author = {Eva Sharma and
+Chen Li and
+Lu Wang},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
+  eprint = {1906.03741},
   eprinttype = {arXiv},
-  eprint    = {1906.03741},
+  journal = {CoRR},
   timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
-}""",
+  title = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
+Summarization},
+  url = {http://arxiv.org/abs/1906.03741},
+  volume = {abs/1906.03741},
+  year = {2019},
+}
+""",
     )
 
 
@@ -82,22 +84,24 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{DBLP:journals/corr/abs-1906-03741,
-  author    = {Eva Sharma and
-               Chen Li and
-               Lu Wang},
-  title     = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
-               Summarization},
-  journal   = {CoRR},
-  volume    = {abs/1906.03741},
-  year      = {2019},
-  url       = {http://arxiv.org/abs/1906.03741},
+        bibtex_citation=r"""
+@article{DBLP:journals/corr/abs-1906-03741,
+  author = {Eva Sharma and
+Chen Li and
+Lu Wang},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
+  eprint = {1906.03741},
   eprinttype = {arXiv},
-  eprint    = {1906.03741},
+  journal = {CoRR},
   timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
-}""",
+  title = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
+Summarization},
+  url = {http://arxiv.org/abs/1906.03741},
+  volume = {abs/1906.03741},
+  year = {2019},
+}
+""",
         adapted_from=["BigPatentClustering"],
     )
 

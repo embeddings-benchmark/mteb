@@ -38,19 +38,21 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
-            title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
-            author = "Nielsen, Dan",
-            editor = {Alum{\"a}e, Tanel  and
-            Fishel, Mark},
-            booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = may,
-            year = "2023",
-            address = "T{\'o}rshavn, Faroe Islands",
-            publisher = "University of Tartu Library",
-            url = "https://aclanthology.org/2023.nodalida-1.20",
-            pages = "185--201",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{nielsen-2023-scandeval,
+  address = {T{\'o}rshavn, Faroe Islands},
+  author = {Nielsen, Dan},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
+  month = may,
+  pages = {185--201},
+  publisher = {University of Tartu Library},
+  title = {{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing},
+  url = {https://aclanthology.org/2023.nodalida-1.20},
+  year = {2023},
+}
+""",
         prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
     )
 

@@ -16,14 +16,12 @@ from ..custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from ..encoder_interface import PromptType
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
+    check_language_code,
 )
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
+    "Accent identification",
     "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -62,12 +60,31 @@ TASK_SUBTYPE = Literal[
     "Music Genre Classification",
     "Music Instrument Recognition",
     "Spoken Language Identification",
+    "Stroke Classification of Musical Instrument",
+    "Tonic Classification of Musical Instrument",
+    "Speaker Count Identification",
+    "Species Classification",
+    "Spoken Digit Classification",
     "Gender Clustering",
+    "Vocal Sound Classification",
+    "Music Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
     "Rendered semantic textual similarity",
+    "Sentiment Analysis",
+    "Intent Classification",
+    "Vehicle Clustering",
+    "Environment Sound Clustering",
+    "Environment Sound Reranking",
+    "Rendered semantic textual similarity",
+    "Gender Classification",
+    "Age Classification",
 ]
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
+    "Bioacoustics",
     "Blog",
     "Constructed",
     "Encyclopaedic",
@@ -90,10 +107,9 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
-    "Chemistry",
-    "Financial",
     "Music",
     "Speech",
+    "Entertainment",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -109,12 +125,11 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
-    "VisionCentric",
+    "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",
@@ -128,9 +143,11 @@ MIEB_TASK_TYPE = (
 MAEB_TASK_TYPE = (
     "AudioClustering",
     "AudioMultilabelClassification",
+    "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
+    "AudioPairClassification",
 )
 
 TASK_TYPE = (
@@ -146,15 +163,6 @@ TASK_TYPE = (
         "Summarization",
         "InstructionRetrieval",
         "Speed",
-        "Any2AnyMultiChoice",
-        "Any2AnyRetrieval",
-        "Any2TextMutipleChoice",
-        "ImageClustering",
-        "ImageClassification",
-        "ImageMultilabelClassification",
-        "ImageTextPairClassification",
-        "VisualSTS",
-        "ZeroShotClassification",
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
@@ -195,29 +203,13 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
     "automatic",  # any postprocessing using (Audio/Image/Video) models
     "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
 
 SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
-]
-
-PROGRAMMING_LANGS = [
-    "python",
-    "javascript",
-    "typescript",
-    "go",
-    "ruby",
-    "java",
-    "php",
-    "c",
-    "c++",
-    "rust",
-    "swift",
-    "scala",
-    "shell",
-    "sql",
 ]
 
 METRIC_NAME = str
@@ -363,30 +355,10 @@ class TaskMetadata(BaseModel):
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    self._check_language_code(code)
+                    check_language_code(code)
         else:
             for code in eval_langs:
-                self._check_language_code(code)
-
-    @staticmethod
-    def _check_language_code(code):
-        """This method checks that the language code (e.g. "eng-Latn") is valid."""
-        lang, script = code.split("-")
-        if script == "Code":
-            if lang in PROGRAMMING_LANGS:
-                return  # override for code
-            else:
-                raise ValueError(
-                    f"Programming language {lang} is not a valid programming language."
-                )
-        if lang not in ISO_TO_LANGUAGE:
-            raise ValueError(
-                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
-            )
-        if script not in ISO_TO_SCRIPT:
-            raise ValueError(
-                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
-            )
+                check_language_code(code)
 
     @property
     def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:

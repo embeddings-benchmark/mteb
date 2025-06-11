@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import platform
 import time
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -85,6 +86,10 @@ class AbsTaskSpeedTask(AbsTask):
         return info
 
     def _evaluate_subset(self, model: Encoder, data_split, **kwargs) -> ScoresDict:
+        warnings.warn(
+            "SpeedTask is deprecated and will be removed in `v2`.",
+            DeprecationWarning,
+        )
         model.encode(
             ["encode this"], device=self.device, task_name=self.metadata.name
         )  # ensure model is loaded

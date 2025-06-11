@@ -62,7 +62,7 @@ uae_large_v1 = ModelMeta(
         },
     ),
     name="WhereIsAI/UAE-Large-V1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.

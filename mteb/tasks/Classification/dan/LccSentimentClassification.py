@@ -26,26 +26,28 @@ class LccSentimentClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{quasthoff-etal-2006-corpus,
-    title = "Corpus Portal for Search in Monolingual Corpora",
-    author = "Quasthoff, Uwe  and
-      Richter, Matthias  and
-      Biemann, Christian",
-    editor = "Calzolari, Nicoletta  and
-      Choukri, Khalid  and
-      Gangemi, Aldo  and
-      Maegaard, Bente  and
-      Mariani, Joseph  and
-      Odijk, Jan  and
-      Tapias, Daniel",
-    booktitle = "Proceedings of the Fifth International Conference on Language Resources and Evaluation ({LREC}{'}06)",
-    month = may,
-    year = "2006",
-    address = "Genoa, Italy",
-    publisher = "European Language Resources Association (ELRA)",
-    url = "http://www.lrec-conf.org/proceedings/lrec2006/pdf/641_pdf.pdf",
-    abstract = "A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.",
-}""",
+        bibtex_citation=r"""
+@inproceedings{quasthoff-etal-2006-corpus,
+  abstract = {A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.},
+  address = {Genoa, Italy},
+  author = {Quasthoff, Uwe  and
+Richter, Matthias  and
+Biemann, Christian},
+  booktitle = {Proceedings of the Fifth International Conference on Language Resources and Evaluation ({LREC}{'}06)},
+  editor = {Calzolari, Nicoletta  and
+Choukri, Khalid  and
+Gangemi, Aldo  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Odijk, Jan  and
+Tapias, Daniel},
+  month = may,
+  publisher = {European Language Resources Association (ELRA)},
+  title = {Corpus Portal for Search in Monolingual Corpora},
+  url = {http://www.lrec-conf.org/proceedings/lrec2006/pdf/641_pdf.pdf},
+  year = {2006},
+}
+""",
         prompt="Classify texts based on sentiment",
     )
 

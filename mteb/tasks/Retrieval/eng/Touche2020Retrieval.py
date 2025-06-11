@@ -28,23 +28,25 @@ class Touche2020(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@dataset{potthast_2022_6862281,
-  author       = {Potthast, Martin and
-                  Gienapp, Lukas and
-                  Wachsmuth, Henning and
-                  Hagen, Matthias and
-                  Fröbe, Maik and
-                  Bondarenko, Alexander and
-                  Ajjour, Yamen and
-                  Stein, Benno},
-  title        = {{Touché20-Argument-Retrieval-for-Controversial-
-                   Questions}},
-  month        = jul,
-  year         = 2022,
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.6862281},
-  url          = {https://doi.org/10.5281/zenodo.6862281}
-}""",
+        bibtex_citation=r"""
+@dataset{potthast_2022_6862281,
+  author = {Potthast, Martin and
+Gienapp, Lukas and
+Wachsmuth, Henning and
+Hagen, Matthias and
+Fröbe, Maik and
+Bondarenko, Alexander and
+Ajjour, Yamen and
+Stein, Benno},
+  doi = {10.5281/zenodo.6862281},
+  month = jul,
+  publisher = {Zenodo},
+  title = {{Touché20-Argument-Retrieval-for-Controversial-
+Questions}},
+  url = {https://doi.org/10.5281/zenodo.6862281},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
@@ -74,12 +76,14 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@INPROCEEDINGS{Thakur_etal_SIGIR2024,
-   author = "Nandan Thakur and Luiz Bonifacio and Maik {Fr\"{o}be} and Alexander Bondarenko and Ehsan Kamalloo and Martin Potthast and Matthias Hagen and Jimmy Lin",
-   title = "Systematic Evaluation of Neural Retrieval Models on the {Touch\'{e}} 2020 Argument Retrieval Subset of {BEIR}",
-   booktitle = "Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval",
-   year = 2024,
-   address_ = "Washington, D.C."
-}""",
+        bibtex_citation=r"""
+@inproceedings{Thakur_etal_SIGIR2024,
+  address_ = {Washington, D.C.},
+  author = {Nandan Thakur and Luiz Bonifacio and Maik {Fr\"{o}be} and Alexander Bondarenko and Ehsan Kamalloo and Martin Potthast and Matthias Hagen and Jimmy Lin},
+  booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  title = {Systematic Evaluation of Neural Retrieval Models on the {Touch\'{e}} 2020 Argument Retrieval Subset of {BEIR}},
+  year = {2024},
+}
+""",
         adapted_from=["Touche2020"],
     )

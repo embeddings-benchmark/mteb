@@ -87,19 +87,21 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",  # best guess
         dialect=[],
         sample_creation="human-translated",
-        bibtex_citation="""@inproceedings{sen-etal-2022-mintaka,
-    title = "Mintaka: A Complex, Natural, and Multilingual Dataset for End-to-End Question Answering",
-    author = "Sen, Priyanka  and
-      Aji, Alham Fikri  and
-      Saffari, Amir",
-    booktitle = "Proceedings of the 29th International Conference on Computational Linguistics",
-    month = oct,
-    year = "2022",
-    address = "Gyeongju, Republic of Korea",
-    publisher = "International Committee on Computational Linguistics",
-    url = "https://aclanthology.org/2022.coling-1.138",
-    pages = "1604--1619"
-}""",
+        bibtex_citation=r"""
+@inproceedings{sen-etal-2022-mintaka,
+  address = {Gyeongju, Republic of Korea},
+  author = {Sen, Priyanka  and
+Aji, Alham Fikri  and
+Saffari, Amir},
+  booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  month = oct,
+  pages = {1604--1619},
+  publisher = {International Committee on Computational Linguistics},
+  title = {Mintaka: A Complex, Natural, and Multilingual Dataset for End-to-End Question Answering},
+  url = {https://aclanthology.org/2022.coling-1.138},
+  year = {2022},
+}
+""",
     )
 
     def load_data(self, **kwargs):

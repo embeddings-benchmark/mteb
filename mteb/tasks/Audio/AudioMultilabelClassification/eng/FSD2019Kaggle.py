@@ -36,21 +36,22 @@ class FSD2019KaggleMultilingualClassification(
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@dataset{eduardo_fonseca_2020_3612637,
-                author       = {Eduardo Fonseca and
-                                Manoj Plakal and
-                                Frederic Font and
-                                Daniel P. W. Ellis and
-                                Xavier Serra},
-                title        = {FSDKaggle2019},
-                month        = jan,
-                year         = 2020,
-                publisher    = {Zenodo},
-                version      = {1.0},
-                doi          = {10.5281/zenodo.3612637},
-                url          = {https://doi.org/10.5281/zenodo.3612637},
-                }
-        """,
+        bibtex_citation=r"""
+@dataset{eduardo_fonseca_2020_3612637,
+  author = {Eduardo Fonseca and
+Manoj Plakal and
+Frederic Font and
+Daniel P. W. Ellis and
+Xavier Serra},
+  doi = {10.5281/zenodo.3612637},
+  month = jan,
+  publisher = {Zenodo},
+  title = {FSDKaggle2019},
+  url = {https://doi.org/10.5281/zenodo.3612637},
+  version = {1.0},
+  year = {2020},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 8961},
         },
