@@ -13,3 +13,7 @@ body:
     attributes:
       label: Arxiv link
       description: If the model is based on a paper, please provide a link to the paper on Arxiv or another academic repository.
+  - type: textarea
+    attributes:
+      label: Description of the model
+      description: Please provide a clear and concise description of the model you would like to see added.
