@@ -16,4 +16,4 @@ body:
   - type: textarea
     attributes:
       label: Description of the model
-      description: Please provide a clear and concise model of the dataset you would like to see added.
+      description: Please provide a clear and concise description of the model you would like to see added.
