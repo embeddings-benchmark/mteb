@@ -313,13 +313,3 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
     superseded_by=None,
 )
-
-
-if __name__ == "__main__":
-    # Example usage
-    import mteb
-
-    task = mteb.get_task("Ocnli")
-    model = mteb.get_model("HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5")
-    evaluator = mteb.MTEB([task])
-    evaluator.run(model)
