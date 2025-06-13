@@ -129,6 +129,8 @@ class WavlmWrapper(Wrapper):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
+                    truncation=True,
+                    max_length=480000,
                     return_attention_mask=True,
                 ).to(self.device)
 
