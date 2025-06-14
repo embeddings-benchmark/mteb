@@ -96,6 +96,7 @@ ll2vec = ["ll2vec==0.2.3"]
 timm = ["timm==1.0.15"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
+speechbrain = ["speechbrain>=0.5.12"]
 
 [tool.coverage.report]
 

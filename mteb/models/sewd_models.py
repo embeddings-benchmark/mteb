@@ -8,32 +8,27 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-from transformers import Wav2Vec2FeatureExtractor, WavLMModel
+from tqdm import tqdm
+from transformers import SEWDForCTC, Wav2Vec2FeatureExtractor
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 
-class WavlmWrapper(Wrapper):
+class SewDWrapper(Wrapper):
     def __init__(
         self,
-        model_name: str,
-        model_revision: str = None,
+        model_name: str = "facebook/hubert-base-ls960",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
-        self.model_revision = model_revision
         self.device = device
 
-        self.model = WavLMModel.from_pretrained(
-            self.model_name, revision=self.model_revision
-        ).to(self.device)
-
-        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            self.model_name
-        )
+        # SewD uses the same feature extractor as Wav2Vec2
+        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
+        self.model = SEWDForCTC.from_pretrained(model_name).to(self.device)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
@@ -114,9 +109,10 @@ class WavlmWrapper(Wrapper):
         all_embeddings = []
 
         with torch.no_grad():
-            for i in range(0, len(processed_audio), batch_size):
+            for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
 
+                # Pre-process like Wav2Vec2
                 batch_tensor = self._pad_audio_batch(batch)
 
                 if batch_tensor.ndim == 1:
@@ -129,17 +125,17 @@ class WavlmWrapper(Wrapper):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
-                    truncation=True,
-                    max_length=480000,
                     return_attention_mask=True,
                 ).to(self.device)
 
+                # SewD model outputs
                 outputs = self.model(
                     inputs.input_values,
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
+                # Get embeddings from last hidden state
                 last_hidden_state = outputs.hidden_states[-1]
                 embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
@@ -160,202 +156,77 @@ class WavlmWrapper(Wrapper):
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
 
-wavlm_base = ModelMeta(
+sewd_base = ModelMeta(
     loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-base",
-        model_revision="efa81aae7ff777e464159e0f877d54eac5b84f81",
+        SewDWrapper,
+        model_name="asapp/sew-d-base-plus-400k-ft-ls100h",
     ),
-    name="microsoft/wavlm-base",
+    name="asapp/sew-d-base-plus-400k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="efa81aae7ff777e464159e0f877d54eac5b84f81",
-    release_date="2022-07-19",
+    revision="dba3bb02fda4248b6e082697eee756de8fe8aa8a",
+    release_date="2021-09-14",
     max_tokens=float("inf"),
-    n_parameters=94_700_000,
-    memory_usage_mb=361,
+    n_parameters=95_000_000,
+    memory_usage_mb=675,
     embed_dim=768,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-base",
+    license="apache-2.0",
+    reference="https://huggingface.co/asapp/sew-d-base-plus-400k-ft-ls100h",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"Librispeech": ["train"]},
+    training_datasets={"LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
-wavlm_base_sd = ModelMeta(
+sewd_tiny = ModelMeta(
     loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-base-sd",
-        model_revision="fe13cca7e592cf0e11287cfede24e6999ac7dc4e",
+        SewDWrapper,
+        model_name="asapp/sew-d-tiny-100k-ft-ls100h",
     ),
-    name="microsoft/wavlm-base-sd",
+    name="asapp/sew-d-tiny-100k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="fe13cca7e592cf0e11287cfede24e6999ac7dc4e",
-    release_date="2022-07-19",
+    revision="1966cdcfbd2123ee90b003c2aa6ec6fe204cc4d8",
+    release_date="2021-09-14",
     max_tokens=float("inf"),
-    n_parameters=94_700_000,
-    memory_usage_mb=361,
-    embed_dim=768,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-base-sd",
+    n_parameters=19_700_000,
+    memory_usage_mb=92,
+    embed_dim=256,
+    license="apache-2.0",
+    reference="https://huggingface.co/asapp/sew-d-tiny-100k-ft-ls100h",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"Librispeech": ["train"], "LibriMix": ["train"]},
+    training_datasets={"LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
-wavlm_base_plus = ModelMeta(
+sewd_mid = ModelMeta(
     loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-base-plus",
-        model_revision="4c66d4806a428f2e922ccfa1a962776e232d487b",
+        SewDWrapper,
+        model_name="asapp/sew-d-mid-400k-ft-ls100h",
     ),
-    name="microsoft/wavlm-base-plus",
+    name="asapp/sew-d-mid-400k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="4c66d4806a428f2e922ccfa1a962776e232d487b",
-    release_date="2022-07-19",
+    revision="b2ff9fdb3bddc81657cf5f16bc0c510be0a39b3e",
+    release_date="2021-09-14",
     max_tokens=float("inf"),
-    n_parameters=94_700_000,
-    memory_usage_mb=361,
+    n_parameters=139_000_000,
+    memory_usage_mb=530,
     embed_dim=768,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-base-plus",
+    license="apache-2.0",
+    reference="https://huggingface.co/asapp/sew-d-mid-400k-ft-ls100h",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        "Libri-Light": ["train"],
-        "GigaSpeech": ["train"],
-        "VoxPopuli": ["train"],
-    },
-    modalities=["audio"],
-)
-
-wavlm_base_plus_sv = ModelMeta(
-    loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-base-plus-sv",
-        model_revision="feb593a6c23c1cc3d9510425c29b0a14d2b07b1e",
-    ),
-    name="microsoft/wavlm-base-plus-sv",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="feb593a6c23c1cc3d9510425c29b0a14d2b07b1e",
-    release_date="2022-07-19",
-    max_tokens=float("inf"),
-    n_parameters=94_700_000,
-    memory_usage_mb=361,
-    embed_dim=768,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-base-plus-sv",
-    similarity_fn_name="cosine",
-    framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={
-        "Libri-Light": ["train"],
-        "GigaSpeech": ["train"],
-        "VoxPopuli": ["train"],
-        "VoxCeleb1": ["train"],
-    },
-    modalities=["audio"],
-)
-
-wavlm_base_plus_sd = ModelMeta(
-    loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-base-plus-sd",
-        model_revision="5bd86f0662bd55704109a794c6a1b1790ea0f91a",
-    ),
-    name="microsoft/wavlm-base-plus-sd",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="5bd86f0662bd55704109a794c6a1b1790ea0f91a",
-    release_date="2022-07-19",
-    max_tokens=float("inf"),
-    n_parameters=94_700_000,
-    memory_usage_mb=361,
-    embed_dim=768,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-base-plus-sd",
-    similarity_fn_name="cosine",
-    framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={
-        "Libri-Light": ["train"],
-        "GigaSpeech": ["train"],
-        "VoxPopuli": ["train"],
-        "LibriMix": ["train"],
-    },
-    modalities=["audio"],
-)
-
-wavlm_base_sv = ModelMeta(
-    loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-base-sv",
-        model_revision="0a23162ffc49adcf42bdf836a00cb2eb45af3601",
-    ),
-    name="microsoft/wavlm-base-sv",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="0a23162ffc49adcf42bdf836a00cb2eb45af3601",
-    release_date="2022-07-19",
-    max_tokens=float("inf"),
-    n_parameters=94_700_000,
-    memory_usage_mb=361,
-    embed_dim=768,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-base-sv",
-    similarity_fn_name="cosine",
-    framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={"Librispeech": ["train"], "VoxCeleb1": ["train"]},
-    modalities=["audio"],
-)
-
-wavlm_large = ModelMeta(
-    loader=partial(
-        WavlmWrapper,
-        model_name="microsoft/wavlm-large",
-        model_revision="c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c",
-    ),
-    name="microsoft/wavlm-large",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c",
-    release_date="2022-07-19",
-    max_tokens=float("inf"),
-    n_parameters=316_620_000,
-    memory_usage_mb=1208,
-    embed_dim=1024,
-    license="mit",
-    reference="https://huggingface.co/microsoft/wavlm-large",
-    similarity_fn_name="cosine",
-    framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={
-        "Libri-Light": ["train"],
-        "GigaSpeech": ["train"],
-        "VoxPopuli": ["train"],
-    },
+    training_datasets={"LibriSpeech": ["train"]},
     modalities=["audio"],
 )
