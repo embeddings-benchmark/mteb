@@ -19,9 +19,7 @@ class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["test_5s", "test"],
-        eval_langs=[
-            "eng-Latn",
-        ],
+        eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2025-01-01", "2025-12-31"),  # Competition year
         domains=["Spoken", "Speech", "Bioacoustics"],
@@ -29,15 +27,17 @@ class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
         license="cc-by-nc-4.0",
         dialect=[],
         modalities=["audio"],
-        bibtex_citation="""@misc{rauch2024birdsetlargescaledatasetaudio,
-              title={BirdSet: A Large-Scale Dataset for Audio Classification in Avian Bioacoustics}, 
-              author={Lukas Rauch and Raphael Schwinger and Moritz Wirth and René Heinrich and Denis Huseljic and Marek Herde and Jonas Lange and Stefan Kahl and Bernhard Sick and Sven Tomforde and Christoph Scholz},
-              year={2024},
-              eprint={2403.10380},
-              archivePrefix={arXiv},
-              primaryClass={cs.SD},
-              url={https://arxiv.org/abs/2403.10380}, 
-        }""",
+        bibtex_citation=r"""
+@misc{rauch2024birdsetlargescaledatasetaudio,
+  archiveprefix = {arXiv},
+  author = {Lukas Rauch and Raphael Schwinger and Moritz Wirth and René Heinrich and Denis Huseljic and Marek Herde and Jonas Lange and Stefan Kahl and Bernhard Sick and Sven Tomforde and Christoph Scholz},
+  eprint = {2403.10380},
+  primaryclass = {cs.SD},
+  title = {BirdSet: A Large-Scale Dataset for Audio Classification in Avian Bioacoustics},
+  url = {https://arxiv.org/abs/2403.10380},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test_5s": 12000},  # 50 classes × 20 samples each
             "n_classes": 50,
@@ -77,19 +77,21 @@ class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
             17: "Mountain Chickadee",
             18: "Orange-crowned Warbler",
             19: "Warbling Vireo",
-            20: "Northern Flicker"
+            20: "Northern Flicker",
         }
 
         def ids_to_names(example):
             """Convert a list of ints to a list of bird-name strings."""
             return {
-                self.label_column_name: [id2name[i] for i in example[self.label_column_name]]
+                self.label_column_name: [
+                    id2name[i] for i in example[self.label_column_name]
+                ]
             }
 
         # Apply to every split you evaluate on (e.g. "test_5s" and "test")
         self.dataset = self.dataset.map(
             ids_to_names,
-            num_proc=4,           # speed-up; adjust or drop if you’re low on RAM
+            num_proc=4,  # speed-up; adjust or drop if you’re low on RAM
         )
 
         self.dataset = self.stratified_subsampling(
