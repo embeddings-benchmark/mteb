@@ -65,12 +65,16 @@ TASK_SUBTYPE = Literal[
     "Species Classification",
     "Spoken Digit Classification",
     "Gender Clustering",
+    "Vocal Sound Classification",
     "Music Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",
     "Vehicle Clustering",
     "Environment Sound Clustering",
+    "Environment Sound Reranking",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
@@ -78,6 +82,7 @@ TASK_SUBTYPE = Literal[
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
     "Bioacoustics",
     "Blog",
     "Constructed",
@@ -137,6 +142,7 @@ MIEB_TASK_TYPE = (
 MAEB_TASK_TYPE = (
     "AudioClustering",
     "AudioMultilabelClassification",
+    "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
