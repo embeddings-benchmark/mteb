@@ -53,6 +53,7 @@ from mteb.models import (
     linq_models,
     llm2clip_models,
     llm2vec_models,
+    mcinext_models,
     misc_models,
     moco_models,
     model2vec_models,
@@ -179,6 +180,7 @@ model_modules = [
     colqwen_models,
     colsmol_models,
     geogpt_models,
+    mcinext_models,
 ]
 MODEL_REGISTRY = {}
 
