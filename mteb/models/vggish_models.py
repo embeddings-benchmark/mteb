@@ -38,6 +38,8 @@ def vggish_loader(**kwargs):
             self.converter = WaveformToInput()
             self.sampling_rate = 16000  # VGGish requires 16kHz audio
             self.embed_dim = 128  # VGGish embedding dimension
+            self.min_audio_length = 0.96
+            self.min_samples = int(self.min_audio_length * self.sampling_rate)
 
         def _process_audio(self, audio):
             processed_audio = []
@@ -55,6 +57,7 @@ def vggish_loader(**kwargs):
 
             if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
                 for audio, _ in batch:
+                    print("Audio shape after convert:", audio.shape)
                     waveforms.append(self._convert_audio(audio))
             else:
                 for item in batch:
@@ -83,10 +86,24 @@ def vggish_loader(**kwargs):
             if isinstance(audio, np.ndarray):
                 audio = torch.from_numpy(audio)
             audio = audio.float().squeeze()
+
+            if audio.ndim > 1:
+                audio = audio.mean(dim=0)
+
             # Normalize to [-1.0, 1.0] if needed
             if audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
-            return audio
+
+            # Ensure audio is at least 0.96s (15,360 samples at 16kHz)
+            min_len = 15360
+            if audio.shape[-1] < min_len:
+                pad_len = min_len - audio.shape[-1]
+                audio = torch.nn.functional.pad(audio, (0, pad_len))
+
+            if audio.shape[-1] < self.min_samples:
+                pad_amount = self.min_samples - audio.shape[-1]
+                audio = torch.nn.functional.pad(audio, (0, pad_amount))
+            return audio   
 
         def _load_audio_file(self, path):
             waveform, sample_rate = torchaudio.load(path)
@@ -96,7 +113,7 @@ def vggish_loader(**kwargs):
                     sample_rate, self.sampling_rate
                 )
                 waveform = resampler(waveform)
-            return waveform
+            return self._convert_audio(waveform)
 
         def get_audio_embeddings(
             self, audio, *, task_name=None, prompt_type=None, batch_size=4, **kwargs
