@@ -107,6 +107,7 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.NusaParagraphEmotionClassification import *
 from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
+from .multilingual.RuSciBenchClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.ScandiSentClassification import *
 from .multilingual.SIB200Classification import *
