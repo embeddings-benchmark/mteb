@@ -13,12 +13,14 @@ class TextStatistics(TypedDict):
     """Class for descriptive statistics for texts.
 
     Attributes:
+        total_text_length: Total length of all texts
         min_text_length: Minimum length of text
         average_text_length: Average length of text
         max_text_length: Maximum length of text
         unique_texts: Number of unique texts
     """
 
+    total_text_length: int
     min_text_length: int
     average_text_length: float
     max_text_length: int
@@ -71,12 +73,9 @@ class ScoreStatistics(TypedDict):
     """Class for descriptive statistics for texts.
 
     Attributes:
-        min_labels_per_text: Minimum number of labels per text
-        average_label_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
+        min_score: Minimum score
+        avg_score: Average score
+        max_score: Maximum score
     """
 
     min_score: int
