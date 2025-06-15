@@ -113,21 +113,13 @@ class AbsTaskAnySTS(AbsTask):
             score = self.dataset[split]["score"]
 
         if "text" in self.metadata.modalities:
-            text1_statistics = calculate_text_statistics(
-                sentence1,
-            )
-            text2_statistics = calculate_text_statistics(
-                sentence2,
-            )
+            text1_statistics = calculate_text_statistics(sentence1)
+            text2_statistics = calculate_text_statistics(sentence2)
 
-            sentence1_len = [len(s) for s in sentence1]
-            sentence2_len = [len(s) for s in sentence2]
-            number_of_characters = sum(sentence1_len) + sum(sentence2_len)
             unique_pairs = len(set(zip(sentence1, sentence2)))
         else:
             text1_statistics = None
             text2_statistics = None
-            number_of_characters = None
             unique_pairs = None
 
         if "image" in self.metadata.modalities:
@@ -141,7 +133,12 @@ class AbsTaskAnySTS(AbsTask):
 
         return AnySTSDescriptiveStatistics(
             num_samples=len(sentence1),
-            number_of_characters=number_of_characters,
+            number_of_characters=(
+                text1_statistics["total_text_length"]
+                + text2_statistics["total_text_length"]
+                if text1_statistics
+                else None
+            ),
             unique_pairs=unique_pairs,
             text1_statistics=text1_statistics,
             text2_statistics=text2_statistics,

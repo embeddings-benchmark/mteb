@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter
 from typing import Any
 
 import numpy as np
@@ -10,10 +9,14 @@ from datasets import Dataset
 
 from mteb.encoder_interface import Encoder
 from mteb.types import ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask
+from .statistics_calculation import (
+    calculate_label_statistics,
+    calculate_text_statistics,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -23,34 +26,15 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
 
-        min_text_length: Minimum length of text
-        average_text_length: Average length of text
-        max_text_length: Maximum length of text
-        unique_texts: Number of unique texts
-
-        min_labels_per_text: Minimum number of labels per text
-        average_labels_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
+        text_statistics: Statistics for the text
+        labels_statistics: Statistics for the labels
     """
 
     num_samples: int
-    number_of_characters: int
 
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
-    unique_texts: int
-
-    min_labels_per_text: int
-    average_labels_per_text: float
-    max_labels_per_text: int
-
-    unique_labels: int
-    labels: dict[str, dict[str, int]]
+    text_statistics: TextStatistics
+    labels_statistics: LabelStatistics
 
 
 class AbsTaskClustering(AbsTask):
@@ -105,41 +89,25 @@ class AbsTaskClustering(AbsTask):
             sentences = []
             labels = []
             for hf_subset in self.metadata.eval_langs:
-                sentences.extend(self.dataset[hf_subset][split]["sentences"])
-                labels.extend(self.dataset[hf_subset][split]["labels"])
+                cur_sentences = self.dataset[hf_subset][split]["sentences"]
+                cur_labels = self.dataset[hf_subset][split]["labels"]
+                if len(cur_sentences) == 1 and len(cur_labels) == 1:
+                    cur_sentences = cur_sentences[0]
+                    cur_labels = cur_labels[0]
+                sentences.extend(cur_sentences)
+                labels.extend(cur_labels)
         else:
             sentences = self.dataset[split]["sentences"]
             labels = self.dataset[split]["labels"]
 
-        text_len = [len(t) for t in sentences]
-        all_sentences = []
-        for s in sentences:
-            all_sentences.extend(s)
-        total_text_len = sum(text_len)
-        total_labels = []
-        for label in labels:
-            if isinstance(label, list):
-                total_labels.extend(label)
-            else:
-                total_labels.append(label)
-        label_counter = Counter(total_labels)
+        if len(sentences) == 1 and len(labels) == 1:
+            sentences = sentences[0]
+            labels = labels[0]
+
         return ClusteringDescriptiveStatistics(
             num_samples=len(sentences),
-            number_of_characters=total_text_len,
-            min_text_length=min(text_len),
-            average_text_length=total_text_len / len(sentences),
-            max_text_length=max(text_len),
-            unique_texts=len(set(all_sentences)),
-            min_labels_per_text=min(label_counter.values()),
-            average_labels_per_text=len(total_labels) / len(sentences),
-            max_labels_per_text=max(label_counter.values()),
-            unique_labels=len(label_counter),
-            labels={
-                str(label): {
-                    "count": value,
-                }
-                for label, value in label_counter.items()
-            },
+            text_statistics=calculate_text_statistics(sentences),
+            labels_statistics=calculate_label_statistics(labels),
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:

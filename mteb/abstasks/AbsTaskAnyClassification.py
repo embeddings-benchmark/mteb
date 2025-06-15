@@ -231,7 +231,7 @@ class AbsTaskAnyClassification(AbsTask):
 
         image_statistics = None
         text_statistics = None
-        num_texts_in_train, total_text_len = None, None
+        num_texts_in_train = None
 
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)

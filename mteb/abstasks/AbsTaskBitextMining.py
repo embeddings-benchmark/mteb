@@ -164,18 +164,16 @@ class AbsTaskBitextMining(AbsTask):
             sentence1 = self.dataset[split][sent_1]
             sentence2 = self.dataset[split][sent_2]
 
-        text1_statistics = calculate_text_statistics(
-            sentence1,
-        )
-        text2_statistics = calculate_text_statistics(
-            sentence2,
-        )
+        text1_statistics = calculate_text_statistics(sentence1)
+        text2_statistics = calculate_text_statistics(sentence2)
         unique_pairs = len(set(zip(sentence1, sentence2)))
 
         return BitextDescriptiveStatistics(
             num_samples=len(sentence1),
-            number_of_characters=sum(len(s) for s in sentence1)
-            + sum(len(s) for s in sentence2),
+            number_of_characters=(
+                text1_statistics["total_text_length"]
+                + text2_statistics["total_text_length"]
+            ),
             unique_pairs=unique_pairs,
             sentence1_statistics=text1_statistics,
             sentence2_statistics=text2_statistics,
