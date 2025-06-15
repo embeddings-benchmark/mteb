@@ -16,7 +16,7 @@ class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "revision": "e3e2a63ffff66b9a9735524551e3818e96af03ee",
         },
         type="AudioZeroshotClassification",
-        category="a2a",
+        category="a2t",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
