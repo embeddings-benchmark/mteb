@@ -48,11 +48,11 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
     )
     max_depth = 5
 
-    def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_columns(
-            {"article": "sentences", "category": "labels"}
-        )
-        self.dataset = self.dataset.map(split_labels)
+    # def dataset_transform(self) -> None:
+    #     self.dataset = self.dataset.rename_columns(
+    #         {"article": "sentences", "category": "labels"}
+    #     )
+    #     self.dataset = self.dataset.map(split_labels)
 
 
 class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
@@ -92,8 +92,8 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
     )
     max_depth = 5
 
-    def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_columns(
-            {"ingress": "sentences", "category": "labels"}
-        )
-        self.dataset = self.dataset.map(split_labels)
+    # def dataset_transform(self) -> None:
+    #     self.dataset = self.dataset.rename_columns(
+    #         {"ingress": "sentences", "category": "labels"}
+    #     )
+    #     self.dataset = self.dataset.map(split_labels)
