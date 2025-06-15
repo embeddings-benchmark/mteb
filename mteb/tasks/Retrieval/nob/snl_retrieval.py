@@ -10,8 +10,8 @@ class SNLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SNLRetrieval",
         dataset={
-            "path": "mteb/SNLRetrieval",
-            "revision": "73497a9d5f2197d64ed96eac82ddf2c0382d5ee4",
+            "path": "adrlau/navjordj-SNL_summarization_copy",
+            "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
         },
         description="Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.",
         reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
