@@ -71,7 +71,7 @@ class DenseRetrievalExactSearch:
     def search(
         self,
         corpus: dict[str, dict[str, str]],
-        queries: dict[str, str],
+        queries: dict[str, str | list[str] | list[dict[str, str]]],
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -119,7 +119,26 @@ class DenseRetrievalExactSearch:
         for pair in query_instruction_pairs:
             query, instruction = pair
             # Create a hashable key for the pair
-            query_key = tuple(query) if isinstance(query, list) else query
+            if isinstance(query, str):
+                query_key = query
+            elif isinstance(query, list):
+                if isinstance(query[0], str):
+                    # If it's a list of strings, convert to tuple
+                    query_key = tuple(query)
+                elif isinstance(query[0], dict):
+                    query_key = tuple(
+                        sorted((k, v) for d in query for k, v in d.items())
+                    )
+                else:
+                    raise ValueError(
+                        f"Unsupported query type in list: {type(query[0])}. Must be str or dict."
+                    )
+            elif isinstance(query, dict):
+                query_key = tuple(sorted(query.items()))
+            else:
+                raise ValueError(
+                    f"Unsupported query type: {type(query)}. Must be str, list, or dict."
+                )
             pair_key = (query_key, instruction)
 
             if pair_key not in pair_to_idx:
