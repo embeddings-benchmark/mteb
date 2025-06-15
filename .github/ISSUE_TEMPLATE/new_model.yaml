@@ -1,0 +1,19 @@
+name: 🤖 New model
+description: Create a request for a new model to be added to MTEB
+title: "Add model: {model_id}"
+labels: ["new model"]
+body:
+  - type: input
+    attributes:
+      label: Model link on Hugging Face
+      description: Please provide a link to the model on Hugging Face. If the model is closed-source, please provide a link to the model provider or documentation.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Arxiv link
+      description: If the model is based on a paper, please provide a link to the paper on Arxiv or another academic repository.
+  - type: textarea
+    attributes:
+      label: Description of the model
+      description: Please provide a clear and concise description of the model you would like to see added.

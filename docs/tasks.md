@@ -596,6 +596,14 @@ The following tables give you an overview of the tasks in MTEB.
 | [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s | [Blog, Web, Written] | None | None |
 | [QuoraRetrieval-Fa](https://huggingface.co/datasets/MCINext/quora-fa) | ['fas'] | Retrieval | s2s | [Web] | None | None |
 | [QuoraRetrievalHardNegatives](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s |  | None | None |
+| [R2MEDBioinformaticsRetrieval](https://huggingface.co/datasets/R2MED/Bioinformatics) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDBiologyRetrieval](https://huggingface.co/datasets/R2MED/Biology) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDIIYiClinicalRetrieval](https://huggingface.co/datasets/R2MED/IIYi-Clinical) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDMedQADiagRetrieval](https://huggingface.co/datasets/R2MED/MedQA-Diag) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDMedXpertQAExamRetrieval](https://huggingface.co/datasets/R2MED/MedXpertQA-Exam) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDMedicalSciencesRetrieval](https://huggingface.co/datasets/R2MED/Medical-Sciences) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDPMCClinicalRetrieval](https://huggingface.co/datasets/R2MED/PMC-Clinical) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDPMCTreatmentRetrieval](https://huggingface.co/datasets/R2MED/PMC-Treatment) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
 | [RARbCode](https://arxiv.org/abs/2404.06347) (Husain et al., 2019) | ['eng'] | Retrieval | s2p | [Programming, Written] | None | None |
 | [RARbMath](https://arxiv.org/abs/2404.06347) (Cobbe et al., 2021) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [RESISC45](https://ieeexplore.ieee.org/abstract/document/7891544) (Cheng et al., 2017) | ['eng'] | ImageClassification | i2i | [Encyclopaedic] | {'test': 6300} | {'test': {'num_samples': 6300, 'unique_num_labels': 45, 'min_image_width': 256, 'average_image_width': 256.0, 'max_image_width': 256, 'min_image_height': 256, 'average_image_height': 256.0, 'max_image_height': 256, 'labels': {'31': {'count': 135}, '11': {'count': 144}, '28': {'count': 135}, '43': {'count': 154}, '41': {'count': 144}, '33': {'count': 134}, '19': {'count': 130}, '16': {'count': 127}, '22': {'count': 130}, '34': {'count': 143}, '24': {'count': 164}, '0': {'count': 169}, '13': {'count': 146}, '25': {'count': 115}, '6': {'count': 132}, '36': {'count': 135}, '39': {'count': 142}, '18': {'count': 140}, '23': {'count': 147}, '37': {'count': 159}, '15': {'count': 122}, '29': {'count': 140}, '9': {'count': 159}, '27': {'count': 140}, '21': {'count': 131}, '3': {'count': 134}, '1': {'count': 162}, '32': {'count': 153}, '26': {'count': 150}, '35': {'count': 151}, '44': {'count': 118}, '30': {'count': 154}, '20': {'count': 139}, '4': {'count': 130}, '42': {'count': 127}, '40': {'count': 137}, '5': {'count': 140}, '17': {'count': 142}, '2': {'count': 123}, '38': {'count': 130}, '10': {'count': 140}, '12': {'count': 146}, '8': {'count': 146}, '7': {'count': 143}, '14': {'count': 118}}}} |
@@ -1202,7 +1210,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 20 | 161 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 113 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 498 |
+| eng | English | Indo-European | 0 | 3 | 49 | 20 | 161 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 121 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 506 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1975,7 +1983,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 593 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 601 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
