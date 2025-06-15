@@ -48,12 +48,6 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
     )
     max_depth = 5
 
-    # def dataset_transform(self) -> None:
-    #     self.dataset = self.dataset.rename_columns(
-    #         {"article": "sentences", "category": "labels"}
-    #     )
-    #     self.dataset = self.dataset.map(split_labels)
-
 
 class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
     max_document_to_embed = 1300
@@ -91,9 +85,3 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
         prompt="Identify categories in a Norwegian lexicon",
     )
     max_depth = 5
-
-    # def dataset_transform(self) -> None:
-    #     self.dataset = self.dataset.rename_columns(
-    #         {"ingress": "sentences", "category": "labels"}
-    #     )
-    #     self.dataset = self.dataset.map(split_labels)
