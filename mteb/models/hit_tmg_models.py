@@ -32,6 +32,7 @@ class KALMWrapper(InstructSentenceTransformerWrapper):
         instruction = self.get_task_instruction(
             task_name, prompt_type, self.prompts_dict
         )
+        # import there due to circular imports
         from mteb import get_task
 
         task = get_task(task_name)
