@@ -204,6 +204,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a Chinese community medical question, retrieve replies that best answer the question"
         },
+        adapted_from=["CMedQAv2-reranking"],
     )
 
 
