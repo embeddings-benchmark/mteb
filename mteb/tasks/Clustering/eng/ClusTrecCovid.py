@@ -4,7 +4,7 @@ from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
 )
 from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ClusTrecCovid(AbsTaskClusteringFast, MultilingualTask):

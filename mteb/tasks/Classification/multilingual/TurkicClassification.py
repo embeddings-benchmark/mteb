@@ -6,7 +6,7 @@ import datasets
 from datasets import DatasetDict
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TurkicClassification(AbsTaskAnyClassification):

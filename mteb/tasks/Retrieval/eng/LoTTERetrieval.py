@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 DOMAINS = ["writing", "recreation", "science", "technology", "lifestyle"]
 DOMAINS_TYPES = ["search", "forum"]

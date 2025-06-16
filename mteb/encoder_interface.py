@@ -4,10 +4,11 @@ from typing import TYPE_CHECKING, Any, Protocol, Union, runtime_checkable
 
 from torch.utils.data import DataLoader
 
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    from mteb.abstasks import TaskMetadata
+    pass
 
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
 
