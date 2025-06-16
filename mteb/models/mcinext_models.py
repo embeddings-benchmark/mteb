@@ -22,216 +22,145 @@ MODEL_API_NAMES = {
     "hakim-unsup": "Hakim_unsuper",
 }
 
-# Task configurations
-TASK_CONFIGS = {
-    "1_1": (
-        "دسته بندی , تحلیل احساس رضایت کاربر در مکالمه با چت بات",
-        ["عالی", "خوب", "متوسط", "بد", "خیلی بد"],
-    ),
-    "1_2": (
-        "دسته بندی , تشخیص لحن کاربر در مکالمه با چت بات",
-        ["رسمی", "عامیانه", "کودکانه", "لاتی", "عصبانی"],
-    ),
-    "1_3": (
-        "دسته بندی , تشخیص لحن چت بات در مکالمه ی کاربر با چت بات",
-        ["رسمی", "عامیانه", "کودکانه", "لاتی", "عصبانی"],
-    ),
-    "1_4": (
-        "دسته بندی , تحلیل احساس عصبانیت کاربر در مکالمه با چت بات",
-        ["مثبت", "منفی"],
-    ),
-    "1_5": (
-        "دسته بندی , تحلیل احساس رضایت کاربر در مکالمه با چت بات",
-        ["مثبت", "منفی"],
-    ),
-    "1_6": (
-        "دسته بندی , تحلیل احساس صمیمیت کاربر در مکالمه با چت بات",
-        ["مثبت", "منفی"],
-    ),
-    "1_7": ("دسته بندی , تحلیل احساس ترس کاربر در مکالمه با چت بات", ["مثبت", "منفی"]),
-    "1_8": (
-        "دسته بندی , تحلیل احساس حسادت کاربر در مکالمه با چت بات",
-        ["مثبت", "منفی"],
-    ),
-    "1_9": (
-        "دسته بندی , تحلیل احساس شگفتی کاربر در مکالمه با چت بات",
-        ["مثبت", "منفی"],
-    ),
-    "1_10": ("دسته بندی , تحلیل احساس عشق کاربر در مکالمه با چت بات", ["مثبت", "منفی"]),
-    "1_11": ("دسته بندی , تحلیل احساس غصه کاربر در مکالمه با چت بات", ["مثبت", "منفی"]),
-    "1_12": (
-        "دسته بندی , تحلیل احساس خوشحالی کاربر در مکالمه با چت بات",
-        ["مثبت", "منفی"],
-    ),
-    "1_13": ("دسته بندی , تشخیص لحن متن", ["عامیانه", "رسمی", "کودکانه", "ادبی"]),
-    "1_14": (
-        "دسته بندی , دسته بندی موضوعی متن",
-        [
-            "بازی ویدیویی",
-            "راهنمای خرید",
-            "سلامت و زیبایی",
-            "علم و تکنولوژی",
-            "عمومی",
-            "هنر و سینما",
-            "کتاب و ادبیات",
-        ],
-    ),
-    "1_15": (
-        "دسته بندی , دسته بندی موضوعی متن",
-        [
-            "پزشکی",
-            "کشاورزی و منابع طبیعی",
-            "فنی مهندسی",
-            "علوم پایه",
-            "علوم انسانی",
-            "هنر و معماری",
-            "علمی تخصصی",
-            "دامپزشکی",
-        ],
-    ),
-    "1_16": (
-        "دسته بندی , دسته بندی موضوعی متن",
-        [
-            "هنر و طراحی",
-            "مسائل اجتماعی و فعال‌سازی",
-            "الهام‌بخش و انگیزشی",
-            "خودرو",
-            "زیبایی و لوازم آرایشی",
-            "غذا و آشپزی",
-            "کسب و کار و مالی",
-            "مد و سبک",
-            "آموزش و یادگیری",
-            "علم و کشف",
-            "بازی",
-            "فناوری و نوآوری",
-            "مذهب و معنویت",
-            "حیوانات خانگی و جانوران",
-            "سفر و ماجراجویی",
-            "خانواده و پرورش فرزند",
-            "خنده‌دار و طنز",
-            "سلامت و بهزیستی",
-            "خانه و باغ",
-            "سیاست و مسائل روز",
-            "تفریحات و فرهنگ عامه",
-            "ورزش و ورزشکاری",
-            "آب و هوا و فصول",
-            "کتاب‌ها و ادبیات",
-            "محیط زیست و پایداری",
-        ],
-    ),
-    "1_17": (
-        "دسته بندی , دسته بندی موضوعی متن",
-        [
-            "موسیقی",
-            "تقویم",
-            "هشدار",
-            "آب‌وهوا",
-            "پخش",
-            "تاریخ و زمان",
-            "آشپزی",
-            "ایمیل",
-            "بیرون‌بر",
-            "اخبار",
-            "پیشنهاد",
-            "فهرست‌ها",
-            "اجتماعی",
-            "حمل‌ونقل",
-            "عمومی",
-            "پرسش و پاسخ",
-            "صوتی",
-            "اینترنت اشیاء",
-        ],
-    ),
-    "1_18": (
-        "دسته بندی , دسته بندی احساس متن",
-        ["شادی", "غم", "خشم", "انزجار", "ترس", "تعجب"],
-    ),
-    "1_19": ("دسته بندی , تحلیل احساس رضایت متن", ["مثبت", "منفی", "خنثی"]),
-    "1_20": (
-        "دسته بندی , تشخیص لحن کاربر در مکالمه با چت بات",
-        ["رسمی", "عامیانه", "کودکانه"],
-    ),
-    "1_21": (
-        "دسته بندی , تشخیص لحن چت بات در مکالمه ی کاربر با چت بات",
-        ["رسمی", "عامیانه", "کودکانه"],
-    ),
-    "1_170": ("دسته بندی , دسته بندی موضوعی متن", []),
-    "1_190": ("دسته بندی , تحلیل احساس رضایت متن", ["مثبت", "منفی"]),
-    "3_1": (
-        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم خلاصه ی متن اول است ؟",
-        None,
-    ),
-    "3_5": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", None),
-    "3_6": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", None),
-    "3_12": (
-        "تشخیص ارتباط , متن اول یک مکالمه است. آیا متن دوم خلاصه ی متن اول است ؟",
-        None,
-    ),
-    "3_13": ("تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟", None),
-    "3_14": (
-        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم موضوع استخراج شده ی متن اول است ؟",
-        None,
-    ),
-}
-
-# Dataset task mappings
+# Dataset task mappings with descriptions and task IDs
 DATASET_TASKS = {
-    "PersianTextEmotion": (1, 18),
-    "PersianFoodSentimentClassification": (1, 190),
-    "SentimentDKSF": (1, 19),
-    "MassiveIntentClassification": (1, 170),
-    "MassiveScenarioClassification": (1, 17),
-    "SynPerChatbotConvSAAnger": (1, 4),
-    "SynPerChatbotConvSASatisfaction": (1, 5),
-    "SynPerChatbotConvSAFriendship": (1, 6),
-    "SynPerChatbotConvSAFear": (1, 7),
-    "SynPerChatbotConvSAJealousy": (1, 8),
-    "SynPerChatbotConvSASurprise": (1, 9),
-    "SynPerChatbotConvSALove": (1, 10),
-    "SynPerChatbotConvSASadness": (1, 11),
-    "SynPerChatbotConvSAHappiness": (1, 12),
-    "SynPerChatbotConvSAToneChatbotClassification": (1, 21),
-    "SynPerChatbotConvSAToneUserClassification": (1, 20),
-    "PersianTextTone": (1, 13),
-    "SynPerChatbotToneUserClassification": (1, 2),
-    "SynPerChatbotToneChatbotClassification": (1, 3),
-    "SynPerChatbotRAGToneUserClassification": (1, 2),
-    "SynPerChatbotRAGToneChatbotClassification": (1, 3),
-    "SynPerChatbotSatisfactionLevelClassification": (1, 1),
-    "DigimagClassification": (1, 14),
-    "NLPTwitterAnalysisClassification": (1, 16),
-    "SIDClassification": (1, 15),
-    "DeepSentiPers": (1, 19),
-    "DigikalamagClassification": (1, 14),
-    "FarsTail": (4, 6),
-    "ParsinluEntail": (4, 6),
-    "ParsinluQueryParaphPC": (4, 7),
-    "SynPerChatbotRAGFAQPC": (4, 1),
-    "SynPerTextKeywordsPC": (4, 2),
-    "SynPerQAPC": (4, 3),
-    "CExaPPC": (4, 7),
-    "FarsiParaphraseDetection": (4, 7),
-    "Farsick": (3, 6),
-    "Query2Query": (3, 6),
-    "SynPerSTS": (3, 6),
-    "BeytooteClustering": (1, 170),
-    "DigikalamagClustering": (1, 14),
-    "NLPTwitterAnalysisClustering": (1, 16),
-    "HamshahriClustring": (1, 170),
-    "SIDClustring": (1, 15),
-    "MIRACLReranking": (3, 5),
-    "WikipediaRerankingMultilingual": (3, 5),
-    "SAMSumFa": (3, 12),
-    "SynPerChatbotSumSRetrieval": (3, 1),
-    "SynPerChatbotRAGSumSRetrieval": (3, 1),
-    "SynPerQARetrieval": (3, 5),
-    "SynPerChatbotTopicsRetrieval": (3, 14),
-    "SynPerChatbotRAGTopicsRetrieval": (3, 14),
-    "SynPerChatbotRAGFAQRetrieval": (3, 3),
-    "PersianWebDocumentRetrieval": (3, 13),
+    "PersianTextEmotion": ("دسته بندی , دسته بندی احساس متن", 1),
+    "PersianFoodSentimentClassification": ("دسته بندی , تحلیل احساس رضایت متن", 1),
+    "SentimentDKSF": ("دسته بندی , تحلیل احساس رضایت متن", 1),
+    "MassiveIntentClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "MassiveScenarioClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "SynPerChatbotConvSAAnger": (
+        "دسته بندی , تحلیل احساس عصبانیت کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSASatisfaction": (
+        "دسته بندی , تحلیل احساس رضایت کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSAFriendship": (
+        "دسته بندی , تحلیل احساس صمیمیت کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSAFear": (
+        "دسته بندی , تحلیل احساس ترس کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSAJealousy": (
+        "دسته بندی , تحلیل احساس حسادت کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSASurprise": (
+        "دسته بندی , تحلیل احساس شگفتی کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSALove": (
+        "دسته بندی , تحلیل احساس عشق کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSASadness": (
+        "دسته بندی , تحلیل احساس غصه کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSAHappiness": (
+        "دسته بندی , تحلیل احساس خوشحالی کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSAToneChatbotClassification": (
+        "دسته بندی , تشخیص لحن چت بات در مکالمه ی کاربر با چت بات",
+        1,
+    ),
+    "SynPerChatbotConvSAToneUserClassification": (
+        "دسته بندی , تشخیص لحن کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "PersianTextTone": ("دسته بندی , تشخیص لحن متن", 1),
+    "SynPerChatbotToneUserClassification": (
+        "دسته بندی , تشخیص لحن کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotToneChatbotClassification": (
+        "دسته بندی , تشخیص لحن چت بات در مکالمه ی کاربر با چت بات",
+        1,
+    ),
+    "SynPerChatbotRAGToneUserClassification": (
+        "دسته بندی , تشخیص لحن کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "SynPerChatbotRAGToneChatbotClassification": (
+        "دسته بندی , تشخیص لحن چت بات در مکالمه ی کاربر با چت بات",
+        1,
+    ),
+    "SynPerChatbotSatisfactionLevelClassification": (
+        "دسته بندی , تحلیل احساس رضایت کاربر در مکالمه با چت بات",
+        1,
+    ),
+    "DigimagClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "NLPTwitterAnalysisClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "SIDClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "DeepSentiPers": ("دسته بندی , تحلیل احساس رضایت متن", 1),
+    "DigikalamagClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "FarsTail": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 4),
+    "ParsinluEntail": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 4),
+    "ParsinluQueryParaphPC": (
+        "تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟",
+        4,
+    ),
+    "SynPerChatbotRAGFAQPC": (
+        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم خلاصه ی متن اول است ؟",
+        4,
+    ),
+    "SynPerTextKeywordsPC": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", 4),
+    "SynPerQAPC": ("تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟", 4),
+    "CExaPPC": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 4),
+    "FarsiParaphraseDetection": (
+        "تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟",
+        4,
+    ),
+    "Farsick": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 3),
+    "Query2Query": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 3),
+    "SynPerSTS": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 3),
+    "BeytooteClustering": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "DigikalamagClustering": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "NLPTwitterAnalysisClustering": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "HamshahriClustring": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "SIDClustring": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "MIRACLReranking": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", 3),
+    "WikipediaRerankingMultilingual": (
+        "تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟",
+        3,
+    ),
+    "SAMSumFa": (
+        "تشخیص ارتباط , متن اول یک مکالمه است. آیا متن دوم خلاصه ی متن اول است ؟",
+        3,
+    ),
+    "SynPerChatbotSumSRetrieval": (
+        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم خلاصه ی متن اول است ؟",
+        3,
+    ),
+    "SynPerChatbotRAGSumSRetrieval": (
+        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم خلاصه ی متن اول است ؟",
+        3,
+    ),
+    "SynPerQARetrieval": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", 3),
+    "SynPerChatbotTopicsRetrieval": (
+        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم موضوع استخراج شده ی متن اول است ؟",
+        3,
+    ),
+    "SynPerChatbotRAGTopicsRetrieval": (
+        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم موضوع استخراج شده ی متن اول است ؟",
+        3,
+    ),
+    "SynPerChatbotRAGFAQRetrieval": (
+        "تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟",
+        3,
+    ),
+    "PersianWebDocumentRetrieval": (
+        "تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟",
+        3,
+    ),
 }
 
-# Add all retrieval datasets with task (3, 13)
+# Add all retrieval datasets with the same instruction and task ID
 RETRIEVAL_DATASETS = [
     "ArguAna-Fa",
     "ClimateFEVER-Fa",
@@ -263,7 +192,7 @@ RETRIEVAL_DATASETS = [
 ]
 
 for dataset in RETRIEVAL_DATASETS:
-    DATASET_TASKS[dataset] = (3, 13)
+    DATASET_TASKS[dataset] = ("تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟", 3)
 
 
 class APIError(Exception):
@@ -278,7 +207,7 @@ class APIError(Exception):
         self.status_code = status_code
 
 
-class OurInstructModelWrapper(Wrapper):
+class HakimModelWrapper(Wrapper):
     """A simplified wrapper for the Hakim instruction-following model."""
 
     def __init__(
@@ -314,13 +243,10 @@ class OurInstructModelWrapper(Wrapper):
         if "unsup" in self.model_name:
             return sample
 
-        task_id, subtask_id = DATASET_TASKS.get(task_name, (None, None))
-        if not task_id:
-            logger.warning(f"Unknown dataset: {task_name}, no preprocessing applied.")
-            return sample
+        task_prompt, task_id = DATASET_TASKS.get(task_name, (None, None))
 
-        task_prompt, _ = TASK_CONFIGS.get(f"{task_id}_{subtask_id}", ("", None))
         if not task_prompt:
+            logger.warning(f"Unknown dataset: {task_name}, no preprocessing applied.")
             return sample
 
         task_prompt = f"مسئله : {task_prompt}"
@@ -413,7 +339,7 @@ class OurInstructModelWrapper(Wrapper):
 # Model metadata
 hakim = ModelMeta(
     loader=partial(
-        OurInstructModelWrapper,
+        HakimModelWrapper,
         trust_remote_code=True,
         model_name="hakim",
         revision="v1",
@@ -481,7 +407,7 @@ hakim = ModelMeta(
 
 hakim_small = ModelMeta(
     loader=partial(
-        OurInstructModelWrapper,
+        HakimModelWrapper,
         trust_remote_code=True,
         model_name="hakim-small",
         revision="v1",
@@ -548,7 +474,7 @@ hakim_small = ModelMeta(
 
 hakim_unsup = ModelMeta(
     loader=partial(
-        OurInstructModelWrapper,
+        HakimModelWrapper,
         trust_remote_code=True,
         model_name="hakim-unsup",
         revision="v1",
