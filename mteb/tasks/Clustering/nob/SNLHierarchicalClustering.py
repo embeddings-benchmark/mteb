@@ -18,11 +18,11 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="SNLHierarchicalClusteringP2P",
         dataset={
-            "path": "navjordj/SNL_summarization",
-            "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+            "path": "mteb/SNLHierarchicalClusteringP2P",
+            "revision": "693a321c42fb13ffe76bb9043f8d2aaa8f0a9499",
         },
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
-        reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
+        reference="https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringP2P",
         type="Clustering",
         category="p2p",
         modalities=["text"],
@@ -48,12 +48,6 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
     )
     max_depth = 5
 
-    def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_columns(
-            {"article": "sentences", "category": "labels"}
-        )
-        self.dataset = self.dataset.map(split_labels)
-
 
 class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
     max_document_to_embed = 1300
@@ -62,11 +56,11 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="SNLHierarchicalClusteringS2S",
         dataset={
-            "path": "navjordj/SNL_summarization",
-            "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+            "path": "mteb/SNLHierarchicalClusteringS2S",
+            "revision": "b505e4ce65f255228e49dd07b6f8148731c5dc64",
         },
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
-        reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
+        reference="https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringS2S",
         type="Clustering",
         category="s2s",
         modalities=["text"],
@@ -91,9 +85,3 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
         prompt="Identify categories in a Norwegian lexicon",
     )
     max_depth = 5
-
-    def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_columns(
-            {"ingress": "sentences", "category": "labels"}
-        )
-        self.dataset = self.dataset.map(split_labels)
