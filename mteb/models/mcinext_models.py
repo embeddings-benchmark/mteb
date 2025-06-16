@@ -338,9 +338,6 @@ class OurInstructModelWrapper(Wrapper):
         """Makes an API request with retry logic."""
         for attempt in range(self.max_retries):
             try:
-                print(self.api_url)
-                print(self.headers)
-                print(data["model"])
                 response = requests.post(
                     self.api_url, headers=self.headers, json=data, timeout=60
                 )
@@ -396,7 +393,6 @@ class OurInstructModelWrapper(Wrapper):
                 "encoding_format": "float",
                 "add_special_tokens": True,
             }
-            # print(data)
             try:
                 batch_embeddings = self._make_api_request(data)
                 if len(batch_embeddings) != len(batch):
@@ -406,7 +402,6 @@ class OurInstructModelWrapper(Wrapper):
                 all_embeddings.extend(batch_embeddings)
             except APIError as e:
                 logger.error(f"Failed to process batch starting at index {i}: {e}")
-                # Depending on desired behavior, you could return partial results or re-raise
                 raise e
 
         logger.info(
