@@ -7,8 +7,8 @@ from functools import partial
 import torch
 
 from mteb.model_meta import ModelMeta
-
 from mteb.models.instruct_wrapper import instruct_wrapper
+
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
     languages=["eng-Latn"],
