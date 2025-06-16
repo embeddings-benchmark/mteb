@@ -24,8 +24,8 @@ mock_retrieval = (MockSentenceTransformer(), MockRetrievalTask(), 0.0)
     [mock_classification, mock_retrieval],
     ids=["mock_classification", "mock_retrieval"],
 )
-def test_run_tasks(model: Encoder, task: AbsTask, expected_score: float):
-    results = mteb.run_tasks(model, task, cache=None, co2_tracker=False)
+def test_evaluate(model: Encoder, task: AbsTask, expected_score: float):
+    results = mteb.evaluate(model, task, cache=None, co2_tracker=False)
 
     assert len(results) == 1, "should return exactly one result"
     result = results[0]
@@ -40,11 +40,11 @@ def test_run_tasks(model: Encoder, task: AbsTask, expected_score: float):
 @pytest.mark.parametrize(
     "model, task, expected_score", [mock_classification], ids=["mock_classification"]
 )
-def test_run_tasks_with_cache(
+def test_evaluate_with_cache(
     model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
 ):
     cache = ResultCache(tmp_path)
-    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
 
     # Check if the cache is created
     path = cache.get_task_result_path(
@@ -70,7 +70,7 @@ def test_run_tasks_with_cache(
     ],  # default split is "test" so this will run "train" and then ["test", "train"], also means that expected score can be different
     ids=["mock_classification"],
 )
-def test_run_task_w_missing_splits(
+def test_evaluate_w_missing_splits(
     model: Encoder,
     task: AbsTask,
     expected_score: float,
@@ -82,12 +82,12 @@ def test_run_task_w_missing_splits(
     task._eval_splits = splits
     # ^ eq. to mteb.get_task("name", splits=[...])
 
-    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
     result = results[0]
 
     assert set(result.eval_splits) == set(splits)
     task._eval_splits = list(set(list(task.metadata.eval_splits) + splits))
-    results = mteb.run_tasks(model, task, cache=cache)
+    results = mteb.evaluate(model, task, cache=cache)
     updated = results[0]
 
     assert set(updated.eval_splits) != set(result.eval_splits)
@@ -104,7 +104,7 @@ def test_run_task_w_missing_splits(
     [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.63093)],
     ids=["mock_retrieval"],
 )
-def test_run_task_w_missing_subset(
+def test_evaluate_w_missing_subset(
     model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
 ):
     cache = ResultCache(tmp_path)
@@ -113,13 +113,13 @@ def test_run_task_w_missing_subset(
     task.hf_subsets = hf_subsets[:-1]
     # ^ eq. to mteb.get_task("name", splits=[...])
 
-    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
     result = results[0]
 
     assert set(result.hf_subsets) == set(hf_subsets[:1])
 
     task.hf_subsets = hf_subsets
-    results = mteb.run_tasks(model, task, cache=cache)
+    results = mteb.evaluate(model, task, cache=cache)
     updated = results[0]
 
     assert set(updated.hf_subsets) != set(result.hf_subsets)
@@ -136,7 +136,7 @@ def test_run_task_w_missing_subset(
     [(*mock_classification, ["train"])],
     ids=["mock_classification"],
 )
-def test_run_task_overwrites(
+def test_evaluate_overwrites(
     model: Encoder,
     task: AbsTask,
     expected_score: float,
@@ -149,20 +149,20 @@ def test_run_task_overwrites(
     # ^ eq. to mteb.get_task("name", splits=[...])
 
     # run part of a task to make an incomplete result
-    results = mteb.run_tasks(model, task, cache=cache, co2_tracker=False)
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
 
     task._eval_splits = task.metadata.eval_splits  # reset splits to default
 
     with pytest.raises(ValueError):
-        results = mteb.run_tasks(
+        results = mteb.evaluate(
             model, task, cache=cache, overwrite_strategy="only-cache"
         )
 
     with pytest.raises(ValueError):
-        results = mteb.run_tasks(model, task, cache=cache, overwrite_strategy="never")
+        results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="never")
 
     # should just overwrite
-    results = mteb.run_tasks(model, task, cache=cache, overwrite_strategy="always")
+    results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="always")
     assert results[0].get_score() == expected_score, (
         "main score should match the expected value"
     )
