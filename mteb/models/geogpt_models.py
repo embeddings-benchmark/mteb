@@ -7,15 +7,15 @@ from functools import partial
 import torch
 
 from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
+from mteb.models.instruct_wrapper import instruct_wrapper
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
     languages=["eng-Latn"],
     open_weights=True,
     revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",
     loader=partial(
-        InstructSentenceTransformerWrapper,
+        instruct_wrapper,
         "GeoGPT-Research-Project/GeoEmbedding",
         "29803c28ea7ef6871194a8ebc85ad7bfe174928e",
         instruction_template="Instruct: {instruction}\nQuery: ",

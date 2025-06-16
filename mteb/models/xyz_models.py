@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 xyz_zh_datasets = {
     "BQ": ["train"],
