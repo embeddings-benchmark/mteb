@@ -8,7 +8,6 @@ from typing import Any, cast
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb import SentenceTransformerWrapper
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -21,6 +20,7 @@ from mteb.models import (
     model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.types import HFSubset, SplitName
 
 logger = logging.getLogger(__name__)
