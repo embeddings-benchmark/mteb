@@ -23,6 +23,6 @@ from .eng.TUTAcousticScenes import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
 from .eng.VoxPopuliAccentID import *
-from .eng.VoxPopuliGenderID import *
-from .eng.VoxPopuliLanguageID import *
+from .multilingual.VoxPopuliLanguageID import *
+from .multilingual.VoxPopuliGenderID import *
 from .multilingual.MInDS14 import *
