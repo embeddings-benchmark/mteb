@@ -8,7 +8,6 @@ from typing import Any, cast
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb import SentenceTransformerWrapper
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -21,6 +20,7 @@ from mteb.models import (
     model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.types import HFSubset, SplitName
 
 logger = logging.getLogger(__name__)
@@ -76,7 +76,7 @@ def _get_model_meta(model: Encoder | SentenceTransformer | CrossEncoder) -> Mode
     return meta
 
 
-def _run_task(
+def _evaluate(
     model: Encoder,
     task: AbsTask,
     *,
@@ -104,7 +104,7 @@ def _run_task(
             logging_logger=logger,  # type: ignore[arg-type]
             allow_multiple_runs=False,
         ) as tracker:
-            result = _run_task(
+            result = _evaluate(
                 model,
                 task,
                 splits=splits,
@@ -152,7 +152,7 @@ def _run_task(
     return result
 
 
-def run_tasks(
+def evaluate(
     model: ModelMeta | Encoder | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,
@@ -167,7 +167,8 @@ def run_tasks(
     Args:
         model: The model to use for encoding.
         tasks: A task to run.
-        co2_tracker: If True, track the CO₂ emissions of the evaluation. If none is passed co2 tracking will be run if codecarbon is installed.
+        co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using
+            `pip install mteb[codecarbon]`. If none is passed co2 tracking will only be run if codecarbon is installed.
         encode_kwargs: Additional keyword arguments passed to the models `encode` method.
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
         cache: The cache to use for loading the results. If None, then no cache will be used. The default cache saved the cache in the
@@ -188,24 +189,24 @@ def run_tasks(
         >>> import mteb
         >>> model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
         >>> task = mteb.get_task("STS12")
-        >>> result = mteb.run_tasks(ModelMeta, task)
+        >>> result = mteb.evaluate(ModelMeta, task)
         >>>
         >>> # with CO2 tracking
-        >>> result = mteb.run_tasks(model_meta, task, co2_tracker=True)
+        >>> result = mteb.evaluate(model_meta, task, co2_tracker=True)
         >>>
         >>> # with encode kwargs
-        >>> result = mteb.run_tasks(model_meta, task, encode_kwargs={"batch_size": 16})
+        >>> result = mteb.evaluate(model_meta, task, encode_kwargs={"batch_size": 16})
         >>>
         >>> # with online cache
         >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb")
         >>>
         >>> cache.download_from_remote()
-        >>> result = mteb.run_tasks(model_meta, task, cache=cache)
+        >>> result = mteb.evaluate(model_meta, task, cache=cache)
     """
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         task = cast(AbsTaskAggregate, tasks)
-        results = run_tasks(
+        results = evaluate(
             model,
             task.metadata.tasks,
             co2_tracker=co2_tracker,
@@ -226,7 +227,7 @@ def run_tasks(
     else:
         results = []
         for task in tasks:
-            _res = run_tasks(
+            _res = evaluate(
                 model,
                 task,
                 co2_tracker=co2_tracker,
@@ -304,7 +305,7 @@ def run_tasks(
         model = model.load_model()
     if raise_error is False:
         try:
-            result = _run_task(
+            result = _evaluate(
                 model=model,
                 splits=missing_eval,
                 task=task,
@@ -325,7 +326,7 @@ def run_tasks(
                 model_revision=model_revision,
                 task_results=[],
             )
-    result = _run_task(
+    result = _evaluate(
         model=model,
         splits=missing_eval,
         task=task,

@@ -45,7 +45,7 @@ class MTEB:
 
     @deprecated(
         "MTEB is deprecated and will be removed in future versions. "
-        "Please use the `mteb.run_tasks` function instead."
+        "Please use the `mteb.evaluate` function instead."
     )
     def __init__(
         self,
