@@ -1,13 +1,20 @@
 from __future__ import annotations
 
+import json
 import logging
 import os
 import shutil
 import subprocess
+from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
+from typing import cast
 
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
+from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +24,7 @@ class ResultCache:
 
     Example:
         >>> from mteb.cache import ResultCache
-        >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb") # default
+        >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
         >>> result = cache.load_from_cache("task_name", "model_name", "model_revision")
     """
@@ -53,6 +60,8 @@ class ResultCache:
                 )
             model_revision = model_name.revision
             model_name = model_name.model_name_as_path()
+        elif isinstance(model_name, str):
+            model_name = model_name.replace("/", "__").replace(" ", "_")
 
         if model_revision is None:
             raise ValueError(
@@ -214,3 +223,249 @@ class ResultCache:
 
     def __repr__(self) -> str:
         return f"ResultCache(cache_path={self.cache_path})"
+
+    def get_cache_paths(
+        self,
+        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        require_model_meta: bool = True,
+        include_remote: bool = True,
+    ) -> list[Path]:
+        """Get all paths in the cache directory.
+
+        Args:
+            models: A list of model names or ModelMeta objects to filter the paths.
+            tasks: A list of task names to filter the paths.
+            require_model_meta: If True, only return paths that have a model_meta.json file.
+            include_remote: If True, include remote results in the returned paths.
+
+        Returns:
+            A list of paths in the cache directory.
+
+        Example:
+            >>> from mteb.cache import ResultCache
+            >>> cache = ResultCache()
+            >>>
+            >>> # Get all cache paths
+            >>> paths = cache.get_cache_paths()
+            >>>
+            >>> # Get all cache paths for a specific task
+            >>> paths = cache.get_cache_paths(tasks=["STS12"])
+            >>>
+            >>> # Get all cache paths for a specific model
+            >>> paths = cache.get_cache_paths(models=["sentence-transformers/all-MiniLM-L6-v2"])
+            >>>
+            >>> # Get all cache paths for a specific model and revision
+            >>> model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+            >>> paths = cache.get_cache_paths(models=[model_meta])
+        """
+        cache_paths = [
+            p
+            for p in (self.cache_path / "results").glob("**/*.json")
+            if p.name != "model_meta.json"
+        ]
+        if include_remote:
+            cache_paths += [
+                p
+                for p in (self.cache_path / "remote").glob("**/*.json")
+                if p.name != "model_meta.json"
+            ]
+
+        cache_paths = self._filter_paths_by_model_and_revision(
+            cache_paths,
+            models=models,
+        )
+        cache_paths = self._filter_paths_by_task(cache_paths, tasks=tasks)
+
+        if require_model_meta:
+            cache_paths = [
+                p for p in cache_paths if (p.parent / "model_meta.json").exists()
+            ]
+        return cache_paths
+
+    def get_models(
+        self,
+        tasks: Sequence[str] | None = None,
+        require_model_meta: bool = True,
+        include_remote: bool = True,
+    ) -> list[tuple[ModelName, Revision]]:
+        """Get all models in the cache directory."""
+        cache_paths = self.get_cache_paths(
+            tasks=tasks,
+            require_model_meta=require_model_meta,
+            include_remote=include_remote,
+        )
+        models = [(p.parent.name, p.parent.parent.name) for p in cache_paths]
+        return models
+
+    def get_tasks(
+        self,
+        models: list[str] | list[ModelMeta] | None = None,
+        require_model_meta: bool = True,
+        include_remote: bool = True,
+    ) -> list[str]:
+        """Get all tasks in the cache directory."""
+        cache_paths = self.get_cache_paths(
+            models=models,
+            require_model_meta=require_model_meta,
+            include_remote=include_remote,
+        )
+        tasks = [p.stem for p in cache_paths]
+        return tasks
+
+    @staticmethod
+    def _get_model_name_and_revision_from_path(
+        revision_path: Path,
+    ) -> tuple[ModelName, Revision]:
+        model_meta = revision_path / "model_meta.json"
+        model_path = revision_path.parent
+
+        if not model_meta.exists():
+            logger.debug(
+                f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
+            )
+            model_name = model_path.name.replace("__", "/")
+            revision = revision_path.name
+            return model_name, revision
+        with model_meta.open("r") as f:
+            model_meta_json = json.load(f)
+            model_name = model_meta_json["name"]
+            revision = model_meta_json["revision"]
+        return model_name, revision
+
+    @staticmethod
+    def _filter_paths_by_model_and_revision(
+        paths: list[Path],
+        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+    ) -> list[Path]:
+        model_revisions: list[str] | None = None
+        if models is not None:
+            if isinstance(models[0], ModelMeta):
+                models = cast(list[ModelMeta], models)
+                model_names = {m.model_name_as_path() for m in models}
+                model_revisions = [
+                    m.revision if m.revision else "no_revision_available"
+                    for m in models
+                ]
+
+            else:
+                models = cast(list[str], models)
+                model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
+
+            if model_revisions is None:  # filter by model names only
+                paths = [p for p in paths if p.parent.parent.name in model_names]
+            else:  # filter by model names and revisions
+                name_and_revision = {
+                    (nam, rev) for nam, rev in zip(model_names, model_revisions)
+                }
+                paths = [
+                    p
+                    for p in paths
+                    if (p.parent.name, p.parent.parent.name) in name_and_revision
+                ]
+        return paths
+
+    @staticmethod
+    def _filter_paths_by_task(
+        paths: list[Path],
+        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+    ) -> list[Path]:
+        if tasks is not None:
+            task_names = set()
+
+            for task in tasks:
+                if isinstance(task, AbsTask):
+                    task_names.add(task.metadata.name)
+                else:
+                    task_names.add(task)
+
+            paths = [p for p in paths if p.stem in task_names]
+        return paths
+
+    def load_results(
+        self,
+        models: Sequence[str] | Sequence[ModelMeta] | None = None,
+        tasks: Sequence[str] | Sequence[AbsTask] | None = None,
+        require_model_meta: bool = True,
+        include_remote: bool = True,
+        validate_and_filter: bool = False,
+        only_main_score: bool = False,
+    ) -> BenchmarkResults:
+        """Loads the results from the cache directory and returns a BenchmarkResults object.
+
+        Args:
+            models: A list of model names to load the results for. If None it will load the results for all models. Defaults to None.
+            tasks: A list of task names to load the results for. If None it will load the results for all tasks. Defaults to None.
+            require_model_meta: If True it will ignore results that do not have a model_meta.json file. Defaults to True. If false it attempt to
+                extract the model name and revision from the path.
+            include_remote: If True, it will include results from the remote repository. Defaults to True.
+            validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
+                splits from the results object that are not default in the task metadata. Defaults to True.
+            only_main_score: If True, only the main score will be loaded.
+
+        Returns:
+            A BenchmarkResults object containing the results for the specified models and tasks.
+
+        Example:
+            >>> from mteb.cache import ResultCache
+            >>> cache = ResultCache()
+            >>>
+            >>> # Load results for specific models and tasks
+            >>> results = cache.load_results(
+            ...     models=["sentence-transformers/all-MiniLM-L6-v2"],
+            ...     tasks=["STS12"],
+            ...     require_model_meta=True,
+            ... )
+        """
+        paths = self.get_cache_paths(
+            models=models,
+            tasks=tasks,
+            require_model_meta=require_model_meta,
+            include_remote=include_remote,
+        )
+        models_results = defaultdict(list)
+
+        task_names = {}
+        if tasks is not None:
+            for task in tasks:
+                if isinstance(task, AbsTask):
+                    task_names[task.metadata.name] = task
+                else:
+                    task_names[task] = None
+
+        for path in paths:
+            task_result = TaskResult.from_disk(path)
+
+            if only_main_score:
+                task_result = task_result.only_main_score()
+            model_name, revision = self._get_model_name_and_revision_from_path(
+                path.parent
+            )
+
+            if validate_and_filter:
+                task = task_names[task_result.task_name]
+                try:
+                    task_result.validate_and_filter_scores(task=task)
+                except Exception as e:
+                    logger.info(
+                        f"Validation failed for {task_result.task_name} in {model_name} {revision}: {e}"
+                    )
+                    continue
+
+            models_results[(model_name, revision)].append(task_result)
+
+        # create BenchmarkResults object
+        models_results = [
+            ModelResult(
+                model_name=model_name,
+                model_revision=revision,
+                task_results=task_results,
+            )
+            for (model_name, revision), task_results in models_results.items()
+        ]
+
+        benchmark_results = BenchmarkResults(
+            model_results=models_results,
+        )
+
+        return benchmark_results
