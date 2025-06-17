@@ -68,3 +68,17 @@ Dupoux, Emmanuel},
     label_column_name: str = "gender"
     samples_per_label: int = 30
     is_cross_validation: bool = True
+
+    def dataset_transform(self):
+        # Define label mapping
+        label2id = {"Female": 0, "Male": 1}
+
+        # Apply transformation to all dataset splits
+        for split in self.dataset:
+            # Define transform function to add numeric labels
+            def add_gender_id(example):
+                example["gender_id"] = label2id[example["gender"]]
+                return example
+
+            print(f"Converting gender labels to numeric IDs for split '{split}'...")
+            self.dataset[split] = self.dataset[split].map(add_gender_id)
