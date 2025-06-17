@@ -302,7 +302,7 @@ evaluation.run(model)
 
 ## Running the Evaluation
 
-This section contains documentation related to the runtime of the evalutaion. How to pass arguments to the encoder, saving outputs and similar.
+This section contains documentation related to the runtime of the evaluation. How to pass arguments to the encoder, saving outputs and similar.
 
 
 ### Introduction to the runner
