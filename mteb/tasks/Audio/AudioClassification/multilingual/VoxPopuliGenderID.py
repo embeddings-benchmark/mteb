@@ -4,12 +4,21 @@ from mteb.abstasks.Audio.AbsTaskAudioClassification import (
     AbsTaskAudioClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.MultilingualTask import MultilingualTask
+
+EVAL_LANGS_MAP = {
+    "en": ["eng-Latn"],  # English
+    "fr": ["fra-Latn"],  # French
+    "es": ["spa-Latn"],  # Spanish
+    "pl": ["pol-Latn"],  # Polish
+    "de": ["deu-Latn"],  # German
+}
 
 
-class VoxPopuliLanguageID(AbsTaskAudioClassification):
+class VoxPopuliGenderID(MultilingualTask, AbsTaskAudioClassification):
     metadata = TaskMetadata(
-        name="VoxPopuliLanguageID",
-        description="Classification of speech samples into one of 5 European languages (English, German, French, Spanish, Polish) from European Parliament recordings.",
+        name="VoxPopuliGenderID",
+        description="Classification of speech samples by speaker gender (male/female) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "AdnanElAssadi/mini-voxpopuli",
@@ -19,17 +28,11 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=[
-            "eng-Latn",  # English
-            "deu-Latn",  # German
-            "fra-Latn",  # French
-            "spa-Latn",  # Spanish
-            "pol-Latn",  # Polish
-        ],
+        eval_langs=EVAL_LANGS_MAP,
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
-        task_subtypes=["Spoken Language Identification"],
+        task_subtypes=["Gender Classification"],
         license="cc0-1.0",
         annotations_creators="human-annotated",
         dialect=[],
@@ -58,34 +61,25 @@ Dupoux, Emmanuel},
 }
 """,
         descriptive_stats={
-            "n_samples": {
-                "train": 7800,
-            },
+            "n_samples": {"train": 500},
         },
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "language"
+    label_column_name: str = "gender_id"
     samples_per_label: int = 30
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-        import numpy as np
-        from datasets import DatasetDict
+        # Define label mapping
+        label2id = {"female": 0, "male": 1}
 
-        test_ds = self.dataset["train"]
+        # Apply transformation to all dataset splits
+        for split in self.dataset:
+            # Define transform function to add numeric labels
+            def add_gender_id(example):
+                example["gender_id"] = label2id[example["gender"]]
+                return example
 
-        def is_valid_audio(example):
-            audio_arr = example.get("audio", {}).get("array", None)
-            # require at least 500 samples (so that Kaldi fbank(window_size=400) won't fail)
-            if (audio_arr is None) or (len(audio_arr) < 500):
-                return False
-            if np.isnan(audio_arr).any() or np.isinf(audio_arr).any():
-                return False
-            return True
-
-        filtered_test = test_ds.filter(is_valid_audio)
-        print(f"Kept {len(filtered_test)} valid samples out of {len(test_ds)} total")
-
-        # Create a new DatasetDict that has both "train" and "test" = filtered_test
-        self.dataset = DatasetDict({"train": filtered_test})
+            print(f"Converting gender labels to numeric IDs for split '{split}'...")
+            self.dataset[split] = self.dataset[split].map(add_gender_id)
