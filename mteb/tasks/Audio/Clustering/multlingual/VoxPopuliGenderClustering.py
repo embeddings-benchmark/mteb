@@ -9,7 +9,7 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
 
     metadata = TaskMetadata(
         name="VoxPopuliGenderClustering",
-        description="Clustering speech samples by speaker gender (male/female) from European Parliament recordings.",
+        description="Subsampled Dataset for clustering speech samples by speaker gender (male/female) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "AdnanElAssadi/mini-voxpopuli",
@@ -19,7 +19,13 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
         type="AudioClustering",
         category="a2a",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs= [
+            "eng-Latn",  # English
+            "fra-Latn",  # French
+            "spa-Latn",  # Spanish
+            "pol-Latn",  # Polish
+            "deu-Latn",  # German
+        ],  
         main_score="cluster_accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -53,9 +59,7 @@ Dupoux, Emmanuel},
 """,
         descriptive_stats={
             "n_samples": {
-                "train": 7600,
-                "validation": 1750,
-                "test": 1840,
+                "train": 500
             },
         },
     )

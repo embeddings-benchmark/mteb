@@ -4,21 +4,11 @@ from mteb.abstasks.Audio.AbsTaskAudioClassification import (
     AbsTaskAudioClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.abstasks.MultilingualTask import MultilingualTask
 
-EVAL_LANGS_MAP = {
-    "en": ["eng-Latn"],  # English
-    "fr": ["fra-Latn"],  # French
-    "es": ["spa-Latn"],  # Spanish
-    "pl": ["pol-Latn"],  # Polish
-    "de": ["deu-Latn"],  # German
-}
-
-
-class VoxPopuliGenderID(MultilingualTask, AbsTaskAudioClassification):
+class VoxPopuliGenderID(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="VoxPopuliGenderID",
-        description="Classification of speech samples by speaker gender (male/female) from European Parliament recordings.",
+        description="Subsampled Dataset Classification of speech samples by speaker gender (male/female) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "AdnanElAssadi/mini-voxpopuli",
@@ -28,7 +18,13 @@ class VoxPopuliGenderID(MultilingualTask, AbsTaskAudioClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=EVAL_LANGS_MAP,
+        eval_langs= [
+            "eng-Latn",  # English
+            "fra-Latn",  # French
+            "spa-Latn",  # Spanish
+            "pol-Latn",  # Polish
+            "deu-Latn",  # German
+        ], 
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],

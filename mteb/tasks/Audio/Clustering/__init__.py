@@ -9,4 +9,4 @@ from .eng.VehicleSoundClustering import *
 from .eng.VoiceGender import *
 from .eng.VoxCelebClustering import *
 from .eng.VoxPopuliAccentClustering import *
-from .eng.VoxPopuliGenderClustering import *
+from .multlingual.VoxPopuliGenderClustering import *
