@@ -5,6 +5,7 @@ from mteb.abstasks.Audio.AbsTaskAudioClassification import (
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class VoxPopuliGenderID(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="VoxPopuliGenderID",
@@ -18,13 +19,13 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs= [
+        eval_langs=[
             "eng-Latn",  # English
             "fra-Latn",  # French
             "spa-Latn",  # Spanish
             "pol-Latn",  # Polish
             "deu-Latn",  # German
-        ], 
+        ],
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],

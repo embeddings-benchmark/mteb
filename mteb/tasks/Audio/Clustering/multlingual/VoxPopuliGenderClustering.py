@@ -19,13 +19,13 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
         type="AudioClustering",
         category="a2a",
         eval_splits=["train"],
-        eval_langs= [
+        eval_langs=[
             "eng-Latn",  # English
             "fra-Latn",  # French
             "spa-Latn",  # Spanish
             "pol-Latn",  # Polish
             "deu-Latn",  # German
-        ],  
+        ],
         main_score="cluster_accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -58,9 +58,7 @@ Dupoux, Emmanuel},
 }
 """,
         descriptive_stats={
-            "n_samples": {
-                "train": 500
-            },
+            "n_samples": {"train": 500},
         },
     )
 
