@@ -7,7 +7,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 from torch.utils.data import DataLoader
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.nvidia_models import nvidia_training_datasets

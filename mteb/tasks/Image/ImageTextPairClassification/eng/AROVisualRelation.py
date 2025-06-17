@@ -3,7 +3,8 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
+
 
 
 class AROVisualRelation(AbsTaskImageTextPairClassification):

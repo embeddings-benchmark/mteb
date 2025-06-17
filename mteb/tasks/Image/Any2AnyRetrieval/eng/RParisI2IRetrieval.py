@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import MultiChoiceEvaluationMixin
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RParisEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):

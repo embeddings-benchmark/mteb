@@ -10,7 +10,7 @@ import tqdm
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import (
     ModelMeta,

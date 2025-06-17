@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from datasets import DatasetDict, load_dataset
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 

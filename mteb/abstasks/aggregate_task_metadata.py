@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import ConfigDict, model_validator
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import (
+from mteb.abstasks.task_metadata import (
     AnnotatorType,
     SampleCreationMethod,
     TaskDomain,

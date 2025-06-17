@@ -29,7 +29,7 @@ from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
 from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
     AbsTaskZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 general_args = {
     "description": "a mock task for testing",

@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from mteb.abstasks import AbsTask, AbsTaskAny2AnyRetrieval
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.

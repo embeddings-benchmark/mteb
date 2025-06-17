@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator

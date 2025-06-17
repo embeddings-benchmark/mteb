@@ -16,7 +16,7 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
-from mteb.abstasks.TaskMetadata import TaskDomain, TaskType
+from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart

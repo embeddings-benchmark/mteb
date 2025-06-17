@@ -4,7 +4,7 @@ import polars as pl
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):

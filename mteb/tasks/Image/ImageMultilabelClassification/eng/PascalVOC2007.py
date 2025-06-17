@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
     AbsTaskImageMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 # NOTE: In the paper, this is grouped with linear probe tasks.

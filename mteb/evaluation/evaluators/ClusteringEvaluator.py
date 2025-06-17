@@ -9,7 +9,7 @@ from datasets import Dataset
 from sklearn import metrics
 from torch.utils.data import DataLoader
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator

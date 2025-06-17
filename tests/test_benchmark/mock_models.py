@@ -11,7 +11,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.load_results.task_results import Namespace
 from mteb.model_meta import ModelMeta
 from mteb.models import AbsEncoder, SentenceTransformerWrapper

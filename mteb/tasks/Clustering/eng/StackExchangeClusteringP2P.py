@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskClustering import AbsTaskClustering
 from ....abstasks.AbsTaskClusteringFast import (

@@ -9,7 +9,7 @@ from datasets import Dataset
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator

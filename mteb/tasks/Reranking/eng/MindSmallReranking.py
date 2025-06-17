@@ -5,7 +5,7 @@ from collections import defaultdict
 
 import tqdm
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ....evaluation.evaluators.retrieval_metrics import max_over_subqueries

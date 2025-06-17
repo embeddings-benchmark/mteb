@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.load_results.task_results import TaskResult
 
 tests_folder = Path(__file__).parent.parent

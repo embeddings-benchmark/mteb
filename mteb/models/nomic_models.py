@@ -9,7 +9,7 @@ import transformers
 from packaging.version import Version
 from torch.utils.data import DataLoader
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.types import Array, BatchedInput, PromptType

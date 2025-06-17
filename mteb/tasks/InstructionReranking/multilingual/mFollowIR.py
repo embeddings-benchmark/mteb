@@ -4,7 +4,7 @@ from logging import getLogger
 
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change

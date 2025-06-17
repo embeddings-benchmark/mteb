@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from mteb.abstasks.TaskMetadata import TaskType
+from mteb.abstasks.task_metadata import TaskType
 
 
 def text_plot(text: str):
