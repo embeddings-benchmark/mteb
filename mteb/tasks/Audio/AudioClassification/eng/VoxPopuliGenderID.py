@@ -71,7 +71,7 @@ Dupoux, Emmanuel},
 
     def dataset_transform(self):
         # Define label mapping
-        label2id = {"Female": 0, "Male": 1}
+        label2id = {"female": 0, "male": 1}
 
         # Apply transformation to all dataset splits
         for split in self.dataset:
