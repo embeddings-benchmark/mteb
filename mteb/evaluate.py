@@ -167,7 +167,7 @@ def evaluate(
     Args:
         model: The model to use for encoding.
         tasks: A task to run.
-        co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using 
+        co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using
             `pip install mteb[codecarbon]`. If none is passed co2 tracking will only be run if codecarbon is installed.
         encode_kwargs: Additional keyword arguments passed to the models `encode` method.
         raise_error: If True, raise an error if the task fails. If False, return an empty list.

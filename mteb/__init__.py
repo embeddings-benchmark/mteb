@@ -5,6 +5,7 @@ from importlib.metadata import version
 from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
+from mteb.evaluate import evaluate
 from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.load_results.task_results import TaskResult
@@ -15,7 +16,6 @@ from mteb.models import (
     get_model_metas,
 )
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
-from mteb.evaluate import evaluate
 
 from .benchmarks.benchmark import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
