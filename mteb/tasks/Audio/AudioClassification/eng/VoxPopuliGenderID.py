@@ -5,6 +5,14 @@ from mteb.abstasks.Audio.AbsTaskAudioClassification import (
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+EVAL_LANGS_MAP = {
+    "en-GB": ["eng-Latn"],  # English
+    "fr-FR": ["fra-Latn"],  # French
+    "es-ES": ["spa-Latn"],  # Spanish
+    "pl-PL": ["pol-Latn"],  # Polish
+    "de-DE": ["deu-Latn"],  # German
+}
+
 
 class VoxPopuliGenderID(AbsTaskAudioClassification):
     metadata = TaskMetadata(
@@ -12,15 +20,14 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         description="Classification of speech samples by speaker gender (male/female) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "facebook/voxpopuli",
-            "name": "en",
-            "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
+            "path": "AdnanElAssadi/mini-voxpopuli",
+            "revision": "70031eb5affcb0805e448fdf0b2dbbfc05f0aa8f",
             "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],
+        eval_langs=EVAL_LANGS_MAP,
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -53,11 +60,7 @@ Dupoux, Emmanuel},
 }
 """,
         descriptive_stats={
-            "n_samples": {
-                "train": 7600,
-                "validation": 1750,
-                "test": 1840,
-            },
+            "n_samples": {"train": 500},
         },
     )
 
@@ -65,6 +68,3 @@ Dupoux, Emmanuel},
     label_column_name: str = "gender"
     samples_per_label: int = 30
     is_cross_validation: bool = True
-
-    def dataset_transform(self):
-        self.dataset["train"] = self.dataset["test"]

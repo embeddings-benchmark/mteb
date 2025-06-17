@@ -12,9 +12,8 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
         description="Classification of speech samples into one of 5 European languages (English, German, French, Spanish, Polish) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "facebook/voxpopuli",
-            "name": "multilang",
-            "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
+            "path": "AdnanElAssadi/mini-voxpopuli",
+            "revision": "70031eb5affcb0805e448fdf0b2dbbfc05f0aa8f",
             "trust_remote_code": True,
         },
         type="AudioClassification",
@@ -74,7 +73,7 @@ Dupoux, Emmanuel},
         import numpy as np
         from datasets import DatasetDict
 
-        test_ds = self.dataset["test"]
+        test_ds = self.dataset["train"]
 
         def is_valid_audio(example):
             audio_arr = example.get("audio", {}).get("array", None)
@@ -89,9 +88,4 @@ Dupoux, Emmanuel},
         print(f"Kept {len(filtered_test)} valid samples out of {len(test_ds)} total")
 
         # Create a new DatasetDict that has both "train" and "test" = filtered_test
-        self.dataset = DatasetDict(
-            {
-                "train": filtered_test,
-                "test": filtered_test,
-            }
-        )
+        self.dataset = DatasetDict({"train": filtered_test})
