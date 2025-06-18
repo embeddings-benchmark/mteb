@@ -5,6 +5,7 @@ from __future__ import annotations
 from functools import partial
 
 import torch
+import logging
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
@@ -13,6 +14,82 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 from mteb.models.nomic_models import (
     nomic_training_data,
 )
+
+logger = logging.getLogger(__name__)
+
+
+class GigaWrapper(InstructSentenceTransformerWrapper):
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        if self.add_eos_token:
+            sentences = [
+                example + self.model.tokenizer.eos_token for example in sentences
+            ]
+
+        instruction = self.get_task_instruction(
+            task_name, prompt_type, self.prompts_dict
+        )
+
+        # import there due to circular imports
+        from mteb import get_task
+
+        task = get_task(task_name)
+
+        # to passage prompts won't be applied to passages
+        if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
+            instruction = None
+            logger.info(
+                f"No instruction used, because prompt type = {prompt_type.passage}"
+            )
+
+        if instruction:
+            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+
+        embeddings = self.model.encode(
+            sentences,
+            prompt=instruction,
+            **kwargs,
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+    
+
+GIGA_task_prompts = {
+    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise\nquery: ",
+    "STS22": "Retrieve semantically similar text\nquery: ",
+    "RuSTSBenchmarkSTS": "Retrieve semantically similar text\nquery: ",
+    "RUParaPhraserSTS": "Retrieve semantically similar text\nquery: ",
+    
+    "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, удивление, страх, гнев или нейтрально) \nкомментарий: ",
+    "GeoreviewClassification": "Classify the organization rating based on the reviews\nquery: ",
+    "GeoreviewClusteringP2P": "Классифицируй рейтинг организации на основе отзыва \nотзыв: ",
+    "HeadlineClassification": "Классифицируй тему данного новостного заголовка \nзаголовок: ",
+    "InappropriatenessClassification": "Классифицируй данный комментарий как токсичный или не токсичный \nкомментарий: ",
+    "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text\nquery: ",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents\nquery: ",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios\nquery: ",
+    "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment\nquery: ",
+    "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchGRNTIClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchOECDClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "SensitiveTopicsClassification": "Классифицируй чувствительную тему по запросу \nзапрос: ",
+
+    "RuBQRetrieval": {"query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ", "passage": ""},
+    "RuBQReranking": {"query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ", "passage": ""},
+    "RiaNewsRetrieval": {"query": "Given a news title, retrieve relevant news article\nquery: ", "passage": ""},
+    "MIRACLReranking": {"query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ", "passage": ""},
+    "MIRACLRetrieval": {"query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ", "passage": ""}
+}
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -589,13 +666,14 @@ frida = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
+    loader=partial(  # type: ignore
+        GigaWrapper,
         model_name="ai-sage/Giga-Embeddings-instruct",
         revision="40b27667b9ad586d7812675df76e5062ccc80b0e",
-        trust_remote_code=True,
-        instruction_template="{instruction}\nquery: ",
+        instruction_template="{instruction}",
+        max_seq_length=512,
         apply_instruction_to_passages=False,
+        prompts_dict=GIGA_task_prompts,
         model_kwargs={
             "torch_dtype": torch.bfloat16,
         },
