@@ -147,6 +147,7 @@ class MockSentenceTransformer(SentenceTransformer):
     )
 
     def __init__(self):
+        self._modules = {}
         pass
 
     def encode(
@@ -164,8 +165,9 @@ class MockSentenceTransformer(SentenceTransformer):
         device: str | None = None,
         normalize_embeddings: bool = False,
         **kwargs: Any,
-    ) -> list[Tensor] | ndarray | Tensor:
-        return torch.randn(len(sentences), 10).numpy()
+    ) -> ndarray:
+        rng_state = np.random.RandomState(42)
+        return rng_state.randn(len(sentences), 10)
 
     @staticmethod
     def get_sentence_embedding_dimension() -> int:

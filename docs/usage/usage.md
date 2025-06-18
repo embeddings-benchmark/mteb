@@ -41,6 +41,20 @@ results = evaluation.run(model)
 ```
 
 
+## Speeding up evaluations
+
+Evaluation in MTEB consists of three main components. The download of the dataset, the encoding of the samples, and the evaluation. Typically, the most notable bottleneck are either in the encoding step or on the download step. We discuss how to speed these up in the following sections.
+
+### Speeding up download
+
+The fastest way to speed up downloads is by using Huggingface's [`xet`](https://huggingface.co/blog/xet-on-the-hub). You can use this simply using:
+
+```bash
+pip install mteb[xet]
+```
+
+For one of the larger datasets, `MrTidyRetrieval` (~15 GB), we have seen speed-ups from ~40 minutes to ~30 minutes while using `xet`.
+
 ### Evaluating on Different Modalities
 MTEB is not only text evaluating, but also allow you to evaluate image and image-text embeddings.
 
@@ -177,7 +191,7 @@ This section describes how to select benchmarks and task to evaluate, including 
 ### Selecting a Benchmark
 
 `mteb` comes with a set of predefined benchmarks. These can be fetched using `mteb.get_benchmark` and run in a similar fashion to other sets of tasks.
-For instance to select the 56 English datasets that form the English leaderboard:
+For instance to select the English datasets that form the English leaderboard:
 
 ```python
 import mteb
@@ -442,12 +456,15 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 
 ```python
 # define your task(s) and model above as normal
-...
+task = mteb.get_task("LccSentimentClassification")
+model = mteb.get_model("minishlab/M2V_base_glove_subword")
+evaluation = mteb.MTEB(tasks=[task])
+
 # wrap the model with the cache wrapper
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
-model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='<path_to_cache_dir>')
+model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
 # run as normal
-evaluation.run(model, ...)
+evaluation.run(model_with_cached_emb)
 ```
 
 If you want to directly access the cached embeddings (e.g. for subsequent analyses) follow this example:
@@ -457,8 +474,8 @@ import numpy as np
 from mteb.models.cache_wrapper import TextVectorMap
 
 # Access the memory-mapped file and convert to array
-vector_map = TextVectorMap("<path_to_cache_dir>/AppsRetrieval")
-vector_map.load(name="AppsRetrieval")
+vector_map = TextVectorMap("path_to_cache_dir/LccSentimentClassification")
+vector_map.load(name="LccSentimentClassification")
 vectors = np.asarray(vector_map.vectors)
 
 # Remove all "placeholders" in the embedding cache

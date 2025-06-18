@@ -14,15 +14,25 @@ import numpy as np
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset
-from mteb.languages import ISO_LANGUAGE, LanguageScripts
+from mteb._helpful_enum import HelpfulStrEnum
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.languages import LanguageScripts
 from mteb.model_meta import ScoringFunction
-
-Split = str
-Score = Any
+from mteb.types import (
+    HFSubset,
+    ISOLanguage,
+    ISOLanguageScript,
+    Score,
+    ScoresDict,
+    SplitName,
+)
 
 logger = logging.getLogger(__name__)
+
+
+class Criterias(HelpfulStrEnum):
+    MTEB_VERSION = "mteb_version"
+    DATASET_REVISION = "dataset_revision"
 
 
 class ScalaNbClassificationDummy:
@@ -108,7 +118,7 @@ class TaskResult(BaseModel):
         task_name: The name of the MTEB task.
         dataset_revision: The revision dataset for the task on HuggingFace dataset hub.
         mteb_version: The version of the MTEB used to evaluate the model.
-        scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[Split, list[Scores]].
+        scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[SplitName, list[Scores]].
             Where Scores is a dictionary with the following structure; dict[str, Any]. Where the keys and values are scores. Split is the split of
             the dataset.
         evaluation_time: The time taken to evaluate the model.
@@ -144,7 +154,7 @@ class TaskResult(BaseModel):
     dataset_revision: str
     task_name: str
     mteb_version: str | None
-    scores: dict[Split, list[ScoresDict]]
+    scores: dict[SplitName, list[ScoresDict]]
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
@@ -152,7 +162,7 @@ class TaskResult(BaseModel):
     def from_task_results(
         cls,
         task: AbsTask | type[AbsTask],
-        scores: dict[Split, dict[HFSubset, ScoresDict]],
+        scores: dict[SplitName, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
     ) -> TaskResult:
@@ -180,8 +190,8 @@ class TaskResult(BaseModel):
 
     @field_validator("scores")
     def _validate_scores(
-        cls, v: dict[Split, list[ScoresDict]]
-    ) -> dict[Split, list[ScoresDict]]:
+        cls, v: dict[SplitName, list[ScoresDict]]
+    ) -> dict[SplitName, list[ScoresDict]]:
         for split, hf_subset_scores in v.items():
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
@@ -223,11 +233,25 @@ class TaskResult(BaseModel):
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
-        return doms
+        return doms  # type: ignore
 
     @property
     def task_type(self) -> str:
         return self.task.metadata.type
+
+    @property
+    def hf_subsets(self) -> list[str]:
+        """Get the hf_subsets present in the scores."""
+        hf_subsets = set()
+        for split, split_res in self.scores.items():
+            for entry in split_res:
+                hf_subsets.add(entry["hf_subset"])
+        return list(hf_subsets)
+
+    @property
+    def eval_splits(self) -> list[str]:
+        """Get the eval splits present in the scores."""
+        return list(self.scores.keys())
 
     def to_dict(self) -> dict:
         return self.model_dump()
@@ -236,7 +260,7 @@ class TaskResult(BaseModel):
     def from_dict(cls, data: dict) -> TaskResult:
         return cls.model_validate(data)
 
-    def _round_scores(self, scores: dict[Split, list[ScoresDict]], n: int) -> None:
+    def _round_scores(self, scores: dict[SplitName, list[ScoresDict]], n: int) -> None:
         """Recursively round scores to n decimal places"""
         for key, value in scores.items():
             if isinstance(value, dict):
@@ -424,9 +448,9 @@ class TaskResult(BaseModel):
 
     def get_score(
         self,
-        splits: list[Split] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
+        splits: list[SplitName] | None = None,
+        languages: list[ISOLanguage | ISOLanguageScript] | None = None,
+        scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], Any] = np.mean,
     ) -> Any:
@@ -576,3 +600,145 @@ class TaskResult(BaseModel):
         new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult.from_validated(**new_res)
         return new_res
+
+    def is_mergeable(
+        self,
+        result: TaskResult | AbsTask,
+        criteria: list[str] | list[Criterias] = [
+            "mteb_version",
+            "dataset_revision",
+        ],
+        raise_error: bool = False,
+    ) -> bool:
+        """Checks if the TaskResult object can be merged with another TaskResult or Task.
+
+        Args:
+            result: The TaskResult or Task object to check against.
+            criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
+                It will always check that the task name match.
+            raise_error: If True, raises an error if the objects cannot be merged. If False, returns False.
+
+        Returns:
+            True if the TaskResult object can be merged with the other object, False otherwise.
+        """
+        criteria = [
+            Criterias.from_str(c) if isinstance(c, str) else c for c in criteria
+        ]
+        if isinstance(result, TaskResult):
+            name = result.task_name
+            revision = result.dataset_revision
+            mteb_version = result.mteb_version
+        elif isinstance(result, AbsTask):
+            mteb_version = version("mteb")
+            name = result.metadata.name
+            revision = result.metadata.revision
+        else:
+            return False
+
+        if self.task_name != name:
+            if raise_error:
+                raise ValueError(
+                    f"Cannot merge TaskResult objects as they are derived from different tasks ({self.task_name} and {name})"
+                )
+            return False
+
+        if Criterias.MTEB_VERSION in criteria and self.mteb_version != mteb_version:
+            if raise_error:
+                raise ValueError(
+                    f"Cannot merge TaskResult objects as they are derived from different MTEB versions ({self.mteb_version} and {mteb_version})"
+                )
+            return False
+
+        if Criterias.DATASET_REVISION in criteria and self.dataset_revision != revision:
+            if raise_error:
+                raise ValueError(
+                    f"Cannot merge TaskResult objects as they are derived from different dataset revisions ({self.dataset_revision} and {revision})"
+                )
+            return False
+
+        return True
+
+    def merge(
+        self,
+        new_results: TaskResult,
+        criteria: list[str] | list[Criterias] = [
+            "mteb_version",
+            "dataset_revision",
+        ],
+    ) -> TaskResult:
+        """Merges two TaskResult objects.
+
+        Args:
+            new_results: The new TaskResult object to merge with the current one.
+            criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
+                It will always check that the task name match.
+
+        Returns:
+            A new TaskResult object with the merged scores.
+        """
+        self.is_mergeable(new_results, criteria=criteria, raise_error=True)
+
+        merged_scores = self.scores.copy()
+
+        for split, scores in new_results.scores.items():
+            if split in merged_scores:
+                merged_scores[split] = self._merge_split_scores(
+                    merged_scores[split], scores
+                )
+            else:
+                merged_scores[split] = scores
+
+        existing_kg_co2_emissions = (
+            self.kg_co2_emissions if self.kg_co2_emissions else 0
+        )
+        new_kg_co2_emissions = (
+            new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0
+        )
+        merged_kg_co2_emissions = None
+        if existing_kg_co2_emissions and new_kg_co2_emissions:
+            merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
+
+        merged_evaluation_time = None
+        if self.evaluation_time and new_results.evaluation_time:
+            merged_evaluation_time = self.evaluation_time + new_results.evaluation_time
+        merged_results = TaskResult(
+            dataset_revision=new_results.dataset_revision,
+            task_name=new_results.task_name,
+            mteb_version=new_results.mteb_version,
+            scores=merged_scores,
+            evaluation_time=merged_evaluation_time,
+            kg_co2_emissions=merged_kg_co2_emissions,
+        )
+
+        return merged_results
+
+    @staticmethod
+    def _merge_split_scores(
+        existing_scores: list[ScoresDict], new_scores: list[ScoresDict]
+    ) -> list[ScoresDict]:
+        merged = {score["hf_subset"]: score for score in existing_scores}
+        for score in new_scores:
+            merged[score["hf_subset"]] = score
+        return list(merged.values())
+
+    def get_missing_evaluations(self, task: AbsTask) -> dict[str, list[str]]:
+        """Checks which splits and subsets are missing from the results.
+
+        Args:
+            task: The task to check against.
+
+        Returns:
+            A dictionary with the splits as keys and a list of missing subsets as values.
+        """
+        missing_splits = {}
+        for splits in task.eval_splits:
+            if splits not in self.scores:  # split it fully missing
+                missing_splits[splits] = task.hf_subsets
+            if splits in self.scores:
+                hf_subsets = {score["hf_subset"] for score in self.scores[splits]}
+
+                missing_splits[splits] = [
+                    subset for subset in task.hf_subsets if subset not in hf_subsets
+                ]
+
+        return missing_splits

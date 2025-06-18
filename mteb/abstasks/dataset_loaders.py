@@ -35,7 +35,7 @@ class RetrievalSplitData(TypedDict):
     top_ranked: Mapping[str, list[str]] | None
 
 
-class RetrievalDataLoader:
+class RetrievalDatasetLoader:
     """This dataloader handles the dataloading for retrieval-oriented tasks, including standard retrieval, reranking, and instruction-based variants of the above.
 
     If the `hf_repo` is provided, the dataloader will fetch the data from the HuggingFace hub. Otherwise, it will look for the data in the specified `data_folder`.
@@ -57,9 +57,7 @@ class RetrievalDataLoader:
         self.split = split
         self.config = config if config != "default" else None
 
-    def load(
-        self,
-    ) -> RetrievalSplitData:
+    def load(self) -> RetrievalSplitData:
         top_ranked = None
         instructions = None
 
@@ -145,7 +143,7 @@ class RetrievalDataLoader:
 
         return queries_ds
 
-    def _load_qrels(self):
+    def _load_qrels(self) -> dict[str, dict[str, float]]:
         logger.info("Loading qrels...")
 
         config = f"{self.config}-qrels" if self.config is not None else "default"

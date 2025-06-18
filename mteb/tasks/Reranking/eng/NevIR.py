@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.retrieval_metrics import paired_accuracy
 
 
 class NevIR(AbsTaskRetrieval):
@@ -37,3 +38,15 @@ class NevIR(AbsTaskRetrieval):
 }
 """,
     )
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        return {
+            "paired_accuracy": paired_accuracy(qrels, results, scores),
+        }

@@ -1390,6 +1390,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
+    top_k = 1
     expected_stats = {
         "val": {
             "num_samples": 4,
@@ -1462,6 +1463,99 @@ class MockRetrievalTask(AbsTaskRetrieval):
         base_datasplit = base_retrieval_datasplit()
         base_datasplit["instructions"] = None
         base_datasplit["top_ranked"] = None
+
+        self.dataset["default"]["test"] = base_datasplit
+        self.dataset["default"]["val"] = base_datasplit
+        self.data_loaded = True
+
+
+class MockRetrievalDialogTask(AbsTaskRetrieval):
+    top_k = 1
+    expected_stats = {
+        "val": {
+            "num_samples": 4,
+            "number_of_characters": 112,
+            "num_documents": 2,
+            "min_document_length": 27,
+            "average_document_length": 30.0,
+            "max_document_length": 33,
+            "unique_documents": 2,
+            "num_queries": 2,
+            "min_query_length": 23,
+            "average_query_length": 26.0,
+            "max_query_length": 29,
+            "unique_queries": 2,
+            "none_queries": 0,
+            "num_relevant_docs": 4,
+            "min_relevant_docs_per_query": 2,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 2,
+            "num_instructions": None,
+            "min_instruction_length": None,
+            "average_instruction_length": None,
+            "max_instruction_length": None,
+            "unique_instructions": None,
+            "num_top_ranked": None,
+            "min_top_ranked_per_query": None,
+            "average_top_ranked_per_query": None,
+            "max_top_ranked_per_query": None,
+        },
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 112,
+            "num_documents": 2,
+            "min_document_length": 27,
+            "average_document_length": 30.0,
+            "max_document_length": 33,
+            "unique_documents": 2,
+            "num_queries": 2,
+            "min_query_length": 23,
+            "average_query_length": 26.0,
+            "max_query_length": 29,
+            "unique_queries": 2,
+            "none_queries": 0,
+            "num_relevant_docs": 4,
+            "min_relevant_docs_per_query": 2,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 2,
+            "num_instructions": None,
+            "min_instruction_length": None,
+            "average_instruction_length": None,
+            "max_instruction_length": None,
+            "unique_instructions": None,
+            "num_top_ranked": None,
+            "min_top_ranked_per_query": None,
+            "average_top_ranked_per_query": None,
+            "max_top_ranked_per_query": None,
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="Retrieval",
+        name="MockRetrievalDialogTask",
+        main_score="ndcg_at_10",
+        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["instructions"] = None
+        base_datasplit["top_ranked"] = None
+        base_datasplit["query"] = [
+            [
+                {"role": "user", "content": "What is the weather like today?"},
+                {
+                    "role": "assistant",
+                    "content": "The weather is sunny with a chance of rain.",
+                },
+            ],
+            [
+                {"role": "user", "content": "What is the capital of France?"},
+                {"role": "assistant", "content": "The capital of France is Paris."},
+            ],
+        ]
 
         self.dataset["default"]["test"] = base_datasplit
         self.dataset["default"]["val"] = base_datasplit

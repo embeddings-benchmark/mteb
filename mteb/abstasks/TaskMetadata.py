@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import json
 import logging
-from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Union
+from typing import Any
 
 from huggingface_hub import (
     DatasetCard,
@@ -21,14 +20,22 @@ from pydantic import (
 from typing_extensions import Literal, TypedDict
 
 import mteb
-from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from mteb.languages import (
-    ISO_LANGUAGE_SCRIPT,
-    check_language_code,
+from mteb.languages import check_language_code
+from mteb.types import (
+    HFSubset,
+    ISOLanguageScript,
+    Languages,
+    Licenses,
+    Modalities,
+    PromptType,
+    StrDate,
+    StrURL,
 )
-from mteb.types import PromptType
+from mteb.types.statistics import DescriptiveStatistics
 
-TASK_SUBTYPE = Literal[
+logger = logging.getLogger(__name__)
+
+TaskSubtype = Literal[
     "Article retrieval",
     "Conversational retrieval",
     "Dialect pairing",
@@ -65,7 +72,7 @@ TASK_SUBTYPE = Literal[
     "Intent classification",
 ]
 
-TASK_DOMAIN = Literal[
+TaskDomain = Literal[
     "Academic",
     "Blog",
     "Constructed",
@@ -92,7 +99,7 @@ TASK_DOMAIN = Literal[
     "Entertainment",
 ]
 
-SAMPLE_CREATION_METHOD = Literal[
+SampleCreationMethod = Literal[
     "found",
     "created",
     "human-translated and localized",
@@ -134,10 +141,10 @@ _TASK_TYPE = (
     "InstructionReranking",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[_TASK_TYPE]
+TaskType = Literal[_TASK_TYPE]
 
 
-TASK_CATEGORY = Literal[
+TaskCategory = Literal[
     "t2t",
     "t2c",  # text-to-category
     "i2i",  # image-to-image
@@ -151,22 +158,13 @@ TASK_CATEGORY = Literal[
     "it2it",  # image+text-to-image+text
 ]
 
-ANNOTATOR_TYPE = Literal[
+AnnotatorType = Literal[
     "expert-annotated",
     "human-annotated",
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
 ]
-
-SPLIT_NAME = str
-HFSubset = str
-LANGUAGES = Union[
-    list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
-]
-
-METRIC_NAME = str
-METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
 class PromptDict(TypedDict, total=False):
@@ -179,90 +177,6 @@ class PromptDict(TypedDict, total=False):
 
     query: str
     passage: str
-
-
-class DescriptiveStatistics(TypedDict):
-    """Class for descriptive statistics."""
-
-    pass
-
-
-class TextStatistics(TypedDict):
-    """Class for descriptive statistics for texts.
-
-    Attributes:
-        min_text_length: Minimum length of text
-        average_text_length: Average length of text
-        max_text_length: Maximum length of text
-        unique_texts: Number of unique texts
-    """
-
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
-    unique_texts: int
-
-
-class ImageStatistics(TypedDict):
-    """Class for descriptive statistics for images.
-
-    Attributes:
-        min_image_width: Minimum width of images
-        average_image_width: Average width of images
-        max_image_width: Maximum width of images
-
-        min_image_height: Minimum height of images
-        average_image_height: Average height of images
-        max_image_height: Maximum height of images
-    """
-
-    min_image_width: float
-    average_image_width: float
-    max_image_width: float
-
-    min_image_height: float
-    average_image_height: float
-    max_image_height: float
-
-
-class LabelStatistics(TypedDict):
-    """Class for descriptive statistics for texts.
-
-    Attributes:
-        min_labels_per_text: Minimum number of labels per text
-        average_label_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
-    """
-
-    min_labels_per_text: int
-    average_label_per_text: float
-    max_labels_per_text: int
-
-    unique_labels: int
-    labels: dict[str, dict[str, int]]
-
-
-class ScoreStatistics(TypedDict):
-    """Class for descriptive statistics for texts.
-
-    Attributes:
-        min_labels_per_text: Minimum number of labels per text
-        average_label_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
-    """
-
-    min_score: int
-    avg_score: float
-    max_score: int
-
-
-logger = logging.getLogger(__name__)
 
 
 class MetadataDatasetDict(TypedDict, total=False):
@@ -322,24 +236,24 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     prompt: str | PromptDict | None = None
-    type: TASK_TYPE
-    modalities: list[MODALITIES] = ["text"]
-    category: TASK_CATEGORY | None = None
-    reference: STR_URL | None = None
+    type: TaskType
+    modalities: list[Modalities] = ["text"]
+    category: TaskCategory | None = None
+    reference: StrURL | None = None
 
     eval_splits: list[str] = ["test"]
-    eval_langs: LANGUAGES
+    eval_langs: Languages
     main_score: str
 
-    date: tuple[STR_DATE, STR_DATE] | None = None
-    domains: list[TASK_DOMAIN] | None = None
-    task_subtypes: list[TASK_SUBTYPE] | None = None
-    license: LICENSES | STR_URL | None = None
+    date: tuple[StrDate, StrDate] | None = None
+    domains: list[TaskDomain] | None = None
+    task_subtypes: list[TaskSubtype] | None = None
+    license: Licenses | StrURL | None = None
 
-    annotations_creators: ANNOTATOR_TYPE | None = None
+    annotations_creators: AnnotatorType | None = None
     dialect: list[str] | None = None
 
-    sample_creation: SAMPLE_CREATION_METHOD | None = None
+    sample_creation: SampleCreationMethod | None = None
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
 
@@ -395,7 +309,7 @@ class TaskMetadata(BaseModel):
                 dataset["path"],
             )
 
-    def eval_langs_are_valid(self, eval_langs: LANGUAGES) -> None:
+    def eval_langs_are_valid(self, eval_langs: Languages) -> None:
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -406,7 +320,7 @@ class TaskMetadata(BaseModel):
                 check_language_code(code)
 
     @property
-    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+    def bcp47_codes(self) -> list[ISOLanguageScript]:
         """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
         if isinstance(self.eval_langs, dict):
             return sorted(
@@ -449,7 +363,7 @@ class TaskMetadata(BaseModel):
         )
 
     @property
-    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
+    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
         """Return a dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
