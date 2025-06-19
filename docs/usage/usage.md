@@ -137,7 +137,7 @@ evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model)
 ```
 
-However, we do recommend check if mteb includes an implementation of the model before using sentence transformers since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt and not specifying it may reduce performance.
+However, we do recommend checking if mteb includes an implementation of the model before using sentence transformers since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt and not specifying it may reduce performance.
 
 > [!NOTE]
 > If you want to evaluate a cross encoder on a reranking task, see section on [running cross encoders for reranking](#running-cross-encoders-on-reranking)
