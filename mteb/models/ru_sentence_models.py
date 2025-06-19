@@ -19,8 +19,7 @@ GIGA_task_prompts = {
     "STS22": "Retrieve semantically similar text\nquery: ",
     "RuSTSBenchmarkSTS": "Retrieve semantically similar text\nquery: ",
     "RUParaPhraserSTS": "Retrieve semantically similar text\nquery: ",
-    "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, "
-    "удивление, страх, гнев или нейтрально) \nкомментарий: ",
+    "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, удивление, страх, гнев или нейтрально) \nкомментарий: ",
     "GeoreviewClassification": "Classify the organization rating based on the reviews\nquery: ",
     "GeoreviewClusteringP2P": "Классифицируй рейтинг организации на основе отзыва \nотзыв: ",
     "HeadlineClassification": "Классифицируй тему данного новостного заголовка \nзаголовок: ",
