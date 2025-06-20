@@ -25,4 +25,7 @@ from .eng.TUTAcousticScenes import *
 from .eng.VocalSound import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .eng.VoxPopuliAccentID import *
 from .multilingual.MInDS14 import *
+from .multilingual.VoxPopuliGenderID import *
+from .multilingual.VoxPopuliLanguageID import *
