@@ -25,8 +25,10 @@ class BirdSetMultilabelClassification(AbsTaskAudioMultilabelClassification):
         domains=["Spoken", "Speech", "Bioacoustics"],
         task_subtypes=["Species Classification"],
         license="cc-by-nc-4.0",
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
+        sample_creation="created",
         bibtex_citation=r"""
 @misc{rauch2024birdsetlargescaledatasetaudio,
   archiveprefix = {arXiv},
