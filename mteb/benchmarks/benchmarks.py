@@ -2016,7 +2016,7 @@ R2MED = Benchmark(
         ]
     ),
     description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
-    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios. 
+    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
     It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
     """,
     reference="https://r2med.github.io/",
@@ -2028,4 +2028,57 @@ R2MED = Benchmark(
   year = {2025},
 }
 """,
+)
+
+
+VIDORE_X = Benchmark(
+    name="JinaVDR",
+    tasks=get_tasks(
+        tasks=[
+            "JinaVDRMedicalPrescriptionsRetrieval",
+            "JinaVDRStanfordSlideRetrieval",
+            "JinaVDRDonutVQAISynHMPRetrieval",
+            "JinaVDRTableVQARetrieval",
+            "JinaVDRChartQARetrieval",
+            "JinaVDRTQARetrieval",
+            "JinaVDROpenAINewsRetrieval",
+            "JinaVDREuropeanaDeNewsRetrieval",
+            "JinaVDREuropeanaEsNewsRetrieval",
+            "JinaVDREuropeanaItScansRetrieval",
+            "JinaVDREuropeanaNlLegalRetrieval",
+            "JinaVDRHindiGovVQARetrieval",
+            "JinaVDRAutomobileCatelogRetrieval",
+            "JinaVDRBeveragesCatalogueRetrieval",
+            "JinaVDRRamensBenchmarkRetrieval",
+            "JinaVDRJDocQARetrieval",
+            "JinaVDRHungarianDocQARetrieval",
+            "JinaVDRArabicChartQARetrieval",
+            "JinaVDRArabicInfographicsVQARetrieval",
+            "JinaVDROWIDChartsRetrieval",
+            "JinaVDRMPMQARetrieval",
+            "JinaVDRJina2024YearlyBookRetrieval",
+            "JinaVDRWikimediaCommonsMapsRetrieval",
+            "JinaVDRPlotQARetrieval",
+            "JinaVDRMMTabRetrieval",
+            "JinaVDRCharXivOCRRetrieval",
+            "JinaVDRStudentEnrollmentSyntheticRetrieval",
+            "JinaVDRGitHubReadmeRetrieval",
+            "JinaVDRTweetStockSyntheticsRetrieval",
+            "JinaVDRAirbnbSyntheticRetrieval",
+            "JinaVDRShanghaiMasterPlanRetrieval",
+            "JinaVDRWikimediaCommonsDocumentsRetrieval",
+            "JinaVDREuropeanaFrNewsRetrieval",
+            "JinaVDRDocQAHealthcareIndustryRetrieval",
+            "JinaVDRDocQAAI",
+            "JinaVDRShiftProjectRetrieval",
+            "JinaVDRTatQARetrieval",
+            "JinaVDRInfovqaRetrieval",
+            "JinaVDRDocVQARetrieval",
+            "JinaVDRDocQAGovReportRetrieval",
+            "JinaVDRTabFQuadRetrieval",
+            "JinaVDRDocQAEnergyRetrieval",
+            "JinaVDRArxivQARetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to a given text.",
 )
