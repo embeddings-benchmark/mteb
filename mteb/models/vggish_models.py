@@ -75,8 +75,10 @@ def vggish_loader(**kwargs):
                             waveforms.append(self._convert_audio(audio))
                         elif "path" in item:
                             waveforms.append(self._load_audio_file(item["path"]))
-                    elif isinstance(item, (np.ndarray, torch.Tensor)):
-                        waveforms.append(self._convert_audio(item))
+                    elif isinstance(
+                        item, (np.ndarray, torch.Tensor)
+                    ):  ## beijing opera goes here. torch.Tensor.
+                        waveforms.append(item)
                     elif isinstance(item, str):
                         waveforms.append(self._load_audio_file(item))
 
@@ -103,7 +105,7 @@ def vggish_loader(**kwargs):
             if audio.shape[-1] < self.min_samples:
                 pad_amount = self.min_samples - audio.shape[-1]
                 audio = torch.nn.functional.pad(audio, (0, pad_amount))
-            return audio   
+            return audio
 
         def _load_audio_file(self, path):
             waveform, sample_rate = torchaudio.load(path)
@@ -129,14 +131,46 @@ def vggish_loader(**kwargs):
 
                     batch_embeddings = []
                     for audio_data in batch:
-                        # Prepare input tensor for the model
-                        audio_tensor = audio_data.to(self.device)
-
                         # Convert to input format expected by VGGish
-                        input_tensor = self.converter(audio_tensor, self.sampling_rate)
+                        input_tensor = self.converter(
+                            audio_data.float(), self.sampling_rate
+                        )
                         input_tensor = input_tensor.to(self.device)
 
-                        # Get embeddings from VGGish
+                        # Skip empty tensors
+                        if input_tensor.numel() == 0:
+                            print("Creating zero embedding for empty tensor")
+                            zero_embedding = torch.zeros(
+                                self.embed_dim, device=self.device
+                            )
+                            batch_embeddings.append(zero_embedding.cpu().numpy())
+                            continue
+
+                        # Ensure correct tensor format for VGGish
+                        if input_tensor.dim() == 4:  # [batch, channels, height, width]
+                            if input_tensor.shape[1] == 3:
+                                # Convert 3-channel to 1-channel by taking the mean
+                                input_tensor = input_tensor.mean(dim=1, keepdim=True)
+                        elif (
+                            input_tensor.dim() == 3
+                        ):  # Could be [channels, height, width] or [batch, height, width]
+                            if input_tensor.shape[0] == 3:
+                                # This is [3, height, width] - treat as 3 channels, add batch dim
+                                input_tensor = input_tensor.mean(
+                                    dim=0, keepdim=True
+                                ).unsqueeze(0)
+                            elif input_tensor.shape[0] > 0:
+                                # This might be [batch, height, width] - add channel dim
+                                input_tensor = input_tensor.unsqueeze(1)
+
+                        # Final check: ensure we have [batch, 1, height, width]
+                        if input_tensor.dim() == 3:
+                            input_tensor = input_tensor.unsqueeze(1)  # Add channel dim
+                        elif input_tensor.dim() == 2:
+                            input_tensor = input_tensor.unsqueeze(0).unsqueeze(
+                                0
+                            )  # Add batch and channel dims
+
                         embedding = self.model(input_tensor)
 
                         # Use mean pooling if needed
