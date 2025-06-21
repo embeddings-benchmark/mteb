@@ -68,6 +68,7 @@ TASK_SUBTYPE = Literal[
     "Gender Clustering",
     "Vocal Sound Classification",
     "Music Clustering",
+    "Accent Clustering",
     "Sentiment Clustering",
     "Emotion Clustering",
     "Rendered semantic textual similarity",
