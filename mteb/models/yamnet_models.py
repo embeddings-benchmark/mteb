@@ -32,90 +32,121 @@ def yamnet_loader(**kwargs):
         ):
             self.device = device
             self.model = yamnet.yamnet(pretrained=True)
-            self.model.eval()
-            self.model = self.model.to(self.device)
+            self.model.eval().to(self.device)
 
             self.converter = WaveformToInput()
             self.sampling_rate = 16000  # YAMNet requires 16kHz audio
             self.embed_dim = 1024  # YAMNet embedding dimension
-            self.min_audio_length = 0.96
+            self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
 
-        def _process_audio(self, audio):
-            processed_audio = []
-
-            if isinstance(audio, DataLoader):
-                for batch in audio:
-                    processed_audio.extend(self._handle_batch(batch))
-            else:
-                processed_audio = self._handle_batch(audio)
-
-            return processed_audio
-
-        def _handle_batch(self, batch):
-            waveforms = []
-
-            if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
-                for audio, _ in batch:
-                    waveforms.append(self._convert_audio(audio))
-            else:
-                for item in batch:
-                    if isinstance(item, dict):
-                        if "array" in item:
-                            audio = item["array"]
-                            if isinstance(audio, np.ndarray):
-                                audio = torch.from_numpy(audio)
-                            audio = audio.float()
-                            if item["sampling_rate"] != self.sampling_rate:
-                                resampler = torchaudio.transforms.Resample(
-                                    item["sampling_rate"], self.sampling_rate
-                                )
-                                audio = resampler(audio)
-                            waveforms.append(self._convert_audio(audio))
-                        elif "path" in item:
-                            waveforms.append(self._load_audio_file(item["path"]))
-                    elif isinstance(item, (np.ndarray, torch.Tensor)):
-                        waveforms.append(self._convert_audio(item))
-                    elif isinstance(item, str):
-                        waveforms.append(self._load_audio_file(item))
-
-            return waveforms
-
-        def _convert_audio(self, audio):
-            if isinstance(audio, np.ndarray):
-                audio = torch.from_numpy(audio)
-            audio = audio.float().squeeze()
-            # Normalize to [-1.0, 1.0] if needed
-            if audio.abs().max() > 1.0:
-                audio = audio / audio.abs().max()
-            min_samples = int(self.min_audio_length * self.sampling_rate)
-            if audio.shape[0] < min_samples:
-                repeats = int(np.ceil(min_samples / audio.shape[0]))
-                audio = audio.repeat(repeats)
-                audio = audio[:min_samples]
+        def _resample_audio(self, audio, source_rate):
+            """Resample audio to target sampling rate."""
+            if source_rate != self.sampling_rate:
+                resampler = torchaudio.transforms.Resample(
+                    source_rate, self.sampling_rate
+                )
+                return resampler(audio)
             return audio
 
-        def _load_audio_file(self, path):
-            waveform, sample_rate = torchaudio.load(path)
-            waveform = waveform.squeeze().float()
-            if sample_rate != self.sampling_rate:
-                resampler = torchaudio.transforms.Resample(
-                    sample_rate, self.sampling_rate
-                )
-                waveform = resampler(waveform)
-            return waveform
+        def _normalize_audio(self, audio):
+            """Normalize and pad audio to minimum length."""
+            if isinstance(audio, np.ndarray):
+                audio = torch.from_numpy(audio)
 
-        def _pad_audio_batch(self, batch):
-            batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
-            max_length = max(audio.shape[0] for audio in batch)
-            padded_batch = [
-                torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
-                for audio in batch
-            ]
-            return torch.stack(padded_batch)
+            audio = audio.float().squeeze()
+            if audio.ndim > 1:
+                audio = audio.mean(dim=0)
+
+            # Normalize to [-1.0, 1.0]
+            if audio.abs().max() > 1.0:
+                audio = audio / audio.abs().max()
+
+            # Pad to minimum length
+            if audio.shape[-1] < self.min_samples:
+                pad_amount = self.min_samples - audio.shape[-1]
+                audio = torch.nn.functional.pad(audio, (0, pad_amount))
+
+            return audio
+
+        def _process_audio_item(self, item):
+            """Process a single audio item into normalized tensor."""
+            if isinstance(item, dict):
+                if "array" in item:
+                    audio = (
+                        torch.from_numpy(item["array"])
+                        if isinstance(item["array"], np.ndarray)
+                        else item["array"]
+                    )
+                    audio = self._resample_audio(audio.float(), item["sampling_rate"])
+                    return self._normalize_audio(audio)
+                elif "path" in item:
+                    return self._load_audio_file(item["path"])
+            elif isinstance(item, (np.ndarray, torch.Tensor)):
+                return item
+            elif isinstance(item, str):
+                return self._load_audio_file(item)
+
+            return item
+
+        def _process_audio(self, audio):
+            """Process audio input into list of normalized tensors."""
+            if isinstance(audio, DataLoader):
+                processed = []
+                for batch in audio:
+                    processed.extend(self._process_batch(batch))
+                return processed
+            else:
+                return self._process_batch(audio)
+
+        def _process_batch(self, batch):
+            """Process a batch of audio items."""
+            if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
+                waveforms = []
+                for audio, _ in batch:
+                    waveforms.append(self._normalize_audio(audio))
+                return waveforms
+
+            return [self._process_audio_item(item) for item in batch]
+
+        def _load_audio_file(self, path):
+            """Load and process audio file."""
+            waveform, sample_rate = torchaudio.load(path)
+            waveform = self._resample_audio(waveform.squeeze().float(), sample_rate)
+            return self._normalize_audio(waveform)
+
+        def _prepare_input_tensor(self, audio_data):
+            """Convert audio to VGGish input format and handle tensor dimensions."""
+            input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
+                self.device
+            )
+
+            if input_tensor.numel() == 0:
+                return None
+
+            # Handle different tensor dimensions
+            if input_tensor.dim() == 4 and input_tensor.shape[0] == 2:
+                # [2, batch, height, width] -> [1, batch, height, width]
+                input_tensor = input_tensor.mean(dim=0, keepdim=True)
+            elif input_tensor.dim() == 3:
+                if input_tensor.shape[0] == 3:
+                    # [3, height, width] -> [1, 1, height, width]
+                    input_tensor = input_tensor.mean(dim=0, keepdim=True).unsqueeze(0)
+                else:
+                    # [batch, height, width] -> [batch, 1, height, width]
+                    input_tensor = input_tensor.unsqueeze(1)
+            elif input_tensor.dim() == 2:
+                # [height, width] -> [1, 1, height, width]
+                input_tensor = input_tensor.unsqueeze(0).unsqueeze(0)
+            elif input_tensor.dim() == 3:
+                # [batch, height, width] -> [batch, 1, height, width]
+                input_tensor = input_tensor.unsqueeze(1)
+
+            return input_tensor
 
         def get_audio_embeddings(
             self, audio, *, task_name=None, prompt_type=None, batch_size=4, **kwargs
         ):
+            """Generate embeddings for audio inputs."""
             processed_audio = self._process_audio(audio)
             all_embeddings = []
 
@@ -124,42 +155,46 @@ def yamnet_loader(**kwargs):
                     range(0, len(processed_audio), batch_size), desc="Processing audio"
                 ):
                     batch = processed_audio[i : i + batch_size]
-
-                    if len(batch) > 1:
-                        batch_tensor = self._pad_audio_batch(batch)
-                    else:
-                        batch_tensor = batch[0].unsqueeze(0)
-
                     batch_embeddings = []
-                    for j in range(batch_tensor.shape[0]):
-                        # Prepare input tensor for the model
-                        audio_data = batch_tensor[j]
-                        audio_tensor = audio_data.to(self.device)
 
-                        # Convert to input format expected by YAMNet
-                        input_tensor = self.converter(audio_tensor, self.sampling_rate)
-                        input_tensor = input_tensor.to(self.device)
+                    for audio_data in batch:
+                        input_tensor = self._prepare_input_tensor(audio_data)
 
-                        # Get embeddings from YAMNet (discard logits)
+                        if input_tensor is None:
+                            # Create zero embedding for empty tensor
+                            print("Creating zero embedding for empty tensor")
+                            zero_embedding = torch.zeros(
+                                self.embed_dim, device=self.device
+                            )
+                            batch_embeddings.append(zero_embedding.cpu().numpy())
+                            continue
+
+                        # discard logits
                         embedding, _ = self.model(input_tensor)
-
-                        # Use mean pooling if needed, or just take the embedding as is
-                        if len(embedding.shape) > 1:
-                            embedding = torch.mean(embedding, dim=0)
+                        # Handle 4D tensors with shape [batch, embed_dim, 1, 1]
+                        if (
+                            embedding.dim() == 4
+                            and embedding.shape[2] == 1
+                            and embedding.shape[3] == 1
+                        ):
+                            # [batch, embed_dim, 1, 1] -> [batch, embed_dim]
+                            embedding = embedding.squeeze(2).squeeze(2)
 
                         batch_embeddings.append(embedding.cpu().numpy())
 
                     all_embeddings.extend(batch_embeddings)
 
-            if not all_embeddings:
-                return np.zeros((0, self.embed_dim))
+            import pdb
 
-            return np.array(all_embeddings)
+            pdb.set_trace()
+            return (
+                np.array(all_embeddings)
+                if all_embeddings
+                else np.zeros((0, self.embed_dim))
+            )
 
         def encode(self, inputs, *, task_name, prompt_type=None, **kwargs):
-            return self.get_audio_embeddings(
-                inputs, task_name=task_name, prompt_type=prompt_type, **kwargs
-            )
+            raise ValueError("yamnet models only support audio encoding.")
 
     return YAMNetWrapper(**kwargs)
 

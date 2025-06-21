@@ -103,7 +103,6 @@ def vggish_loader(**kwargs):
             if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
                 waveforms = []
                 for audio, _ in batch:
-                    print("Audio shape after convert:", audio.shape)
                     waveforms.append(self._normalize_audio(audio))
                 return waveforms
 
