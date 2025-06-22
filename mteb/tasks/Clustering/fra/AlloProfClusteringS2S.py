@@ -31,7 +31,6 @@ class AlloProfClusteringS2S(AbsTaskClustering):
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         date=("1996-01-01", "2023-04-14"),
-        form=None,
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="mit",
