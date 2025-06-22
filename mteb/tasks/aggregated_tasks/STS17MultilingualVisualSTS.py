@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.tasks.Image.VisualSTS import STS17MultilingualVisualSTS
 
 task_list_sts17: list[AbsTask] = [
@@ -19,6 +20,7 @@ class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
         tasks=task_list_sts17,
         category="i2i",
         license="not specified",
+        modalities=["image"],
         annotations_creators="human-annotated",
         dialect=[""],
         eval_langs={
@@ -58,13 +60,14 @@ task_list_sts17_multi: list[AbsTask] = [
 ]
 
 
-class STS17MultilingualVisualSTSMultilingual(AbsTaskAggregate):
+class STS17MultilingualVisualSTSMultilingual(AbsTaskAggregate, MultilingualTask):
     metadata = AggregateTaskMetadata(
         name="VisualSTS17Multilingual",
         description="STS17MultilingualVisualSTS multilingual.",
         reference="https://arxiv.org/abs/2402.08183/",
         tasks=task_list_sts17_multi,
         category="i2i",
+        modalities=["image"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[""],

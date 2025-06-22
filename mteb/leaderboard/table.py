@@ -258,7 +258,7 @@ def apply_styling(
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = joint_table.style.format(
         {
-            **{column: "{:.2f}" for column in score_columns},
+            **dict.fromkeys(score_columns, "{:.2f}"),
             "Rank (Borda)": "{:.0f}",
         },
         na_rep="",

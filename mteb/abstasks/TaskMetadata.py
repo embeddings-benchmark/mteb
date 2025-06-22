@@ -80,6 +80,8 @@ TASK_SUBTYPE = Literal[
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
+    "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[

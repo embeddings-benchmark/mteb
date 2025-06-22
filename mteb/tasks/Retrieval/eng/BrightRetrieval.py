@@ -37,11 +37,9 @@ def load_bright_data(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    corpus = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
-    queries = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
-    relevant_docs = {
-        domain: {split: None for split in eval_splits} for domain in DOMAINS
-    }
+    corpus = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
+    queries = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
+    relevant_docs = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
 
     for domain in domains:
         domain_corpus = datasets.load_dataset(
@@ -107,7 +105,7 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         name="BrightRetrieval",
         dataset={
             "path": "xlangai/BRIGHT",
-            "revision": "a75a0eb",
+            "revision": "a75a0eb483f6a5233a6efc2d63d71540a4443dfb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Bright retrieval dataset.",
