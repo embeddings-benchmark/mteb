@@ -347,7 +347,7 @@ seed_embedding = ModelMeta(
         SeedWrapper,
         model_name="Bytedance/Seed-1.6-embedding",
         max_tokens=32000,
-        available_embed_dims=[2048, 1024, 512],
+        available_embed_dims=[2048, 1024],
     ),
     max_tokens=32768,
     embed_dim=2048,
