@@ -2031,7 +2031,7 @@ R2MED = Benchmark(
 )
 
 
-VIDORE_X = Benchmark(
+JinaVDR = Benchmark(
     name="JinaVDR",
     tasks=get_tasks(
         tasks=[
@@ -2080,5 +2080,5 @@ VIDORE_X = Benchmark(
             "JinaVDRArxivQARetrieval",
         ],
     ),
-    description="Retrieve associated pages according to a given text.",
+    description="Multilingual, domain-diverse and layout-rich document retrieval benchmark.",
 )
