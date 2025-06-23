@@ -94,6 +94,9 @@ def yamnet_loader(**kwargs):
         def _process_audio(self, audio):
             """Process audio input into list of normalized tensors."""
             if isinstance(audio, DataLoader):
+                # Force single-threaded processing to avoid pickling issues
+                audio.num_workers = 0
+
                 processed = []
                 for batch in audio:
                     processed.extend(self._process_batch(batch))

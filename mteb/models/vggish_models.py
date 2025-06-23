@@ -94,6 +94,9 @@ def vggish_loader(**kwargs):
         def _process_audio(self, audio):
             """Process audio input into list of normalized tensors."""
             if isinstance(audio, DataLoader):
+                # Force single-threaded processing to avoid pickling issues
+                audio.num_workers = 0
+
                 processed = []
                 for batch in audio:
                     processed.extend(self._process_batch(batch))
@@ -119,6 +122,9 @@ def vggish_loader(**kwargs):
 
         def _prepare_input_tensor(self, audio_data):
             """Convert audio to VGGish input format and handle tensor dimensions."""
+            if isinstance(audio_data, np.ndarray):
+                audio_data = torch.from_numpy(audio_data)
+
             if audio_data.ndim == 1:
                 audio_data = audio_data.unsqueeze(0)
 
