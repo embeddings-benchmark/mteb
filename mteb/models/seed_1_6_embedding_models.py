@@ -6,8 +6,13 @@ import time
 from functools import partial
 from typing import Any
 
+import base64
+from io import BytesIO
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
+import torchvision.transforms.functional as F
+from PIL import Image
 import tqdm
 
 from mteb.encoder_interface import PromptType
@@ -20,7 +25,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 
-def multimodal_embedding(image_url=None, text_content=None):
+def pil_to_base64(image, format='jpeg'):
+    buffer = BytesIO()
+    image.save(buffer, format=format)
+    img_bytes = buffer.getvalue()
+    encoded_bytes = base64.b64encode(img_bytes)
+    return encoded_bytes.decode('utf-8')
+
+
+
+
+def multimodal_embedding(image_base64=None, text_content=None):
     auth_token = os.getenv("VOLCES_AUTH_TOKEN")
     model_name = "doubao-embedding-vision-250615"
     api_url = "https://ark.cn-beijing.volces.com/api/v3/embeddings/multimodal"
@@ -31,9 +46,9 @@ def multimodal_embedding(image_url=None, text_content=None):
         "Content-Type": "application/json"
     }
 
-    if image_url is not None and text_content is None:
+    if image_base64 is not None and text_content is None:
         inputs = []
-        for image in image_url:
+        for image in image_base64:
             image_format = "jpeg"
             image_data = f"data:image/{image_format};base64,{image}"
             inputs.append({
@@ -45,7 +60,7 @@ def multimodal_embedding(image_url=None, text_content=None):
             "model": model_name,
             "input": inputs
         }
-    elif image_url is None and text_content is not None:
+    elif image_base64 is None and text_content is not None:
         payload = {
             "model": model_name,
             "input": [
@@ -57,7 +72,7 @@ def multimodal_embedding(image_url=None, text_content=None):
         }
     else:
         inputs = []
-        for image in image_url:
+        for image in image_base64:
             image_format = "jpeg"
             image_data = f"data:image/{image_format};base64,{image}"
             inputs.append({
@@ -196,29 +211,111 @@ class SeedWrapper(Wrapper):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-    def _encode(self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None):
+
+    def get_text_embeddings(
+        self,
+        texts: list[str],
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 32,
+    ):
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
             f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
         )
 
-        if prompt_type == PromptType("query") or prompt_type is None:
-            if task_name in TASK_NAME_TO_INSTRUCTION:
-                instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            else:
-                raise ValueError(f"Unknown task_name {task_name}")
-            inputs = [instruction.format(i) for i in inputs]
-        else:
-            pass
+        if (prompt_type == PromptType("query") or prompt_type is None) and task_name in TASK_NAME_TO_INSTRUCTION:
+            instruction = TASK_NAME_TO_INSTRUCTION[task_name]
+            texts = [instruction.format(i) for i in texts]
         
-        outputs = multi_thread_encode(inputs)
+        outputs = multi_thread_encode(texts)
 
         if self._embed_dim is not None:
             outputs = outputs[:, : self._embed_dim]
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
 
         return outputs.float().tolist()
+    
+
+    def get_image_embeddings(
+            self,
+            images: list[Image.Image] | DataLoader,
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            **kwargs: Any,
+        ):
+        assert (
+            self._embed_dim is None or self._embed_dim in self._available_embed_dims
+        ), (
+            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+        )
+
+        if (prompt_type == PromptType("query") or prompt_type is None) and task_name in TASK_NAME_TO_INSTRUCTION:
+            instruction = TASK_NAME_TO_INSTRUCTION[task_name]
+        else:
+            instruction = ""
+        
+        if isinstance(images, DataLoader):
+            images_base64 = []
+            for batch in images:        
+                images_base64.extend([pil_to_base64(F.to_pil_image(b)) for b in batch])
+        else:
+            images_base64 = [pil_to_base64(image) for image in images]
+        outputs = []
+        for image in images_base64:
+            if instruction=="":
+                resp = multimodal_embedding(image_base64=[image])
+            else:
+                resp = multimodal_embedding(image_base64=[image], text_content=instruction)
+            embedding = torch.tensor(resp["data"]["embedding"])
+            embedding = torch.reshape(embedding, (1, -1))
+                
+        outputs = torch.stack(outputs, dim=0)
+        
+        if self._embed_dim is not None:
+            outputs = outputs[:, : self._embed_dim]
+        outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
+        return outputs.float().tolist()
+        
+
+    def get_fused_embeddings(
+            self,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
+            fusion_mode="sum",
+            **kwargs: Any,
+        ):
+        assert (
+            self._embed_dim is None or self._embed_dim in self._available_embed_dims
+        ), (
+            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+        )
+
+        assert len(texts) == len(images)
+        if isinstance(images, DataLoader):
+            images_base64 = []
+            for batch in images:        
+                images_base64.extend([pil_to_base64(F.to_pil_image(b)) for b in batch])
+        else:
+            images_base64 = [pil_to_base64(image) for image in images]
+        
+        outputs = []
+        for i in range(len(images_base64)):
+            resp = multimodal_embedding(image_base64=[images_base64[i]], text_content=texts[i])
+            embedding = torch.tensor(resp["data"]["embedding"])
+            embedding = torch.reshape(embedding, (1, -1))
+                
+        outputs = torch.stack(outputs, dim=0)
+        
+        if self._embed_dim is not None:
+            outputs = outputs[:, : self._embed_dim]
+        outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
+        return outputs.float().tolist()
+    
 
     def encode(
         self,
@@ -252,12 +349,11 @@ class SeedWrapper(Wrapper):
         all_embeddings = []
 
         for sublist in tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar):
-            embedding = self._encode(sublist, task_name, prompt_type)
+            embedding = self.get_text_embeddings(sublist, task_name, prompt_type)
             all_embeddings.extend(embedding)
 
         return np.array(all_embeddings)
 
-   
 
 TASK_NAME_TO_INSTRUCTION = {
     "ArguAna": "Given a claim, find documents that refute the claim\n{}",
