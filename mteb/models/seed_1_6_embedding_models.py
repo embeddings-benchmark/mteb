@@ -25,14 +25,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 logger = logging.getLogger(__name__)
 
 
-def pil_to_base64(image, format='jpeg'):
+def pil_to_base64(image, format="jpeg"):
     buffer = BytesIO()
     image.save(buffer, format=format)
     img_bytes = buffer.getvalue()
     encoded_bytes = base64.b64encode(img_bytes)
-    return encoded_bytes.decode('utf-8')
-
-
+    return encoded_bytes.decode("utf-8")
 
 
 def multimodal_embedding(image_base64=None, text_content=None):
@@ -42,8 +40,8 @@ def multimodal_embedding(image_base64=None, text_content=None):
 
     headers = {
         "Authorization": f"Bearer {auth_token}",
-        "x-ark-vlm1": "true", 
-        "Content-Type": "application/json"
+        "x-ark-vlm1": "true",
+        "Content-Type": "application/json",
     }
 
     if image_base64 is not None and text_content is None:
@@ -51,50 +49,27 @@ def multimodal_embedding(image_base64=None, text_content=None):
         for image in image_base64:
             image_format = "jpeg"
             image_data = f"data:image/{image_format};base64,{image}"
-            inputs.append({
-                "type": "image_url",
-                "image_url": {"url": image_data}
-            })
+            inputs.append({"type": "image_url", "image_url": {"url": image_data}})
 
-        payload = {
-            "model": model_name,
-            "input": inputs
-        }
+        payload = {"model": model_name, "input": inputs}
     elif image_base64 is None and text_content is not None:
         payload = {
             "model": model_name,
             "input": [
-                {
-                    "type": "text",
-                    "text": text_content
-                },
-            ]
+                {"type": "text", "text": text_content},
+            ],
         }
     else:
         inputs = []
         for image in image_base64:
             image_format = "jpeg"
             image_data = f"data:image/{image_format};base64,{image}"
-            inputs.append({
-                "type": "image_url",
-                "image_url": {"url": image_data}
-            })
-        inputs.append({
-            "type": "text",
-            "text": text_content
-        })
-        payload = {
-            "model": model_name,
-            "input": inputs
-        }
+            inputs.append({"type": "image_url", "image_url": {"url": image_data}})
+        inputs.append({"type": "text", "text": text_content})
+        payload = {"model": model_name, "input": inputs}
 
     try:
-        response = requests.post(
-            url=api_url,
-            headers=headers,
-            json=payload,
-            timeout=10
-        )
+        response = requests.post(url=api_url, headers=headers, json=payload, timeout=10)
 
         response.raise_for_status()
         return response.json()
@@ -114,15 +89,15 @@ def multimodal_embedding(image_base64=None, text_content=None):
 def multi_thread_encode(sentences, batch_size=1, max_workers=8):
     batches = []
     for idx in range(0, len(sentences), batch_size):
-        batches.append((idx // batch_size, sentences[idx:idx + batch_size]))
+        batches.append((idx // batch_size, sentences[idx : idx + batch_size]))
 
     n_batches = len(batches)
     results = [None] * n_batches  # Pre-allocated result list
-    all_embeddings = []           # Final ordered embeddings
+    all_embeddings = []  # Final ordered embeddings
 
     def _process_batch(batch_idx, batch_sentences):
         sentence = batch_sentences[0]
-        
+
         retries = 5
         while retries > 0:
             try:
@@ -131,9 +106,7 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
                 break
             except Exception as e:
                 time.sleep(1)
-                logger.warning(
-                    f"Retrying... {retries} retries left. Error: {str(e)}"
-                )
+                logger.warning(f"Retrying... {retries} retries left. Error: {str(e)}")
                 retries -= 1
                 if retries == 0:
                     raise e
@@ -141,8 +114,7 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = {
-            executor.submit(_process_batch, idx, batch): idx
-            for idx, batch in batches
+            executor.submit(_process_batch, idx, batch): idx for idx, batch in batches
         }
 
         for future in as_completed(futures):
@@ -158,19 +130,14 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
     return all_embeddings.float().cpu()
 
 
-
-doubao_embedding_training_data = (
-    {
-        "PAWSX": ["train"],
-        "QBQTC": ["train"],
-        "STSB": ["train"],
-        "TNews": ["train"],
-        "Waimai": ["train"],
-        "IFlyTek": ["train"],
-    }
-    | bge_chinese_training_data
-)
-
+doubao_embedding_training_data = {
+    "PAWSX": ["train"],
+    "QBQTC": ["train"],
+    "STSB": ["train"],
+    "TNews": ["train"],
+    "Waimai": ["train"],
+    "IFlyTek": ["train"],
+} | bge_chinese_training_data
 
 
 class Seed16EmbeddingWrapper(Wrapper):
@@ -203,7 +170,6 @@ class Seed16EmbeddingWrapper(Wrapper):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-
     def get_text_embeddings(
         self,
         texts: list[str],
@@ -218,10 +184,12 @@ class Seed16EmbeddingWrapper(Wrapper):
             f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
         )
 
-        if (prompt_type == PromptType("query") or prompt_type is None) and task_name in TASK_NAME_TO_INSTRUCTION:
+        if (
+            prompt_type == PromptType("query") or prompt_type is None
+        ) and task_name in TASK_NAME_TO_INSTRUCTION:
             instruction = TASK_NAME_TO_INSTRUCTION[task_name]
             texts = [instruction.format(i) for i in texts]
-        
+
         outputs = multi_thread_encode(texts)
 
         if self._embed_dim is not None:
@@ -229,60 +197,64 @@ class Seed16EmbeddingWrapper(Wrapper):
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
 
         return outputs.float().tolist()
-    
 
     def get_image_embeddings(
-            self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            **kwargs: Any,
-        ):
+        self,
+        images: list[Image.Image] | DataLoader,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 32,
+        **kwargs: Any,
+    ):
         import torchvision.transforms.functional as F
+
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
             f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
         )
 
-        if (prompt_type == PromptType("query") or prompt_type is None) and task_name in TASK_NAME_TO_INSTRUCTION:
+        if (
+            prompt_type == PromptType("query") or prompt_type is None
+        ) and task_name in TASK_NAME_TO_INSTRUCTION:
             instruction = TASK_NAME_TO_INSTRUCTION[task_name]
         else:
             instruction = ""
-        
+
         if isinstance(images, DataLoader):
             images_base64 = []
-            for batch in images:        
+            for batch in images:
                 images_base64.extend([pil_to_base64(F.to_pil_image(b)) for b in batch])
         else:
             images_base64 = [pil_to_base64(image) for image in images]
         outputs = []
         for image in images_base64:
-            if instruction=="":
+            if instruction == "":
                 resp = multimodal_embedding(image_base64=[image])
             else:
-                resp = multimodal_embedding(image_base64=[image], text_content=instruction)
+                resp = multimodal_embedding(
+                    image_base64=[image], text_content=instruction
+                )
             embedding = torch.tensor(resp["data"]["embedding"])
             embedding = torch.reshape(embedding, (1, -1))
-                
+
         outputs = torch.stack(outputs, dim=0)
-        
+
         if self._embed_dim is not None:
             outputs = outputs[:, : self._embed_dim]
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
         return outputs.float().tolist()
-        
 
     def get_fused_embeddings(
-            self,
-            texts: list[str] | None = None,
-            images: list[Image.Image] | DataLoader | None = None,
-            fusion_mode="sum",
-            **kwargs: Any,
-        ):
+        self,
+        texts: list[str] | None = None,
+        images: list[Image.Image] | DataLoader | None = None,
+        fusion_mode="sum",
+        **kwargs: Any,
+    ):
         import torchvision.transforms.functional as F
+
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
@@ -292,24 +264,25 @@ class Seed16EmbeddingWrapper(Wrapper):
         assert len(texts) == len(images)
         if isinstance(images, DataLoader):
             images_base64 = []
-            for batch in images:        
+            for batch in images:
                 images_base64.extend([pil_to_base64(F.to_pil_image(b)) for b in batch])
         else:
             images_base64 = [pil_to_base64(image) for image in images]
-        
+
         outputs = []
         for i in range(len(images_base64)):
-            resp = multimodal_embedding(image_base64=[images_base64[i]], text_content=texts[i])
+            resp = multimodal_embedding(
+                image_base64=[images_base64[i]], text_content=texts[i]
+            )
             embedding = torch.tensor(resp["data"]["embedding"])
             embedding = torch.reshape(embedding, (1, -1))
-                
+
         outputs = torch.stack(outputs, dim=0)
-        
+
         if self._embed_dim is not None:
             outputs = outputs[:, : self._embed_dim]
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
         return outputs.float().tolist()
-    
 
     def encode(
         self,
