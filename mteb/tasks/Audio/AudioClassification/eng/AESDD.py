@@ -45,5 +45,5 @@ class AESDDClassification(AbsTaskAudioClassification):
         },
     )
 
-    audio_column_name: str = "audio"
     label_column_name: str = "label"
+    is_cross_validation: bool = True
