@@ -73,8 +73,10 @@ class Wrapper:
         task_types = get_args(TASK_TYPE)
         prompt_types = [e.value for e in PromptType]
         for task_name in task_to_prompt_name:
-            if "-" in task_name:
-                task_name, prompt_type = task_name.split("-")
+            if "-" in task_name and task_name.endswith(
+                (f"-{PromptType.query.value}", f"-{PromptType.passage.value}")
+            ):
+                task_name, prompt_type = task_name.rsplit("-", 1)
                 if prompt_type not in prompt_types:
                     msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
                     logger.warning(msg)
