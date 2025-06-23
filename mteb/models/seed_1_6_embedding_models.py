@@ -11,7 +11,6 @@ from io import BytesIO
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-import torchvision.transforms.functional as F
 from PIL import Image
 import tqdm
 
@@ -23,6 +22,7 @@ from mteb.requires_package import requires_package
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+logger = logging.getLogger(__name__)
 
 
 def pil_to_base64(image, format='jpeg'):
@@ -96,21 +96,17 @@ def multimodal_embedding(image_base64=None, text_content=None):
             timeout=10
         )
 
-        # 检查HTTP状态码
         response.raise_for_status()
-
-        # 尝试解析JSON响应
         return response.json()
 
     except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP错误 ({http_err.response.status_code}): {http_err}")
+        logger.error(f"HTTP error ({http_err.response.status_code}): {http_err}")
     except requests.exceptions.JSONDecodeError:
-        print("错误：响应不是有效的JSON格式")
-        print(f"原始响应：{response.text}")
+        logger.error("Error:The response is not in valid JSON format")
     except requests.exceptions.Timeout:
-        print("错误：请求超时")
+        logger.error("Error:Request timeout")
     except Exception as e:
-        print(f"未知错误：{str(e)}")
+        logger.error(f"Unknown error: {str(e)}")
 
     return None
 
@@ -163,10 +159,6 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
 
 
 
-
-logger = logging.getLogger(__name__)
-
-
 doubao_embedding_training_data = (
     {
         "PAWSX": ["train"],
@@ -181,7 +173,7 @@ doubao_embedding_training_data = (
 
 
 
-class SeedWrapper(Wrapper):
+class Seed16EmbeddingWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
@@ -248,6 +240,7 @@ class SeedWrapper(Wrapper):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+        import torchvision.transforms.functional as F
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
@@ -289,6 +282,7 @@ class SeedWrapper(Wrapper):
             fusion_mode="sum",
             **kwargs: Any,
         ):
+        import torchvision.transforms.functional as F
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
@@ -440,7 +434,7 @@ seed_embedding = ModelMeta(
         "zho-Hans",
     ],
     loader=partial(
-        SeedWrapper,
+        Seed16EmbeddingWrapper,
         model_name="Bytedance/Seed-1.6-embedding",
         max_tokens=32000,
         available_embed_dims=[2048, 1024],
