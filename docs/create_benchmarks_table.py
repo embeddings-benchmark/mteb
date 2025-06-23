@@ -3,8 +3,9 @@ from __future__ import annotations
 from collections import Counter
 from pathlib import Path
 
+from create_tasks_table import insert_tables
+
 import mteb
-from docs.create_tasks_table import insert_tables
 
 
 def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:

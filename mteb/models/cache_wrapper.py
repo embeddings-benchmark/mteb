@@ -155,8 +155,8 @@ class TextVectorMap:
                     self.vectors = np.memmap(
                         self.vectors_file, dtype="float32", mode="r+"
                     )
-                    self.vectors = self.vectors.reshape(-1, self.vector_dim)
-                    logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
+                    self.vectors = self.vectors.reshape(-1, self.vector_dim)  # type: ignore
+                    logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")  # type: ignore
                 else:
                     logger.warning(
                         "Vector dimension not set. Unable to load vectors file."
@@ -214,22 +214,30 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
         logger.info("Initialized CachedEmbeddingWrapper")
 
     def encode(
-        self, texts: list[str], batch_size: int = 32, task_name: str = None, **kwargs
+        self,
+        texts: list[str],
+        batch_size: int = 32,
+        task_name: str | None = None,
+        **kwargs,
     ) -> np.ndarray:
         """Encode texts using the wrapped model, with caching"""
+        _task_name = task_name or "no_task_name"
+
         try:
             results = []
             uncached_texts = []
             uncached_indices = []
 
             # Initialize cache
-            if task_name not in self.cache_dict:
-                self.cache_dict[task_name] = TextVectorMap(self.cache_path / task_name)
-                self.cache_dict[task_name].load(name=task_name)
+            if _task_name not in self.cache_dict:
+                self.cache_dict[_task_name] = TextVectorMap(
+                    self.cache_path / _task_name
+                )
+                self.cache_dict[_task_name].load(name=_task_name)
 
             # Check cache for each text
             for i, text in enumerate(texts):
-                vector = self.cache_dict[task_name].get_vector(text)
+                vector = self.cache_dict[_task_name].get_vector(text)
                 if vector is not None:
                     results.append(vector)
                 else:
@@ -240,16 +248,19 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
             if uncached_texts:
                 logger.info(f"Encoding {len(uncached_texts)} new texts")
                 new_vectors = self._model.encode(
-                    uncached_texts, batch_size=batch_size, **kwargs
+                    uncached_texts,
+                    batch_size=batch_size,
+                    task_name=task_name,  # type: ignore
+                    **kwargs,
                 )
                 if isinstance(new_vectors, torch.Tensor):
                     new_vectors = new_vectors.cpu().numpy()
 
                 # Add new vectors to cache
                 for text, vector in zip(uncached_texts, new_vectors):
-                    self.cache_dict[task_name].add(text, vector)
+                    self.cache_dict[_task_name].add(text, vector)
                 results.extend(new_vectors)
-                self.cache_dict[task_name].save()
+                self.cache_dict[_task_name].save()
             else:
                 logger.info("All texts found in cache")
 
@@ -287,7 +298,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
 
     def __dir__(self) -> list[str]:
         """Return all attributes from both this class and the wrapped model"""
-        return list(set(super().__dir__() + dir(self._model)))
+        return list(set(super().__dir__() + dir(self._model)))  # type: ignore
 
     def __del__(self):
         self.close()

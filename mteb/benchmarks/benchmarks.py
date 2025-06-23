@@ -674,21 +674,6 @@ MTEB_code = Benchmark(
             "StackOverflowQA",
             "SyntheticText2SQL",
         ],
-        languages=[
-            "c",
-            "c++",
-            "go",
-            "java",
-            "javascript",
-            "php",
-            "python",
-            "ruby",
-            "rust",
-            "scala",
-            "shell",
-            "swift",
-            "typescript",
-        ],
     ),
     description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
@@ -1336,8 +1321,8 @@ C_MTEB = Benchmark(
 )
 
 FA_MTEB = Benchmark(
-    name="MTEB(fas, beta)",
-    display_name="Farsi (BETA)",
+    name="MTEB(fas, v1)",
+    display_name="Farsi",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1352,7 +1337,7 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGToneUserClassification",
             "SynPerChatbotToneChatbotClassification",
             "SynPerChatbotToneUserClassification",
-            "PersianTextTone",
+            "SynPerTextToneClassification",
             "SIDClassification",
             "DeepSentiPers",
             "PersianTextEmotion",
@@ -1411,9 +1396,16 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="Main Persian (Farsi) benchmarks from MTEB",
-    reference=None,
-    citation=None,
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
 )
 
@@ -1922,271 +1914,118 @@ ENCODECHKA = Benchmark(
 """,
 )
 
-MIEB_common_tasks = [
-    # Image Classification
-    "Birdsnap",  # fine
-    "Caltech101",  # fine
-    "CIFAR10",  # coarse
-    "CIFAR100",  # fine
-    "Country211",  # fine
-    "DTD",  # coarse
-    "EuroSAT",  # coarse
-    "FER2013",  # coarse
-    "FGVCAircraft",  # fine
-    "Food101Classification",  # fine
-    "GTSRB",  # coarse
-    "Imagenet1k",  # fine
-    "MNIST",  # coarse
-    "OxfordFlowersClassification",  # fine
-    "OxfordPets",  # fine
-    "PatchCamelyon",  # coarse
-    "RESISC45",  # fine
-    "StanfordCars",  # fine
-    "STL10",  # coarse
-    "SUN397",  # fine
-    "UCF101",  # fine
-    # ImageMultiLabelClassification
-    "VOC2007",  # coarse
-    # Clustering
-    "CIFAR10Clustering",
-    "CIFAR100Clustering",
-    "ImageNetDog15Clustering",
-    "ImageNet10Clustering",
-    "TinyImageNetClustering",
-    # ZeroShotClassification
-    "BirdsnapZeroShot",
-    "Caltech101ZeroShot",
-    "CIFAR10ZeroShot",
-    "CIFAR100ZeroShot",
-    "CLEVRZeroShot",
-    "CLEVRCountZeroShot",
-    "Country211ZeroShot",
-    "DTDZeroShot",
-    "EuroSATZeroShot",
-    "FER2013ZeroShot",
-    "FGVCAircraftZeroShot",
-    "Food101ZeroShot",
-    "GTSRBZeroShot",
-    "Imagenet1kZeroShot",
-    "MNISTZeroShot",
-    "OxfordPetsZeroShot",
-    "PatchCamelyonZeroShot",
-    "RenderedSST2",
-    "RESISC45ZeroShot",
-    "StanfordCarsZeroShot",
-    "STL10ZeroShot",
-    "SUN397ZeroShot",
-    "UCF101ZeroShot",
-    # Any2AnyMultipleChoice
-    "BLINKIT2IMultiChoice",
-    "BLINKIT2TMultiChoice",
-    "CVBenchCount",
-    "CVBenchRelation",
-    "CVBenchDepth",
-    "CVBenchDistance",
-    # Compositionality
-    "AROCocoOrder",
-    "AROFlickrOrder",
-    "AROVisualAttribution",
-    "AROVisualRelation",
-    "SugarCrepe",
-    "Winoground",
-    "ImageCoDe",
-    # VisualSTS
-    "STS12VisualSTS",
-    "STS13VisualSTS",
-    "STS14VisualSTS",
-    "STS15VisualSTS",
-    "STS16VisualSTS",
-    # Any2AnyRetrieval
-    "BLINKIT2IRetrieval",
-    "BLINKIT2TRetrieval",
-    "CIRRIT2IRetrieval",
-    "CUB200I2IRetrieval",
-    "EDIST2ITRetrieval",
-    "Fashion200kI2TRetrieval",
-    "Fashion200kT2IRetrieval",
-    "FashionIQIT2IRetrieval",
-    "Flickr30kI2TRetrieval",
-    "Flickr30kT2IRetrieval",
-    "FORBI2IRetrieval",
-    "GLDv2I2IRetrieval",
-    "GLDv2I2TRetrieval",
-    "HatefulMemesI2TRetrieval",
-    "HatefulMemesT2IRetrieval",
-    "ImageCoDeT2IRetrieval",
-    "InfoSeekIT2ITRetrieval",
-    "InfoSeekIT2TRetrieval",
-    "MemotionI2TRetrieval",
-    "MemotionT2IRetrieval",
-    "METI2IRetrieval",
-    "MSCOCOI2TRetrieval",
-    "MSCOCOT2IRetrieval",
-    "NIGHTSI2IRetrieval",
-    "OVENIT2ITRetrieval",
-    "OVENIT2TRetrieval",
-    "ROxfordEasyI2IRetrieval",
-    "ROxfordMediumI2IRetrieval",
-    "ROxfordHardI2IRetrieval",
-    "RP2kI2IRetrieval",
-    "RParisEasyI2IRetrieval",
-    "RParisMediumI2IRetrieval",
-    "RParisHardI2IRetrieval",
-    "SciMMIRI2TRetrieval",
-    "SciMMIRT2IRetrieval",
-    "SketchyI2IRetrieval",
-    "SOPI2IRetrieval",
-    "StanfordCarsI2IRetrieval",
-    "TUBerlinT2IRetrieval",
-    "VidoreArxivQARetrieval",
-    "VidoreDocVQARetrieval",
-    "VidoreInfoVQARetrieval",
-    "VidoreTabfquadRetrieval",
-    "VidoreTatdqaRetrieval",
-    "VidoreShiftProjectRetrieval",
-    "VidoreSyntheticDocQAAIRetrieval",
-    "VidoreSyntheticDocQAEnergyRetrieval",
-    "VidoreSyntheticDocQAGovernmentReportsRetrieval",
-    "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
-    "VisualNewsI2TRetrieval",
-    "VisualNewsT2IRetrieval",
-    "VizWizIT2TRetrieval",
-    "VQA2IT2TRetrieval",
-    "WebQAT2ITRetrieval",
-    "WebQAT2TRetrieval",
-]
-
-MIEB_ENG = Benchmark(
-    name="MIEB(eng)",
-    tasks=get_tasks(
-        tasks=MIEB_common_tasks
-        + [
-            "VisualSTS17Eng",
-            "VisualSTS-b-Eng",
-        ],
-    ),
-    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
-    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document undestanding, visual STS, and CV-centric tasks.""",
-    reference="",
-    contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="",
-)
-
-MIEB_MULTILINGUAL = Benchmark(
-    name="MIEB(Multilingual)",
-    tasks=get_tasks(
-        tasks=MIEB_common_tasks
-        + [
-            "WITT2IRetrieval",
-            "XFlickr30kCoT2IRetrieval",
-            "XM3600T2IRetrieval",
-            "VisualSTS17Eng",
-            "VisualSTS-b-Eng",
-            "VisualSTS17Multilingual",
-            "VisualSTS-b-Multilingual",
-        ],
-    ),
-    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
-    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
-    datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
-    reference="",
-    contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="",
-)
-
-MIEB_LITE = Benchmark(
-    name="MIEB(lite)",
+VIDORE = Benchmark(
+    name="ViDoRe(v1)",
     tasks=get_tasks(
         tasks=[
-            # Image Classification
-            "Country211",
-            "DTD",
-            "EuroSAT",
-            "GTSRB",
-            "OxfordPets",
-            "PatchCamelyon",
-            "RESISC45",
-            "SUN397",
-            # Clustering
-            "ImageNetDog15Clustering",
-            "TinyImageNetClustering",
-            # ZeroShotClassification
-            "CIFAR100ZeroShot",
-            "Country211ZeroShot",
-            "FER2013ZeroShot",
-            "FGVCAircraftZeroShot",
-            "Food101ZeroShot",
-            "OxfordPetsZeroShot",
-            "StanfordCarsZeroShot",
-            # Any2AnyMultipleChoice
-            "BLINKIT2IMultiChoice",
-            "CVBenchCount",
-            "CVBenchRelation",
-            "CVBenchDepth",
-            "CVBenchDistance",
-            # ImageTextPairClassification
-            "AROCocoOrder",
-            "AROFlickrOrder",
-            "AROVisualAttribution",
-            "AROVisualRelation",
-            "Winoground",
-            "ImageCoDe",
-            # VisualSTS
-            "STS13VisualSTS",
-            "STS15VisualSTS",
-            "STS17MultilingualVisualSTS",
-            "STSBenchmarkMultilingualVisualSTS",
-            # Any2AnyRetrieval
-            "CIRRIT2IRetrieval",
-            "CUB200I2IRetrieval",
-            "Fashion200kI2TRetrieval",
-            "HatefulMemesI2TRetrieval",
-            "InfoSeekIT2TRetrieval",
-            "NIGHTSI2IRetrieval",
-            "OVENIT2TRetrieval",
-            "RP2kI2IRetrieval",
+            "VidoreArxivQARetrieval",
             "VidoreDocVQARetrieval",
             "VidoreInfoVQARetrieval",
             "VidoreTabfquadRetrieval",
             "VidoreTatdqaRetrieval",
             "VidoreShiftProjectRetrieval",
             "VidoreSyntheticDocQAAIRetrieval",
-            "VisualNewsI2TRetrieval",
-            "VQA2IT2TRetrieval",
-            "WebQAT2ITRetrieval",
-            "WITT2IRetrieval",
-            "XM3600T2IRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         ],
     ),
-    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks.
-    This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
-    relative rank of models.""",
-    reference="",
-    contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="",
-)
-
-BUILT_MTEB = Benchmark(
-    name="BuiltBench(eng)",
-    tasks=get_tasks(
-        tasks=[
-            "BuiltBenchClusteringP2P",
-            "BuiltBenchClusteringS2S",
-            "BuiltBenchRetrieval",
-            "BuiltBenchReranking",
-        ],
-    ),
-    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
-    reference="https://arxiv.org/abs/2411.12056",
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
     citation=r"""
-@article{shahinmoghadam2024benchmarking,
-  author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
-  journal = {arXiv preprint arXiv:2411.12056},
-  title = {Benchmarking pre-trained text embedding models in aligning built asset information},
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
   year = {2024},
 }
 """,
-    contacts=["mehrzadshm"],
+)
+
+VIDORE_V2 = Benchmark(
+    name="ViDoRe(v2)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
+)
+
+VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
+    name="VisualDocumentRetrieval",
+    display_name="Visual Document Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+    tasks=get_tasks(
+        tasks=[
+            # v1
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+            # v2
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
+)
+
+R2MED = Benchmark(
+    name="R2MED",
+    display_name="Reasoning-driven medical retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "R2MEDBiologyRetrieval",
+            "R2MEDBioinformaticsRetrieval",
+            "R2MEDMedicalSciencesRetrieval",
+            "R2MEDMedXpertQAExamRetrieval",
+            "R2MEDMedQADiagRetrieval",
+            "R2MEDPMCTreatmentRetrieval",
+            "R2MEDPMCClinicalRetrieval",
+            "R2MEDIIYiClinicalRetrieval",
+        ]
+    ),
+    description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
+    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
+    It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
+    """,
+    reference="https://r2med.github.io/",
+    citation=r"""
+@article{li2025r2med,
+  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal = {arXiv preprint arXiv:2505.14558},
+  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  year = {2025},
+}
+""",
 )

@@ -55,6 +55,7 @@ TASK_SUBTYPE = Literal[
     "Duplicate Detection",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
+    "Keyword Spotting",
     "Instrument Source Classification",
     "Music Genre Classification",
     "Music Instrument Recognition",
@@ -65,16 +66,22 @@ TASK_SUBTYPE = Literal[
     "Species Classification",
     "Spoken Digit Classification",
     "Gender Clustering",
+    "Vocal Sound Classification",
     "Music Clustering",
+    "Accent Clustering",
+    "Sentiment Clustering",
     "Emotion Clustering",
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",
     "Vehicle Clustering",
     "Environment Sound Clustering",
+    "Environment Sound Reranking",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
+    "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[
@@ -139,6 +146,7 @@ MIEB_TASK_TYPE = (
 MAEB_TASK_TYPE = (
     "AudioClustering",
     "AudioMultilabelClassification",
+    "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
