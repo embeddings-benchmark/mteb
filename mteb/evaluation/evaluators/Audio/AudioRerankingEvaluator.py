@@ -144,7 +144,7 @@ class AudioRerankingEvaluator(Evaluator):
         )
 
         all_query_embs = np.asarray(
-            model.encode(
+            model.get_audio_embeddings(
                 query_dataloader,
                 task_name=self.task_name,
                 prompt_type=PromptType.query,
@@ -171,7 +171,7 @@ class AudioRerankingEvaluator(Evaluator):
         )
 
         all_docs_embs = np.asarray(
-            model.encode(
+            model.get_audio_embeddings(
                 docs_dataloader,
                 task_name=self.task_name,
                 prompt_type=PromptType.passage,
@@ -245,7 +245,7 @@ class AudioRerankingEvaluator(Evaluator):
 
             # Encode query and documents
             query_emb = np.asarray(
-                model.encode(
+                model.get_audio_embeddings(
                     query_dataloader,
                     task_name=self.task_name,
                     prompt_type=PromptType.query,
@@ -254,7 +254,7 @@ class AudioRerankingEvaluator(Evaluator):
             )
 
             docs_emb = np.asarray(
-                model.encode(
+                model.get_audio_embeddings(
                     docs_dataloader,
                     task_name=self.task_name,
                     prompt_type=PromptType.passage,

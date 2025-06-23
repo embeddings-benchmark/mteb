@@ -102,6 +102,7 @@ from mteb.models import (
     uae_models,
     unispeech_models,
     vdr_models,
+    vggish_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -110,6 +111,7 @@ from mteb.models import (
     wavlm_models,
     whisper_models,
     xyz_models,
+    yamnet_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -213,6 +215,8 @@ model_modules = [
     nb_sbert,
     seed_models,
     qwen2_models,
+    yamnet_models,
+    vggish_models,
     sewd_models,
     unispeech_models,
     ara_models,
