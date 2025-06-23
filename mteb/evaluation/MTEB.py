@@ -582,7 +582,7 @@ class MTEB:
         save_path = output_folder / "model_meta.json"
 
         with save_path.open("w") as f:
-            json.dump(model_meta.to_dict(), f)
+            json.dump(model_meta.to_dict(), f, default=str)
 
     def get_last_evaluated_splits(self):
         """Returns a dictionary of tasks and their evaluated splits from the most recent run.

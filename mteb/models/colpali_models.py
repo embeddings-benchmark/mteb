@@ -6,6 +6,7 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
@@ -40,7 +41,7 @@ class ColPaliEngineWrapper(AbsEncoder):
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, revision=revision, device_map=self.device, **kwargs
+            model_name, device_map=self.device, **kwargs
         )
         self.mdl.eval()
 
@@ -96,11 +97,13 @@ class ColPaliEngineWrapper(AbsEncoder):
             iterator = DataLoader(images, batch_size=batch_size)
 
         with torch.no_grad():
-            for batch in iterator:
+            for batch in tqdm(iterator, desc="Encoding images"):
                 # batch may be list of tensors or PIL
                 imgs = [
-                    F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
-                    for b in batch
+                    F.to_pil_image(b.to(self.device))
+                    if not isinstance(b, Image.Image)
+                    else b
+                    for b in batch["image"]
                 ]
                 inputs = self.processor.process_images(imgs)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
@@ -120,9 +123,8 @@ class ColPaliEngineWrapper(AbsEncoder):
     ):
         all_embeds = []
         with torch.no_grad():
-            for i in range(0, len(texts), batch_size):
-                batch = texts[i : i + batch_size]
-                inputs = self.processor.process_queries(batch)
+            for batch in tqdm(texts, desc="Encoding texts"):
+                inputs = self.processor.process_queries(batch["text"])
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
