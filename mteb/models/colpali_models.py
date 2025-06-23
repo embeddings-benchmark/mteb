@@ -91,13 +91,8 @@ class ColPaliEngineWrapper(AbsEncoder):
 
         all_embeds = []
 
-        if isinstance(images, DataLoader):
-            iterator = images
-        else:
-            iterator = DataLoader(images, batch_size=batch_size)
-
         with torch.no_grad():
-            for batch in tqdm(iterator, desc="Encoding images"):
+            for batch in tqdm(images, desc="Encoding images"):
                 # batch may be list of tensors or PIL
                 imgs = [
                     F.to_pil_image(b.to(self.device))
