@@ -121,6 +121,8 @@ class ClapZeroShotWrapper:
                 batch_features = []
                 # Process each item in the batch individually to avoid memory issues
                 for item in batch:
+                    if isinstance(item, torch.Tensor):
+                        item = {"array": item.numpy()}
                     inputs = self.pipeline.feature_extractor(
                         [item["array"]],
                         sampling_rate=target_sampling_rate,
