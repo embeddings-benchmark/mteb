@@ -1,17 +1,20 @@
 from mteb.models.wrapper import Wrapper
 from mteb.encoder_interface import PromptType
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from functools import partial
+
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 import json
 import os
-
+import mteb
 
 class CustomWrapper(Wrapper):
     def __init__(self, model_name, model_revision):
         # load the tokenizer and the model
-        self.qu_tokenizer =  = AutoTokenizer.from_pretrained("Qwen3-4B")
+        self.qu_tokenizer = AutoTokenizer.from_pretrained("Qwen3-4B")
         self.qu_model = AutoModelForCausalLM.from_pretrained(
             "Qwen3-4B",
             torch_dtype="auto"
@@ -88,7 +91,8 @@ class CustomWrapper(Wrapper):
 
         # thinking_content = tokenizer.decode(output_ids[:index], skip_special_tokens=True).strip("\n")
         content = tokenizer.decode(output_ids[index:], skip_special_tokens=True).strip("\n")
-        return self.parse_result(content)
+        queries = " ".join(self.parse_result(content)["queries"])
+        return queries
 
     def cached_query_understanding(self, text):
         return self.get_qu(text, self.qu_tokenizer, self.qu_model)
@@ -98,14 +102,14 @@ class CustomWrapper(Wrapper):
         sentences: list[str],
         *,
         task_name: str,
-        prompt_type: PromptType | None = None,
+        prompt_type: PromptType = None,
         **kwargs
     ) -> np.ndarray:
         # your custom implementation here
         if prompt_type == PromptType.query:
             new_sentences = []
             for s in sentences:
-                new_sentences.append(s + self.cached_query_understanding(s))
+                new_sentences.append(s + " " + self.cached_query_understanding(s))
             query_embeddings = self.embed_model.encode(new_sentences, prompt_name="query")
             return query_embeddings
         else:
@@ -130,13 +134,14 @@ qu_meta_emb_model = ModelMeta(
     loader=partial(
         CustomWrapper,
         model_name="Qwen/Qwen3-Embedding-0.6B",
-        model_revision="2025062301"
+        model_revision="2025062301",
         model_prompts={
            "query": "",
            "passage": "",
         },
     ),
-    name="qu-q4-0-q3-em-0.6",
+    # name="liyouli/qu-q4-0-q3-em-0.6",
+    name="Qwen/Qwen3-Embedding-0.6B",
     languages=["zho-Hans"],
     open_weights=True,
     revision="111",
@@ -154,3 +159,9 @@ qu_meta_emb_model = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
 )
+# model_meta = mteb.get_model_meta("liyouli/qu-q4-0-q3-em-0.6")
+model_meta = mteb.get_model_meta("Qwen/Qwen3-Embedding-0.6B")
+model_meta.calculate_memory_usage_mb() 
+
+# 发现无法提交成功！！必须要有模型上传到huggingface
+# requests.exceptions.ConnectionError: (MaxRetryError("HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /liyouli/qu-q4-0-q3-em-0.6/resolve/main/model.safetensors (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7fddbb50e790>: Failed to establish a new connection: [Errno 110] Connection timed out'))"), '(Request ID: 52a4f9b2-0e72-42de-a961-05c734919d5a)')
