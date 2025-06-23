@@ -32,7 +32,7 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
 
 
 class AudioDataset(torch.utils.data.Dataset):
-    def __init__(self, hf_dataset, audio_column_name: str = "image", transform=None):
+    def __init__(self, hf_dataset, audio_column_name: str = "audio", transform=None):
         self.dataset = hf_dataset
         self.transform = transform
         self.audio_column_name = audio_column_name
