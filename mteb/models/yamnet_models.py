@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from functools import partial
 from typing import Any
 
@@ -11,6 +12,8 @@ from tqdm import tqdm
 
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+
+logger = logging.getLogger(__name__)
 
 
 def yamnet_loader(**kwargs):
@@ -116,6 +119,9 @@ def yamnet_loader(**kwargs):
 
         def _prepare_input_tensor(self, audio_data):
             """Convert audio to VGGish input format and handle tensor dimensions."""
+            if audio_data.ndim == 1:
+                audio_data = audio_data.unsqueeze(0)
+
             input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
                 self.device
             )
@@ -162,7 +168,7 @@ def yamnet_loader(**kwargs):
 
                         if input_tensor is None:
                             # Create zero embedding for empty tensor
-                            print("Creating zero embedding for empty tensor")
+                            logger.debug("Creating zero embedding for empty tensor")
                             zero_embedding = torch.zeros(
                                 self.embed_dim, device=self.device
                             )
@@ -171,6 +177,7 @@ def yamnet_loader(**kwargs):
 
                         # discard logits
                         embedding, _ = self.model(input_tensor)
+
                         # Handle 4D tensors with shape [batch, embed_dim, 1, 1]
                         if (
                             embedding.dim() == 4
@@ -180,13 +187,14 @@ def yamnet_loader(**kwargs):
                             # [batch, embed_dim, 1, 1] -> [batch, embed_dim]
                             embedding = embedding.squeeze(2).squeeze(2)
 
+                        # Use mean pooling if needed
+                        if len(embedding.shape) > 1:
+                            embedding = torch.mean(embedding, dim=0)
+
                         batch_embeddings.append(embedding.cpu().numpy())
 
                     all_embeddings.extend(batch_embeddings)
 
-            import pdb
-
-            pdb.set_trace()
             return (
                 np.array(all_embeddings)
                 if all_embeddings
