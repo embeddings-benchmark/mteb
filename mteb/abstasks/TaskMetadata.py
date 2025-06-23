@@ -55,6 +55,7 @@ TASK_SUBTYPE = Literal[
     "Duplicate Detection",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
+    "Keyword Spotting",
     "Instrument Source Classification",
     "Music Genre Classification",
     "Music Instrument Recognition",
@@ -67,6 +68,7 @@ TASK_SUBTYPE = Literal[
     "Gender Clustering",
     "Vocal Sound Classification",
     "Music Clustering",
+    "Accent Clustering",
     "Sentiment Clustering",
     "Emotion Clustering",
     "Rendered semantic textual similarity",
@@ -78,6 +80,8 @@ TASK_SUBTYPE = Literal[
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
+    "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[
