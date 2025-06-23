@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import AudioEncoder, PromptType
 from mteb.evaluation.evaluators.Evaluator import Evaluator
-from mteb.evaluation.evaluators.utils import cos_sim, nAUC
+from mteb.evaluation.evaluators.utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ class AudioRerankingEvaluator(Evaluator):
         encode_kwargs: dict[str, Any] = {},
         use_batched_encoding: bool = True,
         limit: int | None = None,
-        k_values: list[int] = [1, 3, 5, 10, 20, 100],
+        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         transform=None,
         **kwargs,
     ):
@@ -154,6 +154,7 @@ class AudioRerankingEvaluator(Evaluator):
 
         all_mrr_scores = []
         all_ap_scores = []
+        all_conf_scores = []
 
         # Collect all documents
         all_docs = []
@@ -198,13 +199,17 @@ class AudioRerankingEvaluator(Evaluator):
             # Calculate similarity scores
             sim_scores = cos_sim(query_emb, docs_emb)
             sim_scores = sim_scores.cpu().numpy()[0]  # Flatten
+            
+            # Compute confidence scores properly
+            conf_scores = confidence_scores(sim_scores)
+            all_conf_scores.append(conf_scores)
 
             # Calculate metrics
             metrics = self._compute_metrics(sim_scores, is_relevant)
             all_mrr_scores.append(metrics["mrr"])
             all_ap_scores.append(metrics["map"])
 
-        return self._collect_results(all_mrr_scores, all_ap_scores)
+        return self._collect_results(all_mrr_scores, all_ap_scores, all_conf_scores)
 
     def compute_metrics_individual(self, model: AudioEncoder):
         """Encodes and evaluates each (query, positive, negative) tuple individually.
@@ -212,6 +217,7 @@ class AudioRerankingEvaluator(Evaluator):
         """
         all_mrr_scores = []
         all_ap_scores = []
+        all_conf_scores = []
 
         for instance in tqdm.tqdm(self.samples, desc="Evaluating samples"):
             query_audio = instance[self.query_column_name]
@@ -265,47 +271,57 @@ class AudioRerankingEvaluator(Evaluator):
             # Calculate similarity scores
             sim_scores = cos_sim(query_emb, docs_emb)
             sim_scores = sim_scores.cpu().numpy()[0]  # Flatten
+            
+            # Compute confidence scores properly
+            conf_scores = confidence_scores(sim_scores)
+            all_conf_scores.append(conf_scores)
 
             # Calculate metrics
             metrics = self._compute_metrics(sim_scores, is_relevant)
             all_mrr_scores.append(metrics["mrr"])
             all_ap_scores.append(metrics["map"])
 
-        return self._collect_results(all_mrr_scores, all_ap_scores)
+        return self._collect_results(all_mrr_scores, all_ap_scores, all_conf_scores)
 
-    def _collect_results(self, all_mrr_scores, all_ap_scores):
+    def _collect_results(self, all_mrr_scores, all_ap_scores, all_conf_scores):
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
         results = {
             "map": mean_ap,
+            "mrr": mean_mrr,  # Add standard mrr key
             f"mrr@{self.mrr_at_k}": mean_mrr,
         }
 
-        # Add nAUC scores if we have multiple samples
-        if len(all_mrr_scores) > 1:
+        # Compute nAUCs properly like text reranking
+        if len(all_mrr_scores) > 1 and len(all_conf_scores) > 0:
             try:
-                # Use ap_scores as confidence scores instead of mrr_scores
-                all_mrr_scores_array = np.array(all_mrr_scores)
-                all_ap_scores_array = np.array(all_ap_scores)
-
-                # Check for potential NaN or inf values
-                if (
-                    np.isnan(all_ap_scores_array).any()
-                    or np.isinf(all_ap_scores_array).any()
-                ):
-                    logger.warning(
-                        "Found NaN or inf values in confidence scores, skipping nAUC calculation"
-                    )
-                else:
-                    nAUC_values = nAUC(all_ap_scores_array, all_mrr_scores_array)
-                    for k, v in nAUC_values.items():
-                        results[k] = v
+                naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
+                naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+                results.update(naucs_map)
+                results.update(naucs_mrr)
             except Exception as e:
                 logger.warning(f"Error calculating nAUC: {e}")
-                # Continue without nAUC values
 
         return results
+
+    @staticmethod
+    def nAUC_scores(
+        all_conf_scores: list[dict[str, float]],
+        metrics: list[float],
+        metric_name: str,
+    ) -> dict[str, float]:
+        """Computes normalized Area Under the Curve on a set of evaluated instances"""
+        conf_fcts = list(all_conf_scores[0].keys())
+        all_conf_scores = {
+            fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
+        }
+        metrics = np.array(metrics)
+        naucs = {
+            f"nAUC_{metric_name}_{fct}": nAUC(all_conf_scores[fct], metrics)
+            for fct in conf_fcts
+        }
+        return naucs
 
     def _compute_metrics(self, sim_scores, is_relevant):
         """Compute Mean Average Precision and Mean Reciprocal Rank for a single query"""
