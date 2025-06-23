@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from functools import partial
 from typing import Any
 
@@ -11,6 +12,8 @@ from tqdm import tqdm
 
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+
+logger = logging.getLogger(__name__)
 
 
 def vggish_loader(**kwargs):
@@ -165,7 +168,7 @@ def vggish_loader(**kwargs):
 
                         if input_tensor is None:
                             # Create zero embedding for empty tensor
-                            print("Creating zero embedding for empty tensor")
+                            logger.debug("Creating zero embedding for empty tensor")
                             zero_embedding = torch.zeros(
                                 self.embed_dim, device=self.device
                             )
