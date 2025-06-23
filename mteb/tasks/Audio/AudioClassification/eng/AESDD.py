@@ -12,8 +12,8 @@ class AESDDClassification(AbsTaskAudioClassification):
         description="Speech Emotion Recognition Dataset.",
         reference="https://m3c.web.auth.gr/research/aesdd-speech-emotion-recognition/",
         dataset={
-            "path": "mteb/AESDD",
-            "revision": "afbff14d927de14412d8124502313ea6d9d140e0",
+            "path": "EdwardLin2023/AESDD",
+            "revision": "5ecde28811adf538a7699b76291a99503e3734f5",
         },
         type="AudioClassification",
         category="a2t",
@@ -39,11 +39,9 @@ class AESDDClassification(AbsTaskAudioClassification):
             publisher={Audio Engineering Society}
             }""",
         descriptive_stats={
-            "n_samples": {"train": 3200},
+            "n_samples": {"train": 604},
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 16
-    is_cross_validation: bool = True
