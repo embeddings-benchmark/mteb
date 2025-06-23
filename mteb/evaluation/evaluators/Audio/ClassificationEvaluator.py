@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import logging
 import math
 import os
@@ -7,7 +8,7 @@ from typing import Any
 
 import numpy as np
 import torch
-from datasets import Audio
+import torchaudio
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -31,13 +32,8 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
 
 
 class AudioDataset(torch.utils.data.Dataset):
-    def __init__(
-        self,
-        hf_dataset: Any,
-        audio_column_name: str = "audio",
-        transform: torch.nn.Module | None = None,  # anything from torchaudio.transforms
-    ) -> None:
-        self.dataset = hf_dataset.cast_column(audio_column_name, Audio())
+    def __init__(self, hf_dataset, audio_column_name: str = "image", transform=None):
+        self.dataset = hf_dataset
         self.transform = transform
         self.audio_column_name = audio_column_name
 
@@ -46,11 +42,16 @@ class AudioDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         audio = self.dataset[idx][self.audio_column_name]
-        waveform = torch.tensor(audio["array"], dtype=torch.float32)
-        if self.transform:
+        if isinstance(audio, bytes):
+            waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
+        elif isinstance(audio, str):
+            # Assuming audio is a file path
+            waveform, sample_rate = torchaudio.load(audio)
+        else:
+            # Assume audio is already a tensor or in a usable format
+            waveform = audio
+        if self.transform is not None:
             waveform = self.transform(waveform)
-        if waveform.dim() == 1:
-            waveform = waveform.unsqueeze(0)
         return waveform
 
 
