@@ -119,6 +119,9 @@ def yamnet_loader(**kwargs):
 
         def _prepare_input_tensor(self, audio_data):
             """Convert audio to VGGish input format and handle tensor dimensions."""
+            if isinstance(audio_data, np.ndarray):
+                audio_data = torch.from_numpy(audio_data)
+
             if audio_data.ndim == 1:
                 audio_data = audio_data.unsqueeze(0)
 
