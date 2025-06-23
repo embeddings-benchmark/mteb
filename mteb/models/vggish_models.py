@@ -116,6 +116,9 @@ def vggish_loader(**kwargs):
 
         def _prepare_input_tensor(self, audio_data):
             """Convert audio to VGGish input format and handle tensor dimensions."""
+            if audio_data.ndim == 1:
+                audio_data = audio_data.unsqueeze(0)
+
             input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
                 self.device
             )
