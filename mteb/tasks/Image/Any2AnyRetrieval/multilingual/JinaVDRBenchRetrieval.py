@@ -40,7 +40,7 @@ def get_langs(langs: list[str]) -> dict[str, list[str]]:
 
 COMMON_METADATA = {
     "description": "Retrieve associated pages according to questions or related text.",
-    "reference": None,  # TODO: add reference paper
+    "reference": "https://arxiv.org/abs/2506.18902",
     "type": "DocumentUnderstanding",
     "category": "t2i",
     "eval_splits": ["test"],
@@ -48,8 +48,18 @@ COMMON_METADATA = {
     "task_subtypes": ["Image Text Retrieval"],
     "dialect": [],
     "modalities": ["text", "image"],
-    "bibtex_citation": None,  # TODO: add bibtex citation
-    "prompt": {"query": "Find a screenshot that relevant to the user's input."},
+    "bibtex_citation": r"""
+@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
+      year={2025},
+      eprint={2506.18902},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.18902},
+}
+""",
+    "prompt": {"query": "Find a screenshot that is relevant to the user's input."},
 }
 
 
@@ -508,7 +518,7 @@ class JinaVDRHindiGovVQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         },
         eval_langs=["hin-Deva"],
         domains=["Government"],
-        license="not specified",  # TODO: check license
+        license="not specified",
         annotations_creators="LM-generated",
         sample_creation="found",
         descriptive_stats={
@@ -538,7 +548,7 @@ class JinaVDRAutomobileCatelogRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieva
         },
         eval_langs=["jpn-Jpan"],
         domains=["Engineering", "Web"],
-        license="not specified",  # TODO: check license
+        license="not specified",
         annotations_creators="LM-generated",
         sample_creation="found",
         descriptive_stats={
@@ -568,7 +578,7 @@ class JinaVDRBeveragesCatalogueRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
         },
         eval_langs=["rus-Cyrl"],
         domains=["Web"],
-        license="not specified",  # TODO: check license
+        license="not specified",
         annotations_creators="LM-generated",
         sample_creation="found",
         descriptive_stats={
@@ -598,7 +608,7 @@ class JinaVDRRamensBenchmarkRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval)
         },
         eval_langs=["jpn-Jpan"],
         domains=["Web"],
-        license="not specified",  # TODO: check license
+        license="not specified",
         annotations_creators="LM-generated",
         sample_creation="found",
         descriptive_stats={
@@ -688,7 +698,7 @@ class JinaVDRArabicChartQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         },
         eval_langs=["ara-Arab"],
         domains=["Academic"],
-        license="not specified",  # TODO: check license
+        license="mit",
         annotations_creators="derived",
         sample_creation="found",
         descriptive_stats={
@@ -718,8 +728,8 @@ class JinaVDRArabicInfographicsVQARetrieval(MultilingualTask, AbsTaskAny2AnyRetr
         },
         eval_langs=["ara-Arab"],
         domains=["Academic"],
-        license="not specified",  # TODO: check license
-        annotations_creators="LM-generated",
+        license="mit",
+        annotations_creators="derived",
         sample_creation="found",
         descriptive_stats={
             "n_samples": None,
@@ -779,7 +789,7 @@ class JinaVDRMPMQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         eval_langs=["eng-Latn"],
         domains=["Web"],
         license="apache-2.0",
-        annotations_creators="derived",  # TODO: check this
+        annotations_creators="human-annotated",
         sample_creation="found",
         descriptive_stats={
             "n_samples": None,
@@ -1190,7 +1200,7 @@ class JinaVDREuropeanaFrNewsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval)
         eval_langs=["fra-Latn"],
         domains=["News"],
         license="cc0-1.0",
-        annotations_creators="derived",  # TODO: check
+        annotations_creators="LM-generated",
         sample_creation="found",
         descriptive_stats={
             "n_samples": None,
@@ -1281,8 +1291,8 @@ class JinaVDRShiftProjectRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         },
         eval_langs=["eng-Latn"],
         domains=["Web"],
-        license="cc-by-4.0",  # TODO: check license
-        annotations_creators="LM-generated",  # TODO: check annotations creators
+        license="mit",
+        annotations_creators="derived",
         sample_creation="found",
         descriptive_stats={
             "n_samples": None,
