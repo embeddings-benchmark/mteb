@@ -121,6 +121,11 @@ XLMR_LANGUAGES = [
     "zho-Hans",
 ]
 
+JinaV4_TRAINING_DATA = {
+    # Self-reported (message from JinaAI member)
+    # inhouse data + synthetic data
+}
+
 
 class JinaWrapper(SentenceTransformerWrapper):
     """following the hf model card documentation."""
@@ -202,8 +207,8 @@ jina_embeddings_v4 = ModelMeta(
     open_weights=True,
     revision="59a893d25bc18d3b5bdc03d5b2a1327f25e5e21c",
     release_date="2025-06-24",  # official release date
-    n_parameters=int(572 * 1e6),
-    memory_usage_mb=1092,
+    n_parameters=int(3.8 * 1e9),
+    memory_usage_mb=7500,
     max_tokens=8194,
     embed_dim=2048,
     license="cc-by-nc-4.0",
@@ -213,38 +218,7 @@ jina_embeddings_v4 = ModelMeta(
     reference="https://huggingface.co/jinaai/jina-embeddings-v4",
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        "PAQ": ["train"],
-        "GooAQ": ["train"],
-        "WikiAnswers": ["train"],
-        "AmazonQA": ["train"],
-        "ELI5": ["train"],
-        "SentenceCompression": ["train"],
-        "SimpleWikipedia": ["train"],
-        "Specter": ["train"],
-        "Squad2": ["train"],
-        "Tmdb": ["train"],
-        "TrivialQA": ["train"],
-        "TweetQA": ["train"],
-        "WikiHow": ["train"],
-        "Xmarket": [],  # adopted from Cross-Market Recommendation (XMRec).
-        "S2ORC": [],  # title abstract pair.
-        "YahooAnswers": [],  # question answer pair.
-        "MSMARCO": ["train"],  # pairs and mined hard negative.
-        "StackExchange": [],  # title body pair.
-        "QuoraQA": ["train"],  # duplicate question pairs.
-        "MsCocoCaptions": ["train"],  # pairs describe the same image.
-        "Flickr30k": ["train"],  # pairs describe the same image.
-        "SNLI": ["train"],  # random negative.
-        "ESCI": ["train"],  # exact match as positive match and mined hard negative.
-        "NegationDataset": [
-            "train"
-        ],  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
-        "NQ": ["train"],  # mined hard negative.
-        "HotpotQA": ["train"],  # mined hard negative.
-        "FEVER": ["train"],  # mined hard negative.
-        "CC-NEWS": [],  # title-content with random negative.
-    },
+    training_datasets=JinaV4_TRAINING_DATA,
     adapted_from="Qwen-2.5-VL-Instruct",
 )
 
