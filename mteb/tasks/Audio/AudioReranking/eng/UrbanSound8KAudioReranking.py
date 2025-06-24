@@ -13,19 +13,19 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
     one of the 10 urban sound classes, the task is to rank positive audio samples (same class) higher
     than negative samples (different classes).
 
-    Each query has 6 positive examples (same urban sound class) and 24 negative examples
+    Each query has 5 positive examples (same urban sound class) and 20 negative examples
     (different urban sound classes), creating a focused urban audio retrieval scenario
-    with 30 total candidates per query. The dataset contains 400 queries providing comprehensive
+    with 25 total candidates per query. The dataset contains 200 queries providing comprehensive
     evaluation across all 10 urban sound categories.
     """
 
     metadata = TaskMetadata(
         name="UrbanSound8KAudioReranking",
-        description="UrbanSound8K urban sound dataset adapted for audio reranking. Given a query audio of urban sounds, rank 6 relevant audio samples higher than 24 irrelevant ones from different urban sound classes. Contains 400 queries across 10 urban sound categories for comprehensive evaluation.",
+        description="UrbanSound8K urban sound dataset adapted for audio reranking. Given a query audio of urban sounds, rank 5 relevant audio samples higher than 20 irrelevant ones from different urban sound classes. Contains 200 queries across 10 urban sound categories for comprehensive evaluation.",
         reference="https://urbansounddataset.weebly.com/urbansound8k.html",
         dataset={
             "path": "AdnanElAssadi/urbansound8k-audio-reranking",
-            "revision": "6acc320fb52a9f040bc68d446cbabb79dff7d46a",
+            "revision": "71a0190434dcd2ed2bf9bfc5d850a83b94759255",
         },
         type="AudioReranking",
         category="a2a", 
@@ -50,7 +50,7 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 400},
+            "n_samples": {"test": 200},
         },
     )
 
