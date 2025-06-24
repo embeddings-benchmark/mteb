@@ -87,7 +87,17 @@ class ListConRanker(RerankerWrapper):
         )
         
         return final_scores
-        
+
+listconranker_training_datasets ={
+    'cMedQAv1': ['train'],
+    'cMedQAv2': ['train'],
+    'MMarcoReranking-chinese_simplified': ['train'],
+    'T2Reranking': ['train'],
+    'Huatuo26M-Lite': ['train'],
+    'MARC': ['train'],
+    'XL-sum-chinese_simplified': ['train'],
+    'CSL': ['train'],
+}
 
 listconranker = ModelMeta(
     loader=ListConRanker,
@@ -98,11 +108,11 @@ listconranker = ModelMeta(
     languages=['zho-Hans'],
     open_weights=True,
     revision='95ae6a5f422a916bc36520f0f3e198e7d91520a0',
-    release_date='2025-6-20',
+    release_date='2024-12-11',
     n_parameters=401_000_000,
     memory_usage_mb=None,
     similarity_fn_name=None,
-    training_datasets=None,
+    training_datasets=listconranker_training_datasets,
     embed_dim=1024,
     license='mit',
     max_tokens=512,
