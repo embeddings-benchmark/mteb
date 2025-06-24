@@ -56,7 +56,7 @@ model = mteb.get_model(model_name=model_name)
 3. Run the Evaluation: 
 
 ```python
-results = mteb.evluate(model, tasks=tasks)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 
