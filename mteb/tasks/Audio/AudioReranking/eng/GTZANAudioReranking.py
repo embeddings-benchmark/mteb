@@ -13,19 +13,19 @@ class GTZANAudioReranking(AbsTaskAudioReranking):
     from one of the 10 music genres, the task is to rank positive audio samples (same genre) higher
     than negative samples (different genres).
 
-    Each query has 4 positive examples (same music genre) and 16 negative examples
+    Each query has 3 positive examples (same music genre) and 10 negative examples
     (different music genres), creating a focused music genre retrieval scenario
-    with 20 total candidates per query. The dataset contains 300 queries providing comprehensive
-    evaluation across all 10 music genres with high statistical power.
+    with 13 total candidates per query. The dataset contains 150 queries providing comprehensive
+    evaluation across all 10 music genres.
     """
 
     metadata = TaskMetadata(
         name="GTZANAudioReranking",
-        description="GTZAN music genre dataset adapted for audio reranking. Given a query audio from one of 10 music genres, rank 4 relevant audio samples higher than 16 irrelevant ones from different genres. Contains 300 queries across 10 music genres for comprehensive evaluation.",
+        description="GTZAN music genre dataset adapted for audio reranking. Given a query audio from one of 10 music genres, rank 3 relevant audio samples higher than 10 irrelevant ones from different genres. Contains 150 queries across 10 music genres for comprehensive evaluation.",
         reference="https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification",
         dataset={
             "path": "AdnanElAssadi/gtzan-audio-reranking",
-            "revision": "main",
+            "revision": "65acd91773161ed7f28d788b058802174f3324d9",
         },
         type="AudioReranking",
         category="a2a",
@@ -54,7 +54,7 @@ class GTZANAudioReranking(AbsTaskAudioReranking):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 300},
+            "n_samples": {"test": 150},
         },
     )
 
