@@ -310,7 +310,7 @@ results = mteb.evaluate(model, tasks=tasks)
 
 ### Specifying the cache
 
-By default `mteb` with save the results in cache folder located at the `~/.cache/mteb`, however if you want to saving the results in a specific folder you
+By default `mteb` with save the results in cache folder located at `~/.cache/mteb`, however if you want to saving the results in a specific folder you
 can specify it as follows:
 
 ```python
