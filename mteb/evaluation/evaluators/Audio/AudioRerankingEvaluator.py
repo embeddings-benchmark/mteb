@@ -199,7 +199,7 @@ class AudioRerankingEvaluator(Evaluator):
             # Calculate similarity scores
             sim_scores = cos_sim(query_emb, docs_emb)
             sim_scores = sim_scores.cpu().numpy()[0]  # Flatten
-            
+
             # Compute confidence scores properly
             conf_scores = confidence_scores(sim_scores)
             all_conf_scores.append(conf_scores)
@@ -271,7 +271,7 @@ class AudioRerankingEvaluator(Evaluator):
             # Calculate similarity scores
             sim_scores = cos_sim(query_emb, docs_emb)
             sim_scores = sim_scores.cpu().numpy()[0]  # Flatten
-            
+
             # Compute confidence scores properly
             conf_scores = confidence_scores(sim_scores)
             all_conf_scores.append(conf_scores)
