@@ -6,7 +6,6 @@ from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-
 class AROVisualRelation(AbsTaskImageTextPairClassification):
     images_column_names = ["image"]
     texts_column_names = ["true_caption", "false_caption"]
