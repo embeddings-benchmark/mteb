@@ -142,7 +142,11 @@ class AbsTaskAudioReranking(AbsTask):
 
         def get_audio_duration(audio_obj):
             """Calculate audio duration in seconds"""
-            if isinstance(audio_obj, dict) and "array" in audio_obj and "sampling_rate" in audio_obj:
+            if (
+                isinstance(audio_obj, dict)
+                and "array" in audio_obj
+                and "sampling_rate" in audio_obj
+            ):
                 return len(audio_obj["array"]) / audio_obj["sampling_rate"]
             return 0.0  # Default if duration can't be calculated
 
@@ -150,7 +154,9 @@ class AbsTaskAudioReranking(AbsTask):
         positive_durations = [get_audio_duration(p) for p in positive]
         negative_durations = [get_audio_duration(n) for n in negative]
 
-        total_duration = sum(query_durations) + sum(positive_durations) + sum(negative_durations)
+        total_duration = (
+            sum(query_durations) + sum(positive_durations) + sum(negative_durations)
+        )
 
         return AudioRerankingDescriptiveStatistics(
             num_samples=len(query),
@@ -158,18 +164,32 @@ class AbsTaskAudioReranking(AbsTask):
             num_positive=len(positive),
             num_negative=len(negative),
             min_query_duration=min(query_durations) if query_durations else 0.0,
-            avg_query_duration=sum(query_durations) / len(query_durations) if query_durations else 0.0,
+            avg_query_duration=sum(query_durations) / len(query_durations)
+            if query_durations
+            else 0.0,
             max_query_duration=max(query_durations) if query_durations else 0.0,
             unique_query=len(
                 {str(q) for q in query}
             ),  # Use string representation for uniqueness
-            min_positive_duration=min(positive_durations) if positive_durations else 0.0,
-            avg_positive_duration=sum(positive_durations) / len(positive_durations) if positive_durations else 0.0,
-            max_positive_duration=max(positive_durations) if positive_durations else 0.0,
+            min_positive_duration=min(positive_durations)
+            if positive_durations
+            else 0.0,
+            avg_positive_duration=sum(positive_durations) / len(positive_durations)
+            if positive_durations
+            else 0.0,
+            max_positive_duration=max(positive_durations)
+            if positive_durations
+            else 0.0,
             unique_positive=len({str(p) for p in positive}),
-            min_negative_duration=min(negative_durations) if negative_durations else 0.0,
-            avg_negative_duration=sum(negative_durations) / len(negative_durations) if negative_durations else 0.0,
-            max_negative_duration=max(negative_durations) if negative_durations else 0.0,
+            min_negative_duration=min(negative_durations)
+            if negative_durations
+            else 0.0,
+            avg_negative_duration=sum(negative_durations) / len(negative_durations)
+            if negative_durations
+            else 0.0,
+            max_negative_duration=max(negative_durations)
+            if negative_durations
+            else 0.0,
             unique_negative=len({str(n) for n in negative}),
         )
 
