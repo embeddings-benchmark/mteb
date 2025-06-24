@@ -4,8 +4,7 @@ import logging
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import sentence_transformers_loader
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 logger = logging.getLogger(__name__)
 
