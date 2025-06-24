@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CbdClassification(AbsTaskAnyClassification):
@@ -126,14 +126,38 @@ class AllegroReviewsClassification(AbsTaskAnyClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
-        date=None,
+        date=(
+            "2020-06-22",
+            "2020-07-07",
+        ),  # best guess: based on commit dates in https://github.com/allegro/klejbenchmark-baselines
         domains=["Reviews"],
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        task_subtypes=["Sentiment/Hate speech"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{rybak-etal-2020-klej,
+  abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
+  address = {Online},
+  author = {Rybak, Piotr  and
+Mroczkowski, Robert  and
+Tracz, Janusz  and
+Gawlik, Ireneusz},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+  doi = {10.18653/v1/2020.acl-main.111},
+  editor = {Jurafsky, Dan  and
+Chai, Joyce  and
+Schluter, Natalie  and
+Tetreault, Joel},
+  month = jul,
+  pages = {1191--1201},
+  publisher = {Association for Computational Linguistics},
+  title = {{KLEJ}: Comprehensive Benchmark for {P}olish Language Understanding},
+  url = {https://aclanthology.org/2020.acl-main.111/},
+  year = {2020},
+}
+""",
     )
 
 

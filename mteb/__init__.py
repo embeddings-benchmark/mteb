@@ -3,8 +3,9 @@ from __future__ import annotations
 from importlib.metadata import version
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
+from mteb.evaluate import evaluate
 from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.load_results.task_results import TaskResult
@@ -40,4 +41,5 @@ __all__ = [
     "Encoder",
     "AbsTask",
     "SentenceTransformerWrapper",
+    "evaluate",
 ]

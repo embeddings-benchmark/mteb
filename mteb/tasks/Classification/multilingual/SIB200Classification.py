@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
     "ace_Latn": ["ace-Latn"],
@@ -211,7 +211,7 @@ class SIB200Classification(AbsTaskAnyClassification):
         dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is
         annotated in English for the topics,  science/technology, travel, politics, sports,
         health, entertainment, and geography. The labels are then transferred to the other languages
-        in Flores-200 which are machine-translated.
+        in Flores-200 which are human-translated.
         """,
         reference="https://arxiv.org/abs/2309.07445",
         dataset={

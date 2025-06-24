@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import difflib
 import logging
 from collections.abc import Iterable
-from functools import lru_cache
 from typing import Any
 
 from huggingface_hub import ModelCard
+from huggingface_hub.errors import RepositoryNotFoundError
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -21,12 +22,16 @@ from mteb.models import (
     blip2_models,
     blip_models,
     bm25,
+    cadet_models,
     cde_models,
     clip_models,
     codesage_models,
     cohere_models,
     cohere_v,
     colbert_models,
+    colpali_models,
+    colqwen_models,
+    colsmol_models,
     conan_models,
     dino_models,
     e5_instruct,
@@ -34,6 +39,7 @@ from mteb.models import (
     e5_v,
     evaclip_models,
     fa_models,
+    geogpt_models,
     gme_v_models,
     google_models,
     gritlm_models,
@@ -44,6 +50,7 @@ from mteb.models import (
     jina_clip,
     jina_models,
     lens_models,
+    lgai_embedding_models,
     linq_models,
     listconranker,
     llm2clip_models,
@@ -65,7 +72,7 @@ from mteb.models import (
     promptriever_models,
     qodo_models,
     qtack_models,
-    relle_models,
+    qwen3_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
@@ -87,12 +94,14 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
+    xyz_models,
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 logger = logging.getLogger(__name__)
 
 model_modules = [
+    xyz_models,
     align_models,
     arctic_models,
     bedrock_models,
@@ -100,6 +109,7 @@ model_modules = [
     blip2_models,
     blip_models,
     bm25,
+    cadet_models,
     clip_models,
     codesage_models,
     cde_models,
@@ -121,6 +131,7 @@ model_modules = [
     jina_models,
     jina_clip,
     lens_models,
+    lgai_embedding_models,
     linq_models,
     listconranker,
     llm2clip_models,
@@ -142,13 +153,14 @@ model_modules = [
     promptriever_models,
     qodo_models,
     qtack_models,
-    relle_models,
+    qwen3_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
     richinfoai_models,
     ru_sentence_models,
     ua_sentence_models,
+    seed_models,
     salesforce_models,
     searchmap_models,
     sentence_transformers_models,
@@ -169,7 +181,10 @@ model_modules = [
     ara_models,
     b1ade_models,
     nb_sbert,
-    seed_models,
+    colpali_models,
+    colqwen_models,
+    colsmol_models,
+    geogpt_models,
 ]
 MODEL_REGISTRY = {}
 
@@ -282,43 +297,54 @@ def get_model_meta(
         A model metadata object
     """
     if model_name in MODEL_REGISTRY:
-        if revision and (not MODEL_REGISTRY[model_name].revision == revision):
+        model_meta = MODEL_REGISTRY[model_name]
+
+        if revision and (not model_meta.revision == revision):
             raise ValueError(
-                f"Model revision {revision} not found for model {model_name}. Expected {MODEL_REGISTRY[model_name].revision}."
+                f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
-        return MODEL_REGISTRY[model_name]
-    else:  # assume it is a sentence-transformers model
-        if not fetch_from_hf:
-            raise ValueError(
-                f"Model {model_name} not found in MTEB registry. Please set fetch_from_hf=False to load it from HuggingFace Hub."
-            )
+        return model_meta
+    if fetch_from_hf:
         logger.info(
-            "Model not found in model registry, assuming it is on HF Hub model."
+            "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
-        logger.info(
-            f"Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
-        )
+        try:
+            meta = model_meta_from_hf_hub(model_name)
+            meta.revision = revision
+            return meta
+        except RepositoryNotFoundError:
+            pass
 
-        meta = model_meta_from_hf_hub(model_name)
-        meta.revision = revision
-        meta.name = model_name
-    return meta
+    not_found_msg = f"Model '{model_name}' not found in MTEB registry"
+    not_found_msg += " nor on the Huggingface Hub." if fetch_from_hf else "."
+
+    close_matches = difflib.get_close_matches(model_name, MODEL_REGISTRY.keys())
+    model_names_no_org = {mdl: mdl.split("/")[-1] for mdl in MODEL_REGISTRY.keys()}
+    if model_name in model_names_no_org:
+        close_matches = [model_names_no_org[model_name]] + close_matches
+
+    suggestion = ""
+    if close_matches:
+        if len(close_matches) > 1:
+            suggestion = f" Did you mean: '{close_matches[0]}' or {close_matches[1]}?"
+        else:
+            suggestion = f" Did you mean: '{close_matches[0]}'?"
+
+    raise KeyError(not_found_msg + suggestion)
 
 
-@lru_cache
 def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
-    card_data = {}
+    card = ModelCard.load(model_name)
+    card_data = card.data.to_dict()
     frameworks = ["PyTorch"]
-    try:
-        card_data = ModelCard.load(model_name).data.to_dict()
-    except Exception as e:
-        logger.warning(f"Failed to extract metadata from model: {e}.")
+    loader = None
     if card_data.get("library_name", None) == "sentence-transformers":
         frameworks.append("Sentence Transformers")
+        loader = sentence_transformers_loader
     revision = card_data.get("base_model_revision", None)
     license = card_data.get("license", None)
     return ModelMeta(
-        loader=sentence_transformers_loader,  # we assume all models are loadable with sentence-transformers
+        loader=loader,
         name=model_name,
         revision=revision,
         release_date=None,
@@ -340,7 +366,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
 
 def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
     return ModelMeta(
-        loader=None,
+        loader=sentence_transformers_loader,
         name=model.model.name_or_path,
         revision=model.config._commit_hash,
         release_date=None,

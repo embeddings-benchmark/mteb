@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "as": ["asm-Beng"],
@@ -18,6 +17,8 @@ _LANGUAGES = {
     "te": ["tel-Telu"],
 }
 
+SPLIT = "test"
+
 
 class IndicQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -31,7 +32,7 @@ class IndicQARetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=[SPLIT],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
         date=("2022-08-01", "2022-12-20"),

@@ -9,7 +9,7 @@ import torch
 import tqdm
 from scipy.stats import pearsonr, spearmanr
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.similarity_functions import cos_sim, dot_score
 

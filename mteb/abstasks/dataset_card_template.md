@@ -27,15 +27,15 @@ You can evaluate an embedding model on this dataset using the following code:
 ```python
 import mteb
 
-task = mteb.get_tasks(["{{ dataset_task_name }}"])
-evaluator = mteb.MTEB(task)
+task = mteb.get_task("{{ dataset_task_name }}")
+evaluator = mteb.MTEB([task])
 
 model = mteb.get_model(YOUR_MODEL)
 evaluator.run(model)
 ```
 
 <!-- Datasets want link to arxiv in readme to autolink dataset with paper -->
-To learn more about how to run models on `mteb` task check out the [GitHub repitory](https://github.com/embeddings-benchmark/mteb). 
+To learn more about how to run models on `mteb` task check out the [GitHub repository](https://github.com/embeddings-benchmark/mteb).
 
 ## Citation
 
@@ -55,7 +55,7 @@ If you use this dataset, please cite the dataset as well as [mteb](https://githu
 }
 
 @article{muennighoff2022mteb,
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
   journal={arXiv preprint arXiv:2210.07316},

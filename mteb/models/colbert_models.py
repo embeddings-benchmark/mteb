@@ -6,7 +6,7 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
@@ -35,7 +35,7 @@ class ColBERTModel(AbsEncoder):
             **kwargs: Additional arguments to pass to the model.
         """
         requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
-        from pylate import models as colbert_model
+        from pylate import models as colbert_model  # type: ignore[import]
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
@@ -177,5 +177,34 @@ jina_colbert_v2 = ModelMeta(
         "mMARCO-NL": ["train"],  # translation not trained on
         "DuRetrieval": [],
         "MIRACL": ["train"],
+    },
+)
+
+
+lightonai__GTE_ModernColBERT_v1 = ModelMeta(
+    loader=ColBERTModel,
+    name="lightonai/GTE-ModernColBERT-v1",
+    languages=[
+        "eng-Latn",  # English
+    ],
+    open_weights=True,
+    revision="78d50a162b04dfdc45c3af6b4294ba77c24888a3",
+    public_training_code="https://gist.github.com/NohTow/3030fe16933d8276dd5b3e9877d89f0f",
+    public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
+    release_date="2025-04-30",
+    n_parameters=int(149 * 1e6),
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=None,  # Bag of Embeddings (128) for each token
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT"],
+    reference="https://huggingface.co/lightonai/GTE-ModernColBERT-v1",
+    use_instructions=False,
+    adapted_from="Alibaba-NLP/gte-modernbert-base",
+    superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
 )

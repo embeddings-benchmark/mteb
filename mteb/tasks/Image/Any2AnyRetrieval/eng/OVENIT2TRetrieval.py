@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
@@ -24,7 +24,7 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        modalities=["text"],
+        modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{hu2023open,

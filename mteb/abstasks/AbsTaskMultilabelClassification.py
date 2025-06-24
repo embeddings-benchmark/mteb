@@ -14,8 +14,8 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
+from mteb.types import ScoresDict
 
-from ..load_results.task_results import ScoresDict
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)

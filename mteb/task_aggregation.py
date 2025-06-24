@@ -8,12 +8,11 @@ import numpy as np
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.task_results import TaskResult
 from mteb.overview import get_task
+from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
-REVISION = str
-MODEL_NAME = str
-AGGREGATION = dict[MODEL_NAME, dict[REVISION, dict[str, float]]]
+AGGREGATION = dict[ModelName, dict[Revision, dict[str, float]]]
 
 
 def mean(results: BenchmarkResults) -> AGGREGATION:

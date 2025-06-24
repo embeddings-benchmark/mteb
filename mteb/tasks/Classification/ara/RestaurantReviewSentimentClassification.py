@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RestaurantReviewSentimentClassification(AbsTaskAnyClassification):
+    superseded_by = "RestaurantReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
         dataset={
@@ -44,3 +45,39 @@ class RestaurantReviewSentimentClassification(AbsTaskAnyClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )
+
+
+class RestaurantReviewSentimentClassificationV2(AbsTaskAnyClassification):
+    metadata = TaskMetadata(
+        name="RestaurantReviewSentimentClassification.v2",
+        dataset={
+            "path": "mteb/restaurant_review_sentiment",
+            "revision": "5d28c1e8fb393173a849696ed178b90a6f78754a",
+        },
+        description="""Dataset of 8156 restaurant reviews from qaym.com in Arabic for sentiment analysis
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
+        reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["ara-Arab"],
+        main_score="accuracy",
+        date=("2014-01-01", "2015-01-01"),
+        domains=["Reviews", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-SA"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{elsahar2015building,
+  author = {ElSahar, Hady and El-Beltagy, Samhaa R},
+  booktitle = {International conference on intelligent text processing and computational linguistics},
+  organization = {Springer},
+  pages = {23--34},
+  title = {Building large arabic multi-domain resources for sentiment analysis},
+  year = {2015},
+}
+""",
+    )

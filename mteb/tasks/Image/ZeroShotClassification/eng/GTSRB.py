@@ -5,7 +5,7 @@ import os
 from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
     AbsTaskZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):

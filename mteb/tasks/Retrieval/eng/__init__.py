@@ -73,6 +73,16 @@ from .NQRetrieval import NQ, NQHardNegatives
 from .PiqaRetrieval import PIQA
 from .QuailRetrieval import Quail
 from .QuoraRetrieval import QuoraRetrieval, QuoraRetrievalHardNegatives
+from .R2MEDRetrieval import (
+    R2MEDBioinformaticsRetrieval,
+    R2MEDBiologyRetrieval,
+    R2MEDIIYiClinicalRetrieval,
+    R2MEDMedicalSciencesRetrieval,
+    R2MEDMedQADiagRetrieval,
+    R2MEDMedXpertQAExamRetrieval,
+    R2MEDPMCClinicalRetrieval,
+    R2MEDPMCTreatmentRetrieval,
+)
 from .RARbCodeRetrieval import RARbCode
 from .RARbMathRetrieval import RARbMath
 from .SCIDOCSRetrieval import SCIDOCS
@@ -189,4 +199,12 @@ __all__ = [
     "Touche2020",
     "Touche2020v3Retrieval",
     "WinoGrande",
+    "R2MEDBiologyRetrieval",
+    "R2MEDBioinformaticsRetrieval",
+    "R2MEDMedicalSciencesRetrieval",
+    "R2MEDMedXpertQAExamRetrieval",
+    "R2MEDMedQADiagRetrieval",
+    "R2MEDPMCTreatmentRetrieval",
+    "R2MEDPMCClinicalRetrieval",
+    "R2MEDIIYiClinicalRetrieval",
 ]

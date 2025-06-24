@@ -7,7 +7,7 @@ from typing import get_args
 import polars as pl
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE
+from mteb.abstasks.task_metadata import TaskType
 from mteb.languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE, PROGRAMMING_LANGS
 
 
@@ -79,7 +79,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
             if lang in PROGRAMMING_LANGS:
                 lang = "code"
             if table_dict.get(lang) is None:
-                table_dict[lang] = dict.fromkeys(sorted(get_args(TASK_TYPE)), 0)
+                table_dict[lang] = dict.fromkeys(sorted(get_args(TaskType)), 0)
             table_dict[lang][task.metadata.type] += 1
 
     ## Wrangle for polars
@@ -100,13 +100,13 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
         .alias("2-lang-fam")
     )
 
-    df = df.with_columns(sum=pl.sum_horizontal(get_args(TASK_TYPE)))
+    df = df.with_columns(sum=pl.sum_horizontal(get_args(TaskType)))
     df = df.select(sorted(df.columns))
     if sort_by_sum:
         df = df.sort(by="sum", descending=True)
 
     total = df.sum()
-    task_names = sorted(get_args(TASK_TYPE))
+    task_names = sorted(get_args(TaskType))
     headers = ["ISO Code", "Language", "Family"] + task_names + ["Sum"]
     table_header = "| " + " | ".join(headers) + " |"
     separator_line = "|"

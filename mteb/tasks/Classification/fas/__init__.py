@@ -5,7 +5,6 @@ from .FaMTEBClassification import (
     DigikalamagClassification,
     NLPTwitterAnalysisClassification,
     PersianTextEmotion,
-    PersianTextTone,
     SentimentDKSF,
     SIDClassification,
     SynPerChatbotConvSAAnger,
@@ -24,6 +23,7 @@ from .FaMTEBClassification import (
     SynPerChatbotSatisfactionLevelClassification,
     SynPerChatbotToneChatbotClassification,
     SynPerChatbotToneUserClassification,
+    SynPerTextToneClassification,
 )
 from .PersianFoodSentimentClassification import PersianFoodSentimentClassification
 
@@ -33,7 +33,6 @@ __all__ = [
     "NLPTwitterAnalysisClassification",
     "PersianFoodSentimentClassification",
     "PersianTextEmotion",
-    "PersianTextTone",
     "SIDClassification",
     "SentimentDKSF",
     "SynPerChatbotConvSAAnger",
@@ -52,4 +51,5 @@ __all__ = [
     "SynPerChatbotSatisfactionLevelClassification",
     "SynPerChatbotToneChatbotClassification",
     "SynPerChatbotToneUserClassification",
+    "SynPerTextToneClassification",
 ]

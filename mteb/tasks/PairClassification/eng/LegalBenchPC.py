@@ -5,7 +5,7 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_COLUMN_MAP = [
     {

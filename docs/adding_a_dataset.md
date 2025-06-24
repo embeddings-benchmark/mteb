@@ -72,8 +72,7 @@ class SciDocsReranking(AbsTaskReranking):
 
 # testing the task with a model:
 model = SentenceTransformer("average_word_embeddings_komninos")
-evaluation = MTEB(tasks=[SciDocsReranking()])
-evaluation.run(model)
+results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 ```
 
 > **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
@@ -100,7 +99,6 @@ class VGClustering(AbsTaskClustering):
             "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
         },
         date=("2012-01-01", "2020-01-01"),
-        form="Written",
         domains=["Academic", "Non-fiction"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-nc-4.0",
@@ -236,8 +234,9 @@ Once you are finished create a PR to the [MTEB](https://github.com/embeddings-be
 The PR will be reviewed by one of the organizers or contributors who might ask you to change things. Once the PR is approved the dataset will be added into the main repository.
 
 
-Before you commit here is a checklist you should consider completing before submitting:
+Before you commit, here is a checklist you should complete before submitting:
 
+- [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
 
 An easy way to test it is using:
@@ -249,7 +248,7 @@ from sentence_transformers import SentenceTransformer
 model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=[YourNewTask()])
+results = mteb.evaluate(model, tasks=[YourNewTask()])
 ```
 
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
@@ -257,5 +256,3 @@ evaluation = MTEB(tasks=[YourNewTask()])
   - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
-- [ ] Run tests locally to make sure nothing is broken using `make test`.
-- [ ] Run the formatter to format the code using `make lint`.

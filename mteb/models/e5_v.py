@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType

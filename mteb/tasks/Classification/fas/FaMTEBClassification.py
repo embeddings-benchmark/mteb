@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SynPerChatbotConvSAAnger(AbsTaskAnyClassification):
@@ -436,13 +436,13 @@ class SynPerChatbotToneUserClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class PersianTextTone(AbsTaskAnyClassification):
+class SynPerTextToneClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
-        name="PersianTextTone",
+        name="SynPerTextToneClassification",
         description="Persian Text Tone",
         reference="https://mcinext.com/",
         dataset={
-            "path": "MCINext/persian-text-tone",
+            "path": "MCINext/synthetic-persian-text-tone-classification",
             "revision": "7144f4c6bdd77911df0dfc5a8bd44dba17e27e3a",
         },
         type="Classification",

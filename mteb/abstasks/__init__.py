@@ -18,7 +18,6 @@ from .Image import (
     AbsTaskImageTextPairClassification,
     AbsTaskZeroShotClassification,
 )
-from .TaskMetadata import TaskMetadata
 
 __all__ = [
     "AbsTask",
@@ -31,7 +30,6 @@ __all__ = [
     "AbsTaskRetrieval",
     "AbsTaskAnySTS",
     "AbsTaskSummarization",
-    "TaskMetadata",
     "AbsTaskAny2AnyMultiChoice",
     "AbsTaskAny2AnyRetrieval",
     "AbsTaskImageClustering",

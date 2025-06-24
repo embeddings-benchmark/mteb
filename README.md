@@ -51,8 +51,7 @@ model_name = "average_word_embeddings_komninos"
 
 model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder=f"results/{model_name}")
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 ### Using the CLI
@@ -134,7 +133,7 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
 
 ```bibtex
 @article{muennighoff2022mteb,
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
   journal={arXiv preprint arXiv:2210.07316},

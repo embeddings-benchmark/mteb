@@ -8,7 +8,7 @@ from typing import TypeVar
 import datasets
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 T = TypeVar("T")
 

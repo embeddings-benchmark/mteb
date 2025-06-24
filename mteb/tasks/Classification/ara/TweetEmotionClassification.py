@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetEmotionClassification(AbsTaskAnyClassification):
+    superseded_by = "TweetEmotionClassification.v2"
     metadata = TaskMetadata(
         name="TweetEmotionClassification",
         dataset={
@@ -17,6 +18,42 @@ class TweetEmotionClassification(AbsTaskAnyClassification):
         category="t2c",
         modalities=["text"],
         eval_splits=["train"],
+        eval_langs=["ara-Arab"],
+        main_score="accuracy",
+        date=("2014-01-01", "2016-08-31"),
+        domains=["Social", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-JO", "ara-arab-SA"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{al2018emotional,
+  author = {Al-Khatib, Amr and El-Beltagy, Samhaa R},
+  booktitle = {Computational Linguistics and Intelligent Text Processing: 18th International Conference, CICLing 2017, Budapest, Hungary, April 17--23, 2017, Revised Selected Papers, Part II 18},
+  organization = {Springer},
+  pages = {105--114},
+  title = {Emotional tone detection in arabic tweets},
+  year = {2018},
+}
+""",
+    )
+
+
+class TweetEmotionClassificationV2(AbsTaskAnyClassification):
+    metadata = TaskMetadata(
+        name="TweetEmotionClassification.v2",
+        dataset={
+            "path": "mteb/TweetEmotionClassification",
+            "revision": "930d65840c089406ceed5241b1a9ba7294e5eeae",
+        },
+        description="""A dataset of 10,012 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
+        reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2014-01-01", "2016-08-31"),

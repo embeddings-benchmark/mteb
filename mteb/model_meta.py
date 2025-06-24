@@ -16,12 +16,8 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
-
-from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from .languages import (
-    ISO_LANGUAGE_SCRIPT,
-    check_language_code,
-)
+from mteb.languages import check_language_code
+from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +32,7 @@ FRAMEWORKS = Literal[
     "NumPy",
     "PyLate",
     "ColBERT",
+    "ColPali",
 ]
 
 
@@ -99,26 +96,26 @@ class ModelMeta(BaseModel):
 
     name: str | None
     revision: str | None
-    release_date: STR_DATE | None
-    languages: list[ISO_LANGUAGE_SCRIPT] | None
+    release_date: StrDate | None
+    languages: list[ISOLanguageScript] | None
     loader: Callable[..., Encoder] | type[Encoder] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     n_parameters: int | None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
-    license: LICENSES | STR_URL | None
+    license: Licenses | StrURL | None
     open_weights: bool | None
     public_training_code: str | None
     public_training_data: str | bool | None
     framework: list[FRAMEWORKS]
-    reference: STR_URL | None = None
+    reference: StrURL | None = None
     similarity_fn_name: ScoringFunction | None
     use_instructions: bool | None
     training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
-    modalities: list[MODALITIES] = ["text"]
+    modalities: list[Modalities] = ["text"]
     is_cross_encoder: bool | None = None
     citation: str | None = None
 
@@ -148,7 +145,7 @@ class ModelMeta(BaseModel):
 
     @field_validator("languages")
     @classmethod
-    def languages_are_valid(cls, languages: list[ISO_LANGUAGE_SCRIPT] | None) -> None:
+    def languages_are_valid(cls, languages: list[ISOLanguageScript] | None) -> None:
         if languages is None:
             return None
 

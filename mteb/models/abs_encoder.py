@@ -7,7 +7,7 @@ from typing import Any, Callable, get_args
 from torch.utils.data import DataLoader
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE, TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata, TaskType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.similarity_functions import (
     cos_sim,
@@ -219,7 +219,7 @@ class AbsEncoder(ABC):
         """
         if self.model_prompts is None:
             return
-        task_types = get_args(TASK_TYPE)
+        task_types = get_args(TaskType)
         prompt_types = [e.value for e in PromptType]
         for task_name in self.model_prompts:
             if "-" in task_name:
