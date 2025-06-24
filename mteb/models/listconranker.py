@@ -89,14 +89,14 @@ class ListConRanker(RerankerWrapper):
         return final_scores
 
 listconranker_training_datasets ={
-    'cMedQAv1': ['train'],
-    'cMedQAv2': ['train'],
-    'MMarcoReranking-chinese_simplified': ['train'],
+    'CMedQAv1-reranking': ['train'],
+    'CMedQAv2-reranking': ['train'],
+    'MMarcoReranking': ['train'],
     'T2Reranking': ['train'],
-    'Huatuo26M-Lite': ['train'],
-    'MARC': ['train'],
-    'XL-sum-chinese_simplified': ['train'],
-    'CSL': ['train'],
+    # 'Huatuo26M-Lite': ['train'],
+    # 'MARC': ['train'],
+    # 'XL-sum-chinese_simplified': ['train'],
+    # 'CSL': ['train'],
 }
 
 listconranker = ModelMeta(
