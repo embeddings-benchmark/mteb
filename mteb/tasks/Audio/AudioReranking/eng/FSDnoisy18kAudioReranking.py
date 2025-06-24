@@ -13,19 +13,19 @@ class FSDnoisy18kAudioReranking(AbsTaskAudioReranking):
     This version is adapted for audio reranking where given a query audio from one of the 20 sound classes,
     the task is to rank positive audio samples (same class) higher than negative samples (different classes).
 
-    Each query has 6 positive examples (same sound class) and 24 negative examples
+    Each query has 4 positive examples (same sound class) and 16 negative examples
     (different sound classes), creating a challenging noisy audio retrieval scenario
-    with 30 total candidates per query. The dataset contains 400 queries providing robust
+    with 20 total candidates per query. The dataset contains 200 queries providing robust
     evaluation across all 20 sound event categories, including handling of label noise.
     """
 
     metadata = TaskMetadata(
         name="FSDnoisy18kAudioReranking",
-        description="FSDnoisy18k sound event dataset adapted for audio reranking. Given a query audio with potential label noise, rank 6 relevant audio samples higher than 24 irrelevant ones from different sound classes. Contains 400 queries across 20 sound event categories.",
+        description="FSDnoisy18k sound event dataset adapted for audio reranking. Given a query audio with potential label noise, rank 4 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 200 queries across 20 sound event categories.",
         reference="https://zenodo.org/record/2529934",
         dataset={
             "path": "AdnanElAssadi/fsdnoisy18k-audio-reranking",
-            "revision": "main",
+            "revision": "46ec066bfd2a78bae0b7ce71bbfbb479fba151c5",
         },
         type="AudioReranking",
         category="a2a",
@@ -52,7 +52,7 @@ class FSDnoisy18kAudioReranking(AbsTaskAudioReranking):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 400},
+            "n_samples": {"test": 200},
         },
     )
 
