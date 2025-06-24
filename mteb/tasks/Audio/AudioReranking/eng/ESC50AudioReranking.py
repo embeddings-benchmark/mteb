@@ -27,7 +27,7 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
             "revision": "5e0a9d84912522db2eb6b825cbfd09fb20df2a61",
         },
         type="AudioReranking",
-        category="a2a", 
+        category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

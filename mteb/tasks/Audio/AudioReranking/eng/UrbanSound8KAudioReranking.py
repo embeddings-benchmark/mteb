@@ -28,7 +28,7 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
             "revision": "71a0190434dcd2ed2bf9bfc5d850a83b94759255",
         },
         type="AudioReranking",
-        category="a2a", 
+        category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -7,8 +7,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class VocalSoundAudioReranking(AbsTaskAudioReranking):
     """VocalSound dataset adapted for audio reranking task.
 
-    The VocalSound dataset consists of recordings of human vocal sounds across 6 categories: 
-    laughter, sighs, coughs, throat clearing, sneezes, and sniffs. The recordings include rich 
+    The VocalSound dataset consists of recordings of human vocal sounds across 6 categories:
+    laughter, sighs, coughs, throat clearing, sneezes, and sniffs. The recordings include rich
     metadata such as speaker age, gender, native language, country, and health condition. This
     version is adapted for audio reranking where given a query vocal sound from one of the 6 categories,
     the task is to rank positive audio samples (same vocal sound type) higher than negative
@@ -29,7 +29,7 @@ class VocalSoundAudioReranking(AbsTaskAudioReranking):
             "revision": "64fa19c62cfd8f0aca9a1e10e82da8abb6ba7009",
         },
         type="AudioReranking",
-        category="a2a", 
+        category="a2a",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
