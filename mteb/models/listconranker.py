@@ -9,7 +9,7 @@ from transformers import (
     AutoTokenizer,
 )
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta
 from mteb.models.rerankers_custom import RerankerWrapper
 from mteb.types import BatchedInput, PromptType
