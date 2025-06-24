@@ -3,7 +3,7 @@ from __future__ import annotations
 from datasets import Dataset, DatasetDict, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "ar": ["ara-Arab"],

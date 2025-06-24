@@ -13,7 +13,7 @@ import torch
 from datasets import Dataset
 from PIL import Image
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
 from mteb.types import PromptType

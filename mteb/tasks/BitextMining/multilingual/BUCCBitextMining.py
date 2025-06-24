@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "de-en": ["deu-Latn", "eng-Latn"],

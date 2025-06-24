@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 
 # type: ignore
-from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
+from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
 class KorFin(AbsTaskAnyClassification):
