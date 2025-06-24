@@ -14,17 +14,17 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
 
     Each query has 5 positive examples (same environmental sound class) and 16 negative examples
     (different environmental sound classes), creating a challenging audio-to-audio retrieval scenario
-    with 21 total candidates per query. The dataset contains 400 queries providing robust evaluation
+    with 21 total candidates per query. The dataset contains 200 queries providing robust evaluation
     across all 50 environmental sound categories.
     """
 
     metadata = TaskMetadata(
         name="ESC50AudioReranking",
-        description="ESC-50 environmental sound dataset adapted for audio reranking. Given a query audio of environmental sounds, rank 5 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 400 queries across 50 environmental sound categories for robust evaluation.",
+        description="ESC-50 environmental sound dataset adapted for audio reranking. Given a query audio of environmental sounds, rank 5 relevant audio samples higher than 16 irrelevant ones from different sound classes. Contains 200 queries across 50 environmental sound categories for robust evaluation.",
         reference="https://github.com/karolpiczak/ESC-50",
         dataset={
             "path": "AdnanElAssadi/esc-50-audio-reranking",
-            "revision": "eec7e3ca16d495076a252e8ef4410cf7cfa0b416",
+            "revision": "5e0a9d84912522db2eb6b825cbfd09fb20df2a61",
         },
         type="AudioReranking",
         category="a2a", 
@@ -49,7 +49,7 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 400},
+            "n_samples": {"test": 200},
         },
     )
 
