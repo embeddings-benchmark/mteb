@@ -40,3 +40,8 @@ class CREMA_DClustering(AbsTaskAudioClustering):
 }
 """,
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
+        )

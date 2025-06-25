@@ -56,3 +56,8 @@ Dupoux, Emmanuel},
             "n_samples": {"test": 6900},
         },
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name
+        )

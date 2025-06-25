@@ -54,3 +54,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
         ds = ds.map(add_label_id)
         self.dataset = ds
         self.label_column_name = "label_id"
+
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name
+        )
