@@ -19,6 +19,7 @@ from torch.utils.data import DataLoader
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_chinese_training_data
+from mteb.models.nvidia_models import nvidia_training_datasets
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
@@ -130,14 +131,19 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
     return all_embeddings.float().cpu()
 
 
-doubao_embedding_training_data = {
-    "PAWSX": ["train"],
-    "QBQTC": ["train"],
-    "STSB": ["train"],
-    "TNews": ["train"],
-    "Waimai": ["train"],
-    "IFlyTek": ["train"],
-} | bge_chinese_training_data
+doubao_embedding_training_data = (
+    {
+        "PAWSX": ["train"],
+        "QBQTC": ["train"],
+        "STSB": ["train"],
+        "TNews": ["train"],
+        "Waimai": ["train"],
+        "IFlyTek": ["train"],
+        "MassiveScenarioClassification": ["train"],
+    }
+    | bge_chinese_training_data
+    | nvidia_training_datasets
+)
 
 
 class Seed16EmbeddingWrapper(Wrapper):
