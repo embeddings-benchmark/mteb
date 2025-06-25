@@ -41,11 +41,11 @@ class ESC50AudioReranking(AbsTaskAudioReranking):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{piczak2015esc,
-  title={ESC: Dataset for Environmental Sound Classification},
-  author={Piczak, Karol J},
-  booktitle={Proceedings of the 23rd ACM international conference on Multimedia},
-  pages={1015--1018},
-  year={2015}
+  author = {Piczak, Karol J},
+  booktitle = {Proceedings of the 23rd ACM international conference on Multimedia},
+  pages = {1015--1018},
+  title = {ESC: Dataset for Environmental Sound Classification},
+  year = {2015},
 }
 """,
         descriptive_stats={

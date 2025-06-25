@@ -41,7 +41,7 @@ class UrbanSound8KAudioReranking(AbsTaskAudioReranking):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Salamon2014ADA,Add commentMore actions
+@article{Salamon2014ADA,
   author = {Justin Salamon and Christopher Jacoby and Juan Pablo Bello},
   journal = {Proceedings of the 22nd ACM international conference on Multimedia},
   title = {A Dataset and Taxonomy for Urban Sound Research},

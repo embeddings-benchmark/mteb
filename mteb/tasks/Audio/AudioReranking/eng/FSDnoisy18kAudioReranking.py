@@ -42,13 +42,12 @@ class FSDnoisy18kAudioReranking(AbsTaskAudioReranking):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{fonseca2019fsdnoisy18k,
-  title     = {Learning Sound Event Classifiers from Web Audio with Noisy Labels},
-  author    = {Fonseca, Eduardo and Plakal, Manoj and Ellis, Daniel P. W. and Font, Frederic and Favory, Xavier and Serra, Xavier},
-  booktitle = {ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
-  year      = {2019},
-  pages     = {21--25},
-  organization = {IEEE}
-}
+  author = {Fonseca, Eduardo and Plakal, Manoj and Ellis, Daniel P. W. and Font, Frederic and Favory, Xavier and Serra, Xavier},
+  booktitle = {ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  organization = {IEEE},
+  pages = {21--25},
+  title = {Learning Sound Event Classifiers from Web Audio with Noisy Labels},
+  year = {2019},
 }
 """,
         descriptive_stats={
