@@ -157,10 +157,10 @@ def filter_models(
     availability: bool | None,
     compatibility: list[str],
     instructions: bool | None,
-    model_size: int,
+    max_model_size: int,
     zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
 ):
-    lower, upper = 0, model_size
+    lower, upper = 0, max_model_size
     # Setting to None, when the user doesn't specify anything
     if (lower == MIN_MODEL_SIZE) or (lower is None):
         lower = None
@@ -217,7 +217,7 @@ def get_leaderboard_app() -> gr.Blocks:
         availability=None,
         compatibility=[],
         instructions=None,
-        model_size=MAX_MODEL_SIZE,
+        max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
     )
 
@@ -588,7 +588,7 @@ def get_leaderboard_app() -> gr.Blocks:
             availability,
             compatibility,
             instructions,
-            model_size,
+            max_model_size,
             zero_shot: hash(
                 (
                     id(scores),
@@ -596,7 +596,7 @@ def get_leaderboard_app() -> gr.Blocks:
                     hash(availability),
                     hash(tuple(compatibility)),
                     hash(instructions),
-                    hash(model_size),
+                    hash(max_model_size),
                     hash(zero_shot),
                 )
             ),
@@ -607,7 +607,7 @@ def get_leaderboard_app() -> gr.Blocks:
             availability: bool | None,
             compatibility: list[str],
             instructions: bool | None,
-            model_size: int,
+            max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
         ):
             start_time = time.time()
@@ -618,7 +618,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot_setting=zero_shot,
             )
             elapsed = time.time() - start_time
@@ -792,7 +792,7 @@ def get_leaderboard_app() -> gr.Blocks:
             availability=None,
             compatibility=[],
             instructions=None,
-            model_size=MAX_MODEL_SIZE,
+            max_model_size=MAX_MODEL_SIZE,
             zero_shot="allow_all",
         )
         # We have to call this both on the filtered and unfiltered task because the callbacks
