@@ -131,7 +131,6 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
     return all_embeddings.float().cpu()
 
 
-
 doubao_embedding_training_data = (
     {
         "PAWSX": ["train"],
@@ -145,6 +144,7 @@ doubao_embedding_training_data = (
     | bge_chinese_training_data
     | nvidia_training_datasets
 )
+
 
 class Seed16EmbeddingWrapper(Wrapper):
     def __init__(
