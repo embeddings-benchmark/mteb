@@ -518,7 +518,8 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
 )
 
 
-KaLM_Embedding_X_0605 = ModelMeta(
+
+KaLM-Team__KaLM_Embedding_X_0605 = ModelMeta(
     loader=partial(
         KALMWrapper,
         model_name="KaLM-Team/KaLM-Embedding-X-0605",
