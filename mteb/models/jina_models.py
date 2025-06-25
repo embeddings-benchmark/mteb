@@ -121,6 +121,11 @@ XLMR_LANGUAGES = [
     "zho-Hans",
 ]
 
+JinaV4_TRAINING_DATA = {
+    # Self-reported (message from JinaAI member)
+    # inhouse data + synthetic data
+}
+
 
 class JinaWrapper(SentenceTransformerWrapper):
     """following the hf model card documentation."""
@@ -183,6 +188,99 @@ class JinaWrapper(SentenceTransformerWrapper):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
+
+
+class JinaV4Wrapper(JinaWrapper):
+    """following the hf model card documentation."""
+
+    jina_task_to_prompt = {
+        "retrieval.query": "Query: ",
+        "retrieval.passage": "Passage: ",
+        "text-matching": "Query: "
+    }
+
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
+        requires_package(self, "peft", model, "pip install 'mteb[peft]'")
+        import peft  # noqa: F401
+
+        super().__init__(
+            model=model,
+            revision=revision,
+            model_prompts=model_prompts,
+            **kwargs,
+        )
+
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        if prompt_name:
+            logger.info(
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+            )
+        logger.info(f"Encoding {len(sentences)} sentences.")
+
+        jina_task_name = self.model_prompts.get(prompt_name, None)
+
+        embeddings = self.model.encode(
+            sentences,
+            task=jina_task_name.split('.')[0] if jina_task_name else None,
+            prompt=self.jina_task_to_prompt.get(jina_task_name, None),
+            **kwargs,
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+
+jina_embeddings_v4 = ModelMeta(
+    loader=partial(  # type: ignore
+        JinaV4Wrapper,
+        model="jinaai/jina-embeddings-v4",
+        revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval-query": "retrieval.query",
+            "Retrieval-passage": "retrieval.passage",
+            "STS": "text-matching",
+        },
+    ),
+    name="jinaai/jina-embeddings-v4",
+    languages=XLMR_LANGUAGES,
+    open_weights=True,
+    revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
+    release_date="2025-06-24",  # official release date
+    n_parameters=int(3.8 * 1e9),
+    memory_usage_mb=7500,
+    max_tokens=8194,
+    embed_dim=2048,
+    license="cc-by-nc-4.0",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v4",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=JinaV4_TRAINING_DATA,
+    adapted_from="Qwen-2.5-VL-Instruct",
+)
 
 
 jina_embeddings_v3 = ModelMeta(
