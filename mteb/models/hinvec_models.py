@@ -16,7 +16,6 @@ def instruction_template(
 
 
 hinvec_training_datasets = {
-    
     "MintakaRetrieval": ["train"],
     "HindiDiscourseClassification": ["train"],
     "SentimentAnalysisHindi": ["train"],
