@@ -14,7 +14,7 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, Field
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import (
+from mteb.abstasks.task_metadata import (
     TaskDomain,
     TaskType,
 )

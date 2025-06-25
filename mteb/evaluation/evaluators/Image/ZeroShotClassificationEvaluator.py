@@ -6,7 +6,7 @@ from typing import Any
 from datasets import Dataset
 from sklearn import metrics
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
     create_dataloader_from_texts,
     create_image_dataloader,

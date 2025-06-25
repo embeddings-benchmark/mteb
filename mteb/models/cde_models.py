@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoConfig
 
 import mteb
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import corpus_to_dict
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction

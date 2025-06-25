@@ -7,7 +7,7 @@ import torch
 from sentence_transformers import __version__ as st_version
 from torch.utils.data import DataLoader
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.requires_package import requires_package

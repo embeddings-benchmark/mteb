@@ -7,7 +7,7 @@ import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import BatchedInput, Conversation, ConversationTurn
 
 logger = logging.getLogger(__name__)
