@@ -17,7 +17,7 @@ class AmbientAcousticContextClustering(AbsTaskAudioClustering):
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cluster_accuracy",
         date=("2020-01-01", "2020-12-31"),
