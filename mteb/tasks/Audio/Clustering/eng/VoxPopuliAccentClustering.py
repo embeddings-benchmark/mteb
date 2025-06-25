@@ -12,10 +12,8 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
         description="Clustering English speech samples by non-native accent from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "facebook/voxpopuli",
-            "name": "en_accented",
-            "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
-            "trust_remote_code": True,
+            "path": "mteb/voxpopuli-accent-clustering",
+            "revision": "f7558b7e2e984ab1680f405174798512cb8d4854",
         },
         type="AudioClustering",
         category="a2a",
@@ -53,11 +51,6 @@ Dupoux, Emmanuel},
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 6900},
+            "n_samples": {"test": 2048},
         },
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name
-        )
