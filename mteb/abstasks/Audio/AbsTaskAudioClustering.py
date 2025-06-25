@@ -1,21 +1,24 @@
 from __future__ import annotations
 
+import itertools
 import logging
+import random
 from typing import Any
 
-from datasets import Dataset
+import numpy as np
+from datasets import DatasetDict
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ...encoder_interface import Encoder
-from ...evaluation.evaluators import AudioClusteringEvaluator
 from ..AbsTask import AbsTask, ScoresDict
+from ..AbsTaskClusteringFast import evaluate_clustering_bootstrapped
 
 logger = logging.getLogger(__name__)
 
 
 class AbsTaskAudioClustering(AbsTask):
-    """Abstract class for Clustering tasks
+    """Abstract class for AudioClustering tasks that is based on the AbsTaskClusteringFast class.
     The similarity is computed between pairs and the results are ranked.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
@@ -40,17 +43,69 @@ class AbsTaskAudioClustering(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: Dataset,
+        dataset: DatasetDict,
         *,
         encode_kwargs: dict[str, Any] = {},
-        **kwargs,
-    ) -> ScoresDict:
-        evaluator = AudioClusteringEvaluator(
-            dataset[self.audio_column_name],
-            dataset[self.label_column_name],
+        **kwargs: Any,
+    ) -> dict[str, float | dict[str, list[float]]]:
+        rng_state = random.Random(self.seed)
+
+        if (
+            self.max_document_to_embed is not None
+            and self.max_fraction_of_documents_to_embed is not None
+        ):
+            raise Exception(
+                "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
+            )
+
+        if (
+            self.max_document_to_embed is None
+            and self.max_fraction_of_documents_to_embed is None
+        ):
+            downsampled_dataset = dataset
+        else:
+            if self.max_fraction_of_documents_to_embed is not None:
+                max_documents_to_embed = int(
+                    self.max_fraction_of_documents_to_embed * len(dataset)
+                )
+            else:
+                max_documents_to_embed = self.max_document_to_embed
+
+            max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
+            example_indices = rng_state.sample(
+                range(len(dataset)), k=max_documents_to_embed
+            )
+            downsampled_dataset = dataset.select(example_indices)  # type: ignore
+
+        embeddings = model.encode(
+            downsampled_dataset[self.audio_column_name],  # type: ignore
             task_name=self.metadata.name,
-            **kwargs,
+            **encode_kwargs,
         )
-        metrics = evaluator(model, encode_kwargs=encode_kwargs)
-        self._add_main_score(metrics)
-        return metrics
+
+        labels = []
+        for label in downsampled_dataset[self.label_column_name]:
+            if not isinstance(label, list):
+                label = [label]
+            labels.append(label)
+
+        all_v_scores = evaluate_clustering_bootstrapped(
+            embeddings,
+            labels,
+            n_clusters=self.n_clusters,
+            cluster_size=self.max_documents_per_cluster,
+            kmean_batch_size=self.k_mean_batch_size,
+            max_depth=self.max_depth,
+            rng_state=rng_state,
+        )
+        v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
+
+        mean_v_measure = np.mean(v_measures)
+        v_std = np.std(v_measures)
+        scores = {
+            "v_measures": all_v_scores,
+            "v_measure": float(mean_v_measure),
+            "v_measure_std": v_std,
+        }
+        self._add_main_score(scores)
+        return scores
