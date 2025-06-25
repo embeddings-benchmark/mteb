@@ -1,26 +1,26 @@
 from __future__ import annotations
 
-import os
+import base64
 import logging
+import os
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
+from io import BytesIO
 from typing import Any
 
-import base64
-from io import BytesIO
 import numpy as np
+import requests
 import torch
-from torch.utils.data import DataLoader
-from PIL import Image
 import tqdm
+from PIL import Image
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_chinese_training_data
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
-import requests
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 logger = logging.getLogger(__name__)
 
