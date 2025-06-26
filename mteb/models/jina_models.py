@@ -196,7 +196,7 @@ class JinaV4Wrapper(JinaWrapper):
     jina_task_to_prompt = {
         "retrieval.query": "Query: ",
         "retrieval.passage": "Passage: ",
-        "text-matching": "Query: "
+        "text-matching": "Query: ",
     }
 
     def __init__(
@@ -239,7 +239,7 @@ class JinaV4Wrapper(JinaWrapper):
 
         embeddings = self.model.encode(
             sentences,
-            task=jina_task_name.split('.')[0] if jina_task_name else None,
+            task=jina_task_name.split(".")[0] if jina_task_name else None,
             prompt=self.jina_task_to_prompt.get(jina_task_name, None),
             **kwargs,
         )
