@@ -19,7 +19,7 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Accent Clustering"],
@@ -54,3 +54,4 @@ Dupoux, Emmanuel},
             "n_samples": {"test": 2048},
         },
     )
+    max_fraction_of_documents_to_embed = None

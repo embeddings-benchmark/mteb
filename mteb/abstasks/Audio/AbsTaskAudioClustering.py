@@ -7,6 +7,8 @@ from typing import Any
 
 import numpy as np
 from datasets import DatasetDict
+from scipy.optimize import linear_sum_assignment
+from sklearn import metrics
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
@@ -25,7 +27,12 @@ class AbsTaskAudioClustering(AbsTask):
         audio: datasets.Audio
         label: int
     """
-
+    max_fraction_of_documents_to_embed: float | None = 0.04
+    max_document_to_embed: int | None = None
+    max_documents_per_cluster: int = 16_384
+    n_clusters: int = 10
+    k_mean_batch_size: int = 512
+    max_depth = None
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
 
@@ -77,10 +84,11 @@ class AbsTaskAudioClustering(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
-        embeddings = model.encode(
+        if "batch_size" not in encode_kwargs:
+            encode_kwargs["batch_size"] = 32
+        embeddings = model.get_audio_embeddings(
             downsampled_dataset[self.audio_column_name],  # type: ignore
-            task_name=self.metadata.name,
-            **encode_kwargs,
+            batch_size=encode_kwargs["batch_size"],
         )
 
         labels = []
@@ -99,9 +107,9 @@ class AbsTaskAudioClustering(AbsTask):
             rng_state=rng_state,
         )
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
-
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
+
         scores = {
             "v_measures": all_v_scores,
             "v_measure": float(mean_v_measure),
