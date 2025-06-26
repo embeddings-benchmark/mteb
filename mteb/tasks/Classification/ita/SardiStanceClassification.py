@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class SardiStanceClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SardiStanceClassification",
@@ -14,6 +15,7 @@ class SardiStanceClassification(AbsTaskClassification):
         reference="https://github.com/mirkolai/evalita-sardistance",
         type="Classification",
         category="s2s",
+        date=("2019-11-01", "2020-01-31"),
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
@@ -24,13 +26,16 @@ class SardiStanceClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{cignarella2020sardistance,
-        title={Sardistance@ evalita2020: Overview of the task on stance detection in italian tweets},
-        author={Cignarella, Alessandra Teresa and Lai, Mirko and Bosco, Cristina and Patti, Viviana and Rosso, Paolo and others},
-        booktitle={CEUR WORKSHOP PROCEEDINGS},
-        pages={1--10},
-        year={2020},
-        organization={Ceur}""",
+        bibtex_citation=r"""
+@inproceedings{cignarella2020sardistance,
+  author = {Cignarella, Alessandra Teresa and Lai, Mirko and Bosco, Cristina and Patti, Viviana and Rosso, Paolo and others},
+  booktitle = {CEUR WORKSHOP PROCEEDINGS},
+  organization = {Ceur},
+  pages = {1--10},
+  title = {Sardistance@ evalita2020: Overview of the task on stance detection in italian tweets},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

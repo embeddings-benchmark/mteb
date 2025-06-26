@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class DisCoTexPairClassification(AbsTaskPairClassification):
@@ -17,6 +16,7 @@ class DisCoTexPairClassification(AbsTaskPairClassification):
         type="PairClassification",
         category="s2s",
         modalities=["text"],
+        date=("2023-01-01", "2023-12-31"),
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
         main_score="max_ap",
@@ -26,15 +26,17 @@ class DisCoTexPairClassification(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{brunato2023discotex,
-        title={DisCoTex at EVALITA 2023: overview of the assessing discourse coherence in Italian texts task},
-        author={Brunato, Dominique and Colla, Davide and Dell'Orletta, Felice and Dini, Irene and Radicioni, Daniele Paolo and Ravelli, Andrea Amelio and others},
-        booktitle={CEUR WORKSHOP PROCEEDINGS},
-        volume={3473},
-        pages={1--8},
-        year={2023},
-        organization={CEUR}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{brunato2023discotex,
+  author = {Brunato, Dominique and Colla, Davide and Dell'Orletta, Felice and Dini, Irene and Radicioni, Daniele Paolo and Ravelli, Andrea Amelio and others},
+  booktitle = {CEUR WORKSHOP PROCEEDINGS},
+  organization = {CEUR},
+  pages = {1--8},
+  title = {DisCoTex at EVALITA 2023: overview of the assessing discourse coherence in Italian texts task},
+  volume = {3473},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

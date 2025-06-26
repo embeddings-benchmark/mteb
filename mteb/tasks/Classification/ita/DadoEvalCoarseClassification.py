@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class DadoEvalCoarseClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DadoEvalCoarseClassification",
@@ -13,6 +14,7 @@ class DadoEvalCoarseClassification(AbsTaskClassification):
         description="The DaDoEval dataset is a curated collection of 2,759 documents authored by Alcide De Gasperi, spanning the period from 1901 to 1954. Each document in the dataset is manually tagged with its date of issue.",
         reference="https://github.com/dhfbk/DaDoEval",
         type="Classification",
+        date=("1901-01-01", "1954-12-31"),
         category="s2s",
         modalities=["text"],
         eval_splits=["test"],
@@ -24,16 +26,16 @@ class DadoEvalCoarseClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{menini2020dadoeval,
-        title={DaDoEval@ EVALITA 2020: Same-genre and cross-genre dating of historical documents},
-        author={Menini, Stefano and Moretti, Giovanni and Sprugnoli, Rachele and Tonelli, Sara and others},
-        booktitle={Proceedings of the Seventh Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop (EVALITA 2020)},
-        pages={391--397},
-        year={2020},
-        organization={Accademia University Press}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{menini2020dadoeval,
+  author = {Menini, Stefano and Moretti, Giovanni and Sprugnoli, Rachele and Tonelli, Sara and others},
+  booktitle = {Proceedings of the Seventh Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop (EVALITA 2020)},
+  organization = {Accademia University Press},
+  pages = {391--397},
+  title = {DaDoEval@ EVALITA 2020: Same-genre and cross-genre dating of historical documents},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):
