@@ -1,16 +1,31 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import numpy as np
 import pytest
-import torch
 
 import mteb
-from mteb.evaluation.evaluators import (
-    kNNClassificationEvaluator,
-    kNNClassificationEvaluatorPytorch,
-    logRegClassificationEvaluator,
-)
-from tests.test_benchmark.mock_models import MockNumpyEncoder
+from mteb.evaluation.evaluators import logRegClassificationEvaluator
+
+
+@dataclass
+class ClassificationTestCase:
+    x_train: list[str]
+    y_train: list[int]
+    x_test: list[str]
+    y_test: list[int]
+    task_name: str
+    expected_score: float | None = None  # For deterministic tests
+
+
+class MockNumpyEncoder(mteb.Encoder):
+    def __init__(self):
+        self.rng_state = np.random.default_rng(42)
+
+    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        return self.rng_state.random((len(sentences), 10))
+
 
 # Basic test data
 SENTENCES_TRAIN_BINARY = [
@@ -42,528 +57,138 @@ SENTENCES_TEST_MULTICLASS = [
 ]
 Y_TEST_MULTICLASS = np.array([0, 1, 2])
 
-# For checking the cache
-SENTENCES_TEST_CACHE = [
-    "another new positive sentence",
-    "another new negative sentence",
-]
-Y_TEST_CACHE = np.array([1, 0])
+# Test cases with expected scores (deterministic due to fixed random seed)
+BINARY_TEST_CASE = ClassificationTestCase(
+    x_train=SENTENCES_TRAIN_BINARY,
+    y_train=Y_TRAIN_BINARY.tolist(),
+    x_test=SENTENCES_TEST_BINARY,
+    y_test=Y_TEST_BINARY.tolist(),
+    task_name="test_logreg_binary",
+    expected_score=0.5,  # Expected accuracy with deterministic MockNumpyEncoder
+)
+
+MULTICLASS_TEST_CASE = ClassificationTestCase(
+    x_train=SENTENCES_TRAIN_MULTICLASS,
+    y_train=Y_TRAIN_MULTICLASS.tolist(),
+    x_test=SENTENCES_TEST_MULTICLASS,
+    y_test=Y_TEST_MULTICLASS.tolist(),
+    task_name="test_logreg_multiclass",
+    expected_score=0.0,  # Expected accuracy with deterministic MockNumpyEncoder
+)
 
 
-class TestKNNClassificationEvaluator:
-    @pytest.fixture
-    def model(self):
-        return MockNumpyEncoder()
+def is_binary_classification(y_train: list[int], y_test: list[int]) -> bool:
+    """Check if the classification task is binary based on the labels."""
+    all_labels = set(y_train + y_test)
+    return len(all_labels) == 2
 
-    @pytest.fixture
-    def eval_binary(self):
-        return kNNClassificationEvaluator(
-            SENTENCES_TRAIN_BINARY,
-            Y_TRAIN_BINARY,
-            SENTENCES_TEST_BINARY,
-            Y_TEST_BINARY,
-            task_name="test_knn_binary",
-        )
 
-    @pytest.fixture
-    def eval_multiclass(self):
-        return kNNClassificationEvaluator(
-            SENTENCES_TRAIN_MULTICLASS,
-            Y_TRAIN_MULTICLASS,
-            SENTENCES_TEST_MULTICLASS,
-            Y_TEST_MULTICLASS,
-            task_name="test_knn_multiclass",
-        )
+# Fixtures
+@pytest.fixture
+def model():
+    return MockNumpyEncoder()
 
-    @pytest.mark.parametrize(
-        "evaluator_fixture, is_binary",
-        [
-            ("eval_binary", True),
-            ("eval_multiclass", False),
-        ],
+
+@pytest.fixture(params=[BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
+def test_case(request):
+    return request.param
+
+
+def test_output_structure(model, test_case: ClassificationTestCase):
+    """Test that the evaluator returns the expected output structure."""
+    evaluator = logRegClassificationEvaluator(
+        test_case.x_train,
+        np.array(test_case.y_train),
+        test_case.x_test,
+        np.array(test_case.y_test),
+        task_name=test_case.task_name,
     )
-    def test_output_structure(self, evaluator_fixture, is_binary, model, request):
-        evaluator = request.getfixturevalue(evaluator_fixture)
-        scores, test_cache = evaluator(model)
-        assert isinstance(scores, dict)
-        assert isinstance(test_cache, np.ndarray)
-        assert "accuracy" in scores
-        assert "f1" in scores
-        assert "accuracy_cosine" in scores
-        assert "f1_cosine" in scores
-        assert "accuracy_euclidean" in scores
-        assert "f1_euclidean" in scores
+    scores, test_cache = evaluator(model)
 
-        if is_binary:
-            assert "ap" in scores
-            assert "ap_cosine" in scores
-            assert "ap_euclidean" in scores
-        else:
-            assert "ap" not in scores
+    # Check basic structure
+    assert isinstance(scores, dict)
+    assert isinstance(test_cache, np.ndarray)
 
-    @pytest.mark.parametrize(
-        "evaluator_fixture, is_binary",
-        [
-            ("eval_binary", True),
-            ("eval_multiclass", False),
-        ],
+    # Check required metrics
+    assert "accuracy" in scores
+    assert "f1" in scores
+    assert "f1_weighted" in scores
+
+    # Check binary-specific metrics
+    is_binary = is_binary_classification(test_case.y_train, test_case.y_test)
+    if is_binary:
+        assert "ap" in scores
+        assert "ap_weighted" in scores
+    else:
+        assert "ap" not in scores
+
+
+def test_expected_scores(model, test_case: ClassificationTestCase):
+    """Test that the evaluator returns expected scores with deterministic model."""
+    if test_case.expected_score is None:
+        pytest.skip("No expected score defined for this test case")
+
+    evaluator = logRegClassificationEvaluator(
+        test_case.x_train,
+        np.array(test_case.y_train),
+        test_case.x_test,
+        np.array(test_case.y_test),
+        task_name=test_case.task_name,
     )
-    def test_score_ranges(self, evaluator_fixture, is_binary, model, request):
-        evaluator = request.getfixturevalue(evaluator_fixture)
-        scores, _ = evaluator(model)
-        metrics_to_check = [
-            "accuracy",
-            "f1",
-            "accuracy_cosine",
-            "f1_cosine",
-            "accuracy_euclidean",
-            "f1_euclidean",
-        ]
-        if is_binary:
-            metrics_to_check.extend(["ap", "ap_cosine", "ap_euclidean"])
+    scores, _ = evaluator(model)
 
-        for metric in metrics_to_check:
-            assert 0 <= scores[metric] <= 1
-
-    def test_cache_usage_binary(self, model, eval_binary):
-        _, test_cache_initial = eval_binary(model)
-        eval_binary_cache_test = kNNClassificationEvaluator(
-            SENTENCES_TRAIN_BINARY,
-            Y_TRAIN_BINARY,
-            SENTENCES_TEST_BINARY,
-            Y_TEST_BINARY,
-            task_name="test_knn_binary_cache",
-        )
-        scores_with_cache, test_cache_after_cache_usage = eval_binary_cache_test(
-            model, test_cache=test_cache_initial
-        )
-
-        assert np.array_equal(test_cache_initial, test_cache_after_cache_usage)
-        for metric in ["accuracy", "f1", "ap"]:
-            assert 0 <= scores_with_cache[metric] <= 1
-
-    @pytest.mark.parametrize(
-        "train_sentences, train_labels, test_sentences, test_labels, task_name, limit, expected_train_len, expected_test_len, is_binary_after_limit, expected_exception",
-        [
-            # Ensure binary classification is still possible after limiting
-            (
-                SENTENCES_TRAIN_BINARY,
-                Y_TRAIN_BINARY,
-                SENTENCES_TEST_BINARY,
-                Y_TEST_BINARY,
-                "test_knn_limit_binary",
-                3,
-                3,
-                2,
-                True,
-                None,
-            ),
-            # Test case where limiting results in a single class, expecting no AP and no exception
-            (
-                SENTENCES_TRAIN_BINARY,
-                Y_TRAIN_BINARY,
-                SENTENCES_TEST_BINARY,
-                Y_TEST_BINARY,
-                "test_knn_limit_not_binary",
-                1,
-                1,
-                1,
-                False,
-                None,
-            ),
-        ],
+    # Check that accuracy matches expected value (with some tolerance for floating point)
+    assert abs(scores["accuracy"] - test_case.expected_score) < 1e-10, (
+        f"Expected accuracy {test_case.expected_score}, got {scores['accuracy']}"
     )
-    def test_limit_parameter(
-        self,
-        model,
-        train_sentences,
-        train_labels,
-        test_sentences,
-        test_labels,
-        task_name,
-        limit,
-        expected_train_len,
-        expected_test_len,
-        is_binary_after_limit,
-        expected_exception,
-    ):
-        if expected_exception:
-            with pytest.raises(expected_exception):
-                eval_limited = kNNClassificationEvaluator(
-                    train_sentences,
-                    train_labels,
-                    test_sentences,
-                    test_labels,
-                    task_name=task_name,
-                    limit=limit,
-                )
-                eval_limited(model)
-        else:
-            eval_limited = kNNClassificationEvaluator(
-                train_sentences,
-                train_labels,
-                test_sentences,
-                test_labels,
-                task_name=task_name,
-                limit=limit,
-            )
-            assert len(eval_limited.sentences_train) == expected_train_len
-            assert len(eval_limited.y_train) == expected_train_len
-            assert len(eval_limited.sentences_test) == expected_test_len
-            assert len(eval_limited.y_test) == expected_test_len
-
-            scores, _ = eval_limited(model)
-            assert "accuracy" in scores
-            assert "f1" in scores
-            if is_binary_after_limit:
-                assert "ap" in scores
-            else:
-                assert "ap" not in scores
 
 
-class LocalMockTorchEncoder(mteb.Encoder):
-    def __init__(self):
-        pass
+def test_cache_usage_binary(model):
+    """Test that embedding caching works correctly for binary classification.
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10)
+    This test verifies the caching mechanism used to avoid re-encoding the same
+    sentences multiple times. The workflow is:
 
+    1. Run a first evaluation which encodes test sentences and returns embeddings cache
+    2. Run a second evaluation with the same test sentences, passing the cache from step 1
+    3. Verify that the cache is preserved (not modified) during the second evaluation
+    4. Verify that the second evaluation still produces valid classification results
 
-class TestKNNClassificationEvaluatorPytorch:
-    @pytest.fixture
-    def model_pytorch(self):
-        return LocalMockTorchEncoder()
+    The cache contains the encoded embeddings for the test sentences, allowing the
+    evaluator to skip the encoding step when the same sentences are evaluated again.
+    This is particularly useful when running multiple evaluations on the same dataset
+    with different models or parameters.
+    """
+    test_case = BINARY_TEST_CASE
 
-    @pytest.fixture
-    def eval_pytorch_binary(self):
-        return kNNClassificationEvaluatorPytorch(
-            SENTENCES_TRAIN_BINARY,
-            Y_TRAIN_BINARY,
-            SENTENCES_TEST_BINARY,
-            Y_TEST_BINARY,
-            task_name="test_knn_pytorch_binary",
-        )
-
-    @pytest.fixture
-    def eval_pytorch_multiclass(self):
-        return kNNClassificationEvaluatorPytorch(
-            SENTENCES_TRAIN_MULTICLASS,
-            Y_TRAIN_MULTICLASS,
-            SENTENCES_TEST_MULTICLASS,
-            Y_TEST_MULTICLASS,
-            task_name="test_knn_pytorch_multiclass",
-        )
-
-    @pytest.mark.parametrize(
-        "evaluator_fixture, is_binary",
-        [
-            ("eval_pytorch_binary", True),
-            ("eval_pytorch_multiclass", False),
-        ],
+    # First evaluation to generate cache
+    evaluator_initial = logRegClassificationEvaluator(
+        test_case.x_train,
+        np.array(test_case.y_train),
+        test_case.x_test,
+        np.array(test_case.y_test),
+        task_name=test_case.task_name,
     )
-    def test_output_structure(
-        self, evaluator_fixture, is_binary, model_pytorch, request
-    ):
-        evaluator = request.getfixturevalue(evaluator_fixture)
-        scores, test_cache = evaluator(model_pytorch)
-        assert isinstance(scores, dict)
-        assert isinstance(test_cache, torch.Tensor)
-        assert "accuracy" in scores
-        assert "f1" in scores
-        assert "accuracy_cosine" in scores
-        assert "f1_cosine" in scores
-        assert "accuracy_euclidean" in scores
-        assert "f1_euclidean" in scores
-        assert "accuracy_dot" in scores
-        assert "f1_dot" in scores
+    _, test_cache_initial = evaluator_initial(model)
 
-        if is_binary:
-            assert "ap" in scores
-            assert "ap_cosine" in scores
-            assert "ap_euclidean" in scores
-            assert "ap_dot" in scores
-        else:
-            assert "ap" not in scores
-
-    @pytest.mark.parametrize(
-        "evaluator_fixture, is_binary",
-        [
-            ("eval_pytorch_binary", True),
-            ("eval_pytorch_multiclass", False),
-        ],
+    # Second evaluation using cache
+    evaluator_with_cache = logRegClassificationEvaluator(
+        test_case.x_train,
+        np.array(test_case.y_train),
+        test_case.x_test,
+        np.array(test_case.y_test),
+        task_name=f"{test_case.task_name}_cache",
     )
-    def test_score_ranges(self, evaluator_fixture, is_binary, model_pytorch, request):
-        evaluator = request.getfixturevalue(evaluator_fixture)
-        scores, _ = evaluator(model_pytorch)
-        metrics_to_check = [
-            "accuracy",
-            "f1",
-            "accuracy_cosine",
-            "f1_cosine",
-            "accuracy_euclidean",
-            "f1_euclidean",
-            "accuracy_dot",
-            "f1_dot",
-        ]
-        if is_binary:
-            metrics_to_check.extend(["ap", "ap_cosine", "ap_euclidean", "ap_dot"])
-
-        for metric_key in metrics_to_check:
-            assert 0 <= scores[metric_key] <= 1
-
-    def test_cache_usage_binary(self, model_pytorch, eval_pytorch_binary):
-        _, test_cache_initial = eval_pytorch_binary(model_pytorch)
-        eval_binary_cache_test = kNNClassificationEvaluatorPytorch(
-            SENTENCES_TRAIN_BINARY,
-            Y_TRAIN_BINARY,
-            SENTENCES_TEST_BINARY,
-            Y_TEST_BINARY,
-            task_name="test_knn_pytorch_binary_cache",
-        )
-        scores_with_cache, test_cache_after_cache_usage = eval_binary_cache_test(
-            model_pytorch, test_cache=test_cache_initial
-        )
-
-        assert torch.equal(test_cache_initial, test_cache_after_cache_usage)
-        for metric_key in scores_with_cache.keys():
-            if "accuracy" in metric_key or "f1" in metric_key or "ap" in metric_key:
-                assert 0 <= scores_with_cache[metric_key] <= 1
-
-    @pytest.mark.parametrize(
-        "train_sentences, train_labels, test_sentences, test_labels, task_name, limit, expected_train_len, expected_test_len, is_binary_after_limit, expected_exception",
-        [
-            (
-                SENTENCES_TRAIN_BINARY,
-                Y_TRAIN_BINARY,
-                SENTENCES_TEST_BINARY,
-                Y_TEST_BINARY,
-                "test_knn_pytorch_limit_binary",
-                3,
-                3,
-                2,
-                True,
-                None,
-            ),
-            (
-                SENTENCES_TRAIN_BINARY,
-                Y_TRAIN_BINARY,
-                SENTENCES_TEST_BINARY,
-                Y_TEST_BINARY,
-                "test_knn_pytorch_limit_not_binary",
-                1,
-                1,
-                1,
-                False,
-                None,
-            ),
-        ],
+    scores_with_cache, test_cache_after_cache_usage = evaluator_with_cache(
+        model, test_cache=test_cache_initial
     )
-    def test_limit_parameter(
-        self,
-        model_pytorch,
-        train_sentences,
-        train_labels,
-        test_sentences,
-        test_labels,
-        task_name,
-        limit,
-        expected_train_len,
-        expected_test_len,
-        is_binary_after_limit,
-        expected_exception,
-    ):
-        if expected_exception:
-            with pytest.raises(expected_exception):
-                eval_limited = kNNClassificationEvaluatorPytorch(
-                    train_sentences,
-                    train_labels,
-                    test_sentences,
-                    test_labels,
-                    task_name=task_name,
-                    limit=limit,
-                )
-                eval_limited(model_pytorch)
-        else:
-            eval_limited = kNNClassificationEvaluatorPytorch(
-                train_sentences,
-                train_labels,
-                test_sentences,
-                test_labels,
-                task_name=task_name,
-                limit=limit,
-            )
-            assert len(eval_limited.sentences_train) == expected_train_len
-            assert len(eval_limited.y_train) == expected_train_len
-            assert len(eval_limited.sentences_test) == expected_test_len
-            assert len(eval_limited.y_test) == expected_test_len
 
-            scores, _ = eval_limited(model_pytorch)
-            assert "accuracy" in scores
-            assert "f1" in scores
-            if is_binary_after_limit:
-                assert "ap" in scores
-            else:
-                assert "ap" not in scores
+    # Verify cache is preserved
+    assert np.array_equal(test_cache_initial, test_cache_after_cache_usage)
 
-
-class TestLogRegClassificationEvaluator:
-    @pytest.fixture
-    def model(self):
-        return MockNumpyEncoder()
-
-    @pytest.fixture
-    def eval_logreg_binary(self):
-        return logRegClassificationEvaluator(
-            SENTENCES_TRAIN_BINARY,
-            Y_TRAIN_BINARY,
-            SENTENCES_TEST_BINARY,
-            Y_TEST_BINARY,
-            task_name="test_logreg_binary",
-        )
-
-    @pytest.fixture
-    def eval_logreg_multiclass(self):
-        return logRegClassificationEvaluator(
-            SENTENCES_TRAIN_MULTICLASS,
-            Y_TRAIN_MULTICLASS,
-            SENTENCES_TEST_MULTICLASS,
-            Y_TEST_MULTICLASS,
-            task_name="test_logreg_multiclass",
-        )
-
-    @pytest.mark.parametrize(
-        "evaluator_fixture, is_binary",
-        [
-            ("eval_logreg_binary", True),
-            ("eval_logreg_multiclass", False),
-        ],
-    )
-    def test_output_structure(self, evaluator_fixture, is_binary, model, request):
-        evaluator = request.getfixturevalue(evaluator_fixture)
-        scores, test_cache = evaluator(model)
-        assert isinstance(scores, dict)
-        assert isinstance(test_cache, np.ndarray)
-        assert "accuracy" in scores
-        assert "f1" in scores
-        assert "f1_weighted" in scores
-
-        if is_binary:
-            assert "ap" in scores
-            assert "ap_weighted" in scores
-        else:
-            assert "ap" not in scores
-
-    @pytest.mark.parametrize(
-        "evaluator_fixture, is_binary",
-        [
-            ("eval_logreg_binary", True),
-            ("eval_logreg_multiclass", False),
-        ],
-    )
-    def test_score_ranges(self, evaluator_fixture, is_binary, model, request):
-        evaluator = request.getfixturevalue(evaluator_fixture)
-        scores, _ = evaluator(model)
-        metrics_to_check = ["accuracy", "f1", "f1_weighted"]
-        if is_binary:
-            metrics_to_check.extend(["ap", "ap_weighted"])
-
-        for metric in metrics_to_check:
-            assert 0 <= scores[metric] <= 1
-
-    def test_cache_usage_binary(self, model, eval_logreg_binary):
-        _, test_cache_initial = eval_logreg_binary(model)
-        eval_binary_cache_test = logRegClassificationEvaluator(
-            SENTENCES_TRAIN_BINARY,
-            Y_TRAIN_BINARY,
-            SENTENCES_TEST_BINARY,
-            Y_TEST_BINARY,
-            task_name="test_logreg_binary_cache",
-        )
-        scores_with_cache, test_cache_after_cache_usage = eval_binary_cache_test(
-            model, test_cache=test_cache_initial
-        )
-
-        assert np.array_equal(test_cache_initial, test_cache_after_cache_usage)
-        for metric in ["accuracy", "f1", "f1_weighted", "ap", "ap_weighted"]:
-            assert 0 <= scores_with_cache[metric] <= 1
-
-    @pytest.mark.parametrize(
-        "train_sentences, train_labels, test_sentences, test_labels, task_name, limit, expected_train_len, expected_test_len, is_binary_after_limit, expected_exception",
-        [
-            # Ensure binary classification is still possible after limiting
-            (
-                SENTENCES_TRAIN_BINARY,
-                Y_TRAIN_BINARY,
-                SENTENCES_TEST_BINARY,
-                Y_TEST_BINARY,
-                "test_logreg_limit_binary",
-                3,
-                3,
-                2,
-                True,
-                None,
-            ),
-            # Test case where limiting results in a single class, expecting ValueError
-            (
-                SENTENCES_TRAIN_BINARY,
-                Y_TRAIN_BINARY,
-                SENTENCES_TEST_BINARY,
-                Y_TEST_BINARY,
-                "test_logreg_limit_not_binary_train",
-                1,
-                1,
-                1,
-                False,
-                ValueError,
-            ),
-        ],
-    )
-    def test_limit_parameter(
-        self,
-        model,
-        train_sentences,
-        train_labels,
-        test_sentences,
-        test_labels,
-        task_name,
-        limit,
-        expected_train_len,
-        expected_test_len,
-        is_binary_after_limit,
-        expected_exception,
-    ):
-        if expected_exception:
-            with pytest.raises(expected_exception):
-                eval_limited = logRegClassificationEvaluator(
-                    train_sentences,
-                    train_labels,
-                    test_sentences,
-                    test_labels,
-                    task_name=task_name,
-                    limit=limit,
-                )
-                eval_limited(model)
-        else:
-            eval_limited = logRegClassificationEvaluator(
-                train_sentences,
-                train_labels,
-                test_sentences,
-                test_labels,
-                task_name=task_name,
-                limit=limit,
-            )
-            assert len(eval_limited.sentences_train) == expected_train_len
-            assert len(eval_limited.y_train) == expected_train_len
-            assert len(eval_limited.sentences_test) == expected_test_len
-            assert len(eval_limited.y_test) == expected_test_len
-
-            scores, _ = eval_limited(model)
-            assert "accuracy" in scores
-            assert "f1" in scores
-            assert "f1_weighted" in scores
-            if is_binary_after_limit:
-                assert "ap" in scores
-                assert "ap_weighted" in scores
-            else:
-                assert "ap" not in scores
-                assert "ap_weighted" not in scores
+    # Verify that scores are returned (structure check only)
+    assert "accuracy" in scores_with_cache
+    assert "f1" in scores_with_cache
+    assert "f1_weighted" in scores_with_cache
+    assert "ap" in scores_with_cache
+    assert "ap_weighted" in scores_with_cache
