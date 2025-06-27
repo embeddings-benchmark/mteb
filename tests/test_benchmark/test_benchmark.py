@@ -15,6 +15,7 @@ import mteb
 import mteb.overview
 from mteb.create_meta import generate_readme
 from mteb.evaluation.MTEB import logger
+from mteb.models.wrapper import Wrapper
 
 from .mock_models import (
     MockCLIPEncoder,
@@ -300,6 +301,11 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
+
+
+@pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-passage"])
+def test_prompt_name_split_correctly(task_name: str, tmp_path: Path):
+    Wrapper.validate_task_to_prompt_name({task_name: task_name})
 
 
 @pytest.mark.parametrize(
