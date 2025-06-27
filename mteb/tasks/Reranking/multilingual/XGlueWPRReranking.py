@@ -81,9 +81,9 @@ _CITATION = r"""
 """
 
 
-class XGlueWRPReranking(MultilingualTask, AbsTaskReranking):
+class XGlueWPRReranking(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
-        name="XGlueWRPReranking",
+        name="XGlueWPRReranking",
         description="""XGLUE is a new benchmark dataset to evaluate the performance of cross-lingual pre-trained models
         with respect to cross-lingual natural language understanding and generation. XGLUE is composed of 11 tasks spans 19 languages.""",
         reference="https://github.com/microsoft/XGLUE",

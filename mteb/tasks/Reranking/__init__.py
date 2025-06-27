@@ -13,6 +13,6 @@ from .jpn.MMarcoReranking import *
 from .multilingual.ESCIReranking import *
 from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
-from .multilingual.XGlueWRPReranking import *
+from .multilingual.XGlueWPRReranking import *
 from .rus.RuBQReranking import *
 from .zho.CMTEBReranking import *
