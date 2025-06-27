@@ -9,12 +9,13 @@ from mteb.models.wrapper import Wrapper
 from PIL import Image
 from torch.utils.data import DataLoader
 
+
 class llama_nemoretriever_colembed(Wrapper):
     def __init__(
         self,
         model_name_or_path: str,
         trust_remote_code: bool,
-        device_map='cuda',
+        device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
         revision=None,
@@ -26,17 +27,12 @@ class llama_nemoretriever_colembed(Wrapper):
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
             attn_implementation=attn_implementation,
-            revision=revision
+            revision=revision,
         ).eval()
 
-    def get_text_embeddings(
-        self,
-        texts,
-        batch_size: int = 32,
-        **kwargs
-    ):
+    def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
         batch_size = 1
-        return(self.model.forward_queries(texts, batch_size=batch_size))
+        return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
         self,
@@ -45,20 +41,22 @@ class llama_nemoretriever_colembed(Wrapper):
         **kwargs,
     ):
         import torchvision.transforms.functional as F
-        
+
         all_images = []
         if isinstance(images, DataLoader):
             iterator = images
         else:
             iterator = DataLoader(images, batch_size=batch_size)
-        
+
         for batch in iterator:
             for b in batch:
-                pil_img = F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
+                pil_img = (
+                    F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
+                )
                 all_images.append(pil_img)
 
         batch_size = 1
-        return(self.model.forward_passages(all_images, batch_size=batch_size))
+        return self.model.forward_passages(all_images, batch_size=batch_size)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         scores = self.similarity(text_embeddings, image_embeddings)
@@ -66,7 +64,7 @@ class llama_nemoretriever_colembed(Wrapper):
 
     def similarity(self, a, b):
         return self.model.get_scores(a, b)
-    
+
     def get_fused_embeddings(
         self,
         *args,
@@ -85,12 +83,13 @@ class llama_nemoretriever_colembed(Wrapper):
             "Encode is not implemented. Please use .mdl.forward_queries or mdl.forward_passages."
         )
 
+
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     loader=partial(
         llama_nemoretriever_colembed,
         model_name_or_path="nvidia/llama-nemoretriever-colembed-1b-v1",
         trust_remote_code=True,
-        revision="1f0fdea7f5b19532a750be109b19072d719b8177"
+        revision="1f0fdea7f5b19532a750be109b19072d719b8177",
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
     languages=["eng-Latn"],
@@ -117,7 +116,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
         llama_nemoretriever_colembed,
         model_name_or_path="nvidia/llama-nemoretriever-colembed-3b-v1",
         trust_remote_code=True,
-        revision="50c36f4d5271c6851aa08bd26d69f6e7ca8b870c"
+        revision="50c36f4d5271c6851aa08bd26d69f6e7ca8b870c",
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
     languages=["eng-Latn"],
