@@ -13,6 +13,7 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.requires_package import requires_package
+from mteb.languages import PROGRAMMING_LANGS
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +122,33 @@ XLMR_LANGUAGES = [
     "zho-Hans",
 ]
 
+JinaV4_TRAINING_DATA = {
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "mMARCO-NL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
+    "STS12": ["train"],
+    "SICK-R": ["train"],
+    "CodeSearchNetRetrieval": ["train"],
+    "CodeFeedbackST": ["train"],
+    "CodeFeedbackMT": ["train"],
+    "AppsRetrieval": ["train"],
+    "StackOverflowQA": ["train"],
+    "CornStack": [],
+    "VDRMultilingualRetrieval": ["train"],
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "DocVQA": ["train"],
+    "InfoVQA": ["train"],
+    "TATDQA": ["train"],
+    "arXivQA": ["train"],
+    # "other": [], # inhouse dataset including synthetic datasets
+}
+
 
 class JinaWrapper(SentenceTransformerWrapper):
     """following the hf model card documentation."""
@@ -183,6 +211,140 @@ class JinaWrapper(SentenceTransformerWrapper):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
+
+
+class JinaV4Wrapper(SentenceTransformerWrapper):
+    """following the hf model card documentation."""
+
+    jina_task_to_prompt = {
+        "retrieval.query": "Query: ",
+        "retrieval.passage": "Passage: ",
+        "text-matching": "Query: ",
+    }
+
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
+        requires_package(
+            self, "flash_attn", model, "pip install 'mteb[flash_attention]'"
+        )
+        requires_package(self, "peft", model, "pip install 'mteb[jina-v4]'")
+        requires_package(self, "torchvision", model, "pip install 'mteb[jina-v4]'")
+        import peft  # noqa: F401
+        import flash_attn  # noqa: F401
+        import transformers  # noqa: F401
+
+        super().__init__(model, revision, model_prompts, **kwargs)
+
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        if prompt_name:
+            logger.info(
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+            )
+        logger.info(f"Encoding {len(sentences)} sentences.")
+
+        # Get Jina-specific parameters
+        jina_task_name = self.model_prompts.get(prompt_name) if prompt_name else None
+        jina_prompt = (
+            self.jina_task_to_prompt.get(jina_task_name) if jina_task_name else None
+        )
+
+        # Override task for programming-related content
+        jina_task_name = get_programming_task_override(task_name, jina_task_name)
+
+        embeddings = self.model.encode(
+            sentences,
+            task=jina_task_name.split(".")[0] if jina_task_name else None,
+            prompt=jina_prompt,
+            **kwargs,
+        )
+
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+
+def get_programming_task_override(
+    task_name: str, current_task_name: str | None
+) -> str | None:
+    """
+    Check if task involves programming content and override with 'code' task if so.
+
+    Args:
+        task_name: Original task name to check
+        current_task_name: Current Jina task name
+
+    Returns:
+        'code' if programming-related task detected, otherwise current_task_name
+    """
+    # Import here to avoid circular imports
+    from mteb import get_task
+
+    task = get_task(task_name)
+
+    # Check various indicators for programming content
+    has_code_language = any(lang.endswith("-Code") for lang in task.metadata.eval_langs)
+    has_programming_language = any(
+        lang in PROGRAMMING_LANGS for lang in task.metadata.languages
+    )
+    has_programming_domain = any(
+        domain == "Programming" for domain in task.metadata.domains
+    )
+
+    if has_code_language or has_programming_language or has_programming_domain:
+        return "code"
+
+    return current_task_name
+
+
+jina_embeddings_v4 = ModelMeta(
+    loader=partial(  # type: ignore
+        JinaV4Wrapper,
+        model="jinaai/jina-embeddings-v4",
+        revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
+        trust_remote_code=True,
+        model_prompts={
+            "Retrieval-query": "retrieval.query",
+            "Retrieval-passage": "retrieval.passage",
+            "STS": "text-matching",
+        },
+    ),
+    name="jinaai/jina-embeddings-v4",
+    languages=XLMR_LANGUAGES,
+    open_weights=True,
+    revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
+    release_date="2025-06-24",  # official release date
+    n_parameters=int(3.8 * 1e9),
+    memory_usage_mb=7500,
+    max_tokens=8194,
+    embed_dim=2048,
+    license="cc-by-nc-4.0",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v4",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=JinaV4_TRAINING_DATA,
+    adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
+)
 
 
 jina_embeddings_v3 = ModelMeta(
