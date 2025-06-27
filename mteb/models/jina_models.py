@@ -13,6 +13,7 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.requires_package import requires_package
+from mteb.languages import PROGRAMMING_LANGS
 
 logger = logging.getLogger(__name__)
 
@@ -235,12 +236,19 @@ class JinaV4Wrapper(JinaWrapper):
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
-        jina_task_name = self.model_prompts.get(prompt_name, None)
+        # Get Jina-specific parameters
+        jina_task_name = self.model_prompts.get(prompt_name) if prompt_name else None
+        jina_prompt = (
+            self.jina_task_to_prompt.get(jina_task_name) if jina_task_name else None
+        )
+
+        # Override task for programming-related content
+        jina_task_name = get_programming_task_override(task_name, jina_task_name)
 
         embeddings = self.model.encode(
             sentences,
             task=jina_task_name.split(".")[0] if jina_task_name else None,
-            prompt=self.jina_task_to_prompt.get(jina_task_name, None),
+            prompt=jina_prompt,
             **kwargs,
         )
 
@@ -248,6 +256,39 @@ class JinaV4Wrapper(JinaWrapper):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
+
+
+def get_programming_task_override(
+    task_name: str, current_task_name: str | None
+) -> str | None:
+    """
+    Check if task involves programming content and override with 'code' task if so.
+
+    Args:
+        task_name: Original task name to check
+        current_task_name: Current Jina task name
+
+    Returns:
+        'code' if programming-related task detected, otherwise current_task_name
+    """
+    # Import here to avoid circular imports
+    from mteb import get_task
+
+    task = get_task(task_name)
+
+    # Check various indicators for programming content
+    has_code_language = any(lang.endswith("-Code") for lang in task.metadata.eval_langs)
+    has_programming_language = any(
+        lang in PROGRAMMING_LANGS for lang in task.metadata.languages
+    )
+    has_programming_domain = any(
+        domain == "Programming" for domain in task.metadata.domains
+    )
+
+    if has_code_language or has_programming_language or has_programming_domain:
+        return "code"
+
+    return current_task_name
 
 
 jina_embeddings_v4 = ModelMeta(
@@ -279,7 +320,7 @@ jina_embeddings_v4 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=JinaV4_TRAINING_DATA,
-    adapted_from="Qwen-2.5-VL-Instruct",
+    adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
 )
 
 
