@@ -123,8 +123,30 @@ XLMR_LANGUAGES = [
 ]
 
 JinaV4_TRAINING_DATA = {
-    # Self-reported (message from JinaAI member)
-    # inhouse data + synthetic data
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "mMARCO-NL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
+    "STS12": ["train"],
+    "SICK-R": ["train"],
+    "CodeSearchNetRetrieval": ["train"],
+    "CodeFeedbackST": ["train"],
+    "CodeFeedbackMT": ["train"],
+    "AppsRetrieval": ["train"],
+    "StackOverflowQA": ["train"],
+    "CornStack": [],
+    "VDRMultilingualRetrieval": ["train"],
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "DocVQA": ["train"],
+    "InfoVQA": ["train"],
+    "TATDQA": ["train"],
+    "arXivQA": ["train"],
+    # "other": [], # inhouse dataset including synthetic datasets
 }
 
 
@@ -191,7 +213,7 @@ class JinaWrapper(SentenceTransformerWrapper):
         return embeddings
 
 
-class JinaV4Wrapper(JinaWrapper):
+class JinaV4Wrapper(SentenceTransformerWrapper):
     """following the hf model card documentation."""
 
     jina_task_to_prompt = {
@@ -207,15 +229,16 @@ class JinaV4Wrapper(JinaWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "peft", model, "pip install 'mteb[peft]'")
-        import peft  # noqa: F401
-
-        super().__init__(
-            model=model,
-            revision=revision,
-            model_prompts=model_prompts,
-            **kwargs,
+        requires_package(
+            self, "flash_attn", model, "pip install 'mteb[flash_attention]'"
         )
+        requires_package(self, "peft", model, "pip install 'mteb[jina-v4]'")
+        requires_package(self, "torchvision", model, "pip install 'mteb[jina-v4]'")
+        import peft  # noqa: F401
+        import flash_attn  # noqa: F401
+        import transformers  # noqa: F401
+
+        super().__init__(model, revision, model_prompts, **kwargs)
 
     def encode(
         self,
