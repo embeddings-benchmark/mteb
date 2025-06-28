@@ -17,9 +17,9 @@ class AmbientAcousticContextClustering(AbsTaskAudioClustering):
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2020-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Environment Sound Clustering"],
@@ -55,3 +55,4 @@ class AmbientAcousticContextClustering(AbsTaskAudioClustering):
             "sampling_rate": 16000,
         },
     )
+    max_fraction_of_documents_to_embed = None

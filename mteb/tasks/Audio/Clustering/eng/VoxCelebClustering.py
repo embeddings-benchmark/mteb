@@ -18,7 +18,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2024-06-27", "2024-06-28"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Sentiment Clustering"],
@@ -39,6 +39,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
 }
 """,
     )
+    max_fraction_of_documents_to_embed = None
 
     def dataset_transform(self):
         ds = self.dataset
@@ -54,3 +55,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
         ds = ds.map(add_label_id)
         self.dataset = ds
         self.label_column_name = "label_id"
+
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name
+        )

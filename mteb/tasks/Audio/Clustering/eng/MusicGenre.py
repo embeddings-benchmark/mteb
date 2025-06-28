@@ -18,7 +18,7 @@ class MusicGenreClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2005-01-01", "2005-12-31"),
         domains=["Music"],
         task_subtypes=["Music Clustering"],
@@ -38,3 +38,4 @@ class MusicGenreClustering(AbsTaskAudioClustering):
 }
 """,
     )
+    max_fraction_of_documents_to_embed = None

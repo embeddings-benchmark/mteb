@@ -12,16 +12,14 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
         description="Clustering English speech samples by non-native accent from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "facebook/voxpopuli",
-            "name": "en_accented",
-            "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
-            "trust_remote_code": True,
+            "path": "mteb/voxpopuli-accent-clustering",
+            "revision": "f7558b7e2e984ab1680f405174798512cb8d4854",
         },
         type="AudioClustering",
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Accent Clustering"],
@@ -53,6 +51,7 @@ Dupoux, Emmanuel},
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 6900},
+            "n_samples": {"test": 2048},
         },
     )
+    max_fraction_of_documents_to_embed = None

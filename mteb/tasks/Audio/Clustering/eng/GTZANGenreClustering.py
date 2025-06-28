@@ -18,7 +18,7 @@ class GTZANGenreClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2000-01-01", "2001-12-31"),
         domains=["Music"],
         task_subtypes=["Music Clustering"],
@@ -41,3 +41,4 @@ class GTZANGenreClustering(AbsTaskAudioClustering):
 }
 """,
     )
+    max_fraction_of_documents_to_embed = None

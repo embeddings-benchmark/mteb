@@ -26,7 +26,7 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
             "pol-Latn",  # Polish
             "deu-Latn",  # German
         ],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
         task_subtypes=["Gender Clustering"],
@@ -62,7 +62,7 @@ Dupoux, Emmanuel},
         },
     )
 
-    audio_column_name: str = "audio"
+    max_fraction_of_documents_to_embed = None
 
     def dataset_transform(self):
         # Define label mapping

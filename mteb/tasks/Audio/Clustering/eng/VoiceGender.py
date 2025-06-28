@@ -18,7 +18,7 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2024-01-01", "2024-12-31"),
         domains=["Spoken"],
         task_subtypes=["Gender Clustering"],
@@ -36,3 +36,9 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
 }
 """,
     )
+    max_fraction_of_documents_to_embed = None
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
+        )

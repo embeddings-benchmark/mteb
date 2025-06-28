@@ -18,7 +18,7 @@ class CREMA_DClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2014-01-01", "2014-12-31"),
         domains=["Speech"],
         task_subtypes=["Emotion Clustering"],
@@ -40,3 +40,9 @@ class CREMA_DClustering(AbsTaskAudioClustering):
 }
 """,
     )
+    max_fraction_of_documents_to_embed = None
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
+        )
