@@ -19,7 +19,7 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
             "revision": "d4dc581109fd9ea6b8ed2c4a85075a5ec910cfda",
         },
         type="AudioReranking",
-        category="a2t",
+        category="a2a",
         modalities=["audio"],
         eval_splits=["test"],  # The mini dataset has only one split
         eval_langs=["eng-Latn"],
