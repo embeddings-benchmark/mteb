@@ -71,7 +71,7 @@ speedtask = [
 ]
 peft = ["peft>=0.11.0"]
 leaderboard = [
-    "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio==5.35.0; python_version > '3.9'", # 3.10 is required for gradio
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
