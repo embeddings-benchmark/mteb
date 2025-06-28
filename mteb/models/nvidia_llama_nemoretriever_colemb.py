@@ -83,6 +83,25 @@ class llama_nemoretriever_colembed(Wrapper):
             "Encode is not implemented. Please use .mdl.forward_queries or mdl.forward_passages."
         )
 
+TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "DocVQA": ["train"],
+    "InfoVQA": ["train"],
+    "TATDQA": ["train"],
+    "arXivQA": ["train"],
+    "hotpotqa": ["train"],
+    "miracl": ["train"],
+    "NQ": ["train"],
+    "stackexchange": ["train"],
+    "SQuAD": ["train"],
+    "WebInstructSub": ["train"],
+    "docmatix-ir": ["train"],
+    "vdr-multilingual-train": ["train"],
+    "colpali_train_set": ["train"], # as it contains PDFs
+    "VisRAG-Ret-Train-Synthetic-data": ["train"],
+    "VisRAG-Ret-Train-In-domain-data": ["train"],
+    "wiki-ss-nq": ["train"]
+}
 
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     loader=partial(
@@ -100,15 +119,15 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     memory_usage_mb=9224,
     max_tokens=8192,
     embed_dim=2048,
-    license="not specified",
+    license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
     open_weights=True,
     public_training_code="Proprietary Code",
-    public_training_data="Proprietary",
+    public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
     framework=["PyTorch"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1",
     similarity_fn_name="max_sim",
     use_instructions=True,
-    training_datasets={},
+    training_datasets=TRAINING_DATA,
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
@@ -127,13 +146,13 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     memory_usage_mb=16811,
     max_tokens=8192,
     embed_dim=3072,
-    license="not specified",
+    license="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE",
     open_weights=True,
     public_training_code="Proprietary Code",
-    public_training_data="Proprietary",
+    public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
     framework=["PyTorch"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1",
     similarity_fn_name="max_sim",
     use_instructions=True,
-    training_datasets={},
+    training_datasets=TRAINING_DATA,
 )
