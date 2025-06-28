@@ -1,34 +1,68 @@
 # Loading and working with results
 
-Multiple models have already been run on tasks available within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
+After running models on `mteb` you typically want to know more about the results. You can load your results from the cache using the `ResultCache` object.
+
+
 
 To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
 import mteb
 
+tasks = mteb.get_tasks(tasks=["STS12"])
+model_names = ["intfloat/multilingual-e5-large"]
+
+cache = ResultCache("~/.cache/mteb")
+results = cache.load_results(models=model_names, tasks=tasks)
+
+```
+
+From this you will get a results object:
+```py
+results
+# BenchmarkResults(model_results=[...](#1))
+type(results)
+# mteb.load_results.benchmark_results.BenchmarkResults
+```
+
+## Working with remote results
+
+While you can of course use local results you typically want to compare your model to existing models run using `mteb`. For MTEB all previously submitted results are available results [repository](https://github.com/embeddings-benchmark/results).
+
+You can download this using:
+
+```py
+from mteb.cache import ResultCache
+
+cache = ResultCache()
+cache.download_from_remote() # download results from the remote repository
+```
+
+From here you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+
+```py
+from mteb.cache import ResultCache
+
 # select your tasks
 tasks = mteb.get_tasks(task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"])
-# or use a benchmark
-tasks = mteb.get_benchmark("MTEB(Multilingual, v1)").tasks
 
 model_names = [
     "GritLM/GritLM-7B",
     "intfloat/multilingual-e5-large",
 ]
 
-results = mteb.load_results(models=model_names, tasks=tasks)
+
+cache = ResultCache()
+cache.download_from_remote() # download results from the remote repository
+
+results = cache.load_results(
+    models=model_names, 
+    tasks=tasks
+    include_remote=True, # default
+)
 ```
 
-From this you will get a results object:
-```py
-results
-# BenchmarkResults(model_results=[...](#10))
-type(results)
-# mteb.load_results.benchmark_results.BenchmarkResults
-```
-
-## Working with the result objects
+## Working with `BenchmarkResults`
 
 The result object is a convenient object in `mteb` for working with dataframes and allows you to quick examine your results.
 
