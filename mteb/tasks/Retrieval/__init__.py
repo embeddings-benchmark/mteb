@@ -31,6 +31,7 @@ from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
 from .eng.BuiltBenchRetrieval import *
+from .eng.ChatDoctor_HealthCareMagic import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
