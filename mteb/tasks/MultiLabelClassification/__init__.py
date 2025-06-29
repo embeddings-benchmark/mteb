@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ita.EmitClassification import *
 from .kor.KorHateSpeechMLClassification import *
 from .mlt.MalteseNewsClassification import *
 from .multilingual.MultiEURLEXMultilabelClassification import *
