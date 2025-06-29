@@ -1,13 +1,14 @@
-import torch
+from __future__ import annotations
 
-from transformers import AutoModel
 from functools import partial
+
+import torch
+from PIL import Image
+from torch.utils.data import DataLoader
+from transformers import AutoModel
 
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-
-from PIL import Image
-from torch.utils.data import DataLoader
 
 
 class llama_nemoretriever_colembed(Wrapper):
@@ -83,6 +84,7 @@ class llama_nemoretriever_colembed(Wrapper):
             "Encode is not implemented. Please use .mdl.forward_queries or mdl.forward_passages."
         )
 
+
 TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
     "DocVQA": ["train"],
@@ -97,10 +99,10 @@ TRAINING_DATA = {
     "WebInstructSub": ["train"],
     "docmatix-ir": ["train"],
     "vdr-multilingual-train": ["train"],
-    "colpali_train_set": ["train"], # as it contains PDFs
+    "colpali_train_set": ["train"],  # as it contains PDFs
     "VisRAG-Ret-Train-Synthetic-data": ["train"],
     "VisRAG-Ret-Train-In-domain-data": ["train"],
-    "wiki-ss-nq": ["train"]
+    "wiki-ss-nq": ["train"],
 }
 
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
