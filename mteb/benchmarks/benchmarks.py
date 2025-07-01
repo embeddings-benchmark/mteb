@@ -2152,7 +2152,7 @@ VN_MTEB = Benchmark(
     contacts=["BaoLocPham"],
 )
 
-JinaVDR = Benchmark(
+JINA_VDR = Benchmark(
     name="JinaVDR",
     display_name="Jina Visual Document Retrieval",
     tasks=get_tasks(
