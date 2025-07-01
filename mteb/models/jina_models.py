@@ -230,6 +230,7 @@ class JinaV4Wrapper(Wrapper):
         attn_implementation="flash_attention_2",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
+        vector_type: str = "multi_vector",
         **kwargs,
     ) -> None:
         requires_package(
@@ -337,6 +338,7 @@ class JinaV4Wrapper(Wrapper):
         else:
             self.vector_type = "single_vector"
 
+
         with torch.no_grad():
             return self.model.encode_text(
                 texts=texts,
@@ -347,6 +349,7 @@ class JinaV4Wrapper(Wrapper):
                 prompt_name=prompt_name_param,
                 task=base_task,
                 return_numpy=return_numpy,
+
             )
 
     def get_image_embeddings(
@@ -393,6 +396,7 @@ class JinaV4Wrapper(Wrapper):
             task=base_task,
             return_numpy=return_numpy,
         )
+
 
     def get_fused_embeddings(
         self,

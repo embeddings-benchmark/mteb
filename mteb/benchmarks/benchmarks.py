@@ -2031,7 +2031,7 @@ R2MED = Benchmark(
 )
 
 
-JinaVDR = Benchmark(
+JINA_VDR = Benchmark(
     name="JinaVDR",
     display_name="Jina Visual Document Retrieval",
     tasks=get_tasks(
