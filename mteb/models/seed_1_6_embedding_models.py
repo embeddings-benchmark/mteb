@@ -405,7 +405,7 @@ TASK_NAME_TO_INSTRUCTION = {
 
 
 seed_embedding = ModelMeta(
-    name="Bytedance/Seed-1.6-embedding",
+    name="Bytedance/Seed1.6-embedding",
     revision="1",
     release_date="2025-06-18",
     languages=[
@@ -414,7 +414,7 @@ seed_embedding = ModelMeta(
     ],
     loader=partial(
         Seed16EmbeddingWrapper,
-        model_name="Bytedance/Seed-1.6-embedding",
+        model_name="Bytedance/Seed1.6-embedding",
         max_tokens=32000,
         available_embed_dims=[2048, 1024],
     ),
