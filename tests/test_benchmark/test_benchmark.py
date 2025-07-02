@@ -9,7 +9,6 @@ from unittest.mock import patch
 import numpy as np
 import pytest
 import torch
-from sentence_transformers import SentenceTransformer
 
 import mteb
 import mteb.overview
@@ -114,7 +113,7 @@ def test_prompt_name_passed_to_all_encodes(
             assert prompt_name == _task_name
             return np.zeros((len(sentences), 10))
 
-    class EncoderWithoutInstructions(SentenceTransformer):
+    class EncoderWithoutInstructions(MockSentenceTransformer):
         def encode(self, sentences, **kwargs):
             assert kwargs["prompt_name"] is None
             return super().encode(sentences, **kwargs)
@@ -138,7 +137,8 @@ def test_prompt_name_passed_to_all_encodes(
         overwrite_results=True,
     )
     # Test that the task_name is not passed down to the encoder
-    model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
+    model = EncoderWithoutInstructions()
+    model.prompts = {}
     assert model.prompts == {}, "The encoder should not have any prompts"
     eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
