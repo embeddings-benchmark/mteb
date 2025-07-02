@@ -138,7 +138,6 @@ def test_prompt_name_passed_to_all_encodes(
     )
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions()
-    model.prompts = {}
     assert model.prompts == {}, "The encoder should not have any prompts"
     eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
