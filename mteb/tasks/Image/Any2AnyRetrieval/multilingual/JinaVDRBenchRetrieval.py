@@ -497,7 +497,7 @@ class JinaVDREuropeanaNlLegalRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 244,
-                    "num_queries": 199,
+                    "num_queries": 198,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -767,7 +767,7 @@ class JinaVDROWIDChartsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 937,
-                    "num_queries": 132,
+                    "num_queries": 131,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -797,7 +797,7 @@ class JinaVDRMPMQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 782,
-                    "num_queries": 155,
+                    "num_queries": 154,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1061,7 +1061,7 @@ class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetri
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 10000,
-                    "num_queries": 6287,
+                    "num_queries": 6277,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1093,7 +1093,7 @@ class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval)
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 10000,
-                    "num_queries": 4962,
+                    "num_queries": 4952,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1178,7 +1178,7 @@ class JinaVDRWikimediaCommonsDocumentsRetrieval(
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 15217,
-                    "num_queries": 14080,
+                    "num_queries": 14060,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1240,7 +1240,7 @@ class JinaVDRDocQAHealthcareIndustryRetrieval(
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 961,
-                    "num_queries": 90,
+                    "num_queries": 89,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1270,7 +1270,7 @@ class JinaVDRDocQAAI(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 962,
-                    "num_queries": 70,
+                    "num_queries": 69,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1300,7 +1300,7 @@ class JinaVDRShiftProjectRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 998,
-                    "num_queries": 89,
+                    "num_queries": 88,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1330,7 +1330,7 @@ class JinaVDRTatQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 270,
-                    "num_queries": 121,
+                    "num_queries": 120,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1360,7 +1360,7 @@ class JinaVDRInfovqaRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 500,
-                    "num_queries": 363,
+                    "num_queries": 362,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1390,7 +1390,7 @@ class JinaVDRDocVQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 499,
-                    "num_queries": 394,
+                    "num_queries": 38,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1420,7 +1420,7 @@ class JinaVDRDocQAGovReportRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 970,
-                    "num_queries": 77,
+                    "num_queries": 76,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1450,7 +1450,7 @@ class JinaVDRTabFQuadRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 70,
-                    "num_queries": 1264,
+                    "num_queries": 125,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1480,7 +1480,7 @@ class JinaVDRDocQAEnergyRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 971,
-                    "num_queries": 69,
+                    "num_queries": 68,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
@@ -1510,7 +1510,7 @@ class JinaVDRArxivQARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "num_documents": 499,
-                    "num_queries": 30,
+                    "num_queries": 29,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
