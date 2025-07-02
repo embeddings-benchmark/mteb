@@ -70,7 +70,6 @@ def _load_single_language(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    print(path, split, lang, cache_dir, revision)
     query_ds = load_dataset(
         path,
         data_dir=f"{lang}/queries" if lang else "queries",
