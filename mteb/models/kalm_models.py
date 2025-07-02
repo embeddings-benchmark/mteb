@@ -324,7 +324,7 @@ KaLM_X_task_prompts = {
     "PolEmo2.0-IN": "Classify the sentiment of in-domain (medicine and hotels) online reviews",
     "PolEmo2.0-OUT": "Classify the sentiment of out-of-domain (products and school) online reviews",
     "AllegroReviews": "Classify the sentiment of reviews from e-commerce marketplace Allegro",
-    "PAC": "Classify the sentence into one of the two types: \"BEZPIECZNE_POSTANOWIENIE_UMOWNE\" and \"KLAUZULA_ABUZYWNA\"",
+    "PAC": 'Classify the sentence into one of the two types: "BEZPIECZNE_POSTANOWIENIE_UMOWNE" and "KLAUZULA_ABUZYWNA"',
     "EightTagsClustering": "Identify of headlines from social media posts in Polish  into 8 categories: film, history, food, medicine, motorization, work, sport and technology",
     "ArguAna-PL-query": "Given a claim, find documents that refute the claim",
     "DBPedia-PL-query": "Given a query, retrieve relevant entity descriptions from DBPedia",
@@ -428,7 +428,7 @@ KaLM_X_task_prompts = {
     "CQADupstackGamingRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
     "CQADupstackGamingRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
     "CQADupstackUnixRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
-    "CQADupstackUnixRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question"
+    "CQADupstackUnixRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
 }
 
 KaLM_INSTRUCTION = "Instruct: {instruction} \n Query: "
@@ -540,7 +540,7 @@ KaLM_Embedding_X_0605 = ModelMeta(
     license=None,
     reference="https://github.com/KaLM-Team/KaLM-Embedding-X",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers","PyTorch"],
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/HITsz-TMG/KaLM-Embedding",
     public_training_data=None,
