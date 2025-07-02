@@ -103,10 +103,8 @@ class JaCWIRReranking(AbsTaskReranking):
                 )
 
         # Convert to Dataset
-        from datasets import Dataset
-
         self.dataset = {_EVAL_SPLIT: Dataset.from_list(transformed_data)}
-
+        self.dataset_transform()  # do nothing
         self.data_loaded = True
 
     def _evaluate_subset(
