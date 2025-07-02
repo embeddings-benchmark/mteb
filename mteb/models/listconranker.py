@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.model_meta import ModelMeta
 
-
 listconranker_training_datasets = {
     "CMedQAv1-reranking": ["train"],
     "CMedQAv2-reranking": ["train"],
