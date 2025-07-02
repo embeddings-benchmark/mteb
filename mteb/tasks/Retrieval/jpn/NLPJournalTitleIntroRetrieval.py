@@ -11,12 +11,17 @@ _EVAL_SPLIT = "test"
 class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NLPJournalTitleIntroRetrieval",
-        description="This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding introduction with the given title.",
-        reference="https://github.com/sbintuitions/JMTEB",
+        description=(
+            "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
+            "The titles, abstracts and introductions of the academic papers were shuffled. "
+            "The goal is to find the corresponding introduction with the given title."
+        ),
+        reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
             "path": "sbintuitions/JMTEB",
-            "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
             "trust_remote_code": True,
+            "dataset_version": "latest",
         },
         type="Retrieval",
         category="s2s",
@@ -24,9 +29,9 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
         main_score="ndcg_at_10",
-        date=("2000-01-01", "2023-12-31"),
+        date=("1994-10-10", "2025-06-15"),
         domains=["Academic", "Written"],
-        task_subtypes=[],
+        task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
@@ -34,14 +39,29 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
+    def __init__(self, dataset_version: str = "latest", **kwargs):
+        """Initialize the NLPJournalTitleIntroRetrieval task.
+
+        Args:
+            dataset_version: Version of the NLP Journal dataset to use.
+                           Options: "v1", "v2", "latest". Default is "latest".
+            **kwargs: placeholder
+        """
+        super().__init__(**kwargs)
+        self.dataset_version = dataset_version
+
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
+        # Add dataset_version to the dataset loading kwargs
+        dataset_kwargs = self.metadata_dict["dataset"].copy()
+        dataset_kwargs["dataset_version"] = self.dataset_version
+
         query_list = datasets.load_dataset(
             name="nlp_journal_title_intro-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **dataset_kwargs,
         )
 
         queries = {}
@@ -53,7 +73,7 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         corpus_list = datasets.load_dataset(
             name="nlp_journal_title_intro-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **dataset_kwargs,
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
