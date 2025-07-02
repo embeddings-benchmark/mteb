@@ -16,9 +16,6 @@ listconranker_training_datasets = {
 
 listconranker = ModelMeta(
     loader=None,  # implemented in v2.0.0 branch
-    loader_kwargs=dict(
-        fp_options="float16",
-    ),
     name="ByteDance/ListConRanker",
     languages=["zho-Hans"],
     open_weights=True,
