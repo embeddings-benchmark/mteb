@@ -8,20 +8,21 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 _EVAL_SPLIT = "test"
 
 
-class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
+class NLPJournalTitleAbsRetrievalV2(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NLPJournalTitleAbsRetrieval",
+        name="NLPJournalTitleAbsRetrieval.V2",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
             "The titles, abstracts and introductions of the academic papers were shuffled. "
-            "The goal is to find the corresponding abstract with the given title."
+            "The goal is to find the corresponding abstract with the given title. "
+            "This is the V2 dataset (last updated 2025-06-15)."
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
             "path": "sbintuitions/JMTEB",
             "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
             "trust_remote_code": True,
-            "dataset_version": "latest",
+            "dataset_version": "v2",
         },
         type="Retrieval",
         category="s2s",
@@ -39,29 +40,14 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
-    def __init__(self, dataset_version: str = "latest", **kwargs):
-        """Initialize the NLPJournalTitleAbsRetrieval task.
-
-        Args:
-            dataset_version: Version of the NLP Journal dataset to use.
-                           Options: "v1", "v2", "latest". Default is "latest".
-            **kwargs: placeholder
-        """
-        super().__init__(**kwargs)
-        self.dataset_version = dataset_version
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        # Add dataset_version to the dataset loading kwargs
-        dataset_kwargs = self.metadata_dict["dataset"].copy()
-        dataset_kwargs["dataset_version"] = self.dataset_version
-
         query_list = datasets.load_dataset(
             name="nlp_journal_title_abs-query",
             split=_EVAL_SPLIT,
-            **dataset_kwargs,
+            **self.metadata_dict["dataset"],
         )
 
         queries = {}
@@ -73,7 +59,70 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
         corpus_list = datasets.load_dataset(
             name="nlp_journal_title_abs-corpus",
             split="corpus",
-            **dataset_kwargs,
+            **self.metadata_dict["dataset"],
+        )
+
+        corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
+
+        self.corpus = {_EVAL_SPLIT: corpus}
+        self.queries = {_EVAL_SPLIT: queries}
+        self.relevant_docs = {_EVAL_SPLIT: qrels}
+
+        self.data_loaded = True
+
+
+class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="NLPJournalTitleAbsRetrieval",
+        description=(
+            "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
+            "The titles, abstracts and introductions of the academic papers were shuffled. "
+            "The goal is to find the corresponding abstract with the given title. "
+            "This is the V1 dataset (last updated 2020-06-15)."
+        ),
+        reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
+        dataset={
+            "path": "sbintuitions/JMTEB",
+            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
+            "trust_remote_code": True,
+            "dataset_version": "v1",
+        },
+        type="Retrieval",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=["jpn-Jpan"],
+        main_score="ndcg_at_10",
+        date=("1994-10-10", "2020-06-15"),
+        domains=["Academic", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        query_list = datasets.load_dataset(
+            name="nlp_journal_title_abs-query",
+            split=_EVAL_SPLIT,
+            **self.metadata_dict["dataset"],
+        )
+
+        queries = {}
+        qrels = {}
+        for row_id, row in enumerate(query_list):
+            queries[str(row_id)] = row["query"]
+            qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
+
+        corpus_list = datasets.load_dataset(
+            name="nlp_journal_title_abs-corpus",
+            split="corpus",
+            **self.metadata_dict["dataset"],
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
