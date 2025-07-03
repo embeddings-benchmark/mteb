@@ -11,10 +11,26 @@ import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.bge_models import bge_chinese_training_data
+from mteb.models.nvidia_models import nvidia_training_datasets
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
+
+
+seed_1_5_training_data = (
+    {
+        "PAWSX": ["train"],
+        "QBQTC": ["train"],
+        "STSB": ["train"],
+        "TNews": ["train"],
+        "Waimai": ["train"],
+        "IFlyTek": ["train"],
+    }
+    | bge_chinese_training_data
+    | nvidia_training_datasets
+)
 
 
 class SeedWrapper(Wrapper):
@@ -236,11 +252,11 @@ seed_embedding = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://console.volcengine.com/ark/region:ark+cn-beijing/model/detail?Id=doubao-embedding-large",
+    reference="https://seed1-5-embedding.github.io/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=seed_1_5_training_data,
     public_training_code=None,
     public_training_data=None,
 )

@@ -156,6 +156,6 @@ align_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets={
-        # COYO-700M
+        #  COYO-700M
     },
 )

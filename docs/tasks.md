@@ -20,7 +20,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [ATEC](https://aclanthology.org/2021.emnlp-main.357) (Raghu et al., 2021) | ['cmn'] | STS | s2s |  | None | None |
 | [AfriSentiClassification](https://arxiv.org/abs/2302.08956) (Shamsuddeen Hassan Muhammad, 2023) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social, Written] | None | None |
 | [AfriSentiLangClassification](https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social, Written] | None | None |
-| [AllegroReviews](https://aclanthology.org/2020.acl-main.111.pdf) | ['pol'] | Classification | s2s | [Reviews] | None | None |
+| [AllegroReviews](https://aclanthology.org/2020.acl-main.111.pdf) (Rybak et al., 2020) | ['pol'] | Classification | s2s | [Reviews] | None | None |
 | [AlloProfClusteringP2P.v2](https://huggingface.co/datasets/lyon-nlp/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Clustering | p2p | [Encyclopaedic, Written] | None | None |
 | [AlloProfClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Clustering | s2s | [Encyclopaedic, Written] | None | None |
 | [AlloprofReranking](https://huggingface.co/datasets/antoinelb7/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Reranking | s2p | [Academic, Web, Written] | None | None |
@@ -437,6 +437,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MIRACLReranking](https://project-miracl.github.io/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Reranking | s2s | [Encyclopaedic, Written] | None | None |
 | [MIRACLRetrieval](http://miracl.ai/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [MIRACLRetrievalHardNegatives](http://miracl.ai/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
+| [MIRACLVisionRetrieval](https://arxiv.org/pdf/2407.01449) (Radek Osmulski, 2025) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | DocumentUnderstanding | t2i | [Encyclopaedic] | None | None |
 | [MLQARetrieval](https://huggingface.co/datasets/mlqa) (Lewis et al., 2019) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [MLQuestions](https://github.com/McGill-NLP/MLQuestions) (Kulshreshtha et al., 2021) | ['eng'] | Retrieval | s2p | [Academic, Encyclopaedic, Written] | None | None |
 | [MLSUMClusteringP2P.v2](https://huggingface.co/datasets/mteb/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | p2p | [News, Written] | None | None |
@@ -595,6 +596,14 @@ The following tables give you an overview of the tasks in MTEB.
 | [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s | [Blog, Web, Written] | None | None |
 | [QuoraRetrieval-Fa](https://huggingface.co/datasets/MCINext/quora-fa) | ['fas'] | Retrieval | s2s | [Web] | None | None |
 | [QuoraRetrievalHardNegatives](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s |  | None | None |
+| [R2MEDBioinformaticsRetrieval](https://huggingface.co/datasets/R2MED/Bioinformatics) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDBiologyRetrieval](https://huggingface.co/datasets/R2MED/Biology) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDIIYiClinicalRetrieval](https://huggingface.co/datasets/R2MED/IIYi-Clinical) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDMedQADiagRetrieval](https://huggingface.co/datasets/R2MED/MedQA-Diag) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDMedXpertQAExamRetrieval](https://huggingface.co/datasets/R2MED/MedXpertQA-Exam) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDMedicalSciencesRetrieval](https://huggingface.co/datasets/R2MED/Medical-Sciences) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDPMCClinicalRetrieval](https://huggingface.co/datasets/R2MED/PMC-Clinical) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
+| [R2MEDPMCTreatmentRetrieval](https://huggingface.co/datasets/R2MED/PMC-Treatment) (Li et al., 2025) | ['eng'] | Retrieval | s2p | [Medical] | None | None |
 | [RARbCode](https://arxiv.org/abs/2404.06347) (Husain et al., 2019) | ['eng'] | Retrieval | s2p | [Programming, Written] | None | None |
 | [RARbMath](https://arxiv.org/abs/2404.06347) (Cobbe et al., 2021) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [RESISC45](https://ieeexplore.ieee.org/abstract/document/7891544) (Cheng et al., 2017) | ['eng'] | ImageClassification | i2i | [Encyclopaedic] | {'test': 6300} | {'test': {'num_samples': 6300, 'unique_num_labels': 45, 'min_image_width': 256, 'average_image_width': 256.0, 'max_image_width': 256, 'min_image_height': 256, 'average_image_height': 256.0, 'max_image_height': 256, 'labels': {'31': {'count': 135}, '11': {'count': 144}, '28': {'count': 135}, '43': {'count': 154}, '41': {'count': 144}, '33': {'count': 134}, '19': {'count': 130}, '16': {'count': 127}, '22': {'count': 130}, '34': {'count': 143}, '24': {'count': 164}, '0': {'count': 169}, '13': {'count': 146}, '25': {'count': 115}, '6': {'count': 132}, '36': {'count': 135}, '39': {'count': 142}, '18': {'count': 140}, '23': {'count': 147}, '37': {'count': 159}, '15': {'count': 122}, '29': {'count': 140}, '9': {'count': 159}, '27': {'count': 140}, '21': {'count': 131}, '3': {'count': 134}, '1': {'count': 162}, '32': {'count': 153}, '26': {'count': 150}, '35': {'count': 151}, '44': {'count': 118}, '30': {'count': 154}, '20': {'count': 139}, '4': {'count': 130}, '42': {'count': 127}, '40': {'count': 137}, '5': {'count': 140}, '17': {'count': 142}, '2': {'count': 123}, '38': {'count': 130}, '10': {'count': 140}, '12': {'count': 146}, '8': {'count': 146}, '7': {'count': 143}, '14': {'count': 118}}}} |
@@ -661,9 +670,9 @@ The following tables give you an overview of the tasks in MTEB.
 | [SIDClustring](https://www.sid.com/) | ['fas'] | Clustering | p2p | [Academic] | None | None |
 | [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Sap et al., 2019) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
 | [SKQuadRetrieval](https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad) | ['slk'] | Retrieval | s2s | [Encyclopaedic] | None | None |
-| [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
-| [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction, Written] | None | None |
-| [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
+| [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringP2P) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
+| [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringS2S) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction, Written] | None | None |
+| [SNLRetrieval](https://huggingface.co/datasets/mteb/SNLRetrieval) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
 | [SOPI2IRetrieval](https://paperswithcode.com/dataset/stanford-online-products) (Oh Song et al., 2016) | ['eng'] | Any2AnyRetrieval | i2i | [Encyclopaedic] | {'test': 240106} | {'test': {'number_of_characters': 0, 'num_samples': 240106, 'num_queries': 120053, 'num_documents': 120053, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 120053, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 120053, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 7.0, 'max_relevant_docs_per_query': 12, 'unique_relevant_docs': 120053}} |
 | [SRNCorpusBitextMining](https://arxiv.org/abs/2212.06383) (Zwennicker et al., 2022) | ['nld', 'srn'] | BitextMining | s2s | [Social, Web, Written] | None | None |
 | [STL10](https://cs.stanford.edu/~acoates/stl10/) (Coates et al., 2011) | ['eng'] | ImageClassification | i2i | [Encyclopaedic] | {'test': 8000} | {'test': {'num_samples': 8000, 'unique_num_labels': 10, 'min_image_width': 96, 'average_image_width': 96.0, 'max_image_width': 96, 'min_image_height': 96, 'average_image_height': 96.0, 'max_image_height': 96, 'labels': {'0': {'count': 800}, '1': {'count': 800}, '2': {'count': 800}, '3': {'count': 800}, '4': {'count': 800}, '5': {'count': 800}, '6': {'count': 800}, '7': {'count': 800}, '8': {'count': 800}, '9': {'count': 800}}}} |
@@ -984,7 +993,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | Apurinã | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | apw | Western Apache | Athabaskan-Eyak-Tlingit | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | apz | Safeyoka | Angan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ara | Arabic | Unclassified | 0 | 2 | 0 | 4 | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 36 |
+| ara | Arabic | Unclassified | 0 | 2 | 0 | 4 | 12 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 37 |
 | arb | Standard Arabic | Afro-Asiatic | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
 | are | Western Arrarnta | Pama-Nyungan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | arl | Arabela | Zaparoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1031,7 +1040,7 @@ The following tables give you an overview of the tasks in MTEB.
 | bef | Benabena | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bel | Belarusian | Indo-European | 0 | 0 | 0 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | bem | Bemba (Zambia) | Atlantic-Congo | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ben | Bengali | Indo-European | 0 | 1 | 0 | 9 | 9 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 32 |
+| ben | Bengali | Indo-European | 0 | 1 | 0 | 9 | 9 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 33 |
 | beo | Beami | Bosavi | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ber | Berber (Other) | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | beu | Blagar | Timor-Alor-Pantar | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1173,7 +1182,7 @@ The following tables give you an overview of the tasks in MTEB.
 | dah | Gwahatike | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dan | Danish | Indo-European | 0 | 2 | 0 | 8 | 10 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 31 |
 | ded | Dedua | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| deu | German | Indo-European | 0 | 2 | 0 | 8 | 14 | 7 | 0 | 3 | 0 | 0 | 0 | 0 | 1 | 7 | 2 | 20 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 72 |
+| deu | German | Indo-European | 0 | 2 | 0 | 8 | 14 | 7 | 0 | 4 | 0 | 0 | 0 | 0 | 1 | 7 | 2 | 20 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 73 |
 | dgc | Casiguran Dumagat Agta | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgr | Dogrib | Athabaskan-Eyak-Tlingit | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgz | Daga | Dagan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1201,7 +1210,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 20 | 161 | 21 | 7 | 14 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 113 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 497 |
+| eng | English | Indo-European | 0 | 3 | 49 | 20 | 161 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 121 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 506 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1215,14 +1224,14 @@ The following tables give you an overview of the tasks in MTEB.
 | fai | Faiwol | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fao | Faroese | Indo-European | 0 | 0 | 0 | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | far | Fataleka | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fas | Persian | Indo-European | 0 | 1 | 0 | 6 | 28 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 | 2 | 41 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 94 |
+| fas | Persian | Indo-European | 0 | 1 | 0 | 6 | 28 | 5 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 8 | 2 | 41 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 95 |
 | ffm | Maasina Fulfulde | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fij | Fijian | Austronesian | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | fil | Filipino | Austronesian | 0 | 1 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| fin | Finnish | Uralic | 0 | 1 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 2 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 24 |
+| fin | Finnish | Uralic | 0 | 1 | 0 | 5 | 6 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 2 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 25 |
 | fon | Fon | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | for | Fore | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 0 | 1 | 0 | 9 | 13 | 8 | 0 | 3 | 0 | 0 | 0 | 0 | 1 | 6 | 3 | 17 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 70 |
+| fra | French | Indo-European | 0 | 1 | 0 | 9 | 13 | 8 | 0 | 4 | 0 | 0 | 0 | 0 | 1 | 6 | 3 | 17 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 71 |
 | fry | Western Frisian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fuc | Pulaar | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fue | Borgu Fulfulde | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1279,7 +1288,7 @@ The following tables give you an overview of the tasks in MTEB.
 | hch | Huichol | Uto-Aztecan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | heb | Hebrew | Afro-Asiatic | 0 | 1 | 0 | 6 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 15 |
 | heg | Helong | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hin | Hindi | Indo-European | 0 | 1 | 0 | 11 | 12 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 11 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 43 |
+| hin | Hindi | Indo-European | 0 | 1 | 0 | 11 | 12 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 11 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 44 |
 | hix | Hixkaryána | Cariban | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hla | Halia | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hlt | Matu Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1311,7 +1320,7 @@ The following tables give you an overview of the tasks in MTEB.
 | imo | Imbongu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ina | Interlingua (International Auxiliary Language Association) | Artificial Language | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | inb | Inga | Quechuan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ind | Indonesian | Austronesian | 0 | 3 | 0 | 8 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 27 |
+| ind | Indonesian | Austronesian | 0 | 3 | 0 | 8 | 7 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
 | ino | Inoke-Yate | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | iou | Tuma-Irumu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ipi | Ipili | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1328,7 +1337,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | Bu (Kaduna State) | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jiv | Shuar | Chicham | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jni | Janji | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 0 | 3 | 0 | 7 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 14 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 42 |
+| jpn | Japanese | Japonic | 0 | 3 | 0 | 7 | 8 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 14 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 43 |
 | jvn | Caribbean Javanese | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kab | Kabyle | Afro-Asiatic | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | kac | Kachin | Sino-Tibetan | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
@@ -1384,7 +1393,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | Western Kanjobal | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | knv | Tabo | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kon | Kongo | Unclassified | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kor | Korean | Koreanic | 0 | 2 | 0 | 6 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 1 | 10 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 39 |
+| kor | Korean | Koreanic | 0 | 2 | 0 | 6 | 8 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 3 | 1 | 10 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 40 |
 | kos | Kosraean | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpf | Komba | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpg | Kapingamarangi | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1709,7 +1718,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | Luguru | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | rug | Roviana | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | run | Rundi | Atlantic-Congo | 0 | 0 | 0 | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| rus | Russian | Indo-European | 0 | 2 | 0 | 7 | 18 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 4 | 2 | 17 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 64 |
+| rus | Russian | Indo-European | 0 | 2 | 0 | 7 | 18 | 6 | 0 | 1 | 0 | 0 | 0 | 0 | 2 | 4 | 2 | 17 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 65 |
 | rwo | Rawa | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sab | Buglere | Chibchan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sag | Sango | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
@@ -1748,7 +1757,7 @@ The following tables give you an overview of the tasks in MTEB.
 | soq | Kanasi | Dagan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sot | Southern Sotho | Atlantic-Congo | 0 | 0 | 0 | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | soy | Miyobe | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spa | Spanish | Indo-European | 0 | 2 | 0 | 6 | 13 | 4 | 0 | 3 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 15 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 57 |
+| spa | Spanish | Indo-European | 0 | 2 | 0 | 6 | 13 | 4 | 0 | 4 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 15 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 58 |
 | spl | Selepet | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spm | Akukem | Ramu | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spp | Supyire Senoufo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1772,7 +1781,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sus | Susu | Mande | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | suz | Sunwar | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | svk | Slovakian Sign Language | Sign Language | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swa | Swahili (macrolanguage) | Atlantic-Congo | 0 | 1 | 0 | 1 | 7 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 16 |
+| swa | Swahili (macrolanguage) | Atlantic-Congo | 0 | 1 | 0 | 1 | 7 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 17 |
 | swe | Swedish | Indo-European | 0 | 1 | 0 | 6 | 9 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 27 |
 | swg | Swabian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swh | Swahili (individual language) | Atlantic-Congo | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
@@ -1797,7 +1806,7 @@ The following tables give you an overview of the tasks in MTEB.
 | tcz | Thado Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tdt | Tetun Dili | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tee | Huehuetla Tepehua | Totonacan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tel | Telugu | Dravidian | 0 | 1 | 0 | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 5 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 25 |
+| tel | Telugu | Dravidian | 0 | 1 | 0 | 7 | 7 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 5 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 26 |
 | ter | Tereno | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tet | Tetum | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tew | Tewa (USA) | Kiowa-Tanoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1806,7 +1815,7 @@ The following tables give you an overview of the tasks in MTEB.
 | tgl | Tagalog | Austronesian | 0 | 0 | 0 | 5 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 11 |
 | tgo | Sudest | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tgp | Tangoa | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tha | Thai | Tai-Kadai | 0 | 1 | 0 | 6 | 8 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 25 |
+| tha | Thai | Tai-Kadai | 0 | 1 | 0 | 6 | 8 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 26 |
 | tif | Tifal | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tim | Timbe | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tir | Tigrinya | Afro-Asiatic | 0 | 0 | 0 | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
@@ -1930,7 +1939,7 @@ The following tables give you an overview of the tasks in MTEB.
 | yle | Yele | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | yml | Iamalele | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | yon | Yongkom | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yor | Yoruba | Atlantic-Congo | 0 | 0 | 0 | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 16 |
+| yor | Yoruba | Atlantic-Congo | 0 | 0 | 0 | 4 | 5 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 17 |
 | yrb | Yareba | Yareban | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | yre | Yaouré | Mande | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | yss | Yessan-Mayo | Sepik | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1955,7 +1964,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zaw | Mitla Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zca | Coatecas Altas Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zga | Kinga | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zho | Chinese | Unclassified | 0 | 2 | 0 | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 14 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 26 |
+| zho | Chinese | Unclassified | 0 | 2 | 0 | 4 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 14 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 27 |
 | zia | Zia | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ziw | Zigula | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zlm | Malay (individual language) | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1974,7 +1983,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 23 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 593 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 601 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
