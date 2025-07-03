@@ -349,7 +349,6 @@ class JinaV4Wrapper(Wrapper):
                 prompt_name=prompt_name_param,
                 task=base_task,
                 return_numpy=return_numpy,
-
             )
 
     def get_image_embeddings(
