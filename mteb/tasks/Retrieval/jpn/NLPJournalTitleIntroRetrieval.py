@@ -37,7 +37,15 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
+        adapted_from=["NLPJournalTitleIntroRetrieval"],
+        bibtex_citation=r"""
+@misc{jmteb,
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
+  howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
+  title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):
@@ -100,7 +108,14 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
+        bibtex_citation=r"""
+@misc{jmteb,
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
+  howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
+  title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):
