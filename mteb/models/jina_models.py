@@ -10,10 +10,10 @@ import torch
 from sentence_transformers import __version__ as st_version
 
 from mteb.encoder_interface import PromptType
+from mteb.languages import PROGRAMMING_LANGS
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.requires_package import requires_package
-from mteb.languages import PROGRAMMING_LANGS
 
 logger = logging.getLogger(__name__)
 
@@ -234,8 +234,8 @@ class JinaV4Wrapper(SentenceTransformerWrapper):
         )
         requires_package(self, "peft", model, "pip install 'mteb[jina-v4]'")
         requires_package(self, "torchvision", model, "pip install 'mteb[jina-v4]'")
-        import peft  # noqa: F401
         import flash_attn  # noqa: F401
+        import peft  # noqa: F401
         import transformers  # noqa: F401
 
         super().__init__(model, revision, model_prompts, **kwargs)
@@ -284,8 +284,7 @@ class JinaV4Wrapper(SentenceTransformerWrapper):
 def get_programming_task_override(
     task_name: str, current_task_name: str | None
 ) -> str | None:
-    """
-    Check if task involves programming content and override with 'code' task if so.
+    """Check if task involves programming content and override with 'code' task if so.
 
     Args:
         task_name: Original task name to check
