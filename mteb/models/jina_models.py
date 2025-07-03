@@ -396,7 +396,6 @@ class JinaV4Wrapper(Wrapper):
             return_numpy=return_numpy,
         )
 
-
     def get_fused_embeddings(
         self,
         *args,
