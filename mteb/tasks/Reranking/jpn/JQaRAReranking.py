@@ -1,15 +1,10 @@
 from __future__ import annotations
 
-from typing import Any
-
 import datasets
 from datasets import Dataset
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators import RerankingEvaluator
-from mteb.load_results.task_results import ScoresDict
 
 _EVAL_SPLIT = "test"
 
@@ -106,22 +101,3 @@ class JQaRAReranking(AbsTaskReranking):
         self.dataset = {_EVAL_SPLIT: Dataset.from_list(transformed_data)}
         self.dataset_transform()  # do nothing
         self.data_loaded = True
-
-    def _evaluate_subset(
-        self,
-        model: Encoder,
-        data_split: Dataset,
-        *,
-        encode_kwargs: dict[str, Any] = {},
-        **kwargs: Any,
-    ) -> ScoresDict:
-        evaluator = RerankingEvaluator(
-            samples=data_split,
-            task_name=self.metadata.name,
-            encode_kwargs=encode_kwargs,
-            **kwargs,
-        )
-        scores = evaluator(model)
-
-        self._add_main_score(scores)
-        return scores
