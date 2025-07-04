@@ -71,8 +71,10 @@ from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ind.IndonesianMongabayConservationClassification import *
+from .ita.DadoEvalCoarseClassification import *
 from .ita.ItaCaseholdClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
+from .ita.SardiStanceClassification import *
 from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
