@@ -336,7 +336,6 @@ class HakimModelWrapper(Wrapper):
         return np.array(all_embeddings, dtype=np.float32)
 
 
-# Model metadata
 hakim = ModelMeta(
     loader=partial(
         HakimModelWrapper,
