@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 import numpy as np
 import torch
@@ -47,6 +47,37 @@ class MockNumpyEncoder(AbsMockEncoder):
         **kwargs: Any,
     ) -> Array:
         return np.random.rand(len(inputs.dataset), 10)  # type: ignore # noqa: NPY002
+
+
+class MockSparseEncoder(AbsMockEncoder):
+    sparsity = 0.5
+    embedding_size = 10
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        rng_state = np.random.RandomState(42)
+        arr = rng_state.rand(len(inputs.dataset), self.embedding_size)  # type: ignore
+        arr[arr < self.sparsity] = 0  # Apply sparsity
+        # covert to torch coo format
+        arr = torch.tensor(arr, dtype=torch.float32)
+        sparse_arr = arr.to_sparse()
+        return sparse_arr
+
+    def similarity(self, embeddings1: Tensor, embeddings2: Tensor) -> Tensor:
+        # dummy 'sparse' similarity implementation
+        embeddings1 = embeddings1.to_dense()
+        embeddings2 = embeddings2.to_dense()
+        arr = super().similarity(embeddings1, embeddings2)
+        arr = cast(torch.Tensor, arr)
+        return arr
 
 
 class MockTorchEncoder(AbsMockEncoder):

@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 import numpy as np
+import torch
 from datasets import Dataset
 from sklearn.base import BaseEstimator
 from sklearn.metrics import (
@@ -118,6 +119,10 @@ class ClassificationEvaluator(Evaluator):
             hf_subset=self.hf_subset,
             **encode_kwargs,
         )
+        # TODO: refactor:
+        if isinstance(X_train, torch.Tensor) and X_train.is_sparse:
+            X_train = X_train.to_dense()
+
         if test_cache is None:
             test_cache = model.encode(
                 dataloader_test,
@@ -126,10 +131,16 @@ class ClassificationEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
+
+            # TODO: refactor:
+            if isinstance(test_cache, torch.Tensor) and test_cache.is_sparse:
+                test_cache = test_cache.to_dense()
+
         logger.info("Fitting logistic regression classifier...")
         y_train = self.train_dataset[self.label_column_name]
         y_test = self.eval_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
+
         logger.info("Evaluating...")
         y_pred = self.classifier.predict(test_cache)
         scores = self.calculate_scores(y_test, y_pred)

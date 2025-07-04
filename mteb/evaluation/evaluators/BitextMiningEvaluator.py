@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
+from mteb.types import Array
 
 from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
@@ -19,6 +20,19 @@ logger = logging.getLogger(__name__)
 
 
 DEFAULT_PAIR = [("sentence1", "sentence2")]
+
+
+def _slide_embeddings(arr: Array, start: int, end: int) -> Array:
+    # TODO: refactor to a mteb.arrays module
+    # handle exception for sparse torch tensors
+    if isinstance(arr, torch.Tensor) and arr.is_sparse:
+        indices = torch.arange(start, end, device=arr.device)
+        # Ensure indices are within bounds
+        indices = indices[indices < arr.shape[0]]
+        return arr.index_select(0, indices)
+
+    # default case (Array API specification)
+    return arr[start:end]
 
 
 class BitextMiningEvaluator(Evaluator):
@@ -162,15 +176,25 @@ class BitextMiningEvaluator(Evaluator):
         for query_start_idx in range(0, len(query_embeddings), query_chunk_size):
             # Iterate over chunks of the corpus
             for corpus_start_idx in range(0, len(corpus_embeddings), corpus_chunk_size):
-                # Compute cosine similarities
-                similarity_scores = model.similarity(  # type: ignore
-                    query_embeddings[
-                        query_start_idx : query_start_idx + query_chunk_size
-                    ],
-                    corpus_embeddings[
-                        corpus_start_idx : corpus_start_idx + corpus_chunk_size
-                    ],
+                # Compute similarities
+                # q_emb = query_embeddings[
+                #     query_start_idx : query_start_idx + query_chunk_size
+                # ]
+                # c_emb = corpus_embeddings[
+                #     corpus_start_idx : corpus_start_idx + corpus_chunk_size
+                # ]
+                q_emb = _slide_embeddings(
+                    query_embeddings,
+                    query_start_idx,
+                    query_start_idx + query_chunk_size,
                 )
+                c_emb = _slide_embeddings(
+                    corpus_embeddings,
+                    corpus_start_idx,
+                    corpus_start_idx + corpus_chunk_size,
+                )
+
+                similarity_scores = model.similarity(q_emb, c_emb)  # type: ignore
 
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

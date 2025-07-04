@@ -11,6 +11,7 @@ from sklearn.metrics.pairwise import (
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
+import torch
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.encoder_interface import Encoder
@@ -94,15 +95,19 @@ class PairClassificationEvaluator(Evaluator):
         logger.warning(
             f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
-        all_unique_texts_embs = np.asarray(
-            model.encode(
+        all_unique_texts_embs = model.encode(
                 create_dataloader_from_texts(all_unique_texts),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
                 **encode_kwargs,
             )
-        )
+        # TODO: refactor:
+        if isinstance(all_unique_texts_embs, torch.Tensor) and all_unique_texts_embs.is_sparse:
+            all_unique_texts_embs = all_unique_texts_embs.to_dense()
+        
+        all_unique_texts_embs = np.asarray(all_unique_texts_embs) # TODO: Check if this is needed (we should be handle to handle torch.Tensor and np.ndarray)
+        
         return all_unique_texts_embs[all_texts_indexes]
 
     def compute_metrics(

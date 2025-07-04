@@ -9,12 +9,13 @@ from typing import Any
 import numpy as np
 import sklearn
 import sklearn.cluster
+import torch
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
-from mteb.types import HFSubset
+from mteb.types import Array, HFSubset
 from mteb.types.statistics import DescriptiveStatistics
 
 from .AbsTask import AbsTask
@@ -23,6 +24,24 @@ logger = logging.getLogger(__name__)
 
 
 MultilingualDataset = dict[HFSubset, DatasetDict]
+
+
+# TODO: refactor
+def apply_index_mask(arr: Array, index_mask: np.ndarray) -> Array:
+    if isinstance(arr, torch.Tensor) and arr.is_sparse:
+        # convert mask to indices, e.g. [True, False, True] -> [0, 2]
+        indices = torch.nonzero(torch.tensor(index_mask), as_tuple=False).squeeze(1)
+        return arr.index_select(0, indices)
+    # default case (Array API specification)
+    return arr[index_mask]
+
+
+# TODO: refactor
+def select_indices(arr: Array, indices: list[int]) -> Array:
+    if isinstance(arr, torch.Tensor) and arr.is_sparse:
+        _indices = torch.tensor(indices, device=arr.device)
+        return arr.index_select(0, _indices)
+    return arr[indices]
 
 
 def evaluate_clustering_bootstrapped(
@@ -58,7 +77,9 @@ def evaluate_clustering_bootstrapped(
             [level_label != -1 for level_label in level_labels]
         )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
         level_labels = level_labels[valid_idx]
-        level_embeddings = embeddings[valid_idx]
+        # level_embeddings = embeddings[valid_idx]
+        level_embeddings = apply_index_mask(embeddings, valid_idx)
+
         clustering_model = sklearn.cluster.MiniBatchKMeans(
             n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
@@ -69,8 +90,14 @@ def evaluate_clustering_bootstrapped(
             n_embeddings = len(level_embeddings)
             cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
 
-            _embeddings = level_embeddings[cluster_indices]
+            # _embeddings = level_embeddings[cluster_indices]
+            _embeddings = select_indices(level_embeddings, cluster_indices)
             _labels = level_labels[cluster_indices]
+
+            # TODO: refactor: We could probably just do the conversion once in the beginning and avoid the other checks.
+            if isinstance(_embeddings, torch.Tensor) and _embeddings.is_sparse:
+                _embeddings = _embeddings.to_dense()
+
             cluster_assignment = clustering_model.fit_predict(_embeddings)
             v_measure = v_measure_score(_labels, cluster_assignment)
             v_measures[f"Level {i_level}"].append(v_measure)

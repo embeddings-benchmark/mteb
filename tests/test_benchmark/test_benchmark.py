@@ -27,6 +27,7 @@ from .mock_models import (
     MockSentenceTransformer,
     MockSentenceTransformersbf16Encoder,
     MockSentenceTransformerWrapper,
+    MockSparseEncoder,
     MockTorchEncoder,
     MockTorchfp16Encoder,
 )
@@ -64,6 +65,7 @@ def test_mulitple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path
         MockTorchEncoder(),
         MockTorchfp16Encoder(),
         MockSentenceTransformersbf16Encoder(),
+        MockSparseEncoder(),
     ],
 )
 def test_benchmark_encoders_on_task(

@@ -7,6 +7,7 @@ import sklearn
 import sklearn.cluster
 from datasets import Dataset
 from sklearn import metrics
+import torch
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -50,6 +51,9 @@ class ClusteringEvaluator(Evaluator):
             batch_size=self.clustering_batch_size,
             n_init="auto",
         )
+        # TODO: refactor:
+        if isinstance(corpus_embeddings, torch.Tensor) and corpus_embeddings.is_sparse:
+            corpus_embeddings = corpus_embeddings.to_dense()
         clustering_model.fit(corpus_embeddings)
         cluster_assignment = clustering_model.labels_
 
