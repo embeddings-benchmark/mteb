@@ -376,8 +376,11 @@ The following tables give you an overview of the tasks in MTEB.
 | [Itacola](https://aclanthology.org/2021.findings-emnlp.250/) (Trotta et al., 2021) | ['ita'] | Classification | s2s | [Non-fiction, Spoken, Written] | None | None |
 | [JCrewBlockerLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [JDReview](https://aclanthology.org/2023.nodalida-1.20/) (Xiao et al., 2023) | ['cmn'] | Classification | s2s |  | None | None |
+| [JQaRAReranking](https://huggingface.co/datasets/hotchpotch/JQaRA) | ['jpn'] | Reranking | s2s | [Encyclopaedic, Non-fiction, Written] | None | None |
 | [JSICK](https://github.com/sbintuitions/JMTEB) (Yanaka et al., 2022) | ['jpn'] | STS | s2s | [Web, Written] | None | None |
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) (Kurihara et al., 2022) | ['jpn'] | STS | s2s | [Web, Written] | None | None |
+| [JaCWIRReranking](https://huggingface.co/datasets/hotchpotch/JaCWIR) | ['jpn'] | Reranking | s2s | [Web, Written] | None | None |
+| [JaCWIRRetrieval](https://huggingface.co/datasets/hotchpotch/JaCWIR) | ['jpn'] | Retrieval | s2s | [Web, Written] | None | None |
 | [JaGovFaqsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Web, Written] | None | None |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
 | [JaqketRetrieval](https://github.com/kumapo/JAQKET-dataset) (鈴木正敏, 2020) | ['jpn'] | Retrieval | s2p | [Encyclopaedic, Non-fiction, Written] | {'test': 115226} | {'test': {'number_of_characters': 428294530, 'num_samples': 115226, 'num_queries': 997, 'num_documents': 114229, 'min_document_length': 16, 'average_document_length': 0.44, 'max_document_length': 98, 'unique_documents': 114229, 'min_query_length': 8, 'average_query_length': 429532.57, 'max_query_length': 188424, 'unique_queries': 997, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 989}} |
@@ -488,9 +491,14 @@ The following tables give you an overview of the tasks in MTEB.
 | [NFCorpus-NL](https://huggingface.co/datasets/clips/beir-nl-nfcorpus) (Nikolay Banar, 2024) | ['nld'] | Retrieval | s2p | [Academic, Medical, Written] | None | None |
 | [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [NIGHTSI2IRetrieval](https://proceedings.neurips.cc/paper_files/paper/2023/hash/9f09f316a3eaf59d9ced5ffaefe97e0f-Abstract-Conference.html) (Fu et al., 2024) | ['eng'] | Any2AnyRetrieval | i2i | [Encyclopaedic] | {'test': 42158} | {'test': {'number_of_characters': 0, 'num_samples': 42158, 'num_queries': 2120, 'num_documents': 40038, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 40038, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 2120, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 2120}} |
-| [NLPJournalAbsIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
-| [NLPJournalTitleAbsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
-| [NLPJournalTitleIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalAbsArticleRetrieval](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalAbsArticleRetrieval.V2](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalAbsIntroRetrieval](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalAbsIntroRetrieval.V2](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalTitleAbsRetrieval](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalTitleAbsRetrieval.V2](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalTitleIntroRetrieval](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPJournalTitleIntroRetrieval.V2](https://huggingface.co/datasets/sbintuitions/JMTEB) (Li et al., 2024) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
 | [NLPTwitterAnalysisClassification](https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/tree/main) | ['fas'] | Classification | s2p | [Social] | None | None |
 | [NLPTwitterAnalysisClustering](https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/commits/main) | ['fas'] | Clustering | s2s | [Social] | None | None |
 | [NQ](https://ai.google.com/research/NaturalQuestions/) (Tom Kwiatkowski, 2019) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
@@ -1337,7 +1345,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | Bu (Kaduna State) | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jiv | Shuar | Chicham | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jni | Janji | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 0 | 3 | 0 | 7 | 8 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 14 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 43 |
+| jpn | Japanese | Japonic | 0 | 3 | 0 | 7 | 8 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 20 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 51 |
 | jvn | Caribbean Javanese | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kab | Kabyle | Afro-Asiatic | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | kac | Kachin | Sino-Tibetan | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
@@ -1983,7 +1991,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 601 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 28 | 92 | 58 | 607 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
