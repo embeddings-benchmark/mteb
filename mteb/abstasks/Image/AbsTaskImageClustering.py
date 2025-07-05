@@ -48,7 +48,7 @@ class ImageClusteringDescriptiveStatistics(DescriptiveStatistics):
     labels: dict[str, dict[str, int]]
 
 
-class AbsTaskImageClustering(AbsTask):
+class AbsTaskAnyClustering(AbsTask):
     """Abstract class for Clustering tasks
     The similarity is computed between pairs and the results are ranked.
 

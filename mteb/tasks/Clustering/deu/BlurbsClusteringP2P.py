@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
 from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
 
-class BlurbsClusteringP2P(AbsTaskClustering):
+class BlurbsClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "BlurbsClusteringP2P.v2"
 
     metadata = TaskMetadata(

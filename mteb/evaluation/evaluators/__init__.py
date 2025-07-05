@@ -8,7 +8,6 @@ from .Evaluator import Evaluator
 from .Image import (
     Any2AnyMultiChoiceEvaluator,
     Any2AnyRetrievalEvaluator,
-    ImageClusteringEvaluator,
     ImageTextPairClassificationEvaluator,
     ZeroShotClassificationEvaluator,
 )
@@ -32,7 +31,6 @@ __all__ = [
     "PairClassificationEvaluator",
     "Any2AnyMultiChoiceEvaluator",
     "Any2AnyRetrievalEvaluator",
-    "ImageClusteringEvaluator",
     "ImageTextPairClassificationEvaluator",
     "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",

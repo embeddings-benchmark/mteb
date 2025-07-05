@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -15,7 +15,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 NUM_SAMPLES = 2048
 
 
-class BlurbsClusteringS2S(AbsTaskClustering):
+class BlurbsClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "BlurbsClusteringS2S.v2"
 
     metadata = TaskMetadata(
