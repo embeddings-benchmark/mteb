@@ -8,7 +8,7 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
-from mteb.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 

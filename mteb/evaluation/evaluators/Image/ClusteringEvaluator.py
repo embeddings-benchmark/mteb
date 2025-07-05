@@ -11,8 +11,8 @@ from sklearn import metrics
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
-from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
+from mteb.models.encoder_interface import Encoder
 
 logger = logging.getLogger(__name__)
 

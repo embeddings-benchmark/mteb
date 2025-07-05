@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from mteb.abstasks.AbsTask import set_seed
-from mteb.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder
 
 
 class Evaluator(ABC):
