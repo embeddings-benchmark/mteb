@@ -13,14 +13,9 @@ from mteb.models.overview import MODEL_REGISTRY
 logging.basicConfig(level=logging.INFO)
 
 
-def teardown_function():
-    hf_cache_info = scan_cache_dir()
-    all_revisions = []
-    for repo in list(hf_cache_info.repos):
-        for revision in list(repo.revisions):
-            all_revisions.append(revision.commit_hash)
-
-    delete_strategy = scan_cache_dir().delete_revisions(*all_revisions)
+def teardown_function(revision: str):
+    """Teardown function to delete the model revision from the cache."""
+    delete_strategy = scan_cache_dir().delete_revisions(revision)
     print("Will free " + delete_strategy.expected_freed_size_str)
     delete_strategy.execute()
 
@@ -44,13 +39,13 @@ def get_model_below_n_param_threshold(model_name: str) -> str:
         try:
             m = get_model(model_name)
             if m is not None:
+                revision = m.mteb_model_meta.revision
+                teardown_function(revision)
                 del m
                 return "None"
         except Exception as e:
             logging.warning(f"Failed to load model {model_name} with error {e}")
             return e.__str__()
-        finally:
-            teardown_function()
 
 
 def parse_args():

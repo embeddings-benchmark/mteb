@@ -33,7 +33,6 @@ class HALClusteringS2S(AbsTaskClustering):
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         date=("2000-03-29", "2024-05-24"),
-        form=None,
         domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="apache-2.0",

@@ -29,20 +29,22 @@ class AESDDClassification(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@article{vryzas2018speech,
-            title={Speech emotion recognition for performance interaction},
-            author={Vryzas, Nikolaos and Kotsakis, Rigas and Liatsou, Aikaterini and Dimoulas, Charalampos A and Kalliris, George},
-            journal={Journal of the Audio Engineering Society},
-            volume={66},
-            number={6},
-            pages={457--467},
-            year={2018},
-            publisher={Audio Engineering Society}
-            }""",
+        bibtex_citation=r"""
+@article{vryzas2018speech,
+  author = {Vryzas, Nikolaos and Kotsakis, Rigas and Liatsou, Aikaterini and Dimoulas, Charalampos A and Kalliris, George},
+  journal = {Journal of the Audio Engineering Society},
+  number = {6},
+  pages = {457--467},
+  publisher = {Audio Engineering Society},
+  title = {Speech emotion recognition for performance interaction},
+  volume = {66},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 604},
         },
     )
 
-    audio_column_name: str = "audio"
     label_column_name: str = "label"
+    is_cross_validation: bool = True
