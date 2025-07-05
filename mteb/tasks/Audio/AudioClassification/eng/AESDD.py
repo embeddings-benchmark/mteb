@@ -14,6 +14,7 @@ class AESDDClassification(AbsTaskAudioClassification):
         dataset={
             "path": "EdwardLin2023/AESDD",
             "revision": "5ecde28811adf538a7699b76291a99503e3734f5",
+            "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
