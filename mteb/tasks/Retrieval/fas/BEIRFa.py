@@ -83,7 +83,7 @@ class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        adapted_from=["CQADupstackAndroid"],
+        adapted_from=["CQADupstackAndroidRetrieval"],
     )
 
 
@@ -110,7 +110,7 @@ class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        adapted_from=["CQADupstackEnglish"],
+        adapted_from=["CQADupstackEnglishRetrieval"],
     )
 
 
@@ -353,7 +353,7 @@ class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        adapted_from=["CQADupstackWebmasters"],
+        adapted_from=["CQADupstackWebmastersRetrieval"],
     )
 
 

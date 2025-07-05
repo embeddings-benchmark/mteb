@@ -19,6 +19,13 @@
 | Domains       | {{ domains }}                               |
 | Reference     | {{ dataset_reference | default("", true) }} |
 
+{% if reupload -%}
+Source datasets:
+{%- for dataset in source_datasets %}
+- [{{ dataset }}](https://huggingface.co/datasets/{{ dataset }})
+{%- endfor %}
+{%- endif %}
+
 
 ## How to evaluate on this task
 
