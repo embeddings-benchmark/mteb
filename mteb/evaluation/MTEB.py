@@ -256,7 +256,7 @@ class MTEB:
         eval_subsets: list[str] | None = None,
         overwrite_results: bool = False,
         raise_error: bool = True,
-        co2_tracker: bool = False,
+        co2_tracker: bool = True,
         encode_kwargs: dict[str, Any] | None = None,
         **kwargs,
     ) -> list[TaskResult]:
