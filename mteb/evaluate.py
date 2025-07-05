@@ -12,11 +12,11 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
-from mteb.encoder_interface import Encoder
 from mteb.load_results.benchmark_results import ModelResult
 from mteb.load_results.task_results import TaskResult
-from mteb.model_meta import ModelMeta
-from mteb.models import (
+from mteb.models.encoder_interface import Encoder
+from mteb.models.model_meta import ModelMeta
+from mteb.models.overview import (
     model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )

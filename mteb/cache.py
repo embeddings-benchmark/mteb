@@ -7,7 +7,7 @@ import subprocess
 from pathlib import Path
 
 from mteb.load_results.task_results import TaskResult
-from mteb.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 

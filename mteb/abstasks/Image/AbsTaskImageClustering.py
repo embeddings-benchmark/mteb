@@ -9,8 +9,8 @@ from datasets import Dataset
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
-from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageClusteringEvaluator
+from ...models.encoder_interface import Encoder
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
