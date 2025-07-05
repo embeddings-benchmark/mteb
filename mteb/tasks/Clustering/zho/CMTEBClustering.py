@@ -4,7 +4,7 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -132,7 +132,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
         )
 
 
-class CLSClusteringS2S(AbsTaskClustering):
+class CLSClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "CLSClusteringS2S.v2"
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
@@ -167,7 +167,7 @@ class CLSClusteringS2S(AbsTaskClustering):
     )
 
 
-class CLSClusteringP2P(AbsTaskClustering):
+class CLSClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "CLSClusteringP2P.v2"
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
@@ -320,7 +320,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         )
 
 
-class ThuNewsClusteringS2S(AbsTaskClustering):
+class ThuNewsClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "ThuNewsClusteringS2S.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S",
@@ -363,7 +363,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
     )
 
 
-class ThuNewsClusteringP2P(AbsTaskClustering):
+class ThuNewsClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "ThuNewsClusteringP2P.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringP2P",

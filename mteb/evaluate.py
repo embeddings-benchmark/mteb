@@ -330,7 +330,7 @@ def evaluate(
         model=model,
         splits=missing_eval,
         task=task,
-        co2_tracker=co2_tracker,
+        co2_tracker=False,
         encode_kwargs=encode_kwargs,
     )
 

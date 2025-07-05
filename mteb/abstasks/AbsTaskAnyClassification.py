@@ -260,6 +260,7 @@ class AbsTaskAnyClassification(AbsTask):
 
         label_count = Counter(total_labels)
 
+        text_statistics, image_statistics = None, None
         if text_len:
             text_statistics = TextStatistics(
                 min_text_length=min(text_len),
@@ -267,8 +268,6 @@ class AbsTaskAnyClassification(AbsTask):
                 max_text_length=max(text_len),
                 unique_texts=len(set(inputs)),
             )
-        else:
-            text_statistics = None
 
         if img_widths:
             image_statistics = ImageStatistics(
@@ -279,8 +278,6 @@ class AbsTaskAnyClassification(AbsTask):
                 average_image_height=sum(img_heights) / len(img_heights),
                 max_image_height=max(img_heights),
             )
-        else:
-            image_statistics = None
 
         label_statistics = LabelStatistics(
             min_labels_per_text=min(label_len),

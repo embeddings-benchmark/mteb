@@ -4,7 +4,7 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -72,7 +72,7 @@ Iryna Gurevych},
         self.max_fraction_of_documents_to_embed = None
 
 
-class RedditClustering(AbsTaskClustering):
+class RedditClustering(AbsTaskAnyClustering):
     superseded_by = "RedditClustering.v2"
     metadata = TaskMetadata(
         name="RedditClustering",

@@ -7,7 +7,7 @@ from typing import TypeVar
 
 import datasets
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 T = TypeVar("T")
@@ -22,7 +22,7 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
         yield batch
 
 
-class SwednClustering(AbsTaskClustering):
+class SwednClustering(AbsTaskAnyClustering):
     superseded_by = "SwednClusteringP2P"
 
     metadata = TaskMetadata(

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TenKGnadClusteringP2P(AbsTaskClustering):
+class TenKGnadClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "TenKGnadClusteringP2P.v2"
 
     metadata = TaskMetadata(

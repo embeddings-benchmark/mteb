@@ -4,7 +4,7 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -12,7 +12,7 @@ from mteb.abstasks.AbsTaskClusteringFast import (
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TwentyNewsgroupsClustering(AbsTaskClustering):
+class TwentyNewsgroupsClustering(AbsTaskAnyClustering):
     superseded_by = "TwentyNewsgroupsClustering.v2"
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering",

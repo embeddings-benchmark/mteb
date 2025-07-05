@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 import numpy as np
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -26,7 +26,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClusteringS2S(AbsTaskClustering):
+class MasakhaNEWSClusteringS2S(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",
         dataset={

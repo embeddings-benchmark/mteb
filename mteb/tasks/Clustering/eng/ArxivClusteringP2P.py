@@ -4,11 +4,11 @@ import random
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ArxivClusteringP2P(AbsTaskClustering):
+class ArxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringP2P"
 
     metadata = TaskMetadata(
@@ -46,7 +46,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
     )
 
 
-class ArxivClusteringP2PFast(AbsTaskClustering):
+class ArxivClusteringP2PFast(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringP2P"
     # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.

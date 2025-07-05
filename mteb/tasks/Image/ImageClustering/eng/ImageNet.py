@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ImageNetDog15Clustering(AbsTaskImageClustering):
+class ImageNetDog15Clustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="ImageNetDog15Clustering",
         description="Clustering images from a 15-class dogs-only subset of the dog classes in ImageNet.",
@@ -40,9 +40,11 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
 }
 """,
     )
+    input_column_name = "image"
+    label_column_name = "label"
 
 
-class ImageNet10Clustering(AbsTaskImageClustering):
+class ImageNet10Clustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="ImageNet10Clustering",
         description="Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.",
@@ -78,3 +80,5 @@ class ImageNet10Clustering(AbsTaskImageClustering):
 }
 """,
     )
+    input_column_name = "image"
+    label_column_name = "label"

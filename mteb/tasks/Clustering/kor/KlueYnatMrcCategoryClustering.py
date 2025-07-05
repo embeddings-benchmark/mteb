@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KlueYnatMrcCategoryClustering(AbsTaskClustering):
+class KlueYnatMrcCategoryClustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="KlueYnatMrcCategoryClustering",
         description="this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MRC  dataset. News_category: IT/Science, Sports, Media/Culture, Ecomomy/Finance, Real Estate",

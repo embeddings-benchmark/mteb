@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from .AbsTask import AbsTask
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
+from .AbsTaskAnyClustering import AbsTaskAnyClustering
 from .AbsTaskAnySTS import AbsTaskAnySTS
 from .AbsTaskBitextMining import AbsTaskBitextMining
-from .AbsTaskClustering import AbsTaskClustering
 from .AbsTaskClusteringFast import AbsTaskClusteringFast
 from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from .AbsTaskPairClassification import AbsTaskPairClassification
@@ -13,7 +13,6 @@ from .AbsTaskSummarization import AbsTaskSummarization
 from .Image import (
     AbsTaskAny2AnyMultiChoice,
     AbsTaskAny2AnyRetrieval,
-    AbsTaskImageClustering,
     AbsTaskImageMultilabelClassification,
     AbsTaskImageTextPairClassification,
     AbsTaskZeroShotClassification,
@@ -23,7 +22,7 @@ __all__ = [
     "AbsTask",
     "AbsTaskBitextMining",
     "AbsTaskAnyClassification",
-    "AbsTaskClustering",
+    "AbsTaskAnyClustering",
     "AbsTaskClusteringFast",
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
@@ -32,7 +31,6 @@ __all__ = [
     "AbsTaskSummarization",
     "AbsTaskAny2AnyMultiChoice",
     "AbsTaskAny2AnyRetrieval",
-    "AbsTaskImageClustering",
     "AbsTaskImageMultilabelClassification",
     "AbsTaskImageTextPairClassification",
     "AbsTaskZeroShotClassification",

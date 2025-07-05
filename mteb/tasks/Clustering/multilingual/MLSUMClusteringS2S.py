@@ -4,7 +4,7 @@ import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -20,7 +20,7 @@ _LANGUAGES = {
 N_SAMPLES = 2048
 
 
-class MLSUMClusteringS2S(AbsTaskClustering):
+class MLSUMClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "MLSUMClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",

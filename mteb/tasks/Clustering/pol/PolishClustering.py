@@ -5,7 +5,7 @@ from itertools import chain
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -15,7 +15,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 N_SAMPLES = 2048
 
 
-class EightTagsClustering(AbsTaskClustering):
+class EightTagsClustering(AbsTaskAnyClustering):
     superseded_by = "EightTagsClustering.v2"
     metadata = TaskMetadata(
         name="EightTagsClustering",

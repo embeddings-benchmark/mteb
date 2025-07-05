@@ -5,7 +5,7 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -13,7 +13,7 @@ from mteb.abstasks.AbsTaskClusteringFast import (
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditClusteringP2P(AbsTaskClustering):
+class RedditClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "RedditClusteringP2P.v2"
     metadata = TaskMetadata(
         name="RedditClusteringP2P",
