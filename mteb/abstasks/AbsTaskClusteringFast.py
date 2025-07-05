@@ -17,11 +17,11 @@ from mteb.encoder_interface import Encoder
 from mteb.types import HFSubset
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
-from .AbsTask import AbsTask
-from .statistics_calculation import (
+from ._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
 )
+from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

@@ -5,56 +5,31 @@ import logging
 from collections import defaultdict
 from pathlib import Path
 from time import time
-from typing import Any, Callable, TypedDict
+from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict
 
 from mteb.encoder_interface import Encoder
 from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics, TextStatistics
+from mteb.types.statistics import (
+    DescriptiveStatistics,
+    RelevantDocsStatistics,
+    TextStatistics,
+    TopRankedStatistics,
+)
 
 from ..create_dataloaders import corpus_to_dict
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
+from ._statistics_calculation import (
+    calculate_relevant_docs_statistics,
+    calculate_text_statistics,
+    calculate_top_ranked_statistics,
+)
 from .AbsTask import AbsTask
 from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
-from .statistics_calculation import calculate_text_statistics
 
 logger = logging.getLogger(__name__)
-
-
-class TopRankedStatistics(TypedDict):
-    """Statistics for top ranked documents in a retrieval task.
-
-    Attributes:
-        num_top_ranked: Total number of top ranked documents across all queries.
-        min_top_ranked_per_query: Minimum number of top ranked documents for any query.
-        average_top_ranked_per_query: Average number of top ranked documents per query.
-        max_top_ranked_per_query: Maximum number of top ranked documents for any query.
-    """
-
-    num_top_ranked: int
-    min_top_ranked_per_query: int
-    average_top_ranked_per_query: float
-    max_top_ranked_per_query: int
-
-
-class RelevantDocsStatistics(TypedDict):
-    """Statistics for relevant documents in a retrieval task.
-
-    Attributes:
-        num_relevant_docs: Total number of relevant documents across all queries.
-        min_relevant_docs_per_query: Minimum number of relevant documents for any query.
-        average_relevant_docs_per_query: Average number of relevant documents per query.
-        max_relevant_docs_per_query: Maximum number of relevant documents for any query.
-        unique_relevant_docs: Number of unique relevant documents across all queries.
-    """
-
-    num_relevant_docs: int
-    min_relevant_docs_per_query: int
-    average_relevant_docs_per_query: float
-    max_relevant_docs_per_query: float
-    unique_relevant_docs: int
 
 
 class RetrievalDescriptiveStatistics(DescriptiveStatistics):
@@ -460,57 +435,30 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked = split_data["top_ranked"]
 
         corpus = list(corpus_to_dict(list(corpus.values()))["text"])
-        # todo handle conversations e. g. Statcan
         queries_texts = [q for q in queries.values() if isinstance(q, str)]
         num_documents = len(corpus)
         num_queries = len(queries_texts)
 
-        # create a list of number of relevant docs per query
-        qrels_lengths = [
-            len(relevant_docs[qid]) for qid in relevant_docs if qid in queries
-        ]
-        unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
-        # number of qrels that are not 0
-        num_qrels_non_zero = sum(
-            sum(1 for doc_id in docs if docs[doc_id] != 0)
-            for docs in relevant_docs.values()
-        )
-        qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
-
-        relevant_docs_statistics = RelevantDocsStatistics(
-            num_relevant_docs=num_qrels_non_zero,
-            min_relevant_docs_per_query=min(qrels_lengths),
-            average_relevant_docs_per_query=qrels_per_doc,
-            max_relevant_docs_per_query=max(qrels_lengths),
-            unique_relevant_docs=unique_qrels,
+        relevant_docs_statistics = calculate_relevant_docs_statistics(
+            relevant_docs, list(queries.keys())
         )
 
         if instructions is not None and len(instructions) > 0:
-            instruction_statistics = calculate_text_statistics(instructions)
+            instruction_statistics = calculate_text_statistics(
+                list(instructions.values())
+            )
         else:
             instruction_statistics = None
 
         if top_ranked is not None and num_queries and len(top_ranked) > 0:
-            top_ranked_statistics = TopRankedStatistics(
-                num_top_ranked=sum(
-                    len(docs) for docs in top_ranked.values() if docs is not None
-                ),
-                min_top_ranked_per_query=min(
-                    len(docs) for docs in top_ranked.values() if docs is not None
-                ),
-                average_top_ranked_per_query=(
-                    sum(len(docs) for docs in top_ranked.values() if docs is not None)
-                    / num_queries
-                ),
-                max_top_ranked_per_query=max(
-                    len(docs) for docs in top_ranked.values() if docs is not None
-                ),
+            top_ranked_statistics = calculate_top_ranked_statistics(
+                top_ranked, num_queries
             )
         else:
             top_ranked_statistics = None
 
         corpus_statistics = calculate_text_statistics(corpus)
-        queries_statistics = calculate_text_statistics(queries)
+        queries_statistics = calculate_text_statistics(list(queries.values()))
 
         number_of_characters = (
             corpus_statistics["total_text_length"]

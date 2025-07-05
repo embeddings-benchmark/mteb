@@ -1416,7 +1416,7 @@ class MockRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 89,
+            "number_of_characters": 137,
             "documents_statistics": {
                 "total_text_length": 85,
                 "min_text_length": 39,
@@ -1425,10 +1425,10 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -1467,7 +1467,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
-            "number_of_characters": 214,
+            "number_of_characters": 274,
             "documents_statistics": {
                 "total_text_length": 170,
                 "min_text_length": 39,
@@ -1476,11 +1476,11 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 44,
-                "min_text_length": 11,
-                "average_text_length": 11.0,
-                "max_text_length": 11,
-                "unique_texts": 4,
+                "total_text_length": 104,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
@@ -1499,7 +1499,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 89,
+                    "number_of_characters": 137,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -1508,10 +1508,10 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -1531,7 +1531,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 89,
+                    "number_of_characters": 137,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -1540,10 +1540,10 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -1587,7 +1587,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
-            "number_of_characters": 89,
+            "number_of_characters": 137,
             "documents_statistics": {
                 "total_text_length": 85,
                 "min_text_length": 39,
@@ -1596,10 +1596,10 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -1614,7 +1614,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 4,
-            "number_of_characters": 89,
+            "number_of_characters": 137,
             "documents_statistics": {
                 "total_text_length": 85,
                 "min_text_length": 39,
@@ -1623,10 +1623,10 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -1663,61 +1663,57 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
-            "number_of_characters": 112,
-            "num_documents": 2,
-            "min_document_length": 27,
-            "average_document_length": 30.0,
-            "max_document_length": 33,
-            "unique_documents": 2,
-            "num_queries": 2,
-            "min_query_length": 23,
-            "average_query_length": 26.0,
-            "max_query_length": 29,
-            "unique_queries": 2,
-            "none_queries": 0,
-            "num_relevant_docs": 4,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 2,
-            "num_instructions": None,
-            "min_instruction_length": None,
-            "average_instruction_length": None,
-            "max_instruction_length": None,
-            "unique_instructions": None,
-            "num_top_ranked": None,
-            "min_top_ranked_per_query": None,
-            "average_top_ranked_per_query": None,
-            "max_top_ranked_per_query": None,
+            "number_of_characters": 137,
+            "documents_statistics": {
+                "total_text_length": 85,
+                "min_text_length": 39,
+                "average_text_length": 42.5,
+                "max_text_length": 46,
+                "unique_texts": 2,
+            },
+            "queries_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "instructions_statistics": None,
+            "top_ranked_statistics": None,
         },
         "test": {
             "num_samples": 4,
-            "number_of_characters": 112,
-            "num_documents": 2,
-            "min_document_length": 27,
-            "average_document_length": 30.0,
-            "max_document_length": 33,
-            "unique_documents": 2,
-            "num_queries": 2,
-            "min_query_length": 23,
-            "average_query_length": 26.0,
-            "max_query_length": 29,
-            "unique_queries": 2,
-            "none_queries": 0,
-            "num_relevant_docs": 4,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 2,
-            "num_instructions": None,
-            "min_instruction_length": None,
-            "average_instruction_length": None,
-            "max_instruction_length": None,
-            "unique_instructions": None,
-            "num_top_ranked": None,
-            "min_top_ranked_per_query": None,
-            "average_top_ranked_per_query": None,
-            "max_top_ranked_per_query": None,
+            "number_of_characters": 137,
+            "documents_statistics": {
+                "total_text_length": 85,
+                "min_text_length": 39,
+                "average_text_length": 42.5,
+                "max_text_length": 46,
+                "unique_texts": 2,
+            },
+            "queries_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 2,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 2,
+                "unique_relevant_docs": 2,
+            },
+            "instructions_statistics": None,
+            "top_ranked_statistics": None,
         },
     }
 
@@ -1755,7 +1751,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 8,
-            "number_of_characters": 210,
+            "number_of_characters": 274,
             "documents_statistics": {
                 "total_text_length": 170,
                 "min_text_length": 39,
@@ -1764,11 +1760,11 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 40,
-                "min_text_length": 10,
-                "average_text_length": 10.0,
-                "max_text_length": 10,
-                "unique_texts": 4,
+                "total_text_length": 104,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
@@ -1782,7 +1778,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 89,
+                    "number_of_characters": 137,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -1791,10 +1787,10 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -1809,7 +1805,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 89,
+                    "number_of_characters": 137,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -1818,10 +1814,10 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -1838,7 +1834,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 8,
-            "number_of_characters": 214,
+            "number_of_characters": 274,
             "documents_statistics": {
                 "total_text_length": 170,
                 "min_text_length": 39,
@@ -1847,11 +1843,11 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 44,
-                "min_text_length": 11,
-                "average_text_length": 11.0,
-                "max_text_length": 11,
-                "unique_texts": 4,
+                "total_text_length": 104,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
@@ -1865,7 +1861,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 89,
+                    "number_of_characters": 137,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -1874,10 +1870,10 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -1892,7 +1888,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 89,
+                    "number_of_characters": 137,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -1901,10 +1897,10 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2176,7 +2172,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 93,
+            "number_of_characters": 195,
             "documents_statistics": {
                 "total_text_length": 85,
                 "min_text_length": 39,
@@ -2185,10 +2181,10 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -2199,10 +2195,10 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "unique_relevant_docs": 2,
             },
             "instructions_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 58,
+                "min_text_length": 26,
+                "average_text_length": 29.0,
+                "max_text_length": 32,
                 "unique_texts": 2,
             },
             "top_ranked_statistics": None,
@@ -2228,7 +2224,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 93,
+            "number_of_characters": 195,
             "documents_statistics": {
                 "total_text_length": 85,
                 "min_text_length": 39,
@@ -2237,10 +2233,10 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -2251,10 +2247,10 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "unique_relevant_docs": 2,
             },
             "instructions_statistics": {
-                "total_text_length": 4,
-                "min_text_length": 2,
-                "average_text_length": 2.0,
-                "max_text_length": 2,
+                "total_text_length": 58,
+                "min_text_length": 26,
+                "average_text_length": 29.0,
+                "max_text_length": 32,
                 "unique_texts": 2,
             },
             "top_ranked_statistics": {
@@ -2284,7 +2280,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
-            "number_of_characters": 258,
+            "number_of_characters": 390,
             "documents_statistics": {
                 "total_text_length": 170,
                 "min_text_length": 39,
@@ -2293,11 +2289,11 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 44,
-                "min_text_length": 11,
-                "average_text_length": 11.0,
-                "max_text_length": 11,
-                "unique_texts": 4,
+                "total_text_length": 104,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
@@ -2307,17 +2303,22 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "unique_relevant_docs": 4,
             },
             "instructions_statistics": {
-                "total_text_length": 44,
-                "min_text_length": 11,
-                "average_text_length": 11.0,
-                "max_text_length": 11,
-                "unique_texts": 4,
+                "total_text_length": 116,
+                "min_text_length": 26,
+                "average_text_length": 29.0,
+                "max_text_length": 32,
+                "unique_texts": 2,
             },
-            "top_ranked_statistics": None,
+            "top_ranked_statistics": {
+                "num_top_ranked": 8,
+                "min_top_ranked_per_query": 2,
+                "average_top_ranked_per_query": 2.0,
+                "max_top_ranked_per_query": 2,
+            },
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 93,
+                    "number_of_characters": 195,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -2326,10 +2327,10 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2340,17 +2341,22 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_relevant_docs": 2,
                     },
                     "instructions_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 58,
+                        "min_text_length": 26,
+                        "average_text_length": 29.0,
+                        "max_text_length": 32,
                         "unique_texts": 2,
                     },
-                    "top_ranked_statistics": None,
+                    "top_ranked_statistics": {
+                        "num_top_ranked": 4,
+                        "min_top_ranked_per_query": 2,
+                        "average_top_ranked_per_query": 2.0,
+                        "max_top_ranked_per_query": 2,
+                    },
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 93,
+                    "number_of_characters": 195,
                     "documents_statistics": {
                         "total_text_length": 85,
                         "min_text_length": 39,
@@ -2359,10 +2365,10 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2373,13 +2379,18 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_relevant_docs": 2,
                     },
                     "instructions_statistics": {
-                        "total_text_length": 4,
-                        "min_text_length": 2,
-                        "average_text_length": 2.0,
-                        "max_text_length": 2,
+                        "total_text_length": 58,
+                        "min_text_length": 26,
+                        "average_text_length": 29.0,
+                        "max_text_length": 32,
                         "unique_texts": 2,
                     },
-                    "top_ranked_statistics": None,
+                    "top_ranked_statistics": {
+                        "num_top_ranked": 4,
+                        "min_top_ranked_per_query": 2,
+                        "average_top_ranked_per_query": 2.0,
+                        "max_top_ranked_per_query": 2,
+                    },
                 },
             },
         }
@@ -2864,6 +2875,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -2884,6 +2896,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
+                "unique_images": 10,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -2948,6 +2961,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
+                "unique_images": 4,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -2968,6 +2982,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 1,
@@ -2988,6 +3003,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 1,
@@ -3010,6 +3026,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
+                "unique_images": 20,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -3030,6 +3047,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
+                        "unique_images": 10,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 1,
@@ -3050,6 +3068,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
+                        "unique_images": 10,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 1,
@@ -3432,6 +3451,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
+                "unique_images": 2,
             },
             "image2_statistics": {
                 "min_image_width": 100,
@@ -3440,6 +3460,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
+                "unique_images": 2,
             },
             "label_statistics": {"min_score": 0.5, "avg_score": 0.5, "max_score": 0.5},
         }

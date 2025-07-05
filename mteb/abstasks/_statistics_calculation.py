@@ -6,8 +6,10 @@ from typing import Any
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
+    RelevantDocsStatistics,
     ScoreStatistics,
     TextStatistics,
+    TopRankedStatistics,
 )
 
 
@@ -33,6 +35,14 @@ def calculate_text_statistics(texts: list[str]) -> TextStatistics:
 
 
 def calculate_image_statistics(images: list[Any]) -> ImageStatistics:
+    """Calculate descriptive statistics for a list of images.
+
+    Args:
+        images: List of images to analyze. Each image should have a `size` attribute that returns a tuple (width, height).
+
+    Returns:
+        ImageStatistics: A dictionary containing the descriptive statistics.
+    """
     img_widths, img_heights = [], []
     for img in images:
         width, height = img.size  # type: ignore
@@ -46,10 +56,20 @@ def calculate_image_statistics(images: list[Any]) -> ImageStatistics:
         min_image_height=min(img_heights),
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
+        # some image types (PngImageFile) may be unhashable
+        unique_images=len({id(img) for img in images}),
     )
 
 
 def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics:
+    """Calculate descriptive statistics for a list of labels.
+
+    Args:
+        labels: List of labels, where each label can be an integer or a list of integers (for multilabel classification).
+
+    Returns:
+        LabelStatistics: A dictionary containing the descriptive statistics.
+    """
     if isinstance(labels[0], int):
         label_len = [1] * len(labels)
         total_label_len = len(labels)
@@ -94,4 +114,56 @@ def calculate_score_statistics(scores: list[int | float]) -> ScoreStatistics:
         min_score=min(scores),
         avg_score=sum(scores) / len(scores),
         max_score=max(scores),
+    )
+
+
+def calculate_top_ranked_statistics(
+    top_ranked: dict[str, list[str]], num_queries: int
+) -> TopRankedStatistics:
+    """Calculate statistics for top-ranked items.
+
+    Args:
+        top_ranked: List of lists, where each inner list contains IDs of top-ranked items.
+        num_queries: Total number of queries.
+
+    Returns:
+        dict: A dictionary with the count of top-ranked items per ID.
+    """
+    return TopRankedStatistics(
+        num_top_ranked=sum(
+            len(docs) for docs in top_ranked.values() if docs is not None
+        ),
+        min_top_ranked_per_query=min(
+            len(docs) for docs in top_ranked.values() if docs is not None
+        ),
+        average_top_ranked_per_query=(
+            sum(len(docs) for docs in top_ranked.values() if docs is not None)
+            / num_queries
+        ),
+        max_top_ranked_per_query=max(
+            len(docs) for docs in top_ranked.values() if docs is not None
+        ),
+    )
+
+
+def calculate_relevant_docs_statistics(
+    relevant_docs: dict[str, dict[str, float]], queries_ids: list[str]
+) -> RelevantDocsStatistics:
+    qrels_lengths = [
+        len(relevant_docs[qid]) for qid in relevant_docs if qid in queries_ids
+    ]
+    unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
+    # number of qrels that are not 0
+    num_qrels_non_zero = sum(
+        sum(1 for doc_id in docs if docs[doc_id] != 0)
+        for docs in relevant_docs.values()
+    )
+    qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if len(queries_ids) else 0
+
+    return RelevantDocsStatistics(
+        num_relevant_docs=num_qrels_non_zero,
+        min_relevant_docs_per_query=min(qrels_lengths),
+        average_relevant_docs_per_query=qrels_per_doc,
+        max_relevant_docs_per_query=max(qrels_lengths),
+        unique_relevant_docs=unique_qrels,
     )

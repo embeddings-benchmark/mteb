@@ -11,11 +11,11 @@ from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
 from ..evaluation.evaluators import SummarizationEvaluator
-from .AbsTask import AbsTask
-from .statistics_calculation import (
+from ._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
+from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

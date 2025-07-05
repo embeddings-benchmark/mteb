@@ -10,8 +10,8 @@ from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, TextStatistics
 
 from ..evaluation.evaluators import BitextMiningEvaluator
+from ._statistics_calculation import calculate_text_statistics
 from .AbsTask import AbsTask
-from .statistics_calculation import calculate_text_statistics
 
 logger = logging.getLogger(__name__)
 

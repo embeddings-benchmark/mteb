@@ -20,12 +20,12 @@ from mteb.types.statistics import (
 )
 
 from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
-from .AbsTask import AbsTask
-from .statistics_calculation import (
+from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
 )
+from .AbsTask import AbsTask
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)
