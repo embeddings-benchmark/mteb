@@ -6,18 +6,21 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import (
     requires_image_dependencies,
     requires_package,
 )
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class ColPaliEngineWrapper:
+class ColPaliEngineWrapper(AbsEncoder):
     """Base wrapper for `colpali_engine` models. Adapted from https://github.com/illuin-tech/colpali/tree/bebcdd6715dba42624acd8d7f7222a16a5daf848/colpali_engine/models"""
 
     def __init__(
@@ -38,15 +41,42 @@ class ColPaliEngineWrapper:
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, revision=revision, device_map=self.device, **kwargs
+            model_name, device_map=self.device, **kwargs
         )
         self.mdl.eval()
 
         # Load processor
         self.processor = processor_class.from_pretrained(model_name)
 
-    def encode(self, sentences, **kwargs):
-        return self.get_text_embeddings(texts=sentences, **kwargs)
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        text_embeddings = None
+        image_embeddings = None
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+
+        if text_embeddings is not None and image_embeddings is not None:
+            if len(text_embeddings) != len(image_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            fused_embeddings = text_embeddings + image_embeddings
+            return fused_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif image_embeddings is not None:
+            return image_embeddings
+        raise ValueError
 
     def encode_input(self, inputs):
         return self.mdl(**inputs)
@@ -61,17 +91,14 @@ class ColPaliEngineWrapper:
 
         all_embeds = []
 
-        if isinstance(images, DataLoader):
-            iterator = images
-        else:
-            iterator = DataLoader(images, batch_size=batch_size)
-
         with torch.no_grad():
-            for batch in iterator:
+            for batch in tqdm(images, desc="Encoding images"):
                 # batch may be list of tensors or PIL
                 imgs = [
-                    F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
-                    for b in batch
+                    F.to_pil_image(b.to(self.device))
+                    if not isinstance(b, Image.Image)
+                    else b
+                    for b in batch["image"]
                 ]
                 inputs = self.processor.process_images(imgs)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
@@ -91,9 +118,8 @@ class ColPaliEngineWrapper:
     ):
         all_embeds = []
         with torch.no_grad():
-            for i in range(0, len(texts), batch_size):
-                batch = texts[i : i + batch_size]
-                inputs = self.processor.process_queries(batch)
+            for batch in tqdm(texts, desc="Encoding texts"):
+                inputs = self.processor.process_queries(batch["text"])
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
@@ -179,7 +205,7 @@ colpali_v1_1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.1",
-    similarity_fn_name="MaxSim",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
@@ -204,7 +230,7 @@ colpali_v1_2 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.2",
-    similarity_fn_name="MaxSim",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
@@ -229,7 +255,7 @@ colpali_v1_3 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.3",
-    similarity_fn_name="MaxSim",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )

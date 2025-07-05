@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -204,6 +204,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a Chinese community medical question, retrieve replies that best answer the question"
         },
+        adapted_from=["CMedQAv2-reranking"],
     )
 
 

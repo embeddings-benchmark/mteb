@@ -56,8 +56,7 @@ model = mteb.get_model(model_name=model_name)
 3. Run the Evaluation: 
 
 ```python
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 
@@ -130,8 +129,7 @@ model_name = "laion/CLIP-ViT-L-14-laion2B-s32B-b82K"
 model = mteb.get_model(model_name=model_name)
 
 tasks = mteb.get_tasks(tasks=["CIFAR10ZeroShot"])
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 By default, results will be under `results/laion__CLIP-ViT-L-14-laion2B-s32B-b82K/REVISION/CIFAR10ZeroShot.json`. Sometimes metrics can be a bit different than what the original paper claimed. This might be due to the resolution/layout difference of images in the remake of the dataset.

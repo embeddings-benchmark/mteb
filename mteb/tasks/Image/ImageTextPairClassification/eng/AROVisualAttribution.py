@@ -3,20 +3,20 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AROVisualRelation(AbsTaskImageTextPairClassification):
+class AROVisualAttribution(AbsTaskImageTextPairClassification):
     images_column_names = ["image"]
     texts_column_names = ["true_caption", "false_caption"]
 
     metadata = TaskMetadata(
-        name="AROVisualRelation",
+        name="AROVisualAttribution",
         description="Compositionality Evaluation of images to their captions.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
-            "path": "gowitheflow/ARO-Visual-Relation",
-            "revision": "3867ad4f46a1ac2e63be034d1fc77dd8c2ef7209",
+            "path": "gowitheflow/ARO-Visual-Attribution",
+            "revision": "18f7e01358d91df599d723f00e16a18640e19398",
         },
         type="Compositionality",
         category="i2t",

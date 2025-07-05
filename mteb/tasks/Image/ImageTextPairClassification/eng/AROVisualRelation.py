@@ -3,27 +3,20 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AROFlickrOrder(AbsTaskImageTextPairClassification):
-    images_column_names = ["images"]
-    texts_column_names = [
-        "correct_caption",
-        "hard_text_1",
-        "hard_text_2",
-        "hard_text_3",
-        "hard_text_4",
-    ]
+class AROVisualRelation(AbsTaskImageTextPairClassification):
+    images_column_names = ["image"]
+    texts_column_names = ["true_caption", "false_caption"]
 
     metadata = TaskMetadata(
-        name="AROFlickrOrder",
-        description="Compositionality Evaluation of images to their captions."
-        + "Each capation has four hard negatives created by order permutations.",
+        name="AROVisualRelation",
+        description="Compositionality Evaluation of images to their captions.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
-            "path": "gowitheflow/ARO-Flickr-Order",
-            "revision": "1f9485f69c87947812378a1aedf86410c86a0aa8",
+            "path": "gowitheflow/ARO-Visual-Relation",
+            "revision": "3867ad4f46a1ac2e63be034d1fc77dd8c2ef7209",
         },
         type="Compositionality",
         category="i2t",

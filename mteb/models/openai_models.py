@@ -7,7 +7,7 @@ import numpy as np
 import tqdm
 from torch.utils.data import DataLoader
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
@@ -29,6 +29,7 @@ class OpenAIModel(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
+        client: Any | None = None,  # OpenAI
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
@@ -51,7 +52,7 @@ class OpenAIModel(AbsEncoder):
         )
         import tiktoken
 
-        self._client = OpenAI()
+        self._client = OpenAI() if client is None else client
         self._model_name = model_name.split("/")[-1]
         self._embed_dim = embed_dim
 

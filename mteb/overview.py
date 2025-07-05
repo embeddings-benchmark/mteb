@@ -13,12 +13,10 @@ from mteb.abstasks import (
     AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskCategory, TaskDomain, TaskType
+from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
 )
 from mteb.tasks import *  # import all tasks
 from mteb.types import Modalities
@@ -82,14 +80,14 @@ SIMILAR_TASKS = create_similar_tasks()
 def check_is_valid_script(script: str) -> None:
     if script not in ISO_TO_SCRIPT:
         raise ValueError(
-            f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
+            f"Invalid script code: '{script}', you can see valid ISO 15924 codes using `from mteb.languages import ISO_TO_SCRIPT`."
         )
 
 
 def check_is_valid_language(lang: str) -> None:
     if lang not in ISO_TO_LANGUAGE:
         raise ValueError(
-            f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
+            f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.langauges import ISO_TO_LANGUAGE`."
         )
 
 
