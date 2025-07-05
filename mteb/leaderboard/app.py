@@ -74,6 +74,8 @@ def download_table(table: pd.DataFrame) -> str:
 
 
 def update_citation(benchmark_name: str) -> str:
+    if benchmark_name == "selector_state":
+        return ""
     benchmark = mteb.get_benchmark(benchmark_name)
     if benchmark.citation is not None:
         citation = f"```bibtex\n{benchmark.citation}\n```"
@@ -85,6 +87,9 @@ def update_citation(benchmark_name: str) -> str:
 def update_description(
     benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
 ) -> str:
+    if benchmark_name == "selector_state":
+        return ""
+
     benchmark = mteb.get_benchmark(benchmark_name)
     description = f"{benchmark.description}\n"
     n_languages = len(languages)
