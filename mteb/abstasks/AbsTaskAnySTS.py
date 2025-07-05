@@ -15,6 +15,11 @@ from mteb.types.statistics import (
 )
 
 from ..evaluation.evaluators import AnySTSEvaluator
+from ._statistics_calculation import (
+    calculate_image_statistics,
+    calculate_score_statistics,
+    calculate_text_statistics,
+)
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -108,71 +113,32 @@ class AbsTaskAnySTS(AbsTask):
             score = self.dataset[split]["score"]
 
         if "text" in self.metadata.modalities:
-            text1_statistics = TextStatistics(
-                min_text_length=min(len(s) for s in sentence1),
-                average_text_length=sum(len(s) for s in sentence1) / len(sentence1),
-                max_text_length=max(len(s) for s in sentence1),
-                unique_texts=len(set(sentence1)),
-            )
-            text2_statistics = TextStatistics(
-                min_text_length=min(len(s) for s in sentence2),
-                max_text_length=max(len(s) for s in sentence2),
-                average_text_length=sum(len(s) for s in sentence2) / len(sentence2),
-                unique_texts=len(set(sentence2)),
-            )
-            sentence1_len = [len(s) for s in sentence1]
-            sentence2_len = [len(s) for s in sentence2]
-            number_of_characters = sum(sentence1_len) + sum(sentence2_len)
+            text1_statistics = calculate_text_statistics(sentence1)
+            text2_statistics = calculate_text_statistics(sentence2)
+
             unique_pairs = len(set(zip(sentence1, sentence2)))
         else:
             text1_statistics = None
             text2_statistics = None
-            number_of_characters = None
             unique_pairs = None
 
         if "image" in self.metadata.modalities:
-            img_widths1, img_heights1 = [], []
-            for img in sentence1:
-                width, height = img.size
-                img_heights1.append(height)
-                img_widths1.append(width)
-
-            image1_statistics = ImageStatistics(
-                min_image_width=min(img_widths1),
-                average_image_width=sum(img_widths1) / len(img_widths1),
-                max_image_width=max(img_widths1),
-                min_image_height=min(img_heights1),
-                average_image_height=sum(img_heights1) / len(img_heights1),
-                max_image_height=max(img_widths1),
-            )
-
-            img_widths2, img_heights2 = [], []
-            for img in sentence2:
-                width, height = img.size
-                img_heights2.append(height)
-                img_widths2.append(width)
-
-            image2_statistics = ImageStatistics(
-                min_image_width=min(img_widths2),
-                average_image_width=sum(img_widths2) / len(img_widths2),
-                max_image_width=max(img_widths2),
-                min_image_height=min(img_heights2),
-                average_image_height=sum(img_heights2) / len(img_heights2),
-                max_image_height=max(img_widths2),
-            )
+            image1_statistics = calculate_image_statistics(sentence1)
+            image2_statistics = calculate_image_statistics(sentence2)
         else:
             image1_statistics = None
             image2_statistics = None
 
-        labels_statistics = ScoreStatistics(
-            min_score=min(score),
-            avg_score=sum(score) / len(score),
-            max_score=max(score),
-        )
+        labels_statistics = calculate_score_statistics(score)
 
         return AnySTSDescriptiveStatistics(
             num_samples=len(sentence1),
-            number_of_characters=number_of_characters,
+            number_of_characters=(
+                text1_statistics["total_text_length"]
+                + text2_statistics["total_text_length"]
+                if text1_statistics
+                else None
+            ),
             unique_pairs=unique_pairs,
             text1_statistics=text1_statistics,
             text2_statistics=text2_statistics,
