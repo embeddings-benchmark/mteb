@@ -56,14 +56,14 @@ class RetrievalDatasetLoader:
         self.trust_remote_code = trust_remote_code
         self.split = split
         self.config = config if config != "default" else None
+        self.dataset_configs = get_dataset_config_names(
+            self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
+        )
 
     def load(self) -> RetrievalSplitData:
         top_ranked = None
         instructions = None
 
-        configs = get_dataset_config_names(
-            self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
-        )
         qrels = self._load_qrels()
         corpus = self._load_corpus()
         queries = self._load_queries()
@@ -73,10 +73,10 @@ class RetrievalDatasetLoader:
             for query in queries.filter(lambda x: x["id"] in qrels)
         }
 
-        if any(c.endswith("top_ranked") for c in configs):
+        if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked()
 
-        if any(c.endswith("instruction") for c in configs):
+        if any(c.endswith("instruction") for c in self.dataset_configs):
             instructions = self._load_instructions()
 
         return RetrievalSplitData(
@@ -147,11 +147,15 @@ class RetrievalDatasetLoader:
         logger.info("Loading qrels...")
 
         config = f"{self.config}-qrels" if self.config is not None else "default"
-        try:
-            qrels_ds = self.load_dataset_split(config)
-        except Exception:
-            # todo Remove after uploading
-            qrels_ds = self.load_dataset_split("qrels")
+        if config == "default" and config not in self.dataset_configs:
+            if "qrels" in self.dataset_configs:
+                config = "qrels"
+            else:
+                raise ValueError(
+                    "No qrels or default config found. Please specify a valid config or ensure the dataset has qrels."
+                )
+
+        qrels_ds = self.load_dataset_split(config)
 
         qrels_ds = qrels_ds.cast(
             Features(
