@@ -9,7 +9,7 @@ from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.load_results.task_results import TaskResult
 from mteb.models.encoder_interface import Encoder
-from mteb.models.overview import get_model, get_model_meta, get_model_metas
+from mteb.models.get_model_meta import get_model, get_model_meta, get_model_metas
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 

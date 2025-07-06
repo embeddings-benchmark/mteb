@@ -11,188 +11,11 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.models.encoder_interface import Encoder
+from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-from .model_implementations import (
-    align_models,
-    ara_models,
-    arctic_models,
-    b1ade_models,
-    bedrock_models,
-    bge_models,
-    blip2_models,
-    blip_models,
-    bm25,
-    cadet_models,
-    cde_models,
-    clip_models,
-    codesage_models,
-    cohere_models,
-    cohere_v,
-    colbert_models,
-    colpali_models,
-    colqwen_models,
-    colsmol_models,
-    conan_models,
-    dino_models,
-    e5_instruct,
-    e5_models,
-    e5_v,
-    evaclip_models,
-    fa_models,
-    geogpt_models,
-    gme_v_models,
-    google_models,
-    gritlm_models,
-    gte_models,
-    ibm_granite_models,
-    inf_models,
-    jasper_models,
-    jina_clip,
-    jina_models,
-    lens_models,
-    lgai_embedding_models,
-    linq_models,
-    listconranker,
-    llm2clip_models,
-    llm2vec_models,
-    misc_models,
-    moco_models,
-    model2vec_models,
-    moka_models,
-    mxbai_models,
-    nb_sbert,
-    no_instruct_sentence_models,
-    nomic_models,
-    nomic_models_vision,
-    nvidia_models,
-    openai_models,
-    openclip_models,
-    ops_moa_models,
-    piccolo_models,
-    promptriever_models,
-    qodo_models,
-    qtack_models,
-    qwen3_models,
-    repllama_models,
-    rerankers_custom,
-    rerankers_monot5_based,
-    richinfoai_models,
-    ru_sentence_models,
-    salesforce_models,
-    searchmap_models,
-    seed_models,
-    sentence_transformers_models,
-    shuu_model,
-    siglip_models,
-    sonar_models,
-    stella_models,
-    text2vec_models,
-    ua_sentence_models,
-    uae_models,
-    vdr_models,
-    vista_models,
-    vlm2vec_models,
-    voyage_models,
-    voyage_v,
-    xyz_models,
-)
-
 logger = logging.getLogger(__name__)
-
-model_modules = [
-    xyz_models,
-    align_models,
-    arctic_models,
-    bedrock_models,
-    bge_models,
-    blip2_models,
-    blip_models,
-    bm25,
-    cadet_models,
-    clip_models,
-    codesage_models,
-    cde_models,
-    cohere_models,
-    cohere_v,
-    colbert_models,
-    conan_models,
-    dino_models,
-    e5_instruct,
-    e5_models,
-    e5_v,
-    evaclip_models,
-    google_models,
-    gritlm_models,
-    gte_models,
-    ibm_granite_models,
-    inf_models,
-    jasper_models,
-    jina_models,
-    jina_clip,
-    lens_models,
-    lgai_embedding_models,
-    linq_models,
-    listconranker,
-    llm2clip_models,
-    llm2vec_models,
-    misc_models,
-    model2vec_models,
-    moka_models,
-    moco_models,
-    mxbai_models,
-    no_instruct_sentence_models,
-    nomic_models,
-    nomic_models_vision,
-    nvidia_models,
-    openai_models,
-    openclip_models,
-    ops_moa_models,
-    piccolo_models,
-    gme_v_models,
-    promptriever_models,
-    qodo_models,
-    qtack_models,
-    qwen3_models,
-    repllama_models,
-    rerankers_custom,
-    rerankers_monot5_based,
-    richinfoai_models,
-    ru_sentence_models,
-    ua_sentence_models,
-    seed_models,
-    salesforce_models,
-    searchmap_models,
-    sentence_transformers_models,
-    shuu_model,
-    siglip_models,
-    vista_models,
-    vlm2vec_models,
-    voyage_v,
-    stella_models,
-    sonar_models,
-    text2vec_models,
-    stella_models,
-    bedrock_models,
-    uae_models,
-    voyage_models,
-    vdr_models,
-    fa_models,
-    ara_models,
-    b1ade_models,
-    nb_sbert,
-    colpali_models,
-    colqwen_models,
-    colsmol_models,
-    geogpt_models,
-]
-MODEL_REGISTRY = {}
-
-for module in model_modules:
-    for mdl in vars(module).values():
-        if isinstance(mdl, ModelMeta):
-            MODEL_REGISTRY[mdl.name] = mdl
 
 
 def get_model_metas(
@@ -269,14 +92,14 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
 
     # If revision not available in the modelmeta, try to extract it from sentence-transformers
     if hasattr(model, "model") and isinstance(model.model, SentenceTransformer):  # type: ignore
-        _meta = model_meta_from_sentence_transformers(model.model)  # type: ignore
+        _meta = _model_meta_from_sentence_transformers(model.model)  # type: ignore
         if meta.revision is None:
             meta.revision = _meta.revision if _meta.revision else meta.revision
         if not meta.similarity_fn_name:
             meta.similarity_fn_name = _meta.similarity_fn_name
 
     elif isinstance(model, CrossEncoder):
-        _meta = model_meta_from_cross_encoder(model.model)
+        _meta = _model_meta_from_cross_encoder(model.model)
         if meta.revision is None:
             meta.revision = _meta.revision if _meta.revision else meta.revision
 
@@ -365,7 +188,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     )
 
 
-def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
+def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
     return ModelMeta(
         loader=sentence_transformers_loader,
         name=model.model.name_or_path,
@@ -387,7 +210,7 @@ def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
     )
 
 
-def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
+def _model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
     name: str | None = (
         model.model_card_data.model_name
         if model.model_card_data.model_name

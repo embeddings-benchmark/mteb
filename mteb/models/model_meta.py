@@ -45,7 +45,7 @@ class ScoringFunction(str, Enum):
     CUSTOM = "custom"
 
 
-def get_loader_name(
+def _get_loader_name(
     loader: Callable[..., Encoder] | None,
 ) -> str | None:
     if loader is None:
@@ -140,12 +140,14 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
-        dict_repr["loader"] = get_loader_name(loader)
+        dict_repr["loader"] = _get_loader_name(loader)
         return dict_repr
 
     @field_validator("languages")
     @classmethod
-    def languages_are_valid(cls, languages: list[ISOLanguageScript] | None) -> None:
+    def languages_are_valid(
+        cls, languages: list[ISOLanguageScript] | None
+    ) -> list[ISOLanguageScript] | None:
         if languages is None:
             return None
 
@@ -169,6 +171,10 @@ class ModelMeta(BaseModel):
             raise NotImplementedError(
                 "No model implementation is available for this model."
             )
+        if self.name is None:
+            raise ValueError("name is not set for ModelMeta. Cannot load model.")
+        if self.revision is None:
+            raise ValueError("revision is not set for ModelMeta. Cannot load model.")
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
