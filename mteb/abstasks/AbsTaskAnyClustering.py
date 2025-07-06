@@ -84,7 +84,9 @@ class AbsTaskAnyClustering(AbsTask):
                     hf_subset=hf_subset,
                     **kwargs,
                 )
-                metrics = evaluator(model, encode_kwargs=encode_kwargs)
+                metrics = evaluator(
+                    model, encode_kwargs=encode_kwargs, v_measure_only=True
+                )
                 v_measures.append(metrics["v_measure"])
 
             v_mean = np.mean(v_measures)

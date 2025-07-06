@@ -53,7 +53,13 @@ class ClusteringEvaluator(Evaluator):
                 "Currently only 'image' modality is supported."
             )
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
+    def __call__(
+        self,
+        model: Encoder,
+        *,
+        encode_kwargs: dict[str, Any],
+        v_measure_only: bool = False,
+    ):
         data_loader = self.create_dataloader(batch_size=encode_kwargs["batch_size"])
 
         embeddings = model.encode(
@@ -76,6 +82,9 @@ class ClusteringEvaluator(Evaluator):
 
         logger.info("Evaluating...")
         v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
+        if v_measure_only:
+            return {"v_measure": v_measure}
+
         nmi = metrics.cluster.normalized_mutual_info_score(labels, cluster_assignment)
         ari = metrics.cluster.adjusted_rand_score(labels, cluster_assignment)
 
