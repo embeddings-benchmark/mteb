@@ -67,7 +67,9 @@ class AbsTaskAnyClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         ## MTEB v1 text clustering requires renaming and eval per subset.
-        if "sentences" in dataset.column_names:
+        if "sentences" in dataset.column_names and isinstance(
+            dataset[self.input_column_name][0], list
+        ):
             v_measures = []
             for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
                 clustering_dataset = Dataset.from_dict(cluster_set).rename_column(
@@ -123,6 +125,11 @@ class AbsTaskAnyClustering(AbsTask):
         else:
             inputs = self.dataset[split][self.input_column_name]
             labels = self.dataset[split][self.label_column_name]
+
+        if isinstance(inputs[0], list):
+            inputs = [item for sublist in inputs for item in sublist]
+        if isinstance(labels[0], list):
+            labels = [item for sublist in labels for item in sublist]
 
         total_text_len = 0
         text_len = None

@@ -514,22 +514,21 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
 class MockClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "number_of_characters": 52,
-            "number_texts_intersect_with_train": 1,
+            "num_samples": 3,
+            "number_of_characters": 81,
             "text_statistics": {
                 "min_text_length": 23,
-                "average_text_length": 26.0,
+                "average_text_length": 27.0,
                 "max_text_length": 29,
-                "unique_texts": 2,
+                "unique_texts": 3,
             },
             "image_statistics": None,
             "label_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
                 "max_labels_per_text": 1,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+                "unique_labels": 3,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
             },
         },
     }
@@ -567,43 +566,76 @@ class MockClusteringTask(AbsTaskAnyClustering):
 class MockMultilingualClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "number_of_characters": 6,
-            "min_text_length": 3,
-            "average_text_length": 3.0,
-            "max_text_length": 3,
-            "unique_texts": 3,
-            "min_labels_per_text": 2,
-            "average_labels_per_text": 3.0,
-            "max_labels_per_text": 2,
-            "unique_labels": 3,
-            "labels": {"0": {"count": 2}, "1": {"count": 2}, "2": {"count": 2}},
+            "num_samples": 6,
+            "number_of_characters": 162,
+            "image_statistics": None,
+            "label_statistics": {
+                "average_label_per_text": 1.0,
+                "labels": {
+                    "0": {
+                        "count": 2,
+                    },
+                    "1": {
+                        "count": 2,
+                    },
+                    "2": {
+                        "count": 2,
+                    },
+                },
+                "max_labels_per_text": 1,
+                "min_labels_per_text": 1,
+                "unique_labels": 3,
+            },
+            "text_statistics": {
+                "average_text_length": 27.0,
+                "max_text_length": 29,
+                "min_text_length": 23,
+                "unique_texts": 3,
+            },
             "hf_subset_descriptive_stats": {
                 "eng": {
-                    "num_samples": 1,
-                    "number_of_characters": 3,
-                    "min_text_length": 3,
-                    "average_text_length": 3.0,
-                    "max_text_length": 3,
-                    "unique_texts": 3,
-                    "min_labels_per_text": 1,
-                    "average_labels_per_text": 3.0,
-                    "max_labels_per_text": 1,
-                    "unique_labels": 3,
-                    "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+                    "image_statistics": None,
+                    "label_statistics": {
+                        "average_label_per_text": 1.0,
+                        "labels": {
+                            "0": {"count": 1},
+                            "1": {"count": 1},
+                            "2": {"count": 1},
+                        },
+                        "max_labels_per_text": 1,
+                        "min_labels_per_text": 1,
+                        "unique_labels": 3,
+                    },
+                    "num_samples": 3,
+                    "number_of_characters": 81,
+                    "text_statistics": {
+                        "average_text_length": 27.0,
+                        "max_text_length": 29,
+                        "min_text_length": 23,
+                        "unique_texts": 3,
+                    },
                 },
                 "fra": {
-                    "num_samples": 1,
-                    "number_of_characters": 3,
-                    "min_text_length": 3,
-                    "average_text_length": 3.0,
-                    "max_text_length": 3,
-                    "unique_texts": 3,
-                    "min_labels_per_text": 1,
-                    "average_labels_per_text": 3.0,
-                    "max_labels_per_text": 1,
-                    "unique_labels": 3,
-                    "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+                    "image_statistics": None,
+                    "label_statistics": {
+                        "average_label_per_text": 1.0,
+                        "labels": {
+                            "0": {"count": 1},
+                            "1": {"count": 1},
+                            "2": {"count": 1},
+                        },
+                        "max_labels_per_text": 1,
+                        "min_labels_per_text": 1,
+                        "unique_labels": 3,
+                    },
+                    "text_statistics": {
+                        "average_text_length": 27.0,
+                        "max_text_length": 29,
+                        "min_text_length": 23,
+                        "unique_texts": 3,
+                    },
+                    "num_samples": 3,
+                    "number_of_characters": 81,
                 },
             },
         }
@@ -2892,14 +2924,23 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "unique_num_labels": 2,
-            "min_image_width": 100,
-            "average_image_width": 100.0,
-            "max_image_width": 100,
-            "min_image_height": 100,
-            "average_image_height": 100.0,
-            "max_image_height": 100,
-            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+            "number_of_characters": 0,
+            "text_statistics": None,
+            "image_statistics": {
+                "average_image_height": 100.0,
+                "average_image_width": 100.0,
+                "max_image_height": 100,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "min_image_width": 100,
+            },
+            "label_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
         }
     }
 
