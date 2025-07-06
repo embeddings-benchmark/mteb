@@ -9,6 +9,9 @@ from PIL import Image
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
+)
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.AbsTaskMultilabelClassification import (
@@ -24,9 +27,6 @@ from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
 )
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
-)
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -3303,7 +3303,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
         self.data_loaded = True
 
 
-class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
+class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
