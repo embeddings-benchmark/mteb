@@ -6,7 +6,6 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
 _LANGUAGES = [
     "ar",
     "da",
@@ -33,7 +32,7 @@ _LANGUAGES = [
     "vi",
     "zh_cn",
     "zh_hk",
-    "zh_tw"
+    "zh_tw",
 ]
 
 _LANGUAGE_MAPPING = {
@@ -62,12 +61,12 @@ _LANGUAGE_MAPPING = {
     "vi": "vie-Latn",
     "zh_cn": "zho-Hans",
     "zh_hk": "zho-Hant",
-    "zh_tw": "zho-Hant"
+    "zh_tw": "zho-Hant",
 }
 
 
-# Change _EVAL_LANGS to only use the same language for source and target
 _EVAL_LANGS = {k: [v] for k, v in _LANGUAGE_MAPPING.items()}
+
 
 class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
@@ -79,13 +78,13 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
             "path": "apple/mkqa",
             "revision": "325131889721ae0ed885b76ecb8011369d75abad",
             "trust_remote_code": True,
-            "name":"mkqa"
+            "name": "mkqa",
         },
         type="Retrieval",
         category="s2p",
         modalities=["text"],
         eval_splits=["train"],
-        eval_langs=_EVAL_LANGS, 
+        eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
         domains=["Written"],
         task_subtypes=["Question answering"],
@@ -113,7 +112,6 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
         )
 
         for lang in self.hf_subsets:
-
             self.queries[lang] = {}
             self.corpus[lang] = {}
             self.relevant_docs[lang] = {}
@@ -127,18 +125,22 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
 
                 query_ids = {
                     query: f"Q{i}"
-                    for i, query in enumerate(set([entry[lang] for entry in split_data['queries']]))
+                    for i, query in enumerate(
+                        {entry[lang] for entry in split_data["queries"]}
+                    )
                 }
 
-                context_texts = set([hit['text'] for entry in split_data["answers"] for hit in entry[lang]]) 
-
-                context_ids = {
-                    text: f"C{i}" for i, text in enumerate(context_texts)
+                context_texts = {
+                    hit["text"]
+                    for entry in split_data["answers"]
+                    for hit in entry[lang]
                 }
+
+                context_ids = {text: f"C{i}" for i, text in enumerate(context_texts)}
 
                 for row in split_data:
                     query = row["queries"][lang]
-                    contexts = [entry['text'] for entry in row["answers"][lang]]
+                    contexts = [entry["text"] for entry in row["answers"][lang]]
 
                     if query is None or None in contexts:
                         continue
