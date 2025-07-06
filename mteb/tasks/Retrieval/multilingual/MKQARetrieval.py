@@ -6,6 +6,7 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 _LANGUAGES = [
     "ar",
     "da",
@@ -32,7 +33,7 @@ _LANGUAGES = [
     "vi",
     "zh_cn",
     "zh_hk",
-    "zh_tw",
+    "zh_tw"
 ]
 
 _LANGUAGE_MAPPING = {
@@ -61,35 +62,30 @@ _LANGUAGE_MAPPING = {
     "vi": "vie-Latn",
     "zh_cn": "zho-Hans",
     "zh_hk": "zho-Hant",
-    "zh_tw": "zho-Hant",
+    "zh_tw": "zho-Hant"
 }
 
 
-_EVAL_LANGS = {
-    f"{s_lang}-{t_lang}": [_LANGUAGE_MAPPING[s_lang], _LANGUAGE_MAPPING[t_lang]]
-    for s_lang in _LANGUAGES
-    for t_lang in _LANGUAGES
-}
-
+# Change _EVAL_LANGS to only use the same language for source and target
+_EVAL_LANGS = {k: [v] for k, v in _LANGUAGE_MAPPING.items()}
 
 class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="MKQARetrieval",
         description="""Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled from the Google Natural Questions dataset.
         For each query we collect new passage-independent answers. These queries and answers are then human translated into 25 Non-English languages.""",
-        reference="https://github.com/apple/ml-mkqa",
+        reference="https://huggingface.co/datasets/mkqa",
         dataset={
             "path": "apple/mkqa",
             "revision": "325131889721ae0ed885b76ecb8011369d75abad",
             "trust_remote_code": True,
-            "name": "mkqa",
+            "name":"mkqa"
         },
         type="Retrieval",
         category="s2p",
         modalities=["text"],
-        date=("2020-01-01", "2020-12-31"),
         eval_splits=["train"],
-        eval_langs=_EVAL_LANGS,
+        eval_langs=_EVAL_LANGS, 
         main_score="ndcg_at_10",
         domains=["Written"],
         task_subtypes=["Question answering"],
@@ -97,18 +93,16 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{mkqa,
-  author = {Shayne Longpre and Yi Lu and Joachim Daiber},
-  title = {MKQA: A Linguistically Diverse Benchmark for Multilingual Open Domain Question Answering},
-  url = {https://arxiv.org/pdf/2007.15207.pdf},
-  year = {2020},
-}
-        """,
+        bibtex_citation="""@misc{mkqa,
+        title = {MKQA: A Linguistically Diverse Benchmark for Multilingual Open Domain Question Answering},
+        author = {Shayne Longpre and Yi Lu and Joachim Daiber},
+        year = {2020},
+        URL = {https://arxiv.org/pdf/2007.15207.pdf}
+        }""",
     )
 
     def load_data(self, **kwargs):
-        """In this retrieval datasets, corpus is in lang XX and queries in lang YY."""
+        """In this retrieval dataset, corpus and queries are in the same language."""
         if self.data_loaded:
             return
 
@@ -118,40 +112,33 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
             **self.metadata_dict["dataset"],
         )
 
-        for lang_pair in self.hf_subsets:
-            source_lang_abb, target_lang_abb = lang_pair.split("-")
+        for lang in self.hf_subsets:
 
-            self.queries[lang_pair] = {}
-            self.corpus[lang_pair] = {}
-            self.relevant_docs[lang_pair] = {}
+            self.queries[lang] = {}
+            self.corpus[lang] = {}
+            self.relevant_docs[lang] = {}
 
             for eval_split in self.metadata.eval_splits:
-                self.queries[lang_pair][eval_split] = {}
-                self.corpus[lang_pair][eval_split] = {}
-                self.relevant_docs[lang_pair][eval_split] = {}
+                self.queries[lang][eval_split] = {}
+                self.corpus[lang][eval_split] = {}
+                self.relevant_docs[lang][eval_split] = {}
 
                 split_data = ds[eval_split]
 
                 query_ids = {
                     query: f"Q{i}"
-                    for i, query in enumerate(
-                        {entry[source_lang_abb] for entry in split_data["queries"]}
-                    )
+                    for i, query in enumerate(set([entry[lang] for entry in split_data['queries']]))
                 }
 
-                context_texts = {
-                    hit["text"]
-                    for entry in split_data["answers"]
-                    for hit in entry[target_lang_abb]
-                }
+                context_texts = set([hit['text'] for entry in split_data["answers"] for hit in entry[lang]]) 
 
-                context_ids = {text: f"C{i}" for i, text in enumerate(context_texts)}
+                context_ids = {
+                    text: f"C{i}" for i, text in enumerate(context_texts)
+                }
 
                 for row in split_data:
-                    query = row["queries"][source_lang_abb]
-                    contexts = [
-                        entry["text"] for entry in row["answers"][target_lang_abb]
-                    ]
+                    query = row["queries"][lang]
+                    contexts = [entry['text'] for entry in row["answers"][lang]]
 
                     if query is None or None in contexts:
                         continue
@@ -159,15 +146,13 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
                     query_id = query_ids[query]
                     for context in contexts:
                         context_id = context_ids[context]
-                        self.queries[lang_pair][eval_split][query_id] = query
-                        self.corpus[lang_pair][eval_split][context_id] = {
+                        self.queries[lang][eval_split][query_id] = query
+                        self.corpus[lang][eval_split][context_id] = {
                             "title": "",
                             "text": context,
                         }
-                        if query_id not in self.relevant_docs[lang_pair][eval_split]:
-                            self.relevant_docs[lang_pair][eval_split][query_id] = {}
-                        self.relevant_docs[lang_pair][eval_split][query_id][
-                            context_id
-                        ] = 1
+                        if query_id not in self.relevant_docs[lang][eval_split]:
+                            self.relevant_docs[lang][eval_split][query_id] = {}
+                        self.relevant_docs[lang][eval_split][query_id][context_id] = 1
 
             self.data_loaded = True
