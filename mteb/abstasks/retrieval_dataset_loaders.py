@@ -67,11 +67,6 @@ class RetrievalDatasetLoader:
         corpus = self._load_corpus()
         queries = self._load_queries()
 
-        # queries = {
-        #     query["id"]: query["text"]
-        #     for query in queries.filter(lambda x: x["id"] in qrels)
-        # }
-
         queries = queries.filter(
             lambda x: x["id"] in qrels["query-id"], desc="Filtering queries by qrels"
         )
@@ -205,11 +200,4 @@ class RetrievalDatasetLoader:
                 }
             )
         ).select_columns(["query-id", "instruction"])
-
-        # instructions_ds = {
-        #     row["query-id"]: row["instruction"] for row in instructions_ds
-        # }
-        # logger.info(
-        #     f"Instructions loaded: {len(instructions_ds) if instructions_ds else 0}"
-        # )
         return instructions_ds
