@@ -232,12 +232,12 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
     return -torch.sqrt(torch.sum((a - b) ** 2, dim=-1))
 
 
-def vision_similarity(text_embeddings: Array, image_embeddings: Array) -> Array:
+def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
     text_embeddings = convert_to_tensor(text_embeddings)
-    image_embeddings = convert_to_tensor(image_embeddings)
+    input_embeddings = convert_to_tensor(input_embeddings)
 
     text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True)
-    logits = torch.matmul(image_embeddings, text_embeddings.T)
+    input_embeddings = input_embeddings / input_embeddings.norm(dim=-1, keepdim=True)
+    logits = torch.matmul(input_embeddings, text_embeddings.T)
     probs = (logits * 100).softmax(dim=-1)
     return probs

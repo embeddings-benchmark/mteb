@@ -138,18 +138,14 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         evaluator = ZeroShotClassificationEvaluator(
             dataset,
             self.input_column_name,
-            dataset[self.label_column_name],
+            self.label_column_name,
             candidate_labels,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **kwargs,
         )
-        metrics = evaluator(model, encode_kwargs=encode_kwargs)
-
-        scores = {"accuracy": metrics["accuracy"]}
-        self._add_main_score(scores)
-        return scores
+        return evaluator(model, encode_kwargs=encode_kwargs)
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""

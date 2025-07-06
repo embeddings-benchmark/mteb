@@ -5,6 +5,7 @@ from typing import Any
 
 from datasets import Dataset
 from sklearn import metrics
+from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
@@ -12,7 +13,7 @@ from mteb.create_dataloaders import (
     create_image_dataloader,
 )
 from mteb.models.encoder_interface import Encoder
-from mteb.similarity_functions import vision_similarity
+from mteb.similarity_functions import similarity
 
 from .Evaluator import Evaluator
 
@@ -24,7 +25,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self,
         dataset: Dataset,
         input_column_name: str,
-        labels: list[int],
+        label_column_name: str,
         candidate_labels: list[str],
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -35,7 +36,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         self.dataset = dataset
         self.input_column_name = input_column_name
-        self.labels = labels
+        self.labels = dataset[label_column_name]
         self.candidate_labels = candidate_labels
         self.task_metadata = task_metadata
         self.hf_split = hf_split
@@ -48,13 +49,15 @@ class ZeroShotClassificationEvaluator(Evaluator):
                 image_column_name=self.input_column_name,
                 batch_size=encode_kwargs["batch_size"],
             )
+        elif self.task_metadata.modalities == ["text"]:
+            return DataLoader(self.dataset)
         else:
             # To update for audio.
             raise ValueError(
                 "ZeroShotClassificationEvaluator only supports image and text modalities."
             )
 
-        text_embeddings = model.encode(
+        text_label_embeddings = model.encode(
             create_dataloader_from_texts(self.candidate_labels),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
@@ -70,7 +73,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
         )
 
-        probs = vision_similarity(text_embeddings, input_embeddings)
+        probs = similarity(text_label_embeddings, input_embeddings)
         predictions = probs.argmax(dim=1)
 
         logger.info("Evaluating...")
