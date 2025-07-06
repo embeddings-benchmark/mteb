@@ -166,18 +166,31 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         if self.metadata.is_multilingual:
-            # todo add conversion from dict to dataset
             for subset in self.queries:
                 for split in self.queries[subset]:
-                    self.dataset[subset][split]["queries"] = self.queries[subset][split]
-                    self.dataset[subset][split]["corpus"] = self.corpus[subset][split]
+                    queries = self.queries[subset][split]
+                    corpus = self.corpus[subset][split]
+                    self.dataset[subset][split]["queries"] = Dataset.from_list(
+                        [{"id": k, "text": v} for k, v in queries.items()]
+                    )
+                    self.dataset[subset][split]["corpus"] = Dataset.from_list(
+                        [
+                            {
+                                "id": k,
+                                "text": v["text"],
+                                "title": v.get("title", ""),
+                            }
+                            for k, v in corpus.items()
+                        ]
+                    )
                     self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                         subset
                     ][split]
                     if hasattr(self, "instructions"):
-                        self.dataset[subset][split]["instructions"] = self.instructions[
-                            subset
-                        ][split]
+                        instructions = self.instructions[subset][split]
+                        self.dataset[subset][split]["instructions"] = Dataset.from_list(
+                            [{"id": k, "text": v} for k, v in instructions.items()]
+                        )
                     if hasattr(self, "top_ranked"):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                             subset
@@ -185,15 +198,29 @@ class AbsTaskRetrieval(AbsTask):
         else:
             subset = "default"
             for split in self.queries:
-                self.dataset[subset][split]["queries"] = self.queries[split].copy()
-                self.dataset[subset][split]["corpus"] = self.corpus[split].copy()
+                queries = self.queries[split]
+                corpus = self.corpus[split]
+                self.dataset[subset][split]["queries"] = Dataset.from_list(
+                    [{"id": k, "text": v} for k, v in queries.items()]
+                )
+                self.dataset[subset][split]["corpus"] = Dataset.from_list(
+                    [
+                        {
+                            "id": k,
+                            "text": v["text"],
+                            "title": v.get("title", ""),
+                        }
+                        for k, v in corpus.items()
+                    ]
+                )
                 self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
                 if hasattr(self, "instructions"):
-                    self.dataset[subset][split]["instructions"] = self.instructions[
-                        split
-                    ].copy()
+                    instructions = self.instructions[split]
+                    self.dataset[subset][split]["instructions"] = Dataset.from_list(
+                        [{"id": k, "text": v} for k, v in instructions.items()]
+                    )
                 if hasattr(self, "top_ranked"):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
