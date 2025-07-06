@@ -86,5 +86,5 @@ Dupoux, Emmanuel},
         filtered_test = test_ds.filter(is_valid_audio)
         print(f"Kept {len(filtered_test)} valid samples out of {len(test_ds)} total")
 
-        # Create a new DatasetDict that has "train" 
+        # Create a new DatasetDict that has "train"
         self.dataset = DatasetDict({"train": filtered_test})

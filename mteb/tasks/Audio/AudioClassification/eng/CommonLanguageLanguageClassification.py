@@ -44,7 +44,7 @@ Mirco Ravanelli},
 }
 """,
         descriptive_stats={
-            "n_samples": {"train": 2000, "validation": 2000, "test": 2000}, 
+            "n_samples": {"train": 2000, "validation": 2000, "test": 2000},
         },
     )
 

@@ -42,7 +42,7 @@ class BeijingOpera(AbsTaskAudioClassification):
 }
 """,
         descriptive_stats={
-            "n_samples": {"train": 236},  
+            "n_samples": {"train": 236},
         },
     )
 
