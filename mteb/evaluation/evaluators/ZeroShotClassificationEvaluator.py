@@ -45,7 +45,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         if "image" in self.task_metadata.modalities:
             dataloader = create_image_dataloader(
                 self.dataset,
-                input_column_name=self.input_column_name,
+                image_column_name=self.input_column_name,
                 batch_size=encode_kwargs["batch_size"],
             )
         else:

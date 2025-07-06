@@ -3306,18 +3306,30 @@ class MockVisualSTSTask(AbsTaskAnySTS):
 class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "unique_num_labels": 2,
-            "min_image_width": 100,
-            "average_image_width": 100.0,
-            "max_image_width": 100,
-            "min_image_height": 100,
-            "average_image_height": 100.0,
-            "max_image_height": 100,
-            "min_label_text_length": 23,
-            "average_label_text_length": 26.0,
+            "image_statistics": {
+                "average_image_height": 100.0,
+                "average_image_width": 100.0,
+                "max_image_height": 100,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "min_image_width": 100,
+            },
+            "label_statistics": {
+                "average_label_per_text": 1.0,
+                "labels": {
+                    "label1": {"count": 1},
+                    "label2": {"count": 1},
+                },
+                "max_labels_per_text": 1,
+                "min_labels_per_text": 1,
+                "unique_labels": 2,
+            },
             "max_label_text_length": 29,
-            "labels": {"label1": {"count": 1}, "label2": {"count": 1}},
+            "min_label_text_length": 23,
+            "num_samples": 2,
+            "average_label_text_length": 26.0,
+            "number_of_characters": None,
+            "text_statistics": None,
         }
     }
 
