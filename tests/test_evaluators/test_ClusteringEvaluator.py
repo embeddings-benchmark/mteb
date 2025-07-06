@@ -5,6 +5,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.evaluation.evaluators import ClusteringEvaluator
+from tests.test_benchmark.mock_tasks import MockClusteringTask
 
 
 class TestClusteringEvaluator:
@@ -28,10 +29,17 @@ class TestClusteringEvaluator:
         dataset = Dataset.from_dict({"text": sentences, "labels": labels})
         clusterer = ClusteringEvaluator(
             dataset,
-            task_metadata="",  # typing: ignore
+            input_column_name="text",
+            label_column_name="labels",
+            task_metadata=MockClusteringTask.metadata,  # typing: ignore
             hf_subset="",
             hf_split="",
         )
-        result = clusterer(model, encode_kwargs={})
+        result = clusterer(model, encode_kwargs={"batch_size": 32})
 
-        assert result == {"v_measure": 1.0}
+        assert result == {
+            "v_measure": 1.0,
+            "ari": 1.0,
+            "cluster_accuracy": 1.0,
+            "nmi": 1.0,
+        }
