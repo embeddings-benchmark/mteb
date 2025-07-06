@@ -16,7 +16,7 @@ from mteb.types.statistics import DescriptiveStatistics
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from .AbsTask import AbsTask
-from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
+from .retrieval_dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -135,11 +135,12 @@ class AbsTaskRetrieval(AbsTask):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        empty_dataset = Dataset.from_dict({})
         self.dataset = defaultdict(
             lambda: defaultdict(
                 lambda: RetrievalSplitData(
-                    corpus={},
-                    queries={},
+                    corpus=empty_dataset,
+                    queries=empty_dataset,
                     relevant_docs={},
                     instructions=None,
                     top_ranked=None,
@@ -150,11 +151,13 @@ class AbsTaskRetrieval(AbsTask):
     def convert_v1_dataset_format_to_v2(self):
         if not hasattr(self, "queries"):
             return
+        empty_dataset = Dataset.from_dict({})
+
         self.dataset = defaultdict(
             lambda: defaultdict(
                 lambda: RetrievalSplitData(
-                    corpus={},
-                    queries={},
+                    corpus=empty_dataset,
+                    queries=empty_dataset,
                     relevant_docs={},
                     instructions=None,
                     top_ranked=None,
@@ -163,6 +166,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         if self.metadata.is_multilingual:
+            # todo add conversion from dict to dataset
             for subset in self.queries:
                 for split in self.queries[subset]:
                     self.dataset[subset][split]["queries"] = self.queries[subset][split]
@@ -273,7 +277,7 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        data_split: DatasetDict | Dataset,
+        data_split: RetrievalSplitData,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,

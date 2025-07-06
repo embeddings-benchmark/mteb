@@ -62,7 +62,7 @@ def corpus_to_dict(
 
 
 def create_dataloader_for_retrieval_corpus(
-    inputs: list[dict[str, str]] | dict[str, list[str]] | list[str], **dataloader_kwargs
+    inputs: dict[str, list[str | dict[str, str]]], **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a corpus.
 
