@@ -9,7 +9,7 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
-from mteb.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta
 from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)

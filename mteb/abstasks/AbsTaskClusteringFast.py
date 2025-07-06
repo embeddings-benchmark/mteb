@@ -13,7 +13,7 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder
 from mteb.types import HFSubset
 from mteb.types.statistics import DescriptiveStatistics
 

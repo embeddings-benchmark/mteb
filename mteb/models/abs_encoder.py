@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata, TaskType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.similarity_functions import (
     cos_sim,
     dot_score,
