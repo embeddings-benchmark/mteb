@@ -39,7 +39,7 @@ class CIFAR10Clustering(AbsTaskAnyClustering):
 """,
     )
 
-    image_column_name: str = "img"
+    input_column_name: str = "img"
     label_column_name: str = "label"
 
 

@@ -168,11 +168,7 @@ class AbsTaskAnyClustering(AbsTask):
             total_labels = []
             for l in labels:
                 total_labels.extend(l if len(l) > 0 else [None])
-        for label in labels:
-            if isinstance(label, list):
-                total_labels.extend(label)
-            else:
-                total_labels.append(label)
+
         label_count = Counter(total_labels)
         label_statistics = LabelStatistics(
             min_labels_per_text=min(label_len),
