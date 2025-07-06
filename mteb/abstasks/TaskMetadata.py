@@ -153,6 +153,7 @@ MAEB_TASK_TYPE = (
     "AudioClassification",
     "AudioCrossFoldClassification",
     "AudioPairClassification",
+    "Any2AnyRetrieval",
 )
 
 TASK_TYPE = (
