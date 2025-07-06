@@ -8,7 +8,7 @@ class AudioCapsReversed(AbsTaskAny2AnyRetrieval):
     """This reverses the normal AudioCaps dataset. Instead of audio queries to text corpus, this tests text queries to audio corpus."""
 
     metadata = TaskMetadata(
-        name="AudioCapsReversed",
+        name="AudioCapsReversedRetrieval",
         description="Test task for any2any retrieval: text queries to find audio corpus",
         reference="https://allenai.org/data/arc",
         dataset={

@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class AudioCapsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="AudioCaps",
+        name="AudioCapsRetrieval",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on ARC-Challenge.",
         reference="https://allenai.org/data/arc",
         dataset={
