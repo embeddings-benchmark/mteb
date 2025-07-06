@@ -216,7 +216,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name) # type: ignore
+        return self.model_prompts.get(prompt_name)  # type: ignore
 
     def validate_task_to_prompt_name(self) -> None:
         """Validate the task name and prompt type against the model prompts.
@@ -260,6 +260,10 @@ class AbsEncoder(ABC):
     def format_instruction(
         self, instruction: str, prompt_type: PromptType | None = None
     ) -> str:
+        if self.instruction_template is None:
+            raise ValueError(
+                "Attempting to format an instruction without an instruction template."
+            )
         if isinstance(self.instruction_template, str):
             if "{instruction}" not in self.instruction_template:
                 raise ValueError(
