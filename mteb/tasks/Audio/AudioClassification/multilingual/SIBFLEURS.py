@@ -26,15 +26,15 @@ EVAL_LANGS_MAP = {
 class SIBFLEURSMultilingualClassification(MultilingualTask, AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="SIBFLEURS",
-        description="Topic Classification for multilingual audio dataset. This dataset is a stratified and downsampledsubset of the SIBFLEURS dataset, which is a collection of 1000+ hours of audio data in 100+ languages.",
+        description="Topic Classification for multilingual audio dataset. This dataset is a stratified and downsampled subset of the SIBFLEURS dataset, which is a collection of 1000+ hours of audio data in 100+ languages.",
         reference="https://huggingface.co/datasets/WueNLP/sib-fleurs",
         dataset={
             "path": "mteb/sib-fleurs-multilingual-mini",
-            "revision": "6cc8ecb0b2892883f35a467e925211d6135d05e8",
+            "revision": "bf982e14e2b7fbb08ebe10de7552a9ebf229cc23",
         },
         type="AudioMultilabelClassification",
         category="a2t",
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=EVAL_LANGS_MAP,
         main_score="accuracy",
         date=(
@@ -62,10 +62,11 @@ class SIBFLEURSMultilingualClassification(MultilingualTask, AbsTaskAudioClassifi
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 177},
+            "n_samples": {"train": 1680},  # Count across all languages
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "category"
     samples_per_label: int = 10
+    is_cross_validation: bool = True
