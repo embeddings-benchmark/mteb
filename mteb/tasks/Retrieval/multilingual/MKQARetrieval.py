@@ -6,35 +6,6 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGUAGES = [
-    "ar",
-    "da",
-    "de",
-    "en",
-    "es",
-    "fi",
-    "fr",
-    "he",
-    "hu",
-    "it",
-    "ja",
-    "ko",
-    "km",
-    "ms",
-    "nl",
-    "no",
-    "pl",
-    "pt",
-    "ru",
-    "sv",
-    "th",
-    "tr",
-    "vi",
-    "zh_cn",
-    "zh_hk",
-    "zh_tw",
-]
-
 _LANGUAGE_MAPPING = {
     "ar": "ara-Arab",
     "da": "dan-Latn",
@@ -73,7 +44,7 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
         name="MKQARetrieval",
         description="""Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled from the Google Natural Questions dataset.
         For each query we collect new passage-independent answers. These queries and answers are then human translated into 25 Non-English languages.""",
-        reference="https://huggingface.co/datasets/mkqa",
+        reference="https://github.com/apple/ml-mkqa",
         dataset={
             "path": "apple/mkqa",
             "revision": "325131889721ae0ed885b76ecb8011369d75abad",
@@ -83,6 +54,7 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
         type="Retrieval",
         category="s2p",
         modalities=["text"],
+        date=("2020-01-01", "2020-12-31"),
         eval_splits=["train"],
         eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
@@ -92,12 +64,14 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{mkqa,
-        title = {MKQA: A Linguistically Diverse Benchmark for Multilingual Open Domain Question Answering},
-        author = {Shayne Longpre and Yi Lu and Joachim Daiber},
-        year = {2020},
-        URL = {https://arxiv.org/pdf/2007.15207.pdf}
-        }""",
+        bibtex_citation=r"""
+@misc{mkqa,
+  author = {Shayne Longpre and Yi Lu and Joachim Daiber},
+  title = {MKQA: A Linguistically Diverse Benchmark for Multilingual Open Domain Question Answering},
+  url = {https://arxiv.org/pdf/2007.15207.pdf},
+  year = {2020},
+}
+        """,
     )
 
     def load_data(self, **kwargs):
