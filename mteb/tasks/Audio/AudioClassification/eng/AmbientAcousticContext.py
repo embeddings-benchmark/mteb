@@ -12,8 +12,8 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
         description="The Ambient Acoustic Context dataset contains 1-second segments for activities that occur in a workplace setting. This is a downsampled version with ~100 train and ~50 test samples per class.",
         reference="https://dl.acm.org/doi/10.1145/3379503.3403535",
         dataset={
-            "path": "AdnanElAssadi/ambient-acoustic-context-small",
-            "revision": "360c858462b79492c6b09d5855ec4d59c87497c6",
+            "path": "mteb/ambient-acoustic-context-small",
+            "revision": "8f4de158d4162de768ebb4dc0594429d785077da",
         },
         type="AudioClassification",
         category="a2t",

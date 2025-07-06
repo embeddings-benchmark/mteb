@@ -12,9 +12,8 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
         description="Subsampled Dataset for classification of speech samples into one of 5 European languages (English, German, French, Spanish, Polish) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "AdnanElAssadi/mini-voxpopuli",
-            "revision": "70031eb5affcb0805e448fdf0b2dbbfc05f0aa8f",
-            "trust_remote_code": True,
+            "path": "mteb/voxpopuli-mini",
+            "revision": "d5fb9661054ba250e2c03adeb9a702ad55e73f27",
         },
         type="AudioClassification",
         category="a2t",
@@ -87,5 +86,5 @@ Dupoux, Emmanuel},
         filtered_test = test_ds.filter(is_valid_audio)
         print(f"Kept {len(filtered_test)} valid samples out of {len(test_ds)} total")
 
-        # Create a new DatasetDict that has both "train" and "test" = filtered_test
+        # Create a new DatasetDict that has "train" 
         self.dataset = DatasetDict({"train": filtered_test})

@@ -12,8 +12,8 @@ class FSDD(AbsTaskAudioClassification):
         description="Spoken digit classification of audio into one of 10 classes: 0-9",
         reference="https://huggingface.co/datasets/silky1708/Free-Spoken-Digit-Dataset",
         dataset={
-            "path": "silky1708/Free-Spoken-Digit-Dataset",
-            "revision": "f67112d5c77a50355e3232f58b1fa1917e62c435",
+            "path": "mteb/free-spoken-digit-dataset",
+            "revision": "c34455c99604d35cb8d27328c267be1478efc903",
         },
         type="AudioClassification",
         category="a2t",

@@ -9,13 +9,11 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class VoxPopuliAccentID(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="VoxPopuliAccentID",
-        description="Classification of English speech samples into one of 15 non-native accents from European Parliament recordings.",
+        description="Classification of English speech samples into one of 15 non-native accents from European Parliament recordings. This is a stratified subsampled version of the original VoxPopuli dataset.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "facebook/voxpopuli",
-            "name": "en_accented",
-            "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
-            "trust_remote_code": True,
+            "path": "mteb/voxpopuli-accent-mini",
+            "revision": "5ea6ce48d0de6db179cb7debf0d6813faa495a33",
         },
         type="AudioClassification",
         category="a2t",
@@ -53,7 +51,7 @@ Dupoux, Emmanuel},
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 6900},
+            "n_samples": {"test": 2000},
         },
     )
 

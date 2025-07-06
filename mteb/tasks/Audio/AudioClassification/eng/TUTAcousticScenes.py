@@ -9,11 +9,11 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class TUTAcousticScenesClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="TUTAcousticScenes",
-        description="TUT Urban Acoustic Scenes 2018 dataset consists of 10-second audio segments from 10 acoustic scenes recorded in six European cities.",
+        description="TUT Urban Acoustic Scenes 2018 dataset consists of 10-second audio segments from 10 acoustic scenes recorded in six European cities. This is a stratified subsampled version of the original dataset.",
         reference="https://zenodo.org/record/1228142",
         dataset={
-            "path": "wetdog/TUT-urban-acoustic-scenes-2018-development",
-            "revision": "583b181ea2666eb28d10909784690009f6c9da9d",
+            "path": "mteb/tut-acoustic-scenes-mini",
+            "revision": "fe74de34b726995a39971faeb83491480ca1886e",
         },
         type="AudioClassification",
         category="a2t",
@@ -42,7 +42,7 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
 }
 """,
         descriptive_stats={
-            "n_samples": {"train": 8640},  # Based on provided stats
+            "n_samples": {"train": 2000},  # Stratified subsampled from original 8640
             "n_classes": 10,
             "classes": [
                 "airport",
