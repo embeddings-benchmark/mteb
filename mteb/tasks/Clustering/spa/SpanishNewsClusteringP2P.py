@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 
 
-class SpanishNewsClusteringP2P(AbsTaskClustering):
+class SpanishNewsClusteringP2P(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="SpanishNewsClusteringP2P",
         description="Clustering of news articles, 7 topics in total.",

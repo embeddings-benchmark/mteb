@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 import numpy as np
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -11,7 +11,7 @@ from mteb.abstasks.AbsTaskClusteringFast import (
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AlloProfClusteringP2P(AbsTaskClustering):
+class AlloProfClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "AlloProfClusteringP2P.v2"
 
     metadata = TaskMetadata(
