@@ -9,6 +9,9 @@ from PIL import Image
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
+)
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.AbsTaskMultilabelClassification import (
@@ -24,9 +27,6 @@ from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
 )
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
-)
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -3303,21 +3303,33 @@ class MockVisualSTSTask(AbsTaskAnySTS):
         self.data_loaded = True
 
 
-class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
+class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "unique_num_labels": 2,
-            "min_image_width": 100,
-            "average_image_width": 100.0,
-            "max_image_width": 100,
-            "min_image_height": 100,
-            "average_image_height": 100.0,
-            "max_image_height": 100,
-            "min_label_text_length": 23,
-            "average_label_text_length": 26.0,
+            "image_statistics": {
+                "average_image_height": 100.0,
+                "average_image_width": 100.0,
+                "max_image_height": 100,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "min_image_width": 100,
+            },
+            "label_statistics": {
+                "average_label_per_text": 1.0,
+                "labels": {
+                    "label1": {"count": 1},
+                    "label2": {"count": 1},
+                },
+                "max_labels_per_text": 1,
+                "min_labels_per_text": 1,
+                "unique_labels": 2,
+            },
             "max_label_text_length": 29,
-            "labels": {"label1": {"count": 1}, "label2": {"count": 1}},
+            "min_label_text_length": 23,
+            "num_samples": 2,
+            "average_label_text_length": 26.0,
+            "number_of_characters": None,
+            "text_statistics": None,
         }
     }
 
@@ -3343,6 +3355,63 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "test": Dataset.from_dict(
                     {
                         "image": images,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:
+        return ["This is a test sentence", "This is another test sentence"]
+
+
+class MockTextZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
+    expected_stats = {
+        "test": {
+            "image_statistics": None,
+            "label_statistics": {
+                "average_label_per_text": 1.0,
+                "labels": {
+                    "label1": {"count": 1},
+                    "label2": {"count": 1},
+                },
+                "max_labels_per_text": 1,
+                "min_labels_per_text": 1,
+                "unique_labels": 2,
+            },
+            "max_label_text_length": 29,
+            "min_label_text_length": 23,
+            "num_samples": 2,
+            "average_label_text_length": 26.0,
+            "number_of_characters": None,
+            "text_statistics": {
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "min_text_length": 23,
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="ZeroShotClassification",
+        name="MockZeroShotClassification",
+        main_score="accuracy",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["text"]
+    metadata.category = "t2t"
+    input_column_name = "text"
+
+    def load_data(self, **kwargs):
+        texts = ["This is a test sentence", "This is another test sentence"]
+        labels = ["label1", "label2"]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "text": texts,
                         "label": labels,
                     }
                 ),

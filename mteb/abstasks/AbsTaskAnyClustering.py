@@ -44,11 +44,11 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
 
 
 class AbsTaskAnyClustering(AbsTask):
-    """Abstract class for Clustering tasks
+    """Abstract class for Clustering tasks for any modality.
     The similarity is computed between pairs and the results are ranked.
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        sentences: list of str
-        labels: list of str
+        input_column_name: list of inputs (str | image).
+        label_column_name: list of str or class labels.
     """
 
     abstask_prompt = "Identify categories in user passages."

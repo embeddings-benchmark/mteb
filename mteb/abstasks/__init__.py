@@ -4,6 +4,7 @@ from .AbsTask import AbsTask
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
 from .AbsTaskAnyClustering import AbsTaskAnyClustering
 from .AbsTaskAnySTS import AbsTaskAnySTS
+from .AbsTaskAnyZeroShotClassification import AbsTaskAnyZeroShotClassification
 from .AbsTaskBitextMining import AbsTaskBitextMining
 from .AbsTaskClusteringFast import AbsTaskClusteringFast
 from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
@@ -15,7 +16,6 @@ from .Image import (
     AbsTaskAny2AnyRetrieval,
     AbsTaskImageMultilabelClassification,
     AbsTaskImageTextPairClassification,
-    AbsTaskZeroShotClassification,
 )
 
 __all__ = [
@@ -33,5 +33,5 @@ __all__ = [
     "AbsTaskAny2AnyRetrieval",
     "AbsTaskImageMultilabelClassification",
     "AbsTaskImageTextPairClassification",
-    "AbsTaskZeroShotClassification",
+    "AbsTaskAnyZeroShotClassification",
 ]
