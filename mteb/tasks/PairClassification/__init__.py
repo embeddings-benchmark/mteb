@@ -16,6 +16,7 @@ from .fas.FaMTEBPairClassification import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
+from .ita.DisCoTexPairClassification import *
 from .kor.KlueNLI import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsXPairClassification import *
