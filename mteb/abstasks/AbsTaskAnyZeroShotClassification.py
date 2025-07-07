@@ -86,20 +86,32 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         label_count = Counter(labels)
 
         # build image statistics
-        img_widths, img_heights = [], []
-        for img in inputs:
-            w, h = img.size  # type: ignore
-            img_widths.append(w)
-            img_heights.append(h)
+        image_statistics = None
+        if "image" in self.metadata.modalities:
+            img_widths, img_heights = [], []
+            for img in inputs:
+                w, h = img.size  # type: ignore
+                img_widths.append(w)
+                img_heights.append(h)
 
-        image_statistics = ImageStatistics(
-            min_image_width=min(img_widths),
-            average_image_width=sum(img_widths) / len(img_widths),
-            max_image_width=max(img_widths),
-            min_image_height=min(img_heights),
-            average_image_height=sum(img_heights) / len(img_heights),
-            max_image_height=max(img_heights),
-        )
+            image_statistics = ImageStatistics(
+                min_image_width=min(img_widths),
+                average_image_width=sum(img_widths) / len(img_widths),
+                max_image_width=max(img_widths),
+                min_image_height=min(img_heights),
+                average_image_height=sum(img_heights) / len(img_heights),
+                max_image_height=max(img_heights),
+            )
+
+        text_statistics = None
+        if self.metadata.modalities == ["text"]:
+            # build text statistics
+            text_lengths = [len(str(text)) for text in inputs]
+            text_statistics = TextStatistics(
+                min_text_length=min(text_lengths),
+                average_text_length=sum(text_lengths) / len(text_lengths),
+                max_text_length=max(text_lengths),
+            )
 
         # single‐label per sample => use LabelStatistics
         label_statistics = LabelStatistics(
@@ -116,7 +128,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         return ZeroShotClassificationDescriptiveStatistics(
             num_samples=num_samples,
             number_of_characters=None,
-            text_statistics=None,
+            text_statistics=text_statistics,
             image_statistics=image_statistics,
             label_statistics=label_statistics,
             min_label_text_length=min(candidate_lens),

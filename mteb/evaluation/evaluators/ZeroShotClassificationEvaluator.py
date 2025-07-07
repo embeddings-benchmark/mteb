@@ -73,11 +73,11 @@ class ZeroShotClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
         )
 
-        probs = similarity(text_label_embeddings, input_embeddings)
+        if self.task_metadata.modalities == ["text"]:
+            probs = model.similarity(text_label_embeddings, input_embeddings)
+        else:
+            probs = similarity(text_label_embeddings, input_embeddings)
+
         predictions = probs.argmax(dim=1)
-
-        logger.info("Evaluating...")
-
         accuracy = metrics.accuracy_score(self.labels, predictions.tolist())
-
         return {"accuracy": accuracy}
