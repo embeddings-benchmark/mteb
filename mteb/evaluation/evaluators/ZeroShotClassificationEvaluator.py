@@ -50,7 +50,9 @@ class ZeroShotClassificationEvaluator(Evaluator):
                 batch_size=encode_kwargs["batch_size"],
             )
         elif self.task_metadata.modalities == ["text"]:
-            return DataLoader(self.dataset)
+            dataloader = DataLoader(
+                self.dataset, batch_size=encode_kwargs["batch_size"]
+            )
         else:
             # To update for audio.
             raise ValueError(
