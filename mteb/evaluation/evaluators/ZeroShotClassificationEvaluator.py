@@ -64,7 +64,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,
-            batch_size=encode_kwargs["batch_size"],
+            **encode_kwargs,
         )
 
         input_embeddings = model.encode(
@@ -72,7 +72,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,
-            batch_size=encode_kwargs["batch_size"],
+            **encode_kwargs,
         )
 
         if self.task_metadata.modalities == ["text"]:
