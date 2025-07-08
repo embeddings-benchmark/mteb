@@ -13,9 +13,8 @@ from typing import cast
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
-from mteb.model_meta import ModelMeta
-from mteb.types import ModelName, Revision
 from mteb.models.model_meta import ModelMeta
+from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 
@@ -296,7 +295,7 @@ class ResultCache:
             require_model_meta=require_model_meta,
             include_remote=include_remote,
         )
-        models = [(p.parent.name, p.parent.parent.name) for p in cache_paths]
+        models = [(p.parent.parent.name, p.parent.name) for p in cache_paths]
         return models
 
     def get_tasks(
@@ -395,13 +394,13 @@ class ResultCache:
         """Loads the results from the cache directory and returns a BenchmarkResults object.
 
         Args:
-            models: A list of model names to load the results for. If None it will load the results for all models. Defaults to None.
-            tasks: A list of task names to load the results for. If None it will load the results for all tasks. Defaults to None.
-            require_model_meta: If True it will ignore results that do not have a model_meta.json file. Defaults to True. If false it attempt to
+            models: A list of model names to load the results for. If None it will load the results for all models.
+            tasks: A list of task names to load the results for. If None it will load the results for all tasks.
+            require_model_meta: If True it will ignore results that do not have a model_meta.json file. If false it attempt to
                 extract the model name and revision from the path.
-            include_remote: If True, it will include results from the remote repository. Defaults to True.
+            include_remote: If True, it will include results from the remote repository.
             validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
-                splits from the results object that are not default in the task metadata. Defaults to True.
+                splits from the results object that are not default in the task metadata.
             only_main_score: If True, only the main score will be loaded.
 
         Returns:

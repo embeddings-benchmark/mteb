@@ -35,8 +35,8 @@ def test_get_cache_path() -> None:
     assert isinstance(paths, list), "Cache paths should be a list"
     assert isinstance(paths[0], Path), "Cache paths should be a list of Paths"
 
-    paths_w_meta = cache.get_cache_paths(require_model_meta=True)
-    assert len(paths_w_meta) > len(paths), (
+    paths_w_meta = cache.get_cache_paths(require_model_meta=True, include_remote=False)
+    assert len(paths_w_meta) < len(paths), (
         "Paths with model meta should be fewer than without"
     )
 
@@ -68,6 +68,16 @@ def test_get_models_and_tasks() -> None:
     tasks = cache.get_tasks()
     assert isinstance(tasks, list), "Tasks should be a list"
     assert isinstance(tasks[0], str), "Tasks should be a list of task names"
+
+    known_model = "sentence-transformers__average_word_embeddings_levy_dependency"
+    known_revision = "6d9c09a789ad5dd126b476323fccfeeafcd90509"
+
+    assert known_model in [mdl[0] for mdl in models], (
+        "Known model should be in the results"
+    )
+    assert known_revision in [mdl[1] for mdl in models if mdl[0] == known_model], (
+        "Known revision should be in the results for the known model"
+    )
 
 
 def test_load_results():
