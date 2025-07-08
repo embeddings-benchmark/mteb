@@ -27,53 +27,22 @@ class MockNumpyEncoder(mteb.Encoder):
         return self.rng_state.random((len(sentences), 10))
 
 
-# Basic test data
-SENTENCES_TRAIN_BINARY = [
-    "this is a positive sentence",
-    "another positive sentence",
-    "this is a negative sentence",
-    "another negative sentence",
-]
-Y_TRAIN_BINARY = np.array([1, 1, 0, 0])
-SENTENCES_TEST_BINARY = [
-    "a new positive sentence",
-    "a new negative sentence",
-]
-Y_TEST_BINARY = np.array([1, 0])
-
-SENTENCES_TRAIN_MULTICLASS = [
-    "class 0 sentence 1",
-    "class 0 sentence 2",
-    "class 1 sentence 1",
-    "class 1 sentence 2",
-    "class 2 sentence 1",
-    "class 2 sentence 2",
-]
-Y_TRAIN_MULTICLASS = np.array([0, 0, 1, 1, 2, 2])
-SENTENCES_TEST_MULTICLASS = [
-    "new class 0 sentence",
-    "new class 1 sentence",
-    "new class 2 sentence",
-]
-Y_TEST_MULTICLASS = np.array([0, 1, 2])
-
-# Test cases with expected scores (deterministic due to fixed random seed)
 BINARY_TEST_CASE = ClassificationTestCase(
-    x_train=SENTENCES_TRAIN_BINARY,
-    y_train=Y_TRAIN_BINARY.tolist(),
-    x_test=SENTENCES_TEST_BINARY,
-    y_test=Y_TEST_BINARY.tolist(),
-    task_name="test_logreg_binary",
-    expected_score=0.5,  # Expected accuracy with deterministic MockNumpyEncoder
+    x_train=["pos1", "pos2", "neg1", "neg2"],
+    y_train=[1, 1, 0, 0],
+    x_test=["new pos", "new neg"],
+    y_test=[1, 0],
+    model= MockNumpyEncoder(),
+    expected_score=0.5,
 )
 
 MULTICLASS_TEST_CASE = ClassificationTestCase(
-    x_train=SENTENCES_TRAIN_MULTICLASS,
-    y_train=Y_TRAIN_MULTICLASS.tolist(),
-    x_test=SENTENCES_TEST_MULTICLASS,
-    y_test=Y_TEST_MULTICLASS.tolist(),
-    task_name="test_logreg_multiclass",
-    expected_score=0.0,  # Expected accuracy with deterministic MockNumpyEncoder
+    x_train=["cls 1", "still cls 1", "cls 2", "also cls 2", "cls 3", "cls 3 too"],
+    y_train=[0, 0, 1, 1, 2, 2],
+    x_test=["new cls 1", "new cls 2", "new cls 3"],
+    y_test=[0, 1, 2],
+    model= MockNumpyEncoder(),
+    expected_score=0.0,
 )
 
 
