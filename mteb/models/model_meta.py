@@ -173,8 +173,6 @@ class ModelMeta(BaseModel):
             )
         if self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
-        if self.revision is None:
-            raise ValueError("revision is not set for ModelMeta. Cannot load model.")
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
