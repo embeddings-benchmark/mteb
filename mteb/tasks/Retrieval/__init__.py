@@ -113,9 +113,11 @@ from .fra.BSARDRetrieval import *
 from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
+from .jpn.JaCWIRRetrieval import *
 from .jpn.JaGovFaqsRetrieval import *
 from .jpn.JaqketRetrieval import *
 from .jpn.JaQuADRetrieval import *
+from .jpn.NLPJournalAbsArticleRetrieval import *
 from .jpn.NLPJournalAbsIntroRetrieval import *
 from .jpn.NLPJournalTitleAbsRetrieval import *
 from .jpn.NLPJournalTitleIntroRetrieval import *
@@ -129,6 +131,7 @@ from .multilingual.CUREv1Retrieval import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
+from .multilingual.MKQARetrieval import *
 from .multilingual.MLQARetrieval import *
 from .multilingual.MrTidyRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
