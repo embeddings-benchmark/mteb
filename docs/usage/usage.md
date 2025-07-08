@@ -19,8 +19,7 @@ model = ...
 tasks = mteb.get_tasks(tasks=["{task1}", "{task1}"])
 
 # run the evaluation
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 For instance if we want to run [`"sentence-transformers/all-MiniLM-L6-v2"`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) on
@@ -36,8 +35,7 @@ model = mteb.get_model(model_name) # will default to SentenceTransformers(model_
 
 # select the desired tasks and evaluate
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 
@@ -76,10 +74,9 @@ However, we recommend starting with one of the predefined benchmarks:
 ```python
 import mteb
 benchmark = mteb.get_benchmark("MIEB(eng)")
-evaluation = mteb.MTEB(tasks=benchmark)
-
 model = mteb.get_model("{model-of-choice}")
-evaluation.run(model)
+
+results = mteb.evaluate(model, tasks=benchmark)
 ```
 
 You can also specify exclusive modality filtering to only get tasks with exactly the requested modalities (default behavior with `exclusive_modality_filter=False`):
@@ -132,8 +129,7 @@ model = SentenceTransformers("sentence-transformers/LaBSE")
 
 # select the desired tasks and evaluate
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 However, we do recommend check in mteb include an implementation of the model before using sentence transformers since some models (e.g. the [multilingual e5 models](https://huggingface.co/collections/intfloat/multilingual-e5-text-embeddings-67b2b8bb9bff40dec9fb3534)) require a prompt and not specifying it may reduce performance.
@@ -178,8 +174,7 @@ class CustomModel:
 # evaluating the model:
 model = CustomModel()
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-evaluation = mteb.MTEB(tasks=tasks)
-evaluation.run(model)
+model = mteb.evaluate(model, tasks=tasks)
 ```
 
 If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md).
@@ -196,7 +191,8 @@ For instance to select the English datasets that form the English leaderboard:
 ```python
 import mteb
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
-evaluation = mteb.MTEB(tasks=benchmark)
+model = ...
+results = mteb.evaluate(model, tasks=benchmark)
 ```
 
 The benchmark specified not only a list of tasks, but also what splits and language to run on.
@@ -294,8 +290,7 @@ class MyCustomTask(AbsTaskReranking):
     ...
 
 model = mteb.get_model(...)
-evaluation = mteb.MTEB(tasks=[MyCustomTask()])
-evaluation.run(model)
+results = mteb.evaluate(model, tasks=[MyCustomTask()])
 ```
 
 
@@ -304,14 +299,23 @@ evaluation.run(model)
 This section contain documentation related to the runtime of the evalution. How to pass arguments to the encoder, saving outputs and similar.
 
 
-### Introduction to the runner
+### Introduction to `mteb.evaluate()`
 
-By default `mteb` with save the results in the `results/{model_name}` folder, however if you want to saving the results in a specific folder you
+Evalauting models in `mteb` typically takes the simple form:
+
+```python
+results = mteb.evaluate(model, tasks=tasks)
+```
+
+
+### Specifying the cache
+
+By default `mteb` with save the results in cache folder located at `~/.cache/mteb`, however if you want to saving the results in a specific folder you
 can specify it as follows:
 
 ```python
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="my_results_folder")
+cache = mteb.ResultCache(cache_path="~/.cache/mteb")
+results = mteb.evaluate(model, tasks=tasks, cache=cache)
 ```
 
 ### Tracking Carbon Emissions
@@ -319,8 +323,7 @@ results = evaluation.run(model, output_folder="my_results_folder")
 `mteb` allows for easy tracking of carbon emission eq. using `codecarbon`. You simply need to install `mteb[codecarbon]` and enable co2 tracking:
 
 ```python
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, co2_tracker=True)
+results = mteb.evaluate(tasks=tasks, co2_tracker=True)
 ```
 
 
@@ -329,7 +332,7 @@ results = evaluation.run(model, co2_tracker=True)
 To pass in arguments to the model's `encode` function, you can use the encode keyword arguments (`encode_kwargs`):
 
 ```python
-evaluation.run(model, encode_kwargs={"batch_size": 32})
+mteb.evaluate(model, tasks, encode_kwargs={"batch_size": 32})
 ```
 
 ### Running SentenceTransformer model with prompts
@@ -341,7 +344,7 @@ from sentence_transformers import SentenceTransformer
 
 
 model = SentenceTransformer("average_word_embeddings_komninos", prompts={"query": "Query:", "passage": "Passage:"})
-evaluation = mteb.MTEB(tasks=tasks)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 In prompts the key can be:
@@ -458,13 +461,12 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 # define your task(s) and model above as normal
 task = mteb.get_task("LccSentimentClassification")
 model = mteb.get_model("minishlab/M2V_base_glove_subword")
-evaluation = mteb.MTEB(tasks=[task])
 
 # wrap the model with the cache wrapper
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
 model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
 # run as normal
-evaluation.run(model_with_cached_emb)
+results = mteb.evaluate(model_with_cached_emb, tasks=[task])
 ```
 
 If you want to directly access the cached embeddings (e.g. for subsequent analyses) follow this example:

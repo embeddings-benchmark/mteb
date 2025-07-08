@@ -10,9 +10,11 @@ from huggingface_hub.errors import RepositoryNotFoundError
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.encoder_interface import Encoder
-from mteb.model_meta import ModelMeta
-from mteb.models import (
+from mteb.models.encoder_interface import Encoder
+from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+
+from .model_implementations import (
     align_models,
     ara_models,
     arctic_models,
@@ -52,6 +54,7 @@ from mteb.models import (
     lens_models,
     lgai_embedding_models,
     linq_models,
+    listconranker,
     llm2clip_models,
     llm2vec_models,
     misc_models,
@@ -95,7 +98,6 @@ from mteb.models import (
     voyage_v,
     xyz_models,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 logger = logging.getLogger(__name__)
 
@@ -132,6 +134,7 @@ model_modules = [
     lens_models,
     lgai_embedding_models,
     linq_models,
+    listconranker,
     llm2clip_models,
     llm2vec_models,
     misc_models,

@@ -72,8 +72,7 @@ class SciDocsReranking(AbsTaskReranking):
 
 # testing the task with a model:
 model = SentenceTransformer("average_word_embeddings_komninos")
-evaluation = MTEB(tasks=[SciDocsReranking()])
-evaluation.run(model)
+results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 ```
 
 > **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
@@ -84,7 +83,7 @@ evaluation.run(model)
 Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
 
 ```python
-class VGClustering(AbsTaskClustering):
+class VGClustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="VGClustering",
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
@@ -249,7 +248,7 @@ from sentence_transformers import SentenceTransformer
 model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=[YourNewTask()])
+results = mteb.evaluate(model, tasks=[YourNewTask()])
 ```
 
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.

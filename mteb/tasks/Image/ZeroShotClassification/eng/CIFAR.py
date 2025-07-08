@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
+class CIFAR10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="CIFAR10ZeroShot",
         description="Classifying images from 10 classes.",
@@ -40,7 +40,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-    image_column_name: str = "img"
+    input_column_name: str = "img"
 
     def get_candidate_labels(self) -> list[str]:
         return [
@@ -49,7 +49,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
         ]
 
 
-class CIFAR100ZeroShotClassification(AbsTaskZeroShotClassification):
+class CIFAR100ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="CIFAR100ZeroShot",
         description="Classifying images from 100 classes.",
@@ -83,7 +83,7 @@ class CIFAR100ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-    image_column_name: str = "img"
+    input_column_name: str = "img"
     label_column_name: str = "fine_label"
 
     def get_candidate_labels(self) -> list[str]:

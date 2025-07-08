@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 
 
-class ArxivClusteringS2S(AbsTaskClustering):
+class ArxivClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringS2S"
     metadata = TaskMetadata(
         name="ArxivClusteringS2S",

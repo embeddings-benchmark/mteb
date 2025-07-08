@@ -8,7 +8,7 @@ import iso639
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
 from tqdm import tqdm
 
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 to_keep = [
     "Haon-Chen/speed-embedding-7b-instruct",

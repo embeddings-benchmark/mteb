@@ -5,9 +5,9 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from ....abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -78,7 +78,7 @@ Iryna Gurevych},
         self.dataset = DatasetDict(ds)
 
 
-class StackExchangeClusteringP2P(AbsTaskClustering):
+class StackExchangeClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "StackExchangeClusteringP2P.v2"
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P",

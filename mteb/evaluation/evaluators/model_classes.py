@@ -12,8 +12,8 @@ import torch
 import tqdm
 from torch.utils.data import DataLoader
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.encoder_interface import Encoder
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.encoder_interface import Encoder
 
 from ...create_dataloaders import (
     create_dataloader_for_queries,

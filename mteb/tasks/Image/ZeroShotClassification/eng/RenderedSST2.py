@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RenderedSST2(AbsTaskZeroShotClassification):
+class RenderedSST2(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="RenderedSST2",
         description="RenderedSST2.",
@@ -32,7 +32,7 @@ class RenderedSST2(AbsTaskZeroShotClassification):
     )
 
     # Override default column names in the subclass
-    image_column_name: str = "png"
+    input_column_name: str = "png"
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:

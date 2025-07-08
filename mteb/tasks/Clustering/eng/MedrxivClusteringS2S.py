@@ -4,12 +4,12 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
@@ -51,7 +51,7 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
         self.dataset = DatasetDict(ds)
 
 
-class MedrxivClusteringS2S(AbsTaskClustering):
+class MedrxivClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "MedrxivClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MedrxivClusteringS2S",

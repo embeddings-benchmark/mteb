@@ -8,8 +8,8 @@ import pytest
 import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.encoder_interface import Encoder
-from mteb.model_meta import ModelMeta
+from mteb.models.encoder_interface import Encoder
+from mteb.models.model_meta import ModelMeta
 from tests.test_benchmark.mock_models import AbsMockEncoder
 from tests.test_benchmark.task_grid import TASK_TEST_GRID
 

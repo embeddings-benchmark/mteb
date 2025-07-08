@@ -5,9 +5,9 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "bs": ["bos-Latn"],
@@ -27,7 +27,7 @@ _LANGUAGES = {
 }
 
 
-class WikiClusteringP2P(AbsTaskClustering):
+class WikiClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",

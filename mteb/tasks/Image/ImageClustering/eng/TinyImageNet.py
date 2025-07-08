@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TinyImageNet(AbsTaskImageClustering):
+class TinyImageNet(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="TinyImageNetClustering",
         description="Clustering over 200 classes.",
@@ -31,3 +31,5 @@ class TinyImageNet(AbsTaskImageClustering):
         sample_creation="found",
         bibtex_citation="""""",
     )
+    input_column_name = "image"
+    label_column_name = "label"

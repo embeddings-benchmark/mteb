@@ -12,9 +12,9 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.encoder_interface import Encoder
-from mteb.model_meta import ScoringFunction
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.encoder_interface import Encoder
+from mteb.models.model_meta import ScoringFunction
 
 from ...create_dataloaders import create_dataloader_from_texts
 from ...similarity_functions import compute_pairwise_similarity

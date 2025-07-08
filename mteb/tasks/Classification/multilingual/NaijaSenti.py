@@ -5,7 +5,7 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NaijaSenti(AbsTaskAnyClassification):

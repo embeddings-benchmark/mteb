@@ -17,7 +17,7 @@ from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
 from ...create_dataloaders import create_image_dataloader
-from ...encoder_interface import Encoder
+from ...models.encoder_interface import Encoder
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

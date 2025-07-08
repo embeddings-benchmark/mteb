@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
@@ -40,7 +40,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
             check_label_distribution(self.dataset[split])
 
 
-class BiorxivClusteringP2P(AbsTaskClustering):
+class BiorxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "BiorxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringP2P",

@@ -43,6 +43,7 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
 )
@@ -101,6 +102,7 @@ MOCK_TASK_TEST_GRID = [
     MockMultilingualInstructionReranking(),
     MockInstructionReranking(),
     MockRetrievalDialogTask(),
+    MockTextZeroShotClassificationTask(),
 ]
 
 MOCK_TASK_TEST_GRID_AS_STRING = [

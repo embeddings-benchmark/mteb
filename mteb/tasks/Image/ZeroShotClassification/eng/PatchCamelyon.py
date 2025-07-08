@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class PatchCamelyonZeroShotClassification(AbsTaskZeroShotClassification):
+class PatchCamelyonZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="PatchCamelyonZeroShot",
         description="""Histopathology diagnosis classification dataset.""",
@@ -56,7 +56,7 @@ and Fichtinger, Gabor},
 }
 """,
     )
-    image_column_name = "webp"
+    input_column_name = "webp"
     label_column_name = "cls"
 
     def get_candidate_labels(self) -> list[str]:
