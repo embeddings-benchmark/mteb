@@ -62,7 +62,7 @@ def model():
 def test_case(request):
     return request.param
 
-
+@pytest.fixture("test_case", [BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
 def test_output_structure(model, test_case: ClassificationTestCase):
     """Test that the evaluator returns the expected output structure."""
     evaluator = logRegClassificationEvaluator(
