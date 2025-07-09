@@ -5,8 +5,8 @@ from dataclasses import dataclass
 import numpy as np
 import pytest
 
-import mteb
 from mteb.evaluation.evaluators import logRegClassificationEvaluator
+from tests.test_benchmark.mock_models import MockNumpyEncoder
 
 
 @dataclass
@@ -15,16 +15,7 @@ class ClassificationTestCase:
     y_train: list[int]
     x_test: list[str]
     y_test: list[int]
-    task_name: str
     expected_score: float | None = None  # For deterministic tests
-
-
-class MockNumpyEncoder(mteb.Encoder):
-    def __init__(self):
-        self.rng_state = np.random.default_rng(42)
-
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return self.rng_state.random((len(sentences), 10))
 
 
 BINARY_TEST_CASE = ClassificationTestCase(
@@ -32,7 +23,6 @@ BINARY_TEST_CASE = ClassificationTestCase(
     y_train=[1, 1, 0, 0],
     x_test=["new pos", "new neg"],
     y_test=[1, 0],
-    model= MockNumpyEncoder(),
     expected_score=0.5,
 )
 
@@ -41,7 +31,6 @@ MULTICLASS_TEST_CASE = ClassificationTestCase(
     y_train=[0, 0, 1, 1, 2, 2],
     x_test=["new cls 1", "new cls 2", "new cls 3"],
     y_test=[0, 1, 2],
-    model= MockNumpyEncoder(),
     expected_score=0.0,
 )
 
@@ -55,12 +44,13 @@ def is_binary_classification(y_train: list[int], y_test: list[int]) -> bool:
 # Fixtures
 @pytest.fixture
 def model():
-    return MockNumpyEncoder()
+    return MockNumpyEncoder(seed=42)
 
 
 @pytest.fixture(params=[BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
 def test_case(request):
     return request.param
+
 
 @pytest.fixture("test_case", [BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
 def test_output_structure(model, test_case: ClassificationTestCase):
@@ -70,7 +60,7 @@ def test_output_structure(model, test_case: ClassificationTestCase):
         np.array(test_case.y_train),
         test_case.x_test,
         np.array(test_case.y_test),
-        task_name=test_case.task_name,
+        task_name="test_classification",
     )
     scores, test_cache = evaluator(model)
 
@@ -92,6 +82,7 @@ def test_output_structure(model, test_case: ClassificationTestCase):
         assert "ap" not in scores
 
 
+@pytest.fixture("test_case", [BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
 def test_expected_scores(model, test_case: ClassificationTestCase):
     """Test that the evaluator returns expected scores with deterministic model."""
     if test_case.expected_score is None:
@@ -102,7 +93,7 @@ def test_expected_scores(model, test_case: ClassificationTestCase):
         np.array(test_case.y_train),
         test_case.x_test,
         np.array(test_case.y_test),
-        task_name=test_case.task_name,
+        task_name="test_classification",
     )
     scores, _ = evaluator(model)
 
@@ -112,7 +103,7 @@ def test_expected_scores(model, test_case: ClassificationTestCase):
     )
 
 
-def test_cache_usage_binary(model):
+def test_cache_usage_binary():
     """Test that embedding caching works correctly for binary classification.
 
     This test verifies the caching mechanism used to avoid re-encoding the same
@@ -129,6 +120,7 @@ def test_cache_usage_binary(model):
     with different models or parameters.
     """
     test_case = BINARY_TEST_CASE
+    model = MockNumpyEncoder(seed=42)
 
     # First evaluation to generate cache
     evaluator_initial = logRegClassificationEvaluator(
@@ -136,7 +128,7 @@ def test_cache_usage_binary(model):
         np.array(test_case.y_train),
         test_case.x_test,
         np.array(test_case.y_test),
-        task_name=test_case.task_name,
+        task_name="test_binary_cache",
     )
     _, test_cache_initial = evaluator_initial(model)
 
@@ -146,7 +138,7 @@ def test_cache_usage_binary(model):
         np.array(test_case.y_train),
         test_case.x_test,
         np.array(test_case.y_test),
-        task_name=f"{test_case.task_name}_cache",
+        task_name="test_binary_cache_usage",
     )
     scores_with_cache, test_cache_after_cache_usage = evaluator_with_cache(
         model, test_cache=test_cache_initial
