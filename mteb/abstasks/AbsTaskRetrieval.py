@@ -16,7 +16,7 @@ from mteb.types.statistics import DescriptiveStatistics
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from .AbsTask import AbsTask
-from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
+from .retrieval_dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -135,11 +135,12 @@ class AbsTaskRetrieval(AbsTask):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        empty_dataset = Dataset.from_dict({})
         self.dataset = defaultdict(
             lambda: defaultdict(
                 lambda: RetrievalSplitData(
-                    corpus={},
-                    queries={},
+                    corpus=empty_dataset,
+                    queries=empty_dataset,
                     relevant_docs={},
                     instructions=None,
                     top_ranked=None,
@@ -150,11 +151,13 @@ class AbsTaskRetrieval(AbsTask):
     def convert_v1_dataset_format_to_v2(self):
         if not hasattr(self, "queries"):
             return
+        empty_dataset = Dataset.from_dict({})
+
         self.dataset = defaultdict(
             lambda: defaultdict(
                 lambda: RetrievalSplitData(
-                    corpus={},
-                    queries={},
+                    corpus=empty_dataset,
+                    queries=empty_dataset,
                     relevant_docs={},
                     instructions=None,
                     top_ranked=None,
@@ -165,15 +168,29 @@ class AbsTaskRetrieval(AbsTask):
         if self.metadata.is_multilingual:
             for subset in self.queries:
                 for split in self.queries[subset]:
-                    self.dataset[subset][split]["queries"] = self.queries[subset][split]
-                    self.dataset[subset][split]["corpus"] = self.corpus[subset][split]
+                    queries = self.queries[subset][split]
+                    corpus = self.corpus[subset][split]
+                    self.dataset[subset][split]["queries"] = Dataset.from_list(
+                        [{"id": k, "text": v} for k, v in queries.items()]
+                    )
+                    self.dataset[subset][split]["corpus"] = Dataset.from_list(
+                        [
+                            {
+                                "id": k,
+                                "text": v["text"],
+                                "title": v.get("title", ""),
+                            }
+                            for k, v in corpus.items()
+                        ]
+                    )
                     self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                         subset
                     ][split]
                     if hasattr(self, "instructions"):
-                        self.dataset[subset][split]["instructions"] = self.instructions[
-                            subset
-                        ][split]
+                        instructions = self.instructions[subset][split]
+                        self.dataset[subset][split]["instructions"] = Dataset.from_list(
+                            [{"id": k, "text": v} for k, v in instructions.items()]
+                        )
                     if hasattr(self, "top_ranked"):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                             subset
@@ -181,15 +198,29 @@ class AbsTaskRetrieval(AbsTask):
         else:
             subset = "default"
             for split in self.queries:
-                self.dataset[subset][split]["queries"] = self.queries[split].copy()
-                self.dataset[subset][split]["corpus"] = self.corpus[split].copy()
+                queries = self.queries[split]
+                corpus = self.corpus[split]
+                self.dataset[subset][split]["queries"] = Dataset.from_list(
+                    [{"id": k, "text": v} for k, v in queries.items()]
+                )
+                self.dataset[subset][split]["corpus"] = Dataset.from_list(
+                    [
+                        {
+                            "id": k,
+                            "text": v["text"],
+                            "title": v.get("title", ""),
+                        }
+                        for k, v in corpus.items()
+                    ]
+                )
                 self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
                 if hasattr(self, "instructions"):
-                    self.dataset[subset][split]["instructions"] = self.instructions[
-                        split
-                    ].copy()
+                    instructions = self.instructions[split]
+                    self.dataset[subset][split]["instructions"] = Dataset.from_list(
+                        [{"id": k, "text": v} for k, v in instructions.items()]
+                    )
                 if hasattr(self, "top_ranked"):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
@@ -273,7 +304,7 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        data_split: DatasetDict | Dataset,
+        data_split: RetrievalSplitData,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,

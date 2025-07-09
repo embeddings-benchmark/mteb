@@ -4,6 +4,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
+from datasets import Dataset
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
 
@@ -22,13 +24,13 @@ logger = logging.getLogger(__name__)
 class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, str],
+        corpus: Dataset,
+        queries: Dataset,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        instructions: dict[str, str] | None = None,
+        instructions: Dataset | None = None,
         top_ranked: dict[str, list[str]] | None = None,
         qid: str | None = None,
         **kwargs,
