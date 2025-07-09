@@ -3,15 +3,15 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import sklearn
-import sklearn.cluster
 from datasets import Dataset
-from sklearn import metrics
+from scipy.optimize import linear_sum_assignment
+from sklearn import cluster, metrics
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder
 
+from ...create_dataloaders import create_image_dataloader
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -21,6 +21,8 @@ class ClusteringEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
+        input_column_name: str,
+        label_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -30,30 +32,71 @@ class ClusteringEvaluator(Evaluator):
         super().__init__(**kwargs)
         self.dataset = dataset
         self.clustering_batch_size = clustering_batch_size
+        self.input_column_name = input_column_name
+        self.label_column_name = label_column_name
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
-        corpus_embeddings = model.encode(
-            DataLoader(self.dataset),
+    def create_dataloader(self, batch_size: int) -> DataLoader:
+        if self.task_metadata.modalities == ["image"]:
+            return create_image_dataloader(
+                self.dataset,
+                image_column_name=self.input_column_name,
+                batch_size=batch_size,
+            )
+        elif self.task_metadata.modalities == ["text"]:
+            return DataLoader(self.dataset)
+        else:
+            raise ValueError(
+                f"Unsupported modality {self.task_metadata.modalities}. "
+                "Currently only 'image' modality is supported."
+            )
+
+    def __call__(
+        self,
+        model: Encoder,
+        *,
+        encode_kwargs: dict[str, Any],
+        v_measure_only: bool = False,
+    ):
+        data_loader = self.create_dataloader(batch_size=encode_kwargs["batch_size"])
+
+        embeddings = model.encode(
+            data_loader,
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,
             **encode_kwargs,
         )
 
-        labels = self.dataset["labels"]
+        labels = self.dataset[self.label_column_name]
         logger.info("Fitting Mini-Batch K-Means model...")
-        clustering_model = sklearn.cluster.MiniBatchKMeans(
+        clustering_model = cluster.MiniBatchKMeans(
             n_clusters=len(set(labels)),
             batch_size=self.clustering_batch_size,
             n_init="auto",
         )
-        clustering_model.fit(corpus_embeddings)
+        clustering_model.fit(embeddings)
         cluster_assignment = clustering_model.labels_
 
         logger.info("Evaluating...")
         v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
+        if v_measure_only:
+            return {"v_measure": v_measure}
 
-        return {"v_measure": v_measure}
+        nmi = metrics.cluster.normalized_mutual_info_score(labels, cluster_assignment)
+        ari = metrics.cluster.adjusted_rand_score(labels, cluster_assignment)
+
+        matrix = metrics.confusion_matrix(labels, cluster_assignment)
+        # get linear sum assignment
+        row_ind, col_ind = linear_sum_assignment(matrix, maximize=True)
+        total_correct = matrix[row_ind, col_ind].sum()
+        clustering_accuracy = total_correct / len(labels)
+
+        return {
+            "v_measure": v_measure,
+            "nmi": nmi,
+            "ari": ari,
+            "cluster_accuracy": clustering_accuracy,
+        }

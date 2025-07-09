@@ -24,11 +24,8 @@ def get_changed_files(base_branch="main"):
     return [
         f
         for f in changed_files
-        if f.startswith("mteb/models/")
+        if f.startswith("mteb/models/model_implementations/")
         and f.endswith(".py")
-        and "overview" not in f
-        and "init" not in f
-        and "instructions" not in f
         and Path(f).exists()
     ]
 

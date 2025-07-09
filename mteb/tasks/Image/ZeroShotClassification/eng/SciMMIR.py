@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SciMMIR(AbsTaskZeroShotClassification):
+class SciMMIR(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="SciMMIR",
         description="SciMMIR.",

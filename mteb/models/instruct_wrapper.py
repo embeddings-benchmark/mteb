@@ -24,14 +24,14 @@ def instruct_wrapper(
     requires_package(
         instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
     )
-    from gritlm import GritLM
+    from gritlm import GritLM  # type: ignore[import]
 
     class InstructGritLMModel(GritLM, AbsEncoder):
         def __init__(
             self,
             model_name_or_path: str,
             mode: str,
-            instruction_template: str | Callable[[str], str] | None = None,
+            instruction_template: str | Callable[[str, PromptType], str] | None = None,
             **kwargs,
         ):
             if (
@@ -68,13 +68,13 @@ def instruct_wrapper(
 
             if self.instruction_template:
                 instruction = self.format_instruction(instruction, prompt_type)
-            inputs = [text for batch in inputs for text in batch["text"]]
+            _inputs = [text for batch in inputs for text in batch["text"]]
 
             logger.info(
                 f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
             )
             embeddings = super().encode(
-                inputs, instruction=instruction, *args, **kwargs
+                _inputs, instruction=instruction, *args, **kwargs
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True
@@ -89,7 +89,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        instruction_template: str | Callable[[str], str] | None = None,
+        instruction_template: str | Callable[[str, PromptType], str] | None = None,
         max_seq_length: int | None = None,
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
@@ -121,9 +121,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 "No instruction template provided. Instructions will be used as-is."
             )
 
+        self.instruction_template = instruction_template
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.add_eos_token = add_eos_token
         if max_seq_length is not None:

@@ -18,8 +18,8 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
+from mteb.models.encoder_interface import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 

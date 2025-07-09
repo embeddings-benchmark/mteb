@@ -12,7 +12,7 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder
 
 from ...create_dataloaders import (
     create_dataloader,
