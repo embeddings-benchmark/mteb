@@ -12,9 +12,8 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         description="Subsampled Dataset Classification of speech samples by speaker gender (male/female) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
-            "path": "AdnanElAssadi/mini-voxpopuli",
-            "revision": "70031eb5affcb0805e448fdf0b2dbbfc05f0aa8f",
-            "trust_remote_code": True,
+            "path": "mteb/voxpopuli-mini",
+            "revision": "d5fb9661054ba250e2c03adeb9a702ad55e73f27",
         },
         type="AudioClassification",
         category="a2t",

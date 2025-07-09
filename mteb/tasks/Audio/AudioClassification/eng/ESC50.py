@@ -12,8 +12,8 @@ class ESC50Classification(AbsTaskAudioClassification):
         description="Environmental Sound Classification Dataset.",
         reference="https://huggingface.co/datasets/ashraq/esc50",
         dataset={
-            "path": "ashraq/esc50",
-            "revision": "e3e2a63ffff66b9a9735524551e3818e96af03ee",
+            "path": "mteb/esc50",
+            "revision": "0877d3708afd4deba0b89a2b54eb528e7f24ec6c",
         },
         type="AudioClassification",
         category="a2t",

@@ -12,8 +12,8 @@ class BeijingOpera(AbsTaskAudioClassification):
         description="Audio classification of percussion instruments into one of 4 classes: `Bangu`, `Naobo`, `Daluo`, and `Xiaoluo`",
         reference="https://huggingface.co/datasets/silky1708/BeijingOpera",
         dataset={
-            "path": "silky1708/BeijingOpera",
-            "revision": "c5e967a1ae3569cf7f1dd2bb9273fd9424032e4a",
+            "path": "mteb/beijing-opera",
+            "revision": "fed432f5ad94bc8d76c96d0ba05a38e805254281",
         },
         type="AudioClassification",
         category="a2t",
@@ -42,7 +42,7 @@ class BeijingOpera(AbsTaskAudioClassification):
 }
 """,
         descriptive_stats={
-            "n_samples": {"train": 236, "test": 3021},  # test samples not found!
+            "n_samples": {"train": 236},
         },
     )
 

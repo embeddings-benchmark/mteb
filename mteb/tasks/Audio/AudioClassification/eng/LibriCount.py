@@ -12,8 +12,8 @@ class LibriCount(AbsTaskAudioClassification):
         description="Multiclass speaker count identification. Dataset contains audio recordings with between 0 to 10 speakers.",
         reference="https://huggingface.co/datasets/silky1708/LibriCount",
         dataset={
-            "path": "silky1708/LibriCount",
-            "revision": "679b233f0ef8aa6eb58382efcda49d6557db1af7",
+            "path": "mteb/libricount",
+            "revision": "cc851c56e30dc5dde80c1823de96d52ca3cb2607",
         },
         type="AudioClassification",
         category="a2t",

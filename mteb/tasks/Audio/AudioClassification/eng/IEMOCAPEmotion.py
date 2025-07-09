@@ -12,8 +12,8 @@ class IEMOCAPEmotionClassification(AbsTaskAudioClassification):
         description="Classification of speech samples into emotions (angry, happy, sad, neutral, frustrated, excited, fearful, surprised, disgusted) from interactive emotional dyadic conversations.",
         reference="https://doi.org/10.1007/s10579-008-9076-6",
         dataset={
-            "path": "AbstractTTS/IEMOCAP",
-            "revision": "9f1696a135a65ce997d898d4121c952269a822ca",
+            "path": "mteb/iemocap",
+            "revision": "6d4225271da423e791e16770d335cfa351cdf88e",
         },
         type="AudioClassification",
         category="a2t",

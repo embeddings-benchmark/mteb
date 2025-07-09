@@ -12,8 +12,8 @@ class SpokenQAforIC(AbsTaskAudioClassification):
         description="SpokenQA dataset reformulated as Intent Classification (IC) task",
         reference="https://huggingface.co/datasets/DynamicSuperb/SpokenQA_SLUE",
         dataset={
-            "path": "DynamicSuperb/SpokenQA_SLUE",
-            "revision": "191367d68255d7bd50928c869690da15961666fd",
+            "path": "mteb/SpokenQA_SLUE",
+            "revision": "97eb2287a0c881538cee9f5db415e80111d96a31",
         },
         type="AudioClassification",
         category="a2t",
