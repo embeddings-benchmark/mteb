@@ -70,7 +70,7 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
     Returns:
         LabelStatistics: A dictionary containing the descriptive statistics.
     """
-    if isinstance(labels[0], int):
+    if not isinstance(labels[0], list):
         label_len = [1] * len(labels)
         total_label_len = len(labels)
         total_labels = labels

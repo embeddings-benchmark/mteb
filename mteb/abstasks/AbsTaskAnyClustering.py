@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter
 from typing import Any
 
 import numpy as np
@@ -18,6 +17,11 @@ from mteb.types.statistics import (
 )
 
 from ..evaluation.evaluators import ClusteringEvaluator
+from ._statistics_calculation import (
+    calculate_image_statistics,
+    calculate_label_statistics,
+    calculate_text_statistics,
+)
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -134,63 +138,15 @@ class AbsTaskAnyClustering(AbsTask):
             labels = [item for sublist in labels for item in sublist]
 
         total_text_len = 0
-        text_len = None
-        img_widths, img_heights = None, None
-
-        if "image" in self.metadata.modalities:
-            img_widths, img_heights = [], []
-            for img in inputs:
-                width, height = img.size  # type: ignore
-                img_heights.append(height)
-                img_widths.append(width)
-        if "text" in self.metadata.modalities:
-            text_len = [len(t) for t in inputs]
-            total_text_len = sum(text_len)
-
         text_statistics, image_statistics = None, None
-        if text_len:
-            text_statistics = TextStatistics(
-                min_text_length=min(text_len),
-                average_text_length=total_text_len / len(inputs),
-                max_text_length=max(text_len),
-                unique_texts=len(set(inputs)),
-            )
-        if img_widths:
-            image_statistics = ImageStatistics(
-                min_image_width=min(img_widths),
-                average_image_width=sum(img_widths) / len(img_widths),
-                max_image_width=max(img_widths),
-                min_image_height=min(img_heights),
-                average_image_height=sum(img_heights) / len(img_heights),
-                max_image_height=max(img_heights),
-            )
+        if "image" in self.metadata.modalities:
+            image_statistics = calculate_image_statistics(inputs)
 
-        # labels
-        if isinstance(labels[0], int):
-            label_len = [1] * len(labels)
-            total_label_len = len(labels)
-            total_labels = labels
-        else:
-            # multilabel case
-            label_len = [len(l) for l in labels]
-            total_label_len = sum(label_len)
-            total_labels = []
-            for l in labels:
-                total_labels.extend(l if len(l) > 0 else [None])
+        if "text" in self.metadata.modalities:
+            text_statistics = calculate_text_statistics(inputs)
 
-        label_count = Counter(total_labels)
-        label_statistics = LabelStatistics(
-            min_labels_per_text=min(label_len),
-            average_label_per_text=total_label_len / len(labels),
-            max_labels_per_text=max(label_len),
-            unique_labels=len(label_count),
-            labels={
-                str(label): {
-                    "count": value,
-                }
-                for label, value in label_count.items()
-            },
-        )
+        label_statistics = calculate_label_statistics(labels)
+
         return ClusteringDescriptiveStatistics(
             num_samples=len(inputs),
             number_of_characters=total_text_len,

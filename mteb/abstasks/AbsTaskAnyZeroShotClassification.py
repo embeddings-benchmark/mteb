@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter
 from typing import Any
 
 from datasets import Dataset
@@ -16,6 +15,11 @@ from mteb.types.statistics import (
 
 from ..evaluation.evaluators import ZeroShotClassificationEvaluator
 from ..models.encoder_interface import Encoder
+from ._statistics_calculation import (
+    calculate_image_statistics,
+    calculate_label_statistics,
+    calculate_text_statistics,
+)
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -32,9 +36,7 @@ class ZeroShotClassificationDescriptiveStatistics(DescriptiveStatistics):
         image_statistics: Statistics for images
         label_statistics: Statistics for dataset labels
 
-        min_label_text_length: Minimum length of candidate label text
-        average_label_text_length: Average length of candidate label text
-        max_label_text_length: Maximum length of candidate label text
+        candidates_labels_text_statistics: Statistics for candidate labels text
     """
 
     num_samples: int
@@ -43,10 +45,7 @@ class ZeroShotClassificationDescriptiveStatistics(DescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     label_statistics: LabelStatistics
-
-    min_label_text_length: int
-    average_label_text_length: float
-    max_label_text_length: int
+    candidates_labels_text_statistics: TextStatistics
 
 
 class AbsTaskAnyZeroShotClassification(AbsTask):
@@ -83,47 +82,17 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
             labels = self.dataset[split][self.label_column_name]
 
         num_samples = len(inputs)
-        label_count = Counter(labels)
 
-        # build image statistics
         image_statistics = None
-        if "image" in self.metadata.modalities:
-            img_widths, img_heights = [], []
-            for img in inputs:
-                w, h = img.size  # type: ignore
-                img_widths.append(w)
-                img_heights.append(h)
-
-            image_statistics = ImageStatistics(
-                min_image_width=min(img_widths),
-                average_image_width=sum(img_widths) / len(img_widths),
-                max_image_width=max(img_widths),
-                min_image_height=min(img_heights),
-                average_image_height=sum(img_heights) / len(img_heights),
-                max_image_height=max(img_heights),
-            )
-
         text_statistics = None
+
+        if "image" in self.metadata.modalities:
+            image_statistics = calculate_image_statistics(inputs)
         if self.metadata.modalities == ["text"]:
-            # build text statistics
-            text_lengths = [len(str(text)) for text in inputs]
-            text_statistics = TextStatistics(
-                min_text_length=min(text_lengths),
-                average_text_length=sum(text_lengths) / len(text_lengths),
-                max_text_length=max(text_lengths),
-            )
+            text_statistics = calculate_text_statistics(inputs)
 
-        # single‐label per sample => use LabelStatistics
-        label_statistics = LabelStatistics(
-            min_labels_per_text=1,
-            average_label_per_text=1.0,
-            max_labels_per_text=1,
-            unique_labels=len(label_count),
-            labels={str(lbl): {"count": cnt} for lbl, cnt in label_count.items()},
-        )
-
-        # candidate‐label text lengths
-        candidate_lens = [len(c) for c in self.get_candidate_labels()]
+        label_statistics = calculate_label_statistics(labels)
+        candidate_lens = calculate_text_statistics(self.get_candidate_labels())
 
         return ZeroShotClassificationDescriptiveStatistics(
             num_samples=num_samples,
@@ -131,9 +100,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             label_statistics=label_statistics,
-            min_label_text_length=min(candidate_lens),
-            average_label_text_length=sum(candidate_lens) / len(candidate_lens),
-            max_label_text_length=max(candidate_lens),
+            candidates_labels_text_statistics=candidate_lens,
         )
 
     def _evaluate_subset(
