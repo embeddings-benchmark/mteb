@@ -7,7 +7,7 @@ from typing import Any
 
 import numpy as np
 import torch
-
+import os
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
@@ -453,7 +453,7 @@ KaLM_v2_task_prompts = {
     "LCQMC-query": "Retrieve semantically similar text",
     "LCQMC-passage": "Retrieve semantically similar text",
     "PAWSX-query": "Retrieve semantically similar text",
-    "PAWSX-passage"": "Retrieve semantically similar text",
+    "PAWSX-passage": "Retrieve semantically similar text",
     "QBQTC-query": "Retrieve semantically similar text",
     "QBQTC-passage": "Retrieve semantically similar text",
     "STSB-query": "Retrieve semantically similar text",
@@ -769,23 +769,31 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     superseded_by=None,
 )
 
-
-HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
-    loader=partial(  # type: ignore
-        InstructSentenceTransformerWrapper,
-        model_name_or_path=os.environ.get("kalm_v2_PATH", "HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2"),
-        revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
+def kalmv2_instruct_loader(model_name_or_path, **kwargs):
+    model = InstructSentenceTransformerWrapper(
+        model_name_or_path,
+        revision=kwargs.pop("revision", None),
         instruction_template=KaLM_INSTRUCTION,
         max_seq_length=512,
         apply_instruction_to_passages=False,
         prompts_dict=KaLM_v2_task_prompts,
+        **kwargs,
+    )
+    encoder = model.model._first_module()
+    return model
+    
+
+HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
+    loader=partial(  # type: ignore
+        kalmv2_instruct_loader,
+        model_name_or_path=os.environ.get("kalm_v2_PATH", "HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2"),
     ),
     name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
     revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
     release_date="2025-06-25",
     languages=["eng-Latn", "zho-Hans"],
     n_parameters=494032768,
-    memory_usage_mb=1885,
+    memory_usage_mb=942,
     max_tokens=512,
     embed_dim=896,
     license="mit",
