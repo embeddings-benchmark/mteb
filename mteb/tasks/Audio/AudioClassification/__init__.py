@@ -21,6 +21,7 @@ from .eng.SpeechCommands import *
 from .eng.SpokeN import *
 from .eng.SpokenQAforIC import *
 from .eng.TUTAcousticScenes import *
+from .eng.UrbanSound8k import *
 from .eng.VocalSound import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
