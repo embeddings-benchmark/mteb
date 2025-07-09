@@ -8,8 +8,8 @@ from datasets import Dataset
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
-from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
+from ..models.encoder_interface import Encoder
 from ._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,

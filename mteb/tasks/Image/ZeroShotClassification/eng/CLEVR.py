@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CLEVR(AbsTaskZeroShotClassification):
+class CLEVR(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="CLEVRZeroShot",
         description="CLEVR closest object distance identification task.",
@@ -39,7 +39,7 @@ class CLEVR(AbsTaskZeroShotClassification):
 """,
     )
 
-    image_column_name: str = "webp"
+    input_column_name: str = "webp"
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:
@@ -55,7 +55,7 @@ class CLEVR(AbsTaskZeroShotClassification):
         return [f"{c} shapes." for c in labels]
 
 
-class CLEVRCount(AbsTaskZeroShotClassification):
+class CLEVRCount(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="CLEVRCountZeroShot",
         description="CLEVR count objects task.",
@@ -88,7 +88,7 @@ class CLEVRCount(AbsTaskZeroShotClassification):
 """,
     )
 
-    image_column_name: str = "webp"
+    input_column_name: str = "webp"
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:

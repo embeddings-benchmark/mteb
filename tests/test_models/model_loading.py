@@ -8,7 +8,7 @@ from pathlib import Path
 from huggingface_hub import scan_cache_dir
 
 from mteb import get_model, get_model_meta
-from mteb.models.overview import MODEL_REGISTRY
+from mteb.models.get_model_meta import MODEL_REGISTRY
 
 logging.basicConfig(level=logging.INFO)
 

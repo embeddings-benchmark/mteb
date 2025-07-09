@@ -10,7 +10,7 @@ from PIL import ImageFile
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 
-from mteb.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -57,8 +57,8 @@ class AbsTaskAnyClassification(AbsTask):
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
-        text: str
-        label: int
+        input_column_name: input (str | image)
+        label_column_name: int
 
     Attributes:
        samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.

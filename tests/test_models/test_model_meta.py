@@ -7,7 +7,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb import MTEB, AbsTask
-from mteb.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 

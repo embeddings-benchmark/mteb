@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BuiltBenchClusteringS2S(AbsTaskClustering):
+class BuiltBenchClusteringS2S(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="BuiltBenchClusteringS2S",
         description="Clustering of built asset names/titles based on categories identified within industry classification systems such as IFC, Uniclass, etc.",

@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Callable, get_args
+from typing import Any, Callable, cast, get_args
 
 from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata, TaskType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.similarity_functions import (
     cos_sim,
     dot_score,
@@ -30,7 +30,7 @@ class AbsEncoder(ABC):
     model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
-    instruction_template: str | Callable[[str, str], str] | None = None
+    instruction_template: str | Callable[[str, PromptType], str] | None = None
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         if self.mteb_model_meta is None or (
@@ -42,7 +42,10 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity")
                 and callable(self.model.similarity)
             ):
-                return self.model.similarity(embeddings1, embeddings2)
+                arr = self.model.similarity(embeddings1, embeddings2)
+                # We assume that the model returns an Array-like object:
+                arr = cast(Array, arr)
+                return arr
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return cos_sim(embeddings1, embeddings2)
@@ -66,7 +69,10 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity_pairwise")
                 and callable(self.model.similarity_pairwise)
             ):
-                return self.model.similarity_pairwise(embeddings1, embeddings2)
+                arr = self.model.similarity_pairwise(embeddings1, embeddings2)
+                # We assume that the model returns an Array-like object:
+                arr = cast(Array, arr)
+                return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return pairwise_cos_sim(embeddings1, embeddings2)
@@ -210,7 +216,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name, None)
+        return self.model_prompts.get(prompt_name)  # type: ignore
 
     def validate_task_to_prompt_name(self) -> None:
         """Validate the task name and prompt type against the model prompts.
@@ -254,6 +260,10 @@ class AbsEncoder(ABC):
     def format_instruction(
         self, instruction: str, prompt_type: PromptType | None = None
     ) -> str:
+        if self.instruction_template is None:
+            raise ValueError(
+                "Attempting to format an instruction without an instruction template."
+            )
         if isinstance(self.instruction_template, str):
             if "{instruction}" not in self.instruction_template:
                 raise ValueError(

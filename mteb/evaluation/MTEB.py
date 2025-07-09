@@ -13,6 +13,11 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any
 
+from mteb.models.get_model_meta import (
+    _model_meta_from_cross_encoder,
+    _model_meta_from_sentence_transformers,
+)
+
 if sys.version_info >= (3, 13):
     from warnings import deprecated
 else:
@@ -23,13 +28,9 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import TaskResult
-from mteb.model_meta import ModelMeta
-from mteb.models import (
-    model_meta_from_cross_encoder,
-    model_meta_from_sentence_transformers,
-)
+from mteb.models.encoder_interface import Encoder
+from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 if TYPE_CHECKING:
@@ -648,9 +649,9 @@ class MTEB:
     @staticmethod
     def _get_model_meta(model: Encoder) -> ModelMeta:
         if isinstance(model, CrossEncoder):
-            meta = model_meta_from_cross_encoder(model)
+            meta = _model_meta_from_cross_encoder(model)
         elif isinstance(model, SentenceTransformer):
-            meta = model_meta_from_sentence_transformers(model)
+            meta = _model_meta_from_sentence_transformers(model)
         else:
             meta = ModelMeta(
                 loader=None,
