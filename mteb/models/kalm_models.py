@@ -7,7 +7,9 @@ from typing import Any
 
 import numpy as np
 import torch
+
 import os
+
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
@@ -279,6 +281,7 @@ kalm_v2_training_data = {
 }
 
 
+
 KaLM_task_prompts = {
     "AmazonCounterfactualClassification": "Given an Amazon review, judge whether it is counterfactual.",
     "AmazonPolarityClassification": "Classifying Amazon reviews into positive or negative sentiment",
@@ -340,6 +343,7 @@ KaLM_task_prompts = {
     "RuSciBenchGRNTIClusteringP2P": "Identify the topic or theme of the Russian articles.",
     "RuSciBenchOECDClusteringP2P": "Identify the topic or theme of the Russian articles.",
 }
+
 
 KaLM_v2_task_prompts = {
     "AmazonCounterfactualClassification": "Given an Amazon review, judge whether it is counterfactual.",
@@ -481,6 +485,7 @@ KaLM_v2_task_prompts = {
     "SummEval-query": "Retrieve semantically similar summaries", 
     "SummEval-passage": "Retrieve semantically similar summaries"
 }
+
 
 KaLM_X_task_prompts = {
     "Classification": "classify the query into different classes.",
@@ -769,6 +774,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     superseded_by=None,
 )
 
+
 def kalmv2_instruct_loader(model_name_or_path, **kwargs):
     model = InstructSentenceTransformerWrapper(
         model_name_or_path,
@@ -838,3 +844,34 @@ KaLM_Embedding_X_0605 = ModelMeta(
     public_training_data=None,
     training_datasets=kalm_training_data,
 )
+
+
+# KaLM_Embedding_X_0605 = ModelMeta(
+#     loader=partial(
+#         KALMWrapper,
+#         model_name="KaLM-Team/KaLM-Embedding-X-0605",
+#         revision="1",
+#         instruction_template=KaLM_INSTRUCTION,
+#         max_seq_length=512,
+#         apply_instruction_to_passages=True,
+#         prompts_dict=KaLM_X_task_prompts,
+#     ),
+#     name="KaLM-Team/KaLM-Embedding-X-0605",
+#     revision="1",
+#     languages=None,
+#     open_weights=False,
+#     release_date="2025-06-05",
+#     n_parameters=9.24 * 1e9,
+#     memory_usage_mb=35254,
+#     max_tokens=8192,
+#     embed_dim=3584,
+#     license=None,
+#     reference="https://github.com/KaLM-Team/KaLM-Embedding-X",
+#     similarity_fn_name="cosine",
+#     framework=["Sentence Transformers", "PyTorch"],
+#     use_instructions=True,
+#     public_training_code="https://github.com/HITsz-TMG/KaLM-Embedding",
+#     public_training_data=None,
+#     training_datasets=kalm_training_data,
+# )
+
