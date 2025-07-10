@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.30"
+version = "1.38.33"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -40,10 +40,6 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "torchaudio>=2.6.0",
-    "librosa>=0.11.0",
-    "soundfile>=0.13.1",
-    "bibtexparser>=1.4.3",
 ]
 
 
@@ -56,7 +52,6 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-# Essential for basic functionality
 image = ["torchvision>0.2.1"]
 dev = [
 "ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
@@ -68,30 +63,40 @@ dev = [
 "pre-commit>=4.1.0",
 "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
-
-# Audio-related (for your testing)
-speechbrain = ["speechbrain>=0.5.12"]
-torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
-
-# OpenAI models (for your whisper testing)
-openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
-
-# Performance & utilities (safe to keep)
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 speedtask = [
     "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
     "GPUtil>=1.4.0",
     "psutil>=5.9.8"
 ]
-xformers = ["xformers>=0.0.29"]
+peft = ["peft>=0.11.0"]
+leaderboard = [
+    "gradio==5.35.0; python_version > '3.9'", # 3.10 is required for gradio
+    "plotly>=5.24.0,<6.0.0",
+    "cachetools>=5.2.0",
+    "matplotlib>=3.9.4",
+]
+flagembedding = ["FlagEmbedding==1.3.4"]
+jina = ["einops>=0.8.0"]
+jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
-
-# REMOVED CONFLICTING EXTRAS:
-# - pylate (conflicts with llm2vec, model2vec)
-# - colpali_engine (conflicts with pylate)
-# - llm2vec (conflicts with pylate, model2vec)
-# - model2vec (conflicts with llm2vec)
-# - All the other model-specific extras that aren't needed for audio testing
+openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
+model2vec = ["model2vec>=0.3.0"]
+pylate = ["pylate>=1.1.4"]
+bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
+gritlm = ["gritlm>=1.0.2"]
+xformers = ["xformers>=0.0.29"]
+blip2 = ["salesforce-lavis>=1.0.2"]
+voyageai = ["voyageai>0.3.0,<2.0.0"]
+voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
+cohere = ["cohere==5.14.0"]
+vertexai = ["vertexai==1.71.1"]
+llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
+timm = ["timm>=1.0.15,<1.1.0"]
+open_clip_torch = ["open_clip_torch==2.31.0"]
+xet = ["huggingface_hub>=0.32.0"]
+ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
+colpali_engine = ["colpali_engine>=0.3.10"]
 
 [tool.coverage.report]
 
@@ -210,4 +215,8 @@ addopts = """
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
-# Removed conflicts section since we removed the conflicting extras
+conflicts = [
+    [{ extra = "timm" }, { extra = "blip2" }],
+    [{ extra = "llm2vec" }, { extra = "pylate" }],
+    [{ extra = "llm2vec" }, { extra = "model2vec" }]
+]
