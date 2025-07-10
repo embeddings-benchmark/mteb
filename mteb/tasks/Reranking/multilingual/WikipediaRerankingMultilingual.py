@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_LANGS = {
     "bg": ["bul-Cyrl"],
@@ -25,21 +24,21 @@ _EVAL_LANGS = {
 }
 
 
-class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
+class WikipediaRerankingMultilingual(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WikipediaRerankingMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
         reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual",
         dataset={
-            "path": "ellamind/wikipedia-2023-11-reranking-multilingual",
-            "revision": "6268b37d6f975f2a134791ba2f250a91d0bdfb4f",
+            "path": "mteb/WikipediaRerankingMultilingual",
+            "revision": "803771c366038ed587b21e3d8fe25f8f73134fad",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
-        main_score="map",
+        main_score="map_at_1000",
         date=("2023-11-01", "2024-05-15"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],

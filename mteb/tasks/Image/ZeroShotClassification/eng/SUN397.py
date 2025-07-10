@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
+class SUN397ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="SUN397ZeroShot",
         description="Large scale scene recognition in 397 categories.",
@@ -43,10 +43,6 @@ class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2010},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 21750},
-            "avg_character_length": {"test": 256},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

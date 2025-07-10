@@ -5,10 +5,9 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "bs": ["bos-Latn"],
@@ -28,7 +27,7 @@ _LANGUAGES = {
 }
 
 
-class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
+class WikiClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
@@ -39,7 +38,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
             "revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -55,7 +54,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
     )
 
 
-class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
+class WikiClusteringFastP2P(AbsTaskClusteringFast):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 
@@ -68,7 +67,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
             "revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

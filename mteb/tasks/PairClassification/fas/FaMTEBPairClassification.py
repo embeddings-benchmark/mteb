@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CExaPPC(AbsTaskPairClassification):
@@ -14,7 +14,7 @@ class CExaPPC(AbsTaskPairClassification):
             "revision": "68a0ff474739367a36c8066ee04802a65aefc117",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -67,7 +67,7 @@ class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
             "revision": "2128d809e27ab8528906e2231f8e824516fb8e5a",
         },
         type="PairClassification",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -105,7 +105,7 @@ class FarsiParaphraseDetection(AbsTaskPairClassification):
             "revision": "c8129741af418d9ae43cfc1fc4f285704e26035f",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -143,7 +143,7 @@ class SynPerTextKeywordsPC(AbsTaskPairClassification):
             "revision": "ea9a840cb163b415cc70b2f7adf2554feae159dc",
         },
         type="PairClassification",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -181,7 +181,7 @@ class SynPerQAPC(AbsTaskPairClassification):
             "revision": "d1b62ef31bebbb48ae01867993a1e583c2ce7d93",
         },
         type="PairClassification",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -220,7 +220,7 @@ class ParsinluEntail(AbsTaskPairClassification):
             "trust_remote_code": True,
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -273,7 +273,7 @@ class ParsinluQueryParaphPC(AbsTaskPairClassification):
             "trust_remote_code": True,
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],

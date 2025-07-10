@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NordicLangClassification(AbsTaskClassification):
+class NordicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",
@@ -16,7 +16,7 @@ class NordicLangClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=[

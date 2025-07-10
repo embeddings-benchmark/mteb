@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MalteseNewsClassification(AbsTaskMultilabelClassification):
@@ -21,7 +21,7 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
             "revision": "6bb0321659c4f07c4c2176c30c98c971be6571b4",
         },
         type="MultilabelClassification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["mlt-Latn"],

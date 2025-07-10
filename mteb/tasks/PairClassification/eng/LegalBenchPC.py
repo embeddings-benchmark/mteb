@@ -5,7 +5,7 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_COLUMN_MAP = [
     {
@@ -72,7 +72,7 @@ class LegalBenchPC(AbsTaskPairClassification):
             "trust_remote_code": True,
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -130,9 +130,9 @@ class LegalBenchPC(AbsTaskPairClassification):
         _hf_dataset = None
         for dataset_col_map in _DATASET_COLUMN_MAP:
             _dataset = datasets.load_dataset(
-                self.metadata_dict["dataset"]["path"],
+                self.metadata.dataset["path"],
                 dataset_col_map["name"],
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
                 trust_remote_code=True,
             )
 

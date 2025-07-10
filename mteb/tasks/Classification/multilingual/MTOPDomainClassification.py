@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -14,7 +13,7 @@ _LANGUAGES = {
 }
 
 
-class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
+class MTOPDomainClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MTOPDomainClassification",
         dataset={
@@ -24,7 +23,7 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

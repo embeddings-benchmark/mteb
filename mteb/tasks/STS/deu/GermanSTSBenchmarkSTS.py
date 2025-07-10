@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class GermanSTSBenchmarkSTS(AbsTaskSTS):
+class GermanSTSBenchmarkSTS(AbsTaskAnySTS):
+    min_score = 0
+    max_score = 5
+
     metadata = TaskMetadata(
         name="GermanSTSBenchmark",
         dataset={
@@ -16,7 +19,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         + "Translations were originally done by T-Systems on site services GmbH.",
         reference="https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["deu-Latn"],
@@ -37,10 +40,3 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
 }
 """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

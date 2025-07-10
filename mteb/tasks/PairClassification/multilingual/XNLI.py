@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
     "ar": ["ara-Arab"],
@@ -22,7 +21,7 @@ _LANGS = {
 }
 
 
-class XNLI(MultilingualTask, AbsTaskPairClassification):
+class XNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XNLI",
         dataset={
@@ -31,7 +30,7 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         },
         description="",
         reference="https://aclanthology.org/D18-1269/",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test", "validation"],
@@ -107,19 +106,19 @@ _LANGS_2 = {
 }
 
 
-class XNLIV2(MultilingualTask, AbsTaskPairClassification):
+class XNLIV2(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XNLIV2",
         dataset={
-            "path": "mteb/xnli2.0-multi-pair",
-            "revision": "5b7d477a8c62cdd18e2fed7e015497c20b4371ad",
+            "path": "mteb/XNLIV2",
+            "revision": "06108371a8bceee5024a527c4330baa29eb5a013",
         },
-        description="""
-        This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding'
-        with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB
-        """,
+        description=(
+            "This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding' "
+            "with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB"
+        ),
         reference="https://arxiv.org/pdf/2301.06527",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
@@ -142,30 +141,4 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
   year = {2023},
 }
 """,
-        # average of premise and hypothesis
     )
-
-    def dataset_transform(self):
-        _dataset = {}
-        for lang in self.hf_subsets:
-            _dataset[lang] = {}
-            self.dataset[lang] = self.stratified_subsampling(
-                self.dataset[lang], seed=self.seed, splits=self.metadata.eval_splits
-            )
-            for split in self.metadata.eval_splits:
-                # 0=entailment, 2=contradiction. Filter out neutral to match the task.
-                # Then map entailment as positive (1) and contradiction as negative (0).
-                hf_dataset = self.dataset[lang][split].filter(
-                    lambda x: x["label"] in [0, 2]
-                )
-                hf_dataset = hf_dataset.map(
-                    lambda example: {"label": 0 if example["label"] == 2 else 1}
-                )
-                _dataset[lang][split] = [
-                    {
-                        "sentence1": hf_dataset["premise"],
-                        "sentence2": hf_dataset["hypothesis"],
-                        "labels": hf_dataset["label"],
-                    }
-                ]
-        self.dataset = _dataset

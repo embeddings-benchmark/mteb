@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import clustering_downsample
-from mteb.abstasks.TaskMetadata import TaskMetadata
+import random
+
+from datasets import Dataset, DatasetDict
+
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ArxivClusteringP2P(AbsTaskClustering):
+class ArxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringP2P"
 
     metadata = TaskMetadata(
@@ -17,7 +20,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
             "revision": "a122ad7f3f0291bf49cc6f4d32aa80929df69d5d",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -43,7 +46,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
     )
 
 
-class ArxivClusteringP2PFast(AbsTaskClustering):
+class ArxivClusteringP2PFast(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringP2P"
     # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
@@ -57,7 +60,7 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
             "revision": "a122ad7f3f0291bf49cc6f4d32aa80929df69d5d",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -84,5 +87,25 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        ds = clustering_downsample(self.dataset, self.seed)
-        self.dataset = ds
+        rng_state = random.Random(self.seed)
+
+        ds = {}
+        for split in self.dataset:
+            _docs = []
+            _labels = []
+
+            n_clusters = len(self.dataset[split])
+
+            for i in range(n_clusters):
+                labels = self.dataset[split]["labels"][i]
+                sentences = self.dataset[split]["sentences"][i]
+
+                n_sample = min(2048, len(sentences))
+
+                # sample n_sample from each cluster
+                idxs = rng_state.sample(range(len(sentences)), n_sample)
+                _docs.append([sentences[idx] for idx in idxs])
+                _labels.append([labels[idx] for idx in idxs])
+
+            ds[split] = Dataset.from_dict({"sentences": _docs, "labels": _labels})
+        self.dataset = DatasetDict(ds)

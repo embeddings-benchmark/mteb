@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MewsC16JaClustering(AbsTaskClusteringFast):
@@ -21,7 +21,7 @@ class MewsC16JaClustering(AbsTaskClusteringFast):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

@@ -5,9 +5,9 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from ....abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
@@ -24,7 +24,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "815ca46b2622cec33ccafc3735d572c266efdb44",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -78,7 +78,7 @@ Iryna Gurevych},
         self.dataset = DatasetDict(ds)
 
 
-class StackExchangeClusteringP2P(AbsTaskClustering):
+class StackExchangeClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "StackExchangeClusteringP2P.v2"
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P",
@@ -89,7 +89,7 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
             "revision": "815ca46b2622cec33ccafc3735d572c266efdb44",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

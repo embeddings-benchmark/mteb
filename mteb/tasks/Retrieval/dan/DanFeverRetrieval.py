@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DanFeverRetrieval(AbsTaskRetrieval):
@@ -16,7 +16,7 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         description="A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset. DanFeverRetrieval fixed an issue in DanFever where some corpus entries were incorrectly removed.",
         reference="https://aclanthology.org/2021.nodalida-main.47/",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
@@ -119,7 +119,7 @@ class DanFever(AbsTaskRetrieval):
         description="A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset.",
         reference="https://aclanthology.org/2021.nodalida-main.47/",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],

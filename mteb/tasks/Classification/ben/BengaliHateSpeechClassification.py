@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BengaliHateSpeechClassification(AbsTaskClassification):
+class BengaliHateSpeechClassification(AbsTaskAnyClassification):
     superseded_by = "BengaliHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification",
@@ -15,7 +15,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
             "revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],
@@ -44,7 +44,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         )
 
 
-class BengaliHateSpeechClassificationV2(AbsTaskClassification):
+class BengaliHateSpeechClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification.v2",
         description="""The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.
@@ -55,7 +55,7 @@ class BengaliHateSpeechClassificationV2(AbsTaskClassification):
             "revision": "ccd942d16d2f0512799a1480034650a7b076027e",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ben-Beng"],

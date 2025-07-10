@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HindiDiscourseClassification(AbsTaskClassification):
+class HindiDiscourseClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HindiDiscourseClassification",
         dataset={
@@ -15,7 +15,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         description="A Hindi Discourse dataset in Hindi with values for coherence.",
         reference="https://aclanthology.org/2020.lrec-1.149/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["hin-Deva"],

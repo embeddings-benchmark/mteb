@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
@@ -34,8 +34,5 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
   year = {2021},
 }
 """,
-        descriptive_stats={
-            # "n_samples": {"default": 397121},
-        },
     )
     skip_first_result = True

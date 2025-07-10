@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class KorSTS(AbsTaskSTS):
+class KorSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="KorSTS",
         dataset={
@@ -15,7 +15,7 @@ class KorSTS(AbsTaskSTS):
         description="Benchmark dataset for STS in Korean. Created by machine translation and human post editing of the STS-B dataset.",
         reference="https://arxiv.org/abs/2004.03289",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],
@@ -37,9 +37,5 @@ class KorSTS(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

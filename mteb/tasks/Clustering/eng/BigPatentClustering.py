@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
 
-class BigPatentClustering(AbsTaskClustering):
+class BigPatentClustering(AbsTaskAnyClustering):
     superseded_by = "BigPatentClustering.v2"
 
     metadata = TaskMetadata(
@@ -23,7 +23,7 @@ class BigPatentClustering(AbsTaskClustering):
             "revision": "62d5330920bca426ce9d3c76ea914f15fc83e891",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -71,7 +71,7 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
             "revision": "58a863a958586a5d6ba51088b94ac74a46aa864f",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

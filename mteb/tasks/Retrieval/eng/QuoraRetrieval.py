@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -20,7 +20,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
         ),
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -62,7 +62,7 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
         ),
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

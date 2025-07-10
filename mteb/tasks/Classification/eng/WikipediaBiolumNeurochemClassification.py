@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaBiolumNeurochemClassification(AbsTaskClassification):
+class WikipediaBiolumNeurochemClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaBiolumNeurochemClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaBiolumNeurochemClassification(AbsTaskClassification):
             "revision": "2f68b7d34c2be896e46b14533573b366e59e5aae",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

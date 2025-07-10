@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -19,7 +19,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         ),
         reference="https://arxiv.org/abs/2404.03555",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["hun-Latn"],

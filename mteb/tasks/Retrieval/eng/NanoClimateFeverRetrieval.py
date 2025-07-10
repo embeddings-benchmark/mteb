@@ -5,7 +5,7 @@ from collections import defaultdict
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoClimateFeverRetrieval(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
             "revision": "96741bfa30b9f56db8c9eb7d08e775ed6474f206",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

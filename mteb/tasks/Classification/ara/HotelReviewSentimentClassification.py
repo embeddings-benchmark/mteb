@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HotelReviewSentimentClassification(AbsTaskClassification):
+class HotelReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "HotelReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="HotelReviewSentimentClassification",
@@ -15,7 +15,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         description="HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
@@ -40,7 +40,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
     )
 
 
-class HotelReviewSentimentClassificationV2(AbsTaskClassification):
+class HotelReviewSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HotelReviewSentimentClassification.v2",
         dataset={
@@ -51,7 +51,7 @@ class HotelReviewSentimentClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

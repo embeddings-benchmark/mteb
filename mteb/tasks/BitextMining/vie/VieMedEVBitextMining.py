@@ -5,7 +5,7 @@ import random
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
@@ -21,7 +21,7 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         description="A high-quality Vietnamese-English parallel data from the medical domain for machine translation",
         reference="https://aclanthology.org/2015.iwslt-evaluation.11/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "vie-Latn"],

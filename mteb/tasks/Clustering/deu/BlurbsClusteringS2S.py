@@ -5,17 +5,17 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
 
-class BlurbsClusteringS2S(AbsTaskClustering):
+class BlurbsClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "BlurbsClusteringS2S.v2"
 
     metadata = TaskMetadata(
@@ -27,7 +27,7 @@ class BlurbsClusteringS2S(AbsTaskClustering):
             "revision": "22793b6a6465bf00120ad525e38c51210858132c",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -67,7 +67,7 @@ class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
             "revision": "22793b6a6465bf00120ad525e38c51210858132c",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

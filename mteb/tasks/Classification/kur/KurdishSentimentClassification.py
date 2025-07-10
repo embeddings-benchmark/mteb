@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KurdishSentimentClassification(AbsTaskClassification):
+class KurdishSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KurdishSentimentClassification",
         description="Kurdish Sentiment Dataset",
@@ -14,7 +14,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
             "revision": "f334d90a9f68cc3af78cc2a2ece6a3b69408124c",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kur-Arab"],

@@ -3,9 +3,8 @@ from __future__ import annotations
 import datasets
 import numpy as np
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "amh": ["amh-Ethi"],
@@ -27,7 +26,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
+class MasakhaNEWSClusteringP2P(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringP2P",
         description="Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.",
@@ -38,7 +37,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -72,7 +71,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset_transform(lang)
         self.data_loaded = True

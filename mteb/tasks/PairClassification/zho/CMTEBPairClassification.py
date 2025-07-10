@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Ocnli(AbsTaskPairClassification):
@@ -14,7 +14,7 @@ class Ocnli(AbsTaskPairClassification):
             "revision": "66e76a618a34d6d565d5538088562851e6daa7ec",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
@@ -54,7 +54,7 @@ class Cmnli(AbsTaskPairClassification):
             "revision": "41bc36f332156f7adc9e38f53777c959b2ae9766",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],

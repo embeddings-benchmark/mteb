@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CzechSubjectivityClassification(AbsTaskClassification):
+class CzechSubjectivityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CzechSubjectivityClassification",
         description="An Czech dataset for subjectivity classification.",
@@ -14,7 +14,7 @@ class CzechSubjectivityClassification(AbsTaskClassification):
             "revision": "e387ddf167f3eba99936cff89909ed6264f17e1f",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2022-04-01", "2022-04-01"),
         eval_splits=["validation", "test"],

@@ -3,9 +3,8 @@ from __future__ import annotations
 import datasets
 import numpy as np
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "amh": ["amh-Ethi"],
@@ -27,7 +26,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
+class MasakhaNEWSClusteringS2S(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",
         dataset={
@@ -40,7 +39,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         ),
         reference="https://huggingface.co/datasets/masakhane/masakhanews",
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -71,7 +70,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset_transform(lang)
         self.data_loaded = True

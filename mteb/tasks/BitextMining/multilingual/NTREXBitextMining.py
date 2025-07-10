@@ -5,8 +5,7 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _BRIDGE_LANGUAGES = (
     "arb_Arab",
@@ -245,7 +244,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
+class NTREXBitextMining(AbsTaskBitextMining):
     parallel_subsets = True
     metadata = TaskMetadata(
         name="NTREXBitextMining",
@@ -257,7 +256,7 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.",
         reference="https://huggingface.co/datasets/davidstap/NTREX",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_EVAL_LANGS,

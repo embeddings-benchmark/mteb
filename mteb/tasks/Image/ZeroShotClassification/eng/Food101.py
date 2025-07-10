@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Food101ZeroShotClassification(AbsTaskZeroShotClassification):
+class Food101ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="Food101ZeroShot",
         description="Classifying food.",
@@ -39,10 +39,6 @@ class Food101ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2014},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"validation": 25300},
-            "avg_character_length": {"validation": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

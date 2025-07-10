@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CUB200I2I(AbsTaskAny2AnyRetrieval):
@@ -35,17 +35,5 @@ class CUB200I2I(AbsTaskAny2AnyRetrieval):
   year = {2010},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"default": 5794},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1074.894348894349,
-                    "average_query_length": 77.06142506142506,
-                    "num_documents": 5794,
-                    "num_queries": 5794,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
     skip_first_result = True

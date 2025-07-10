@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FarsTail(AbsTaskPairClassification):
@@ -16,7 +16,7 @@ class FarsTail(AbsTaskPairClassification):
         description="This dataset, named FarsTail, includes 10,367 samples which are provided in both the Persian language as well as the indexed format to be useful for non-Persian researchers. The samples are generated from 3,539 multiple-choice questions with the least amount of annotator interventions in a way similar to the SciTail dataset",
         reference="https://link.springer.com/article/10.1007/s00500-023-08959-3",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -43,8 +43,8 @@ class FarsTail(AbsTaskPairClassification):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"]["revision"]
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
         data_files = {
             "test": f"https://huggingface.co/datasets/{path}/resolve/{revision}/data/Test-word.csv"
         }

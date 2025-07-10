@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SNLRetrieval(AbsTaskRetrieval):
@@ -16,7 +16,7 @@ class SNLRetrieval(AbsTaskRetrieval):
         description="Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.",
         reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

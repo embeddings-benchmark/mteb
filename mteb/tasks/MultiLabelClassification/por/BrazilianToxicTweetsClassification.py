@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
@@ -21,7 +21,7 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             "revision": "f333c1fcfa3ab43f008a327c8bd0140441354d34",
         },
         type="MultilabelClassification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],

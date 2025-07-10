@@ -5,7 +5,7 @@ import itertools
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
 
@@ -25,7 +25,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
             "revision": "0bbdb47bcbe3a90093699aefeed338a0f28a7ee8",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -65,7 +65,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
             "revision": "b73bd54100e5abfa6e3a23dcafb46fe4d2438dc3",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

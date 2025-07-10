@@ -6,7 +6,10 @@ from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb import MTEB, ModelMeta
+import mteb
+from mteb import MTEB
+from mteb.models.model_meta import ModelMeta
+from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
@@ -317,11 +320,7 @@ def test_mteb_rerank(tmp_path: Path):
         "1395",
     ]
     model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(
-        tasks=[
-            "SciFact",
-        ]
-    )
+    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
     # create fake first stage results
     tmp_file = tmp_path / "tmp.json"
     with open(tmp_file, "w") as f:
@@ -341,32 +340,32 @@ def test_mteb_rerank(tmp_path: Path):
 
     eval.run(
         model,  # type: ignore
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
         eval_splits=["test"],
-        top_k=2,
         previous_results=tmp_file,
         save_predictions=True,
     )
-    tmp_file.unlink()
 
     # read in the results
-    with open("tests/results/SciFact_default_predictions.json") as f:
+    with (tmp_path / "SciFact_default_predictions.json").open() as f:
         results = json.load(f)
 
+    results = sorted(results["1"].keys(), key=lambda x: (results["1"][x], x))[:2]
     # check that only the top two results are re-orderd
-    assert "19238" not in results["1"]
-    assert "4983" in results["1"]
-    assert "18670" in results["1"]
+    assert "19238" not in results
+    assert "4983" in results
+    assert "18670" in results
 
 
-def test_reranker_same_ndcg1():
+def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
-    ce.mteb_model_meta = ModelMeta(
+    ce.mteb_model_meta = ModelMeta(  # type: ignore
+        loader=None,
         name="cross-encoder/ms-marco-TinyBERT-L-2-v2",
         languages=["eng-Latn"],
         open_weights=True,
@@ -385,34 +384,38 @@ def test_reranker_same_ndcg1():
         training_datasets=None,
         framework=["Sentence Transformers", "PyTorch"],
     )
-
-    eval = MTEB(tasks=["SciFact"])
+    task = MockRetrievalTask()
+    eval = MTEB(tasks=[task])
+    stage1_path = tmp_path / "stage1"
     eval.run(
         de,
-        output_folder="tests/results/stage1",
+        output_folder=stage1_path.as_posix(),
         overwrite_results=True,
         save_predictions=True,
         eval_splits=["test"],
     )
+    stage2_path = tmp_path / "stage2"
     eval.run(
         ce,  # type: ignore
-        output_folder="tests/results/stage2",
+        output_folder=stage2_path.as_posix(),
         overwrite_results=True,
-        previous_results="tests/results/stage1/SciFact_default_predictions.json",
+        previous_results=(
+            stage1_path / f"{task.metadata.name}_default_predictions.json"
+        ),
         save_predictions=False,
         eval_splits=["test"],
-        top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
     with open(
-        f"tests/results/stage1/{de_name.replace('/', '__')}/{revision}/SciFact.json"
+        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/{task.metadata.name}.json"
     ) as f:
         stage1 = json.load(f)
 
-    with open(
-        f"tests/results/stage2/cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
-    ) as f:
+    with (
+        stage2_path
+        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/{task.metadata.name}.json"
+    ).open() as f:
         stage2 = json.load(f)
 
     assert (

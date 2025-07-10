@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
@@ -14,7 +14,7 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
         },
         description="Paraphrase-Pairs of Tweets.",
         reference="https://languagenet.github.io/",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

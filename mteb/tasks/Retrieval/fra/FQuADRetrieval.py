@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -19,7 +19,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
             "revision": "5384ce827bbc2156d46e6fcba83d75f8e6e1b4a6",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
@@ -58,7 +58,7 @@ Liu, Yang},
         if self.data_loaded:
             return
         dataset_raw = datasets.load_dataset(
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         # set valid_hasAns and test_hasAns as the validation and test splits (only queries with answers)
@@ -75,12 +75,12 @@ Liu, Yang},
             eval_split: {
                 str(i): q["question"] for i, q in enumerate(dataset_raw[eval_split])
             }
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.corpus = {
             eval_split: {str(row["title"]): row for row in dataset_raw[eval_split]}
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.relevant_docs = {
@@ -88,7 +88,7 @@ Liu, Yang},
                 str(i): {str(q["title"]): 1}
                 for i, q in enumerate(dataset_raw[eval_split])
             }
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.data_loaded = True

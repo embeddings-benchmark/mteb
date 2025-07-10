@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FER2013Classification(AbsTaskImageClassification):
+class FER2013Classification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="FER2013",
         description="Classifying facial emotions.",
@@ -14,7 +19,7 @@ class FER2013Classification(AbsTaskImageClassification):
             "revision": "9399b94167523fe5c40b3a857e24ef931ee4395b",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -40,10 +45,4 @@ class FER2013Classification(AbsTaskImageClassification):
   year = {2015},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 7178},
-            "avg_character_length": {"test": 431.4},
-        },
     )
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

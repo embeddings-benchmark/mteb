@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
@@ -34,17 +34,5 @@ class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
   year = {2021},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 452886},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 7.24,
-                    "num_documents": 25000,
-                    "num_queries": 452886,
-                    "average_relevant_docs_per_query": 3623.0,
-                }
-            },
-        },
     )
     skip_first_result = False

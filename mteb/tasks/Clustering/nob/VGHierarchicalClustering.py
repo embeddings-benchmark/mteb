@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
 
@@ -24,7 +24,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
@@ -71,7 +71,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RomaniBibleClustering(AbsTaskClustering):
+class RomaniBibleClustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="RomaniBibleClustering",
         description="Clustering verses from the Bible in Kalderash Romani by book.",
@@ -14,7 +14,7 @@ class RomaniBibleClustering(AbsTaskClustering):
             "revision": "97fae0e80a8d275bc685dcb3da08972af542ad6e",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rom-Latn"],

@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SweFaqRetrieval(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         description="A Swedish QA dataset derived from FAQ",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],

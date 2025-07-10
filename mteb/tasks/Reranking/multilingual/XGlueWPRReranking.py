@@ -6,8 +6,7 @@ import datasets
 import pandas as pd
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +80,7 @@ _CITATION = r"""
 """
 
 
-class XGlueWPRReranking(MultilingualTask, AbsTaskReranking):
+class XGlueWPRReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="XGlueWPRReranking",
         description="""XGLUE is a new benchmark dataset to evaluate the performance of cross-lingual pre-trained models
@@ -94,7 +93,7 @@ class XGlueWPRReranking(MultilingualTask, AbsTaskReranking):
             "trust_remote_code": True,
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         date=("2019-01-01", "2020-12-31"),
         modalities=["text"],
         eval_splits=["validation", "test"],

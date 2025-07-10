@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DisCoTexPairClassification(AbsTaskPairClassification):
@@ -14,7 +14,7 @@ class DisCoTexPairClassification(AbsTaskPairClassification):
             "revision": "ab9ea43f8e54c8b24b12cd1b77d6eb462385a30b",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2023-01-01", "2023-12-31"),
         eval_splits=["test"],

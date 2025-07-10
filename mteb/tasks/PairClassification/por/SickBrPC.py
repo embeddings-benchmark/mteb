@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SickBrPC(AbsTaskPairClassification):
@@ -14,7 +14,7 @@ class SickBrPC(AbsTaskPairClassification):
         description="SICK-BR is a Portuguese inference corpus, human translated from SICK",
         reference="https://linux.ime.usp.br/~thalen/SICK_PT.pdf",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],

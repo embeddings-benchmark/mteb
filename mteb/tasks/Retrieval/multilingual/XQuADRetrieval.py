@@ -4,8 +4,7 @@ from hashlib import sha256
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -25,7 +24,7 @@ _LANGUAGES = {
 }
 
 
-class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
+class XQuADRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XQuADRetrieval",
         dataset={
@@ -35,7 +34,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         description="XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.",
         reference="https://huggingface.co/datasets/xquad",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=_LANGUAGES,
@@ -78,9 +77,9 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
 
         for lang in self.hf_subsets:
-            data = datasets.load_dataset(
-                name=f"xquad.{lang}", **self.metadata_dict["dataset"]
-            )[split]
+            data = datasets.load_dataset(name=f"xquad.{lang}", **self.metadata.dataset)[
+                split
+            ]
             data = data.filter(lambda x: x["answers"]["text"] != "")
 
             question_ids = {

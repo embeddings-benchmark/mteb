@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.evaluation.evaluators.SummarizationEvaluator import (
     DeprecatedSummarizationEvaluator,
 )
@@ -20,7 +20,7 @@ class SummEvalSummarization(AbsTaskSummarization):
             "revision": "cda12ad7615edc362dbf25a00fdd61d3b1eaf93c",
         },
         type="Summarization",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -42,12 +42,8 @@ class SummEvalSummarization(AbsTaskSummarization):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
 
 class SummEvalSummarizationv2(AbsTaskSummarization):
@@ -60,7 +56,7 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
             "revision": "cda12ad7615edc362dbf25a00fdd61d3b1eaf93c",
         },
         type="Summarization",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -80,12 +76,8 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
   year = {2020},
 }
 """,
-        adapted_from=["SummEvalSummarization"],
+        adapted_from=["SummEval"],
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

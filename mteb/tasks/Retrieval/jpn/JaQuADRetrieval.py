@@ -3,7 +3,7 @@ from __future__ import annotations
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class JaQuADRetrieval(AbsTaskRetrieval):
@@ -17,7 +17,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         description="Human-annotated question-answer pairs for Japanese wikipedia pages.",
         reference="https://arxiv.org/abs/2202.01764",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],
@@ -45,8 +45,8 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        split = self.metadata_dict["eval_splits"][0]
-        ds = load_dataset(**self.metadata_dict["dataset"], split=split)
+        split = self.metadata.eval_splits[0]
+        ds = load_dataset(**self.metadata.dataset, split=split)
         ds = ds.shuffle(seed=42)
         max_samples = min(2048, len(ds))
         ds = ds.select(

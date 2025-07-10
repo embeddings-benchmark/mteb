@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "en-ha": ["eng-Latn", "hau-Latn"],
@@ -12,7 +11,7 @@ _LANGUAGES = {
 }
 
 
-class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
+class NollySentiBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NollySentiBitextMining",
         dataset={
@@ -22,7 +21,7 @@ class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeria (English, Hausa, Igbo, Nigerian-Pidgin, and Yoruba.",
         reference="https://github.com/IyanuSh/NollySenti",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

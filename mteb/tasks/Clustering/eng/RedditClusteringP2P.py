@@ -5,15 +5,15 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditClusteringP2P(AbsTaskClustering):
+class RedditClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "RedditClusteringP2P.v2"
     metadata = TaskMetadata(
         name="RedditClusteringP2P",
@@ -24,7 +24,7 @@ class RedditClusteringP2P(AbsTaskClustering):
             "revision": "385e3cb46b4cfa89021f56c4380204149d0efe33",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -65,7 +65,7 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
             "revision": "385e3cb46b4cfa89021f56c4380204149d0efe33",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

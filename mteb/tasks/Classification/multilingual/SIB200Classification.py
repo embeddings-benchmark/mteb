@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
     "ace_Latn": ["ace-Latn"],
@@ -205,7 +204,7 @@ _LANGS = {
 }
 
 
-class SIB200Classification(MultilingualTask, AbsTaskClassification):
+class SIB200Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SIB200Classification",
         description="""SIB-200 is the largest publicly available topic classification
@@ -220,7 +219,7 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
             "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train", "validation", "test"],
         eval_langs=_LANGS,

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
+class SlovakMovieReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification",
         description="User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)",
@@ -14,7 +14,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "0c47583c9d339b3b6f89e4db76088af5f1ec8d39",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["svk-Latn"],

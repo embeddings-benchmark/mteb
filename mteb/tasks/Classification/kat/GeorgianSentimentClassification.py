@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GeorgianSentimentClassification(AbsTaskClassification):
+class GeorgianSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GeorgianSentimentClassification",
         description="Goergian Sentiment Dataset",
@@ -14,7 +14,7 @@ class GeorgianSentimentClassification(AbsTaskClassification):
             "revision": "d4fb68dff38e89c42406080737b8431ea48fa866",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kat-Geor"],

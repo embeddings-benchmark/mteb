@@ -4,12 +4,12 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
@@ -27,7 +27,7 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -86,7 +86,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             "revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -132,7 +132,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
         )
 
 
-class CLSClusteringS2S(AbsTaskClustering):
+class CLSClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "CLSClusteringS2S.v2"
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
@@ -143,7 +143,7 @@ class CLSClusteringS2S(AbsTaskClustering):
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -167,7 +167,7 @@ class CLSClusteringS2S(AbsTaskClustering):
     )
 
 
-class CLSClusteringP2P(AbsTaskClustering):
+class CLSClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "CLSClusteringP2P.v2"
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
@@ -178,7 +178,7 @@ class CLSClusteringP2P(AbsTaskClustering):
             "revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -215,7 +215,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         description="Clustering of titles from the THUCNews dataset",
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -274,7 +274,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         description="Clustering of titles + abstracts from the THUCNews dataset",
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -320,7 +320,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         )
 
 
-class ThuNewsClusteringS2S(AbsTaskClustering):
+class ThuNewsClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "ThuNewsClusteringS2S.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S",
@@ -331,7 +331,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         description="Clustering of titles from the THUCNews dataset",
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -363,7 +363,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
     )
 
 
-class ThuNewsClusteringP2P(AbsTaskClustering):
+class ThuNewsClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "ThuNewsClusteringP2P.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringP2P",
@@ -374,7 +374,7 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         description="Clustering of titles + abstracts from the THUCNews dataset",
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],

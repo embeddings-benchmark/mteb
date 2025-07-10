@@ -1,25 +1,25 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class SciDocsReranking(AbsTaskReranking):
+class SciDocsReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
         reference="https://allenai.org/data/scidocs",
         dataset={
-            "path": "mteb/scidocs-reranking",
-            "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+            "path": "mteb/SciDocsRR",
+            "revision": "39b8377811871075eed9de3b8a7e21aaa6acb3d8",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2000-01-01", "2020-12-31"),  # best guess
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],

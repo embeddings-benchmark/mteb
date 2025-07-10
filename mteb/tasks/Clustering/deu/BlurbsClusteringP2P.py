@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
 
-class BlurbsClusteringP2P(AbsTaskClustering):
+class BlurbsClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "BlurbsClusteringP2P.v2"
 
     metadata = TaskMetadata(
@@ -19,7 +19,7 @@ class BlurbsClusteringP2P(AbsTaskClustering):
             "revision": "a2dd5b02a77de3466a3eaa98ae586b5610314496",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -58,7 +58,7 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "a2dd5b02a77de3466a3eaa98ae586b5610314496",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

@@ -18,7 +18,9 @@ from tqdm import tqdm
 # IMPORTANT: Adjust the import below to point to the module where ModelMeta is defined.
 # For example, if ModelMeta is defined in a file model_meta.py in your package, do:
 # from model_meta import ModelMeta
-from mteb.model_meta import ModelMeta  # <-- Replace with the actual import path
+from mteb.models.model_meta import (
+    ModelMeta,
+)  # <-- Replace with the actual import path
 
 
 def find_matching_paren(text: str, open_index: int) -> int | None:

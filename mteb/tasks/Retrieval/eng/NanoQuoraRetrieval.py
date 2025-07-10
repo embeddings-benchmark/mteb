@@ -5,7 +5,7 @@ from collections import defaultdict
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoQuoraRetrieval(AbsTaskRetrieval):
@@ -20,7 +20,7 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
             "revision": "2ab2d73e6c862026282808b913a34f4136928545",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

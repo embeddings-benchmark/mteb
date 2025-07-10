@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class RuSTSBenchmarkSTS(AbsTaskSTS):
+class RuSTSBenchmarkSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="RuSTSBenchmarkSTS",
         dataset={
@@ -16,7 +16,7 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         + "The dataset was checked with RuCOLA model to ensure that the translation is good and filtered.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test", "validation"],
         eval_langs=["rus-Cyrl"],
@@ -38,9 +38,5 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

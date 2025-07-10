@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Food101Classification(AbsTaskImageClassification):
+class Food101Classification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Food101Classification",
         description="Classifying food.",
@@ -14,7 +18,7 @@ class Food101Classification(AbsTaskImageClassification):
             "revision": "e06acf2a88084f04bce4d4a525165d68e0a36c38",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["validation"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -37,8 +41,4 @@ class Food101Classification(AbsTaskImageClassification):
   year = {2014},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"validation": 25300},
-            "avg_character_length": {"validation": 431.4},
-        },
     )

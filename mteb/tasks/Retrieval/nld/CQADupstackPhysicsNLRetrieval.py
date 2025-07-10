@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -19,7 +19,7 @@ class CQADupstackPhysicsNLRetrieval(AbsTaskRetrieval):
             "split": "physics",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
@@ -53,16 +53,16 @@ class CQADupstackPhysicsNLRetrieval(AbsTaskRetrieval):
         # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
             name="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         qrels_raw = datasets.load_dataset(
             name="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries["test"] = {query["_id"]: query["text"] for query in queries_raw}

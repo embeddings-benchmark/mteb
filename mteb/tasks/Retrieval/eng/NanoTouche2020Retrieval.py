@@ -5,7 +5,7 @@ from collections import defaultdict
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoTouche2020Retrieval(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
             "revision": "0d2f26ed8c5ad309f95c7f9499c70a40e140fccd",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

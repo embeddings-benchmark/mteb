@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def _transform(dataset, lang):
@@ -14,7 +13,7 @@ def _transform(dataset, lang):
     return dataset
 
 
-class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
+class AfriSentiClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",
@@ -25,7 +24,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/2302.08956",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -67,7 +66,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
             return
         self.dataset = {}
         for lang in self.hf_subsets:
-            metadata = self.metadata_dict.get("dataset", None)
+            metadata = self.metadata.dataset
             dataset = datasets.load_dataset(name=lang, **metadata)
             self.dataset[lang] = _transform(dataset, lang)
         self.dataset_transform()

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -11,11 +11,11 @@ class BuiltBenchRetrieval(AbsTaskRetrieval):
         description="Retrieval of built asset entity type/class descriptions given a query describing an entity as represented in well-established industry classification systems such as Uniclass, IFC, etc.",
         reference="https://arxiv.org/abs/2411.12056",
         dataset={
-            "path": "mehrzad-shahin/BuiltBench-retrieval",
-            "revision": "ae611238a58dae85f3130563fe9f9e995444a8d6",
+            "path": "mteb/BuiltBenchRetrieval",
+            "revision": "50e46f68a3f864bbc52161a0af461eaba8aa4492",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

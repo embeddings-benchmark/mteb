@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
+class Country211ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="Country211ZeroShot",
         description="Classifying images of 211 countries.",
@@ -41,13 +41,9 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2021},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 21100},
-            "avg_character_length": {"test": 0},
-        },
     )
 
-    image_column_name: str = "jpg"
+    input_column_name: str = "jpg"
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:

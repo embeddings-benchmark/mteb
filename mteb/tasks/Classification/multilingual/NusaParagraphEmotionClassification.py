@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "btk": ["bbc-Latn"],
@@ -18,7 +17,7 @@ _LANGUAGES = {
 }
 
 
-class NusaParagraphEmotionClassification(MultilingualTask, AbsTaskClassification):
+class NusaParagraphEmotionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NusaParagraphEmotionClassification",
         dataset={
@@ -27,7 +26,7 @@ class NusaParagraphEmotionClassification(MultilingualTask, AbsTaskClassification
         },
         description="NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages from the NusaParagraph dataset.",
         reference="https://github.com/IndoNLP/nusa-writes",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

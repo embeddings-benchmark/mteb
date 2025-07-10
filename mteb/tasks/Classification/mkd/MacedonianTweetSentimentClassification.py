@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MacedonianTweetSentimentClassification(AbsTaskClassification):
+class MacedonianTweetSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MacedonianTweetSentimentClassification",
         description="An Macedonian dataset for tweet sentiment classification.",
@@ -14,7 +14,7 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
             "revision": "957e075ba35e4417ba7837987fd7053a6533a1a2",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=["2014-11-01", "2015-04-01"],
         eval_splits=["test"],

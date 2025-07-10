@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Banking77Classification(AbsTaskClassification):
+class Banking77Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Banking77Classification",
         description="Dataset composed of online banking queries annotated with their corresponding intents.",
@@ -14,7 +14,7 @@ class Banking77Classification(AbsTaskClassification):
             "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

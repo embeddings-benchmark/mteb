@@ -7,8 +7,8 @@ from typing import TypeVar
 
 import datasets
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 T = TypeVar("T")
 
@@ -22,7 +22,7 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
         yield batch
 
 
-class SwednClustering(AbsTaskClustering):
+class SwednClustering(AbsTaskAnyClustering):
     superseded_by = "SwednClusteringP2P"
 
     metadata = TaskMetadata(
@@ -36,7 +36,7 @@ class SwednClustering(AbsTaskClustering):
         description="The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.",
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["all"],
         eval_langs=["swe-Latn"],

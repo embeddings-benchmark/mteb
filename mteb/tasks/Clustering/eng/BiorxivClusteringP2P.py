@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
@@ -18,7 +18,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "f5dbc242e11dd8e24def4c4268607a49e02946dc",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -40,7 +40,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
             check_label_distribution(self.dataset[split])
 
 
-class BiorxivClusteringP2P(AbsTaskClustering):
+class BiorxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "BiorxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringP2P",
@@ -51,7 +51,7 @@ class BiorxivClusteringP2P(AbsTaskClustering):
             "revision": "65b79d1d13f80053f67aca9498d9402c2d9f1f40",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

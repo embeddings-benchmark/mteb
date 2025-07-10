@@ -4,8 +4,7 @@ import json
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -63,7 +62,7 @@ def _load_statcan_data(
     return corpus, queries, relevant_docs
 
 
-class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
+class StatcanDialogueDatasetRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StatcanDialogueDatasetRetrieval",
         description="A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.",
@@ -72,7 +71,7 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "7a26938c93e99e0759a1df416896bb72527e2f33",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=_LANGS,
@@ -107,11 +106,11 @@ de Vries, Harm},
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_statcan_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=list(_LANGS.keys()),
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

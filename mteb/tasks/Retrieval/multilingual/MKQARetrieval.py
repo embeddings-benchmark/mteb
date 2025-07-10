@@ -3,8 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGE_MAPPING = {
     "ar": "ara-Arab",
@@ -39,7 +38,7 @@ _LANGUAGE_MAPPING = {
 _EVAL_LANGS = {k: [v] for k, v in _LANGUAGE_MAPPING.items()}
 
 
-class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
+class MKQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MKQARetrieval",
         description="""Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled from the Google Natural Questions dataset.
@@ -52,7 +51,7 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
             "name": "mkqa",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         date=("2020-01-01", "2020-12-31"),
         eval_splits=["train"],
@@ -82,7 +81,7 @@ class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
         self.queries, self.corpus, self.relevant_docs = {}, {}, {}
 
         ds = datasets.load_dataset(
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         for lang in self.hf_subsets:

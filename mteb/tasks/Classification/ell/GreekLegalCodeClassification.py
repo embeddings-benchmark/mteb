@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class GreekLegalCodeClassification(AbsTaskClassification):
+class GreekLegalCodeClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GreekLegalCodeClassification",
         description="Greek Legal Code Dataset for Classification. (subset = chapter)",
@@ -17,7 +17,7 @@ class GreekLegalCodeClassification(AbsTaskClassification):
             "name": "chapter",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2021-01-01", "2021-01-01"),
         eval_splits=["validation", "test"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmotionClassification(AbsTaskClassification):
+class EmotionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="EmotionClassification",
         description="Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
@@ -14,7 +14,7 @@ class EmotionClassification(AbsTaskClassification):
             "revision": "4f58c6b202a23cf9a4da393831edf4f9183cad37",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -15,7 +15,7 @@ class KoStrategyQA(AbsTaskRetrieval):
             "revision": "d243889a3eb6654029dbd7e7f9319ae31d58f97c",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["kor-Hang"],

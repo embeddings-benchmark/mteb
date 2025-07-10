@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -26,7 +25,7 @@ _LANGUAGES = {
 }
 
 
-class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
+class STS22CrosslingualSTSv2(AbsTaskAnySTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="STS22.v2",
@@ -37,7 +36,7 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
         description="SemEval 2022 Task 8: Multilingual News Article Similarity. Version 2 filters updated on STS22 by removing pairs where one of entries contain empty sentences.",
         reference="https://competitions.codalab.org/competitions/33835",
         type="STS",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -82,15 +81,11 @@ Ratan, Shyam},
         adapted_from=["STS22"],
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 1
+    max_score = 4
 
 
-class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
+class STS22CrosslingualSTS(AbsTaskAnySTS):
     superseded_by = "STS22.v2"
     fast_loading = True
     metadata = TaskMetadata(
@@ -102,7 +97,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
         description="SemEval 2022 Task 8: Multilingual News Article Similarity",
         reference="https://competitions.codalab.org/competitions/33835",
         type="STS",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -146,9 +141,5 @@ Ratan, Shyam},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 1
+    max_score = 4

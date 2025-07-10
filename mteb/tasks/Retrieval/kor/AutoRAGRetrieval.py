@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -16,7 +16,7 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         prompt="Retrieve text based on user query.",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

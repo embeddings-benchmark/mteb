@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -15,7 +15,7 @@ class ClimateFEVER(AbsTaskRetrieval):
             "revision": "47f2ac6acb640fc46020b02a5b59fdda04d39380",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -53,7 +53,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
             "revision": "3a309e201f3c2c4b13bd4a367a8f37eee2ec1d21",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -89,7 +89,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
             "revision": "e438c9586767800aeb10dbe8a245c41dbea4e5f4",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

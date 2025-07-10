@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
@@ -37,17 +37,5 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
 """,
         prompt={
             "query": "Retrieve a Wikipedia paragraph that provides an answer to the given query about the image."
-        },
-        descriptive_stats={
-            "n_samples": {"test": 50004},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 676667,
-                    "num_queries": 50004,
-                    "average_relevant_docs_per_query": 9.9,
-                }
-            },
         },
     )

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
     "Danish": ["dan-Latn"],
@@ -12,7 +11,7 @@ _LANGS = {
 }
 
 
-class ScalaClassification(AbsTaskClassification, MultilingualTask):
+class ScalaClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ScalaClassification",
         description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.
@@ -23,7 +22,7 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             "revision": "ec85bb6c69679ed15ac66c0bf6e180bf563eb137",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,

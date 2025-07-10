@@ -8,16 +8,18 @@ from collections import Counter, defaultdict
 
 import pandas as pd
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
-from mteb.custom_validators import MODALITIES
+from mteb.abstasks import (
+    AbsTask,
+    AbsTaskMultilabelClassification,
+)
+from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
 )
 from mteb.tasks import *  # import all tasks
+from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -26,19 +28,34 @@ logger = logging.getLogger(__name__)
 
 
 def create_task_list() -> list[type[AbsTask]]:
-    tasks_categories_cls = list(AbsTask.__subclasses__())
-    tasks = [
-        cls
-        for cat_cls in tasks_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("AbsTask")
+    # reranking subclasses retrieval to share methods, but is an abstract task
+    tasks_categories_cls = list(AbsTask.__subclasses__()) + [
+        AbsTaskMultilabelClassification,
+        AbsTaskReranking,
     ]
+    tasks = []
+    for cat_cls in tasks_categories_cls:
+        for cls in cat_cls.__subclasses__():
+            if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
+                "AbsTaskMultilabelClassification",
+                "AbsTaskReranking",
+            ):
+                tasks.append(cls)
     return tasks
 
 
 def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     tasks = create_task_list()
-    return {cls.metadata.name: cls for cls in tasks}
+    metadata_names = {}
+    for cls in tasks:
+        if cls.metadata.name in metadata_names:
+            raise ValueError(
+                f"Duplicate task name found: {cls.metadata.name}. Please make sure that all task names are unique."
+            )
+        if "AbsTask" in cls.__name__:
+            continue
+        metadata_names[cls.metadata.name] = cls
+    return metadata_names
 
 
 def create_similar_tasks() -> dict[str, list[str]]:
@@ -63,14 +80,14 @@ SIMILAR_TASKS = create_similar_tasks()
 def check_is_valid_script(script: str) -> None:
     if script not in ISO_TO_SCRIPT:
         raise ValueError(
-            f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
+            f"Invalid script code: '{script}', you can see valid ISO 15924 codes using `from mteb.languages import ISO_TO_SCRIPT`."
         )
 
 
 def check_is_valid_language(lang: str) -> None:
     if lang not in ISO_TO_LANGUAGE:
         raise ValueError(
-            f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
+            f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.langauges import ISO_TO_LANGUAGE`."
         )
 
 
@@ -93,11 +110,11 @@ def filter_tasks_by_script(tasks: list[AbsTask], script: list[str]) -> list[AbsT
 
 
 def filter_tasks_by_domains(
-    tasks: list[AbsTask], domains: list[TASK_DOMAIN]
+    tasks: list[AbsTask], domains: list[TaskDomain]
 ) -> list[AbsTask]:
     domains_to_keep = set(domains)
 
-    def _convert_to_set(domain: list[TASK_DOMAIN] | None) -> set:
+    def _convert_to_set(domain: list[TaskDomain] | None) -> set:
         return set(domain) if domain is not None else set()
 
     return [
@@ -108,14 +125,14 @@ def filter_tasks_by_domains(
 
 
 def filter_tasks_by_task_types(
-    tasks: list[AbsTask], task_types: list[TASK_TYPE]
+    tasks: list[AbsTask], task_types: list[TaskType]
 ) -> list[AbsTask]:
     _task_types = set(task_types)
     return [t for t in tasks if t.metadata.type in _task_types]
 
 
 def filter_task_by_categories(
-    tasks: list[AbsTask], categories: list[TASK_CATEGORY]
+    tasks: list[AbsTask], categories: list[TaskCategory]
 ) -> list[AbsTask]:
     _categories = set(categories)
     return [t for t in tasks if t.metadata.category in _categories]
@@ -123,7 +140,7 @@ def filter_task_by_categories(
 
 def filter_tasks_by_modalities(
     tasks: list[AbsTask],
-    modalities: list[MODALITIES],
+    modalities: list[Modalities],
     exclude_modality_filter: bool = False,
 ) -> list[AbsTask]:
     _modalities = set(modalities)
@@ -147,13 +164,11 @@ class MTEBTasks(tuple):
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task, property):
+    def _extract_property_from_task(task: AbsTask, property: str):
         if hasattr(task.metadata, property):
             return getattr(task.metadata, property)
         elif hasattr(task, property):
             return getattr(task, property)
-        elif property in task.metadata_dict:
-            return task.metadata_dict[property]
         else:
             raise KeyError("Property neither in Task attribute or in task metadata.")
 
@@ -276,31 +291,31 @@ class MTEBTasks(tuple):
 
 
 def get_tasks(
+    tasks: list[str] | None = None,
+    *,
     languages: list[str] | None = None,
     script: list[str] | None = None,
-    domains: list[TASK_DOMAIN] | None = None,
-    task_types: list[TASK_TYPE] | None = None,
-    categories: list[TASK_CATEGORY] | None = None,
-    tasks: list[str] | None = None,
+    domains: list[TaskDomain] | None = None,
+    task_types: list[TaskType] | None = None,
+    categories: list[TaskCategory] | None = None,
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[MODALITIES] | None = None,
+    modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_aggregate: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
     Args:
+        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
-        script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
+        script: A list of script codes (ISO 15924 codes, e.g. "Latn"). If None, all scripts are included. For multilingual tasks this will also remove scripts
             that are not in the specified list.
-        domains: A list of task domains.
-        task_types: A string specifying the type of task. If None, all tasks are included.
-        categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
-            paragraph).
-        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
+        domains: A list of task domains, e.g. "Legal", "Medical", "Fiction".
+        task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
+        categories: A list of task categories these include "t2t" (text to text), "t2i" (text to image). See TaskMetadata for the full list.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -377,7 +392,7 @@ def get_task(
     eval_splits: list[str] | None = None,
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[MODALITIES] | None = None,
+    modalities: list[Modalities] | None = None,
     exclusive_modality_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
@@ -412,9 +427,7 @@ def get_task(
     if task_name not in TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
         if close_matches:
-            suggestion = (
-                f"KeyError: '{task_name}' not found. Did you mean: {close_matches[0]}?"
-            )
+            suggestion = f"KeyError: '{task_name}' not found. Did you mean: '{close_matches[0]}'?"
         else:
             suggestion = (
                 f"KeyError: '{task_name}' not found and no similar keys were found."

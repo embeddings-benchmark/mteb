@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FrenkEnClassification(AbsTaskClassification):
+class FrenkEnClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FrenkEnClassification",
         description="English subset of the FRENK dataset",
@@ -15,7 +15,7 @@ class FrenkEnClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/1906.02045",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

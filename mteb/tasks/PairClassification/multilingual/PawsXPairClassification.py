@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
+class PawsXPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PawsXPairClassification",
         dataset={
@@ -16,7 +15,7 @@ class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
         },
         description="{PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
         reference="https://arxiv.org/abs/1908.11828",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test", "validation"],

@@ -3,15 +3,15 @@ from __future__ import annotations
 import datasets
 import numpy as np
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AlloProfClusteringP2P(AbsTaskClustering):
+class AlloProfClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "AlloProfClusteringP2P.v2"
 
     metadata = TaskMetadata(
@@ -25,7 +25,7 @@ class AlloProfClusteringP2P(AbsTaskClustering):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
@@ -84,7 +84,7 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],

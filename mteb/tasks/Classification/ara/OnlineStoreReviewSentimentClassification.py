@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
+class OnlineStoreReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "OnlineStoreReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification",
@@ -15,7 +15,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         description="This dataset contains Arabic reviews of products from the SHEIN online store.",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
@@ -36,7 +36,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         )
 
 
-class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
+class OnlineStoreReviewSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification.v2",
         dataset={
@@ -47,7 +47,7 @@ class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

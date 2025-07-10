@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 
 
-class SpanishNewsClusteringP2P(AbsTaskClustering):
+class SpanishNewsClusteringP2P(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="SpanishNewsClusteringP2P",
         description="Clustering of news articles, 7 topics in total.",
@@ -15,7 +15,7 @@ class SpanishNewsClusteringP2P(AbsTaskClustering):
             "revision": "bf8ca8ddc5b7da4f7004720ddf99bbe0483480e6",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["spa-Latn"],

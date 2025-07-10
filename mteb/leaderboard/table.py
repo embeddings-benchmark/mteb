@@ -11,7 +11,7 @@ import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
-from mteb.models.overview import get_model_meta
+from mteb.models.get_model_meta import get_model_meta
 from mteb.overview import get_task, get_tasks
 
 

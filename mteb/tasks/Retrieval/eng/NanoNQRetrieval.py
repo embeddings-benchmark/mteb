@@ -5,7 +5,7 @@ from collections import defaultdict
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoNQRetrieval(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class NanoNQRetrieval(AbsTaskRetrieval):
             "revision": "77540146379abf95df8326a3c5bb9eb21c7146c3",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

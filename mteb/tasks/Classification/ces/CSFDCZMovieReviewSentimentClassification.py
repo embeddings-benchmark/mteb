@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
+class CSFDCZMovieReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CSFDCZMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Czech.",
@@ -14,7 +14,7 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "dd2ede6faaea338ef6b1e2966f06808656975a23",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2002-06-28", "2020-03-13"),
         eval_splits=["test"],

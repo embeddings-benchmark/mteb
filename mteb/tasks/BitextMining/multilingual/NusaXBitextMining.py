@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "eng-ace": ["eng-Latn", "ace-Latn"],
@@ -19,7 +18,7 @@ _LANGUAGES = {
 }
 
 
-class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
+class NusaXBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NusaXBitextMining",
         dataset={
@@ -29,7 +28,7 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="NusaX is a parallel dataset for machine translation and sentiment analysis on 11 Indonesia languages and English.",
         reference="https://huggingface.co/datasets/indonlp/NusaX-senti/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

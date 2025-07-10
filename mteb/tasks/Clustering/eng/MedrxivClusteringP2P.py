@@ -4,12 +4,12 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
@@ -22,7 +22,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -51,7 +51,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         self.dataset = DatasetDict(ds)
 
 
-class MedrxivClusteringP2P(AbsTaskClustering):
+class MedrxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "MedrxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="MedrxivClusteringP2P",
@@ -62,7 +62,7 @@ class MedrxivClusteringP2P(AbsTaskClustering):
             "revision": "e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

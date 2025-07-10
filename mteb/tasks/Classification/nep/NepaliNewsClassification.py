@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NepaliNewsClassification(AbsTaskClassification):
+class NepaliNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NepaliNewsClassification",
         description="A Nepali dataset for 7500 news articles ",
@@ -14,7 +14,7 @@ class NepaliNewsClassification(AbsTaskClassification):
             "revision": "79125f20d858a08f71ec4923169a6545221725c4",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2019-01-01", "2020-01-01"),
         eval_splits=["train"],

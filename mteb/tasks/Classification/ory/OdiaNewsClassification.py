@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OdiaNewsClassification(AbsTaskClassification):
+class OdiaNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OdiaNewsClassification",
         description="A Odia dataset for 3-class classification of Odia news articles",
@@ -14,7 +14,7 @@ class OdiaNewsClassification(AbsTaskClassification):
             "revision": "ffb8a34c9637fb20256e8c7be02504d16af4bd6b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

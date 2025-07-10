@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TenKGnadClusteringP2P(AbsTaskClustering):
+class TenKGnadClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "TenKGnadClusteringP2P.v2"
 
     metadata = TaskMetadata(
@@ -17,7 +17,7 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
             "revision": "5c59e41555244b7e45c9a6be2d720ab4bafae558",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -46,7 +46,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "5c59e41555244b7e45c9a6be2d720ab4bafae558",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

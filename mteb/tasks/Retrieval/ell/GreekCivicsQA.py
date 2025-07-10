@@ -4,7 +4,7 @@ from hashlib import sha256
 
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -19,7 +19,7 @@ class GreekCivicsQA(AbsTaskRetrieval):
             "revision": "a04523a3c83153be07a8945bb1fb351cbbcef90b",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["default"],
         eval_langs=["ell-Grek"],
@@ -38,8 +38,8 @@ class GreekCivicsQA(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        eval_split = self.metadata_dict["eval_splits"][0]
-        data_raw = datasets.load_dataset(**self.metadata_dict["dataset"])[eval_split]
+        eval_split = self.metadata.eval_splits[0]
+        data_raw = datasets.load_dataset(**self.metadata.dataset)[eval_split]
 
         queries = {eval_split: {}}
         corpus = {eval_split: {}}

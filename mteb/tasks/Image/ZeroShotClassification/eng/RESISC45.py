@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
+class RESISC45ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="RESISC45ZeroShot",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",
@@ -44,10 +44,6 @@ class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2017},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 6300},
-            "avg_character_length": {"test": 256},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

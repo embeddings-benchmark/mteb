@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -20,7 +20,7 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/dwzhu/LongEmbed",
         description=("narrativeqa subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
@@ -63,17 +63,17 @@ Roark, Brian},
         if self.data_loaded:
             return
 
-        query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+        query_list = datasets.load_dataset(**self.metadata.dataset)[
             "queries"
         ]  # dict_keys(['qid', 'text'])
         queries = {row["qid"]: row["text"] for row in query_list}
 
-        corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+        corpus_list = datasets.load_dataset(**self.metadata.dataset)[
             "corpus"
         ]  # dict_keys(['doc_id', 'text'])
         corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
-        qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+        qrels_list = datasets.load_dataset(**self.metadata.dataset)[
             "qrels"
         ]  # dict_keys(['qid', 'doc_id'])
         qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}

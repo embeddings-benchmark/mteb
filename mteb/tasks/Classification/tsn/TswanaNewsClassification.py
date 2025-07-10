@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TswanaNewsClassification(AbsTaskClassification):
+class TswanaNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TswanaNewsClassification",
         description="Tswana News Classification Dataset",
@@ -15,7 +15,7 @@ class TswanaNewsClassification(AbsTaskClassification):
         },
         type="Classification",
         task_subtypes=["Topic classification"],
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tsn-Latn"],

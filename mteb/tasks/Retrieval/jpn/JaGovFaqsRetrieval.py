@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 _MAX_EVAL_SIZE = 2048
@@ -22,7 +22,7 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -44,7 +44,7 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
         query_list = datasets.load_dataset(
             name="jagovfaqs_22k-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         # Limit the dataset size to make sure the task does not take too long to run, sample the dataset to 2048 queries
@@ -59,7 +59,7 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
             qrels[str(row_id)] = {str(row["relevant_docs"][0]): 1}
 
         corpus_list = datasets.load_dataset(
-            name="jagovfaqs_22k-corpus", split="corpus", **self.metadata_dict["dataset"]
+            name="jagovfaqs_22k-corpus", split="corpus", **self.metadata.dataset
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}

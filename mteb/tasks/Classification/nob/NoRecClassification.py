@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NoRecClassification(AbsTaskClassification):
+class NoRecClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NoRecClassification",
         description="A Norwegian dataset for sentiment classification on review",
@@ -15,7 +15,7 @@ class NoRecClassification(AbsTaskClassification):
             "revision": "5b740b7c42c73d586420812a35745fc37118862f",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

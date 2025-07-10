@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CEDRClassification(AbsTaskMultilabelClassification):
@@ -16,7 +16,7 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         description="Classification of sentences by emotions, labeled into 5 categories (joy, sadness, surprise, fear, and anger).",
         reference="https://www.sciencedirect.com/science/article/pii/S1877050921013247",
         type="MultilabelClassification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

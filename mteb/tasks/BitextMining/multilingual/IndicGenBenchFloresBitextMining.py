@@ -5,8 +5,7 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = [
     "ben-Beng",
@@ -97,7 +96,7 @@ def get_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = get_lang_pairs()
 
 
-class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
+class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={
@@ -108,7 +107,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google",
         reference="https://github.com/google-research-datasets/indic-gen-bench/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
@@ -151,7 +150,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
                 language = f"{coded_source_language}_en"
 
             self.dataset[lang] = datasets.load_dataset(
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
                 field="examples",
                 data_files={
                     "validation": f"flores_{language}_dev.json",

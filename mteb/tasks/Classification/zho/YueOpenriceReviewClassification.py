@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YueOpenriceReviewClassification(AbsTaskClassification):
+class YueOpenriceReviewClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification",
         description="A Cantonese dataset for review classification",
@@ -14,7 +14,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
             "revision": "1300d045cf983bac23faadf3aa12a619624769da",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["yue-Hant"],

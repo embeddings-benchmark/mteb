@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.tasks.Image.VisualSTS import STSBenchmarkMultilingualVisualSTS
+from mteb.tasks.Image.VisualSTS.multilingual.STSBenchmarkMultilingualVisualSTS import (
+    STSBenchmarkMultilingualVisualSTS,
+)
 
 task_list_stsb: list[AbsTask] = [
     STSBenchmarkMultilingualVisualSTS().filter_languages(
@@ -67,7 +68,7 @@ task_list_multi: list[AbsTask] = [
 ]
 
 
-class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate, MultilingualTask):
+class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="VisualSTS-b-Multilingual",
         description="STSBenchmarkMultilingualVisualSTS multilingual.",

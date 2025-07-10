@@ -4,7 +4,7 @@ import random
 
 from datasets import load_dataset
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -21,7 +21,7 @@ class VieQuADRetrieval(AbsTaskRetrieval):
             "revision": "406f09a45cc106a8f7b7fd0c25078883fe58cb1f",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["vie-Latn"],
@@ -61,8 +61,8 @@ Zong, Chengqing},
 
         seed = 42
         random.seed(seed)
-        split = self.metadata_dict["eval_splits"][0]
-        ds = load_dataset(**self.metadata_dict["dataset"], split=split)
+        split = self.metadata.eval_splits[0]
+        ds = load_dataset(**self.metadata.dataset, split=split)
         ds = ds.shuffle(seed=seed)
 
         titles, questions, contexts, answers = [], [], [], []

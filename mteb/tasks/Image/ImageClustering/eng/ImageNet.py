@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ImageNetDog15Clustering(AbsTaskImageClustering):
+class ImageNetDog15Clustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="ImageNetDog15Clustering",
         description="Clustering images from a 15-class dogs-only subset of the dog classes in ImageNet.",
@@ -14,7 +14,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
             "revision": "bfb6ad3b2109d26c9daddf14f98d315daa35ee72",
         },
         type="ImageClustering",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="nmi",
@@ -39,14 +39,12 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1076, "train": 1500},
-            # "avg_character_length": {"test": 431.4},
-        },
     )
+    input_column_name = "image"
+    label_column_name = "label"
 
 
-class ImageNet10Clustering(AbsTaskImageClustering):
+class ImageNet10Clustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="ImageNet10Clustering",
         description="Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.",
@@ -81,8 +79,6 @@ class ImageNet10Clustering(AbsTaskImageClustering):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 13000},
-            # "avg_character_length": {"test": 431.4},
-        },
     )
+    input_column_name = "image"
+    label_column_name = "label"

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BirdsnapZeroShotClassification(AbsTaskZeroShotClassification):
+class BirdsnapZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="BirdsnapZeroShot",
         description="Classifying bird images from 500 species.",
@@ -40,10 +40,6 @@ class BirdsnapZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2014},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1851},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     # Override default column name in the subclass

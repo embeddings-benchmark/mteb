@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
@@ -14,7 +14,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
             "revision": "f33a205966ce032f957c3a22f4f9e378f89a2c56",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

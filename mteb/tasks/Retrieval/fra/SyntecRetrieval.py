@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -19,7 +19,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
             "revision": "19661ccdca4dfc2d15122d776b61685f48c68ca9",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
@@ -49,14 +49,14 @@ class SyntecRetrieval(AbsTaskRetrieval):
         # fetch both subsets of the dataset
         corpus_raw = datasets.load_dataset(
             name="documents",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
-        eval_split = self.metadata_dict["eval_splits"][0]
+        eval_split = self.metadata.eval_splits[0]
         self.queries = {
             eval_split: {
                 str(i): q["Question"] for i, q in enumerate(queries_raw[eval_split])

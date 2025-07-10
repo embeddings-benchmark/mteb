@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
@@ -34,17 +34,5 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
   year = {2013},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"default": 8041},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1074.894348894349,
-                    "average_query_length": 77.06142506142506,
-                    "num_documents": 8041,
-                    "num_queries": 8041,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
     skip_first_result = True

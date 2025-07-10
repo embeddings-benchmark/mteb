@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
@@ -25,7 +25,7 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         },
         reference="https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset",
         type="MultilabelClassification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

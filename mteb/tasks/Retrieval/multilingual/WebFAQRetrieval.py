@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -125,7 +124,7 @@ def _load_webfaq_data(
     return corpus, queries, relevant_docs
 
 
-class WebFAQRetrieval(MultilingualTask, AbsTaskRetrieval):
+class WebFAQRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WebFAQRetrieval",
         description="WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languages, gathered from FAQ pages on the web.",
@@ -135,7 +134,7 @@ class WebFAQRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "c3262adb1c32ac0c3ea8de6393a44366edaa62e1",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
@@ -165,11 +164,11 @@ class WebFAQRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_webfaq_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
+            splits=_EVAL_SPLIT,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

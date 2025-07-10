@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class VisualNewsI2TRetrieval(AbsTaskAny2AnyRetrieval):
@@ -36,16 +36,4 @@ class VisualNewsI2TRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a caption for the news in the given photo."},
-        descriptive_stats={
-            "n_samples": {"test": 20000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 537568,
-                    "num_queries": 20000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

@@ -3,8 +3,7 @@ from __future__ import annotations
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
     "ace_Latn": ["ace-Latn"],
@@ -207,7 +206,7 @@ _LANGS = {
 }
 
 
-class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
+class SIB200ClusteringFast(AbsTaskClusteringFast):
     max_document_to_embed = 1004
     max_fraction_of_documents_to_embed = None
 
@@ -225,7 +224,7 @@ class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
             "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,

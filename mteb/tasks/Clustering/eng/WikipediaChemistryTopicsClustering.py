@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaChemistryTopicsClustering(AbsTaskClustering):
+class WikipediaChemistryTopicsClustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="WikipediaChemistryTopicsClustering",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaChemistryTopicsClustering(AbsTaskClustering):
             "revision": "0a0886b06acbfc735bca6a71b21ce1e5cb92a37b",
         },
         type="Clustering",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

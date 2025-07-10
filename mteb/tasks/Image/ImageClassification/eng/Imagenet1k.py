@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Imagenet1kClassification(AbsTaskImageClassification):
+class Imagenet1kClassification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Imagenet1k",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",
@@ -14,7 +19,7 @@ class Imagenet1kClassification(AbsTaskImageClassification):
             "revision": "b24c7a5a3ef12df09089055d1795e2ce7c7e7397",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -39,10 +44,4 @@ class Imagenet1kClassification(AbsTaskImageClassification):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 37200},
-            "avg_character_length": {"test": 0},
-        },
     )
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

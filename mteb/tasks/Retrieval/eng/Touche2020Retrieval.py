@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Touche2020(AbsTaskRetrieval):
@@ -16,7 +16,7 @@ class Touche2020(AbsTaskRetrieval):
             "revision": "a34f9a33db75fa0cbb21bb5cfc3dae8dc8bec93f",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -64,7 +64,7 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
             "revision": "431886eaecc48f067a3975b70d0949ea2862463c",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

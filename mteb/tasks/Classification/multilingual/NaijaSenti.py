@@ -4,12 +4,11 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NaijaSenti(AbsTaskClassification, MultilingualTask):
+class NaijaSenti(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NaijaSenti",
         description="NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset for the four most widely spoken languages in Nigeria — Hausa, Igbo, Nigerian-Pidgin, and Yorùbá — consisting of around 30,000 annotated tweets per language, including a significant fraction of code-mixed tweets.",
@@ -20,7 +19,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -71,7 +70,7 @@ Brazdil, Pavel},
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=f"{lang}",
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset[lang] = datasets.DatasetDict(
                 {

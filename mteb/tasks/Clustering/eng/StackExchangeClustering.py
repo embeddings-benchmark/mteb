@@ -4,12 +4,12 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
@@ -22,7 +22,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             "revision": "6cbc1f7b2bc0622f2e39d2c77fa502909748c259",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -74,7 +74,7 @@ Iryna Gurevych},
         self.max_fraction_of_documents_to_embed = None
 
 
-class StackExchangeClustering(AbsTaskClustering):
+class StackExchangeClustering(AbsTaskAnyClustering):
     superseded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(
         name="StackExchangeClustering",
@@ -85,7 +85,7 @@ class StackExchangeClustering(AbsTaskClustering):
             "revision": "6cbc1f7b2bc0622f2e39d2c77fa502909748c259",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

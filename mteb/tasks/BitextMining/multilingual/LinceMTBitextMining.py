@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "eng-eng_hin": ["eng-Latn", "hin-Latn"],
 }
 
 
-class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
+class LinceMTBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="LinceMTBitextMining",
         dataset={
@@ -19,7 +18,7 @@ class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.",
         reference="https://ritual.uh.edu/lince/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

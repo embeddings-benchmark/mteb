@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DBpediaClassification(AbsTaskClassification):
+class DBpediaClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DBpediaClassification",
         description="DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.",
@@ -14,7 +14,7 @@ class DBpediaClassification(AbsTaskClassification):
             "revision": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

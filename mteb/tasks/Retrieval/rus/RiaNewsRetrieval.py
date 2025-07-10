@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -17,7 +17,7 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
         description="News article retrieval by headline. Based on Rossiya Segodnya dataset.",
         reference="https://arxiv.org/abs/1901.07786",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -53,7 +53,7 @@ class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
         description="News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://arxiv.org/abs/1901.07786",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

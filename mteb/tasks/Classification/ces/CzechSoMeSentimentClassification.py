@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CzechSoMeSentimentClassification(AbsTaskClassification):
+class CzechSoMeSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification",
         description="User comments on Facebook",
@@ -14,7 +14,7 @@ class CzechSoMeSentimentClassification(AbsTaskClassification):
             "revision": "6ced1d87a030915822b087bf539e6d5c658f1988",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ces-Latn"],

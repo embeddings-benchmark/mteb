@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
+class BulgarianStoreReviewSentimentClassfication(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BulgarianStoreReviewSentimentClassfication",
         description="Bulgarian online store review dataset for sentiment classification.",
@@ -14,7 +14,7 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
             "revision": "701984d6c6efea0e14a1c7850ef70e464c5577c0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2018-05-14", "2018-05-14"),
         eval_splits=["test"],

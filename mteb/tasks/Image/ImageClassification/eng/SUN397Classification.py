@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SUN397Classification(AbsTaskImageClassification):
+class SUN397Classification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="SUN397",
         description="Large scale scene recognition in 397 categories.",
@@ -14,7 +18,7 @@ class SUN397Classification(AbsTaskImageClassification):
             "revision": "7e6af6a2499ad708618be868e1471eac0aca1168",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -41,8 +45,4 @@ class SUN397Classification(AbsTaskImageClassification):
   year = {2010},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 21750},
-            "avg_character_length": {"test": 256},
-        },
     )

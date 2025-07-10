@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -20,7 +19,7 @@ _LANGUAGES = {
 _SPLITS = ["dev", "test"]
 
 
-class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
+class STSBenchmarkMultilingualVisualSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualVisualSTS",
         dataset={
@@ -55,15 +54,4 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
   year = {2024},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"dev": 15000, "test": 13790},
-            "avg_character_length": {"dev": 1.0, "test": 1.0},
-        },
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

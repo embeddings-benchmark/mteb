@@ -5,8 +5,7 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = [
     "aai_Latn",  # Apinayé
@@ -859,7 +858,7 @@ def extend_lang_pairs_english_centric() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs_english_centric()
 
 
-class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
+class BibleNLPBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="BibleNLPBitextMining",
         dataset={
@@ -871,7 +870,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="Partial Bible translations in 829 languages, aligned by verse.",
         reference="https://arxiv.org/abs/2304.09919",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
@@ -910,7 +909,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
             else:
                 dataset = datasets.load_dataset(
                     name=self._transform_lang_name_hf(lang),
-                    **self.metadata_dict["dataset"],
+                    **self.metadata.dataset,
                 )
                 self.dataset[lang] = datasets.DatasetDict({"train": dataset})
                 seen_pairs.append(hf_lang_name)

@@ -18,8 +18,7 @@ model = mteb.get_model(model_name, revision=revision) # load model using registr
 
 tasks = mteb.get_tasks(tasks = ["MIRACLReranking"], languages = ["eng"])
 
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 This workflow should produce the same results as the original run. The results are by default stored in `results/{model_name}/{revision_id}/{task_name}.json`. This approach is equivalent to using the CLI.

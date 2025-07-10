@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class LitSearchRetrieval(AbsTaskRetrieval):
@@ -23,7 +23,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
             "revision": "9573fb284a1026c998df47024b888a163f0f0e25",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -48,7 +48,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
 
         query_ds = datasets.load_dataset(dataset_path, "query")
 

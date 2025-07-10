@@ -1,24 +1,24 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VoyageMMarcoReranking(AbsTaskReranking):
+class VoyageMMarcoReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VoyageMMarcoReranking",
         description="a hard-negative augmented version of the Japanese MMARCO dataset as used in Voyage AI Evaluation Suite",
         reference="https://arxiv.org/abs/2312.16144",
         dataset={
-            "path": "bclavie/mmarco-japanese-hard-negatives",
-            "revision": "e25c91bc31859606507a968559ab1de0f472d007",
+            "path": "mteb/VoyageMMarcoReranking",
+            "revision": "bd2050c52b480e48c51372b4ec98a1cbbc4515f2",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2016-12-01", "2023-12-23"),
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],
@@ -37,12 +37,3 @@ class VoyageMMarcoReranking(AbsTaskReranking):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column(
-            "positives", "positive"
-        ).rename_column("negatives", "negative")
-        # 391,061 dataset size
-        self.dataset["test"] = self.dataset.pop("train").train_test_split(
-            test_size=2048, seed=self.seed
-        )["test"]

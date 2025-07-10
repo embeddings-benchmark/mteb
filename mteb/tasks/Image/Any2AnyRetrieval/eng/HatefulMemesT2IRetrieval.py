@@ -4,7 +4,7 @@ import polars as pl
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
@@ -95,28 +95,16 @@ class HatefulMemesT2IRetrieval(AbsTaskAny2AnyRetrieval):
   year = {2020},
 }
 """,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0,
-                    "average_query_length": 61.0257,
-                    "num_documents": 10000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

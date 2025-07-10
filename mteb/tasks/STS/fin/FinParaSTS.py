@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 N_SAMPLES = 1000
 
 
-class FinParaSTS(AbsTaskSTS):
+class FinParaSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="FinParaSTS",
         dataset={
@@ -19,7 +19,7 @@ class FinParaSTS(AbsTaskSTS):
         description="Finnish paraphrase-based semantic similarity corpus",
         reference="https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fin-Latn"],
@@ -57,12 +57,8 @@ Tarkka, Otto},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 2
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 2
+    max_score = 4
 
     def dataset_transform(self):
         self.dataset = self.dataset.shuffle(seed=self.seed)

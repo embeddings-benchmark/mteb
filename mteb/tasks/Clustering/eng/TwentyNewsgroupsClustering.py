@@ -4,15 +4,15 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TwentyNewsgroupsClustering(AbsTaskClustering):
+class TwentyNewsgroupsClustering(AbsTaskAnyClustering):
     superseded_by = "TwentyNewsgroupsClustering.v2"
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering",
@@ -23,7 +23,7 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
             "revision": "6125ec4e24fa026cec8a478383ee943acfbd5449",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -64,7 +64,7 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
             "revision": "6125ec4e24fa026cec8a478383ee943acfbd5449",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

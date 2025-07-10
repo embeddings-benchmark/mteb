@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FrenkSlClassification(AbsTaskClassification):
+class FrenkSlClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FrenkSlClassification",
         description="Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub: English subset, Croatian subset.",
@@ -15,7 +15,7 @@ class FrenkSlClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/pdf/1906.02045",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["slv-Latn"],

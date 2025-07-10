@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TurHistQuadRetrieval(AbsTaskRetrieval):
@@ -16,7 +16,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         description="Question Answering dataset on Ottoman History in Turkish",
         reference="https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
@@ -53,14 +53,14 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
 
         self.corpus = {}
         self.relevant_docs = {}
         self.queries = {}
         text2id = {}
 
-        for split in self.metadata_dict["eval_splits"]:
+        for split in self.metadata.eval_splits:
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
             ds = ds.shuffle(seed=42)
             max_samples = min(1024, len(ds))

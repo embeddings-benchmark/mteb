@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class PersianFoodSentimentClassification(AbsTaskClassification):
+class PersianFoodSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PersianFoodSentimentClassification",
         description="Persian Food Review Dataset",
@@ -16,7 +16,7 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             "revision": "92ba517dfd22f6334111ad84154d16a2890f5b1d",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fas-Arab"],

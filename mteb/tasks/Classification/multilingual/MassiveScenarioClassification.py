@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "af": ["afr-Latn"],
@@ -59,7 +58,7 @@ _LANGUAGES = {
 }
 
 
-class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
+class MassiveScenarioClassification(AbsTaskAnyClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MassiveScenarioClassification",
@@ -69,7 +68,7 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
         },
         description="MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
         reference="https://arxiv.org/abs/2204.08582",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

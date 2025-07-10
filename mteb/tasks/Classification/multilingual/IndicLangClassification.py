@@ -4,8 +4,8 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "asm_Beng": ["asm-Beng"],
@@ -62,7 +62,7 @@ LANG_MAP = {
 }
 
 
-class IndicLangClassification(AbsTaskClassification):
+class IndicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndicLangClassification",
         dataset={
@@ -71,7 +71,7 @@ class IndicLangClassification(AbsTaskClassification):
         },
         description="A language identification test set for native-script as well as Romanized text which spans 22 Indic languages.",
         reference="https://arxiv.org/abs/2305.15814",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],
@@ -112,9 +112,7 @@ Okazaki, Naoaki},
 
         labels = sorted(_LANGUAGES.keys())
 
-        data = datasets.load_dataset(**self.metadata_dict["dataset"])["train"]["data"][
-            0
-        ]
+        data = datasets.load_dataset(**self.metadata.dataset)["train"]["data"][0]
 
         dataset = {"train": [], "test": []}
         for lang, lang_code in LANG_MAP.items():

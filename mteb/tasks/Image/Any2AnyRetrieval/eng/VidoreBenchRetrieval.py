@@ -3,7 +3,7 @@ from __future__ import annotations
 from datasets import load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def _load_data(
@@ -101,26 +101,14 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 99.328,
-                    "num_documents": 500,
-                    "num_queries": 500,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -157,26 +145,14 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 41.746,
-                    "num_documents": 500,
-                    "num_queries": 500,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -213,26 +189,14 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 64.934,
-                    "num_documents": 500,
-                    "num_queries": 500,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -269,26 +233,14 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 100.63214285714285,
-                    "num_documents": 70,
-                    "num_queries": 280,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -325,26 +277,14 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 72.76368009621167,
-                    "num_documents": 277,
-                    "num_queries": 1663,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -381,26 +321,14 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 97.7,
-                    "num_documents": 1000,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -437,26 +365,14 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 77.71,
-                    "num_documents": 968,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -493,26 +409,14 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 83.69,
-                    "num_documents": 977,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -549,26 +453,14 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 82.53,
-                    "num_documents": 972,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -605,26 +497,14 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 80.43,
-                    "num_documents": 965,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

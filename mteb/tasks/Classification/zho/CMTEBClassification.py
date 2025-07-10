@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TNews(AbsTaskClassification):
+class TNews(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TNews",
         description="Short Text Classification for News",
@@ -14,7 +14,7 @@ class TNews(AbsTaskClassification):
             "revision": "317f262bf1e6126357bbe89e875451e4b0938fe4",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
@@ -77,7 +77,7 @@ Lan, Zhenzhong },
     samples_per_label = 32
 
 
-class IFlyTek(AbsTaskClassification):
+class IFlyTek(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IFlyTek",
         description="Long Text classification for the description of Apps",
@@ -87,7 +87,7 @@ class IFlyTek(AbsTaskClassification):
             "revision": "421605374b29664c5fc098418fe20ada9bd55f8a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
@@ -149,15 +149,10 @@ Lan, Zhenzhong },
     )
 
     samples_per_label = 32
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 5
-        return metadata_dict
+    n_experiments = 5
 
 
-class MultilingualSentiment(AbsTaskClassification):
+class MultilingualSentiment(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MultilingualSentiment",
         description="A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative",
@@ -167,7 +162,7 @@ class MultilingualSentiment(AbsTaskClassification):
             "revision": "46958b007a63fdbf239b7672c25d0bea67b5ea1a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
@@ -186,7 +181,7 @@ class MultilingualSentiment(AbsTaskClassification):
     samples_per_label = 32
 
 
-class JDReview(AbsTaskClassification):
+class JDReview(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="JDReview",
         description="review for iphone",
@@ -196,7 +191,7 @@ class JDReview(AbsTaskClassification):
             "revision": "b7c64bd89eb87f8ded463478346f76731f07bf8b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -222,7 +217,7 @@ class JDReview(AbsTaskClassification):
     samples_per_label = 32
 
 
-class OnlineShopping(AbsTaskClassification):
+class OnlineShopping(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OnlineShopping",
         description="Sentiment Analysis of User Reviews on Online Shopping Websites",
@@ -232,7 +227,7 @@ class OnlineShopping(AbsTaskClassification):
             "revision": "e610f2ebd179a8fda30ae534c3878750a96db120",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -258,7 +253,7 @@ class OnlineShopping(AbsTaskClassification):
     samples_per_label = 32
 
 
-class Waimai(AbsTaskClassification):
+class Waimai(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Waimai",
         description="Sentiment Analysis of user reviews on takeaway platforms",
@@ -268,7 +263,7 @@ class Waimai(AbsTaskClassification):
             "revision": "339287def212450dcaa9df8c22bf93e9980c7023",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],

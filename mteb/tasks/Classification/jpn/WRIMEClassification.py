@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WRIMEClassification(AbsTaskClassification):
+class WRIMEClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WRIMEClassification",
         dataset={
@@ -16,7 +16,7 @@ class WRIMEClassification(AbsTaskClassification):
         description="A dataset of Japanese social network rated for sentiment",
         reference="https://aclanthology.org/2021.naacl-main.169/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

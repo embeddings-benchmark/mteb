@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OxfordPetsClassification(AbsTaskImageClassification):
+class OxfordPetsClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="OxfordPets",
         description="Classifying animal images.",
@@ -14,7 +18,7 @@ class OxfordPetsClassification(AbsTaskImageClassification):
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -42,8 +46,4 @@ class OxfordPetsClassification(AbsTaskImageClassification):
   year = {2012},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 3669},
-            "avg_character_length": {"test": 431.4},
-        },
     )

@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
@@ -24,7 +24,7 @@ and that data is used as a positive example for the question text.""",
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -52,7 +52,7 @@ and that data is used as a positive example for the question text.""",
         query_list = datasets.load_dataset(
             name="jacwir-retrieval-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         queries = {}
@@ -68,7 +68,7 @@ and that data is used as a positive example for the question text.""",
         corpus_list = datasets.load_dataset(
             name="jacwir-retrieval-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
@@ -39,17 +39,5 @@ class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
 """,
         prompt={
             "query": "Find an image caption describing the following everyday image."
-        },
-        descriptive_stats={
-            "n_samples": {"test": 5000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 30.94235294117647,
-                    "average_query_length": 131.56569965870307,
-                    "num_documents": 24809,
-                    "num_queries": 5000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
         },
     )

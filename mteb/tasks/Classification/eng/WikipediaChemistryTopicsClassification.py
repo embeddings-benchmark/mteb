@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaChemistryTopicsClassification(AbsTaskClassification):
+class WikipediaChemistryTopicsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaChemistryTopicsClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaChemistryTopicsClassification(AbsTaskClassification):
             "revision": "d8fb355db2248f95df8ea410a43aa1db1ee96ba4",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

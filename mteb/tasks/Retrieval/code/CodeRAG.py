@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def split_by_first_newline(s):
@@ -16,7 +16,7 @@ def split_by_first_newline(s):
 common_args = {
     "reference": "https://arxiv.org/pdf/2406.14497",
     "type": "Reranking",
-    "category": "s2s",
+    "category": "t2t",
     "modalities": ["text"],
     "eval_splits": ["train"],
     "eval_langs": ["python-Code"],

@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EmitClassification(AbsTaskMultilabelClassification):
@@ -20,7 +20,7 @@ class EmitClassification(AbsTaskMultilabelClassification):
             "revision": "b0ceff2da0ca463d5c8c97a4e1c6e40545a1c3a6",
         },
         type="MultilabelClassification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2022-01-01", "2022-12-31"),
         eval_splits=["test"],

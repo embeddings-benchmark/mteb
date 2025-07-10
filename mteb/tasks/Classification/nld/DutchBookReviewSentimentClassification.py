@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DutchBookReviewSentimentClassification(AbsTaskClassification):
+class DutchBookReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification",
         description="A Dutch book review for sentiment classification.",
@@ -14,7 +14,7 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
             "revision": "1c2815ad38cf4794eb8d678fb08f569ea79392f6",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2019-10-04", "2019-10-04"),
         eval_splits=["test"],

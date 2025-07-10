@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
@@ -18,7 +18,7 @@ class GeoreviewClusteringP2P(AbsTaskClusteringFast):
         description="Review clustering based on Yandex Georeview dataset",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

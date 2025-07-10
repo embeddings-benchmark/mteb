@@ -5,8 +5,8 @@ import shutil
 import numpy as np
 import pytest
 
-from mteb.encoder_interface import Encoder
-from mteb.models.cache_wrapper import CachedEmbeddingWrapper
+from mteb.models.encoder_interface import Encoder
+from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
 
 
 class DummyModel(Encoder):
@@ -16,7 +16,7 @@ class DummyModel(Encoder):
 
     def encode(self, texts, **kwargs):
         self.call_count += 1
-        return np.random.rand(len(texts), self.embedding_dim).astype(np.float32)
+        return np.random.rand(len(texts), self.embedding_dim).astype(np.float32)  # noqa: NPY002
 
     def random_other_function_returns_false(self):
         return False

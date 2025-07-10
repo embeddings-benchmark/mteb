@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ChemHotpotQARetrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class ChemHotpotQARetrieval(AbsTaskRetrieval):
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train", "dev", "test"],
         eval_langs=["eng-Latn"],

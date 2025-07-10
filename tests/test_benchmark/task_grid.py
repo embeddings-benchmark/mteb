@@ -2,14 +2,8 @@
 
 from __future__ import annotations
 
+import mteb
 from mteb.abstasks import AbsTask
-from mteb.tasks.BitextMining.dan.BornholmskBitextMining import BornholmBitextMining
-from mteb.tasks.Classification.multilingual.IndicSentimentClassification import (
-    IndicSentimentClassification,
-)
-from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
-    TwentyNewsgroupsClusteringFast,
-)
 
 from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
@@ -18,13 +12,12 @@ from .mock_tasks import (
     MockClassificationTask,
     MockClusteringFastTask,
     MockClusteringTask,
-    MockImageClassificationKNNPTTask,
-    MockImageClassificationKNNTask,
     MockImageClassificationTask,
     MockImageClusteringTask,
     MockImageMultilabelClassificationTask,
     MockImageTextPairClassificationTask,
-    MockInstructionRetrival,
+    MockInstructionReranking,
+    MockInstructionRetrieval,
     MockMultiChoiceTask,
     MockMultilabelClassification,
     MockMultilingualBitextMiningTask,
@@ -34,7 +27,8 @@ from .mock_tasks import (
     MockMultilingualImageClassificationTask,
     MockMultilingualImageMultilabelClassificationTask,
     MockMultilingualImageTextPairClassificationTask,
-    MockMultilingualInstructionRetrival,
+    MockMultilingualInstructionReranking,
+    MockMultilingualInstructionRetrieval,
     MockMultilingualMultiChoiceTask,
     MockMultilingualMultilabelClassification,
     MockMultilingualPairClassificationTask,
@@ -45,36 +39,34 @@ from .mock_tasks import (
     MockMultilingualSummarizationTask,
     MockPairClassificationTask,
     MockRerankingTask,
+    MockRetrievalDialogTask,
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
 )
 
-twenty_news = TwentyNewsgroupsClusteringFast()
-
-# downsample to speed up tests
-twenty_news.max_document_to_embed = 1000
-twenty_news.n_clusters = 2
-twenty_news.max_fraction_of_documents_to_embed = None
-
-TASK_TEST_GRID = [
-    BornholmBitextMining(),  # bitext mining + just supplying a task class instead of a string
-    IndicSentimentClassification(  # multi subset loader
-        hf_subsets=["as"],  # we only load one subset here to speed up tests
-        n_experiments=2,  # to speed up the test
-    ),
-    "TwentyNewsgroupsClustering",  # clustering and string instead of class
-    twenty_news,  # fast clustering
-    "Banking77Classification",  # classification
-    "SciDocsRR",  # reranking
-    "FarsTail",  # pair classification
-    "TwitterHjerneRetrieval",  # retrieval
-    "BrazilianToxicTweetsClassification",  # multilabel classification
-    "FaroeseSTS",  # STS
-    "SummEval",  # summarization
-]
+TASK_TEST_GRID = (
+    mteb.get_tasks(
+        tasks=[
+            "BornholmBitextMining",  # bitext mining + just supplying a task class instead of a string
+            "TwentyNewsgroupsClustering",  # clustering and string instead of class
+            "TwentyNewsgroupsClustering.v2",  # fast clustering
+            "Banking77Classification",  # classification
+            "FarsTail",  # pair classification
+            "BrazilianToxicTweetsClassification",  # multilabel classification
+            "FaroeseSTS",  # STS
+            "SummEval",  # summarization
+            "TwitterHjerneRetrieval",  # retrieval
+            "SciDocsRR",  # reranking
+            "Core17InstructionRetrieval",  # instruction reranking
+            "InstructIR",  # instruction retrieval
+        ]
+    )
+    + mteb.get_tasks(tasks=["IndicSentimentClassification"], languages=["asm-Beng"])
+)
 
 TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in TASK_TEST_GRID
@@ -105,8 +97,12 @@ MOCK_TASK_TEST_GRID = [
     MockMultilingualMultilabelClassification(),
     MockSummarizationTask(),
     MockMultilingualSummarizationTask(),
-    MockInstructionRetrival(),
-    MockMultilingualInstructionRetrival(),
+    MockInstructionRetrieval(),
+    MockMultilingualInstructionRetrieval(),
+    MockMultilingualInstructionReranking(),
+    MockInstructionReranking(),
+    MockRetrievalDialogTask(),
+    MockTextZeroShotClassificationTask(),
 ]
 
 MOCK_TASK_TEST_GRID_AS_STRING = [
@@ -120,8 +116,6 @@ MOCK_MIEB_TASK_GRID = [
     MockAny2AnyRetrievalT2ITask(),
     MockMultiChoiceTask(),
     MockImageClassificationTask(),
-    MockImageClassificationKNNPTTask(),
-    MockImageClassificationKNNTask(),
     MockImageClusteringTask(),
     MockImageTextPairClassificationTask(),
     MockVisualSTSTask(),
@@ -140,3 +134,11 @@ MOCK_MIEB_TASK_GRID_AS_STRING = [
 MOCK_MIEB_TASK_REGISTRY = {
     task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
 }
+
+ALL_TASK_TEST_GRID = MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID
+
+ALL_TASK_TEST_GRID_AS_STRING = [
+    t.metadata.name if isinstance(t, AbsTask) else t for t in ALL_TASK_TEST_GRID
+]
+
+ALL_MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in ALL_TASK_TEST_GRID}

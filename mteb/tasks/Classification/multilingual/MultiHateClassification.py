@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "ara": ["ara-Arab"],
@@ -19,7 +18,7 @@ _LANGUAGES = {
 }
 
 
-class MultiHateClassification(MultilingualTask, AbsTaskClassification):
+class MultiHateClassification(AbsTaskAnyClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MultiHateClassification",
@@ -33,7 +32,7 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
                      """,
         reference="https://aclanthology.org/2022.woah-1.15/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

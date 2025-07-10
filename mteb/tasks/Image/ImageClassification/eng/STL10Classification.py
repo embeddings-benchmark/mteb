@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class STL10Classification(AbsTaskImageClassification):
+class STL10Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="STL10",
         description="Classifying 96x96 images from 10 classes.",
@@ -14,7 +14,7 @@ class STL10Classification(AbsTaskImageClassification):
             "revision": "49ae7f94508f7feae62baf836db284306eab0b0f",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -46,8 +46,4 @@ class STL10Classification(AbsTaskImageClassification):
   year = {2011},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 8000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

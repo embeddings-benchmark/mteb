@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class STS13STS(AbsTaskSTS):
+class STS13STS(AbsTaskAnySTS):
+    min_score = 0
+    max_score = 5
+
     metadata = TaskMetadata(
         name="STS13",
         dataset={
@@ -15,7 +18,7 @@ class STS13STS(AbsTaskSTS):
         description="SemEval STS 2013 dataset.",
         reference="https://www.aclweb.org/anthology/S13-1004/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -37,10 +40,3 @@ class STS13STS(AbsTaskSTS):
 }
 """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

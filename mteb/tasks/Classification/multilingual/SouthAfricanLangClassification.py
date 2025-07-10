@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = [
     "afr-Latn",
@@ -18,7 +18,7 @@ _LANGUAGES = [
 ]
 
 
-class SouthAfricanLangClassification(AbsTaskClassification):
+class SouthAfricanLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SouthAfricanLangClassification",
         dataset={
@@ -27,7 +27,7 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         },
         description="A language identification test set for 11 South African Languages.",
         reference="https://www.kaggle.com/competitions/south-african-language-identification/",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

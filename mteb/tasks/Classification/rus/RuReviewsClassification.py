@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuReviewsClassification(AbsTaskClassification):
+class RuReviewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuReviewsClassification",
         dataset={
@@ -14,7 +14,7 @@ class RuReviewsClassification(AbsTaskClassification):
         description="Product review classification (3-point scale) based on RuRevies dataset",
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

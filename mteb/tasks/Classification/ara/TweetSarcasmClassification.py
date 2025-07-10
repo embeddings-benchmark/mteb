@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetSarcasmClassification(AbsTaskClassification):
+class TweetSarcasmClassification(AbsTaskAnyClassification):
     superseded_by = "TweetSarcasmClassification.v2"
     metadata = TaskMetadata(
         name="TweetSarcasmClassification",
@@ -15,7 +15,7 @@ class TweetSarcasmClassification(AbsTaskClassification):
         description="Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets.",
         reference="https://aclanthology.org/2020.osact-1.5/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
@@ -58,7 +58,7 @@ Mubarak, Hamdy},
         )
 
 
-class TweetSarcasmClassificationV2(AbsTaskClassification):
+class TweetSarcasmClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetSarcasmClassification.v2",
         dataset={
@@ -69,7 +69,7 @@ class TweetSarcasmClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://aclanthology.org/2020.osact-1.5/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
