@@ -231,7 +231,11 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
-        """Get all paths in the cache directory.
+        """Get all paths to result JSON files in the cache directory. These paths can then be used to fetch task results, like:
+        ```
+        for path in paths:
+            task_result = TaskResult.from_disk(path)
+        ```
 
         Args:
             models: A list of model names or ModelMeta objects to filter the paths.
@@ -298,13 +302,13 @@ class ResultCache:
         models = [(p.parent.parent.name, p.parent.name) for p in cache_paths]
         return models
 
-    def get_tasks(
+    def get_task_names(
         self,
         models: list[str] | list[ModelMeta] | None = None,
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[str]:
-        """Get all tasks in the cache directory."""
+        """Get all task names in the cache directory."""
         cache_paths = self.get_cache_paths(
             models=models,
             require_model_meta=require_model_meta,

@@ -1,6 +1,6 @@
 # Loading and working with results
 
-After running models on `mteb` you typically want to know more about the results. You can load your results from the cache using the `ResultCache` object.
+You can load your results from the cache using the `ResultCache` object.
 
 
 
@@ -8,6 +8,8 @@ To make the results more easily accessible, we have designed custom functionalit
 
 ```python
 import mteb
+
+from mteb.cache import ResultCache
 
 tasks = mteb.get_tasks(tasks=["STS12"])
 model_names = ["intfloat/multilingual-e5-large"]
@@ -27,7 +29,7 @@ type(results)
 
 ## Working with remote results
 
-While you can of course use local results you typically want to compare your model to existing models run using `mteb`. For MTEB all previously submitted results are available results [repository](https://github.com/embeddings-benchmark/results).
+All previously submitted results are available results [repository](https://github.com/embeddings-benchmark/results).
 
 You can download this using:
 
@@ -38,7 +40,7 @@ cache = ResultCache()
 cache.download_from_remote() # download results from the remote repository
 ```
 
-From here you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+From here, you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents, you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```py
 from mteb.cache import ResultCache
@@ -53,7 +55,7 @@ model_names = [
 
 
 cache = ResultCache()
-cache.download_from_remote() # download results from the remote repository
+cache.download_from_remote() # download results from the remote repository. Might take a while the first time. 
 
 results = cache.load_results(
     models=model_names, 
