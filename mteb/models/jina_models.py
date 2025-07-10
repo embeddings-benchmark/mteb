@@ -389,7 +389,7 @@ class JinaV4Wrapper(Wrapper):
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
-        batch_size: int = 8,
+        batch_size: int = 32,
         max_pixels: int = 37788800,
         return_numpy=False,
         **kwargs: Any,
