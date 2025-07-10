@@ -277,12 +277,7 @@ class JinaV4Wrapper(Wrapper):
             tuple: (jina_prompt, base_task, prompt_name_param)
         """
         task_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-
         jina_task_name = self.model_prompts.get(task_type) if task_type else None
-        jina_task_name = get_programming_task_override(task_name, jina_task_name)
-
-        # Extract base task (e.g., "retrieval" from "retrieval.query")
-        base_task = jina_task_name.split(".")[0] if jina_task_name else "retrieval"
 
         # Determine prompt name parameter
         if jina_task_name and "query" in jina_task_name:
@@ -291,6 +286,10 @@ class JinaV4Wrapper(Wrapper):
             prompt_name_param = "passage"
         else:
             prompt_name_param = "query"  # default fallback
+
+        jina_task_name = get_programming_task_override(task_name, jina_task_name)
+        # Extract base task (e.g., "retrieval" from "retrieval.query")
+        base_task = jina_task_name.split(".")[0] if jina_task_name else "retrieval"
 
         return base_task, prompt_name_param, task_type
 
