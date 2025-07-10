@@ -53,6 +53,8 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Rendered semantic textual similarity",
+    "Intent classification",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
     "Keyword Spotting",
@@ -155,7 +157,7 @@ MAEB_TASK_TYPE = (
     "AudioPairClassification",
 )
 
-TASK_TYPE = (
+_TASK_TYPE = (
     (
         "BitextMining",
         "Classification",
@@ -173,7 +175,7 @@ TASK_TYPE = (
     + MAEB_TASK_TYPE
 )
 
-TASK_TYPE = Literal[TASK_TYPE]
+TASK_TYPE = Literal[_TASK_TYPE]
 
 
 TASK_CATEGORY = Literal[
