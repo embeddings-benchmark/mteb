@@ -275,7 +275,7 @@ kalm_v2_training_data = {
     "TwentyNewsgroups-Clustering": ["train"],
     "ATEC": ["train"],
     "BQ": ["train"],
-    "CQADupstack": ["train"]
+    "CQADupstack": ["train"],
 }
 
 
@@ -478,8 +478,8 @@ KaLM_v2_task_prompts = {
     "STS22-passage": "Retrieve semantically similar text",
     "STSBenchmark-query": "Retrieve semantically similar text",
     "STSBenchmark-passage": "Retrieve semantically similar text",
-    "SummEval-query": "Retrieve semantically similar summaries", 
-    "SummEval-passage": "Retrieve semantically similar summaries"
+    "SummEval-query": "Retrieve semantically similar summaries",
+    "SummEval-passage": "Retrieve semantically similar summaries",
 }
 
 KaLM_X_task_prompts = {
@@ -769,24 +769,24 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     superseded_by=None,
 )
 
+
 def kalmv2_instruct_loader(model_name_or_path, **kwargs):
     model = InstructSentenceTransformerWrapper(
         model_name_or_path,
-        revision=kwargs.pop("revision", None),
-        instruction_template=KaLM_INSTRUCTION,
-        max_seq_length=512,
-        apply_instruction_to_passages=False,
-        prompts_dict=KaLM_v2_task_prompts,
         **kwargs,
     )
-    encoder = model.model._first_module()
     return model
-    
+
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
     loader=partial(  # type: ignore
         kalmv2_instruct_loader,
-        model_name_or_path=os.environ.get("kalm_v2_PATH", "HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2"),
+        model_name_or_path="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
+        revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
+        instruction_template=KaLM_INSTRUCTION,
+        max_seq_length=512,
+        apply_instruction_to_passages=False,
+        prompts_dict=KaLM_v2_task_prompts,
     ),
     name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
     revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
@@ -810,31 +810,31 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
 )
 
 
-KaLM_Embedding_X_0605 = ModelMeta(
-    loader=partial(
-        KALMWrapper,
-        model_name="KaLM-Team/KaLM-Embedding-X-0605",
-        revision="1",
-        instruction_template=KaLM_INSTRUCTION,
-        max_seq_length=512,
-        apply_instruction_to_passages=True,
-        prompts_dict=KaLM_X_task_prompts,
-    ),
-    name="KaLM-Team/KaLM-Embedding-X-0605",
-    revision="1",
-    languages=None,
-    open_weights=False,
-    release_date="2025-06-05",
-    n_parameters=9.24 * 1e9,
-    memory_usage_mb=35254,
-    max_tokens=8192,
-    embed_dim=3584,
-    license=None,
-    reference="https://github.com/KaLM-Team/KaLM-Embedding-X",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=True,
-    public_training_code="https://github.com/HITsz-TMG/KaLM-Embedding",
-    public_training_data=None,
-    training_datasets=kalm_training_data,
-)
+# KaLM_Embedding_X_0605 = ModelMeta(
+#     loader=partial(
+#         KALMWrapper,
+#         model_name="KaLM-Team/KaLM-Embedding-X-0605",
+#         revision="1",
+#         instruction_template=KaLM_INSTRUCTION,
+#         max_seq_length=512,
+#         apply_instruction_to_passages=True,
+#         prompts_dict=KaLM_X_task_prompts,
+#     ),
+#     name="KaLM-Team/KaLM-Embedding-X-0605",
+#     revision="1",
+#     languages=None,
+#     open_weights=False,
+#     release_date="2025-06-05",
+#     n_parameters=9.24 * 1e9,
+#     memory_usage_mb=35254,
+#     max_tokens=8192,
+#     embed_dim=3584,
+#     license=None,
+#     reference="https://github.com/KaLM-Team/KaLM-Embedding-X",
+#     similarity_fn_name="cosine",
+#     framework=["Sentence Transformers", "PyTorch"],
+#     use_instructions=True,
+#     public_training_code="https://github.com/HITsz-TMG/KaLM-Embedding",
+#     public_training_data=None,
+#     training_datasets=kalm_training_data,
+# )
