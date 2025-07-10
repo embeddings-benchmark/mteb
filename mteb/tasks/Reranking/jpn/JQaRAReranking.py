@@ -4,7 +4,7 @@ import datasets
 from datasets import Dataset
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
@@ -24,7 +24,7 @@ class JQaRAReranking(AbsTaskReranking):
             "trust_remote_code": True,
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -54,14 +54,14 @@ class JQaRAReranking(AbsTaskReranking):
         query_list = datasets.load_dataset(
             name="jqara-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         # Load corpus
         corpus_list = datasets.load_dataset(
             name="jqara-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         # Create corpus mapping

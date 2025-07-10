@@ -13,11 +13,11 @@ import numpy as np
 import requests
 from torch.utils.data import DataLoader
 
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
+from mteb.types import Array, BatchedInput, PromptType
 
-from ... import TaskMetadata
-from ...types import Array, BatchedInput, PromptType
 from .bge_models import bge_full_data
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 

@@ -55,7 +55,7 @@ class NLPJournalTitleAbsRetrievalV2(AbsTaskRetrieval):
         query_list = datasets.load_dataset(
             name="nlp_journal_title_abs-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         queries = {}
@@ -67,7 +67,7 @@ class NLPJournalTitleAbsRetrievalV2(AbsTaskRetrieval):
         corpus_list = datasets.load_dataset(
             name="nlp_journal_title_abs-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
@@ -96,7 +96,7 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
             "dataset_version": "v1",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],

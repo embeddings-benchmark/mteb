@@ -7,7 +7,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from transformers import AutoModel
 
-from mteb import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
@@ -146,7 +146,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
     framework=["PyTorch"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
 )
@@ -171,7 +171,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     public_training_data="https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1#training-dataset",
     framework=["PyTorch"],
     reference="https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
 )

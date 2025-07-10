@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SardiStanceClassification(AbsTaskClassification):
+class SardiStanceClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SardiStanceClassification",
         dataset={
@@ -14,7 +14,7 @@ class SardiStanceClassification(AbsTaskClassification):
         description="SardiStance is a unique dataset designed for the task of stance detection in Italian tweets. It consists of tweets related to the Sardines movement, providing a valuable resource for researchers and practitioners in the field of NLP.",
         reference="https://github.com/mirkolai/evalita-sardistance",
         type="Classification",
-        category="s2s",
+        category="t2c",
         date=("2019-11-01", "2020-01-31"),
         modalities=["text"],
         eval_splits=["test"],

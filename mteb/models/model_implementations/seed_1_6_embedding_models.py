@@ -13,7 +13,7 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 
-from mteb import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets

@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
@@ -27,7 +27,7 @@ class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
             "dataset_version": "v2",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -57,7 +57,7 @@ class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
         query_list = datasets.load_dataset(
             name="nlp_journal_abs_article-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         queries = {}
@@ -69,7 +69,7 @@ class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
         corpus_list = datasets.load_dataset(
             name="nlp_journal_abs_article-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
@@ -100,7 +100,7 @@ class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
             "dataset_version": "v1",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -129,7 +129,7 @@ class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
         query_list = datasets.load_dataset(
             name="nlp_journal_abs_article-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         queries = {}
@@ -141,7 +141,7 @@ class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
         corpus_list = datasets.load_dataset(
             name="nlp_journal_abs_article-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}

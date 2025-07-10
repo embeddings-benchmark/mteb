@@ -176,6 +176,7 @@ fa_bert = ModelMeta(
 )
 
 tooka_sbert_v2_small = ModelMeta(
+    loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT-V2-Small",
     languages=["fas-Arab"],
     open_weights=True,
@@ -196,6 +197,7 @@ tooka_sbert_v2_small = ModelMeta(
 )
 
 tooka_sbert_v2_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT-V2-Large",
     languages=["fas-Arab"],
     open_weights=True,

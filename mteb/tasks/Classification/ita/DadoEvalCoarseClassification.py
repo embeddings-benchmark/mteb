@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DadoEvalCoarseClassification(AbsTaskClassification):
+class DadoEvalCoarseClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DadoEvalCoarseClassification",
         dataset={
@@ -15,7 +15,7 @@ class DadoEvalCoarseClassification(AbsTaskClassification):
         reference="https://github.com/dhfbk/DaDoEval",
         type="Classification",
         date=("1901-01-01", "1954-12-31"),
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
