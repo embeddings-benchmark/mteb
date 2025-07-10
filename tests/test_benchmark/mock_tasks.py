@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import Image
 
@@ -2585,7 +2584,7 @@ class MockMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
     metadata.category = "it2i"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -2660,7 +2659,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
     metadata.category = "it2i"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -2745,7 +2744,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskAny2AnyRetrieval):
     metadata.category = "i2t"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -2815,7 +2814,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
     metadata.category = "t2i"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -2910,7 +2909,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
     input_column_name = "image"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3083,7 +3082,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
     input_column_name = "image"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3148,7 +3147,7 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
     label_column_name = "label"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3202,7 +3201,7 @@ class MockImageMultilabelClassificationTask(AbsTaskImageMultilabelClassification
     samples_per_label = 3
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3302,7 +3301,7 @@ class MockMultilingualImageMultilabelClassificationTask(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3355,7 +3354,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata.category = "i2t"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3414,7 +3413,7 @@ class MockMultilingualImageTextPairClassificationTask(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
@@ -3477,7 +3476,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
     metadata.category = "i2i"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
 
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3540,7 +3539,7 @@ class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
     metadata.category = "i2t"
 
     def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
 
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
