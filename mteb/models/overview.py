@@ -53,8 +53,10 @@ from mteb.models import (
     lens_models,
     lgai_embedding_models,
     linq_models,
+    listconranker,
     llm2clip_models,
     llm2vec_models,
+    mcinext_models,
     misc_models,
     moco_models,
     model2vec_models,
@@ -136,6 +138,7 @@ model_modules = [
     lens_models,
     lgai_embedding_models,
     linq_models,
+    listconranker,
     llm2clip_models,
     llm2vec_models,
     misc_models,
@@ -187,6 +190,7 @@ model_modules = [
     colqwen_models,
     colsmol_models,
     geogpt_models,
+    mcinext_models,
 ]
 MODEL_REGISTRY = {}
 
