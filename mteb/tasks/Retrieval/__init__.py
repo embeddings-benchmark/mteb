@@ -131,6 +131,7 @@ from .multilingual.CUREv1Retrieval import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
+from .multilingual.MKQARetrieval import *
 from .multilingual.MLQARetrieval import *
 from .multilingual.MrTidyRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
