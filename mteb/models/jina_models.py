@@ -335,7 +335,7 @@ class JinaV4Wrapper(Wrapper):
     ) -> np.ndarray:
         if self.vector_type != "single_vector":
             raise ValueError(
-                "encode() method requires default_vector_type='single_vector'. "
+                "encode() method requires vector_type='single_vector'. "
                 "Load the model with: meta.load_model(vector_type='single_vector')"
             )
 
