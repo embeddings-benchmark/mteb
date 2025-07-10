@@ -3,19 +3,21 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
 
-class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
+class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
-        name="NLPJournalAbsIntroRetrieval.V2",
+        name="NLPJournalAbsArticleRetrieval.V2",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
             "The titles, abstracts and introductions of the academic papers were shuffled. "
-            "The goal is to find the corresponding introduction with the given abstract. "
-            "This is the V2 dataset (last update 2025-06-15)."
+            "The goal is to find the corresponding full article with the given abstract. "
+            "This is the V2 dataset (last updated 2025-06-15)."
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
@@ -25,19 +27,19 @@ class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
             "dataset_version": "v2",
         },
         type="Retrieval",
-        category="t2t",
+        category="s2s",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
         main_score="ndcg_at_10",
-        date=("1994-10-10", "2020-06-15"),
+        date=("1994-10-10", "2025-06-15"),
         domains=["Academic", "Written"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        adapted_from=["NLPJournalAbsIntroRetrieval"],
+        adapted_from=["NLPJournalAbsArticleRetrieval"],
         bibtex_citation=r"""
 @misc{jmteb,
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
@@ -53,7 +55,7 @@ class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
             return
 
         query_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-query",
+            name="nlp_journal_abs_article-query",
             split=_EVAL_SPLIT,
             **self.metadata_dict["dataset"],
         )
@@ -65,7 +67,7 @@ class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
             qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
 
         corpus_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-corpus",
+            name="nlp_journal_abs_article-corpus",
             split="corpus",
             **self.metadata_dict["dataset"],
         )
@@ -79,14 +81,16 @@ class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
+class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
-        name="NLPJournalAbsIntroRetrieval",
+        name="NLPJournalAbsArticleRetrieval",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
             "The titles, abstracts and introductions of the academic papers were shuffled. "
-            "The goal is to find the corresponding introduction with the given abstract. "
-            "This is the V1 dataset (last update 2020-06-15)."
+            "The goal is to find the corresponding full article with the given abstract. "
+            "This is the V1 dataset (last updated 2020-06-15)."
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
@@ -123,9 +127,9 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
             return
 
         query_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-query",
+            name="nlp_journal_abs_article-query",
             split=_EVAL_SPLIT,
-            **self.metadata.dataset,
+            **self.metadata_dict["dataset"],
         )
 
         queries = {}
@@ -135,9 +139,9 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
             qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
 
         corpus_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-corpus",
+            name="nlp_journal_abs_article-corpus",
             split="corpus",
-            **self.metadata.dataset,
+            **self.metadata_dict["dataset"],
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}

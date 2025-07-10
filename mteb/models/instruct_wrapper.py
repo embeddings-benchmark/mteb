@@ -94,6 +94,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
         add_eos_token: bool = False,
+        prompts_dict: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
@@ -107,6 +108,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
             padding_side: Padding side. If None, the padding side will be read from the model config.
             add_eos_token: Whether to add the eos token to each input example.
+            prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         if (
@@ -126,6 +128,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.add_eos_token = add_eos_token
+        self.prompts_dict = prompts_dict
         if max_seq_length is not None:
             self.model.max_seq_length = max_seq_length
         if padding_side is not None:

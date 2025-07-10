@@ -10,11 +10,11 @@ class SNLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SNLRetrieval",
         dataset={
-            "path": "navjordj/SNL_summarization",
+            "path": "adrlau/navjordj-SNL_summarization_copy",  # TODO: replace with mteb/SNLRetrieval after #2820 is resolved.
             "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
         },
         description="Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.",
-        reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
+        reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
         type="Retrieval",
         category="t2t",
         modalities=["text"],

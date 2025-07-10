@@ -16,6 +16,47 @@ from .nomic_models import (
     nomic_training_data,
 )
 
+GIGA_task_prompts = {
+    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise\nquery: ",
+    "STS22": "Retrieve semantically similar text\nquery: ",
+    "RuSTSBenchmarkSTS": "Retrieve semantically similar text\nquery: ",
+    "RUParaPhraserSTS": "Retrieve semantically similar text\nquery: ",
+    "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, удивление, страх, гнев или нейтрально) \nкомментарий: ",
+    "GeoreviewClassification": "Classify the organization rating based on the reviews\nquery: ",
+    "GeoreviewClusteringP2P": "Классифицируй рейтинг организации на основе отзыва \nотзыв: ",
+    "HeadlineClassification": "Классифицируй тему данного новостного заголовка \nзаголовок: ",
+    "InappropriatenessClassification": "Классифицируй данный комментарий как токсичный или не токсичный \nкомментарий: ",
+    "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text\nquery: ",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents\nquery: ",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios\nquery: ",
+    "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment\nquery: ",
+    "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchGRNTIClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchOECDClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "SensitiveTopicsClassification": "Классифицируй чувствительную тему по запросу \nзапрос: ",
+    "RuBQRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "RuBQReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "RiaNewsRetrieval": {
+        "query": "Given a news title, retrieve relevant news article\nquery: ",
+        "passage": "",
+    },
+    "MIRACLReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "MIRACLRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+}
+
 rubert_tiny = ModelMeta(
     loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny",
@@ -683,7 +724,7 @@ frida = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=0 / 0,
     loader_kwargs=dict(
         trust_remote_code=True,
         instruction_template="Instruct: {instruction}\nQuery: ",
