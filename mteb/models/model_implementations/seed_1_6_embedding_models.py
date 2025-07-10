@@ -5,23 +5,21 @@ import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from functools import partial
 from io import BytesIO
 from typing import Any
 
-import numpy as np
 import requests
 import torch
-import tqdm
 from PIL import Image
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.bge_models import bge_chinese_training_data
-from mteb.models.nvidia_models import nvidia_training_datasets
-from mteb.models.wrapper import Wrapper
+from mteb import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_implementations.bge_models import bge_chinese_training_data
+from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
+from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -146,10 +144,11 @@ doubao_embedding_training_data = (
 )
 
 
-class Seed16EmbeddingWrapper(Wrapper):
+class Seed16EmbeddingWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
@@ -178,12 +177,21 @@ class Seed16EmbeddingWrapper(Wrapper):
 
     def get_text_embeddings(
         self,
-        texts: list[str],
+        sentences: list[str],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-    ):
+    ) -> Array:
+        trimmed_sentences = []
+        for sentence in sentences:
+            encoded_sentence = self._encoding.encode(sentence)
+            if len(encoded_sentence) > self._max_tokens:
+                truncated_sentence = self.truncate_text_tokens(sentence)
+                trimmed_sentences.append(truncated_sentence)
+            else:
+                trimmed_sentences.append(sentence)
+
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
@@ -194,25 +202,25 @@ class Seed16EmbeddingWrapper(Wrapper):
             prompt_type == PromptType("query") or prompt_type is None
         ) and task_name in TASK_NAME_TO_INSTRUCTION:
             instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            texts = [instruction.format(i) for i in texts]
+            trimmed_sentences = [instruction.format(i) for i in trimmed_sentences]
 
-        outputs = multi_thread_encode(texts)
+        outputs = multi_thread_encode(trimmed_sentences)
 
         if self._embed_dim is not None:
             outputs = outputs[:, : self._embed_dim]
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
 
-        return outputs.float().tolist()
+        return outputs.float()
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
+        images: list[Image.Image],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torchvision.transforms.functional as F
 
         assert (
@@ -250,7 +258,7 @@ class Seed16EmbeddingWrapper(Wrapper):
         if self._embed_dim is not None:
             outputs = outputs[:, : self._embed_dim]
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
-        return outputs.float().tolist()
+        return outputs.float()
 
     def get_fused_embeddings(
         self,
@@ -258,9 +266,7 @@ class Seed16EmbeddingWrapper(Wrapper):
         images: list[Image.Image] | DataLoader | None = None,
         fusion_mode="sum",
         **kwargs: Any,
-    ):
-        import torchvision.transforms.functional as F
-
+    ) -> Array:
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
         ), (
@@ -268,12 +274,7 @@ class Seed16EmbeddingWrapper(Wrapper):
         )
 
         assert len(texts) == len(images)
-        if isinstance(images, DataLoader):
-            images_base64 = []
-            for batch in images:
-                images_base64.extend([pil_to_base64(F.to_pil_image(b)) for b in batch])
-        else:
-            images_base64 = [pil_to_base64(image) for image in images]
+        images_base64 = [pil_to_base64(image) for image in images]
 
         outputs = []
         for i in range(len(images_base64)):
@@ -288,44 +289,40 @@ class Seed16EmbeddingWrapper(Wrapper):
         if self._embed_dim is not None:
             outputs = outputs[:, : self._embed_dim]
         outputs = torch.nn.functional.normalize(outputs, p=2, dim=1)
-        return outputs.float().tolist()
+        return outputs.float()
 
     def encode(
         self,
-        sentences: list[str],
-        task_name: str,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        retries: int = 5,
         **kwargs: Any,
-    ) -> np.ndarray:
-        trimmed_sentences = []
-        for sentence in sentences:
-            encoded_sentence = self._encoding.encode(sentence)
-            if len(encoded_sentence) > self._max_tokens:
-                truncated_sentence = self.truncate_text_tokens(sentence)
-                trimmed_sentences.append(truncated_sentence)
-            else:
-                trimmed_sentences.append(sentence)
-
-        max_batch_size = kwargs.get("batch_size", 256)
-        sublists = [
-            trimmed_sentences[i : i + max_batch_size]
-            for i in range(0, len(trimmed_sentences), max_batch_size)
-        ]
-
-        show_progress_bar = (
-            False
-            if "show_progress_bar" not in kwargs
-            else kwargs.pop("show_progress_bar")
-        )
-
-        all_embeddings = []
-
-        for sublist in tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar):
-            embedding = self.get_text_embeddings(sublist, task_name, prompt_type)
-            all_embeddings.extend(embedding)
-
-        return np.array(all_embeddings)
+    ) -> Array:
+        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+            sentences = [text for batch in inputs for text in batch["text"]]
+            images = [image for batch in inputs for image in batch["image"]]
+            return self.get_fused_embeddings(
+                texts=sentences,
+                images=images,
+                **kwargs,
+            )
+        if "text" in inputs.dataset.features:
+            sentences = [text for batch in inputs for text in batch["text"]]
+            return self.get_text_embeddings(
+                sentences,
+                task_name=task_metadata.name,
+                prompt_type=prompt_type,
+                **kwargs,
+            )
+        if "image" in inputs.dataset.features:
+            images = [image for batch in inputs for image in batch["image"]]
+            return self.get_image_embeddings(
+                images, task_name=task_metadata.name, prompt_type=prompt_type, **kwargs
+            )
+        raise ValueError
 
 
 TASK_NAME_TO_INSTRUCTION = {
@@ -412,9 +409,8 @@ seed_embedding = ModelMeta(
         "eng-Latn",
         "zho-Hans",
     ],
-    loader=partial(
-        Seed16EmbeddingWrapper,
-        model_name="Bytedance/Seed1.6-embedding",
+    loader=Seed16EmbeddingWrapper,
+    loader_kwargs=dict(
         max_tokens=32000,
         available_embed_dims=[2048, 1024],
     ),

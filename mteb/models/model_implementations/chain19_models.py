@@ -1,18 +1,12 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 # NOTE: This model is intentionally not imported to ensure that it does not appear on the leaderboard
 # see more here: https://github.com/embeddings-benchmark/mteb/issues/2698
 chain19_en = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="bchoiced/CHAIN19",
-        revision="5ba01fcb4e90ede5e2772b8a9ca68c12515dc6af",
-    ),
+    loader=sentence_transformers_loader,
     name="bchoiced/CHAIN19",
     languages=[
         "eng-Latn",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import torch
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -724,11 +725,13 @@ frida = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=0 / 0,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
-        trust_remote_code=True,
-        instruction_template="Instruct: {instruction}\nQuery: ",
+        instruction_template="{instruction}",
+        max_seq_length=512,
         apply_instruction_to_passages=False,
+        prompts_dict=GIGA_task_prompts,
+        trust_remote_code=True,
         model_kwargs={
             "torch_dtype": torch.bfloat16,
         },

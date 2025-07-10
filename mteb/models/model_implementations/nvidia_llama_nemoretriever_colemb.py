@@ -1,34 +1,36 @@
 from __future__ import annotations
 
-from functools import partial
+from typing import Any
 
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from transformers import AutoModel
 
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class llama_nemoretriever_colembed(Wrapper):
+class llama_nemoretriever_colembed(AbsEncoder):
     def __init__(
         self,
         model_name_or_path: str,
+        revision: str,
         trust_remote_code: bool,
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
-        revision=None,
         **kwargs,
     ):
         self.model = AutoModel.from_pretrained(
             model_name_or_path,
+            revision=revision,
             device_map=device_map,
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
             attn_implementation=attn_implementation,
-            revision=revision,
         ).eval()
 
     def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
@@ -77,12 +79,31 @@ class llama_nemoretriever_colembed(Wrapper):
 
     def encode(
         self,
-        *args,
-        **kwargs,
-    ):
-        raise NotImplementedError(
-            "Encode is not implemented. Please use .mdl.forward_queries or mdl.forward_passages."
-        )
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        text_embeddings = None
+        image_embeddings = None
+
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+
+        if text_embeddings is not None and image_embeddings is not None:
+            raise NotImplementedError(
+                "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
+            )
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif image_embeddings is not None:
+            return image_embeddings
+        raise ValueError
 
 
 TRAINING_DATA = {
@@ -106,11 +127,9 @@ TRAINING_DATA = {
 }
 
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
-    loader=partial(
-        llama_nemoretriever_colembed,
-        model_name_or_path="nvidia/llama-nemoretriever-colembed-1b-v1",
+    loader=llama_nemoretriever_colembed,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        revision="1f0fdea7f5b19532a750be109b19072d719b8177",
     ),
     name="nvidia/llama-nemoretriever-colembed-1b-v1",
     languages=["eng-Latn"],
@@ -133,11 +152,9 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
-    loader=partial(
-        llama_nemoretriever_colembed,
-        model_name_or_path="nvidia/llama-nemoretriever-colembed-3b-v1",
+    loader=llama_nemoretriever_colembed,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        revision="50c36f4d5271c6851aa08bd26d69f6e7ca8b870c",
     ),
     name="nvidia/llama-nemoretriever-colembed-3b-v1",
     languages=["eng-Latn"],

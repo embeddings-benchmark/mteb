@@ -7,15 +7,17 @@ import os
 import random
 import string
 import time
-from functools import partial
 from typing import Any
 
 import numpy as np
 import requests
+from torch.utils.data import DataLoader
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
+from ... import TaskMetadata
+from ...types import Array, BatchedInput, PromptType
 from .bge_models import bge_full_data
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -153,6 +155,8 @@ class ConanWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str | None = None,
+        api_model_name: str | None = None,
         **kwargs,
     ) -> None:
         AK = os.getenv("CONAN_AK")
@@ -161,14 +165,20 @@ class ConanWrapper(AbsEncoder):
             raise ValueError("CONAN_AK and CONAN_SK environment variables must be set")
 
         self.client = Client(ak=AK, sk=SK, url="https://ai.om.qq.com/api/conan/v2")
-        self.model_name = model_name
+        self.model_name = api_model_name
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         embeddings = []
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         for sentence in sentences:
             try:
@@ -191,9 +201,9 @@ Conan_embedding_v2 = ModelMeta(
         "eng-Latn",
         "zho-Hans",
     ],
-    loader=partial(  # type: ignore
-        ConanWrapper,
-        model_name="Conan-embedding-v2",
+    loader=ConanWrapper,
+    loader_kwargs=dict(
+        api_model_name="Conan-embedding-v2",
     ),
     max_tokens=32768,
     embed_dim=3584,

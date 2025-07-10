@@ -1,41 +1,34 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any
 
-import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb import TaskMetadata
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class KALMWrapper(InstructSentenceTransformerWrapper):
+class KALMWrapper(InstructSentenceTransformerModel):
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        if self.add_eos_token:
-            sentences = [
-                example + self.model.tokenizer.eos_token for example in sentences
-            ]
+    ) -> Array:
+        _inputs = [text for batch in inputs for text in batch["text"]]
 
-        instruction = self.get_task_instruction(
-            task_name, prompt_type, self.prompts_dict
-        )
-        # import there due to circular imports
-        from mteb import get_task
-
-        task = get_task(task_name)
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
         if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
@@ -44,17 +37,19 @@ class KALMWrapper(InstructSentenceTransformerWrapper):
                 f"No instruction used, because prompt type = {prompt_type.passage}"
             )
 
-        if task.metadata.type in ["STS", "PairClassification", "Summarization"]:
+        if task_metadata.type in ["STS", "PairClassification", "Summarization"]:
             logger.info(
-                f"No instruction used, because task type = {task.metadata.type}"
+                f"No instruction used, because task type = {task_metadata.type}"
             )
             instruction = None
 
         if instruction:
-            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
 
         embeddings = self.model.encode(
-            sentences,
+            _inputs,
             prompt=instruction,
             **kwargs,
         )
@@ -434,10 +429,8 @@ KaLM_X_task_prompts = {
 KaLM_INSTRUCTION = "Instruct: {instruction} \n Query: "
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        KALMWrapper,
-        model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
-        revision="45e42c89990c40aca042659133fc8b13c28634b5",
+    loader=KALMWrapper,
+    loader_kwargs=dict(
         instruction_template=KaLM_INSTRUCTION,
         max_seq_length=512,
         apply_instruction_to_passages=False,
@@ -465,6 +458,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="HIT-TMG/KaLM-embedding-multilingual-mini-v1",
     revision="8a82a0cd2b322b91723e252486f7cce6fd8ac9d3",
     release_date="2024-08-27",
@@ -487,10 +481,8 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        KALMWrapper,
-        model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5",
-        revision="fcff2f8a54e4cd96b7766fef1ee960a43d42bb3c",
+    loader=KALMWrapper,
+    loader_kwargs=dict(
         instruction_template=KaLM_INSTRUCTION,
         max_seq_length=512,
         apply_instruction_to_passages=False,

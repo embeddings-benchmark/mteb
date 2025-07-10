@@ -3,16 +3,14 @@ from __future__ import annotations
 import logging
 import os
 import time
-from functools import partial
 from typing import Any
 
 import numpy as np
 import requests
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
+from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -207,19 +205,20 @@ class APIError(Exception):
         self.status_code = status_code
 
 
-class HakimModelWrapper(Wrapper):
+class HakimModelWrapper(AbsEncoder):
     """A simplified wrapper for the Hakim instruction-following model."""
 
     def __init__(
         self,
         model_name: str,
         revision: str,
+        api_model_name: str,
         max_retries: int = 3,
         retry_delay: int = 10,
         **kwargs: Any,
     ):
-        self.model_name = model_name
-        self.api_url = f"https://mcinext.ai/api/{model_name}"
+        self.model_name = api_model_name
+        self.api_url = f"https://mcinext.ai/api/{api_model_name}"
         self.max_retries = max_retries
         self.retry_delay = retry_delay
         self.api_key = os.getenv("MCINEXT_API_KEY")
@@ -230,7 +229,7 @@ class HakimModelWrapper(Wrapper):
             "Accept": "application/json",
             "Authorization": f"Bearer {self.api_key}",
         }
-        logger.info(f"Initialized model wrapper for: {model_name}")
+        logger.info(f"Initialized model wrapper for: {api_model_name}")
 
     def _preprocess_sample(
         self,
@@ -337,11 +336,9 @@ class HakimModelWrapper(Wrapper):
 
 
 hakim = ModelMeta(
-    loader=partial(
-        HakimModelWrapper,
-        trust_remote_code=True,
-        model_name="hakim",
-        revision="v1",
+    loader=HakimModelWrapper,
+    loader_kwargs=dict(
+        api_model_name="hakim",
     ),
     name="MCINext/Hakim",
     languages=["fas-Arab"],
@@ -405,11 +402,9 @@ hakim = ModelMeta(
 
 
 hakim_small = ModelMeta(
-    loader=partial(
-        HakimModelWrapper,
-        trust_remote_code=True,
-        model_name="hakim-small",
-        revision="v1",
+    loader=HakimModelWrapper,
+    loader_kwargs=dict(
+        api_model_name="hakim-small",
     ),
     name="MCINext/Hakim-small",
     languages=["fas-Arab"],
@@ -472,11 +467,9 @@ hakim_small = ModelMeta(
 )
 
 hakim_unsup = ModelMeta(
-    loader=partial(
-        HakimModelWrapper,
-        trust_remote_code=True,
-        model_name="hakim-unsup",
-        revision="v1",
+    loader=HakimModelWrapper,
+    loader_kwargs=dict(
+        api_model_name="hakim-unsup",
     ),
     name="MCINext/Hakim-unsup",
     languages=["fas-Arab"],

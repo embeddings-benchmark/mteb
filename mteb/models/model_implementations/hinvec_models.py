@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +30,8 @@ hinvec_training_datasets = {
 }
 
 Hinvec_bidir = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Sailesh97/Hinvec",
-        revision="d4fc678720cc1b8c5d18599ce2d9a4d6090c8b6b",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,
         max_seq_length=2048,
