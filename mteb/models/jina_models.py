@@ -230,13 +230,8 @@ class JinaV4Wrapper(Wrapper):
         attn_implementation="flash_attention_2",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
-        vector_type: str = "multi_vector",
         **kwargs,
     ) -> None:
-        if CURRENT_SENTENCE_TRANSFORMERS_VERSION < MIN_SENTENCE_TRANSFORMERS_VERSION:
-            raise RuntimeError(
-                f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
-            )
         requires_package(
             self,
             "flash_attn",
@@ -258,15 +253,7 @@ class JinaV4Wrapper(Wrapper):
             revision=revision,
         ).eval()
         self.model_prompts = model_prompts or {}
-        self.vector_type = self._validate_vector_type(vector_type)
-
-    def _validate_vector_type(self, vector_type: str) -> str:
-        """Validate and return vector type."""
-        if vector_type not in self.SUPPORTED_VECTOR_TYPES:
-            raise ValueError(
-                f"vector_type must be one of {self.SUPPORTED_VECTOR_TYPES}, got {vector_type}"
-            )
-        return vector_type
+        self.vector_type = "single_vector"  # default vector type
 
     def _resolve_task_parameters(
         self, task_name: str | None, prompt_type: PromptType | None = None
@@ -274,7 +261,7 @@ class JinaV4Wrapper(Wrapper):
         """Resolve task parameters from task_name and prompt_type.
 
         Returns:
-            tuple: (jina_prompt, base_task, prompt_name_param)
+            tuple: (base_task, prompt_name_param, task_type)
         """
         task_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         jina_task_name = self.model_prompts.get(task_type) if task_type else None
@@ -302,26 +289,10 @@ class JinaV4Wrapper(Wrapper):
     ) -> None:
         """Log task and prompt information."""
         if prompt_name:
-            logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
-            )
+            logger.info(f"Using {prompt_name=} for {task_name=} {prompt_type=}")
         else:
-            logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
-            )
+            logger.info(f"No model prompts found for {task_name=} {prompt_type=}")
         logger.info(f"Encoding {sentences_count} sentences.")
-
-    def _warn_vector_type_mismatch(self, task_type: str | None) -> None:
-        """Warn about vector type mismatches for DocumentUnderstanding tasks."""
-        if (
-            task_type
-            and task_type.startswith("DocumentUnderstanding")
-            and self.vector_type != "multi_vector"
-        ):
-            logger.warning(
-                "Please use 'multi_vector' mode for DocumentUnderstanding tasks to get better results. "
-                "Load the model with: meta.load_model(vector_type='multi_vector')"
-            )
 
     def encode(
         self,
@@ -332,22 +303,13 @@ class JinaV4Wrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if self.vector_type != "single_vector":
-            raise ValueError(
-                "encode() method requires vector_type='single_vector'. "
-                "Load the model with: meta.load_model(vector_type='single_vector')"
-            )
-
-        # Log task information
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         self._log_task_info(task_name, prompt_type, prompt_name, len(sentences))
 
-        # encode() always uses single_vector mode (return_multivector=False)
         embeddings = self.get_text_embeddings(
             texts=list(sentences),
             task_name=task_name,
             batch_size=batch_size,
-            vector_type="single_vector",
             prompt_type=prompt_type,
             return_numpy=True,
             **kwargs,
@@ -370,13 +332,18 @@ class JinaV4Wrapper(Wrapper):
             task_name, prompt_type
         )
 
-        self._warn_vector_type_mismatch(task_type)
+        if task_type.startswith("DocumentUnderstanding"):
+            self.vector_type = "multi_vector"
+        else:
+            self.vector_type = "single_vector"
 
         with torch.no_grad():
             return self.model.encode_text(
                 texts=texts,
                 batch_size=batch_size,
-                return_multivector=self.vector_type == "multi_vector",
+                return_multivector=True
+                if task_type.startswith("DocumentUnderstanding")
+                else False,
                 prompt_name=prompt_name_param,
                 task=base_task,
                 return_numpy=return_numpy,
@@ -399,7 +366,10 @@ class JinaV4Wrapper(Wrapper):
         # Resolve task parameters
         base_task, _, task_type = self._resolve_task_parameters(task_name, prompt_type)
 
-        self._warn_vector_type_mismatch(task_type)
+        if task_type.startswith("DocumentUnderstanding"):
+            self.vector_type = "multi_vector"
+        else:
+            self.vector_type = "single_vector"
 
         all_images = []
         if isinstance(images, DataLoader):
@@ -419,7 +389,7 @@ class JinaV4Wrapper(Wrapper):
             images=all_images,
             batch_size=batch_size,
             max_pixels=max_pixels,
-            return_multivector=self.vector_type == "multi_vector",
+            return_multivector=True,
             task=base_task,
             return_numpy=return_numpy,
         )
