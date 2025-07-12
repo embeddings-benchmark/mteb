@@ -40,7 +40,9 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "torchaudio>=2.6.0"
+    "torchaudio>=2.6.0",
+    "librosa>=0.11.0",
+    "soundfile>=0.13.1",
 ]
 
 
@@ -95,11 +97,9 @@ vertexai = ["vertexai==1.71.1"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
-torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 xet = ["huggingface_hub>=0.32.0"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.10"]
-speechbrain = ["speechbrain>=0.5.12"]
 
 [tool.coverage.report]
 

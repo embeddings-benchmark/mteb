@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import io
 import logging
 import math
 import os
@@ -8,48 +7,16 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 import tqdm
 from sklearn.metrics import average_precision_score
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import AudioEncoder, PromptType
+from mteb.evaluation.evaluators.dataset_utils import AudioDataset
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 from mteb.evaluation.evaluators.utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
-
-
-class AudioDataset(torch.utils.data.Dataset):
-    def __init__(self, audio_samples, transform=None):
-        self.audio_samples = audio_samples
-        self.transform = transform or (lambda x: x)  # Identity transform by default
-
-    def __len__(self):
-        return len(self.audio_samples)
-
-    def __getitem__(self, idx):
-        audio = self.audio_samples[idx]
-
-        # Handle different types of audio inputs
-        if isinstance(audio, dict) and "array" in audio and "sampling_rate" in audio:
-            # Already in the expected format with array and sampling_rate
-            waveform = torch.tensor(audio["array"])
-            sample_rate = audio["sampling_rate"]
-        elif isinstance(audio, bytes):
-            # Byte stream of audio data
-            waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
-        elif isinstance(audio, str):
-            # Path to audio file
-            waveform, sample_rate = torchaudio.load(audio)
-        else:
-            # Assume it's already a tensor or in a usable format
-            waveform = audio
-
-        if self.transform is not None:
-            waveform = self.transform(waveform)
-
-        return waveform
 
 
 def custom_collate_fn(batch):

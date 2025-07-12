@@ -86,6 +86,7 @@ TASK_SUBTYPE = Literal[
     "Age Classification",
     "Rendered semantic textual similarity",
     "Intent classification",
+    "Song Lyrics Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
@@ -155,6 +156,7 @@ MAEB_TASK_TYPE = (
     "AudioClassification",
     "AudioCrossFoldClassification",
     "AudioPairClassification",
+    "Any2AnyRetrieval",
 )
 
 _TASK_TYPE = (
