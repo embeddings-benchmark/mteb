@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.Audio.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -10,15 +10,15 @@ class AudioCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
         description="Natural language description for any kind of audio in the wild.",
         reference="https://audiocaps.github.io/",
         dataset={
-            "path": "AudioLLMs/audiocaps_test",
-            "revision": "fb42aac15212cbddd723fbbf04b6071b60a9f8fe",
+            "path": "mteb/audiocaps_a2t",
+            "revision": "9633a2d50398d042b79904bde006c1e23d7063d7",
         },
         type="Retrieval",
         category="a2t",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="cv_recall_at_5",
         date=("2018-01-01", "2018-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
@@ -38,19 +38,6 @@ class AudioCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
         # prompt={"query": "Retrieve the answer to the question."},
     )
 
-    audio_column_name: str = "context"
-    text_column_name: str = "answer"
-    id_column_name: str = "audiocap_id"
-
-    def dataset_transform(self):
-        for split in self.dataset.keys():
-            self.dataset[split] = self.dataset[split]
-
-            self.dataset[split] = self.dataset[split].add_column(
-                "audiocap_id",
-                [f"audiocap_{i}" for i in range(len(self.dataset[split]))],
-            )
-
 
 class AudioCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
     """This reverses the normal AudioCaps dataset. Instead of audio queries to text corpus, this tests text queries to audio corpus."""
@@ -60,15 +47,15 @@ class AudioCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
         description="Natural language description for any kind of audio in the wild.",
         reference="https://audiocaps.github.io/",
         dataset={
-            "path": "AudioLLMs/audiocaps_test",
-            "revision": "fb42aac15212cbddd723fbbf04b6071b60a9f8fe",
+            "path": "mteb/audiocaps_t2a",
+            "revision": "54610ade1c109ff008cd59f0f86578c3d6b9e330",
         },
         type="Retrieval",
         category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="cv_recall_at_5",
         date=("2018-01-01", "2018-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
@@ -86,20 +73,3 @@ class AudioCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
     )
-
-    audio_column_name: str = "context"
-    text_column_name: str = "answer"
-    id_column_name: str = "audiocap_id"
-
-    # reverse the default modalities
-    default_query_modality: str = "text"  # queries will be text
-    default_corpus_modality: str = "audio"  # corpus will be audio
-
-    def dataset_transform(self):
-        for split in self.dataset.keys():
-            self.dataset[split] = self.dataset[split]
-
-            self.dataset[split] = self.dataset[split].add_column(
-                "audiocap_id",
-                [f"audiocap_{i}" for i in range(len(self.dataset[split]))],
-            )
