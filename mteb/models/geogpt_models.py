@@ -2,18 +2,22 @@
 
 from __future__ import annotations
 
+from functools import partial
+
 import torch
 
-from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.models.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
     languages=["eng-Latn"],
     open_weights=True,
     revision="29803c28ea7ef6871194a8ebc85ad7bfe174928e",
-    loader=InstructSentenceTransformerModel,
-    loader_kwargs=dict(
+    loader=partial(
+        InstructSentenceTransformerWrapper,
+        "GeoGPT-Research-Project/GeoEmbedding",
+        "29803c28ea7ef6871194a8ebc85ad7bfe174928e",
         instruction_template="Instruct: {instruction}\nQuery: ",
         apply_instruction_to_passages=False,
         model_kwargs={"torch_dtype": torch.bfloat16},

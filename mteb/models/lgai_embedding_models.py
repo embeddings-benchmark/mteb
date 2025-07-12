@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from functools import partial
 
-from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 LGAI_EMBEDDING_TRAINING_DATA = {
     # source: https://arxiv.org/abs/2506.07438
@@ -44,7 +44,11 @@ LGAI_EMBEDDING_TRAINING_DATA = {
 }
 
 lgai_embedding_en = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="annamodels/LGAI-Embedding-Preview",
+        revision="5e0b2316acc8c2e2941ded6b9cb200b1cb313e65",
+    ),
     name="annamodels/LGAI-Embedding-Preview",
     languages=[
         "eng-Latn",

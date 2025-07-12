@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.29"
+version = "1.38.34"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -26,7 +26,7 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
-    "datasets>=2.19.0",
+    "datasets>=2.19.0, <4.0.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
     "scikit-learn>=1.4.0",
@@ -66,14 +66,13 @@ dev = [
     "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
 docs = [
-  "mkdocs>=1.6.1",
-  "mkdocs-material>=9.5.47",
-  "mkdocstrings[python]>=0.18",
-  "mkdocs-bibtex>=2.16.2",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.5.47",
+    "mkdocstrings[python]>=0.18",
+    "mkdocs-bibtex>=2.16.2",
 ]
 leaderboard = [
-    "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
-    "gradio_rangeslider>=0.0.8",
+    "gradio==5.35.0; python_version > '3.9'", # 3.10 is required for gradio
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
@@ -83,6 +82,7 @@ leaderboard = [
 peft = ["peft>=0.11.0"]
 flagembedding = ["FlagEmbedding==1.3.4"]
 jina = ["einops>=0.8.0"]
+jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
@@ -101,6 +101,7 @@ open_clip_torch = ["open_clip_torch==2.31.0"]
 nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.10"]
+xet = ["huggingface_hub>=0.32.0"]
 
 [tool.coverage.report]
 
@@ -132,6 +133,7 @@ namespaces = false
 [tool.setuptools.package-data]
 "*" = ["*.json"]
 "mteb.abstasks" = ["dataset_card_template.md"]
+"mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
 

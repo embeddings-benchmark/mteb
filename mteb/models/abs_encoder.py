@@ -31,6 +31,7 @@ class AbsEncoder(ABC):
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType], str] | None = None
+    prompts_dict: dict[str, str] | None = None
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         if self.mteb_model_meta is None or (
@@ -242,18 +243,26 @@ class AbsEncoder(ABC):
                     raise KeyError(msg)
 
     def get_instruction(
-        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
     ) -> str:
         """Get the instruction/prompt to be used for encoding sentences."""
-        if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if task_metadata.prompt.get(prompt_type.value):
-                return task_metadata.prompt[prompt_type.value]
+        prompt = task_metadata.prompt
+        if self.prompts_dict and task_metadata.name in self.prompts_dict:
+            prompt = self.prompts_dict[task_metadata.name]
+
+        if isinstance(prompt, dict) and prompt_type:
+            if prompt.get(prompt_type.value):
+                return prompt[prompt_type.value]
             logger.warning(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
             )
             return ""
-        if task_metadata.prompt:
-            return task_metadata.prompt
+
+        if prompt:
+            return prompt
+
         abstask = mteb.get_task(task_name=task_metadata.name)
         return abstask.abstask_prompt
 
@@ -273,10 +282,12 @@ class AbsEncoder(ABC):
         return self.instruction_template(instruction, prompt_type)
 
     def get_task_instruction(
-        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
     ) -> str:
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template:
+        if self.instruction_template and len(instruction) > 0:
             return self.format_instruction(instruction)
         return instruction
 

@@ -35,10 +35,6 @@ tasks = [
 
 datasets_not_available = [
     "AfriSentiLangClassification",
-    "SNLHierarchicalClusteringP2P",
-    "SNLClustering",
-    "SNLHierarchicalClusteringS2S",
-    "SNLRetrieval",
 ]
 
 

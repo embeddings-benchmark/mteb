@@ -1,16 +1,10 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 codemodernbert_crow_meta = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
-        revision="044a7a4b552f86e284817234c336bccf16f895ce",
-    ),
+    loader=sentence_transformers_loader,
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
     languages=["eng-Latn"],
     open_weights=True,
