@@ -186,7 +186,8 @@ class AbsTaskAnyClassification(AbsTask):
         if idxs is None:
             idxs = list(range(len(dataset)))
 
-        rng_state = np.random.default_rng(self.seed)
+        # using RandomState for backward compatibility with `v1`
+        rng_state = np.random.RandomState(self.seed)
         rng_state.shuffle(idxs)
 
         label_counter = defaultdict(int)
