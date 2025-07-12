@@ -10,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class JamAltArtist(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="JamAltArtistRetrieval",
+        name="JamAltArtistA2ARetrieval",
         description="Given audio clip of a song (query), retrieve all songs from the same artist in the Jam-Alt-Lines dataset",
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
@@ -18,8 +18,8 @@ class JamAltArtist(AbsTaskAny2AnyRetrieval):
             "revision": "main",
         },
         type="Retrieval",
-        category="s2s",
-        modalities=["audio", "audio"],
+        category="a2a",
+        modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn"],
         main_score="ndcg_at_10",

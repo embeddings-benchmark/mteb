@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class JamAltLyrics(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="JamAltLyricRetrieval",
+        name="JamAltLyricT2ARetrieval",
         description="From textual lyrics (query), retrieve corresponding audio clips of songs from the Jam-Alt-Lines dataset",
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
@@ -16,7 +16,7 @@ class JamAltLyrics(AbsTaskAny2AnyRetrieval):
             "revision": "main",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2a",
         modalities=["text", "audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn"],
