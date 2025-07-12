@@ -41,6 +41,8 @@ dependencies = [
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
     "torchaudio>=2.6.0",
+    "librosa>=0.11.0",
+    "soundfile>=0.13.1",
 ]
 
 
