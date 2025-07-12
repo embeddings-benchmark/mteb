@@ -183,9 +183,10 @@ class AbsTaskAnyClassification(AbsTask):
         if idxs is None:
             idxs = list(range(len(dataset)))
 
+        # using RandomState for backward compatibility with `v1`
         rng_state = np.random.RandomState(self.seed)
         rng_state.shuffle(idxs)
-        print(idxs[:100])
+
         label_counter = defaultdict(int)
         sampled_idxs = []
 
