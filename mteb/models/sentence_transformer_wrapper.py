@@ -13,7 +13,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    from mteb import TaskMetadata
+    from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 

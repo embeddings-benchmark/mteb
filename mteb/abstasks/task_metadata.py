@@ -195,6 +195,7 @@ class MetadataDatasetDict(TypedDict, total=False):
     name: str
     split: str
     trust_remote_code: bool
+    dataset_version: str  # NLPJournalAbsArticleRetrieval.V2
 
 
 class TaskMetadata(BaseModel):

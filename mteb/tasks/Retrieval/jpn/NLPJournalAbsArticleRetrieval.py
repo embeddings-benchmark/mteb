@@ -8,13 +8,15 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _EVAL_SPLIT = "test"
 
 
-class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
+class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
-        name="NLPJournalTitleIntroRetrieval.V2",
+        name="NLPJournalAbsArticleRetrieval.V2",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
             "The titles, abstracts and introductions of the academic papers were shuffled. "
-            "The goal is to find the corresponding introduction with the given title. "
+            "The goal is to find the corresponding full article with the given abstract. "
             "This is the V2 dataset (last updated 2025-06-15)."
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
@@ -25,7 +27,7 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
             "dataset_version": "v2",
         },
         type="Retrieval",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -37,7 +39,7 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        adapted_from=["NLPJournalTitleIntroRetrieval"],
+        adapted_from=["NLPJournalAbsArticleRetrieval"],
         bibtex_citation=r"""
 @misc{jmteb,
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
@@ -53,7 +55,7 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
             return
 
         query_list = datasets.load_dataset(
-            name="nlp_journal_title_intro-query",
+            name="nlp_journal_abs_article-query",
             split=_EVAL_SPLIT,
             **self.metadata.dataset,
         )
@@ -65,7 +67,7 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
             qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
 
         corpus_list = datasets.load_dataset(
-            name="nlp_journal_title_intro-corpus",
+            name="nlp_journal_abs_article-corpus",
             split="corpus",
             **self.metadata.dataset,
         )
@@ -79,13 +81,15 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
+class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
-        name="NLPJournalTitleIntroRetrieval",
+        name="NLPJournalAbsArticleRetrieval",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
             "The titles, abstracts and introductions of the academic papers were shuffled. "
-            "The goal is to find the corresponding introduction with the given title. "
+            "The goal is to find the corresponding full article with the given abstract. "
             "This is the V1 dataset (last updated 2020-06-15)."
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
@@ -123,7 +127,7 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
             return
 
         query_list = datasets.load_dataset(
-            name="nlp_journal_title_intro-query",
+            name="nlp_journal_abs_article-query",
             split=_EVAL_SPLIT,
             **self.metadata.dataset,
         )
@@ -135,7 +139,7 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
             qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
 
         corpus_list = datasets.load_dataset(
-            name="nlp_journal_title_intro-corpus",
+            name="nlp_journal_abs_article-corpus",
             split="corpus",
             **self.metadata.dataset,
         )
