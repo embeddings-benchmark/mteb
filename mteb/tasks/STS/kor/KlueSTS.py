@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class KlueSTS(AbsTaskAnySTS):
@@ -46,6 +45,7 @@ class KlueSTS(AbsTaskAnySTS):
     def dataset_transform(self):
         # In the case of KLUE STS, score value is nested within the `labels` field.
         # We need to extract the `score` and move it outside of the `labels` field for access.
-        self.dataset["validation"] = self.dataset["validation"].map(
-            lambda example: {**example, "score": example["labels"]["label"]}
-        )
+        for split in self.dataset:
+            self.dataset[split] = self.dataset[split].map(
+                lambda example: {**example, "score": example["labels"]["label"]}
+            )

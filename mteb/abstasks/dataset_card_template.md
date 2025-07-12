@@ -19,6 +19,11 @@
 | Domains       | {{ domains }}                               |
 | Reference     | {{ dataset_reference | default("", true) }} |
 
+Source datasets:
+{%- for dataset in source_datasets %}
+- [{{ dataset }}](https://huggingface.co/datasets/{{ dataset }})
+{%- endfor %}
+
 
 ## How to evaluate on this task
 
