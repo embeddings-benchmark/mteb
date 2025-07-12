@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 import logging
 import random
-from collections import Counter, defaultdict
+from collections import defaultdict
 from typing import Any
 
 import numpy as np
@@ -15,8 +15,12 @@ from torch.utils.data import DataLoader
 
 from mteb.models.encoder_interface import Encoder
 from mteb.types import HFSubset
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
+from ._statistics_calculation import (
+    calculate_label_statistics,
+    calculate_text_statistics,
+)
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -79,37 +83,19 @@ def evaluate_clustering_bootstrapped(
 
 
 class ClusteringFastDescriptiveStatistics(DescriptiveStatistics):
-    """Descriptive statistics for Clustering
+    """Descriptive statistics for ClusteringFast
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
 
-        min_text_length: Minimum length of text
-        average_text_length: Average length of text
-        max_text_length: Maximum length of text
-        unique_texts: Number of unique texts
-
-        min_labels_per_text: Minimum number of labels per text
-        average_labels_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
+        text_statistics: Statistics for the text
+        labels_statistics: Statistics for the labels
     """
 
     num_samples: int
-    number_of_characters: int
 
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
-    unique_texts: int
-
-    min_labels_per_text: int
-    average_labels_per_text: float
-    max_labels_per_text: int
-    unique_labels: int
-    labels: dict[str, dict[str, int]]
+    text_statistics: TextStatistics
+    labels_statistics: LabelStatistics
 
 
 class AbsTaskClusteringFast(AbsTask):
@@ -233,32 +219,10 @@ class AbsTaskClusteringFast(AbsTask):
             sentences = self.dataset[split]["sentences"]
             labels = self.dataset[split]["labels"]
 
-        text_len = [len(t) for t in sentences]
-        total_text_len = sum(text_len)
-        total_labels = []
-        for label in labels:
-            if isinstance(label, list):
-                total_labels.extend(label)
-            else:
-                total_labels.append(label)
-        label_counter = Counter(total_labels)
         return ClusteringFastDescriptiveStatistics(
             num_samples=len(sentences),
-            number_of_characters=total_text_len,
-            min_text_length=min(text_len),
-            average_text_length=total_text_len / len(sentences),
-            max_text_length=max(text_len),
-            unique_texts=len(set(text_len)),
-            min_labels_per_text=min(label_counter.values()),
-            average_labels_per_text=len(total_labels) / len(sentences),
-            max_labels_per_text=max(label_counter.values()),
-            unique_labels=len(label_counter),
-            labels={
-                str(label): {
-                    "count": value,
-                }
-                for label, value in label_counter.items()
-            },
+            text_statistics=calculate_text_statistics(sentences),
+            labels_statistics=calculate_label_statistics(labels),
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:

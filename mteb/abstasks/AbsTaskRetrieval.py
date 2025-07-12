@@ -11,10 +11,21 @@ from datasets import Dataset, DatasetDict
 
 from mteb.models.encoder_interface import Encoder
 from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types.statistics import (
+    DescriptiveStatistics,
+    RelevantDocsStatistics,
+    TextStatistics,
+    TopRankedStatistics,
+)
 
+from ..create_dataloaders import corpus_to_dict
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
+from ._statistics_calculation import (
+    calculate_relevant_docs_statistics,
+    calculate_text_statistics,
+    calculate_top_ranked_statistics,
+)
 from .AbsTask import AbsTask
 from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
 
@@ -26,73 +37,28 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: Number of queries and documents
-        num_relevant_docs: Number of relevant documents
+        number_of_characters: Total number of characters in queries and documents
 
-        num_documents: Number of documents
-        min_document_length: Minimum length of documents
-        average_document_length: Average length of documents
-        max_document_length: Maximum length of documents
-        unique_documents: Number of unique documents
-
-        num_queries: number of queries in the dataset
-        min_query_length: Minimum length of queries
-        average_query_length: Average length of queries
-        max_query_length: Maximum length of queries
-        unique_queries: Number of unique queries
-        none_queries: Number of none queries
-
-        number_of_characters: Total number of symbols in the dataset
-        min_relevant_docs_per_query: Minimum number of relevant documents per query
-        average_relevant_docs_per_query: Average number of relevant documents per query
-        max_relevant_docs_per_query: Maximum number of relevant documents per query
-        unique_relevant_docs: Number of unique relevant documents
-
-        num_instructions: Number of instructions
-        min_instruction_length: Minimum length of instructions
-        average_instruction_length: Average length of instructions
-        max_instruction_length: Maximum length of instructions
-        unique_instructions: Number of unique instructions
-
-        num_top_ranked: Number of top ranked documents
-        min_top_ranked_per_query: Minimum number of top ranked documents per query
-        average_top_ranked_per_query: Average number of top ranked documents per query
-        max_top_ranked_per_query: Maximum number of relevant documents per query
+        documents_statistics: Statistics for documents
+        queries_statistics: Statistics for queries
+        relevant_docs_statistics: Statistics for relevant documents
+        instructions_statistics: Statistics for instructions (if available)
+        top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 
     num_samples: int
     number_of_characters: int
 
-    num_documents: int
-    min_document_length: int
-    average_document_length: float
-    max_document_length: int
-    unique_documents: int
+    documents_statistics: TextStatistics
+    queries_statistics: TextStatistics
 
-    num_queries: int
-    min_query_length: int
-    average_query_length: float
-    max_query_length: int
-    unique_queries: int
-    none_queries: int
-
-    num_relevant_docs: int
-    min_relevant_docs_per_query: int
-    average_relevant_docs_per_query: float
-    max_relevant_docs_per_query: float
-    unique_relevant_docs: int
+    relevant_docs_statistics: RelevantDocsStatistics
 
     # these are for datasets with instructions
-    num_instructions: int | None
-    min_instruction_length: int | None
-    average_instruction_length: float | None
-    max_instruction_length: float | None
-    unique_instructions: int | None
+    instructions_statistics: TextStatistics | None
 
     # this is for datasets that do reranking
-    num_top_ranked: int | None
-    min_top_ranked_per_query: int | None
-    average_top_ranked_per_query: float | None
-    max_top_ranked_per_query: int | None
+    top_ranked_statistics: TopRankedStatistics | None
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -468,86 +434,47 @@ class AbsTaskRetrieval(AbsTask):
             instructions = split_data["instructions"]
             top_ranked = split_data["top_ranked"]
 
-        query_len = calculate_queries_length(queries)
-        doc_len = calculate_corpus_length(corpus)
-        num_documents = len(doc_len) if corpus is not None else 0
-        num_queries = len(query_len)
-        num_relevant_docs = sum(len(relevant_docs[qid]) for qid in relevant_docs)
-        none_queries = sum(q is None or len(q) == 0 for q in queries.values())
+        corpus = list(corpus_to_dict(list(corpus.values()))["text"])
+        queries_texts = [q for q in queries.values() if isinstance(q, str)]
+        num_documents = len(corpus)
+        num_queries = len(queries_texts)
 
-        # create a list of number of relevant docs per query
-        qrels_lengths = [
-            len(relevant_docs[qid]) for qid in relevant_docs if qid in queries
-        ]
-        unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
-        # number of qrels that are not 0
-        num_qrels_non_zero = sum(
-            sum(1 for doc_id in docs if docs[doc_id] != 0)
-            for docs in relevant_docs.values()
+        relevant_docs_statistics = calculate_relevant_docs_statistics(
+            relevant_docs, list(queries.keys())
         )
-        qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
 
         if instructions is not None and len(instructions) > 0:
-            instructions_len = [
-                len(instruction) for instruction in instructions.values()
-            ]
-            num_instructions = len(instructions)
-            average_instruction_length = sum(instructions_len)
-            min_instruction_length = min(instructions_len)
-            max_instruction_length = max(instructions_len)
-            unique_instructions = len(set(instructions))
+            instruction_statistics = calculate_text_statistics(
+                list(instructions.values())
+            )
         else:
-            num_instructions = None
-            average_instruction_length = None
-            min_instruction_length = None
-            max_instruction_length = None
-            unique_instructions = None
+            instruction_statistics = None
 
         if top_ranked is not None and num_queries and len(top_ranked) > 0:
-            top_ranked_per_query = [len(docs) for docs in top_ranked.values()]
-            num_top_ranked = len(top_ranked_per_query)
-            min_top_ranked_per_query = min(top_ranked_per_query)
-            average_top_ranked_per_query = sum(top_ranked_per_query) / num_queries
-            max_top_ranked_per_query = max(top_ranked_per_query)
+            top_ranked_statistics = calculate_top_ranked_statistics(
+                top_ranked, num_queries
+            )
         else:
-            num_top_ranked = None
-            min_top_ranked_per_query = None
-            average_top_ranked_per_query = None
-            max_top_ranked_per_query = None
+            top_ranked_statistics = None
+
+        corpus_statistics = calculate_text_statistics(corpus)
+        queries_statistics = calculate_text_statistics(list(queries.values()))
+
+        number_of_characters = (
+            corpus_statistics["total_text_length"]
+            + queries_statistics["total_text_length"]
+        )
+        if instruction_statistics is not None:
+            number_of_characters += instruction_statistics["total_text_length"]
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
-            number_of_characters=sum(query_len) + sum(doc_len),
-            # documents
-            num_documents=num_documents,
-            min_document_length=min(doc_len),
-            average_document_length=sum(doc_len) / num_documents,
-            max_document_length=max(doc_len),
-            unique_documents=len(set(corpus)),
-            # queries
-            num_queries=num_queries,
-            min_query_length=min(query_len),
-            average_query_length=sum(query_len) / num_queries,
-            max_query_length=max(query_len),
-            unique_queries=len(set(queries)),
-            none_queries=none_queries,
-            # relevant docs
-            num_relevant_docs=num_relevant_docs,
-            min_relevant_docs_per_query=min(qrels_lengths),
-            average_relevant_docs_per_query=qrels_per_doc,
-            max_relevant_docs_per_query=max(qrels_lengths),
-            unique_relevant_docs=unique_qrels,
-            # instructions
-            num_instructions=num_instructions,
-            min_instruction_length=min_instruction_length,
-            average_instruction_length=average_instruction_length,
-            max_instruction_length=max_instruction_length,
-            unique_instructions=unique_instructions,
-            # top ranked
-            num_top_ranked=num_top_ranked,
-            min_top_ranked_per_query=min_top_ranked_per_query,
-            average_top_ranked_per_query=average_top_ranked_per_query,
-            max_top_ranked_per_query=max_top_ranked_per_query,
+            number_of_characters=number_of_characters,
+            documents_statistics=corpus_statistics,
+            queries_statistics=queries_statistics,
+            relevant_docs_statistics=relevant_docs_statistics,
+            instructions_statistics=instruction_statistics,
+            top_ranked_statistics=top_ranked_statistics,
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
