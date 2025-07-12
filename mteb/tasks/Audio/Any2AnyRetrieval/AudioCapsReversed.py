@@ -16,8 +16,8 @@ class AudioCapsReversed(AbsTaskAny2AnyRetrieval):
             "revision": "fb42aac15212cbddd723fbbf04b6071b60a9f8fe",
         },
         type="Retrieval",
-        category="s2s",
-        modalities=["text", "audio"],  # both modalities used
+        category="t2a",
+        modalities=["text", "audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",

@@ -14,7 +14,7 @@ class AudioCapsRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "fb42aac15212cbddd723fbbf04b6071b60a9f8fe",
         },
         type="Retrieval",
-        category="s2s",
+        category="a2t",
         modalities=["audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
