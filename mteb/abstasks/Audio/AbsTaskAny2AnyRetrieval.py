@@ -9,7 +9,6 @@ from pathlib import Path
 from time import time
 from typing import Any
 
-import datasets
 import numpy as np
 from datasets import Dataset, Features, Value, load_dataset
 
@@ -166,8 +165,6 @@ class HFDataLoader:
 
     def _load_corpus(self):
         if self.hf_repo:
-            datasets.logging.set_verbosity_debug()
-            # print(self.hf_repo)
             corpus_ds = load_dataset(
                 self.hf_repo,
                 "default",
@@ -183,7 +180,6 @@ class HFDataLoader:
                 keep_in_memory=self.keep_in_memory,
             )
         corpus_ds = next(iter(corpus_ds.values()))  # get first split
-        # print(corpus_ds)
         corpus_ds = corpus_ds.cast_column(self.id_column_name, Value(dtype="string"))
         corpus_ds = corpus_ds.rename_column(self.id_column_name, "id")
         corpus_ds = corpus_ds.remove_columns(
@@ -245,7 +241,6 @@ class HFDataLoader:
                 "score": Value("float"),
             }
         )
-        print(qrels_ds)
         qrels_ds = qrels_ds.cast(features)
         self.qrels = qrels_ds
 
@@ -375,10 +370,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         if self.data_loaded:
             return
 
-        # first load the dataset and apply transforms like base class
-        import datasets
-
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = load_dataset(**self.metadata_dict["dataset"])
         self.dataset_transform()
 
         # now extract corpus, queries, and qrels from the transformed dataset
