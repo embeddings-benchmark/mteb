@@ -262,7 +262,7 @@ def evaluate(
 
     existing_results = None
     if cache:
-        results = cache.load_from_cache(task.metadata.name, meta)
+        results = cache.load_task_result(task.metadata.name, meta)
         if results:
             existing_results = results
 
