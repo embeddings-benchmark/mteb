@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -15,15 +13,15 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class RuSciBenchBitexMining(AbsTaskBitextMining, MultilingualTask):
+class RuSciBenchBitextMining(AbsTaskBitextMining, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
-        name="RuSciBenchBitexMining",
+        name="RuSciBenchBitextMining",
         dataset={
             "path": "mlsa-iai-msu-lab/ru_sci_bench_bitext_mining",
-            "revision": "927d95897a168b79568e96591276b995ed1c4da8",
+            "revision": "e5840033c5cf2573932db027ac8001fe0a7eb6fa",
         },
-        description="Find translation of a scientific article",
+        description="This task focuses on finding translations of scientific articles. The dataset is sourced from eLibrary, Russia's largest electronic library of scientific publications. Russian authors often provide English translations for their abstracts and titles, and the data consists of these paired titles and abstracts. The task evaluates a model's ability to match an article's Russian title and abstract to its English counterpart, or vice versa.",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="BitextMining",
         category="p2p",
@@ -38,34 +36,20 @@ class RuSciBenchBitexMining(AbsTaskBitextMining, MultilingualTask):
         dialect=[],
         sample_creation="found",
         annotations_creators="derived",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{vatolin2024ruscibench,
-  author  = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
-  title   = {RuSciBench: Open Benchmark for Russian and English Scientific Document Representations},
+  author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
+  doi = {10.1134/S1064562424602191},
+  issn = {1531-8362},
   journal = {Doklady Mathematics},
-  year    = {2024},
-  volume  = {110},
-  number  = {1},
-  pages   = {S251--S260},
-  month   = {12},
-  doi     = {10.1134/S1064562424602191},
-  url     = {https://doi.org/10.1134/S1064562424602191},
-  issn    = {1531-8362}
-}""",
+  month = {12},
+  number = {1},
+  pages = {S251--S260},
+  title = {RuSciBench: Open Benchmark for Russian and English Scientific Document Representations},
+  url = {https://doi.org/10.1134/S1064562424602191},
+  volume = {110},
+  year = {2024},
+}
+""",
         prompt="Given the following title and abstract of the scientific article, find its translation",
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset.setdefault(lang, {})[_SPLITS[0]] = datasets.load_dataset(
-                split=_SPLITS[0],
-                name=lang,
-                **self.metadata_dict["dataset"],
-            )
-
-        self.dataset_transform()
-        self.data_loaded = True

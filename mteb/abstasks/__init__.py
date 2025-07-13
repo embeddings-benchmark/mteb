@@ -8,6 +8,7 @@ from .AbsTaskClustering import *
 from .AbsTaskInstructionRetrieval import *
 from .AbsTaskMultilabelClassification import *
 from .AbsTaskPairClassification import *
+from .AbsTaskRegression import *
 from .AbsTaskReranking import *
 from .AbsTaskRetrieval import *
 from .AbsTaskSpeedTask import *

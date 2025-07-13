@@ -250,6 +250,45 @@ MTEB_MAIN_RU = Benchmark(
 """,
 )
 
+
+RU_SCI_BENCH = Benchmark(
+    name="RuSciBench",
+    tasks=get_tasks(
+        tasks=[
+            # BitextMining
+            "RuSciBenchBitextMining",
+            # Classification
+            "RuSciBenchCoreRiscClassification",
+            "RuSciBenchGRNTIOrigClassification",
+            "RuSciBenchOECDOrigClassification",
+            "RuSciBenchPubTypeClassification",
+            # Retrieval
+            "RuSciBenchCiteRetrieval",
+            "RuSciBenchCociteRetrieval",
+            # Regression
+            "RuSciBenchCitedCountRegression",
+            "RuSciBenchYearPublRegression",
+        ],
+    ),
+    description="RuSciBench is a benchmark designed for evaluating sentence encoders and language models on scientific texts in both Russian and English. The data is sourced from eLibrary (www.elibrary.ru), Russia's largest electronic library of scientific publications. This benchmark facilitates the evaluation and comparison of models on various research-related tasks.",
+    reference="https://link.springer.com/article/10.1134/S1064562424602191",
+    citation=r"""
+@article{vatolin2024ruscibench,
+  author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
+  doi = {10.1134/S1064562424602191},
+  issn = {1531-8362},
+  journal = {Doklady Mathematics},
+  month = {12},
+  number = {1},
+  pages = {S251--S260},
+  title = {RuSciBench: Open Benchmark for Russian and English Scientific Document Representations},
+  url = {https://doi.org/10.1134/S1064562424602191},
+  volume = {110},
+  year = {2024},
+}
+""",
+)
+
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     name="FollowIR",
     display_name="Instruction Following",
