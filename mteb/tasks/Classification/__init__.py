@@ -33,7 +33,6 @@ from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
 from .eng.PatentClassification import *
 from .eng.PoemSentimentClassification import *
-from .eng.RuSciBenchClassification import *
 from .eng.SDSEyeProtectionClassification import *
 from .eng.SDSGlovesClassification import *
 from .eng.ToxicChatClassification import *
