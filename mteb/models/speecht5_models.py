@@ -13,7 +13,7 @@ from transformers import (
     SpeechT5Processor,
     SpeechT5ForSpeechToText,
     SpeechT5ForTextToSpeech,
-    SpeechT5SpeechToSpeech
+    SpeechT5ForSpeechToSpeech
 )
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -38,7 +38,7 @@ class SpeechT5Wrapper(Wrapper):
         elif "tts" in model_name.lower():
             self.model = SpeechT5ForTextToSpeech.from_pretrained(model_name).to(self.device)
         elif "vc" in model_name.lower():
-            self.model = SpeechT5SpeechToSpeech.from_pretrained(model_name).to(self.device)
+            self.model = SpeechT5ForSpeechToSpeech.from_pretrained(model_name).to(self.device)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
