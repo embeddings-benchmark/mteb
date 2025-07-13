@@ -65,7 +65,7 @@ class UkrFormalityClassificationV2(AbsTaskClassification):
         Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M
         Additionally, the dataset was balanced, witha labels: 0 - informal, 1 - formal.
 
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/ukr_formality",
             "revision": "e0b2dfa57d505f207deb571e58b0bd0b81180bd4",

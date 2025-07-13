@@ -42,7 +42,7 @@ class RuToxicOKMLCUPClassificationV2(AbsTaskClassification):
             "revision": "729025d2cfa68fcbc587ea80014a42d569cd9048",
         },
         description="""On the Odnoklassniki social network, users post a huge number of comments of various directions and nature every day.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://cups.online/ru/contests/okmlcup2020",
         type="Classification",
         category="t2t",

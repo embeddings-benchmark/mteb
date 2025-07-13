@@ -80,7 +80,7 @@ class DKHateClassificationV2(AbsTaskClassification):
             "revision": "0468ff11393992d8347cf4282fb706fe970608d4",
         },
         description="""Danish Tweets annotated for Hate Speech either being Offensive or not
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2020.lrec-1.430/",
         type="Classification",
         category="s2s",

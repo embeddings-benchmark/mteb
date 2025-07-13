@@ -49,7 +49,7 @@ class SentiRuEval2016ClassificationV2(AbsTaskClassification):
             "revision": "bfa4cbec1753ffed29a8244a4ec208cc9e6c09a0",
         },
         description="""Russian sentiment analysis evaluation SentiRuEval-2016 devoted to reputation monitoring of banks and telecom companies in Twitter. We describe the task, data, the procedure of data preparation, and participants’ results.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/mokoron/sentirueval",
         type="Classification",
         category="t2t",

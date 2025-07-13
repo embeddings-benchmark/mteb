@@ -48,7 +48,7 @@ class SinhalaNewsSourceClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification.v2",
         description="""This dataset contains Sinhala news headlines extracted from 9 news sources (websites) (Sri Lanka Army, Dinamina, GossipLanka, Hiru, ITN, Lankapuwath, NewsLK, Newsfirst, World Socialist Web Site-Sinhala).
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/sinhala_news_source",
             "revision": "6902767dbfa6189cbe5f5b5b56ee6300b1702d33",

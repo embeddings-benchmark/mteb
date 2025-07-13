@@ -74,7 +74,7 @@ class InappropriatenessClassificationV2(AbsTaskClassification):
             "revision": "2bdbb71d9b972709173f1477d7dd33c3d67f51ac",
         },
         description="""Inappropriateness identification in the form of binary classification
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="Classification",
         category="s2s",

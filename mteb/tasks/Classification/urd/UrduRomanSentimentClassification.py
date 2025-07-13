@@ -43,7 +43,7 @@ class UrduRomanSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UrduRomanSentimentClassification.v2",
         description="""The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set",
         dataset={
             "path": "mteb/urdu_roman_sentiment",

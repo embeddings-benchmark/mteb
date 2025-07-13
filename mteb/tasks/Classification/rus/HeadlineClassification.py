@@ -70,7 +70,7 @@ class HeadlineClassificationV2(AbsTaskClassification):
             "revision": "6bd88e7778ee2e3bd8d0ade1be3ad5b6d969145a",
         },
         description="""Headline rubric classification based on the paraphraser plus dataset.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2020.ngt-1.6/",
         type="Classification",
         category="s2s",

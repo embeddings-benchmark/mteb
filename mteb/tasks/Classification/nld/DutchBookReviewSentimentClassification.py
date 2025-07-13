@@ -51,7 +51,7 @@ class DutchBookReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification.v2",
         description="""A Dutch book review for sentiment classification.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/benjaminvdb/DBRD",
         dataset={
             "path": "mteb/dutch_book_review_sentiment",

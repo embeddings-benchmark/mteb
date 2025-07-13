@@ -51,7 +51,7 @@ class RomanianReviewsSentimentV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment.v2",
         description="""LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://arxiv.org/abs/2101.04197",
         dataset={
             "path": "mteb/romanian_reviews_sentiment",

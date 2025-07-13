@@ -65,7 +65,7 @@ class KlueTCV2(AbsTaskClassification):
             "revision": "c0e3d82ac01def9bfd92dffb1e7dde619b50d0a2",
         },
         description="""Topic classification dataset of human-annotated news headlines. Part of the Korean Language Understanding Evaluation (KLUE).
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://arxiv.org/abs/2105.09680",
         type="Classification",
         category="s2s",

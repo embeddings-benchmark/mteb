@@ -61,7 +61,7 @@ class MorocoV2(AbsTaskClassification):
             "revision": "6e70588dbd3d583da8b85989c1c3ab3d4bd2e7c4",
         },
         description="""The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldavian and Romanian samples of text collected from the news domain. The samples belong to one of the following six topics: (0) culture, (1) finance, (2) politics, (3) science, (4) sports, (5) tech
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/moroco",
         type="Classification",
         category="s2s",

@@ -3496,7 +3496,7 @@ class JCrewBlockerLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JCrewBlockerLegalBenchClassification.v2",
         description="""The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of detemining whether the J.Crew Blocker is present in the document.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/j_crew_blocker_legal_bench",
@@ -4450,7 +4450,7 @@ class LegalReasoningCausalityLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LegalReasoningCausalityLegalBenchClassification.v2",
         description="""Given an excerpt from a district court opinion, classify if it relies on statistical evidence in its reasoning.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/legal_reasoning_causality_legal_bench",
@@ -4812,7 +4812,7 @@ class MAUDLegalBenchClassificationV2(AbsTaskClassification):
         33. MAUD Tail Period Length: Given an excerpt from a merger agreement and the task is to answer: how long is the Tail Period, amongst the multiple choice options.
         34. MAUD Type Of Consideration: Given an excerpt from a merger agreement and the task is to answer: what type of consideration is specified in this agreement, amongst the multiple choice options.
 
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/maud_legal_bench",
@@ -5016,7 +5016,7 @@ class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115DataSecurityLegalBenchClassification.v2",
         description="""Given a clause from a privacy policy, classify if the clause describes how user information is protected.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/opp115_data_security_legal_bench",
@@ -5116,7 +5116,7 @@ class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115DoNotTrackLegalBenchClassification.v2",
         description="""Given a clause from a privacy policy, classify if the clause describes if and how Do Not Track signals for online tracking and advertising are honored.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/opp115_do_not_track_legal_bench",
@@ -5483,7 +5483,7 @@ class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115UserChoiceControlLegalBenchClassification.v2",
         description="""Given a clause fro ma privacy policy, classify if the clause describes the choices and control options available to users.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/opp115_user_choice_control_legal_bench",
@@ -5587,7 +5587,7 @@ class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskClassificatio
         6. Communicate - question designed primarily to communicate with other justices
         7. Humor - questions designed to interject humor into the argument and relieve tension
 
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/oral_argument_question_purpose_legal_bench",
@@ -5682,7 +5682,7 @@ class OverrulingLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OverrulingLegalBenchClassification.v2",
         description="""This task consists of classifying whether or not a particular sentence of case law overturns the decision of a previous case.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "mteb/overruling_legal_bench",

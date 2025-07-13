@@ -468,7 +468,7 @@ class SynPerTextToneClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerTextToneClassification.v2",
         description="""Persian Text Tone
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://mcinext.com/",
         dataset={
             "path": "mteb/syn_per_text_tone",
@@ -525,7 +525,7 @@ class SIDClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SIDClassification.v2",
         description="""SID Classification
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://mcinext.com/",
         dataset={
             "path": "mteb/sid",
@@ -585,7 +585,7 @@ class DeepSentiPersV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DeepSentiPers.v2",
         description="""Persian Sentiment Analysis Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/JoyeBright/DeepSentiPers",
         dataset={
             "path": "mteb/deep_senti_pers",
@@ -642,7 +642,7 @@ class PersianTextEmotionV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PersianTextEmotion.v2",
         description="""Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/SeyedAli/Persian-Text-Emotion",
         dataset={
             "path": "mteb/persian_text_emotion",
@@ -699,7 +699,7 @@ class SentimentDKSFV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SentimentDKSF.v2",
         description="""The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/hezarai/hezar",
         dataset={
             "path": "mteb/sentiment_dksf",
@@ -759,7 +759,7 @@ class NLPTwitterAnalysisClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClassification.v2",
         description="""Twitter Analysis Classification
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/tree/main",
         dataset={
             "path": "mteb/nlp_twitter_analysis",

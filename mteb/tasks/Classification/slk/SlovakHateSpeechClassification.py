@@ -35,7 +35,7 @@ class SlovakHateSpeechClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SlovakHateSpeechClassification.v2",
         description="""The dataset contains posts from a social network with human annotations for hateful or offensive language in Slovak.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/TUKE-KEMT/hate_speech_slovak",
         dataset={
             "path": "mteb/slovak_hate_speech",

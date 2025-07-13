@@ -38,7 +38,7 @@ class GujaratiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GujaratiNewsClassification.v2",
         description="""A Gujarati dataset for 3-class classification of Gujarati news articles
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/goru001/nlp-for-gujarati",
         dataset={
             "path": "mteb/gujarati_news",

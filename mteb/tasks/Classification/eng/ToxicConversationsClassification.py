@@ -54,7 +54,7 @@ class ToxicConversationsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ToxicConversationsClassification.v2",
         description="""Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
         dataset={
             "path": "mteb/toxic_conversations",

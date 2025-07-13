@@ -59,7 +59,7 @@ class ImdbClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ImdbClassification.v2",
         description="""Large Movie Review Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/imdb",
             "revision": "d05f0155defa7991dad75bc68c5ccb6774b1fdc5",

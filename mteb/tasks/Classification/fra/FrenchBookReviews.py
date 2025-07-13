@@ -46,7 +46,7 @@ class FrenchBookReviewsV2(AbsTaskClassification):
             "revision": "71d755fd76073533c3d0c262f6b542eb0fa7ce96",
         },
         description="""It is a French book reviews dataset containing a huge number of reader reviews on French books. Each review is pared with a rating that ranges from 0.5 to 5 (with 0.5 increment).
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/Abirate/french_book_reviews",
         type="Classification",
         category="s2s",

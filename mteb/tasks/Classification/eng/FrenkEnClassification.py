@@ -46,7 +46,7 @@ class FrenkEnClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FrenkEnClassification.v2",
         description="""English subset of the FRENK dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/frenk_en",
             "revision": "630d941b6e0879a7238da89af6bfe1b1eb27ca0f",

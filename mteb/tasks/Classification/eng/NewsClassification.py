@@ -50,7 +50,7 @@ class NewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NewsClassification.v2",
         description="""Large News Classification Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/news",
             "revision": "7c1f485c1f43d6aef852c5df6db23b047991a8e7",

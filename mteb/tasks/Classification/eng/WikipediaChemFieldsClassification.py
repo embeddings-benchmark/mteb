@@ -42,7 +42,7 @@ class WikipediaChemFieldsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaChemFieldsClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
             "path": "mteb/wikipedia_chem_fields",

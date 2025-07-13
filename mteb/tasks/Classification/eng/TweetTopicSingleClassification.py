@@ -63,8 +63,8 @@ class TweetTopicSingleClassificationV2(AbsTaskClassification):
         Tweets were preprocessed before the annotation to normalize some artifacts, converting
         URLs into a special token {{URL}} and non-verified usernames into {{USERNAME}}. For verified
         usernames, we replace its display name (or account name) with symbols {@}.
-        
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/tweet_topic_single",
             "revision": "a7904e26081f987da81ad2cc063e09e714e875d0",

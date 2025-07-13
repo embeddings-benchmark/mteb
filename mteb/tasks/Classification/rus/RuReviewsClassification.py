@@ -58,7 +58,7 @@ class RuReviewsClassificationV2(AbsTaskClassification):
             "revision": "46d80ee5ac51be8234725558677e59050b9c418e",
         },
         description="""Product review classification (3-point scale) based on RuRevies dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
         category="p2p",

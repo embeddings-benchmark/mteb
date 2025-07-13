@@ -61,7 +61,7 @@ class CzechProductReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CzechProductReviewSentimentClassification.v2",
         description="""User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (positive, neutral, negative)
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/W13-1609/",
         dataset={
             "path": "mteb/czech_product_review_sentiment",

@@ -60,7 +60,7 @@ class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
             "revision": "476a9e7327aba70ad3e97a169d7310b86be9b245",
         },
         description="""A dataset of Danish political comments rated for sentiment
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
         category="s2s",

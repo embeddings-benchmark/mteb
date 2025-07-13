@@ -48,7 +48,7 @@ class SiswatiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SiswatiNewsClassification.v2",
         description="""Siswati News Classification Dataset
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news",
         dataset={
             "path": "mteb/siswati_news",

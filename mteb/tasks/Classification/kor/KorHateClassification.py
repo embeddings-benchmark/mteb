@@ -71,7 +71,7 @@ class KorHateClassificationV2(AbsTaskClassification):
         hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators,
         consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.
 
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         dataset={
             "path": "mteb/kor_hate",
             "revision": "5d64e6dcbe9204c934e9a3852b1130a6f2d51ad4",

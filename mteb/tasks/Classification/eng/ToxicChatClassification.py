@@ -79,7 +79,7 @@ class ToxicChatClassificationV2(AbsTaskClassification):
             advancements toward building a safe and healthy environment for user-AI
             interactions.
             Only human annotated samples are selected here.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2023.findings-emnlp.311/",
         dataset={
             "path": "mteb/toxic_chat",

@@ -49,7 +49,7 @@ class WisesightSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WisesightSentimentClassification.v2",
         description="""Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/PyThaiNLP/wisesight-sentiment",
         dataset={
             "path": "mteb/wisesight_sentiment",

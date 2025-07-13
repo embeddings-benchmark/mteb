@@ -48,7 +48,7 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification.v2",
         description="""Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://arxiv.org/abs/2011.02686",
         dataset={
             "path": "mteb/poem_sentiment",

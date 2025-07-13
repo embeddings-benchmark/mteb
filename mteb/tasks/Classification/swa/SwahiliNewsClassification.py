@@ -52,7 +52,7 @@ class SwahiliNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwahiliNewsClassification.v2",
         description="""Dataset for Swahili News Classification, categorized with 6 domains (Local News (Kitaifa), International News (Kimataifa), Finance News (Uchumi), Health News (Afya), Sports News (Michezo), and Entertainment News (Burudani)). Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/Mollel/SwahiliNewsClassification",
         dataset={
             "path": "mteb/swahili_news",

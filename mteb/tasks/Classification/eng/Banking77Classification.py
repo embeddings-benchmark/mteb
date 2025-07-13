@@ -64,7 +64,7 @@ class Banking77ClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Banking77Classification.v2",
         description="""Dataset composed of online banking queries annotated with their corresponding intents.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://arxiv.org/abs/2003.04807",
         dataset={
             "path": "mteb/banking77",

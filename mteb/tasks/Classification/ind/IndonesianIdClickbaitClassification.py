@@ -61,7 +61,7 @@ class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
             "revision": "a54158a1b437a85e1982a70d0c57a69c69d0a5b8",
         },
         description="""The CLICK-ID dataset is a collection of Indonesian news headlines that was collected from 12 local online news publishers.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="http://www.sciencedirect.com/science/article/pii/S2352340920311252",
         type="Classification",
         category="s2s",

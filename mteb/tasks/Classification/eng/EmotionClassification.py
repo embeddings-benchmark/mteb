@@ -63,7 +63,7 @@ class EmotionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="EmotionClassification.v2",
         description="""Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.
-        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/12345)""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://www.aclweb.org/anthology/D18-1404",
         dataset={
             "path": "mteb/emotion",
