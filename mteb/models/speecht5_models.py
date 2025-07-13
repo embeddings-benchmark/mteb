@@ -19,7 +19,7 @@ from transformers import (
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-
+from tqdm import tqdm
 
 class SpeechT5Wrapper(Wrapper):
     def __init__(
@@ -65,11 +65,14 @@ class SpeechT5Wrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            audio = torch.from_numpy(audio).float()
+                        elif isinstance(audio, torch.Tensor):
+                            audio = audio.float()
+                        elif isinstance(audio, list):
+                            audio = torch.tensor(audio, dtype=torch.float32)
+                        else:
+                            raise TypeError(f"Unsupported audio type: {type(audio)}")
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
@@ -120,7 +123,7 @@ class SpeechT5Wrapper(Wrapper):
         all_embeddings = []
 
         with torch.no_grad():
-            for i in range(0, len(processed_audio), batch_size):
+            for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
 
                 batch_tensor = self._pad_audio_batch(batch)
@@ -200,8 +203,8 @@ class SpeechT5Wrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         if isinstance(inputs[0], str):
-            return self.get_text_embeddings(inputs)
-        return self.get_audio_embeddings(inputs)
+            return self.get_text_embeddings(inputs).numpy()
+        return self.get_audio_embeddings(inputs).numpy()
 
 
 # ASR model - Optimized for Speech Recognition tasks
