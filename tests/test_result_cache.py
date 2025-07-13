@@ -16,13 +16,18 @@ def test_result_cache() -> None:
     assert cache.has_remote is True, "Cache should not have a remote repository"
 
     # load known results from the cache
-    result = cache.load_from_cache(  # TODO: cache.load_task_result(
+    result = cache.load_task_result(
         "BornholmBitextMining",
         "sentence-transformers/all-MiniLM-L6-v2",
         model_revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
         raise_if_not_found=True,
     )
     # TODO: What happens if rev is not found and there are multiple revisions
+    result = cache.load_task_result(
+        "BornholmBitextMining",
+        "sentence-transformers/all-MiniLM-L6-v2",
+        raise_if_not_found=True,
+    )
 
     assert isinstance(result, TaskResult), "Loaded result should be a TaskResult"
     assert result.task_name == "BornholmBitextMining", "Task name should match"
@@ -65,7 +70,7 @@ def test_get_models_and_tasks() -> None:
         "Models should be a list of tuples (model_name, model_revision)"
     )
 
-    tasks = cache.get_tasks()
+    tasks = cache.get_task_names()
     assert isinstance(tasks, list), "Tasks should be a list"
     assert isinstance(tasks[0], str), "Tasks should be a list of task names"
 

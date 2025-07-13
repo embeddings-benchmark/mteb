@@ -53,6 +53,8 @@ class ResultCache:
         model_revision: str | None = None,
         remote: bool = False,
     ) -> Path:
+        results_folder = "results" if not remote else "remote"
+
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
                 logger.warning(
@@ -63,22 +65,29 @@ class ResultCache:
         elif isinstance(model_name, str):
             model_name = model_name.replace("/", "__").replace(" ", "_")
 
+        model_path = self.cache_path / results_folder / model_name
+
         if model_revision is None:
-            raise ValueError(
-                "model_revision must be specified when model_name is a string"
+            logger.warning(
+                "model_revision is not specified, attempting to load the latest revision. To disable this behavior, specify model_revision explicitly."
             )
+            # get revs from paths
+            revisions = [p for p in model_path.glob("*") if p.is_dir()]
+            if not revisions:
+                raise FileNotFoundError(
+                    f"No revisions found for model {model_name} in {model_path}"
+                )
+            if len(revisions) > 1:
+                logger.warning(
+                    f"Multiple revisions found for model {model_name}: {revisions}. Using the latest one (according to latest edit)."
+                )
+            # sort folder by latest edit time
+            revisions.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+            model_revision = revisions[0].name
 
-        results_folder = "results" if not remote else "remote"
+        return model_path / model_revision / f"{task_name}.json"
 
-        return (
-            self.cache_path
-            / results_folder
-            / model_name
-            / model_revision
-            / f"{task_name}.json"
-        )
-
-    def load_from_cache(
+    def load_task_result(
         self,
         task_name: str,
         model_name: str | ModelMeta,

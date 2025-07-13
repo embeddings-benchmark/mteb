@@ -8,7 +8,6 @@ To make the results more easily accessible, we have designed custom functionalit
 
 ```python
 import mteb
-
 from mteb.cache import ResultCache
 
 tasks = mteb.get_tasks(tasks=["STS12"])
