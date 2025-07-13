@@ -13,13 +13,20 @@ from mteb.overview import get_tasks
 _HISTORIC_DATASETS = [
     "PolEmo2.0-IN",
     "PolEmo2.0-OUT",
+    "PolEmo2.0-OUT.v2",
     "PAC",
+    "PAC.v2",
     "TNews",
+    "TNews.v2",
     "IFlyTek",
+    "IFlyTek.v2",
     "MultilingualSentiment",
+    "MultilingualSentiment.v2",
     "JDReview",
+    "JDReview.v2",
     "OnlineShopping",
     "Waimai",
+    "Waimai.v2",
     "BlurbsClusteringP2P",
     "BlurbsClusteringS2S",
     "TenKGnadClusteringP2P",
@@ -559,17 +566,17 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "SwednClusteringS2S",
     ]
 
-    assert 135 == len(exceptions), (
-        "The number of exceptions has changed. Please do not add new datasets to this list."
-    )
+    assert (
+        135 == len(exceptions)
+    ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     exceptions = []
 
     for task in get_tasks():
         if task.metadata.dataset.get("trust_remote_code", False):
-            assert task.metadata.name not in exceptions, (
-                f"Dataset {task.metadata.name} should not trust remote code"
-            )
+            assert (
+                task.metadata.name not in exceptions
+            ), f"Dataset {task.metadata.name} should not trust remote code"
 
 
 def test_empy_descriptive_stat_in_new_datasets():
@@ -1131,17 +1138,17 @@ def test_empy_descriptive_stat_in_new_datasets():
         "SummEvalFrSummarization.v2",
     ]
 
-    assert 553 == len(exceptions), (
-        "The number of exceptions has changed. Please do not add new datasets to this list."
-    )
+    assert (
+        553 == len(exceptions)
+    ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     exceptions = []
 
     for task in get_tasks():
         if task.metadata.descriptive_stats is None:
-            assert task.metadata.name not in exceptions, (
-                f"Dataset {task.metadata.name} should have descriptive stats"
-            )
+            assert (
+                task.metadata.name not in exceptions
+            ), f"Dataset {task.metadata.name} should have descriptive stats"
 
 
 @pytest.mark.parametrize("task", get_tasks())
@@ -1150,10 +1157,10 @@ def test_eval_langs_correctly_specified(task: AbsTask):
         return
 
     if task.is_multilingual:
-        assert isinstance(task.metadata.eval_langs, dict), (
-            f"{task.metadata.name} should have eval_langs as a dict"
-        )
+        assert isinstance(
+            task.metadata.eval_langs, dict
+        ), f"{task.metadata.name} should have eval_langs as a dict"
     else:
-        assert isinstance(task.metadata.eval_langs, list), (
-            f"{task.metadata.name} should have eval_langs as a list"
-        )
+        assert isinstance(
+            task.metadata.eval_langs, list
+        ), f"{task.metadata.name} should have eval_langs as a list"
