@@ -131,7 +131,7 @@ class SpeechT5Wrapper(Wrapper):
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
                 inputs = self.processor(
-                    batch_tensor.cpu().numpy(),
+                    audio=batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
