@@ -8,7 +8,9 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
     metadata = TaskMetadata(
         name="RuSciBenchCitedCountRegression",
-        description="Predicts the number of times a scientific article has been cited by other papers. The prediction is based on the article's title and abstract. The data is sourced from the Russian electronic library of scientific publications (eLibrary.ru) and includes papers with both Russian and English abstracts.",
+        description="""Predicts the number of times a scientific article has been cited by other papers.
+        The prediction is based on the article's title and abstract. The data is sourced from the Russian electronic
+        library of scientific publications (eLibrary.ru) and includes papers with both Russian and English abstracts.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         dataset={
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
@@ -29,7 +31,7 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
         license="mit",
         sample_creation="found",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         bibtex_citation=r"""
 @article{vatolin2024ruscibench,
   author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
@@ -58,7 +60,9 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
 class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
     metadata = TaskMetadata(
         name="RuSciBenchYearPublRegression",
-        description="Predicts the publication year of a scientific article. The prediction is based on the article's title and abstract. The data is sourced from the Russian electronic library of scientific publications (eLibrary.ru) and includes papers with both Russian and English abstracts.",
+        description="""Predicts the publication year of a scientific article. The prediction is based on the
+        article's title and abstract. The data is sourced from the Russian electronic library of scientific
+        publications (eLibrary.ru) and includes papers with both Russian and English abstracts.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         dataset={
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
@@ -79,7 +83,7 @@ class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
         license="mit",
         sample_creation="found",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         bibtex_citation=r"""
 @article{vatolin2024ruscibench,
   author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},

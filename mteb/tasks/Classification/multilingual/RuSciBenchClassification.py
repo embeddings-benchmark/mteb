@@ -12,7 +12,11 @@ class RuSciBenchCoreRiscClassification(MultilingualTask, AbsTaskClassification):
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
         },
-        description="This binary classification task aims to determine whether a scientific paper (based on its title and abstract) belongs to the Core of the Russian Science Citation Index (RISC). The RISC includes a wide range of publications, but the Core RISC comprises the most cited and prestigious journals, dissertations, theses, monographs, and studies. The task is provided for both Russian and English versions of the paper's title and abstract.",
+        description="""This binary classification task aims to determine whether a scientific paper
+        (based on its title and abstract) belongs to the Core of the Russian Science Citation Index (RISC).
+        The RISC includes a wide range of publications, but the Core RISC comprises the most cited and prestigious
+        journals, dissertations, theses, monographs, and studies. The task is provided for both Russian and English
+        versions of the paper's title and abstract.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
         category="p2p",
@@ -56,7 +60,10 @@ class RuSciBenchPubTypeClassification(MultilingualTask, AbsTaskClassification):
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
         },
-        description="This task involves classifying scientific papers (based on their title and abstract) into different publication types. The dataset identifies the following types: 'Article', 'Conference proceedings', 'Survey', 'Miscellanea', 'Short message', 'Review', and 'Personalia'.  This task is available for both Russian and English versions of the paper's title and abstract.",
+        description="""This task involves classifying scientific papers (based on their title and abstract)
+        into different publication types. The dataset identifies the following types:
+        'Article', 'Conference proceedings', 'Survey', 'Miscellanea', 'Short message', 'Review', and 'Personalia'.
+        This task is available for both Russian and English versions of the paper's title and abstract.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
         category="p2p",
@@ -147,7 +154,10 @@ class RuSciBenchOECDOrigClassification(MultilingualTask, AbsTaskClassification):
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
         },
-        description="Classification of scientific papers based on the OECD (Organization for Economic Co-operation and Development) rubricator. OECD provides a hierarchical 3-level system of classes for labeling scientific articles. This task uses the first two levels of the OECD hierarchy, top 29 classes.",
+        description="""Classification of scientific papers based on the OECD
+        (Organization for Economic Co-operation and Development) rubricator. OECD provides
+        a hierarchical 3-level system of classes for labeling scientific articles.
+        This task uses the first two levels of the OECD hierarchy, top 29 classes.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
         category="p2p",
