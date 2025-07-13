@@ -46,7 +46,9 @@ from .eng.VizWizIT2TRetrieval import *
 from .eng.VQA2IT2TRetrieval import *
 from .eng.WebQAT2ITRetrieval import *
 from .eng.WebQAT2TRetrieval import *
+from .multilingual.MIRACLVisionRetrieval import *
 from .multilingual.VdrMultilingualRetrieval import *
+from .multilingual.Vidore2BenchRetrieval import *
 from .multilingual.WITT2IRetrieval import *
 from .multilingual.XFlickr30kCoT2IRetrieval import *
 from .multilingual.XM3600T2IRetrieval import *

@@ -34,10 +34,6 @@ tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
 
 datasets_not_available = [
     "AfriSentiLangClassification",
-    "SNLHierarchicalClusteringP2P",
-    "SNLClustering",
-    "SNLHierarchicalClusteringS2S",
-    "SNLRetrieval",
 ]
 
 
