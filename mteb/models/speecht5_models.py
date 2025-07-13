@@ -181,7 +181,7 @@ class SpeechT5Wrapper(Wrapper):
                 
                 # For generic SpeechT5Model
                 outputs = self.model.speecht5.encoder(
-                    input_values=inputs["input_ids"],
+                    input_ids=inputs["input_ids"],
                     attention_mask=inputs["attention_mask"]
                 )
                 
