@@ -14,6 +14,47 @@ from mteb.models.nomic_models import (
     nomic_training_data,
 )
 
+GIGA_task_prompts = {
+    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise\nquery: ",
+    "STS22": "Retrieve semantically similar text\nquery: ",
+    "RuSTSBenchmarkSTS": "Retrieve semantically similar text\nquery: ",
+    "RUParaPhraserSTS": "Retrieve semantically similar text\nquery: ",
+    "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, удивление, страх, гнев или нейтрально) \nкомментарий: ",
+    "GeoreviewClassification": "Classify the organization rating based on the reviews\nquery: ",
+    "GeoreviewClusteringP2P": "Классифицируй рейтинг организации на основе отзыва \nотзыв: ",
+    "HeadlineClassification": "Классифицируй тему данного новостного заголовка \nзаголовок: ",
+    "InappropriatenessClassification": "Классифицируй данный комментарий как токсичный или не токсичный \nкомментарий: ",
+    "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text\nquery: ",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents\nquery: ",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios\nquery: ",
+    "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment\nquery: ",
+    "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchGRNTIClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchOECDClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "SensitiveTopicsClassification": "Классифицируй чувствительную тему по запросу \nзапрос: ",
+    "RuBQRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "RuBQReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "RiaNewsRetrieval": {
+        "query": "Given a news title, retrieve relevant news article\nquery: ",
+        "passage": "",
+    },
+    "MIRACLReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "MIRACLRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+}
+
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
     languages=["rus-Cyrl"],
@@ -641,13 +682,15 @@ frida = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
         model_name="ai-sage/Giga-Embeddings-instruct",
-        revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
-        trust_remote_code=True,
-        instruction_template="Instruct: {instruction}\nQuery: ",
+        revision="40b27667b9ad586d7812675df76e5062ccc80b0e",
+        instruction_template="{instruction}",
+        max_seq_length=512,
         apply_instruction_to_passages=False,
+        prompts_dict=GIGA_task_prompts,
+        trust_remote_code=True,
         model_kwargs={
             "torch_dtype": torch.bfloat16,
         },
@@ -655,13 +698,13 @@ giga_embeddings = ModelMeta(
     name="ai-sage/Giga-Embeddings-instruct",
     languages=["eng-Latn", "rus-Cyrl"],
     open_weights=True,
-    revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
-    release_date="2024-12-13",
-    n_parameters=2_530_000_000,
-    memory_usage_mb=9649,
+    revision="40b27667b9ad586d7812675df76e5062ccc80b0e",
+    release_date="2025-06-05",
+    n_parameters=3_227_176_961,
+    memory_usage_mb=12865,
     embed_dim=2048,
     license="mit",
-    max_tokens=32768,
+    max_tokens=4096,
     reference="https://huggingface.co/ai-sage/Giga-Embeddings-instruct",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],

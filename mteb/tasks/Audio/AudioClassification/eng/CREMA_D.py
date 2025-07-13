@@ -12,8 +12,8 @@ class CREMA_D(AbsTaskAudioClassification):
         description="Emotion classification of audio into one of 6 classes: Anger, Disgust, Fear, Happy, Neutral, Sad.",
         reference="https://huggingface.co/datasets/silky1708/CREMA-D",
         dataset={
-            "path": "silky1708/CREMA-D",
-            "revision": "ab26a0ddbeade7c31a3208ecc043f06f9953892c",
+            "path": "mteb/crema-d",
+            "revision": "a9d0821955c418752248b8310438854e56a1cf34",
         },
         type="AudioClassification",
         category="a2t",

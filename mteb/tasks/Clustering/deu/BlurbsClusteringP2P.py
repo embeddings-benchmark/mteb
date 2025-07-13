@@ -25,7 +25,6 @@ class BlurbsClusteringP2P(AbsTaskClustering):
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=["Written"],
         task_subtypes=None,
         license=None,

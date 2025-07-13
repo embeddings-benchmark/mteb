@@ -12,8 +12,8 @@ class MridinghamTonic(AbsTaskAudioClassification):
         description="Tonic classification of Mridingham (a pitched percussion instrument) into one of 6 classes: B,C,C#,D,D#,E",
         reference="https://huggingface.co/datasets/silky1708/Mridingham-Tonic",
         dataset={
-            "path": "silky1708/Mridingham-Tonic",
-            "revision": "848daf08646f29398a27fe0e2cef9c8cd7af9f01",
+            "path": "mteb/mridingham-tonic",
+            "revision": "9304553355441e3d2bf2432691b6209ff9a9339c",
         },
         type="AudioClassification",
         category="a2t",

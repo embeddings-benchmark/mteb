@@ -195,6 +195,8 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # by default, in SentenceTransformer, prompts are `{"query": "", "document": ""}`
+        self.prompts = {}
 
     def encode(
         self,

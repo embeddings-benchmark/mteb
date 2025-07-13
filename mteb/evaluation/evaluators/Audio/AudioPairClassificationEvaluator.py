@@ -95,7 +95,7 @@ class AudioPairClassificationEvaluator(Evaluator):
                 f"Found {n_duplicates}/{total_audios} duplicates in the input data. Only encoding unique sentences."
             )
         audios = [np.array(audio) for audio in audios]
-        embeddings = model.encode(
+        embeddings = model.get_audio_embeddings(
             audios,
             task_name=self.task_name,
             **encode_kwargs,

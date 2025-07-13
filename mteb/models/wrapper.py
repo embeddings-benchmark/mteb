@@ -73,8 +73,10 @@ class Wrapper:
         task_types = get_args(TASK_TYPE)
         prompt_types = [e.value for e in PromptType]
         for task_name in task_to_prompt_name:
-            if "-" in task_name:
-                task_name, prompt_type = task_name.split("-")
+            if "-" in task_name and task_name.endswith(
+                (f"-{PromptType.query.value}", f"-{PromptType.passage.value}")
+            ):
+                task_name, prompt_type = task_name.rsplit("-", 1)
                 if prompt_type not in prompt_types:
                     msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
                     logger.warning(msg)
@@ -88,19 +90,28 @@ class Wrapper:
         return task_to_prompt_name
 
     @staticmethod
-    def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
+    def get_instruction(
+        task_name: str,
+        prompt_type: PromptType | None,
+        prompts_dict: dict[str, str] | None = None,
+    ) -> str:
         """Get the instruction/prompt to be used for encoding sentences."""
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
-        if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if task_metadata.prompt.get(prompt_type.value):
-                return task_metadata.prompt[prompt_type.value]
+        prompt = task_metadata.prompt
+        if prompts_dict and task_name in prompts_dict:
+            prompt = prompts_dict[task_name]
+
+        if isinstance(prompt, dict) and prompt_type:
+            if prompt.get(prompt_type.value):
+                return prompt[prompt_type.value]
             logger.warning(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
             )
             return ""
-        if task_metadata.prompt:
-            return task_metadata.prompt
+
+        if prompt:
+            return prompt
         return task.abstask_prompt
 
     def format_instruction(
@@ -115,9 +126,12 @@ class Wrapper:
         return self.instruction_template(instruction, prompt_type)
 
     def get_task_instruction(
-        self, task_name: str, prompt_type: PromptType | None
+        self,
+        task_name: str,
+        prompt_type: PromptType | None,
+        prompts_dict: dict[str, str] | None = None,
     ) -> str:
-        instruction = self.get_instruction(task_name, prompt_type)
+        instruction = self.get_instruction(task_name, prompt_type, prompts_dict)
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction

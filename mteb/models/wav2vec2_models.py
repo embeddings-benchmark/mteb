@@ -168,11 +168,8 @@ class Wav2Vec2AudioWrapper(Wrapper):
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
 
-                # pre-pad the audio tensors before passing to feature extractor
-                batch = self._pad_audio_batch(batch)
-
                 inputs = self.feature_extractor(
-                    batch,
+                    [b.numpy() if isinstance(b, torch.Tensor) else b for b in batch],
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,

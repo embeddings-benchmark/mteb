@@ -53,8 +53,11 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Rendered semantic textual similarity",
+    "Intent classification",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
+    "Keyword Spotting",
     "Instrument Source Classification",
     "Music Genre Classification",
     "Music Instrument Recognition",
@@ -65,19 +68,30 @@ TASK_SUBTYPE = Literal[
     "Species Classification",
     "Spoken Digit Classification",
     "Gender Clustering",
+    "Vocal Sound Classification",
     "Music Clustering",
+    "Accent Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",
     "Vehicle Clustering",
     "Environment Sound Clustering",
+    "Environment Sound Reranking",
+    "Emotion Reranking",
+    "Music Genre Reranking",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
+    "Rendered semantic textual similarity",
+    "Intent classification",
+    "Song Lyrics Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
     "Bioacoustics",
     "Blog",
     "Constructed",
@@ -137,13 +151,15 @@ MIEB_TASK_TYPE = (
 MAEB_TASK_TYPE = (
     "AudioClustering",
     "AudioMultilabelClassification",
+    "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
     "AudioPairClassification",
+    "Any2AnyRetrieval",
 )
 
-TASK_TYPE = (
+_TASK_TYPE = (
     (
         "BitextMining",
         "Classification",
@@ -161,7 +177,7 @@ TASK_TYPE = (
     + MAEB_TASK_TYPE
 )
 
-TASK_TYPE = Literal[TASK_TYPE]
+TASK_TYPE = Literal[_TASK_TYPE]
 
 
 TASK_CATEGORY = Literal[

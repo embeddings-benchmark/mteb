@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
     metadata = TaskMetadata(
-        name="UrbanSound8k_Zeroshot",
+        name="UrbanSound8kZeroshot",
         description="Environmental Sound Classification Dataset.",
         reference="https://huggingface.co/datasets/danavery/urbansound8K",
         dataset={
@@ -38,13 +38,12 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
 }
 """,
         descriptive_stats={
-            "n_samples": {"train": 8732},
+            "n_samples": {"train": 2048},
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "classID"
-    samples_per_label: int = 50
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
@@ -60,3 +59,8 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "This is a sound of siren",
             "This is a sound of street music",
         ]
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
+        )

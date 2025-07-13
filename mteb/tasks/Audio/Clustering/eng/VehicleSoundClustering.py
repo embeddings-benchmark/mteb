@@ -17,7 +17,7 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cluster_accuracy",
+        main_score="v_measure",
         date=("2024-06-20", "2024-06-20"),
         domains=["Scene"],
         task_subtypes=["Vehicle Clustering"],
@@ -40,5 +40,5 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
         },
     )
 
-    audio_column_name: str = "audio"
     label_column_name: str = "label"
+    max_fraction_of_documents_to_embed = None

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from .eng.AmbientAcousticContext import *
 from .eng.BeijingOpera import *
+from .eng.BirdCLEF import *
 from .eng.CommonLanguageAgeDetection import *
 from .eng.CommonLanguageGenderDetection import *
 from .eng.CommonLanguageLanguageClassification import *
@@ -15,9 +17,16 @@ from .eng.LibriCount import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
-from .eng.SIBFLEURS import *
 from .eng.SpeechCommands import *
+from .eng.SpokeN import *
 from .eng.SpokenQAforIC import *
+from .eng.TUTAcousticScenes import *
+from .eng.UrbanSound8k import *
+from .eng.VocalSound import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .eng.VoxPopuliAccentID import *
 from .multilingual.MInDS14 import *
+from .multilingual.SIBFLEURS import *
+from .multilingual.VoxPopuliGenderID import *
+from .multilingual.VoxPopuliLanguageID import *

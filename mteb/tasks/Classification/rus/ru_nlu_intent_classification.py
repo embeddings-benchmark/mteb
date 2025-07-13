@@ -33,7 +33,7 @@ class RuNLUIntentClassification(AbsTaskClassification, MultilingualTask):
         main_score="accuracy",
         date=("2019-03-26", "2019-03-26"),
         domains=[],
-        task_subtypes=["Intent Classification"],
+        task_subtypes=["Intent classification"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],

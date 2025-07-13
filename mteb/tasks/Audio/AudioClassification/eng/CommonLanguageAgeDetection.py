@@ -9,11 +9,11 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class CommonLanguageAgeDetection(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="CommonLanguageAgeDetection",
-        description="Age Classification",
+        description="Age Classification. This is a stratified subsampled version of the original CommonLanguage dataset.",
         reference="https://huggingface.co/datasets/speechbrain/common_language",
         dataset={
-            "path": "speechbrain/common_language",
-            "revision": "16ea653dd7d6a92f8fd80839466b1c6be1df300a",
+            "path": "mteb/commonlanguage-age-mini",
+            "revision": "a9c585af68d65a29c4ad12121f83853fa1cdda92",
         },
         type="AudioClassification",
         category="a2t",
@@ -44,7 +44,7 @@ Mirco Ravanelli},
 }
 """,
         descriptive_stats={
-            "n_samples": {"train": 22194, "test": 5963},
+            "n_samples": {"train": 2000, "test": 2000, "validation": 2000},
         },
     )
 
