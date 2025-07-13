@@ -438,12 +438,14 @@ class TaskMetadata(BaseModel):
         return self.dataset["revision"]
 
     def create_dataset_card_data(
-        self, existing_dataset_card_data: DatasetCardData | None = None
+        self,
+        existing_dataset_card_data: DatasetCardData | None = None,
     ) -> tuple[DatasetCardData, dict[str, str]]:
         """Create a DatasetCardData object from the task metadata.
 
         Args:
             existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
+            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Returns:
             A DatasetCardData object with the metadata for the task with kwargs to card
@@ -495,8 +497,16 @@ class TaskMetadata(BaseModel):
                 languages.extend(val)
         else:
             languages: list[str] = self.eval_langs
-
-        languages = sorted({lang.split("-")[0] for lang in languages})
+        # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
+        # or a special value like "code", "multilingual".
+        readme_langs = []
+        for lang in languages:
+            lang_name, family = lang.split("-")
+            if family == "Code":
+                readme_langs.append("code")
+            else:
+                readme_langs.append(lang_name)
+        languages = sorted(set(readme_langs))
 
         multilinguality = "multilingual" if self.is_multilingual else "monolingual"
         if self.sample_creation and "translated" in self.sample_creation:
@@ -507,8 +517,13 @@ class TaskMetadata(BaseModel):
                 task.metadata.dataset["path"]
                 for task in mteb.get_tasks(self.adapted_from)
             ]
+            source_datasets.append(self.dataset["path"])
         else:
-            source_datasets = None
+            source_datasets = (
+                None
+                if not TaskMetadata.push_dataset_card_to_hub
+                else [self.dataset["path"]]
+            )
 
         tags = ["mteb"] + self.modalities
 
@@ -524,7 +539,11 @@ class TaskMetadata(BaseModel):
 
         dataset_license = self.license
         if dataset_license:
-            license_mapping = {"not specified": "unknown", "msr-la-nc": "other"}
+            license_mapping = {
+                "not specified": "unknown",
+                "msr-la-nc": "other",
+                "cc-by-nd-2.1-jp": "cc-by-nd-2.1",
+            }
             dataset_license = license_mapping.get(
                 dataset_license,
                 "other" if dataset_license.startswith("http") else dataset_license,
@@ -562,7 +581,8 @@ class TaskMetadata(BaseModel):
         )
 
     def generate_dataset_card(
-        self, existing_dataset_card: DatasetCard | None = None
+        self,
+        existing_dataset_card: DatasetCard | None = None,
     ) -> DatasetCard:
         """Generates a dataset card for the task.
 

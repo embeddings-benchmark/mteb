@@ -478,14 +478,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        def format_text_field(text: str | dict[str, str]) -> str:
-            if isinstance(text, str):
-                return text
-            return (
-                f"{text['title']} {text['text']}".strip()
-                if text.get("title", None) is not None
-                else text["text"]
-            )
+        self.convert_v1_dataset_format_to_v2()
 
         def push_section(
             data: dict[str, dict[Any, Any]],
@@ -518,16 +511,16 @@ class AbsTaskRetrieval(AbsTask):
                 f"{subset}-corpus" if subset != "default" else "corpus",
                 lambda idx, text: {
                     "_id": idx,
-                    "text": format_text_field(text),
-                    "title": text.get("title", "") if isinstance(text, dict) else "",
+                    "text": text["text"],
+                    "title": text.get("title", ""),
                 },
             )
             # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
             for split, values in self.dataset[subset].items():
-                relecant_docs = values["relevant_docs"]
+                relevant_docs = values["relevant_docs"]
                 entries = []
-                for query_id, docs in relecant_docs.items():
+                for query_id, docs in relevant_docs.items():
                     for doc_id, score in docs.items():
                         entries.append(
                             {
