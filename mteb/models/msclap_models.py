@@ -205,10 +205,13 @@ class MSClapWrapper:
     ) -> np.ndarray:
         with torch.no_grad():
             preprocessed_texts = self.model.preprocess_text(texts)
+            if isinstance(preprocessed_texts, dict):
+                preprocessed_texts = {k: v.to(self.device) for k, v in preprocessed_texts.items()}
+            else:
+                preprocessed_texts = preprocessed_texts.to(self.device)
             text_features = self.model.clap.caption_encoder(preprocessed_texts)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-            text_features = text_features.to(self.device)
 
         return text_features.cpu().numpy()
 
