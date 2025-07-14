@@ -10,6 +10,9 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+import tempfile
+import os
+import soundfile as sf
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -129,16 +132,26 @@ class MSClapWrapper:
                     if isinstance(audio_data, torch.Tensor):
                         audio_data = audio_data.numpy()
                     
-                    with torch.no_grad():
-                        audio_features = self.model.get_audio_embeddings(
-                            x=audio_data, 
-                            use_tensor=True
-                        )
-                        # Normalize embeddings
-                        audio_features = audio_features / audio_features.norm(
-                            dim=-1, keepdim=True
-                        )
-                        batch_features.append(audio_features.cpu().numpy())
+                    # Create temporary file for CLAP (it expects file paths)
+                    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
+                        try:
+                            # Write audio data to temporary file
+                            sf.write(tmp_file.name, audio_data, self.sampling_rate)
+                            
+                            # Get embeddings from file path
+                            with torch.no_grad():
+                                audio_features = self.model.get_audio_embeddings(
+                                    [tmp_file.name],  # Pass file path as list
+                                    resample=False   # We already handled resampling
+                                )
+                                # Normalize embeddings
+                                audio_features = audio_features / audio_features.norm(
+                                    dim=-1, keepdim=True
+                                )
+                                batch_features.append(audio_features.cpu().numpy())
+                        finally:
+                            # Clean up temp file
+                            os.unlink(tmp_file.name)
 
                 all_features.extend(batch_features)
 
@@ -159,15 +172,26 @@ class MSClapWrapper:
                 if isinstance(audio_data, torch.Tensor):
                     audio_data = audio_data.numpy()
 
-                with torch.no_grad():
-                    audio_features = self.model.get_audio_embeddings(
-                        audio_data,
-                    )
-                    # Normalize embeddings
-                    audio_features = audio_features / audio_features.norm(
-                        dim=-1, keepdim=True
-                    )
-                    batch_features.append(audio_features.cpu().numpy())
+                # Create temporary file for CLAP (it expects file paths)
+                with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
+                    try:
+                        # Write audio data to temporary file
+                        sf.write(tmp_file.name, audio_data, self.sampling_rate)
+                        
+                        # Get embeddings from file path
+                        with torch.no_grad():
+                            audio_features = self.model.get_audio_embeddings(
+                                [tmp_file.name],  # Pass file path as list
+                                resample=False   # We already handled resampling
+                            )
+                            # Normalize embeddings
+                            audio_features = audio_features / audio_features.norm(
+                                dim=-1, keepdim=True
+                            )
+                            batch_features.append(audio_features.cpu().numpy())
+                    finally:
+                        # Clean up temp file
+                        os.unlink(tmp_file.name)
 
             return np.vstack(batch_features)
 
