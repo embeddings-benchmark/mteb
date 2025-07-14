@@ -8,18 +8,18 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from transformers import (
-    SpeechT5FeatureExtractor, 
-    SpeechT5Processor,
+    SpeechT5ForSpeechToSpeech,
     SpeechT5ForSpeechToText,
     SpeechT5ForTextToSpeech,
-    SpeechT5ForSpeechToSpeech
+    SpeechT5Processor,
 )
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-from tqdm import tqdm
+
 
 class SpeechT5Wrapper(Wrapper):
     def __init__(
@@ -35,13 +35,19 @@ class SpeechT5Wrapper(Wrapper):
         self.feature_extractor = self.processor.feature_extractor
         if "asr" in model_name:
             self.model_type = "asr"
-            self.model = SpeechT5ForSpeechToText.from_pretrained(model_name).to(self.device)
+            self.model = SpeechT5ForSpeechToText.from_pretrained(model_name).to(
+                self.device
+            )
         elif "tts" in model_name:
             self.model_type = "tts"
-            self.model = SpeechT5ForTextToSpeech.from_pretrained(model_name).to(self.device)
+            self.model = SpeechT5ForTextToSpeech.from_pretrained(model_name).to(
+                self.device
+            )
         elif "vc" in model_name:
             self.model_type = "vc"
-            self.model = SpeechT5ForSpeechToSpeech.from_pretrained(model_name).to(self.device)
+            self.model = SpeechT5ForSpeechToSpeech.from_pretrained(model_name).to(
+                self.device
+            )
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
@@ -143,7 +149,7 @@ class SpeechT5Wrapper(Wrapper):
                     padding="longest",
                     return_attention_mask=True,
                 ).to(self.device)
-                
+
                 outputs = self.model.speecht5.encoder(
                     input_values=inputs.input_values,
                     attention_mask=inputs.attention_mask,
@@ -173,7 +179,7 @@ class SpeechT5Wrapper(Wrapper):
         with torch.no_grad():
             for i in range(0, len(texts), batch_size):
                 batch_texts = texts[i : i + batch_size]
-                
+
                 # Process text through tokenizer
                 inputs = self.processor(
                     text=batch_texts,
@@ -181,12 +187,12 @@ class SpeechT5Wrapper(Wrapper):
                     padding="longest",
                     truncation=True,
                 ).to(self.device)
-                
+
                 outputs = self.model.speecht5.encoder(
                     input_values=inputs["input_ids"],
-                    attention_mask=inputs["attention_mask"]
+                    attention_mask=inputs["attention_mask"],
                 )
-                
+
                 last_hidden = outputs.last_hidden_state
                 embeddings = torch.mean(last_hidden, dim=1)
                 all_embeddings.append(embeddings.cpu())
@@ -195,7 +201,7 @@ class SpeechT5Wrapper(Wrapper):
             return torch.cat(all_embeddings, dim=0)
         else:
             return torch.zeros((0, self.text_model.config.hidden_size))
-        
+
     def encode(
         self,
         inputs: AudioBatch,
