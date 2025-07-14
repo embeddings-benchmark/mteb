@@ -107,93 +107,116 @@ class MSClapWrapper:
             waveform = resampler(waveform)
         return waveform.squeeze()
 
+    def _process_audio_to_tensor(self, audio_item) -> torch.Tensor:
+        """Convert various audio formats to torch tensor with proper sampling rate"""
+        if isinstance(audio_item, dict):
+            if "array" in audio_item:
+                audio = audio_item["array"]
+                sr = audio_item.get("sampling_rate", self.sampling_rate)
+                
+                # Convert to torch tensor if numpy
+                if isinstance(audio, np.ndarray):
+                    audio = torch.from_numpy(audio).float()
+                else:
+                    audio = audio.float()
+                
+                # Resample if needed
+                if sr != self.sampling_rate:
+                    resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
+                    audio = resampler(audio)
+                
+                return audio.squeeze()
+                
+            elif "path" in audio_item:
+                return self._load_audio_file(audio_item["path"])
+        
+        elif isinstance(audio_item, (np.ndarray, torch.Tensor)):
+            if isinstance(audio_item, np.ndarray):
+                audio_item = torch.from_numpy(audio_item)
+            return audio_item.squeeze().float()
+        
+        elif isinstance(audio_item, str):
+            return self._load_audio_file(audio_item)
+        
+        else:
+            raise ValueError(f"Unsupported audio format: {type(audio_item)}")
+
+    def _load_audio_file(self, path: str) -> torch.Tensor:
+        """Load audio file and convert to proper format"""
+        waveform, sample_rate = torchaudio.load(path)
+        waveform = waveform.float()
+        
+        if sample_rate != self.sampling_rate:
+            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
+            waveform = resampler(waveform)
+        
+        return waveform.squeeze()
+
     def get_audio_embeddings(
         self,
         audio: AudioBatch,
         **kwargs: Any,
     ) -> np.ndarray:
+        """Get audio embeddings using direct tensor processing (no temp files)"""
         all_features = []
 
         if isinstance(audio, DataLoader):
             # Process all batches
             for batch in tqdm(audio, desc="Processing audio batches"):
-                batch_features = []
-                # Process each item in the batch individually to avoid memory issues
-                for item in batch:
-                    if isinstance(item, torch.Tensor):
-                        item = {"array": item.numpy(), "sampling_rate": self.sampling_rate}
-                    elif isinstance(item, dict) and "array" in item:
-                        # Ensure sampling_rate is available
-                        if "sampling_rate" not in item:
-                            item["sampling_rate"] = self.sampling_rate
-                    
-                    # Convert audio to proper format for CLAP
-                    audio_data = item["array"]
-                    if isinstance(audio_data, torch.Tensor):
-                        audio_data = audio_data.numpy()
-                    
-                    # Create temporary file for CLAP (it expects file paths)
-                    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
-                        try:
-                            # Write audio data to temporary file
-                            sf.write(tmp_file.name, audio_data, self.sampling_rate)
-                            
-                            # Get embeddings from file path
-                            with torch.no_grad():
-                                audio_features = self.model.get_audio_embeddings(
-                                    [tmp_file.name],  # Pass file path as list
-                                    resample=False   # We already handled resampling
-                                )
-                                # Normalize embeddings
-                                audio_features = audio_features / audio_features.norm(
-                                    dim=-1, keepdim=True
-                                )
-                                batch_features.append(audio_features.cpu().numpy())
-                        finally:
-                            # Clean up temp file
-                            os.unlink(tmp_file.name)
-
+                batch_features = self._process_audio_batch(batch)
                 all_features.extend(batch_features)
-
-            return np.vstack(all_features)
         else:
             # Process single batch
-            batch_features = []
-            for item in audio:
-                if isinstance(item, torch.Tensor):
-                    item = {"array": item.numpy(), "sampling_rate": self.sampling_rate}
-                elif isinstance(item, dict) and "array" in item:
-                    # Ensure sampling_rate is available
-                    if "sampling_rate" not in item:
-                        item["sampling_rate"] = self.sampling_rate
+            batch_features = self._process_audio_batch(audio)
+            all_features.extend(batch_features)
 
-                # Convert audio to proper format for CLAP
-                audio_data = item["array"]
-                if isinstance(audio_data, torch.Tensor):
-                    audio_data = audio_data.numpy()
+        return np.vstack(all_features)
 
-                # Create temporary file for CLAP (it expects file paths)
-                with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmp_file:
-                    try:
-                        # Write audio data to temporary file
-                        sf.write(tmp_file.name, audio_data, self.sampling_rate)
-                        
-                        # Get embeddings from file path
-                        with torch.no_grad():
-                            audio_features = self.model.get_audio_embeddings(
-                                [tmp_file.name],  # Pass file path as list
-                                resample=False   # We already handled resampling
-                            )
-                            # Normalize embeddings
-                            audio_features = audio_features / audio_features.norm(
-                                dim=-1, keepdim=True
-                            )
-                            batch_features.append(audio_features.cpu().numpy())
-                    finally:
-                        # Clean up temp file
-                        os.unlink(tmp_file.name)
-
-            return np.vstack(batch_features)
+    def _process_audio_batch(self, batch) -> list[np.ndarray]:
+        """Process a batch of audio items and return embeddings"""
+        batch_features = []
+        
+        for item in batch:
+            # Convert to tensor
+            audio_tensor = self._process_audio_to_tensor(item)
+            
+            # Ensure it's in the right format [batch_size, samples]
+            if audio_tensor.dim() == 1:
+                audio_tensor = audio_tensor.unsqueeze(0)  # Add batch dimension
+            
+            # Get embeddings using the internal audio encoder
+            with torch.no_grad():
+                # Use the internal method like in your working example
+                audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
+                
+                # Normalize embeddings
+                audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
+                
+                batch_features.append(audio_features.cpu().numpy())
+        
+        return batch_features
+        
+    def _process_audio_batch(self, batch) -> list[np.ndarray]:
+        """Process a batch of audio items and return embeddings"""
+        batch_features = []
+        
+        for item in batch:
+            # Convert to tensor
+            audio_tensor = self._process_audio_to_tensor(item)
+            
+            # Ensure it's in the right format [batch_size, samples]
+            if audio_tensor.dim() == 1:
+                audio_tensor = audio_tensor.unsqueeze(0)  # Add batch dimension
+            
+            # Get embeddings using the internal audio encoder
+            with torch.no_grad():
+                # Use the internal method like in your working example
+                audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
+                
+                # Normalize embeddings
+                audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
+                
+                batch_features.append(audio_features.cpu().numpy())
 
     def get_text_embeddings(
         self,
@@ -248,23 +271,21 @@ ms_clap_2023 = ModelMeta(
     name="microsoft/msclap",
     languages=["eng-Latn"],
     revision="N/A",
-    release_date="2023-09-01",  # Based on arXiv paper date
+    release_date="2023-09-01",  
     modalities=["audio", "text"],
-    n_parameters=125_000_000,  # Estimated - 2023 version is larger
+    n_parameters=125_000_000,  
     memory_usage_mb=480,
     max_tokens=float("inf"),
     embed_dim=1024,
     license="mit",
     open_weights=True,
     public_training_code="https://github.com/microsoft/CLAP",
-    public_training_data="Various audio datasets",
+    public_training_data="",
     framework=["PyTorch"],
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
-        # Enhanced training with more diverse datasets
-    },
+    training_datasets={},
 )
 
 ms_clap_clapcap = ModelMeta(
@@ -281,7 +302,7 @@ ms_clap_clapcap = ModelMeta(
     license="mit",
     open_weights=True,
     public_training_code="https://github.com/microsoft/CLAP",
-    public_training_data="Various audio datasets + captioning data",
+    public_training_data="",
     framework=["PyTorch"],
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
