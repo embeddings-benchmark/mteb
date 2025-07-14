@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class RuSciBenchGRNTIClassification(AbsTaskClassification):
-    superseded_by="RuSciBenchGRNTIOrigClassification"
+    superseded_by = "RuSciBenchGRNTIOrigClassification"
 
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClassification",
