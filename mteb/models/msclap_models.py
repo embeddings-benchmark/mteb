@@ -130,7 +130,7 @@ class MSClapWrapper:
                         audio_data = audio_data.numpy()
                     
                     with torch.no_grad():
-                        audio_features = self.model.get_audio_embedding_from_data(
+                        audio_features = self.model.get_audio_embeddings(
                             x=audio_data, 
                             use_tensor=True
                         )
@@ -160,7 +160,7 @@ class MSClapWrapper:
                     audio_data = audio_data.numpy()
 
                 with torch.no_grad():
-                    audio_features = self.model.get_audio_embedding_from_data(
+                    audio_features = self.model.get_audio_embeddings(
                         x=audio_data, 
                         use_tensor=True
                     )
@@ -178,7 +178,7 @@ class MSClapWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
         with torch.no_grad():
-            text_features = self.model.get_text_embedding(texts, use_tensor=True)
+            text_features = self.model.get_text_embeddings(texts, use_tensor=True)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
 
