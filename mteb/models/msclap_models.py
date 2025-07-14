@@ -46,6 +46,7 @@ class MSClapWrapper:
         self.use_cuda = device == "cuda"
         self.device = device
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
+        self.model.clap = self.model.clap.to(self.device)
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
