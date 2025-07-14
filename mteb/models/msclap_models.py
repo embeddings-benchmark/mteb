@@ -95,7 +95,7 @@ class MSClapWrapper:
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze().float()  # Ensure float32
+        return audio.squeeze().float().to(self.device) 
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
@@ -103,7 +103,7 @@ class MSClapWrapper:
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+        return waveform.squeeze().to(self.device)
 
     def _process_audio_to_tensor(self, audio_item) -> torch.Tensor:
         """Convert various audio formats to torch tensor with proper sampling rate"""
@@ -124,7 +124,7 @@ class MSClapWrapper:
                     resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
                     audio = resampler(audio)
                 
-                return audio.squeeze()
+                return audio.squeeze().to(self.device)
                 
             elif "path" in audio_item:
                 return self._load_audio_file(audio_item["path"])
@@ -132,7 +132,7 @@ class MSClapWrapper:
         elif isinstance(audio_item, (np.ndarray, torch.Tensor)):
             if isinstance(audio_item, np.ndarray):
                 audio_item = torch.from_numpy(audio_item)
-            return audio_item.squeeze().float()
+            return audio_item.squeeze().float().to(self.device)
         
         elif isinstance(audio_item, str):
             return self._load_audio_file(audio_item)
@@ -182,11 +182,11 @@ class MSClapWrapper:
             # Ensure it's in the right format [batch_size, samples]
             if audio_tensor.dim() == 1:
                 audio_tensor = audio_tensor.unsqueeze(0)  # Add batch dimension
-            
+
+            audio_tensor = audio_tensor.to(self.device)
             # Get embeddings using the internal audio encoder
             with torch.no_grad():
                 # Use the internal method like in your working example
-                audio_tensor = audio_tensor.to(self.device)
                 audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
                 
                 # Normalize embeddings
