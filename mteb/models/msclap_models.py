@@ -186,6 +186,7 @@ class MSClapWrapper:
             # Get embeddings using the internal audio encoder
             with torch.no_grad():
                 # Use the internal method like in your working example
+                audio_tensor = audio_tensor.to(self.device)
                 audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
                 
                 # Normalize embeddings
