@@ -3,6 +3,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from datasets import DatasetDict
+from sklearn.base import BaseEstimator
+from sklearn.linear_model import LinearRegression
+
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RegressionEvaluator import LinearRegressionEvaluator
@@ -54,33 +58,36 @@ class AbsTaskRegression(AbsTask):
         value: float
     """
 
-    def __init__(self, seed: int = 42, **kwargs: Any):
-        super().__init__(seed, **kwargs)
-        if hasattr(self, "metadata"):
-            self.metadata
+    evaluator: type[LinearRegressionEvaluator] = LinearRegressionEvaluator
+    model: BaseEstimator = LinearRegression(n_jobs=-1)
+
+    train_split: str = "train"
+    label_column_name: str = "value"
+    input_column_name: str = "text"
+    abstask_prompt = "Predict the value of the user passage."
 
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset,
-        eval_split: str = "test",
-        train_split: str = "train",
-        encode_kwargs: dict[str, Any] = {},
+        dataset: DatasetDict,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
-        train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
+        train_split = dataset[self.train_split]
+        eval_split = dataset[hf_split]
 
-        evaluator = LinearRegressionEvaluator(
-            train_split["text"],
-            train_split["value"],
-            eval_split["text"],
-            eval_split["value"],
+        evaluator = self.evaluator(
+            train_split[self.input_column_name],
+            train_split[self.label_column_name],
+            eval_split[self.input_column_name],
+            eval_split[self.label_column_name],
             task_name=self.metadata.name,
-            encode_kwargs=encode_kwargs,
+            hf_subset=hf_subset,
             **kwargs,
         )
-        scores = evaluator(model)
+        scores = evaluator(model, encode_kwargs=encode_kwargs)
         return scores
 
     def _add_main_score(self, scores):
@@ -89,8 +96,8 @@ class AbsTaskRegression(AbsTask):
     def evaluate(
         self,
         model: Encoder,
-        eval_split: str = "test",
-        train_split: str = "train",
+        split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
@@ -98,12 +105,17 @@ class AbsTaskRegression(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
+        if "random_state" in self.classifier.get_params():
+            self.classifier = self.classifier.set_params(random_state=self.seed)
+
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
+                f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
             )
 
             if hf_subset not in self.dataset and hf_subset == "default":
@@ -113,17 +125,14 @@ class AbsTaskRegression(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
-                eval_split,
-                train_split,
+                hf_split=split,
+                hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
 
         return scores
-
-    def __hash__(self) -> int:
-        return hash(self.metadata)
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

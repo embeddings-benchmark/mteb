@@ -22,9 +22,10 @@ class LinearRegressionEvaluator(Evaluator):
         y_train,
         sentences_test,
         y_test,
-        task_name: str | None = None,
+        task_name: str,
+        hf_split: str,
+        hf_subset: str,
         fit_intercept: bool = True,
-        encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
         **kwargs,
     ):
@@ -39,27 +40,30 @@ class LinearRegressionEvaluator(Evaluator):
         self.sentences_test = sentences_test
         self.y_test = y_test
 
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
         self.task_name = task_name
-        self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
-
         self.fit_intercept = fit_intercept
 
-    def __call__(self, model: Encoder) -> dict[str, float]:
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}
+    ) -> dict[str, float]:
         scores = {}
         X_train = model.encode(
             self.sentences_train,
             model=model,
             task_name=self.task_name,
-            **self.encode_kwargs,
+            hf_split="train",
+            hf_subset=self.hf_subset,
+            **encode_kwargs,
         )
         X_test = model.encode(
             self.sentences_test,
             model=model,
             task_name=self.task_name,
-            **self.encode_kwargs,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            **encode_kwargs,
         )
 
         linear_regression = LinearRegression(fit_intercept=self.fit_intercept)
