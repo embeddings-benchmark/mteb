@@ -207,6 +207,7 @@ class MSClapWrapper:
             text_features = self.model.get_text_embeddings(texts)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+            text_features = text_features.to(self.device)
 
         return text_features.cpu().numpy()
 
