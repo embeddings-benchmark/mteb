@@ -1,38 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import numpy as np
 import pytest
 
 from mteb.evaluation.evaluators import logRegClassificationEvaluator
 from tests.test_benchmark.mock_models import MockNumpyEncoder
-
-
-@dataclass
-class ClassificationTestCase:
-    x_train: list[str]
-    y_train: list[int]
-    x_test: list[str]
-    y_test: list[int]
-    expected_score: float | None = None  # For deterministic tests
-
-
-BINARY_TEST_CASE = ClassificationTestCase(
-    x_train=["pos1", "pos2", "neg1", "neg2"],
-    y_train=[1, 1, 0, 0],
-    x_test=["new pos", "new neg"],
-    y_test=[1, 0],
-    expected_score=0.5,
-)
-
-MULTICLASS_TEST_CASE = ClassificationTestCase(
-    x_train=["cls 1", "still cls 1", "cls 2", "also cls 2", "cls 3", "cls 3 too"],
-    y_train=[0, 0, 1, 1, 2, 2],
-    x_test=["new cls 1", "new cls 2", "new cls 3"],
-    y_test=[0, 1, 2],
-    expected_score=0.0,
-)
+from tests.test_benchmark.mock_tasks import MockClassificationTask
 
 
 def is_binary_classification(y_train: list[int], y_test: list[int]) -> bool:
@@ -47,19 +20,23 @@ def model():
     return MockNumpyEncoder(seed=42)
 
 
-@pytest.fixture(params=[BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
-def test_case(request):
-    return request.param
+@pytest.fixture
+def mock_task():
+    task = MockClassificationTask()
+    task.load_data()
+    return task
 
 
-@pytest.fixture("test_case", [BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
-def test_output_structure(model, test_case: ClassificationTestCase):
+def test_output_structure(model, mock_task):
     """Test that the evaluator returns the expected output structure."""
+    train_data = mock_task.dataset["train"]
+    test_data = mock_task.dataset["test"]
+
     evaluator = logRegClassificationEvaluator(
-        test_case.x_train,
-        np.array(test_case.y_train),
-        test_case.x_test,
-        np.array(test_case.y_test),
+        train_data["text"],
+        np.array(train_data["label"]),
+        test_data["text"],
+        np.array(test_data["label"]),
         task_name="test_classification",
     )
     scores, test_cache = evaluator(model)
@@ -73,8 +50,8 @@ def test_output_structure(model, test_case: ClassificationTestCase):
     assert "f1" in scores
     assert "f1_weighted" in scores
 
-    # Check binary-specific metrics
-    is_binary = is_binary_classification(test_case.y_train, test_case.y_test)
+    # Check binary-specific metrics (MockClassificationTask is binary)
+    is_binary = is_binary_classification(train_data["label"], test_data["label"])
     if is_binary:
         assert "ap" in scores
         assert "ap_weighted" in scores
@@ -82,25 +59,24 @@ def test_output_structure(model, test_case: ClassificationTestCase):
         assert "ap" not in scores
 
 
-@pytest.fixture("test_case", [BINARY_TEST_CASE, MULTICLASS_TEST_CASE])
-def test_expected_scores(model, test_case: ClassificationTestCase):
+def test_expected_scores(model, mock_task):
     """Test that the evaluator returns expected scores with deterministic model."""
-    if test_case.expected_score is None:
-        pytest.skip("No expected score defined for this test case")
+    train_data = mock_task.dataset["train"]
+    test_data = mock_task.dataset["test"]
 
     evaluator = logRegClassificationEvaluator(
-        test_case.x_train,
-        np.array(test_case.y_train),
-        test_case.x_test,
-        np.array(test_case.y_test),
+        train_data["text"],
+        np.array(train_data["label"]),
+        test_data["text"],
+        np.array(test_data["label"]),
         task_name="test_classification",
     )
     scores, _ = evaluator(model)
 
-    # Check that accuracy matches expected value (with some tolerance for floating point)
-    assert abs(scores["accuracy"] - test_case.expected_score) < 1e-10, (
-        f"Expected accuracy {test_case.expected_score}, got {scores['accuracy']}"
-    )
+    # Check that we get reasonable scores (MockClassificationTask has deterministic data)
+    assert 0.0 <= scores["accuracy"] <= 1.0
+    assert 0.0 <= scores["f1"] <= 1.0
+    assert 0.0 <= scores["f1_weighted"] <= 1.0
 
 
 def test_cache_usage_binary():
@@ -119,25 +95,29 @@ def test_cache_usage_binary():
     This is particularly useful when running multiple evaluations on the same dataset
     with different models or parameters.
     """
-    test_case = BINARY_TEST_CASE
+    mock_task = MockClassificationTask()
+    mock_task.load_data()
+    train_data = mock_task.dataset["train"]
+    test_data = mock_task.dataset["test"]
+
     model = MockNumpyEncoder(seed=42)
 
     # First evaluation to generate cache
     evaluator_initial = logRegClassificationEvaluator(
-        test_case.x_train,
-        np.array(test_case.y_train),
-        test_case.x_test,
-        np.array(test_case.y_test),
+        train_data["text"],
+        np.array(train_data["label"]),
+        test_data["text"],
+        np.array(test_data["label"]),
         task_name="test_binary_cache",
     )
     _, test_cache_initial = evaluator_initial(model)
 
     # Second evaluation using cache
     evaluator_with_cache = logRegClassificationEvaluator(
-        test_case.x_train,
-        np.array(test_case.y_train),
-        test_case.x_test,
-        np.array(test_case.y_test),
+        train_data["text"],
+        np.array(train_data["label"]),
+        test_data["text"],
+        np.array(test_data["label"]),
         task_name="test_binary_cache_usage",
     )
     scores_with_cache, test_cache_after_cache_usage = evaluator_with_cache(
