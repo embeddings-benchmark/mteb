@@ -96,7 +96,7 @@ class MSClapWrapper:
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze().float().to(self.device) 
+        return audio.squeeze().float()
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
@@ -104,7 +104,7 @@ class MSClapWrapper:
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze().to(self.device)
+        return waveform.squeeze()
 
     def _process_audio_to_tensor(self, audio_item) -> torch.Tensor:
         """Convert various audio formats to torch tensor with proper sampling rate"""
@@ -125,7 +125,7 @@ class MSClapWrapper:
                     resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
                     audio = resampler(audio)
                 
-                return audio.squeeze().to(self.device)
+                return audio.squeeze()
                 
             elif "path" in audio_item:
                 return self._load_audio_file(audio_item["path"])
@@ -133,7 +133,7 @@ class MSClapWrapper:
         elif isinstance(audio_item, (np.ndarray, torch.Tensor)):
             if isinstance(audio_item, np.ndarray):
                 audio_item = torch.from_numpy(audio_item)
-            return audio_item.squeeze().float().to(self.device)
+            return audio_item.squeeze().float()
         
         elif isinstance(audio_item, str):
             return self._load_audio_file(audio_item)
