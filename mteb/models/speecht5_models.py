@@ -31,13 +31,16 @@ class SpeechT5Wrapper(Wrapper):
         self.model_name = model_name
         self.device = device
 
-        self.processor = SpeechT5Processor.from_pretrained(model_name)
+        self.processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
         self.feature_extractor = self.processor.feature_extractor
-        if "asr" in model_name.lower():
+        if "asr" in model_name:
+            self.model_type = "asr"
             self.model = SpeechT5ForSpeechToText.from_pretrained(model_name).to(self.device)
-        elif "tts" in model_name.lower():
+        elif "tts" in model_name:
+            self.model_type = "tts"
             self.model = SpeechT5ForTextToSpeech.from_pretrained(model_name).to(self.device)
-        elif "vc" in model_name.lower():
+        elif "vc" in model_name:
+            self.model_type = "vc"
             self.model = SpeechT5ForSpeechToSpeech.from_pretrained(model_name).to(self.device)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
@@ -153,7 +156,7 @@ class SpeechT5Wrapper(Wrapper):
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            return torch.zeros((0, self.model.config.hidden_size))
+            return torch.zeros((0, self.audio_model.config.hidden_size))
 
     def get_text_embeddings(
         self,
@@ -179,9 +182,8 @@ class SpeechT5Wrapper(Wrapper):
                     truncation=True,
                 ).to(self.device)
                 
-                # For generic SpeechT5Model
                 outputs = self.model.speecht5.encoder(
-                    input_ids=inputs["input_ids"],
+                    input_values=inputs["input_ids"],
                     attention_mask=inputs["attention_mask"]
                 )
                 
@@ -192,7 +194,7 @@ class SpeechT5Wrapper(Wrapper):
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            return torch.zeros((0, self.model.config.hidden_size))
+            return torch.zeros((0, self.text_model.config.hidden_size))
         
     def encode(
         self,
@@ -256,7 +258,7 @@ speecht5_tts = ModelMeta(
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="https://www.openslr.org/12",
     training_datasets={},  # {"LibriTTS": ["train"]},
-    modalities=["audio"],
+    modalities=["text"],
 )
 
 # Voice Conversion model - Optimized for Speech-to-Speech conversion tasks
