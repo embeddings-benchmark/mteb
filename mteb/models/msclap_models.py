@@ -10,8 +10,6 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import tempfile
-import os
 import soundfile as sf
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -114,9 +112,10 @@ class MSClapWrapper:
                 audio = audio_item["array"]
                 sr = audio_item.get("sampling_rate", self.sampling_rate)
                 
-                # Convert to torch tensor if numpy
                 if isinstance(audio, np.ndarray):
                     audio = torch.from_numpy(audio).float()
+                elif isinstance(audio, list):
+                    audio = torch.tensor(audio, dtype=torch.float32)
                 else:
                     audio = audio.float()
                 
@@ -196,27 +195,6 @@ class MSClapWrapper:
         
         return batch_features
         
-    def _process_audio_batch(self, batch) -> list[np.ndarray]:
-        """Process a batch of audio items and return embeddings"""
-        batch_features = []
-        
-        for item in batch:
-            # Convert to tensor
-            audio_tensor = self._process_audio_to_tensor(item)
-            
-            # Ensure it's in the right format [batch_size, samples]
-            if audio_tensor.dim() == 1:
-                audio_tensor = audio_tensor.unsqueeze(0)  # Add batch dimension
-            
-            # Get embeddings using the internal audio encoder
-            with torch.no_grad():
-                # Use the internal method like in your working example
-                audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
-                
-                # Normalize embeddings
-                audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
-                
-                batch_features.append(audio_features.cpu().numpy())
 
     def get_text_embeddings(
         self,
