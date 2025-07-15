@@ -22,12 +22,9 @@ class Wav2ClipZeroShotWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        requires_package(
-            self,
-            "wav2clip",
-            "pip install 'mteb[wav2clip]'"
-        )
+        requires_package(self, "wav2clip", "pip install 'mteb[wav2clip]'")
         import wav2clip
+
         self.wav2clip = wav2clip
         # audio side
         self.device = device
@@ -104,26 +101,26 @@ class Wav2ClipZeroShotWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
         all_embeddings = []
-        
+
         if isinstance(audio, DataLoader):
             # Process each batch separately
             for batch in tqdm(audio, desc="Processing audio batches"):
                 batch_embeddings = []
-                
+
                 # Process each item in the batch individually
                 wavs = self._handle_batch(batch)
                 for wav in wavs:
                     # Process one audio at a time to avoid memory issues
                     wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
                     embed = self.wav2clip.embed_audio(wav_np, self.audio_model)
-                    
+
                     # Normalize
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
                     normalized_embed = embed / norm
                     batch_embeddings.append(normalized_embed)
-                
+
                 all_embeddings.extend(batch_embeddings)
-            
+
             return np.vstack(all_embeddings)
         else:
             # Process single batch - still do it item by item
@@ -132,12 +129,12 @@ class Wav2ClipZeroShotWrapper:
                 # Process one audio at a time
                 wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
                 embed = self.wav2clip.embed_audio(wav_np, self.audio_model)
-                
+
                 # Normalize
                 norm = np.linalg.norm(embed, axis=-1, keepdims=True)
                 normalized_embed = embed / norm
                 all_embeddings.append(normalized_embed)
-            
+
             return np.vstack(all_embeddings)
 
     def get_text_embeddings(
@@ -167,25 +164,28 @@ class Wav2ClipZeroShotWrapper:
         return self.get_audio_embeddings(inputs)
 
 
-# register for MTEB
 wav2clip_zero = ModelMeta(
     loader=partial(Wav2ClipZeroShotWrapper),
-    name="lyrebird/wav2clip",
+    name="wav2clip",
     languages=["eng-Latn"],
-    revision="N/A",
-    release_date="2023-01-01",
+    revision="main",
+    release_date="2022-03-15",
     modalities=["audio", "text"],
-    n_parameters=0,
-    memory_usage_mb=0,
-    max_tokens=float("inf"),
+    n_parameters=163_000_000,  # wav2clip: 11.7M + CLIP: 151.3M ≈ 163M
+    memory_usage_mb=622,  # wav2clip: 44.65MB + CLIP: 577.08MB ≈ 622MB
+    max_tokens=None,
     embed_dim=512,
     license="mit",
     open_weights=True,
     framework=["PyTorch"],
-    reference="https://github.com/andabi/wav2clip",
+    reference="https://github.com/descriptinc/lyrebird-wav2clip",
     similarity_fn_name="cosine",
     use_instructions=False,
-    public_training_code="https://github.com/LAION-AI/CLAP",
-    public_training_data="https://laion.ai/blog/laion-audio-630k/",
-    training_datasets={},
+    public_training_code="https://github.com/descriptinc/lyrebird-wav2clip",
+    public_training_data="https://github.com/descriptinc/lyrebird-wav2clip#data",
+    training_datasets={
+        # "AudioSet": ["https://research.google.com/audioset/"],
+        # "FreeSound": ["https://freesound.org/"],
+        # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
+    },
 )
