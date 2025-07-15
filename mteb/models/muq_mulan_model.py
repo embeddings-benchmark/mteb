@@ -200,8 +200,8 @@ muq_mulan_large = ModelMeta(
     loader=partial(MuQMuLanWrapper, model_name="OpenMuQ/MuQ-MuLan-large"),
     name="OpenMuQ/MuQ-MuLan-large",
     languages=["eng-Latn", "zho-Hans"],  # English and Chinese support
-    revision="main",  # Update this with actual revision if known
-    release_date="2024-01-01",  # Update with actual release date
+    revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",  
+    release_date="2024-01-01", 
     modalities=["audio", "text"],
     n_parameters=None,  # Update with actual parameter count
     memory_usage_mb=None,  # Update with actual memory usage
