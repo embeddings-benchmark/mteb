@@ -37,8 +37,6 @@ class MSClapWrapper:
 
         if "2022" in self.model_name:
             self.version = "2022"
-        elif "clapcap" in self.model_name:
-            self.version = "clapcap"
         elif "2023" in self.model_name:
             self.version = "2023"
         else:
@@ -242,14 +240,14 @@ ms_clap_2022 = ModelMeta(
     revision="N/A",
     release_date="2022-12-01",
     modalities=["audio", "text"],
-    n_parameters=86_000_000,  # Estimated based on architecture
-    memory_usage_mb=350,  # Estimated
-    max_tokens=float("inf"),
-    embed_dim=1024,  # Common embedding dimension for Microsoft CLAP
+    n_parameters=196_000_000, 
+    memory_usage_mb=750,  
+    max_tokens=None,
+    embed_dim=1024,  
     license="mit",
     open_weights=True,
     public_training_code="https://github.com/microsoft/CLAP",
-    public_training_data="Various audio datasets",  # Microsoft used multiple datasets
+    public_training_data="https://github.com/microsoft/CLAP",  # Microsoft used multiple datasets
     framework=["PyTorch"],
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
@@ -264,14 +262,14 @@ ms_clap_2023 = ModelMeta(
     revision="N/A",
     release_date="2023-09-01",
     modalities=["audio", "text"],
-    n_parameters=125_000_000,
-    memory_usage_mb=480,
-    max_tokens=float("inf"),
+    n_parameters=160_000_000,
+    memory_usage_mb=610,
+    max_tokens=None,
     embed_dim=1024,
     license="mit",
     open_weights=True,
     public_training_code="https://github.com/microsoft/CLAP",
-    public_training_data="",
+    public_training_data="https://github.com/microsoft/CLAP",
     framework=["PyTorch"],
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
@@ -279,24 +277,3 @@ ms_clap_2023 = ModelMeta(
     training_datasets={},
 )
 
-ms_clap_clapcap = ModelMeta(
-    loader=partial(MSClapWrapper, model_name="microsoft/msclap-clapcap"),
-    name="microsoft/clap-clapcap",
-    languages=["eng-Latn"],
-    revision="N/A",
-    release_date="2023-09-01",
-    modalities=["audio", "text"],
-    n_parameters=125_000_000,
-    memory_usage_mb=480,
-    max_tokens=float("inf"),
-    embed_dim=1024,
-    license="mit",
-    open_weights=True,
-    public_training_code="https://github.com/microsoft/CLAP",
-    public_training_data="",
-    framework=["PyTorch"],
-    reference="https://github.com/microsoft/CLAP",
-    similarity_fn_name="cosine",
-    use_instructions=False,
-    training_datasets={},
-)
