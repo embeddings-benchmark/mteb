@@ -118,11 +118,11 @@ class Wav2ClipZeroShotWrapper:
             for w in wavs
         ]
 
-        # 3. Stack & move to device
         audio_batch = torch.stack(padded, dim=0).to(self.device)
 
-        # 4. Embed and normalize
-        embeds = wav2clip.embed_audio(audio_batch, self.audio_model)
+        audio_np = audio_batch.cpu().numpy()
+        embeds = wav2clip.embed_audio(audio_np, self.audio_model)
+
         norms = np.linalg.norm(embeds, axis=-1, keepdims=True)
         return embeds / norms
 
