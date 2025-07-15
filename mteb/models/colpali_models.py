@@ -40,10 +40,10 @@ class ColPaliEngineWrapper:
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, 
-            device_map=self.device, 
+            model_name,
+            device_map=self.device,
             adapter_kwargs={"revision": revision},
-            **kwargs
+            **kwargs,
         )
         self.mdl.eval()
 
@@ -93,11 +93,15 @@ class ColPaliEngineWrapper:
         batch_size: int = 32,
         **kwargs,
     ):
-
         all_embeds = []
         with torch.no_grad():
             for i in tqdm(range(0, len(texts), batch_size)):
-                batch = [self.processor.query_prefix + t + self.processor.query_augmentation_token for t in texts[i : i + batch_size]]
+                batch = [
+                    self.processor.query_prefix
+                    + t
+                    + self.processor.query_augmentation_token
+                    for t in texts[i : i + batch_size]
+                ]
                 inputs = self.processor.process_texts(batch).to(self.device)
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))

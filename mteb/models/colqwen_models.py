@@ -39,6 +39,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
             **kwargs,
         )
 
+
 class ColQwen2_5Wrapper(ColPaliEngineWrapper):
     """Wrapper for ColQwen2.5 model."""
 
@@ -62,6 +63,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):
             device=device,
             **kwargs,
         )
+
 
 colqwen2 = ModelMeta(
     loader=partial(
