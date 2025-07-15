@@ -54,11 +54,12 @@ class Wav2ClipZeroShotWrapper:
             # dict with array and sampling_rate
             if isinstance(item, dict) and "array" in item:
                 audio = item["array"]
-                tensor = (
-                    torch.from_numpy(audio)
-                    if isinstance(audio, np.ndarray)
-                    else item["array"]
-                )
+                if isinstance(audio, np.ndarray):
+                    tensor = torch.from_numpy(audio)
+                elif isinstance(audio, list):
+                    tensor = torch.tensor(audio, dtype=torch.float32)
+                else:
+                    tensor = audio  # assume it's already a torch.Tensor
                 tensor = tensor.float().squeeze()
                 if item.get("sampling_rate", self.sampling_rate) != self.sampling_rate:
                     resampler = torchaudio.transforms.Resample(
@@ -77,10 +78,13 @@ class Wav2ClipZeroShotWrapper:
                 waveforms.append(tensor)
 
             # direct numpy or torch
-            elif isinstance(item, (np.ndarray, torch.Tensor)):
-                tensor = (
-                    torch.from_numpy(item) if isinstance(item, np.ndarray) else item
-                )
+            elif isinstance(item, (np.ndarray, torch.Tensor, list)):
+                if isinstance(item, np.ndarray):
+                    tensor = torch.from_numpy(item)
+                elif isinstance(item, list):
+                    tensor = torch.tensor(item, dtype=torch.float32)
+                else:
+                    tensor = item
                 waveforms.append(tensor.float().squeeze())
 
             # file path string
