@@ -14,6 +14,7 @@ from transformers import CLIPModel, CLIPProcessor
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_package
 
 
 class Wav2ClipZeroShotWrapper:
@@ -22,6 +23,11 @@ class Wav2ClipZeroShotWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        requires_package(
+            self,
+            "wav2clip",
+            "pip install wav2clip"
+        )
         # audio side
         self.device = device
         self.audio_model = wav2clip.get_model().to(device)
@@ -152,4 +158,7 @@ wav2clip_zero = ModelMeta(
     reference="https://github.com/andabi/wav2clip",
     similarity_fn_name="cosine",
     use_instructions=False,
+    public_training_code="https://github.com/LAION-AI/CLAP",
+    public_training_data="https://laion.ai/blog/laion-audio-630k/",
+    training_datasets={},
 )
