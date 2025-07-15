@@ -10,7 +10,6 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import soundfile as sf
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -20,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 
 class MSClapWrapper:
-    
     def __init__(
         self,
         model_name: str = "microsoft/msclap",
@@ -33,16 +31,18 @@ class MSClapWrapper:
             "pip install 'mteb[msclap]'",
         )
         from msclap import CLAP
+
         self.model_name = model_name
-        self.sampling_rate = 48000  # CLAP's expected sampling rate
+        self.sampling_rate = 48000 
 
         if "2022" in self.model_name:
             self.version = "2022"
         elif "clapcap" in self.model_name:
             self.version = "clapcap"
+        elif "2023" in self.model_name:
+            self.version = "2023"
         else:
             self.version = "2023"
-        self.version = "2023"
         self.use_cuda = device == "cuda"
         self.device = device
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
@@ -78,7 +78,10 @@ class MSClapWrapper:
                             if isinstance(audio, np.ndarray)
                             else audio.float()
                         )
-                        if item.get("sampling_rate", self.sampling_rate) != self.sampling_rate:
+                        if (
+                            item.get("sampling_rate", self.sampling_rate)
+                            != self.sampling_rate
+                        ):
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
                             )
@@ -112,32 +115,32 @@ class MSClapWrapper:
             if "array" in audio_item:
                 audio = audio_item["array"]
                 sr = audio_item.get("sampling_rate", self.sampling_rate)
-                
+
                 if isinstance(audio, np.ndarray):
                     audio = torch.from_numpy(audio).float()
                 elif isinstance(audio, list):
                     audio = torch.tensor(audio, dtype=torch.float32)
                 else:
                     audio = audio.float()
-                
+
                 # Resample if needed
                 if sr != self.sampling_rate:
                     resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
                     audio = resampler(audio)
-                
+
                 return audio.squeeze()
-                
+
             elif "path" in audio_item:
                 return self._load_audio_file(audio_item["path"])
-        
+
         elif isinstance(audio_item, (np.ndarray, torch.Tensor)):
             if isinstance(audio_item, np.ndarray):
                 audio_item = torch.from_numpy(audio_item)
             return audio_item.squeeze().float()
-        
+
         elif isinstance(audio_item, str):
             return self._load_audio_file(audio_item)
-        
+
         else:
             raise ValueError(f"Unsupported audio format: {type(audio_item)}")
 
@@ -145,11 +148,11 @@ class MSClapWrapper:
         """Load audio file and convert to proper format"""
         waveform, sample_rate = torchaudio.load(path)
         waveform = waveform.float()
-        
+
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        
+
         return waveform.squeeze()
 
     def get_audio_embeddings(
@@ -175,11 +178,11 @@ class MSClapWrapper:
     def _process_audio_batch(self, batch) -> list[np.ndarray]:
         """Process a batch of audio items and return embeddings"""
         batch_features = []
-        
+
         for item in batch:
             # Convert to tensor
             audio_tensor = self._process_audio_to_tensor(item)
-            
+
             # Ensure it's in the right format [batch_size, samples]
             if audio_tensor.dim() == 1:
                 audio_tensor = audio_tensor.unsqueeze(0)  # Add batch dimension
@@ -187,16 +190,17 @@ class MSClapWrapper:
             audio_tensor = audio_tensor.to(self.device)
             # Get embeddings using the internal audio encoder
             with torch.no_grad():
-                # Use the internal method like in your working example
+                # Use the internal method
                 audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
-                
+
                 # Normalize embeddings
-                audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
-                
+                audio_features = audio_features / audio_features.norm(
+                    dim=-1, keepdim=True
+                )
+
                 batch_features.append(audio_features.cpu().numpy())
-        
+
         return batch_features
-        
 
     def get_text_embeddings(
         self,
@@ -206,7 +210,9 @@ class MSClapWrapper:
         with torch.no_grad():
             preprocessed_texts = self.model.preprocess_text(texts)
             if isinstance(preprocessed_texts, dict):
-                preprocessed_texts = {k: v.to(self.device) for k, v in preprocessed_texts.items()}
+                preprocessed_texts = {
+                    k: v.to(self.device) for k, v in preprocessed_texts.items()
+                }
             else:
                 preprocessed_texts = preprocessed_texts.to(self.device)
             text_features = self.model.clap.caption_encoder(preprocessed_texts)
@@ -233,8 +239,8 @@ ms_clap_2022 = ModelMeta(
     loader=partial(MSClapWrapper, model_name="microsoft/msclap-2022"),
     name="microsoft/msclap-2022",
     languages=["eng-Latn"],
-    revision="N/A",  
-    release_date="2022-12-01", 
+    revision="N/A",
+    release_date="2022-12-01",
     modalities=["audio", "text"],
     n_parameters=86_000_000,  # Estimated based on architecture
     memory_usage_mb=350,  # Estimated
@@ -252,13 +258,13 @@ ms_clap_2022 = ModelMeta(
 )
 
 ms_clap_2023 = ModelMeta(
-    loader=partial(MSClapWrapper, model_name="microsoft/msclap"),
-    name="microsoft/msclap",
+    loader=partial(MSClapWrapper, model_name="microsoft/msclap-2023"),
+    name="microsoft/msclap-2023",
     languages=["eng-Latn"],
     revision="N/A",
-    release_date="2023-09-01",  
+    release_date="2023-09-01",
     modalities=["audio", "text"],
-    n_parameters=125_000_000,  
+    n_parameters=125_000_000,
     memory_usage_mb=480,
     max_tokens=float("inf"),
     embed_dim=1024,
@@ -280,7 +286,7 @@ ms_clap_clapcap = ModelMeta(
     revision="N/A",
     release_date="2023-09-01",
     modalities=["audio", "text"],
-    n_parameters=125_000_000, 
+    n_parameters=125_000_000,
     memory_usage_mb=480,
     max_tokens=float("inf"),
     embed_dim=1024,
