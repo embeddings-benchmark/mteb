@@ -7,7 +7,6 @@ from typing import Any
 import numpy as np
 import torch
 import torchaudio
-import wav2clip
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import CLIPModel, CLIPProcessor
@@ -26,8 +25,9 @@ class Wav2ClipZeroShotWrapper:
         requires_package(
             self,
             "wav2clip",
-            "pip install wav2clip"
+            "pip install 'mteb[wav2clip]'"
         )
+        import wav2clip
         # audio side
         self.device = device
         self.audio_model = wav2clip.get_model().to(device)
@@ -103,28 +103,42 @@ class Wav2ClipZeroShotWrapper:
         audio: AudioBatch,
         **kwargs: Any,
     ) -> np.ndarray:
-        # collect all waveforms
+        all_embeddings = []
+        
         if isinstance(audio, DataLoader):
-            wavs: list[torch.Tensor] = []
-            for batch in tqdm(audio, desc="Preparing audio for wav2clip"):
-                wavs.extend(self._handle_batch(batch))
+            # Process each batch separately
+            for batch in tqdm(audio, desc="Processing audio batches"):
+                batch_embeddings = []
+                
+                # Process each item in the batch individually
+                wavs = self._handle_batch(batch)
+                for wav in wavs:
+                    # Process one audio at a time to avoid memory issues
+                    wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
+                    embed = self.audio_model.embed_audio(wav_np, self.audio_model)
+                    
+                    # Normalize
+                    norm = np.linalg.norm(embed, axis=-1, keepdims=True)
+                    normalized_embed = embed / norm
+                    batch_embeddings.append(normalized_embed)
+                
+                all_embeddings.extend(batch_embeddings)
+            
+            return np.vstack(all_embeddings)
         else:
+            # Process single batch - still do it item by item
             wavs = self._handle_batch(audio)
-
-         # 2. Pad to same length
-        max_len = max(w.shape[-1] for w in wavs)
-        padded = [
-            torch.nn.functional.pad(w, (0, max_len - w.shape[-1])) if w.shape[-1] != max_len else w
-            for w in wavs
-        ]
-
-        audio_batch = torch.stack(padded, dim=0).to(self.device)
-
-        audio_np = audio_batch.cpu().numpy()
-        embeds = wav2clip.embed_audio(audio_np, self.audio_model)
-
-        norms = np.linalg.norm(embeds, axis=-1, keepdims=True)
-        return embeds / norms
+            for wav in wavs:
+                # Process one audio at a time
+                wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
+                embed = self.audio_model.embed_audio(wav_np, self.audio_model)
+                
+                # Normalize
+                norm = np.linalg.norm(embed, axis=-1, keepdims=True)
+                normalized_embed = embed / norm
+                all_embeddings.append(normalized_embed)
+            
+            return np.vstack(all_embeddings)
 
     def get_text_embeddings(
         self,
