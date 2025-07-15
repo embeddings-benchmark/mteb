@@ -33,7 +33,7 @@ class MSClapWrapper:
         from msclap import CLAP
 
         self.model_name = model_name
-        self.sampling_rate = 48000 
+        self.sampling_rate = 48000
 
         if "2022" in self.model_name:
             self.version = "2022"
@@ -240,14 +240,14 @@ ms_clap_2022 = ModelMeta(
     revision="N/A",
     release_date="2022-12-01",
     modalities=["audio", "text"],
-    n_parameters=196_000_000, 
-    memory_usage_mb=750,  
+    n_parameters=196_000_000,
+    memory_usage_mb=750,
     max_tokens=None,
-    embed_dim=1024,  
+    embed_dim=1024,
     license="mit",
     open_weights=True,
     public_training_code="https://github.com/microsoft/CLAP",
-    public_training_data="https://github.com/microsoft/CLAP",  # Microsoft used multiple datasets
+    public_training_data="https://github.com/microsoft/CLAP",
     framework=["PyTorch"],
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
@@ -276,4 +276,3 @@ ms_clap_2023 = ModelMeta(
     use_instructions=False,
     training_datasets={},
 )
-
