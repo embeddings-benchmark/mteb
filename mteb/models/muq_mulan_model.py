@@ -57,18 +57,19 @@ class MuQMuLanWrapper:
                     if "array" in item:
                         audio = item["array"]
                         # Convert to torch tensor and ensure float32
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            waveform = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            waveform = torch.tensor(audio, dtype=torch.float32)
+                        else:
+                            waveform = audio.float()  # assume it's already a torch.Tensor
                         # Resample if needed
                         if item.get("sampling_rate", self.target_sampling_rate) != self.target_sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.target_sampling_rate
                             )
-                            audio = resampler(audio)
-                        waveforms.append(self._convert_audio(audio))
+                            waveform = resampler(waveform)
+                        waveforms.append(self._convert_audio(waveform))
                     elif "path" in item:
                         waveforms.append(self._load_audio_file(item["path"]))
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
@@ -113,7 +114,13 @@ class MuQMuLanWrapper:
                     if isinstance(item, torch.Tensor):
                         waveform = item
                     elif isinstance(item, dict) and "array" in item:
-                        waveform = torch.from_numpy(item["array"]).float()
+                        audio = item["array"]
+                        if isinstance(audio, np.ndarray):
+                            waveform = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            waveform = torch.tensor(audio, dtype=torch.float32)
+                        else:
+                            waveform = audio.float()  # assume it's already a torch.Tensor
                         # Resample if needed
                         if item.get("sampling_rate", self.target_sampling_rate) != self.target_sampling_rate:
                             resampler = torchaudio.transforms.Resample(
@@ -139,7 +146,13 @@ class MuQMuLanWrapper:
             
             for item in audio:
                 if isinstance(item, dict) and "array" in item:
-                    waveform = torch.from_numpy(item["array"]).float()
+                    audio = item["array"]
+                    if isinstance(audio, np.ndarray):
+                        waveform = torch.from_numpy(audio).float()
+                    elif isinstance(audio, list):
+                        waveform = torch.tensor(audio, dtype=torch.float32)
+                    else:
+                        waveform = audio.float()  # assume it's already a torch.Tensor
                     # Resample if needed
                     if item.get("sampling_rate", self.target_sampling_rate) != self.target_sampling_rate:
                         resampler = torchaudio.transforms.Resample(
