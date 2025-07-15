@@ -28,10 +28,10 @@ class Wav2ClipZeroShotWrapper:
             "pip install 'mteb[wav2clip]'"
         )
         import wav2clip
+        self.wav2clip = wav2clip
         # audio side
         self.device = device
-        self.audio_model = wav2clip.get_model().to(device)
-        # wav2clip defaults to 16_000 Hz
+        self.audio_model = self.wav2clip.get_model().to(device)
         self.sampling_rate = 16_000
 
         # text side (CLIP)
@@ -115,7 +115,7 @@ class Wav2ClipZeroShotWrapper:
                 for wav in wavs:
                     # Process one audio at a time to avoid memory issues
                     wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
-                    embed = self.audio_model.embed_audio(wav_np, self.audio_model)
+                    embed = self.wav2clip.embed_audio(wav_np, self.audio_model)
                     
                     # Normalize
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
@@ -131,7 +131,7 @@ class Wav2ClipZeroShotWrapper:
             for wav in wavs:
                 # Process one audio at a time
                 wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
-                embed = self.audio_model.embed_audio(wav_np, self.audio_model)
+                embed = self.wav2clip.embed_audio(wav_np, self.audio_model)
                 
                 # Normalize
                 norm = np.linalg.norm(embed, axis=-1, keepdims=True)
