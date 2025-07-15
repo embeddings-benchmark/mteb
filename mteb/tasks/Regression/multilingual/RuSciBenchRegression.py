@@ -51,10 +51,13 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
     )
 
     def dataset_transform(self):
-        for subset in self.dataset:
-            self.dataset[subset]["train"] = self.dataset[subset][
-                "train"
-            ].train_test_split(test_size=2048, seed=self.seed)["test"]
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=self.seed,
+            splits=["train"],
+            label="value",
+            n_samples=2048,
+        )
 
 
 class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
@@ -103,7 +106,10 @@ class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
     )
 
     def dataset_transform(self):
-        for subset in self.dataset:
-            self.dataset[subset]["train"] = self.dataset[subset][
-                "train"
-            ].train_test_split(test_size=2048, seed=self.seed)["test"]
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=self.seed,
+            splits=["train"],
+            label="value",
+            n_samples=2048,
+        )

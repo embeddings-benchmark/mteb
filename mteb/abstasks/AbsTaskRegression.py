@@ -3,16 +3,16 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from datasets import DatasetDict
+import datasets
+import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
 
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RegressionEvaluator import LinearRegressionEvaluator
-
-from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask
+from mteb.load_results.task_results import ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -69,9 +69,10 @@ class AbsTaskRegression(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict,
+        dataset: datasets.DatasetDict,
         hf_split: str,
-        hf_subset: str,
+        *,
+        hf_subset: str | None = None,
         encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
@@ -133,6 +134,54 @@ class AbsTaskRegression(AbsTask):
             self._add_main_score(scores[hf_subset])
 
         return scores
+
+    @staticmethod
+    def stratified_subsampling(
+        dataset_dict: datasets.DatasetDict,
+        seed: int,
+        splits: list[str] = ["test"],
+        label: str = "value",
+        n_samples: int = 2048,
+        n_bins: int = 10,
+    ) -> datasets.DatasetDict:
+        """Subsamples the dataset with stratification by the supplied label, which is assumed to be a continuous value.
+        The continuous values are bucketized into `n_bins` bins based on quantiles.
+        Returns a DatasetDict object.
+
+        Args:
+            dataset_dict: the DatasetDict object.
+            seed: the random seed.
+            splits: the splits of the dataset.
+            label: the label with which the stratified sampling is based on.
+            n_samples: Optional, number of samples to subsample.
+            n_bins: Optional, number of bins to bucketize the continuous label.
+        """
+        stratify_col_name = f"{label}_binned_for_stratification"
+
+        for split in splits:
+            if n_samples >= len(dataset_dict[split]):
+                logger.debug(
+                    "Subsampling not needed for split %s, as n_samples is equal or greater than the number of samples.",
+                    split,
+                )
+                continue
+
+            dataset = dataset_dict[split]
+            labels = dataset[label]
+
+            binned_labels = pd.qcut(labels, q=n_bins, labels=False, duplicates="drop")
+            dataset_with_bins: datasets.Dataset = dataset.add_column(
+                name=stratify_col_name, column=binned_labels.tolist()
+            )
+
+            subsampled_dataset = dataset_with_bins.train_test_split(
+                test_size=n_samples, seed=seed, stratify_by_column=stratify_col_name
+            )["test"]
+
+            subsampled_dataset = subsampled_dataset.remove_columns([stratify_col_name])
+            dataset_dict[split] = subsampled_dataset
+
+        return dataset_dict
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
