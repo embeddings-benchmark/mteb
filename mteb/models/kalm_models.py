@@ -768,19 +768,10 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     superseded_by=None,
 )
 
-
-def kalmv2_instruct_loader(model_name_or_path, **kwargs):
-    model = InstructSentenceTransformerWrapper(
-        model_name_or_path,
-        **kwargs,
-    )
-    return model
-
-
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
     loader=partial(  # type: ignore
-        kalmv2_instruct_loader,
-        model_name_or_path="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
+        InstructSentenceTransformerWrapper,
+        model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
         revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
         instruction_template=KaLM_INSTRUCTION,
         max_seq_length=512,
