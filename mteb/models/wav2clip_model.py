@@ -166,9 +166,9 @@ class Wav2ClipZeroShotWrapper:
 
 wav2clip_zero = ModelMeta(
     loader=partial(Wav2ClipZeroShotWrapper),
-    name="wav2clip",
+    name="lyrebird/wav2clip",
     languages=["eng-Latn"],
-    revision="main",
+    revision="N/A",
     release_date="2022-03-15",
     modalities=["audio", "text"],
     n_parameters=163_000_000,  # wav2clip: 11.7M + CLIP: 151.3M ≈ 163M
