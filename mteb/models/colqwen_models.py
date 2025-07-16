@@ -99,7 +99,7 @@ colqwen2_5 = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="vidore/colqwen2.5-v0.2",
-        revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+        revision="6f6fcdfd1a114dfe365f529701b33d66b9349014",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -107,7 +107,7 @@ colqwen2_5 = ModelMeta(
     ),
     name="vidore/colqwen2.5-v0.2",
     languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    revision="6f6fcdfd1a114dfe365f529701b33d66b9349014",
     release_date="2025-01-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
