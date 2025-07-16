@@ -44,7 +44,7 @@ colsmol_256m = ModelMeta(
     loader=partial(
         ColSmolWrapper,
         model_name="vidore/colSmol-256M",
-        revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+        revision="a59110fdf114638b8018e6c9a018907e12f14855",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -52,7 +52,7 @@ colsmol_256m = ModelMeta(
     ),
     name="vidore/colSmol-256M",
     languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    revision="a59110fdf114638b8018e6c9a018907e12f14855",
     release_date="2025-01-22",
     modalities=["image", "text"],
     n_parameters=256_000_000,
