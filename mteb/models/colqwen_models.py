@@ -138,7 +138,7 @@ colnomic_3b = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="nomic-ai/colnomic-embed-multimodal-3b",
-        revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+        revision="86627b4a9b0cade577851a70afa469084f9863a4",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -146,7 +146,7 @@ colnomic_3b = ModelMeta(
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
     languages=COLNOMIC_LANGUAGES,
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    revision="86627b4a9b0cade577851a70afa469084f9863a4",
     release_date="2025-03-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
