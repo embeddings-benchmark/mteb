@@ -99,7 +99,7 @@ class ColPaliEngineWrapper:
                 batch = [
                     self.processor.query_prefix
                     + t
-                    + self.processor.query_augmentation_token
+                    + self.processor.query_augmentation_token * 10
                     for t in texts[i : i + batch_size]
                 ]
                 inputs = self.processor.process_texts(batch).to(self.device)
