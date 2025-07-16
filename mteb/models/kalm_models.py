@@ -7,6 +7,7 @@ from typing import Any
 
 import numpy as np
 import torch
+
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
