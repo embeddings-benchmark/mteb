@@ -10,7 +10,6 @@ import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import (
-    SpeechT5ForSpeechToSpeech,
     SpeechT5ForSpeechToText,
     SpeechT5ForTextToSpeech,
     SpeechT5Processor,
@@ -33,10 +32,14 @@ class SpeechT5Wrapper(Wrapper):
 
         self.asr_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
         self.tts_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
-        
+
         # Initialize models for both audio and text encoding
-        self.asr_model = SpeechT5ForSpeechToText.from_pretrained("microsoft/speecht5_asr").to(self.device)
-        self.tts_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(self.device)
+        self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
+            "microsoft/speecht5_asr"
+        ).to(self.device)
+        self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
+            "microsoft/speecht5_tts"
+        ).to(self.device)
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
@@ -279,6 +282,6 @@ speecht5_multimodal = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="http://www.festvox.org/cmu_arctic/",
-    training_datasets={}, 
-    modalities=["audio", "text"]
+    training_datasets={},
+    modalities=["audio", "text"],
 )
