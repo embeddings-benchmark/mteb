@@ -31,24 +31,14 @@ class SpeechT5Wrapper(Wrapper):
         self.model_name = model_name
         self.device = device
 
-        self.processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
-        self.feature_extractor = self.processor.feature_extractor
-        if "asr" in model_name:
-            self.model_type = "asr"
-            self.model = SpeechT5ForSpeechToText.from_pretrained(model_name).to(
-                self.device
-            )
-        elif "tts" in model_name:
-            self.model_type = "tts"
-            self.model = SpeechT5ForTextToSpeech.from_pretrained(model_name).to(
-                self.device
-            )
-        elif "vc" in model_name:
-            self.model_type = "vc"
-            self.model = SpeechT5ForSpeechToSpeech.from_pretrained(model_name).to(
-                self.device
-            )
-        self.sampling_rate = self.feature_extractor.sampling_rate
+        self.asr_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
+        self.tts_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+        
+        # Initialize models for both audio and text encoding
+        self.asr_model = SpeechT5ForSpeechToText.from_pretrained("microsoft/speecht5_asr").to(self.device)
+        self.tts_model = SpeechT5ForTextToSpeech.from_pretrained("microsoft/speecht5_tts").to(self.device)
+
+        self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -142,7 +132,7 @@ class SpeechT5Wrapper(Wrapper):
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
-                inputs = self.processor(
+                inputs = self.asr_processor(
                     audio=batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
@@ -150,7 +140,7 @@ class SpeechT5Wrapper(Wrapper):
                     return_attention_mask=True,
                 ).to(self.device)
 
-                outputs = self.model.speecht5.encoder(
+                outputs = self.asr_model.speecht5.encoder(
                     input_values=inputs.input_values,
                     attention_mask=inputs.attention_mask,
                 )
@@ -162,7 +152,7 @@ class SpeechT5Wrapper(Wrapper):
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            return torch.zeros((0, self.audio_model.config.hidden_size))
+            return torch.zeros((0, self.asr_model.config.hidden_size))
 
     def get_text_embeddings(
         self,
@@ -181,14 +171,14 @@ class SpeechT5Wrapper(Wrapper):
                 batch_texts = texts[i : i + batch_size]
 
                 # Process text through tokenizer
-                inputs = self.processor(
+                inputs = self.tts_processor(
                     text=batch_texts,
                     return_tensors="pt",
                     padding="longest",
                     truncation=True,
                 ).to(self.device)
 
-                outputs = self.model.speecht5.encoder(
+                outputs = self.tts_model.speecht5.encoder(
                     input_values=inputs["input_ids"],
                     attention_mask=inputs["attention_mask"],
                 )
@@ -200,7 +190,7 @@ class SpeechT5Wrapper(Wrapper):
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            return torch.zeros((0, self.text_model.config.hidden_size))
+            return torch.zeros((0, self.tts_model.config.hidden_size))
 
     def encode(
         self,
@@ -268,27 +258,27 @@ speecht5_tts = ModelMeta(
 )
 
 # Voice Conversion model - Optimized for Speech-to-Speech conversion tasks
-speecht5_vc = ModelMeta(
+speecht5_multimodal = ModelMeta(
     loader=partial(
         SpeechT5Wrapper,
-        model_name="microsoft/speecht5_vc",
+        model_name="microsoft/speecht5_multimodal",
     ),
-    name="microsoft/speecht5_vc",
+    name="microsoft/speecht5_multimodal",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="c418ba2144598f973d0fddc9fd5909a3af83de3d",
+    revision="N/A",
     release_date="2022-05-16",
     max_tokens=None,
-    n_parameters=155_128_168,
-    memory_usage_mb=591,
+    n_parameters=297_911_401,  # Combined ASR + TTS parameters
+    memory_usage_mb=1136,  # Combined memory usage
     embed_dim=768,
     license="mit",
-    reference="https://huggingface.co/microsoft/speecht5_vc",
+    reference="https://huggingface.co/microsoft/speecht5_asr",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="http://www.festvox.org/cmu_arctic/",
-    training_datasets={},  # {"CMU ARCTIC": ["train"]},
-    modalities=["audio"],
+    training_datasets={}, 
+    modalities=["audio", "text"]
 )
