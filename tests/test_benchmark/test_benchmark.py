@@ -302,7 +302,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     )
 
 
-@pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-passage"])
+@pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-document"])
 def test_prompt_name_split_correctly(task_name: str, tmp_path: Path):
     """Test that the task name is split correctly into task name and prompt type
     for tasks with multiple `-` in their names.
