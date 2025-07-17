@@ -50,15 +50,6 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
         prompt="Predict the number of citations for a scientific article based on the title and abstract",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["train"],
-            label="value",
-            n_samples=2048,
-        )
-
 
 class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
     metadata = TaskMetadata(
@@ -104,12 +95,3 @@ class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
 """,
         prompt="Predict paper publitaction year based on the title and abstract",
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["train"],
-            label="value",
-            n_samples=2048,
-        )

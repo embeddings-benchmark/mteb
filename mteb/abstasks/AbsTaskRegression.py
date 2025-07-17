@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 import datasets
+import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
@@ -66,6 +67,14 @@ class AbsTaskRegression(AbsTask):
     input_column_name: str = "text"
     abstask_prompt = "Predict the value of the user passage."
 
+    n_experiments: int = 10
+    n_samples: int = 2048
+
+    def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)
+        self.n_experiments = self.metadata_dict.get("n_experiments", self.n_experiments)
+        self.n_samples = self.metadata_dict.get("n_samples", self.n_samples)
+
     def _evaluate_subset(
         self,
         model: Encoder,
@@ -79,17 +88,43 @@ class AbsTaskRegression(AbsTask):
         train_split = dataset[self.train_split]
         eval_split = dataset[hf_split]
 
-        evaluator = self.evaluator(
-            train_split[self.input_column_name],
-            train_split[self.label_column_name],
-            eval_split[self.input_column_name],
-            eval_split[self.label_column_name],
-            task_name=self.metadata.name,
-            hf_subset=hf_subset,
-            **kwargs,
-        )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
-        return scores
+        scores_list, test_cache = [], None
+        for i in range(self.n_experiments):
+            logger.info(
+                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
+            )
+
+            if self.n_samples >= len(train_split):
+                train_split_sampled = train_split
+            else:
+                train_split_sampled = self.stratified_subsampling(
+                    datasets.DatasetDict({"train": train_split}),
+                    seed=self.seed + i,
+                    splits=["train"],
+                    label=self.label_column_name,
+                    n_samples=self.n_samples,
+                )["train"]
+
+            evaluator = self.evaluator(
+                train_split_sampled[self.input_column_name],
+                train_split_sampled[self.label_column_name],
+                eval_split[self.input_column_name],
+                eval_split[self.label_column_name],
+                task_name=self.metadata.name,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                **kwargs,
+            )
+            scores, test_cache = evaluator(
+                model, encode_kwargs=encode_kwargs, test_cache=test_cache
+            )
+            scores_list.append(scores)
+
+        avg_scores: dict[str, Any] = {
+            k: np.mean([s[k] for s in scores_list]) for k in scores_list[0]
+        }
+        avg_scores["scores_per_experiment"] = scores_list
+        return avg_scores
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
@@ -106,8 +141,8 @@ class AbsTaskRegression(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        if "random_state" in self.classifier.get_params():
-            self.classifier = self.classifier.set_params(random_state=self.seed)
+        if "random_state" in self.model.get_params():
+            self.model = self.model.set_params(random_state=self.seed)
 
         scores = {}
         hf_subsets = self.hf_subsets
@@ -171,7 +206,12 @@ class AbsTaskRegression(AbsTask):
 
             binned_labels = pd.qcut(labels, q=n_bins, labels=False, duplicates="drop")
             dataset_with_bins: datasets.Dataset = dataset.add_column(
-                name=stratify_col_name, column=binned_labels.tolist()
+                name=stratify_col_name,
+                column=binned_labels.tolist(),
+            )
+            dataset_with_bins = dataset_with_bins.cast_column(
+                stratify_col_name,
+                datasets.ClassLabel(names=np.unique(binned_labels).tolist()),
             )
 
             subsampled_dataset = dataset_with_bins.train_test_split(

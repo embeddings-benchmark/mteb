@@ -46,8 +46,12 @@ class LinearRegressionEvaluator(Evaluator):
         self.fit_intercept = fit_intercept
 
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}
-    ) -> dict[str, float]:
+        self,
+        model: Encoder,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        test_cache: np.ndarray | None = None,
+    ) -> tuple[dict[str, float], np.ndarray]:
         scores = {}
         X_train = model.encode(
             self.sentences_train,
@@ -57,18 +61,20 @@ class LinearRegressionEvaluator(Evaluator):
             hf_subset=self.hf_subset,
             **encode_kwargs,
         )
-        X_test = model.encode(
-            self.sentences_test,
-            model=model,
-            task_name=self.task_name,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            **encode_kwargs,
-        )
+        if test_cache is None:
+            X_test = model.encode(
+                self.sentences_test,
+                model=model,
+                task_name=self.task_name,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
+            test_cache = X_test
 
         linear_regression = LinearRegression(fit_intercept=self.fit_intercept)
         linear_regression.fit(X_train, self.y_train)
-        y_pred = linear_regression.predict(X_test)
+        y_pred = linear_regression.predict(test_cache)
 
         scores["mae"] = mean_absolute_error(self.y_test, y_pred)
         scores["mse"] = mean_squared_error(self.y_test, y_pred)
@@ -76,4 +82,4 @@ class LinearRegressionEvaluator(Evaluator):
         scores["r2"] = r2_score(self.y_test, y_pred)
         scores["kendalltau"] = kendalltau(self.y_test, y_pred).statistic
 
-        return scores
+        return scores, test_cache
