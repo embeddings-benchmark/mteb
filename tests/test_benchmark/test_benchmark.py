@@ -331,12 +331,12 @@ def test_model_query_passage_prompts_task_type(
     task_name = task.metadata.name if is_task_name else task.metadata.type
 
     def check_prompt(prompt_name, is_query):
-        prompt_type = "query" if is_query else "passage"
+        prompt_type = "query" if is_query else "document"
         assert prompt_name == f"{task_name}-{prompt_type}"
 
     prompt_list = {
         f"{task_name}-query": "query",
-        f"{task_name}-passage": "passage",
+        f"{task_name}-document": "document",
     }
 
     class MockEncoderWithPrompts(mteb.Encoder):

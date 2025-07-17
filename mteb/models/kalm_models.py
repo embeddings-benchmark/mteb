@@ -7,6 +7,7 @@ from typing import Any
 
 import numpy as np
 import torch
+
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
@@ -37,10 +38,13 @@ class KALMWrapper(InstructSentenceTransformerWrapper):
         task = get_task(task_name)
 
         # to passage prompts won't be applied to passages
-        if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
+        if (
+            not self.apply_instruction_to_passages
+            and prompt_type == PromptType.document
+        ):
             instruction = None
             logger.info(
-                f"No instruction used, because prompt type = {prompt_type.passage}"
+                f"No instruction used, because prompt type = {prompt_type.document}"
             )
 
         if task.metadata.type in ["STS", "PairClassification", "Summarization"]:
