@@ -12,8 +12,8 @@ class GunshotTriangulation(AbsTaskAudioClassification):
         description="Classifying a weapon based on its muzzle blast",
         reference="https://huggingface.co/datasets/anime-sh/GunshotTriangulationHEAR",
         dataset={
-            "path": "anime-sh/GunshotTriangulationHEAR",
-            "revision": "cc57c7ff05daee3fcfd1657f18642167bf98e9e5",
+            "path": "mteb/GunshotTriangulationHear",
+            "revision": "d5caa98a10a41dd8890a343a631fdbaacc747108",
         },
         type="AudioClassification",
         category="a2t",

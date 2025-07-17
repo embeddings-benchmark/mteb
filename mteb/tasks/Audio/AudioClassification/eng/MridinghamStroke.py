@@ -12,8 +12,8 @@ class MridinghamStroke(AbsTaskAudioClassification):
         description='Stroke classification of Mridingham (a pitched percussion instrument) into one of 10 classes: ["bheem", "cha", "dheem", "dhin", "num", "tham", "ta", "tha", "thi", "thom"]',
         reference="https://huggingface.co/datasets/silky1708/Mridingham-Stroke",
         dataset={
-            "path": "silky1708/Mridingham-Stroke",
-            "revision": "523fe0aac393bbd1a9b46a77951d09296a1b4932",
+            "path": "mteb/mridingham-stroke",
+            "revision": "2b6d06ff3da6da9609f078b6bc92c248016a5112",
         },
         type="AudioClassification",
         category="a2t",

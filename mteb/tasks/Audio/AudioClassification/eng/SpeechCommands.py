@@ -12,8 +12,8 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
         description="A set of one-second .wav audio files, each containing a single spoken English word or background noise. To keep evaluation fast, we use a downsampled version of the original dataset by keeping ~50 samples per class for training.",
         reference="https://arxiv.org/abs/1804.03209",
         dataset={
-            "path": "AdnanElAssadi/speech_commands_small",
-            "revision": "a59564b91bf0cfcf587e11c2603fe42bae21e5f0",
+            "path": "mteb/speech-commands-mini",
+            "revision": "3ac713aa0829eeadda73182f38bbbd788d21254b",
         },
         type="AudioClassification",
         category="a2t",

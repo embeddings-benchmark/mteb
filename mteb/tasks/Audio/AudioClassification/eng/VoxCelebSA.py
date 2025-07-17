@@ -12,8 +12,8 @@ class VoxCelebSA(AbsTaskAudioClassification):
         description="VoxCeleb dataset augmented for Sentiment Analysis task",
         reference="https://huggingface.co/datasets/DynamicSuperb/Sentiment_Analysis_SLUE-VoxCeleb",
         dataset={
-            "path": "DynamicSuperb/Sentiment_Analysis_SLUE-VoxCeleb",
-            "revision": "554ad4367e98b7c6f4d4d9756dc6bbdf345e042e",
+            "path": "mteb/voxceleb-sentiment",
+            "revision": "17fb326752c26b58491de360f0a6a152c9bfe19d",
         },
         type="AudioClassification",
         category="a2t",

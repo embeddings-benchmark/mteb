@@ -12,8 +12,8 @@ class GTZANGenre(AbsTaskAudioClassification):
         description="Music Genre Classification (10 classes)",
         reference="https://huggingface.co/datasets/silky1708/GTZAN-Genre",
         dataset={
-            "path": "silky1708/GTZAN-Genre",
-            "revision": "5efdda59d0d185bfe17ada9b54d233349d0e0168",
+            "path": "mteb/gtzan-genre",
+            "revision": "53efa094d18619a4e2bf36123192ec7a01a7d1bf",
         },
         type="AudioClassification",
         category="a2t",
