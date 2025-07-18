@@ -76,6 +76,7 @@ from .ita.ItaCaseholdClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .ita.SardiStanceClassification import *
 from .jav.JavaneseIMDBClassification import *
+from .jpn.JapaneseSentimentClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
