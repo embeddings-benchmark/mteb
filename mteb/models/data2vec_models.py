@@ -151,7 +151,7 @@ class Data2VecAudioWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
+        raise ValueError("Data2Vec models only support audio encoding.")
 
 
 # Base model
