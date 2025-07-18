@@ -12,8 +12,8 @@ class VocalSoundClassification(AbsTaskAudioClassification):
         description="Human Vocal Sound Classification Dataset.",
         reference="https://huggingface.co/datasets/lmms-lab/vocalsound",
         dataset={
-            "path": "lmms-lab/vocalsound",
-            "revision": "f7a3562aa7841fabebfecf9df435160c8d55cb0c",
+            "path": "mteb/vocalsound",
+            "revision": "426c4f4779901e731f0ba7157de727750325a68b",
         },
         type="AudioClassification",
         category="a2t",

@@ -13,7 +13,6 @@ from urllib.parse import urlencode
 import cachetools
 import gradio as gr
 import pandas as pd
-from gradio_rangeslider import RangeSlider
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
@@ -158,10 +157,10 @@ def filter_models(
     availability: bool | None,
     compatibility: list[str],
     instructions: bool | None,
-    model_size: tuple[int | None, int | None],
+    max_model_size: int,
     zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
 ):
-    lower, upper = model_size
+    lower, upper = 0, max_model_size
     # Setting to None, when the user doesn't specify anything
     if (lower == MIN_MODEL_SIZE) or (lower is None):
         lower = None
@@ -179,6 +178,7 @@ def filter_models(
         frameworks=compatibility,
         n_parameters_range=(lower, upper),
     )
+
     models_to_keep = set()
     for model_meta in model_metas:
         is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
@@ -217,7 +217,7 @@ def get_leaderboard_app() -> gr.Blocks:
         availability=None,
         compatibility=[],
         instructions=None,
-        model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
+        max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
     )
 
@@ -378,11 +378,19 @@ def get_leaderboard_app() -> gr.Blocks:
                             label="Zero-shot",
                             interactive=True,
                         )
-                        model_size = RangeSlider(
-                            minimum=MIN_MODEL_SIZE,
-                            maximum=MAX_MODEL_SIZE,
-                            value=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
-                            label="Model Size (#M Parameters)",
+
+                        max_model_size = gr.Radio(
+                            [
+                                ("<100M", 100),
+                                ("<500M", 500),
+                                ("<1B", 1000),
+                                ("<5B", 5000),
+                                ("<10B", 10000),
+                                (">10B", MAX_MODEL_SIZE),
+                            ],
+                            value=MAX_MODEL_SIZE,
+                            label="Model Parameters",
+                            interactive=True,
                         )
 
         with gr.Tab("Summary"):
@@ -580,7 +588,7 @@ def get_leaderboard_app() -> gr.Blocks:
             availability,
             compatibility,
             instructions,
-            model_size,
+            max_model_size,
             zero_shot: hash(
                 (
                     id(scores),
@@ -588,7 +596,7 @@ def get_leaderboard_app() -> gr.Blocks:
                     hash(availability),
                     hash(tuple(compatibility)),
                     hash(instructions),
-                    hash(model_size),
+                    hash(max_model_size),
                     hash(zero_shot),
                 )
             ),
@@ -599,7 +607,7 @@ def get_leaderboard_app() -> gr.Blocks:
             availability: bool | None,
             compatibility: list[str],
             instructions: bool | None,
-            model_size: tuple[int, int],
+            max_model_size: int,
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
         ):
             start_time = time.time()
@@ -610,7 +618,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot_setting=zero_shot,
             )
             elapsed = time.time() - start_time
@@ -628,7 +636,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
@@ -641,7 +649,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
@@ -654,7 +662,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
@@ -667,7 +675,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
@@ -680,12 +688,12 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
         )
-        model_size.change(
+        max_model_size.change(
             update_models,
             inputs=[
                 scores,
@@ -693,7 +701,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
@@ -706,7 +714,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 availability,
                 compatibility,
                 instructions,
-                model_size,
+                max_model_size,
                 zero_shot,
             ],
             outputs=[models],
@@ -784,7 +792,7 @@ def get_leaderboard_app() -> gr.Blocks:
             availability=None,
             compatibility=[],
             instructions=None,
-            model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
+            max_model_size=MAX_MODEL_SIZE,
             zero_shot="allow_all",
         )
         # We have to call this both on the filtered and unfiltered task because the callbacks

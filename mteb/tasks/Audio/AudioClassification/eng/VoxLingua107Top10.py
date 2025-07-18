@@ -12,8 +12,8 @@ class VoxLingua107Top10(AbsTaskAudioClassification):
         description="Spoken Language Identification for a given audio samples (10 classes/languages)",
         reference="https://huggingface.co/datasets/silky1708/VoxLingua107-Top-10",
         dataset={
-            "path": "silky1708/VoxLingua107-Top-10",
-            "revision": "0ca67257f8b1a9ef8d2a526d9f669ed5c26ed6e7",
+            "path": "mteb/voxlingua107-top10",
+            "revision": "d934546d059e16c9a4669adbd518e0fa86a69ff0",
         },
         type="AudioClassification",
         category="a2t",

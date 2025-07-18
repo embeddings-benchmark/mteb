@@ -12,8 +12,8 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
         description="BirdCLEF+ 2025 dataset for species identification from audio, focused on birds, amphibians, mammals and insects from the Middle Magdalena Valley of Colombia. Downsampled to 50 classes with 20 samples each.",
         reference="https://huggingface.co/datasets/christopher/birdclef-2025",
         dataset={
-            "path": "AdnanElAssadi/birdclef25_small",
-            "revision": "55dbd1a0f77dd71980337a6e64620369c1e3585a",
+            "path": "mteb/birdclef25-mini",
+            "revision": "582215665b247604b555da7ff4e071f82d3617db",
         },
         type="AudioClassification",
         category="a2t",

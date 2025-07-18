@@ -26,9 +26,8 @@ class MInDS14Classification(MultilingualTask, AbsTaskAudioClassification):
         description="MInDS-14 is an evaluation resource for intent detection with spoken data in 14 diverse languages.",
         reference="https://arxiv.org/abs/2104.08524",
         dataset={
-            "path": "PolyAI/minds14",
-            "revision": "75900a7c6f93f014f25b50d16596a6da89add3a5",
-            "trust_remote_code": True,
+            "path": "mteb/minds14-multilingual",
+            "revision": "58d73d2cddefab7df4bc0b814aa5c53c5fd4928e",
         },
         type="AudioClassification",
         category="a2t",
@@ -57,7 +56,7 @@ class MInDS14Classification(MultilingualTask, AbsTaskAudioClassification):
 """,
         descriptive_stats={
             "n_samples": {
-                "train": 563,  # Count for en-US configuration
+                "train": 8170,  # Count across all languages
             },
             "n_classes": 14,
             "classes": [
