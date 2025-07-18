@@ -60,9 +60,14 @@ class ClapZeroShotWrapper:
                         # Convert to torch tensor and ensure float32
                         if isinstance(audio_array, np.ndarray):
                             audio_array = torch.from_numpy(audio_array).float()
+                        elif isinstance(audio_array, list):
+                            # Convert list to numpy array first, then to tensor
+                            audio_array = torch.from_numpy(
+                                np.array(audio_array)
+                            ).float()
                         else:
+                            # Already a tensor
                             audio_array = audio_array.float()
-
                         # Handle resampling if needed
                         if (
                             "sampling_rate" in item
