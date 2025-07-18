@@ -74,23 +74,6 @@ def test_basic_functionality(model, mock_task):
     assert evaluator.task_name == "test_sts"
 
 
-def test_encode_kwargs_handling(model, mock_task):
-    """Test that encode_kwargs are properly handled."""
-    test_data = mock_task.dataset["test"]
-
-    evaluator = STSEvaluator(
-        sentences1=test_data["sentence1"],
-        sentences2=test_data["sentence2"],
-        gold_scores=test_data["score"],
-        task_name="test_sts",
-    )
-
-    # Test that the evaluator accepts encode_kwargs
-    scores = evaluator(model, encode_kwargs={"batch_size": 16})
-    assert isinstance(scores, dict)
-    assert "pearson" in scores
-
-
 def test_batch_size_parameter(mock_task):
     """Test that the batch_size parameter in encode_kwargs works correctly."""
     from tests.test_benchmark.mock_models import MockNumpyEncoder
