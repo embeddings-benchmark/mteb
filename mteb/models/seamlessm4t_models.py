@@ -141,7 +141,7 @@ class SeamlessM4TWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
+        raise ValueError("SeamlessM4T models only support audio encoding.")
 
 
 seamless_m4t_v2_large = ModelMeta(
