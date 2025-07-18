@@ -4,6 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
+
 class BarExamQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BarExamQA",
@@ -19,7 +20,7 @@ class BarExamQA(AbsTaskRetrieval):
             "path": "isaacus/mteb-barexam-qa",
             "revision": "4246981",
         },
-        date=("2024-08-14", "2025-07-18"), 
+        date=("2024-08-14", "2025-07-18"),
         domains=["Legal", "Academic"],
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
@@ -33,4 +34,4 @@ class BarExamQA(AbsTaskRetrieval):
   year = {2025},
   series = {CSLAW '25 (forthcoming)}
 """,
-)
+    )
