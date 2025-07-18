@@ -188,7 +188,8 @@ class JamAltLyricsT2A(MultilingualTask, AbsTaskAny2AnyRetrieval):
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
             "path": "jamendolyrics/jam-alt-lines",
-            "revision": "main",
+            "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
+            "name": "pure",
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2a",
@@ -245,7 +246,8 @@ class JamAltLyricsA2T(MultilingualTask, AbsTaskAny2AnyRetrieval):
         reference="https://huggingface.co/datasets/jamendolyrics/jam-alt-lines",
         dataset={
             "path": "jamendolyrics/jam-alt-lines",
-            "revision": "main",
+            "revision": "11dc96be3bbefd4eb49a467825d7d3d3808105d7",
+            "name": "pure",
         },
         type="Any2AnyMultilingualRetrieval",
         category="a2t",

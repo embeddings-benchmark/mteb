@@ -15,7 +15,7 @@ class AudioCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
         },
         type="Any2AnyRetrieval",
         category="a2t",
-        modalities=["audio"],
+        modalities=["text", "audio"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_5",
@@ -40,8 +40,6 @@ class AudioCapsA2TRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class AudioCapsT2ARetrieval(AbsTaskAny2AnyRetrieval):
-    """This reverses the normal AudioCaps dataset. Instead of audio queries to text corpus, this tests text queries to audio corpus."""
-
     metadata = TaskMetadata(
         name="AudioCapsT2ARetrieval",
         description="Natural language description for any kind of audio in the wild.",
