@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import ClapModel, ClapProcessor, pipeline
+from transformers import ClapModel, ClapProcessor
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -26,16 +26,12 @@ class ClapZeroShotWrapper:
         self.device = device
         self.model = ClapModel.from_pretrained(model_name).to(self.device)
         self.processor = ClapProcessor.from_pretrained(model_name)
+        # CLAP's expected sampling rate. If the input audio is not sampled at this rate,
+        # it will raise a ValueError similar to: ValueError: The model corresponding to
+        # this feature extractor: ClapFeatureExtractor was trained using a sampling rate
+        # of 48000. Please make sure that the provided `raw_speech` input was sampled
+        # with 48000 and not 44100.
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-
-        self.pipeline = pipeline(
-            task="zero-shot-audio-classification",
-            model=self.model,
-            feature_extractor=self.processor.feature_extractor,  # Add the feature extractor
-            tokenizer=self.processor.tokenizer,  # Add the tokenizer
-            device=device,
-            **kwargs,
-        )
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -60,19 +56,25 @@ class ClapZeroShotWrapper:
             for item in batch:
                 if isinstance(item, dict):
                     if "array" in item:
-                        audio = item["array"]
+                        audio_array = item["array"]
                         # Convert to torch tensor and ensure float32
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
-                        if item["sampling_rate"] != self.sampling_rate:
+                        if isinstance(audio_array, np.ndarray):
+                            audio_array = torch.from_numpy(audio_array).float()
+                        else:
+                            audio_array = audio_array.float()
+
+                        # Handle resampling if needed
+                        if (
+                            "sampling_rate" in item
+                            and item["sampling_rate"] != self.sampling_rate
+                        ):
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
                             )
-                            audio = resampler(audio)
-                        waveforms.append(self._convert_audio(audio))
+                            audio_array = resampler(audio_array)
+
+                        # Only squeeze here, don't call _convert_audio again
+                        waveforms.append(audio_array.squeeze())
                     elif "path" in item:
                         waveforms.append(self._load_audio_file(item["path"]))
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
@@ -95,74 +97,40 @@ class ClapZeroShotWrapper:
             waveform = resampler(waveform)
         return waveform.squeeze()
 
-    def _convert_audio(self, audio: AudioData) -> torch.Tensor:
-        if isinstance(audio, np.ndarray):
-            audio = torch.from_numpy(audio)
-        return audio.squeeze()
-
-    def _load_audio_file(self, path: str) -> torch.Tensor:
-        waveform, sample_rate = torchaudio.load(path)
-        if sample_rate != self.sampling_rate:
-            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
-            waveform = resampler(waveform)
-        return waveform.squeeze()
-
     def get_audio_embeddings(
         self,
         audio: AudioBatch,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 4,
         **kwargs: Any,
     ) -> np.ndarray:
         all_features = []
-        target_sampling_rate = 48000  # CLAP's expected sampling rate
+        processed_audio = self._process_audio(audio)
 
-        if isinstance(audio, DataLoader):
-            # Process all batches
-            for batch in tqdm(audio, desc="Processing audio batches"):
-                batch_features = []
-                # Process each item in the batch individually to avoid memory issues
-                for item in batch:
-                    if isinstance(item, torch.Tensor):
-                        item = {"array": item.numpy()}
-                    inputs = self.pipeline.feature_extractor(
-                        [item["array"]],
-                        sampling_rate=target_sampling_rate,
-                        return_tensors="pt",
-                        padding=True,
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        for i in tqdm(
+            range(0, len(processed_audio), batch_size), desc="Processing audio batches"
+        ):
+            batch = processed_audio[i : i + batch_size]
+            batch_arrays = [tensor.numpy() for tensor in batch]
 
-                    with torch.no_grad():
-                        audio_features = self.pipeline.model.get_audio_features(
-                            **inputs
-                        )
-                        audio_features = audio_features / audio_features.norm(
-                            dim=-1, keepdim=True
-                        )
-                        batch_features.append(audio_features.cpu().numpy())
+            inputs = self.processor(
+                audios=batch_arrays,
+                sampling_rate=self.sampling_rate,
+                return_tensors="pt",
+                padding=True,
+            )
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-                all_features.extend(batch_features)
-
-            return np.vstack(all_features)
-        else:
-            # Process single batch
-            batch_features = []
-            for item in audio:
-                inputs = self.pipeline.feature_extractor(
-                    [item["array"]],
-                    sampling_rate=target_sampling_rate,
-                    return_tensors="pt",
-                    padding=True,
+            with torch.no_grad():
+                audio_features = self.model.get_audio_features(**inputs)
+                audio_features = audio_features / audio_features.norm(
+                    dim=-1, keepdim=True
                 )
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                all_features.append(audio_features.cpu().numpy())
 
-                with torch.no_grad():
-                    audio_features = self.pipeline.model.get_audio_features(**inputs)
-                    audio_features = audio_features / audio_features.norm(
-                        dim=-1, keepdim=True
-                    )
-                    batch_features.append(audio_features.cpu().numpy())
-
-            return np.vstack(batch_features)
+        return np.vstack(all_features)
 
     def get_text_embeddings(
         self,
@@ -181,15 +149,13 @@ class ClapZeroShotWrapper:
 
     def encode(
         self,
-        inputs: AudioBatch | list[str],
+        inputs: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if isinstance(inputs[0], str):
-            return self.get_text_embeddings(inputs)
-        return self.get_audio_embeddings(inputs)
+        return self.get_text_embeddings(inputs)
 
 
 # Model metadata

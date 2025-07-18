@@ -145,7 +145,7 @@ class Qwen2AudioWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        return self.get_audio_embeddings(inputs, **kwargs).numpy()
+        raise ValueError("Qwen2Audio models only support audio encoding.")
 
 
 qwen2_audio_meta = ModelMeta(
