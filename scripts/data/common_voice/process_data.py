@@ -105,7 +105,7 @@ def is_language_already_processed(language_code, version, output_dir=None):
         return False
     
     # Check if at least one split directory exists in the audio directory
-    split_dirs = ["train", "test", "validated", "invalidated", "other"]
+    split_dirs = ["train", "test", "dev", "validated", "invalidated", "other"]
     split_exists = False
     for split in split_dirs:
         if (audio_dir / split).exists():
@@ -152,7 +152,7 @@ def extract_tarball(tarball_path, extract_dir, output_dir=None):
     """
     print(f"Extracting {tarball_path} to {extract_dir}...")
     
-    with tarfile.open(tarball_path, "r:gz") as tar:
+    with tarfile.open(tarball_path, "r:gz", errorlevel=1) as tar:
         tar.extractall(path=extract_dir)
     
     # The tarball typically contains a directory like cv-corpus-21.0-2025-03-14/am
@@ -1035,6 +1035,7 @@ def process_language_data(language_dir, language_code, version, language_name=No
         "invalidated.tsv",
         "other.tsv",
         "test.tsv",
+        "dev.tsv",
         "validated.tsv"
     ]
     
