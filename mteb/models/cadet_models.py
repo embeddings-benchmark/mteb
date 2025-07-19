@@ -35,7 +35,7 @@ cadet_embed = ModelMeta(
         revision="8056d118be37a566f20972a5f35cda815f6bc47e",
         model_prompts={
             "query": "query: ",
-            "passage": "passage: ",
+            "document": "passage: ",
         },
     ),
     name="manveertamber/cadet-embed-base-v1",

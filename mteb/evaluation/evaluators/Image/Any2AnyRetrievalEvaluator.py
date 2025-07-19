@@ -195,7 +195,7 @@ class Any2AnyDenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.get_text_embeddings(
                     texts=corpus_texts,
                     task_name=task_name,
-                    prompt_type=PromptType.passage,
+                    prompt_type=PromptType.document,
                     **self.encode_kwargs,
                 )
             else:
@@ -213,7 +213,7 @@ class Any2AnyDenseRetrievalExactSearch:
                     sub_corpus_embeddings = self.model.get_image_embeddings(
                         images=corpus_image_dataloader,
                         task_name=task_name,
-                        prompt_type=PromptType.passage,
+                        prompt_type=PromptType.document,
                         **self.encode_kwargs,
                     )
                 elif corpus_modality == "image,text":
@@ -222,7 +222,7 @@ class Any2AnyDenseRetrievalExactSearch:
                         texts=corpus_texts,
                         images=corpus_image_dataloader,
                         task_name=task_name,
-                        prompt_type=PromptType.passage,
+                        prompt_type=PromptType.document,
                         **self.encode_kwargs,
                     )
                 else:

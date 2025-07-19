@@ -89,24 +89,24 @@ class SentenceTransformerWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
+        prompt = None
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(
                 self.model_prompts, task_name, prompt_type
             )
+            prompt = self.model_prompts.get(prompt_name, None)
         if prompt_name:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using {prompt_name=} for task={task_name} {prompt_type=} with {prompt=}"
             )
         else:
-            logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
-            )
+            logger.info(f"No model prompts found for task={task_name} {prompt_type=}")
         logger.info(f"Encoding {len(sentences)} sentences.")
 
         embeddings = self.model.encode(
             sentences,
-            prompt_name=prompt_name,
+            prompt=prompt,
             **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):
