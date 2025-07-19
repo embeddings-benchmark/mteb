@@ -16,6 +16,7 @@ from .ces.CzechSoMeSentimentClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
+from .dan.DdiscoCohesionClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .deu.GermanPoliticiansTwitterSentimentClassification import *
@@ -109,6 +110,7 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.NusaParagraphEmotionClassification import *
 from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
+from .multilingual.ru_nlu_intent_classification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.ScandiSentClassification import *
 from .multilingual.SIB200Classification import *
@@ -132,7 +134,6 @@ from .rus.GeoreviewClassification import *
 from .rus.HeadlineClassification import *
 from .rus.InappropriatenessClassification import *
 from .rus.KinopoiskClassification import *
-from .rus.ru_nlu_intent_classification import *
 from .rus.ru_toixic_classification_okmlcup import *
 from .rus.RuReviewsClassification import *
 from .rus.RuSciBenchGRNTIClassification import *
