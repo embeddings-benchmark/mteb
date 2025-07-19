@@ -387,6 +387,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [JaCWIRRetrieval](https://huggingface.co/datasets/hotchpotch/JaCWIR) | ['jpn'] | Retrieval | s2s | [Web, Written] | None | None |
 | [JaGovFaqsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Web, Written] | None | None |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
+| [JapaneseSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) (Mollanorozy et al., 2023) | ['jpn'] | Classification | s2s | [Reviews, Written] | None | None |
 | [JaqketRetrieval](https://github.com/kumapo/JAQKET-dataset) (鈴木正敏, 2020) | ['jpn'] | Retrieval | s2p | [Encyclopaedic, Non-fiction, Written] | {'test': 115226} | {'test': {'number_of_characters': 428294530, 'num_samples': 115226, 'num_queries': 997, 'num_documents': 114229, 'min_document_length': 16, 'average_document_length': 0.44, 'max_document_length': 98, 'unique_documents': 114229, 'min_query_length': 8, 'average_query_length': 429532.57, 'max_query_length': 188424, 'unique_queries': 997, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 989}} |
 | [JavaneseIMDBClassification.v2](https://github.com/w11wo/nlp-datasets#javanese-imdb) (Wongso et al., 2021) | ['jav'] | Classification | s2s | [Reviews, Written] | None | None |
 | [KLUE-NLI](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | PairClassification | s2s | [Encyclopaedic, News, Written] | None | None |
@@ -1352,7 +1353,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | Bu (Kaduna State) | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jiv | Shuar | Chicham | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jni | Janji | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 0 | 3 | 0 | 7 | 8 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 21 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 52 |
+| jpn | Japanese | Japonic | 0 | 3 | 0 | 7 | 9 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 21 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 53 |
 | jvn | Caribbean Javanese | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kab | Kabyle | Afro-Asiatic | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | kac | Kachin | Sino-Tibetan | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
@@ -1998,7 +1999,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1494 | 849 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 93 | 65 | 631 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1494 | 850 | 316 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 93 | 65 | 631 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
