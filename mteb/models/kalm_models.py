@@ -167,6 +167,118 @@ kalm_training_data = {
     "MTOPIntentClassification": ["train"],
 }
 
+
+kalm_v2_training_data = {
+    # from technical report
+    # not in MTEB:
+    # ExpertQA
+    # MEDI2BGE
+    # OpenOrca
+    # PAQ
+    # PubMedQA
+    # SearchQA
+    # arxiv_qa
+    # rag-dataset-12000
+    # CC-News
+    # SQuAD 2.0
+    # TriviaQA
+    # WebGPT Comparisons
+    # MultiNLI
+    # NLLB
+    # WikiAnswers
+    # SimCSE NLI
+    # SNLI
+    # Aya Dataset
+    # eli5
+    # ----
+    # in MTEB:
+    "CodeFeedbackMT": ["train"],
+    "CodeFeedbackST": ["train"],
+    "ArxivClusteringP2P": ["train"],
+    "ArxivClusteringS2S": ["train"],
+    "ArxivClusteringP2P.v2": ["train"],
+    "TRECCOVID": ["train"],
+    "DBPedia": ["train"],
+    "ESCIReranking": ["train"],
+    "FEVER": ["train"],
+    "FiQA2018": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "NanoFEVERRetrieval": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
+    "FiQA2018-NL": ["train"],  # translation not trained on
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "MultiLongDocRetrieval": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
+    "MSMARCOv2": ["train"],
+    "NFCorpus": ["train"],
+    "SciFact": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
+    "YahooAnswersTopicsClassification": ["train"],
+    "ContractNLIConfidentialityOfAgreementLegalBenchClassification": ["train"],
+    "ContractNLIExplicitIdentificationLegalBenchClassification": ["train"],
+    "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification": [
+        "train"
+    ],
+    "ContractNLILimitedUseLegalBenchClassification": ["train"],
+    "ContractNLINoLicensingLegalBenchClassification": ["train"],
+    "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification": ["train"],
+    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification": [
+        "train"
+    ],
+    "ContractNLIPermissibleCopyLegalBenchClassification": ["train"],
+    "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification": [
+        "train"
+    ],
+    "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification": ["train"],
+    "ContractNLIReturnOfConfidentialInformationLegalBenchClassification": ["train"],
+    "ContractNLISharingWithEmployeesLegalBenchClassification": ["train"],
+    "ContractNLISharingWithThirdPartiesLegalBenchClassification": ["train"],
+    "ContractNLISurvivalOfObligationsLegalBenchClassification": ["train"],
+    "QuoraRetrieval": ["train"],
+    "NanoQuoraRetrieval": ["train"],
+    "BiorxivClusteringP2P.v2": ["train"],
+    "BiorxivClusteringS2S.v2": ["train"],
+    "MedrxivClusteringP2P.v2": ["train"],
+    "MedrxivClusteringS2S.v2": ["train"],
+    "Banking77Classification": ["train"],
+    "AmazonPolarityClassification": ["train"],
+    "ImdbClassification": ["train"],
+    "EmotionClassification": ["train"],
+    "TweetSentimentExtractionClassification": ["train"],
+    "ToxicConversationsClassification": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "PawsXPairClassification": ["train"],
+    "AmazonReviewsClassification": ["train"],
+    "AmazonCounterfactualClassification": ["train"],
+    "MultilingualSentiment": ["train"],
+    "MassiveIntentClassification": ["train"],
+    "MassiveScenarioClassification": ["train"],
+    "MTOPDomainClassification": ["train"],
+    "MTOPIntentClassification": ["train"],
+    "Reddit-Clustering": ["train"],
+    "Reddit-Clustering-P2P": ["train"],
+    "Stackexchange-Clustering": ["train"],
+    "Stackexchange-Clustering-P2P": ["train"],
+    "TwentyNewsgroups-Clustering": ["train"],
+    "ATEC": ["train"],
+    "BQ": ["train"],
+    "CQADupstack": ["train"],
+}
+
+
 KaLM_task_prompts = {
     "AmazonCounterfactualClassification": "Given an Amazon review, judge whether it is counterfactual.",
     "AmazonPolarityClassification": "Classifying Amazon reviews into positive or negative sentiment",
@@ -229,6 +341,146 @@ KaLM_task_prompts = {
     "RuSciBenchOECDClusteringP2P": "Identify the topic or theme of the Russian articles.",
 }
 
+KaLM_v2_task_prompts = {
+    "AmazonCounterfactualClassification": "Given an Amazon review, judge whether it is counterfactual.",
+    "AmazonPolarityClassification": "Classifying Amazon reviews into positive or negative sentiment",
+    "AmazonReviewsClassification": "Classifying the given Amazon review into its appropriate rating category",
+    "Banking77Classification": "Given an online banking query, find the corresponding intents",
+    "EmotionClassification": "Classifying the emotion expressed in the given Twitter message into one of the six emotions: anger, fear, joy, love, sadness, and surprise",
+    "ImdbClassification": "Classifying the sentiment expressed in the given movie review text from the IMDB dataset",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios",
+    "MTOPDomainClassification": "Classifying the intent domain of the given utterance in task-oriented conversation",
+    "MTOPIntentClassification": "Classifying the intent of the given utterance in task-oriented conversation",
+    "ToxicConversationsClassification": "Classifying the given comments as either toxic or not toxic",
+    "TweetSentimentExtractionClassification": "Classifying the sentiment of a given tweet as either positive, negative, or neutral",
+    "TNews": "Categorizing the given news title",
+    "IFlyTek": "Given an App description text, find the appropriate fine-grained category",
+    "MultilingualSentiment": "Classifying sentiment of the customer review into positive, neutral, or negative",
+    "JDReview": "Classifying sentiment of the customer review for iPhone into positive or negative",
+    "OnlineShopping": "Classifying sentiment of the customer review into positive or negative",
+    "Waimai": "Classify the customer review from a food takeaway platform into positive or negative",
+    "ArxivClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
+    "ArxivClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
+    "BiorxivClusteringP2P": "Identify the main category of Biorxiv papers based on the titles and abstracts",
+    "BiorxivClusteringS2S": "Identify the main category of Biorxiv papers based on the titles",
+    "MedrxivClusteringP2P": "Identify the main category of Medrxiv papers based on the titles and abstracts",
+    "MedrxivClusteringS2S": "Identify the main category of Medrxiv papers based on the titles",
+    "RedditClustering": "Identify the topic or theme of Reddit posts based on the titles",
+    "RedditClusteringP2P": "Identify the topic or theme of Reddit posts based on the titles and posts",
+    "StackExchangeClustering": "Identify the topic or theme of StackExchange posts based on the titles",
+    "StackExchangeClusteringP2P": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
+    "TwentyNewsgroupsClustering": "Identify the topic or theme of the given news articles",
+    "CLSClusteringS2S": "Identify the main category of scholar papers based on the titles",
+    "CLSClusteringP2P": "Identify the main category of scholar papers based on the titles and abstracts",
+    "ThuNewsClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
+    "ThuNewsClusteringP2P": "Identify the topic or theme of the given news articles based on the titles and contents",
+    "Cmnli-query": "Retrieve semantically similar text",
+    "Cmnli-passage": "Retrieve semantically similar text",
+    "Ocnli-query": "Retrieve semantically similar text",
+    "Ocnli-passage": "Retrieve semantically similar text",
+    "SprintDuplicateQuestions-query": "Retrieve semantically similar questions",
+    "SprintDuplicateQuestions-passage": "Retrieve semantically similar questions",
+    "TwitterSemEval2015-query": "Retrieve semantically similar text",
+    "TwitterSemEval2015-passage": "Retrieve semantically similar text",
+    "TwitterURLCorpus-query": "Retrieve semantically similar text",
+    "TwitterURLCorpus-passage": "Retrieve semantically similar text",
+    "CMedQAv1-reranking": "Given a query, retrieve documents that answer the query",
+    "CMedQAv2-reranking": "Given a query, retrieve documents that answer the query",
+    "MMarcoReranking": "Given a query, retrieve documents that answer the query",
+    "T2Reranking": "Given a query, retrieve documents that answer the query",
+    "AskUbuntuDupQuestions-query": "Retrieve semantically similar questions",
+    "AskUbuntuDupQuestions-passage": "Retrieve semantically similar questions",
+    "MindSmallReranking": "Given a query, retrieve documents that answer the query",
+    "SciDocsRR-query": "Retrieve relevant paper titles",
+    "SciDocsRR-passage": "Retrieve relevant paper titles",
+    "StackOverflowDupQuestions-query": "Retrieve semantically similar questions",
+    "StackOverflowDupQuestions-passage": "Retrieve semantically similar questions",
+    "CmedqaRetrieval": "Given a query, retrieve documents that answer the query",
+    "CovidRetrieval": "Given a query, retrieve documents that answer the query",
+    "DuRetrieval": "Given a query, retrieve documents that answer the query",
+    "EcomRetrieval": "Given a query, retrieve documents that answer the query",
+    "MedicalRetrieval": "Given a query, retrieve documents that answer the query",
+    "MMarcoRetrieval": "Given a query, retrieve documents that answer the query",
+    "T2Retrieval": "Given a query, retrieve documents that answer the query",
+    "VideoRetrieval": "Given a query, retrieve documents that answer the query",
+    "MSMARCO": "Given a query, retrieve documents that answer the query",
+    "ArguAna": "Given a query, retrieve documents that answer the query",
+    "ClimateFEVER": "Given a query, retrieve documents that answer the query",
+    "CQADupstackAndroidRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackAndroidRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackEnglishRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackEnglishRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackGamingRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackGamingRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackGisRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackGisRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackMathematicaRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackMathematicaRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackPhysicsRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackPhysicsRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackProgrammersRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackProgrammersRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackStatsRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackStatsRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackTexRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackTexRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackUnixRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackUnixRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackWebmastersRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackWebmastersRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackWordpressRetrieval-query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "CQADupstackWordpressRetrieval-passage": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+    "DBPedia": "Given a query, retrieve documents that answer the query",
+    "FEVER": "Given a query, retrieve documents that answer the query",
+    "FiQA2018": "Given a query, retrieve documents that answer the query",
+    "HotpotQA": "Given a query, retrieve documents that answer the query",
+    "NFCorpus": "Given a query, retrieve documents that answer the query",
+    "NQ": "Given a query, retrieve documents that answer the query",
+    "QuoraRetrieval-query": "Retrieve semantically similar questions",
+    "QuoraRetrieval-passage": "Retrieve semantically similar questions",
+    "SCIDOCS-query": "Given a query, retrieve documents that answer the query",
+    "SCIDOCS-passage": "Given a query, retrieve documents that answer the query",
+    "SciFact": "Given a query, retrieve documents that answer the query",
+    "Touche2020": "Given a query, retrieve documents that answer the query",
+    "TRECCOVID": "Given a query, retrieve documents that answer the query",
+    "AFQMC-query": "Retrieve semantically similar text",
+    "AFQMC-passage": "Retrieve semantically similar text",
+    "ATEC-query": "Retrieve semantically similar text",
+    "ATEC-passage": "Retrieve semantically similar text",
+    "BQ-query": "Retrieve semantically similar text",
+    "BQ-passage": "Retrieve semantically similar text",
+    "LCQMC-query": "Retrieve semantically similar text",
+    "LCQMC-passage": "Retrieve semantically similar text",
+    "PAWSX-query": "Retrieve semantically similar text",
+    "PAWSX-passage": "Retrieve semantically similar text",
+    "QBQTC-query": "Retrieve semantically similar text",
+    "QBQTC-passage": "Retrieve semantically similar text",
+    "STSB-query": "Retrieve semantically similar text",
+    "STSB-passage": "Retrieve semantically similar text",
+    "BIOSSES-query": "Retrieve semantically similar text",
+    "BIOSSES-passage": "Retrieve semantically similar text",
+    "SICK-R-query": "Retrieve semantically similar text",
+    "SICK-R-passage": "Retrieve semantically similar text",
+    "STS12-query": "Retrieve semantically similar text",
+    "STS12-passage": "Retrieve semantically similar text",
+    "STS13-query": "Retrieve semantically similar text",
+    "STS13-passage": "Retrieve semantically similar text",
+    "STS14-query": "Retrieve semantically similar text",
+    "STS14-passage": "Retrieve semantically similar text",
+    "STS15-query": "Retrieve semantically similar text",
+    "STS15-passage": "Retrieve semantically similar text",
+    "STS16-query": "Retrieve semantically similar text",
+    "STS16-passage": "Retrieve semantically similar text",
+    "STS17-query": "Retrieve semantically similar text",
+    "STS17-passage": "Retrieve semantically similar text",
+    "STS22-query": "Retrieve semantically similar text",
+    "STS22-passage": "Retrieve semantically similar text",
+    "STSBenchmark-query": "Retrieve semantically similar text",
+    "STSBenchmark-passage": "Retrieve semantically similar text",
+    "SummEval-query": "Retrieve semantically similar summaries",
+    "SummEval-passage": "Retrieve semantically similar summaries",
+}
 
 KaLM_X_task_prompts = {
     "Classification": "classify the query into different classes.",
@@ -514,6 +766,37 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     use_instructions=True,
     training_datasets=kalm_training_data,
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
+    superseded_by=None,
+)
+
+HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
+    loader=partial(  # type: ignore
+        InstructSentenceTransformerWrapper,
+        model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
+        revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
+        instruction_template=KaLM_INSTRUCTION,
+        max_seq_length=512,
+        apply_instruction_to_passages=False,
+        prompts_dict=KaLM_v2_task_prompts,
+    ),
+    name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
+    revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
+    release_date="2025-06-25",
+    languages=["eng-Latn", "zho-Hans"],
+    n_parameters=494032768,
+    memory_usage_mb=942,
+    max_tokens=512,
+    embed_dim=896,
+    license="mit",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    training_datasets=kalm_v2_training_data,
+    adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5",
     superseded_by=None,
 )
 

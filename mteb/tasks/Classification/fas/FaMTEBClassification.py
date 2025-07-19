@@ -437,6 +437,7 @@ class SynPerChatbotToneUserClassification(AbsTaskClassification):
 
 
 class SynPerTextToneClassification(AbsTaskClassification):
+    superseded_by = "SynPerTextToneClassification.v2"
     metadata = TaskMetadata(
         name="SynPerTextToneClassification",
         description="Persian Text Tone",
@@ -463,7 +464,37 @@ class SynPerTextToneClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
+class SynPerTextToneClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SynPerTextToneClassification.v2",
+        description="""Persian Text Tone
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "mteb/syn_per_text_tone",
+            "revision": "0ed7459db7e905714dc02cbe25b4eac55e91021e",
+        },
+        type="Classification",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=[],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        dialect=[],
+        sample_creation="LM-generated and verified",
+        bibtex_citation=""" """,
+        adapted_from=["SynPerTextToneClassification"],
+    )
+    samples_per_label = 32
+
+
 class SIDClassification(AbsTaskClassification):
+    superseded_by = "SIDClassification.v2"
     metadata = TaskMetadata(
         name="SIDClassification",
         description="SID Classification",
@@ -490,7 +521,37 @@ class SIDClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
+class SIDClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SIDClassification.v2",
+        description="""SID Classification
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "mteb/sid",
+            "revision": "8234b2081bd9ca33bdbc7bf68f5f9540fe3fd480",
+        },
+        type="Classification",
+        category="p2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Academic"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["SIDClassification"],
+    )
+    samples_per_label = 32
+
+
 class DeepSentiPers(AbsTaskClassification):
+    superseded_by = "DeepSentiPers.v2"
     metadata = TaskMetadata(
         name="DeepSentiPers",
         description="Persian Sentiment Analysis Dataset",
@@ -520,7 +581,37 @@ class DeepSentiPers(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("review", "text")
 
 
+class DeepSentiPersV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="DeepSentiPers.v2",
+        description="""Persian Sentiment Analysis Dataset
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://github.com/JoyeBright/DeepSentiPers",
+        dataset={
+            "path": "mteb/deep_senti_pers",
+            "revision": "8d60d8315ac650ef0af32d68c4f92916ffc5cfb8",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Reviews"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["DeepSentiPers"],
+    )
+    samples_per_label = 32
+
+
 class PersianTextEmotion(AbsTaskClassification):
+    superseded_by = "PersianTextEmotion.v2"
     metadata = TaskMetadata(
         name="PersianTextEmotion",
         description="Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
@@ -547,7 +638,37 @@ class PersianTextEmotion(AbsTaskClassification):
     samples_per_label = 32
 
 
+class PersianTextEmotionV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="PersianTextEmotion.v2",
+        description="""Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://huggingface.co/datasets/SeyedAli/Persian-Text-Emotion",
+        dataset={
+            "path": "mteb/persian_text_emotion",
+            "revision": "a45594021eca1d1577296edc030d972a92ff26b3",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=[],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["PersianTextEmotion"],
+    )
+    samples_per_label = 32
+
+
 class SentimentDKSF(AbsTaskClassification):
+    superseded_by = "SentimentDKSF.v2"
     metadata = TaskMetadata(
         name="SentimentDKSF",
         description="The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.",
@@ -574,7 +695,37 @@ class SentimentDKSF(AbsTaskClassification):
     samples_per_label = 32
 
 
+class SentimentDKSFV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SentimentDKSF.v2",
+        description="""The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://github.com/hezarai/hezar",
+        dataset={
+            "path": "mteb/sentiment_dksf",
+            "revision": "05129fb229c8f68267d112cffa655f1312ec6575",
+        },
+        type="Classification",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Reviews"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["SentimentDKSF"],
+    )
+    samples_per_label = 32
+
+
 class NLPTwitterAnalysisClassification(AbsTaskClassification):
+    superseded_by = "NLPTwitterAnalysisClassification.v2"
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClassification",
         description="Twitter Analysis Classification",
@@ -602,6 +753,35 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("tweet", "text")
+
+
+class NLPTwitterAnalysisClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="NLPTwitterAnalysisClassification.v2",
+        description="""Twitter Analysis Classification
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/tree/main",
+        dataset={
+            "path": "mteb/nlp_twitter_analysis",
+            "revision": "41d85185019495609522fece20e93d11ab705301",
+        },
+        type="Classification",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Social"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["NLPTwitterAnalysisClassification"],
+    )
+    samples_per_label = 32
 
 
 class DigikalamagClassification(AbsTaskClassification):
