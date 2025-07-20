@@ -459,11 +459,12 @@ class AbsTask(ABC):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         raise NotImplementedError
 
-    def push_dataset_to_hub(self, repo_name: str) -> None:
+    def push_dataset_to_hub(self, repo_name: str, reupload: bool = False) -> None:
         """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
+            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Example:
             >>> import mteb
@@ -480,8 +481,9 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        self.metadata.push_dataset_card_to_hub(repo_name)
         self._push_dataset_to_hub(repo_name)
+        # dataset repo not creating when pushing card
+        self.metadata.push_dataset_card_to_hub(repo_name, reupload)
 
     @property
     def is_aggregate(
