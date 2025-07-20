@@ -30,7 +30,7 @@ def create_dataloader_from_texts(
 
 
 def corpus_to_dict(
-    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+    corpus: Dataset,
 ) -> dict[str, list[str | None]]:
     if isinstance(corpus, dict):
         sentences = [
@@ -41,7 +41,7 @@ def corpus_to_dict(
         ]
         titles = corpus["title"]
         bodies = corpus["text"]
-    elif isinstance(corpus, list) and isinstance(corpus[0], dict):
+    elif isinstance(corpus, Dataset) and isinstance(corpus[0], dict):
         sentences = [
             (doc["title"] + " " + doc["text"]).strip()
             if "title" in doc
@@ -53,7 +53,7 @@ def corpus_to_dict(
     else:
         sentences = corpus
         titles = [""] * len(corpus)
-        bodies = [""] * len(corpus)
+        bodies = corpus
     return {
         "text": sentences,
         "title": titles,
@@ -62,7 +62,7 @@ def corpus_to_dict(
 
 
 def create_dataloader_for_retrieval_corpus(
-    inputs: dict[str, list[str | dict[str, str]]], **dataloader_kwargs
+    inputs: Dataset, **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a corpus.
 

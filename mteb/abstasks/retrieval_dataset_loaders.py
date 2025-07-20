@@ -20,18 +20,19 @@ logger = logging.getLogger(__name__)
 
 class RetrievalSplitData(TypedDict):
     """A dictionary containing the corpus, queries, relevant documents, instructions, and top-ranked documents for a retrieval task.
-    - `corpus`: A mapping of document IDs to their text or title and text.
-    - `queries`: A mapping of query IDs to their text.
+
+    - `corpus`: A mapping of document IDs to their text or title and text. Columns: "id", "title", "text"
+    - `queries`: A mapping of query IDs to their text. Columns: "id", "text" (can be `Conversation`)
     - `relevant_docs`: A mapping of query IDs to a mapping of document IDs and their relevance scores.
-    - `instructions`: A mapping of query IDs to their instructions (if applicable).
-    - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable).
+    - `instructions`: A mapping of query IDs to their instructions (if applicable). Columns: "query-id", "instruction"
+    - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable). Columns: "query-id", "corpus-ids"
     """
 
-    corpus: Dataset  # Columns: "id", "title", "text"
-    queries: Dataset  # Columns: "id", "text"
+    corpus: Dataset
+    queries: Dataset
     relevant_docs: Mapping[str, Mapping[str, float]]
-    instructions: Dataset | None  # Columns: "query-id", "instruction"
-    top_ranked: Mapping[str, list[str]] | None  # Columns: "query-id", "corpus-ids"
+    instructions: Dataset | None
+    top_ranked: Mapping[str, list[str]] | None
 
 
 class RetrievalDatasetLoader:

@@ -253,7 +253,7 @@ class DenseRetrievalExactSearch:
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(corpus)}
 
         all_doc_embeddings = self.model.encode(
-            create_dataloader_for_retrieval_corpus(corpus.to_dict()),
+            create_dataloader_for_retrieval_corpus(corpus),
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -348,7 +348,7 @@ class DenseRetrievalExactSearch:
             # Encode chunk of corpus
             sub_corpus_embeddings = self.model.encode(
                 create_dataloader_for_retrieval_corpus(
-                    corpus[corpus_start_idx:corpus_end_idx]
+                    corpus.select(range(corpus_start_idx, corpus_end_idx))
                 ),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
