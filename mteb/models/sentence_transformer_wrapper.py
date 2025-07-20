@@ -45,6 +45,13 @@ class SentenceTransformerWrapper(Wrapper):
         ):
             try:
                 model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
+
+                if (
+                    len(self.model.prompts) == 2
+                    and self.model.prompts.get("query", "") == ""
+                    and self.model.prompts.get("document", "") == ""
+                ):
+                    model_prompts = None
             except KeyError:
                 model_prompts = None
                 logger.warning(
