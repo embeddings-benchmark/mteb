@@ -115,7 +115,7 @@ def test_prompt_name_passed_to_all_encodes(
 
     class EncoderWithoutInstructions(MockSentenceTransformer):
         def encode(self, sentences, **kwargs):
-            assert kwargs["prompt_name"] is None
+            assert kwargs["prompt"] is None
             return super().encode(sentences, **kwargs)
 
     if isinstance(task_name, mteb.AbsTask):
