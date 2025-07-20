@@ -69,10 +69,7 @@ class RetrievalDatasetLoader:
         queries = self._load_queries()
 
         queries = queries.filter(
-            lambda x: x["id"] in qrels["query-id"], desc="Filtering queries by qrels"
-        )
-        corpus = corpus.filter(
-            lambda x: x["id"] in qrels["corpus-id"], desc="Filtering corpus by qrels"
+            lambda x: x["id"] in qrels.keys(), desc="Filtering queries by qrels"
         )
 
         if any(c.endswith("top_ranked") for c in configs):

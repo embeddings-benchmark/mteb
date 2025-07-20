@@ -427,13 +427,13 @@ class DenseRetrievalExactSearch:
 
     def search_cross_encoder(
         self,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, str | list[str]],
+        corpus: Dataset,
+        queries: Dataset,
         top_k: int,
         hf_split: str,
         hf_subset: str,
         task_metadata: TaskMetadata,
-        instructions: dict[str, str] | None = None,
+        instructions: Dataset | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
@@ -441,13 +441,15 @@ class DenseRetrievalExactSearch:
         Note: you must provide the path to the results to rerank to the __init__ function as `previous_results` or else rerank all documents in the corpus
         """
         pairs = []  # create the pairs for reranking
-        for qid in tqdm.tqdm(queries.keys()):
+        doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(corpus["id"])}
+        for row in tqdm.tqdm(queries):
+            qid = row["id"]
             if self.previous_results is None:
                 # try to use all of them
                 logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
-                q_results = dict.fromkeys(corpus.keys(), 0.0)
+                q_results = dict.fromkeys(corpus["id"], 0.0)
             else:
                 q_results = self.previous_results[qid]
             # take the top-k only
@@ -455,18 +457,21 @@ class DenseRetrievalExactSearch:
                 sorted(q_results.items(), key=lambda item: item[1], reverse=True)
             )
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
-            query = queries[qid]
+            query = row["text"]
             query = (
                 self.convert_conv_history_to_query(self.model, [query])[0]
                 if isinstance(query, list)
                 else query
             )
+            if instructions:
+                instruction_qid_to_idx = {row["query-id"]: instruction_idx for instruction_idx, row in instructions}
+
             for doc_id in top_n:
                 pairs.append(
                     (
                         query,
-                        corpus[doc_id],
-                        instructions[qid] if instructions is not None else None,
+                        corpus[doc_id_to_idx[doc_id]],
+                        instructions[instruction_qid_to_idx[qid]] if instructions is not None else None,
                         qid,
                         doc_id,
                     )
@@ -474,7 +479,7 @@ class DenseRetrievalExactSearch:
 
         logger.info(f"Reranking the top {top_k} in batches... This might take a while!")
 
-        results = {qid: {} for qid in queries.keys()}
+        results = {qid: {} for qid in queries["id"]}
         for batch_num, corpus_start_idx in enumerate(
             tqdm.tqdm(
                 range(0, len(pairs), self.batch_size),
