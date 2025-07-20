@@ -46,7 +46,7 @@ class ClothoA2TRetrieval(AbsTaskAny2AnyRetrieval):
         if self.data_loaded:
             return
 
-        ds = load_dataset(**self.metadata.dataset, split="test")
+        ds = load_dataset(**self.metadata.dataset, split="test", keep_in_memory=False)
 
         queries_ = {"id": [], "modality": [], "audio": []}
         corpus_ = {"id": [], "modality": [], "text": []}
@@ -130,7 +130,7 @@ class ClothoT2ARetrieval(AbsTaskAny2AnyRetrieval):
         if self.data_loaded:
             return
 
-        ds = load_dataset(**self.metadata.dataset)
+        ds = load_dataset(**self.metadata.dataset, split="test", keep_in_memory=False)
 
         queries_ = {"id": [], "modality": [], "text": []}
         corpus_ = {"id": [], "modality": [], "audio": []}
