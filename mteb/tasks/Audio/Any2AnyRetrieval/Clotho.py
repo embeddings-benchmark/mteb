@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from datasets import Dataset, DatasetDict, load_dataset
 from tqdm import tqdm
 
@@ -55,7 +57,7 @@ class ClothoA2TRetrieval(AbsTaskAny2AnyRetrieval):
         qid = {}
         did = {}
 
-        for row in tqdm(ds, total=len(ds)):
+        for row in tqdm(ds, total=len(ds), desc="Loading Clotho AT2 Retrieval Data"):
             audio = row["audio"]
             texts = row["text"]
             index = row["index"]
@@ -84,9 +86,20 @@ class ClothoA2TRetrieval(AbsTaskAny2AnyRetrieval):
         queries = Dataset.from_dict(queries_)
         relevant_docs = Dataset.from_dict(relevant_docs_)
 
+        qrels_dict = defaultdict(dict)
+
+        df = relevant_docs.to_pandas()
+        query_ids = df["query-id"].to_numpy()
+        corpus_ids = df["corpus-id"].to_numpy()
+        scores = df["score"].to_numpy()
+
+        for q, c, s in zip(query_ids, corpus_ids, scores):
+            qrels_dict[q][c] = int(s)
+
         self.corpus = DatasetDict({"test": corpus})
         self.queries = DatasetDict({"test": queries})
-        self.relevant_docs = DatasetDict({"test": relevant_docs})
+        self.relevant_docs = {}
+        self.relevant_docs["test"] = qrels_dict
 
         self.data_loaded = True
 
@@ -139,7 +152,7 @@ class ClothoT2ARetrieval(AbsTaskAny2AnyRetrieval):
         qid = {}
         did = {}
 
-        for row in tqdm(ds, total=len(ds)):
+        for row in tqdm(ds, total=len(ds), desc="Loading Clotho T2A Retrieval Data"):
             audio = row["audio"]
             texts = row["text"]
             index = row["index"]
@@ -167,8 +180,19 @@ class ClothoT2ARetrieval(AbsTaskAny2AnyRetrieval):
         queries = Dataset.from_dict(queries_)
         relevant_docs = Dataset.from_dict(relevant_docs_)
 
-        self.corpus = DatasetDict({"corpus": corpus})
+        qrels_dict = defaultdict(dict)
+
+        df = relevant_docs.to_pandas()
+        query_ids = df["query-id"].to_numpy()
+        corpus_ids = df["corpus-id"].to_numpy()
+        scores = df["score"].to_numpy()
+
+        for q, c, s in zip(query_ids, corpus_ids, scores):
+            qrels_dict[q][c] = int(s)
+
+        self.corpus = DatasetDict({"test": corpus})
         self.queries = DatasetDict({"test": queries})
-        self.relevant_docs = DatasetDict({"test": relevant_docs})
+        self.relevant_docs = {}
+        self.relevant_docs["test"] = qrels_dict
 
         self.data_loaded = True
