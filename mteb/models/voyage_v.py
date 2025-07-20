@@ -87,7 +87,7 @@ def voyage_v_loader(**kwargs):
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -119,7 +119,7 @@ def voyage_v_loader(**kwargs):
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -175,7 +175,7 @@ def voyage_v_loader(**kwargs):
                 raise ValueError("Either texts or images must be provided")
 
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
