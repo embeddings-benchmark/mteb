@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter, defaultdict
+from collections import defaultdict
 from typing import Any
 
 import numpy as np
@@ -20,6 +20,11 @@ from mteb.types.statistics import (
 )
 
 from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
+from ._statistics_calculation import (
+    calculate_image_statistics,
+    calculate_label_statistics,
+    calculate_text_statistics,
+)
 from .AbsTask import AbsTask
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -31,7 +36,6 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
         number_texts_intersect_with_train: Number of texts in the train split
 
         text_statistics: Statistics for text
@@ -40,7 +44,6 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
-    number_of_characters: int | None
     number_texts_intersect_with_train: int | None
 
     text_statistics: TextStatistics | None
@@ -54,8 +57,8 @@ class AbsTaskAnyClassification(AbsTask):
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
-        text: str
-        label: int
+        input_column_name: input (str | image)
+        label_column_name: int
 
     Attributes:
        samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
@@ -183,7 +186,8 @@ class AbsTaskAnyClassification(AbsTask):
         if idxs is None:
             idxs = list(range(len(dataset)))
 
-        rng_state = np.random.default_rng(self.seed)
+        # using RandomState for backward compatibility with `v1`
+        rng_state = np.random.RandomState(self.seed)
         rng_state.shuffle(idxs)
 
         label_counter = defaultdict(int)
@@ -226,76 +230,24 @@ class AbsTaskAnyClassification(AbsTask):
             if split != self.train_split:
                 train_text = self.dataset[self.train_split][self.input_column_name]
 
-        total_text_len = 0
-        text_len = None
-        img_widths, img_heights = None, None
+        image_statistics = None
+        text_statistics = None
         num_texts_in_train = None
 
         if "image" in self.metadata.modalities:
-            img_widths, img_heights = [], []
-            for img in inputs:
-                width, height = img.size  # type: ignore
-                img_heights.append(height)
-                img_widths.append(width)
+            image_statistics = calculate_image_statistics(inputs)
         if "text" in self.metadata.modalities:
-            text_len = [len(t) for t in inputs]
-            total_text_len = sum(text_len)
+            text_statistics = calculate_text_statistics(inputs)
             num_texts_in_train = (
                 len(set(inputs) & set(train_text))
                 if split != self.train_split
                 else None
             )
 
-        if isinstance(label[0], int):
-            label_len = [1] * len(label)
-            total_label_len = len(label)
-            total_labels = label
-        else:
-            # multilabel classification
-            label_len = [len(l) for l in label]
-            total_label_len = sum(label_len)
-            total_labels = []
-            for l in label:
-                total_labels.extend(l if len(l) > 0 else [None])
-
-        label_count = Counter(total_labels)
-
-        text_statistics, image_statistics = None, None
-        if text_len:
-            text_statistics = TextStatistics(
-                min_text_length=min(text_len),
-                average_text_length=total_text_len / len(inputs),
-                max_text_length=max(text_len),
-                unique_texts=len(set(inputs)),
-            )
-
-        if img_widths:
-            image_statistics = ImageStatistics(
-                min_image_width=min(img_widths),
-                average_image_width=sum(img_widths) / len(img_widths),
-                max_image_width=max(img_widths),
-                min_image_height=min(img_heights),
-                average_image_height=sum(img_heights) / len(img_heights),
-                max_image_height=max(img_heights),
-            )
-
-        label_statistics = LabelStatistics(
-            min_labels_per_text=min(label_len),
-            average_label_per_text=total_label_len / len(label),
-            max_labels_per_text=max(label_len),
-            unique_labels=len(label_count),
-            labels={
-                str(label): {
-                    "count": value,
-                }
-                for label, value in label_count.items()
-            },
-        )
+        label_statistics = calculate_label_statistics(label)
 
         return ClassificationDescriptiveStatistics(
             num_samples=len(inputs),
-            # text
-            number_of_characters=total_text_len,
             number_texts_intersect_with_train=num_texts_in_train
             if num_texts_in_train
             else None,

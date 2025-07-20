@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FGVCAircraftZeroShotClassification(AbsTaskZeroShotClassification):
+class FGVCAircraftZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="FGVCAircraftZeroShot",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",

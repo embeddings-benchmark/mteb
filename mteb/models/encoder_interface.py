@@ -16,7 +16,7 @@ class Encoder(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str, **kwargs) -> None:
+    def __init__(self, model_name: str, revision: str | None, **kwargs) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Callable, get_args
+from typing import Any, Callable, cast, get_args
 
 from torch.utils.data import DataLoader
 
@@ -30,7 +30,8 @@ class AbsEncoder(ABC):
     model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
-    instruction_template: str | Callable[[str, str], str] | None = None
+    instruction_template: str | Callable[[str, PromptType], str] | None = None
+    prompts_dict: dict[str, str] | None = None
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         if self.mteb_model_meta is None or (
@@ -42,7 +43,10 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity")
                 and callable(self.model.similarity)
             ):
-                return self.model.similarity(embeddings1, embeddings2)
+                arr = self.model.similarity(embeddings1, embeddings2)
+                # We assume that the model returns an Array-like object:
+                arr = cast(Array, arr)
+                return arr
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return cos_sim(embeddings1, embeddings2)
@@ -66,7 +70,10 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity_pairwise")
                 and callable(self.model.similarity_pairwise)
             ):
-                return self.model.similarity_pairwise(embeddings1, embeddings2)
+                arr = self.model.similarity_pairwise(embeddings1, embeddings2)
+                # We assume that the model returns an Array-like object:
+                arr = cast(Array, arr)
+                return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return pairwise_cos_sim(embeddings1, embeddings2)
@@ -210,7 +217,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name, None)
+        return self.model_prompts.get(prompt_name)  # type: ignore
 
     def validate_task_to_prompt_name(self) -> None:
         """Validate the task name and prompt type against the model prompts.
@@ -236,24 +243,36 @@ class AbsEncoder(ABC):
                     raise KeyError(msg)
 
     def get_instruction(
-        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
     ) -> str:
         """Get the instruction/prompt to be used for encoding sentences."""
-        if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if task_metadata.prompt.get(prompt_type.value):
-                return task_metadata.prompt[prompt_type.value]
+        prompt = task_metadata.prompt
+        if self.prompts_dict and task_metadata.name in self.prompts_dict:
+            prompt = self.prompts_dict[task_metadata.name]
+
+        if isinstance(prompt, dict) and prompt_type:
+            if prompt.get(prompt_type.value):
+                return prompt[prompt_type.value]
             logger.warning(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
             )
             return ""
-        if task_metadata.prompt:
-            return task_metadata.prompt
+
+        if prompt:
+            return prompt
+
         abstask = mteb.get_task(task_name=task_metadata.name)
         return abstask.abstask_prompt
 
     def format_instruction(
         self, instruction: str, prompt_type: PromptType | None = None
     ) -> str:
+        if self.instruction_template is None:
+            raise ValueError(
+                "Attempting to format an instruction without an instruction template."
+            )
         if isinstance(self.instruction_template, str):
             if "{instruction}" not in self.instruction_template:
                 raise ValueError(
@@ -263,10 +282,12 @@ class AbsEncoder(ABC):
         return self.instruction_template(instruction, prompt_type)
 
     def get_task_instruction(
-        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
     ) -> str:
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template:
+        if self.instruction_template and len(instruction) > 0:
             return self.format_instruction(instruction)
         return instruction
 

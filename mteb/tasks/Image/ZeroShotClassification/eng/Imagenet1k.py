@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
+class Imagenet1kZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="Imagenet1kZeroShot",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",
@@ -44,7 +44,7 @@ class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-    image_column_name: str = "jpg"
+    input_column_name: str = "jpg"
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:

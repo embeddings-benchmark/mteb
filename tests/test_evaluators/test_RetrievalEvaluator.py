@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from mteb import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.evaluation.evaluators import RetrievalEvaluator
 from tests.test_benchmark.mock_tasks import general_args
 

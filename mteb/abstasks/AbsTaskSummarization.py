@@ -8,9 +8,13 @@ from datasets import Dataset
 
 from mteb.models.encoder_interface import Encoder
 from mteb.types import ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
 from ..evaluation.evaluators import SummarizationEvaluator
+from ._statistics_calculation import (
+    calculate_score_statistics,
+    calculate_text_statistics,
+)
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -23,47 +27,19 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
 
-        min_text_length: Minimum length of text
-        avg_text_length: Average length of text
-        max_text_length: Maximum length of text
-        unique_texts: Number of unique texts
-
-        min_human_summaries_length: Minimum length of human summaries
-        avg_human_summaries_length: Average length of human summaries
-        max_human_summaries_length: Maximum length of human summaries
-        unique_human_summaries: Number of unique human summaries
-
-        min_machine_summaries_length: Minimum length of machine summaries
-        avg_machine_summaries_length: Average length of machine summaries
-        max_machine_summaries_length: Maximum length of machine summaries
-        unique_machine_summaries: Number of unique machine summaries
-
-        min_relevance: Minimum relevance score
-        avg_relevance: Average relevance score
-        max_relevance: Maximum relevance score
+        text_statistics: Statistics for the text
+        human_summaries_statistics: Statistics for human summaries
+        machine_summaries_statistics: Statistics for machine summaries
+        score_statistics: Statistics for the relevance scoresk
     """
 
     num_samples: int
     number_of_characters: int
 
-    min_text_length: int
-    avg_text_length: float
-    max_text_length: int
-    unique_texts: int
-
-    min_human_summaries_length: int
-    avg_human_summaries_length: float
-    max_human_summaries_length: int
-    unique_human_summaries: int
-
-    min_machine_summaries_length: int
-    avg_machine_summaries_length: float
-    max_machine_summaries_length: int
-    unique_machine_summaries: int
-
-    min_relevance: float
-    avg_relevance: float
-    max_relevance: float
+    text_statistics: TextStatistics
+    human_summaries_statistics: TextStatistics
+    machine_summaries_statistics: TextStatistics
+    score_statistics: ScoreStatistics
 
 
 class AbsTaskSummarization(AbsTask):
@@ -73,7 +49,7 @@ class AbsTaskSummarization(AbsTask):
         text: str
         human_summaries: list[str]
         machine_summaries: list[str]
-        relevance: list[float] (the score of the machine generated summaries)
+        relevance: list[list[float]] (the score of the machine generated summaries)
     """
 
     min_score: int
@@ -150,31 +126,21 @@ class AbsTaskSummarization(AbsTask):
         for s in machine_summaries:
             all_machine_summaries.extend(s)
 
-        text_len = [len(t) for t in text]
-        total_text_len = sum(text_len)
-        human_summaries_len = [len(s) for s in human_summaries]
-        total_human_summaries_len = sum(human_summaries_len)
-        machine_summaries_len = [len(s) for s in machine_summaries]
-        total_machine_summaries_len = sum(machine_summaries_len)
-        total_relevance = sum(sum(x) / len(x) for x in relevance)
+        text_statistics = calculate_text_statistics(text)
+        human_summaries_statistics = calculate_text_statistics(all_human_summaries)
+        machine_summaries_statistics = calculate_text_statistics(all_machine_summaries)
+
+        relevance = [item for sublist in relevance for item in sublist]
+
         return SummarizationDescriptiveStatistics(
             num_samples=len(text),
-            number_of_characters=total_text_len
-            + total_human_summaries_len
-            + total_machine_summaries_len,
-            min_text_length=min(text_len),
-            avg_text_length=total_text_len / len(text),
-            max_text_length=max(text_len),
-            unique_texts=len(set(text)),
-            min_human_summaries_length=min(human_summaries_len),
-            avg_human_summaries_length=total_human_summaries_len / len(text),
-            max_human_summaries_length=max(human_summaries_len),
-            unique_human_summaries=len(set(all_human_summaries)),
-            min_machine_summaries_length=min(machine_summaries_len),
-            avg_machine_summaries_length=total_machine_summaries_len / len(text),
-            max_machine_summaries_length=max(machine_summaries_len),
-            unique_machine_summaries=len(set(all_machine_summaries)),
-            min_relevance=min(relevance),
-            avg_relevance=total_relevance / len(relevance),
-            max_relevance=max(relevance),
+            number_of_characters=(
+                text_statistics["total_text_length"]
+                + human_summaries_statistics["total_text_length"]
+                + machine_summaries_statistics["total_text_length"]
+            ),
+            text_statistics=text_statistics,
+            human_summaries_statistics=human_summaries_statistics,
+            machine_summaries_statistics=machine_summaries_statistics,
+            score_statistics=calculate_score_statistics(relevance),
         )

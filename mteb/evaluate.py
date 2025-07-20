@@ -15,11 +15,11 @@ from mteb.cache import ResultCache
 from mteb.load_results.benchmark_results import ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.models.encoder_interface import Encoder
-from mteb.models.model_meta import ModelMeta
-from mteb.models.overview import (
-    model_meta_from_cross_encoder,
-    model_meta_from_sentence_transformers,
+from mteb.models.get_model_meta import (
+    _model_meta_from_cross_encoder,
+    _model_meta_from_sentence_transformers,
 )
+from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.types import HFSubset, SplitName
 
@@ -62,9 +62,9 @@ def _get_model_meta(model: Encoder | SentenceTransformer | CrossEncoder) -> Mode
 
     if meta is None:
         if isinstance(model, CrossEncoder):
-            meta = model_meta_from_cross_encoder(model)
+            meta = _model_meta_from_cross_encoder(model)
         elif isinstance(model, SentenceTransformer):
-            meta = model_meta_from_sentence_transformers(model)
+            meta = _model_meta_from_sentence_transformers(model)
         else:
             meta = empty_model_meta
 

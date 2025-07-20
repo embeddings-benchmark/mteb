@@ -13,14 +13,14 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    from mteb import Encoder, TaskMetadata
+    from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, **kwargs
-) -> Encoder:
+) -> SentenceTransformerWrapper:
     return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
 
 
@@ -111,10 +111,10 @@ class SentenceTransformerWrapper(AbsEncoder):
             )
         logger.info(f"Encoding {len(inputs)} inputs.")
 
-        inputs = [text for batch in inputs for text in batch["text"]]
+        _inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
-            inputs,
+            _inputs,
             prompt_name=prompt_name,
             **kwargs,
         )

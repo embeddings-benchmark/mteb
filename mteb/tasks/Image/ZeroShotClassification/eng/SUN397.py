@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
-    AbsTaskZeroShotClassification,
+from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+    AbsTaskAnyZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
+class SUN397ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     metadata = TaskMetadata(
         name="SUN397ZeroShot",
         description="Large scale scene recognition in 397 categories.",
