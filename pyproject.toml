@@ -101,6 +101,7 @@ open_clip_torch = ["open_clip_torch==2.31.0"]
 xet = ["huggingface_hub>=0.32.0"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.10"]
+muq = ["muq==0.1.0"]
 
 [tool.coverage.report]
 
