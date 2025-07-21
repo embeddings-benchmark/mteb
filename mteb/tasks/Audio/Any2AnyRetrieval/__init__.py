@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .AudioCaps import *
+from .AudioSetStrong import *
 from .Clotho import *
 from .EmoVDB import *
 from .HiFiTTS import *
