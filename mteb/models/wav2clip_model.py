@@ -23,12 +23,12 @@ class Wav2ClipZeroShotWrapper:
         **kwargs: Any,
     ):
         requires_package(self, "wav2clip", "pip install 'mteb[wav2clip]'")
-        import wav2clip
+        from wav2clip import embed_audio, get_model
 
-        self.wav2clip = wav2clip
+        self.embed_audio = embed_audio
         # audio side
         self.device = device
-        self.audio_model = self.wav2clip.get_model().to(device)
+        self.audio_model = get_model().to(device)
         self.sampling_rate = 16_000
 
         # text side (CLIP)
@@ -112,7 +112,7 @@ class Wav2ClipZeroShotWrapper:
                 for wav in wavs:
                     # Process one audio at a time to avoid memory issues
                     wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
-                    embed = self.wav2clip.embed_audio(wav_np, self.audio_model)
+                    embed = self.embed_audio(wav_np, self.audio_model)
 
                     # Normalize
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
@@ -153,15 +153,13 @@ class Wav2ClipZeroShotWrapper:
 
     def encode(
         self,
-        inputs: AudioBatch | list[str],
+        inputs: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if isinstance(inputs[0], str):
-            return self.get_text_embeddings(inputs)
-        return self.get_audio_embeddings(inputs)
+        return self.get_text_embeddings(inputs, **kwargs)
 
 
 wav2clip_zero = ModelMeta(

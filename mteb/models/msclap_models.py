@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class MSClapWrapper:
     def __init__(
         self,
-        model_name: str = "microsoft/msclap",
+        model_name: str = "microsoft/msclap-2023",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -188,7 +188,7 @@ class MSClapWrapper:
             audio_tensor = audio_tensor.to(self.device)
             # Get embeddings using the internal audio encoder
             with torch.no_grad():
-                # Use the internal method
+                # Use the internal method: [0] the audio emebdding, [1] has output class probabilities
                 audio_features = self.model.clap.audio_encoder(audio_tensor)[0]
 
                 # Normalize embeddings
@@ -221,15 +221,13 @@ class MSClapWrapper:
 
     def encode(
         self,
-        inputs: AudioBatch | list[str],
+        inputs: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if isinstance(inputs[0], str):
-            return self.get_text_embeddings(inputs)
-        return self.get_audio_embeddings(inputs)
+        return self.get_text_embeddings(inputs, **kwargs)
 
 
 # Microsoft CLAP Model metadata
