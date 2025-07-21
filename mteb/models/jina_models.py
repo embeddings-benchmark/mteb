@@ -269,8 +269,8 @@ class JinaV4Wrapper(Wrapper):
         # Determine prompt name parameter
         if jina_task_name and "query" in jina_task_name:
             prompt_name_param = "query"
-        elif jina_task_name and "passage" in jina_task_name:
-            prompt_name_param = "passage"
+        elif jina_task_name and "document" in jina_task_name:
+            prompt_name_param = "document"
         else:
             prompt_name_param = "query"  # default fallback
 
@@ -549,7 +549,7 @@ jina_embeddings_v4 = ModelMeta(
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
-            "Retrieval-passage": "retrieval.passage",
+            "Retrieval-document": "retrieval.passage",
             "STS": "text-matching",
             "DocumentUnderstanding": "retrieval.query",
         },
@@ -584,7 +584,7 @@ jina_embeddings_v3 = ModelMeta(
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
-            "Retrieval-passage": "retrieval.passage",
+            "Retrieval-document": "retrieval.passage",
             "Clustering": "separation",
             "Classification": "classification",
             "STS": "text-matching",
