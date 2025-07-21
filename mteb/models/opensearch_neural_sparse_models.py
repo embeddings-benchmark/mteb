@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Sequence
+
 import sentence_transformers
 import torch
 
@@ -121,7 +123,7 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="a8abaa916125ee512a7a8f4d706d07eb0128a8e6",
     release_date="2025-06-18",
     n_parameters=137_394_234,
     memory_usage_mb=549,
@@ -139,6 +141,7 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte",
         trust_remote_code=True,
+        revision="a8abaa916125ee512a7a8f4d706d07eb0128a8e6",
     ),
 )
 
@@ -147,7 +150,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="babf71f3c48695e2e53a978208e8aba48335e3c0",
     release_date="2025-03-28",
     n_parameters=66_985_530,
     memory_usage_mb=267,
@@ -164,6 +167,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     loader=partial(
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill",
+        revision="babf71f3c48695e2e53a978208e8aba48335e3c0",
     ),
 )
 
@@ -171,7 +175,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="8921a26c78b8559d6604eb1f5c0b74c079bee38f",
     release_date="2024-07-17",
     n_parameters=66_985_530,
     memory_usage_mb=267,
@@ -188,6 +192,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     loader=partial(
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill",
+        revision="8921a26c78b8559d6604eb1f5c0b74c079bee38f",
     ),
 )
 
@@ -196,7 +201,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="4af867a426867dfdd744097531046f4289a32fdd",
     release_date="2024-07-18",
     n_parameters=22_744_506,
     memory_usage_mb=86,
@@ -213,6 +218,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     loader=partial(
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini",
+        revision="4af867a426867dfdd744097531046f4289a32fdd",
     ),
 )
 
@@ -220,7 +226,7 @@ opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     name="opensearch-project/opensearch-neural-sparse-encoding-doc-v1",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="main",
+    revision="98cdcbd72867c547f72f2b7b7bed9cdf9f09922d",
     release_date="2024-03-07",
     n_parameters=132_955_194,
     memory_usage_mb=507,
@@ -239,5 +245,6 @@ opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     loader=partial(
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v1",
+        revision="98cdcbd72867c547f72f2b7b7bed9cdf9f09922d",
     ),
 )
