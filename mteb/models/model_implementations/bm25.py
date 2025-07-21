@@ -47,8 +47,7 @@ def bm25_loader(model_name, **kwargs):
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
             corpus_texts = [
-                "\n".join([doc.get("title", ""), doc["text"]])
-                for doc in corpus
+                "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
             ]  # concatenate all document values (title, text, ...)
             encoded_corpus = self.encode(corpus_texts)
 
