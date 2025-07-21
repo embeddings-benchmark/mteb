@@ -159,7 +159,7 @@ class DenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.encode(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
                     task_name=task_name,
-                    prompt_type=PromptType.passage,
+                    prompt_type=PromptType.document,
                     request_qid=request_qid,
                     **self.encode_kwargs,
                 )
@@ -385,7 +385,7 @@ class DRESModel:
         corpus: list[dict[str, str]],
         task_name: str,
         batch_size: int,
-        prompt_type: PromptType = PromptType.passage,
+        prompt_type: PromptType = PromptType.document,
         request_qid: str | None = None,
         **kwargs,
     ):
@@ -416,7 +416,7 @@ class DRESModel:
         prompt_type: PromptType | None = None,
         **kwargs,
     ):
-        if prompt_type and prompt_type == PromptType.passage:
+        if prompt_type and prompt_type == PromptType.document:
             return self.encode_corpus(
                 sentences, task_name, prompt_type=prompt_type, **kwargs
             )
