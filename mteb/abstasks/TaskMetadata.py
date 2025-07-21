@@ -87,6 +87,10 @@ TASK_SUBTYPE = Literal[
     "Rendered semantic textual similarity",
     "Intent classification",
     "Song Lyrics Retrieval",
+    "Natural Sound Retrieval",
+    "Speech Transcription Retrieval",
+    "Emotional Speech Retrieval",
+    "Environment Sound Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
