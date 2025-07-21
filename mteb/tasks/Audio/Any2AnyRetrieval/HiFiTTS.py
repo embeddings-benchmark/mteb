@@ -24,7 +24,7 @@ class HiFiTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
         task_subtypes=["Reasoning as Retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
-        dialect=["eng"],
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @article{bakhturina2021hi,
@@ -59,7 +59,7 @@ class HiFiTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
         task_subtypes=["Reasoning as Retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
-        dialect=["eng"],
+        dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
 @article{bakhturina2021hi,
