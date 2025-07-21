@@ -464,14 +464,19 @@ class DenseRetrievalExactSearch:
                 else query
             )
             if instructions:
-                instruction_qid_to_idx = {row["query-id"]: instruction_idx for instruction_idx, row in instructions}
+                instruction_qid_to_idx = {
+                    row["query-id"]: instruction_idx
+                    for instruction_idx, row in instructions
+                }
 
             for doc_id in top_n:
                 pairs.append(
                     (
                         query,
                         corpus[doc_id_to_idx[doc_id]],
-                        instructions[instruction_qid_to_idx[qid]] if instructions is not None else None,
+                        instructions[instruction_qid_to_idx[qid]]
+                        if instructions is not None
+                        else None,
                         qid,
                         doc_id,
                     )
