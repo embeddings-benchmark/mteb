@@ -88,6 +88,7 @@ TASK_SUBTYPE = Literal[
     "Intent classification",
     "Song Lyrics Retrieval",
     "Natural Sound Retrieval",
+    "Music Caption Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
