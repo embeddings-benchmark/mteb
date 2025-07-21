@@ -7,7 +7,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class HiFiTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="HiFiTTSA2TRetrieval",
-        description="Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset.",
+        description="Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset. Dataset is based on public audiobooks from LibriVox and texts from Project Gutenberg.",
         reference="https://openslr.org/109/",
         dataset={
             "path": "mteb/hifi-tts_a2t",
@@ -21,7 +21,7 @@ class HiFiTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
         main_score="cv_recall_at_5",
         date=("2021-01-01", "2021-12-31"),
         domains=["Spoken"],
-        task_subtypes=["Reasoning as Retrieval"],
+        task_subtypes=["Speech Transcription Retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
@@ -38,11 +38,9 @@ class HiFiTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class HiFiTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
-    """Reverse text-to-audio retrieval for the Hi‑Fi TTS sentence–audio pairs."""
-
     metadata = TaskMetadata(
         name="HiFiTTST2ARetrieval",
-        description="Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset.",
+        description="Sentence-level text captions aligned to 44.1 kHz audiobook speech segments from the Hi‑Fi Multi‑Speaker English TTS dataset. Dataset is based on public audiobooks from LibriVox and texts from Project Gutenberg.",
         reference="https://openslr.org/109/",
         dataset={
             "path": "mteb/hifi-tts_t2a",
@@ -56,7 +54,7 @@ class HiFiTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
         main_score="cv_recall_at_5",
         date=("2021-01-01", "2021-12-31"),
         domains=["Spoken"],
-        task_subtypes=["Reasoning as Retrieval"],
+        task_subtypes=["Speech Transcription Retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
