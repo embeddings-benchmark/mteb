@@ -8,3 +8,4 @@ from .MACS import *
 from .multilingual.JamAlt import *
 from .SoundDescs import *
 from .UrbanSound8kRetrieval import *
+from .ESC50Retrieval import *
