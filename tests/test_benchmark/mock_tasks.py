@@ -85,8 +85,8 @@ def base_retrieval_datasplit() -> RetrievalSplitData:
             ]
         ),
         relevant_docs={
-            "q1": {"d1": 1, "d2": 0},
-            "q2": {"d1": 0, "d2": 1},
+            "q1": {"d1": 0, "d2": 1},
+            "q2": {"d1": 1, "d2": 0},
         },
         top_ranked={
             "q1": ["d1", "d2"],
