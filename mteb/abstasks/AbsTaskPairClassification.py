@@ -130,4 +130,14 @@ class AbsTaskPairClassification(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
+        # previously pair classification datasets were stored in a single row
+        if self.metadata.is_multilingual:
+            for subset in self.dataset:
+                for split in self.dataset[subset]:
+                    if len(self.dataset[subset][split]) == 1:
+                        self.dataset[subset][split] = self.dataset[subset][split][0]
+        else:
+            for split in self.dataset:
+                if len(self.dataset[split]) == 1:
+                    self.dataset[split] = self.dataset[split][0]
         self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "labels"])

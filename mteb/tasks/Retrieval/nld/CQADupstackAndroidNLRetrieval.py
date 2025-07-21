@@ -68,7 +68,11 @@ class CQADupstackAndroidNLRetrieval(AbsTaskRetrieval):
         self.queries["test"] = {query["_id"]: query["text"] for query in queries_raw}
 
         self.corpus["test"] = {
-            doc["_id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus_raw
+            doc["_id"]: {
+                "text": doc["text"],
+                "title": doc["title"],
+            }
+            for doc in corpus_raw
         }
         self.relevant_docs["test"] = {
             q["query-id"]: {q["corpus-id"]: int(q["score"])} for q in qrels_raw
