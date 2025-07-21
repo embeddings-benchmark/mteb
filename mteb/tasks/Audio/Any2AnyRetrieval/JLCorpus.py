@@ -26,7 +26,7 @@ class JLCorpusA2TRetrieval(AbsTaskAny2AnyRetrieval):
         domains=["Spoken"],
         task_subtypes=["Reasoning as Retrieval"],
         license="cc0-1.0",
-        annotations_creators="dervived",
+        annotations_creators="derived",
         dialect=[""],
         sample_creation="found",
         bibtex_citation=r"""
