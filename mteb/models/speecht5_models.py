@@ -197,15 +197,13 @@ class SpeechT5Wrapper(Wrapper):
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if isinstance(inputs[0], str):
-            return self.get_text_embeddings(inputs).numpy()
-        return self.get_audio_embeddings(inputs).numpy()
+        return self.get_text_embeddings(inputs, **kwargs).numpy()
 
 
 # ASR model - Optimized for Speech Recognition tasks

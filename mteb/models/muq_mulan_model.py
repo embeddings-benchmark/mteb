@@ -203,16 +203,14 @@ class MuQMuLanWrapper:
 
     def encode(
         self,
-        inputs: AudioBatch | list[str],
+        inputs: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         """Encode inputs (audio or text) into embeddings."""
-        if isinstance(inputs[0], str):
-            return self.get_text_embeddings(inputs)
-        return self.get_audio_embeddings(inputs)
+        return self.get_text_embeddings(inputs, **kwargs)
 
     def calc_similarity(
         self, audio_embeds: np.ndarray, text_embeds: np.ndarray
