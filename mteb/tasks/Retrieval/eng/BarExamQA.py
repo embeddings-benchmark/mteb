@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from sentence_transformers import SentenceTransformer
-
-from mteb import MTEB
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -45,8 +41,3 @@ class BarExamQA(AbsTaskRetrieval):
    eprint={2505.03970}
 }""",
     )
-
-
-model = SentenceTransformer("intfloat/multilingual-e5-small")
-evaluation = MTEB(tasks=[BarExamQA()])
-evaluation.run(model)
