@@ -21,7 +21,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2014-11-01", "2014-11-03"),
-        domains=["Spoken"],
+        domains=["AudioScene"],
         task_subtypes=["Environment Sound Classification"],
         license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",

@@ -89,6 +89,7 @@ TASK_SUBTYPE = Literal[
     "Song Lyrics Retrieval",
     "Natural Sound Retrieval",
     "Speech Transcription Retrieval",
+    "Environment Sound Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
