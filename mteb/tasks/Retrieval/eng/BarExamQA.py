@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from sentence_transformers import SentenceTransformer
-
-from mteb import MTEB
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class BarExamQA(AbsTaskRetrieval):
@@ -43,11 +41,3 @@ class BarExamQA(AbsTaskRetrieval):
    eprint={2505.03970}
 }""",
     )
-
-
-# Define the sentence-transformers model name
-model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-
-model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=[BarExamQA()])
-evaluation.run(model)
