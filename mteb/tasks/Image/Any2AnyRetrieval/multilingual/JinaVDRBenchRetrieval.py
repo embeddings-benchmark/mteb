@@ -51,7 +51,7 @@ COMMON_METADATA = {
     "bibtex_citation": r"""
 @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
-      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
+      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
       year={2025},
       eprint={2506.18902},
       archivePrefix={arXiv},
