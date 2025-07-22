@@ -42,7 +42,7 @@ class MSClapWrapper:
             self.version = "2023"
         else:
             self.version = "2023"
-        
+
         self.use_cuda = device == "cuda"
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
@@ -82,7 +82,7 @@ class MSClapWrapper:
                         else:
                             # Already a tensor
                             audio_array = audio_array.float()
-                        
+
                         # Handle resampling if needed
                         if (
                             "sampling_rate" in item
@@ -133,16 +133,16 @@ class MSClapWrapper:
             range(0, len(processed_audio), batch_size), desc="Processing audio batches"
         ):
             batch = processed_audio[i : i + batch_size]
-            
+
             # Convert tensors to the format expected by msclap
             # Stack tensors into a batch tensor [batch_size, samples]
             max_length = max(tensor.shape[-1] for tensor in batch)
             batch_tensor = torch.zeros(len(batch), max_length, dtype=torch.float32)
-            
+
             for idx, tensor in enumerate(batch):
                 length = tensor.shape[-1]
                 batch_tensor[idx, :length] = tensor
-            
+
             batch_tensor = batch_tensor.to(self.device)
 
             try:
@@ -150,20 +150,26 @@ class MSClapWrapper:
                     # Use the internal audio encoder directly
                     # [0] gives audio embeddings, [1] gives class probabilities
                     audio_features = self.model.clap.audio_encoder(batch_tensor)[0]
-                    
+
                     # Normalize embeddings
                     audio_features = audio_features / audio_features.norm(
                         dim=-1, keepdim=True
                     )
                     all_features.append(audio_features.cpu().numpy())
+                logger.info("✅ BATCHo processing succeeded for audio files")
+
             except Exception as e:
-                logger.warning(f"Batch processing failed, falling back to individual processing: {e}")
+                logger.warning(
+                    f"⚠️  BATCH processing failed, falling back to individual processing: {e}"
+                )
                 # Fallback to individual processing
                 for tensor in batch:
                     single_tensor = tensor.unsqueeze(0).to(self.device)
                     with torch.no_grad():
                         audio_features = self.model.clap.audio_encoder(single_tensor)[0]
-                        audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
+                        audio_features = audio_features / audio_features.norm(
+                            dim=-1, keepdim=True
+                        )
                         all_features.append(audio_features.cpu().numpy())
 
         return np.vstack(all_features)
@@ -181,7 +187,7 @@ class MSClapWrapper:
                 }
             else:
                 preprocessed_texts = preprocessed_texts.to(self.device)
-            
+
             text_features = self.model.clap.caption_encoder(preprocessed_texts)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)

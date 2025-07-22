@@ -134,19 +134,22 @@ class MuQMuLanWrapper:
             # Find max length and pad all tensors
             max_length = max(tensor.shape[-1] for tensor in batch)
             batch_tensor = torch.zeros(len(batch), max_length, dtype=torch.float32)
-            
+
             for idx, tensor in enumerate(batch):
                 length = tensor.shape[-1]
                 batch_tensor[idx, :length] = tensor
-            
+
             batch_tensor = batch_tensor.to(self.device)
-            
+
             with torch.no_grad():
                 # Process entire batch at once
                 audio_embeds = self.model(wavs=batch_tensor)
                 return [embed.cpu().numpy().reshape(1, -1) for embed in audio_embeds]
-                
-        except Exception:
+
+        except Exception as e:
+            logger.warning(
+                f"⚠️  BATCH processing failed, falling back to individual processing: {e}"
+            )
             # Fallback to individual processing if batch processing fails
             batch_features = []
             for tensor in batch:
