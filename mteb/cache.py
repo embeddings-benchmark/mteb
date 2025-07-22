@@ -74,16 +74,15 @@ class ResultCache:
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
-                raise FileNotFoundError(
-                    f"No revisions found for model {model_name} in {model_path}"
-                )
-            if len(revisions) > 1:
-                logger.warning(
-                    f"Multiple revisions found for model {model_name}: {revisions}. Using the latest one (according to latest edit)."
-                )
-            # sort folder by latest edit time
-            revisions.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-            model_revision = revisions[0].name
+                model_revision = "no_revision_available"
+            else:
+                if len(revisions) > 1:
+                    logger.warning(
+                        f"Multiple revisions found for model {model_name}: {revisions}. Using the latest one (according to latest edit)."
+                    )
+                    # sort folder by latest edit time
+                    revisions.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+                model_revision = revisions[0].name
 
         return model_path / model_revision / f"{task_name}.json"
 
@@ -93,6 +92,7 @@ class ResultCache:
         model_name: str | ModelMeta,
         model_revision: str | None = None,
         raise_if_not_found: bool = False,
+        prioritize_remote: bool = False,
     ) -> TaskResult | None:
         """Load the results from the local cache directory.
 
@@ -101,6 +101,7 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             raise_if_not_found: If True, raise an error if the results are not found.
+            prioritize_remote: If True, it will first try to load the results from the remote repository, if available.
 
         Returns:
             The results of the task, or None if not found.
@@ -118,7 +119,9 @@ class ResultCache:
                 task_name=task_name,
                 remote=True,
             )
-            if remote_result_path.exists():
+            if remote_result_path.exists() and prioritize_remote:
+                result_path = remote_result_path
+            elif not result_path.exists():
                 result_path = remote_result_path
 
         if not result_path.exists():

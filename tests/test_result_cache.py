@@ -22,7 +22,6 @@ def test_result_cache() -> None:
         model_revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
         raise_if_not_found=True,
     )
-    # TODO: What happens if rev is not found and there are multiple revisions
     result = cache.load_task_result(
         "BornholmBitextMining",
         "sentence-transformers/all-MiniLM-L6-v2",
