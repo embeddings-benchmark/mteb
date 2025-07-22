@@ -8,12 +8,12 @@ from .AbsTaskClustering import *
 from .AbsTaskInstructionRetrieval import *
 from .AbsTaskMultilabelClassification import *
 from .AbsTaskPairClassification import *
-from .AbsTaskRegression import *
 from .AbsTaskReranking import *
 from .AbsTaskRetrieval import *
 from .AbsTaskSpeedTask import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
+from .AbsTaskTextRegression import *
 from .Image.AbsTaskAny2AnyMultiChoice import *
 from .Image.AbsTaskAny2AnyRetrieval import *
 from .Image.AbsTaskImageClassification import *

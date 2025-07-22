@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskRegression import AbsTaskRegression
+from mteb.abstasks.AbsTaskTextRegression import AbsTaskTextRegression
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
+class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskTextRegression):
     metadata = TaskMetadata(
         name="RuSciBenchCitedCountRegression",
         description="""Predicts the number of times a scientific article has been cited by other papers.
@@ -51,7 +51,7 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskRegression):
     )
 
 
-class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskRegression):
+class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskTextRegression):
     metadata = TaskMetadata(
         name="RuSciBenchYearPublRegression",
         description="""Predicts the publication year of a scientific article. The prediction is based on the
