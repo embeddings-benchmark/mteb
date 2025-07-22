@@ -1,18 +1,22 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 from scipy.stats import kendalltau
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from mteb.abstasks.AbsTaskRegression import RegressorModel
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
+
+
+class RegressorModel(Protocol):
+    def fit(self, X, y, sample_weight=None): ...
+    def predict(self, X): ...
 
 
 class LinearRegressionEvaluator(Evaluator):

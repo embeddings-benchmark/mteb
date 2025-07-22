@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Protocol
+from typing import Any
 
 import datasets
 import numpy as np
@@ -11,7 +11,10 @@ from sklearn.linear_model import LinearRegression
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.RegressionEvaluator import LinearRegressionEvaluator
+from mteb.evaluation.evaluators.RegressionEvaluator import (
+    LinearRegressionEvaluator,
+    RegressorModel,
+)
 from mteb.load_results.task_results import ScoresDict
 
 logger = logging.getLogger(__name__)
@@ -47,11 +50,6 @@ class RegressionDescriptiveStatistics(DescriptiveStatistics):
     min_value: float
     average_value: float
     max_value: float
-
-
-class RegressorModel(Protocol):
-    def fit(self, X, y, sample_weight=None): ...
-    def predict(self, X): ...
 
 
 class AbsTaskTextRegression(AbsTask):
