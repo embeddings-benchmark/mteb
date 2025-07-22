@@ -5,9 +5,9 @@ from typing import Any
 
 import numpy as np
 from scipy.stats import kendalltau
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
+from mteb.abstasks.AbsTaskRegression import RegressorModel
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
@@ -25,6 +25,7 @@ class LinearRegressionEvaluator(Evaluator):
         task_name: str,
         hf_split: str,
         hf_subset: str,
+        regressor: RegressorModel,
         fit_intercept: bool = True,
         limit: int | None = None,
         **kwargs,
@@ -44,6 +45,7 @@ class LinearRegressionEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.task_name = task_name
         self.fit_intercept = fit_intercept
+        self.regressor = regressor
 
     def __call__(
         self,
@@ -72,9 +74,8 @@ class LinearRegressionEvaluator(Evaluator):
             )
             test_cache = X_test
 
-        linear_regression = LinearRegression(fit_intercept=self.fit_intercept)
-        linear_regression.fit(X_train, self.y_train)
-        y_pred = linear_regression.predict(test_cache)
+        self.regressor.fit(X_train, self.y_train)
+        y_pred = self.regressor.predict(test_cache)
 
         scores["mae"] = mean_absolute_error(self.y_test, y_pred)
         scores["mse"] = mean_squared_error(self.y_test, y_pred)

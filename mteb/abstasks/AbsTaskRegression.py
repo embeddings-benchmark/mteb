@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Protocol
 
 import datasets
 import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -50,7 +49,12 @@ class RegressionDescriptiveStatistics(DescriptiveStatistics):
     max_value: float
 
 
-class AbsTaskRegression(AbsTask):
+class RegressorModel(Protocol):
+    def fit(self, X, y, sample_weight=None): ...
+    def predict(self, X): ...
+
+
+class AbsTaskTextRegression(AbsTask):
     """Abstract class for regression tasks
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
@@ -60,7 +64,7 @@ class AbsTaskRegression(AbsTask):
     """
 
     evaluator: type[LinearRegressionEvaluator] = LinearRegressionEvaluator
-    model: BaseEstimator = LinearRegression(n_jobs=-1)
+    regressor: RegressorModel = LinearRegression(n_jobs=-1)
 
     train_split: str = "train"
     label_column_name: str = "value"
@@ -113,6 +117,7 @@ class AbsTaskRegression(AbsTask):
                 task_name=self.metadata.name,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
+                regressor=self.regressor,
                 **kwargs,
             )
             scores, test_cache = evaluator(
