@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from typing import Sequence
+from collections.abc import Sequence
+from functools import partial
 
 import sentence_transformers
 import torch
 
-from functools import partial
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-from sentence_transformers.sparse_encoder import SparseEncoder
-
 
 v2_training_data = {
     "MSMARCO": ["train"],
@@ -53,6 +51,7 @@ class SparseEncoderWrapper(Wrapper):
             raise ImportError(
                 "sentence-transformers version must be >= 5.0.0 to load sparse encoder"
             )
+        from sentence_transformers.sparse_encoder import SparseEncoder
 
         self.model_name = model_name
         self.kwargs = kwargs
@@ -63,15 +62,14 @@ class SparseEncoderWrapper(Wrapper):
     def similarity(
         self, query_embeddings: torch.Tensor, corpus_embeddings: torch.Tensor
     ) -> torch.Tensor:
-        """
-        Compute similarity between sparse query_embeddings and corpus_embeddings in batches.
+        """Compute similarity between sparse query_embeddings and corpus_embeddings in batches.
 
         Args:
-            query_embeddings (Tensor): sparse COO tensor of shape (num_queries, dim)
-            corpus_embeddings (Tensor): tensor of shape (num_corpus, dim)
+            query_embeddings: sparse COO tensor of shape (num_queries, dim)
+            corpus_embeddings: tensor of shape (num_corpus, dim)
 
         Returns:
-            Tensor: similarity matrix of shape (num_queries, num_corpus)
+            Similarity matrix of shape (num_queries, num_corpus)
         """
         sims = []
         num_queries = query_embeddings.size(0)
@@ -113,10 +111,10 @@ class SparseEncoderWrapper(Wrapper):
     ):
         if prompt_type is not None and prompt_type == PromptType.query:
             return self.model.encode_query(
-                sentences,
+                sentences,  # type: ignore[arg-type]
                 **kwargs,
             )
-        return self.model.encode_document(sentences, **kwargs)
+        return self.model.encode_document(sentences, **kwargs)  # type: ignore[return-value]
 
 
 opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
@@ -137,7 +135,7 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v3_training_data,
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte",
         trust_remote_code=True,
@@ -164,7 +162,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v3_training_data,
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill",
         revision="babf71f3c48695e2e53a978208e8aba48335e3c0",
@@ -189,7 +187,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v2_training_data,
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill",
         revision="8921a26c78b8559d6604eb1f5c0b74c079bee38f",
@@ -215,7 +213,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v2_training_data,
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini",
         revision="4af867a426867dfdd744097531046f4289a32fdd",
@@ -242,7 +240,7 @@ opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     training_datasets={
         "MSMARCO": ["train"],
     },
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         SparseEncoderWrapper,
         model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v1",
         revision="98cdcbd72867c547f72f2b7b7bed9cdf9f09922d",
