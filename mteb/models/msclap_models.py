@@ -156,7 +156,6 @@ class MSClapWrapper:
                         dim=-1, keepdim=True
                     )
                     all_features.append(audio_features.cpu().numpy())
-                logger.info("✅ BATCHo processing succeeded for audio files")
 
             except Exception as e:
                 logger.warning(

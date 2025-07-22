@@ -139,10 +139,6 @@ class Wav2ClipZeroShotWrapper:
 
             # Try batch processing first
             try:
-                logger.info(
-                    f"🚀 Attempting BATCH processing for {len(batch_wavs)} audio files"
-                )
-
                 # Stack waveforms into a batch - pad to same length if needed
                 max_length = max(wav.shape[-1] for wav in batch_wavs)
                 padded_wavs = []
@@ -169,10 +165,6 @@ class Wav2ClipZeroShotWrapper:
                 for embed in normalized_embeds:
                     all_embeddings.append(embed.reshape(1, -1))
 
-                logger.info(
-                    f"✅ BATCH processing succeeded for {len(batch_wavs)} audio files"
-                )
-
             except Exception as e:
                 logger.warning(
                     f"⚠️  BATCH processing failed, falling back to individual processing: {e}"
@@ -186,6 +178,11 @@ class Wav2ClipZeroShotWrapper:
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
                     normalized_embed = embed / norm
                     all_embeddings.append(normalized_embed)
+                logger.info(
+                    f"🔄 Individual processing completed for {len(batch_wavs)} audio files"
+                )
+
+        return all_embeddings
 
     def get_text_embeddings(
         self,

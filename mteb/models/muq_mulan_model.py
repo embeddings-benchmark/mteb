@@ -146,10 +146,7 @@ class MuQMuLanWrapper:
                 audio_embeds = self.model(wavs=batch_tensor)
                 return [embed.cpu().numpy().reshape(1, -1) for embed in audio_embeds]
 
-        except Exception as e:
-            logger.warning(
-                f"⚠️  BATCH processing failed, falling back to individual processing: {e}"
-            )
+        except Exception:
             # Fallback to individual processing if batch processing fails
             batch_features = []
             for tensor in batch:
