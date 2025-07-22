@@ -5,7 +5,10 @@ from dataclasses import dataclass
 import gradio as gr
 
 import mteb
+from build.lib.mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb import Benchmark
+
+DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
 
 @dataclass
@@ -136,7 +139,7 @@ def make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
     button_counter = 0
 
     with gr.Column() as column:
-        state = gr.State("selector_state")
+        state = gr.State(DEFAULT_BENCHMARK_NAME)
 
         for category_entry in entries:
             button_counter = _render_category(
