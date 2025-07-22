@@ -269,8 +269,8 @@ class JinaV4Wrapper(Wrapper):
         # Determine prompt name parameter
         if jina_task_name and "query" in jina_task_name:
             prompt_name_param = "query"
-        elif jina_task_name and "document" in jina_task_name:
-            prompt_name_param = "document"
+        elif jina_task_name and "passage" in jina_task_name:
+            prompt_name_param = "passage"
         else:
             prompt_name_param = "query"  # default fallback
 
