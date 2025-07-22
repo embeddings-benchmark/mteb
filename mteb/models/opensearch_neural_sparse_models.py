@@ -51,7 +51,7 @@ class SparseEncoderWrapper(Wrapper):
             raise ImportError(
                 "sentence-transformers version must be >= 5.0.0 to load sparse encoder"
             )
-        from sentence_transformers import SparseEncoder
+        from sentence_transformers.sparse_encoder import SparseEncoder
 
         self.model_name = model_name
         self.kwargs = kwargs
