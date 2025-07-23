@@ -8,8 +8,10 @@ class CMUArcticA2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="CMUArcticA2TRetrieval",
         description=(
-            "Retrieve the correct transcription for a given speech segment "
-            "from the phonetically balanced CMU Arctic single-speaker TTS corpora."
+            "Retrieve the correct transcription for an English speech segment. "
+            "The dataset is derived from the phonetically balanced CMU Arctic single-speaker TTS corpora. "
+            "The corpora contains 1150 samples based on read-aloud segments from books, which are out of copyright "
+            "and derived from the Gutenberg project."
         ),
         reference="http://festvox.org/cmu_arctic/",
         dataset={
@@ -47,8 +49,10 @@ class CMUArcticT2ARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="CMUArcticT2ARetrieval",
         description=(
-            "Retrieve the correct audio segment for a given transcription "
-            "from the phonetically balanced CMU Arctic single-speaker TTS corpora."
+            "Retrieve the correct audio segment for an English transcription. "
+            "The dataset is derived from the phonetically balanced CMU Arctic single-speaker TTS corpora. "
+            "The corpora contains 1150 audio-text pairs based on read-aloud segments from public domain books "
+            "originally sourced from the Gutenberg project."
         ),
         reference="http://festvox.org/cmu_arctic/",
         dataset={
