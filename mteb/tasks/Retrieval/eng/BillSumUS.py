@@ -12,7 +12,7 @@ class BillSumUS(AbsTaskRetrieval):
             "revision": "0c063eb9b2f3085bbbc48f8d51f21a179254187e",
         },
         name="BillSumUS",
-        description="A benchmark for retrieving US bills based on summary prompts.",
+        description="A benchmark for retrieving US federal bills based on their summaries.",
         reference="https://huggingface.co/datasets/FiscalNote/billsum",
         type="Retrieval",
         category="t2t",
