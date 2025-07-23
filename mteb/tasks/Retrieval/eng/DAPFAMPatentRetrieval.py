@@ -40,7 +40,6 @@ _DEFAULT_META = dict(
     license="cc-by-nc-sa-4.0",
     annotations_creators="derived",
     sample_creation="created",
-    # judged_docs_only_flag = False,
     bibtex_citation=BIBTEX,
 )
 
