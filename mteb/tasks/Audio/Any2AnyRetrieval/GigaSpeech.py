@@ -8,8 +8,9 @@ class GigaSpeechA2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="GigaSpeechA2TRetrieval",
         description=(
-            "Transcriptions of audio segments drawn from the GigaSpeech "
-            "multi-domain English speech corpus, covering audiobooks, podcasts, "
+            "Given an English speech segment, retrieve its correct transcription. "
+            "Audio comes from the 10 000‑hour training subset of GigaSpeech, "
+            "which originates from ≈40 000 hours of transcribed audiobooks, podcasts, "
             "and YouTube."
         ),
         reference="https://github.com/SpeechColab/GigaSpeech",
@@ -47,8 +48,9 @@ class GigaSpeechT2ARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="GigaSpeechT2ARetrieval",
         description=(
-            "Transcriptions of audio segments drawn from the GigaSpeech "
-            "multi-domain English speech corpus, covering audiobooks, podcasts, "
+            "Given an English transcription, retrieve its corresponding audio segment. "
+            "Audio comes from the 10 000‑hour training subset of GigaSpeech, "
+            "sourced from ≈40 000 hours of transcribed audiobooks, podcasts, "
             "and YouTube."
         ),
         reference="https://github.com/SpeechColab/GigaSpeech",
