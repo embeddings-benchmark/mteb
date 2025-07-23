@@ -12,7 +12,7 @@ class BillSumCA(AbsTaskRetrieval):
             "revision": "5014f29d7fdde6f9073a75b72be53ed73eed60c6",
         },
         name="BillSumCA",
-        description="A benchmark for retrieving Californian bills based on summary prompts.",
+        description="A benchmark for retrieving Californian bills based on their summaries.",
         reference="https://huggingface.co/datasets/FiscalNote/billsum",
         type="Retrieval",
         category="t2t",
