@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class BillSumCA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         dataset={
-            "path": "isaacus/mteb-BillSumUS",
+            "path": "isaacus/mteb-BillSumCA",
             "revision": "5014f29d7fdde6f9073a75b72be53ed73eed60c6",
         },
         name="BillSumCA",
