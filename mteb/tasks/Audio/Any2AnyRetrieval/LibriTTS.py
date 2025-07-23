@@ -7,8 +7,12 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class LibriTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="LibriTTSA2TRetrieval",
-        description="Retrieval of textual transcripts given synthetic audiobook speech from the LibriTTS dataset.",
-        reference="https://github.com/espnet/espnet/tree/master/egs2/libritts",
+        description=(
+            "Given audiobook speech segments from the multi‑speaker LibriTTS corpus, "
+            "retrieve the correct text transcription. LibriTTS is a 585‑hour, 24 kHz, "
+            "multi‑speaker English TTS corpus derived from LibriVox (audio) and Project Gutenberg (text)."
+        ),
+        reference="https://www.openslr.org/60/",
         dataset={
             "path": "mteb/LibriTTS_a2t",
             "revision": "dbf3f317f96023e103b98548a3b99cfa919afb56",
@@ -21,7 +25,7 @@ class LibriTTSA2TRetrieval(AbsTaskAny2AnyRetrieval):
         main_score="cv_recall_at_5",
         date=("2019-11-01", "2019-12-31"),
         domains=["Spoken"],
-        task_subtypes=["Reasoning as Retrieval"],
+        task_subtypes=["Speech Transcription Retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
@@ -45,8 +49,12 @@ class LibriTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
 
     metadata = TaskMetadata(
         name="LibriTTST2ARetrieval",
-        description="Retrieval of synthetic audiobook speech segments given text transcripts from the LibriTTS dataset.",
-        reference="https://github.com/espnet/espnet/tree/master/egs2/libritts",
+        description=(
+            "Given an English text transcription, retrieve its corresponding audiobook "
+            "speech segment from the multi‑speaker LibriTTS corpus. LibriTTS is a 585‑hour, 24 kHz, "
+            "multi‑speaker English TTS corpus derived from LibriVox and Project Gutenberg."
+        ),
+        reference="https://www.openslr.org/60/",
         dataset={
             "path": "mteb/LibriTTS_t2a",
             "revision": "d6fc5fdcdc0940892c84461e8cfcb908baa717e4",
@@ -59,7 +67,7 @@ class LibriTTST2ARetrieval(AbsTaskAny2AnyRetrieval):
         main_score="cv_recall_at_5",
         date=("2019-11-01", "2019-12-31"),
         domains=["Spoken"],
-        task_subtypes=["Reasoning as Retrieval"],
+        task_subtypes=["Speech Transcription Retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
