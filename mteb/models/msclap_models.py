@@ -201,7 +201,7 @@ class MSClapWrapper:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        return self.get_text_embeddings(inputs)
+        return self.get_text_embeddings(inputs, **kwargs)
 
 
 # Microsoft CLAP Model metadata
