@@ -1,0 +1,41 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+
+
+class BillSumCA(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        dataset={
+            "path": "isaacus/mteb-BillSumUS",
+            "revision": "5014f29d7fdde6f9073a75b72be53ed73eed60c6",
+        },
+        name="BillSumCA",
+        description="A benchmark for retrieving Californian bills based on summary prompts.",
+        reference="https://huggingface.co/datasets/FiscalNote/billsum",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2024-08-14", "2025-07-18"),
+        domains=["Legal", "Government"],
+        task_subtypes=None,
+        license="cc0-1.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="""\
+@inproceedings{Eidelman_2019,
+   title={BillSum: A Corpus for Automatic Summarization of US Legislation},
+   url={http://dx.doi.org/10.18653/v1/D19-5406},
+   DOI={10.18653/v1/d19-5406},
+   booktitle={Proceedings of the 2nd Workshop on New Frontiers in Summarization},
+   publisher={Association for Computational Linguistics},
+   author={Eidelman, Vladimir},
+   year={2019},
+   pages={48–56} }
+""",
+    )
