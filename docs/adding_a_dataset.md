@@ -247,7 +247,7 @@ import mteb
 model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 task = mteb.get_task("{name of your task}")
-evaluation = nmteb.MTEB(tasks=[task])
+evaluation = mteb.MTEB(tasks=[task])
 evaluation.run(model)
 ```
 
