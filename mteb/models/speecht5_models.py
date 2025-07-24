@@ -9,27 +9,39 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import SEWDForCTC, Wav2Vec2FeatureExtractor
+from transformers import (
+    SpeechT5ForSpeechToText,
+    SpeechT5ForTextToSpeech,
+    SpeechT5Processor,
+)
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 
-class SewDWrapper(Wrapper):
+class SpeechT5Wrapper(Wrapper):
     def __init__(
         self,
-        model_name: str = "facebook/hubert-base-ls960",
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
 
-        # SewD uses the same feature extractor as Wav2Vec2
-        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
-        self.model = SEWDForCTC.from_pretrained(model_name).to(self.device)
-        self.sampling_rate = self.feature_extractor.sampling_rate
+        self.asr_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
+        self.tts_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
+
+        # Initialize models for both audio and text encoding
+        self.asr_model = SpeechT5ForSpeechToText.from_pretrained(
+            "microsoft/speecht5_asr"
+        ).to(self.device)
+        self.tts_model = SpeechT5ForTextToSpeech.from_pretrained(
+            "microsoft/speecht5_tts"
+        ).to(self.device)
+
+        self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -55,11 +67,14 @@ class SewDWrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            audio = torch.from_numpy(audio).float()
+                        elif isinstance(audio, torch.Tensor):
+                            audio = audio.float()
+                        elif isinstance(audio, list):
+                            audio = torch.tensor(audio, dtype=torch.float32)
+                        else:
+                            raise TypeError(f"Unsupported audio type: {type(audio)}")
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
@@ -103,6 +118,7 @@ class SewDWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        hidden_layer: float = 1.0,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
@@ -112,7 +128,6 @@ class SewDWrapper(Wrapper):
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
 
-                # Pre-process like Wav2Vec2
                 batch_tensor = self._pad_audio_batch(batch)
 
                 if batch_tensor.ndim == 1:
@@ -120,113 +135,151 @@ class SewDWrapper(Wrapper):
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
-                inputs = self.feature_extractor(
-                    batch_tensor.cpu().numpy(),
+                inputs = self.asr_processor(
+                    audio=batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
                     return_attention_mask=True,
                 ).to(self.device)
 
-                # SewD model outputs
-                outputs = self.model(
-                    inputs.input_values,
+                outputs = self.asr_model.speecht5.encoder(
+                    input_values=inputs.input_values,
                     attention_mask=inputs.attention_mask,
-                    output_hidden_states=True,
                 )
+                last_hidden = outputs.last_hidden_state
+                embeddings = torch.mean(last_hidden, dim=1)
 
-                # Get embeddings from last hidden state
-                last_hidden_state = outputs.hidden_states[-1]
-                embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            return torch.zeros((0, self.model.config.hidden_size))
+            return torch.zeros((0, self.asr_model.config.hidden_size))
+
+    def get_text_embeddings(
+        self,
+        texts: list[str],
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 4,
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        """Get text embeddings using the text encoder."""
+        all_embeddings = []
+
+        with torch.no_grad():
+            for i in range(0, len(texts), batch_size):
+                batch_texts = texts[i : i + batch_size]
+
+                # Process text through tokenizer
+                inputs = self.tts_processor(
+                    text=batch_texts,
+                    return_tensors="pt",
+                    padding="longest",
+                    truncation=True,
+                ).to(self.device)
+
+                outputs = self.tts_model.speecht5.encoder(
+                    input_values=inputs["input_ids"],
+                    attention_mask=inputs["attention_mask"],
+                )
+
+                last_hidden = outputs.last_hidden_state
+                embeddings = torch.mean(last_hidden, dim=1)
+                all_embeddings.append(embeddings.cpu())
+
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.zeros((0, self.tts_model.config.hidden_size))
 
     def encode(
         self,
-        inputs: AudioBatch,
+        inputs: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        raise ValueError("SewD models only support audio encoding.")
+        return self.get_text_embeddings(inputs, **kwargs).numpy()
 
 
-sewd_base = ModelMeta(
+# ASR model - Optimized for Speech Recognition tasks
+speecht5_asr = ModelMeta(
     loader=partial(
-        SewDWrapper,
-        model_name="asapp/sew-d-base-plus-400k-ft-ls100h",
+        SpeechT5Wrapper,
+        model_name="microsoft/speecht5_asr",
     ),
-    name="asapp/sew-d-base-plus-400k-ft-ls100h",
+    name="microsoft/speecht5_asr",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="dba3bb02fda4248b6e082697eee756de8fe8aa8a",
-    release_date="2021-09-14",
-    max_tokens=float("inf"),
-    n_parameters=95_000_000,
-    memory_usage_mb=675,
+    revision="53615c10408485422e09a12cda191a747f4bbe34",
+    release_date="2022-05-16",
+    max_tokens=None,
+    n_parameters=151_575_936,
+    memory_usage_mb=578,
     embed_dim=768,
-    license="apache-2.0",
-    reference="https://huggingface.co/asapp/sew-d-base-plus-400k-ft-ls100h",
+    license="mit",
+    reference="https://huggingface.co/microsoft/speecht5_asr",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
+    public_training_code="https://github.com/microsoft/SpeechT5",
+    public_training_data="https://www.openslr.org/12",
+    training_datasets={},  # {"LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
-sewd_tiny = ModelMeta(
+# TTS model - Optimized for Text-to-Speech tasks
+speecht5_tts = ModelMeta(
     loader=partial(
-        SewDWrapper,
-        model_name="asapp/sew-d-tiny-100k-ft-ls100h",
+        SpeechT5Wrapper,
+        model_name="microsoft/speecht5_tts",
     ),
-    name="asapp/sew-d-tiny-100k-ft-ls100h",
+    name="microsoft/speecht5_tts",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="1966cdcfbd2123ee90b003c2aa6ec6fe204cc4d8",
-    release_date="2021-09-14",
-    max_tokens=float("inf"),
-    n_parameters=19_700_000,
-    memory_usage_mb=92,
-    embed_dim=256,
-    license="apache-2.0",
-    reference="https://huggingface.co/asapp/sew-d-tiny-100k-ft-ls100h",
+    revision="30fcde30f19b87502b8435427b5f5068e401d5f6",
+    release_date="2022-05-16",
+    max_tokens=None,
+    n_parameters=146_335_465,
+    memory_usage_mb=558,
+    embed_dim=768,
+    license="mit",
+    reference="https://huggingface.co/microsoft/speecht5_tts",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
-    modalities=["audio"],
+    public_training_code="https://github.com/microsoft/SpeechT5",
+    public_training_data="https://www.openslr.org/12",
+    training_datasets={},  # {"LibriTTS": ["train"]},
+    modalities=["text"],
 )
 
-sewd_mid = ModelMeta(
+# Voice Conversion model - Optimized for Speech-to-Speech conversion tasks
+speecht5_multimodal = ModelMeta(
     loader=partial(
-        SewDWrapper,
-        model_name="asapp/sew-d-mid-400k-ft-ls100h",
+        SpeechT5Wrapper,
+        model_name="microsoft/speecht5_multimodal",
     ),
-    name="asapp/sew-d-mid-400k-ft-ls100h",
+    name="microsoft/speecht5_multimodal",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="b2ff9fdb3bddc81657cf5f16bc0c510be0a39b3e",
-    release_date="2021-09-14",
-    max_tokens=float("inf"),
-    n_parameters=139_000_000,
-    memory_usage_mb=530,
+    revision="N/A",
+    release_date="2022-05-16",
+    max_tokens=None,
+    n_parameters=297_911_401,  # Combined ASR + TTS parameters
+    memory_usage_mb=1136,  # Combined memory usage
     embed_dim=768,
-    license="apache-2.0",
-    reference="https://huggingface.co/asapp/sew-d-mid-400k-ft-ls100h",
+    license="mit",
+    reference="https://huggingface.co/microsoft/speecht5_asr",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
-    modalities=["audio"],
+    public_training_code="https://github.com/microsoft/SpeechT5",
+    public_training_data="http://www.festvox.org/cmu_arctic/",
+    training_datasets={},
+    modalities=["audio", "text"],
 )

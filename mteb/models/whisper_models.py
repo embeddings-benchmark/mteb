@@ -150,7 +150,7 @@ class WhisperAudioWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
+        raise ValueError("Whisper models only support audio encoding.")
 
 
 # Model Metas for Different Whisper Models
