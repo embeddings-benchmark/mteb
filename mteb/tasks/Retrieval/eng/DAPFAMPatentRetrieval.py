@@ -62,7 +62,6 @@ _IN_PAPER = {
 }
 
 
-# ───────────────────────────────────────────────────
 # MIX-IN with shared logic + metric implementation
 class _DAPFAMMixin:
     # class-level attributes are filled in each concrete subclass
