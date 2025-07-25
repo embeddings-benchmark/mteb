@@ -7,7 +7,6 @@ from typing import TypedDict
 
 from datasets import (
     Dataset,
-    DatasetDict,
     Features,
     Sequence,
     Value,
@@ -21,17 +20,18 @@ logger = logging.getLogger(__name__)
 
 class RetrievalSplitData(TypedDict):
     """A dictionary containing the corpus, queries, relevant documents, instructions, and top-ranked documents for a retrieval task.
-    - `corpus`: A mapping of document IDs to their text or title and text.
-    - `queries`: A mapping of query IDs to their text.
+
+    - `corpus`: A mapping of document IDs to their text or title and text. Columns: "id", "title", "text"
+    - `queries`: A mapping of query IDs to their text. Columns: "id", "text" (can be `Conversation`)
     - `relevant_docs`: A mapping of query IDs to a mapping of document IDs and their relevance scores.
-    - `instructions`: A mapping of query IDs to their instructions (if applicable).
-    - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable).
+    - `instructions`: A mapping of query IDs to their instructions (if applicable). Columns: "query-id", "instruction"
+    - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable). Columns: "query-id", "corpus-ids"
     """
 
-    corpus: Mapping[str, str | dict[str, str]]
-    queries: Mapping[str, str]
+    corpus: Dataset
+    queries: Dataset
     relevant_docs: Mapping[str, Mapping[str, float]]
-    instructions: Mapping[str, str] | None
+    instructions: Dataset | None
     top_ranked: Mapping[str, list[str]] | None
 
 
@@ -68,10 +68,9 @@ class RetrievalDatasetLoader:
         corpus = self._load_corpus()
         queries = self._load_queries()
 
-        queries = {
-            query["id"]: query["text"]
-            for query in queries.filter(lambda x: x["id"] in qrels)
-        }
+        queries = queries.filter(
+            lambda x: x["id"] in qrels.keys(), desc="Filtering queries by qrels"
+        )
 
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked()
@@ -110,7 +109,7 @@ class RetrievalDatasetLoader:
             revision=self.revision,
         )
 
-    def _load_corpus(self) -> dict[str, dict[str, str]]:
+    def _load_corpus(self) -> Dataset:
         logger.info("Loading Corpus...")
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
@@ -120,15 +119,9 @@ class RetrievalDatasetLoader:
         )
         logger.info("Loaded %d %s Documents.", len(corpus_ds), self.split.upper())
         logger.info("Doc Example: %s", corpus_ds[0])
-        return {
-            doc["id"]: {
-                "title": doc.get("title", ""),
-                "text": doc["text"],
-            }
-            for doc in corpus_ds
-        }
+        return corpus_ds
 
-    def _load_queries(self) -> Dataset | DatasetDict:
+    def _load_queries(self) -> Dataset:
         logger.info("Loading Queries...")
 
         config = f"{self.config}-queries" if self.config is not None else "queries"
@@ -173,11 +166,11 @@ class RetrievalDatasetLoader:
         def qrels_dict_init(row):
             qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])
 
-        qrels_ds.map(qrels_dict_init)
+        qrels_ds.map(qrels_dict_init, desc="Creating qrels dict")
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
         return qrels_dict
 
-    def _load_top_ranked(self) -> dict[str, str]:
+    def _load_top_ranked(self) -> dict[str, list[str]]:
         logger.info("Loading Top Ranked")
 
         config = (
@@ -193,11 +186,11 @@ class RetrievalDatasetLoader:
             )
         ).select_columns(["query-id", "corpus-ids"])
 
-        top_ranked_ds = {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked_ds}
+        top_ranked_dict = {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked_ds}
         logger.info(f"Top ranked loaded: {len(top_ranked_ds) if top_ranked_ds else 0}")
-        return top_ranked_ds
+        return top_ranked_dict
 
-    def _load_instructions(self) -> dict[str, str]:
+    def _load_instructions(self) -> Dataset:
         logger.info("Loading Instructions")
 
         config = (
@@ -212,11 +205,4 @@ class RetrievalDatasetLoader:
                 }
             )
         ).select_columns(["query-id", "instruction"])
-
-        instructions_ds = {
-            row["query-id"]: row["instruction"] for row in instructions_ds
-        }
-        logger.info(
-            f"Instructions loaded: {len(instructions_ds) if instructions_ds else 0}"
-        )
         return instructions_ds
