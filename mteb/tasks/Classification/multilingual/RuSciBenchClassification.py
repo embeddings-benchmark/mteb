@@ -100,9 +100,9 @@ class RuSciBenchPubTypeClassification(MultilingualTask, AbsTaskClassification):
     )
 
 
-class RuSciBenchGRNTIOrigClassification(MultilingualTask, AbsTaskClassification):
+class RuSciBenchGRNTIClassificationV2(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
-        name="RuSciBenchGRNTIOrigClassification",
+        name="RuSciBenchGRNTIClassification.v2",
         dataset={
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
@@ -110,7 +110,10 @@ class RuSciBenchGRNTIOrigClassification(MultilingualTask, AbsTaskClassification)
         description="""Classification of scientific papers based on the GRNTI (State Rubricator of Scientific and
         Technical Information) rubricator. GRNTI is a universal hierarchical classification of knowledge domains
         adopted in Russia and CIS countries to systematize the entire flow of scientific and technical information.
-        This task uses the first level of the GRNTI hierarchy and top 28 classes by frequency.""",
+        This task uses the first level of the GRNTI hierarchy and top 28 classes by frequency.
+
+        In this version, English language support has been added and data partitioning has been slightly modified.
+        """,
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
         category="p2p",
@@ -147,9 +150,9 @@ class RuSciBenchGRNTIOrigClassification(MultilingualTask, AbsTaskClassification)
     )
 
 
-class RuSciBenchOECDOrigClassification(MultilingualTask, AbsTaskClassification):
+class RuSciBenchOECDClassificationV2(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
-        name="RuSciBenchOECDOrigClassification",
+        name="RuSciBenchOECDClassification.v2",
         dataset={
             "path": "mlsa-iai-msu-lab/ru_sci_bench_mteb",
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
@@ -157,7 +160,10 @@ class RuSciBenchOECDOrigClassification(MultilingualTask, AbsTaskClassification):
         description="""Classification of scientific papers based on the OECD
         (Organization for Economic Co-operation and Development) rubricator. OECD provides
         a hierarchical 3-level system of classes for labeling scientific articles.
-        This task uses the first two levels of the OECD hierarchy, top 29 classes.""",
+        This task uses the first two levels of the OECD hierarchy, top 29 classes.
+
+        In this version, English language support has been added and data partitioning has been slightly modified.
+        """,
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
         category="p2p",

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Protocol
+from typing import Any
 
 import numpy as np
 from scipy.stats import kendalltau
+from sklearn.base import RegressorMixin
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb.encoder_interface import Encoder
@@ -12,11 +13,6 @@ from mteb.encoder_interface import Encoder
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
-
-class RegressorModel(Protocol):
-    def fit(self, X, y, sample_weight=None): ...
-    def predict(self, X): ...
 
 
 class LinearRegressionEvaluator(Evaluator):
@@ -29,17 +25,10 @@ class LinearRegressionEvaluator(Evaluator):
         task_name: str,
         hf_split: str,
         hf_subset: str,
-        regressor: RegressorModel,
-        fit_intercept: bool = True,
-        limit: int | None = None,
+        regressor: RegressorMixin,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            sentences_train = sentences_train[:limit]
-            y_train = y_train[:limit]
-            sentences_test = sentences_test[:limit]
-            y_test = y_test[:limit]
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -48,7 +37,6 @@ class LinearRegressionEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.task_name = task_name
-        self.fit_intercept = fit_intercept
         self.regressor = regressor
 
     def __call__(

@@ -259,8 +259,8 @@ RU_SCI_BENCH = Benchmark(
             "RuSciBenchBitextMining",
             # Classification
             "RuSciBenchCoreRiscClassification",
-            "RuSciBenchGRNTIOrigClassification",
-            "RuSciBenchOECDOrigClassification",
+            "RuSciBenchGRNTIClassification.v2",
+            "RuSciBenchOECDClassification.v2",
             "RuSciBenchPubTypeClassification",
             # Retrieval
             "RuSciBenchCiteRetrieval",
@@ -2055,7 +2055,7 @@ R2MED = Benchmark(
         ]
     ),
     description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
-    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios. 
+    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
     It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
     """,
     reference="https://r2med.github.io/",
