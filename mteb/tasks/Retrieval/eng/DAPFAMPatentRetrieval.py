@@ -64,12 +64,12 @@ _IN_PAPER = {
 # MIX-IN with shared logic + metric implementation
 class _DAPFAMMixin:
     # class-level attributes are filled in each concrete subclass
-    domain_filter: Optional[str] = None
-    query_fields: List[str] = []
-    corpus_fields: List[str] = []
+    domain_filter: str | None = None
+    query_fields: list[str] = []
+    corpus_fields: list[str] = []
     in_paper: bool = False
 
-    def load_data(self, **_) -> Tuple[Dict, Dict, Dict]:
+    def load_data(self, **_) -> tuple[dict, dict, dict]:
         ds_c = load_dataset(HF_REPO, "corpus", split="train")
         ds_q = load_dataset(HF_REPO, "queries", split="train")
         ds_r = load_dataset(HF_REPO, "relations", split="train")
@@ -91,7 +91,7 @@ class _DAPFAMMixin:
             }
         }
 
-        qrels: Dict[str, Dict[str, Tuple[float, str]]] = {}
+        qrels: dict[str, dict[str, tuple[float, str]]] = {}
         for r in ds_r:
             qid, pid = r["query_id"], r["relevant_id"]
             qrels.setdefault(qid, {})[pid] = (
@@ -109,7 +109,7 @@ class _DAPFAMMixin:
         split: str = "test",
         subsets_to_run=None,
         **kwargs,
-    ) -> Dict[str, Dict[str, float]]:
+    ) -> dict[str, dict[str, float]]:
         """Custom evaluation that quantises embeddings to uint8 before
         normalisation (per the paper) and
         computes recall / nDCG / mAP exactly like the paper if quantize=True and similarity=cosine.
@@ -127,8 +127,9 @@ class _DAPFAMMixin:
 
         encode_kwargs = kwargs.get("encode_kwargs", {})
         quantize = kwargs.get("quantize", True)
-        similarity = kwargs.get("similarity", "cosine")
 
+        # check similarity function name :
+        print(model_wrapper.model.similarity_fn_name)
         emb_c = model_wrapper.model.encode(
             list(corp_texts), **encode_kwargs, show_progress_bar=True
         )
@@ -136,27 +137,25 @@ class _DAPFAMMixin:
             list(qry_texts), **encode_kwargs, show_progress_bar=True
         )
 
-        # uint8 quantisation (per paper)
+        # uint8 quantisation (per paper) if chosen then we go back to fp32 to avoid error
+        # by sentence transformers similarity function (doesn't accept quantized embeddings)
         if quantize:
-            emb_c = quantize_embeddings(emb_c, precision="uint8")
-            emb_q = quantize_embeddings(emb_q, precision="uint8")
+            emb_c_q = quantize_embeddings(emb_c, precision="uint8")
+            emb_q_q = quantize_embeddings(emb_q, precision="uint8")
+            emb_c = emb_c_q.astype(np.float32)
+            emb_q = emb_q_q.astype(np.float32)
 
-        # cosine similarity (to reproduce paper)
-        if similarity == "cosine":
-            emb_c = emb_c / np.linalg.norm(emb_c, axis=1, keepdims=True)
-            emb_q = emb_q / np.linalg.norm(emb_q, axis=1, keepdims=True)
+        sims = model_wrapper.model.similarity(emb_q, emb_c).cpu().numpy()
 
-        sims = emb_q @ emb_c.T
-
-        # ranking per query Dict[str, List[str]]
-        run: Dict[str, List[str]] = {}
+        # ranking per query dict[str, list[str]]
+        run: dict[str, list[str]] = {}
         for i, qid in enumerate(qry_ids):
             scores = sims[i]
             idxs = np.argsort(-scores)
             run[qid] = [(corp_ids[j], float(scores[j])) for j in idxs]
 
         # ---- metric helpers ----
-        def ndcg_at_k(preds: List[str], refset: set[str], k: int) -> float:
+        def ndcg_at_k(preds: list[str], refset: set[str], k: int) -> float:
             if not refset:
                 return 1.0
             gains = [1.0 if pid in refset else 0.0 for pid in preds[:k]]
@@ -232,319 +231,369 @@ class _DAPFAMMixin:
         split: str = "test",
         subsets_to_run=None,
         **kwargs,
-    ) -> Dict[str, Dict[str, float]]:
+    ) -> dict[str, dict[str, float]]:
         return self._dapfam_evaluate(model_wrapper, split, subsets_to_run, **kwargs)
 
 
 # ───────────────────────────────────────────────────
-# ALL domains (no IPC filtering) Tasks
+# DAPFAM Patent Family Retrieval Tasks
 
 
-class Dapfam_ALL_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMAllTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMAllTitlAbsToTitlAbsRetrieval",
         description=(
-            "All-domain retrieval: no domain filtering. "
-            "Queries use title + abstract; corpus uses title + abstract. "
-            "Goal: retrieve citation-linked patent families across all IPC codes "
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title and Abstract. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, no International Patent Classification-based filtering is applied. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to retrieve citation-linked patent families using query and target patent family representations of Title and Abstract across all technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_ALL_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMAllTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMAllTitlAbsToTitlAbsClmRetrieval",
         description=(
-            "All-domain retrieval (paper variant): no domain filtering. "
-            "Queries use title + abstract; corpus adds claims. "
-            "Goal: leverage claims text to retrieve citation-linked patent families across all IPC codes "
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title, Abstract, and Claims. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, no International Patent Classification-based filtering is applied. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to assess how adding Claims text to target patent family representations improves retrieval of citation-linked patent families across all technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_ALL_TitleAbstract_TitleAbstractClaimsDescription(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMAllTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMAllTitlAbsToFullTextRetrieval",
         description=(
-            "All-domain retrieval: no domain filtering. "
-            "Queries use title + abstract; corpus uses title, abstract, claims, and description. "
-            "Goal: evaluate full-text retrieval across all IPC codes. "
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title, Abstract, Claims, and Description. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, no International Patent Classification-based filtering is applied. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval performance using Title and Abstract query patent family representations and full-text target patent family representations across all technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_ALL_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMAllTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMAllTitlAbsClmToTitlAbsRetrieval",
         description=(
-            "All-domain retrieval: no domain filtering. "
-            "Queries use title, abstract, and claims; corpus uses title + abstract. "
-            "Goal: assess claim-augmented queries against surface-text patent family corpus. "
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title and Abstract. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, no International Patent Classification-based filtering is applied. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to measure the effect of Claims-augmented query patent family representations when targets are limited to Title and Abstract across all technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_ALL_TitleAbstractClaims_TitleAbstractClaims(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
         description=(
-            "All-domain retrieval : no domain filtering. "
-            "Both queries and corpus use title, abstract, and claims. "
-            "Goal: reproduce the paper’s full-claims setup across all IPC codes. "
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title, Abstract, and Claims. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, no International Patent Classification-based filtering is applied. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval when both query and target patent families use Claims-augmented representations across all technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_ALL_TitleAbstractClaims_TitleAbstractClaimsDescription(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMAllTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMAllTitlAbsClmToFullTextRetrieval",
         description=(
-            "All-domain retrieval: no domain filtering. "
-            "Queries use title, abstract, and claims; corpus adds description. "
-            "Goal: evaluate complete-text patent family retrieval across all IPC codes. "
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title, Abstract, Claims, and Description. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, no International Patent Classification-based filtering is applied. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval performance using Claims-augmented query patent family representations full-text target patent family representations across all technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-# IN-domain (≥1 shared IPC top-three code) Tasks
-
-
-class Dapfam_IN_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMInTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMInTitlAbsToTitlAbsRetrieval",
         description=(
-            "In-domain retrieval: query and target share at least one IPC top-three code."
-            "Queries use title + abstract; corpus uses title + abstract. "
-            "Goal: retrieve citation-linked patents within the same domain "
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title and Abstract. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to retrieve citation-linked patent families using query and target patent family representations of Title and Abstract within the same technical domain."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_IN_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMInTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMInTitlAbsToTitlAbsClmRetrieval",
         description=(
-            "In-domain retrieval: query and target share at least one IPC top-three code."
-            "Queries use title + abstract; corpus adds claims."
-            "Goal: leverage claims for in-domain patent retrieval."
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title, Abstract, and Claims. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to assess how adding Claims text to target patent family representations improves retrieval of citation-linked patent families within the same technical domain."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_IN_TitleAbstract_TitleAbstractClaimsDescription(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMInTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMInTitlAbsToFullTextRetrieval",
         description=(
-            "In-domain retrieval: query and target share at least one IPC top-three code."
-            "Queries use title + abstract; corpus uses title, abstract, claims, and description. "
-            "Goal: evaluate extended-text in-domain retrieval."
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title, Abstract, Claims, and Description. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval performance using Title and Abstract query patent family representations and full-text target patent family representations within the same technical domain."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_IN_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMInTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMInTitlAbsClmToTitlAbsRetrieval",
         description=(
-            "In-domain retrieval: query and target share at least one IPC top-three code."
-            "Queries use title, abstract, and claims; corpus uses title + abstract. "
-            "Goal: assess claim-driven in-domain queries."
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title and Abstract. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to measure the effect of Claims-augmented query patent family representations when targets are limited to Title and Abstract within the same technical domain."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_IN_TitleAbstractClaims_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMInTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMInTitlAbsClmToTitlAbsClmRetrieval",
         description=(
-            "In-domain retrieval: query and target share at least one IPC top-three code."
-            "Both queries and corpus use title, abstract, and claims. "
-            "Goal: reproduce the in-domain full-claims setup."
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title, Abstract, and Claims. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval when both query and target patent families use Claims-augmented representations within the same technical domain."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_IN_TitleAbstractClaims_TitleAbstractClaimsDescription(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMInTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMInTitlAbsClmToFullTextRetrieval",
         description=(
-            "In-domain retrieval: query and target share at least one IPC top-three code."
-            "Queries use title, abstract, and claims; corpus adds description. "
-            "Goal: evaluate complete-text in-domain retrieval."
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title, Abstract, Claims, and Description. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing at least one three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval performance using Claims-augmented query patent family representations full-text target patent family representations within the same technical domain."
         ),
         **_SHARED_METADATA,
     )
 
 
-# OUT-of-domain (no IPC top-three overlap) Tasks
-
-
-class Dapfam_OUT_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMOutTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMOutTitlAbsToTitlAbsRetrieval",
         description=(
-            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
-            "Queries use title + abstract; corpus uses title + abstract. "
-            "Goal: retrieve citation-linked patents across different IPC domains."
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title and Abstract. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing no three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to retrieve citation-linked patent families using query and target patent family representations of Title and Abstract across different technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_OUT_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMOutTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMOutTitlAbsToTitlAbsClmRetrieval",
         description=(
-            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
-            "Queries use title + abstract; corpus adds claims. "
-            "Goal: leverage claims for cross-domain patent retrieval."
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title, Abstract, and Claims. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing no three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to assess how adding Claims text to target patent family representations improves retrieval of citation-linked patent families across different technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_OUT_TitleAbstract_TitleAbstractClaimsDescription(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMOutTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMOutTitlAbsToFullTextRetrieval",
         description=(
-            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
-            "Queries use title + abstract; corpus uses title, abstract, claims, and description. "
-            "Goal: evaluate extended-text cross-domain retrieval."
+            "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
+            "and target patent families are represented by Title, Abstract, Claims, and Description. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing no three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval performance using Title and Abstract query patent family representations and full-text target patent family representations across different technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_OUT_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
+class DAPFAMOutTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMOutTitlAbsClmToTitlAbsRetrieval",
         description=(
-            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
-            "Queries use title, abstract, and claims; corpus uses title + abstract. "
-            "Goal: assess claim-driven cross-domain queries."
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title and Abstract. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing no three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to measure the effect of Claims-augmented query patent family representations when targets are limited to Title and Abstract across different technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaims(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
+class DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval",
         description=(
-            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
-            "Both queries and corpus use title, abstract, and claims. "
-            "Goal: reproduce the out-of-domain full-claims setup."
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title, Abstract, and Claims. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing no three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval when both query and target patent families use Claims-augmented representations across different technical domains."
         ),
         **_SHARED_METADATA,
     )
 
 
-class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaimsDescription(
-    _DAPFAMMixin, AbsTaskRetrieval
-):
-     # In the paper
-        domain_filter = "OUT"
+class DAPFAMOutTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
+    domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
+    in_paper = False
     metadata = TaskMetadata(
-        name=__qualname__,
+        name="DAPFAMOutTitlAbsClmToFullTextRetrieval",
         description=(
-            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
-            "Queries use title, abstract, and claims; corpus adds description. "
-            "Goal: evaluate complete-text cross-domain retrieval."
+            "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
+            "and target patent families are represented by Title, Abstract, Claims, and Description. "
+            "Relevant target families have a citation link (cited or citing) with the query family. "
+            "Additionally, only targets sharing no three-character International Patent Classification code with the query family. "
+            "Relevance and labelling scheme are described in detail in Section 3.4 and 3.5 of Ayaou et al. (2025), arXiv:2506.22141."
+            "Patents are aggregated and represented at the family level to reduce redundancy across jurisdictions. "
+            "The goal of the task is to evaluate retrieval performance using Claims-augmented query patent family representations full-text target patent family representations across different technical domains."
         ),
         **_SHARED_METADATA,
     )
