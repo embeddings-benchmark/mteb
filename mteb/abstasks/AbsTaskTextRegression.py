@@ -6,7 +6,6 @@ from typing import Any
 import datasets
 import numpy as np
 import pandas as pd
-from sklearn.base import RegressorMixin
 from sklearn.linear_model import LinearRegression
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -14,6 +13,7 @@ from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RegressionEvaluator import (
     LinearRegressionEvaluator,
+    SklearnRegressorModel,
 )
 from mteb.load_results.task_results import ScoresDict
 
@@ -62,7 +62,7 @@ class AbsTaskTextRegression(AbsTask):
     """
 
     evaluator: type[LinearRegressionEvaluator] = LinearRegressionEvaluator
-    regressor: RegressorMixin = LinearRegression(n_jobs=-1)
+    regressor: SklearnRegressorModel = LinearRegression(n_jobs=-1)
 
     train_split: str = "train"
     label_column_name: str = "value"
