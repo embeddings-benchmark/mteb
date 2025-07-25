@@ -114,7 +114,7 @@ class _DAPFAMMixin:
     ) -> Dict[str, Dict[str, float]]:
         """Custom evaluation that quantises embeddings to uint8 before
         normalisation (per the paper) and
-        computes recall / nDCG / mAP exactly like the paper.
+        computes recall / nDCG / mAP exactly like the paper if quantize=True and similarity=cosine.
         It is fully deterministic.
         """
         if not getattr(self, "data_loaded", False):
@@ -128,6 +128,9 @@ class _DAPFAMMixin:
         qry_ids, qry_texts = zip(*queries.items())
 
         encode_kwargs = kwargs.get("encode_kwargs", {})
+        quantize = kwargs.get("quantize", True)
+        similarity = kwargs.get("similarity", "cosine")
+
         emb_c = model_wrapper.model.encode(
             list(corp_texts), **encode_kwargs, show_progress_bar=True
         )
@@ -136,12 +139,15 @@ class _DAPFAMMixin:
         )
 
         # uint8 quantisation (per paper)
-        emb_c = quantize_embeddings(emb_c, precision="uint8")
-        emb_q = quantize_embeddings(emb_q, precision="uint8")
+        if quantize:
+            emb_c = quantize_embeddings(emb_c, precision="uint8")
+            emb_q = quantize_embeddings(emb_q, precision="uint8")
 
-        # cosine similarity
-        emb_c = emb_c / np.linalg.norm(emb_c, axis=1, keepdims=True)
-        emb_q = emb_q / np.linalg.norm(emb_q, axis=1, keepdims=True)
+        # cosine similarity (to reproduce paper)
+        if similarity == "cosine":
+            emb_c = emb_c / np.linalg.norm(emb_c, axis=1, keepdims=True)
+            emb_q = emb_q / np.linalg.norm(emb_q, axis=1, keepdims=True)
+
         sims = emb_q @ emb_c.T
 
         # ranking per query Dict[str, List[str]]
@@ -233,9 +239,7 @@ class _DAPFAMMixin:
 
 
 # ───────────────────────────────────────────────────
-# helper to build TaskMetadata
-def _meta(name: str, desc: str) -> TaskMetadata:
-    return TaskMetadata(name=name, description=desc, **_DEFAULT_META)
+# ALL domains (no IPC filtering) Tasks
 
 
 class Dapfam_ALL_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
@@ -243,7 +247,15 @@ class Dapfam_ALL_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
-    metadata = _meta(__qualname__, "ALL • Query: TA  | Corpus: TA")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "All-domain retrieval: no domain filtering. "
+            "Queries use title + abstract; corpus uses title + abstract. "
+            "Goal: retrieve citation-linked patent families across all IPC codes "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_ALL_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
@@ -251,7 +263,15 @@ class Dapfam_ALL_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieva
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
-    metadata = _meta(__qualname__, "ALL • Query: TA  | Corpus: TA+Claims  (paper)")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "All-domain retrieval (paper variant): no domain filtering. "
+            "Queries use title + abstract; corpus adds claims. "
+            "Goal: leverage claims text to retrieve citation-linked patent families across all IPC codes "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_ALL_TitleAbstract_TitleAbstractClaimsDescription(
@@ -261,7 +281,15 @@ class Dapfam_ALL_TitleAbstract_TitleAbstractClaimsDescription(
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
-    metadata = _meta(__qualname__, "ALL • Query: TA  | Corpus: TA+Claims+Desc")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "All-domain retrieval: no domain filtering. "
+            "Queries use title + abstract; corpus uses title, abstract, claims, and description. "
+            "Goal: evaluate full-text retrieval across all IPC codes. "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_ALL_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
@@ -269,7 +297,15 @@ class Dapfam_ALL_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieva
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
-    metadata = _meta(__qualname__, "ALL • Query: TA+Claims | Corpus: TA")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "All-domain retrieval: no domain filtering. "
+            "Queries use title, abstract, and claims; corpus uses title + abstract. "
+            "Goal: assess claim-augmented queries against surface-text patent family corpus. "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_ALL_TitleAbstractClaims_TitleAbstractClaims(
@@ -279,7 +315,15 @@ class Dapfam_ALL_TitleAbstractClaims_TitleAbstractClaims(
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
-    metadata = _meta(__qualname__, "ALL • Query: TA+Claims | Corpus: TA+Claims (paper)")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "All-domain retrieval : no domain filtering. "
+            "Both queries and corpus use title, abstract, and claims. "
+            "Goal: reproduce the paper’s full-claims setup across all IPC codes. "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_ALL_TitleAbstractClaims_TitleAbstractClaimsDescription(
@@ -289,16 +333,34 @@ class Dapfam_ALL_TitleAbstractClaims_TitleAbstractClaimsDescription(
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
-    metadata = _meta(__qualname__, "ALL • Query: TA+Claims | Corpus: TA+Claims+Desc")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "All-domain retrieval: no domain filtering. "
+            "Queries use title, abstract, and claims; corpus adds description. "
+            "Goal: evaluate complete-text patent family retrieval across all IPC codes. "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
-# ---------- IN domain ----------
+# IN-domain (≥1 shared IPC top-three code) Tasks
+
+
 class Dapfam_IN_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "IN"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
-    metadata = _meta(__qualname__, "IN • Query: TA  | Corpus: TA")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "In-domain retrieval: query and target share at least one IPC top-three code."
+            "Queries use title + abstract; corpus uses title + abstract. "
+            "Goal: retrieve citation-linked patents within the same domain "
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_IN_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
@@ -306,7 +368,15 @@ class Dapfam_IN_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
-    metadata = _meta(__qualname__, "IN • Query: TA  | Corpus: TA+Claims  (paper)")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "In-domain retrieval: query and target share at least one IPC top-three code."
+            "Queries use title + abstract; corpus adds claims."
+            "Goal: leverage claims for in-domain patent retrieval."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_IN_TitleAbstract_TitleAbstractClaimsDescription(
@@ -316,7 +386,15 @@ class Dapfam_IN_TitleAbstract_TitleAbstractClaimsDescription(
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
-    metadata = _meta(__qualname__, "IN • Query: TA  | Corpus: TA+Claims+Desc")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "In-domain retrieval: query and target share at least one IPC top-three code."
+            "Queries use title + abstract; corpus uses title, abstract, claims, and description. "
+            "Goal: evaluate extended-text in-domain retrieval."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_IN_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
@@ -324,7 +402,15 @@ class Dapfam_IN_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
-    metadata = _meta(__qualname__, "IN • Query: TA+Claims | Corpus: TA")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "In-domain retrieval: query and target share at least one IPC top-three code."
+            "Queries use title, abstract, and claims; corpus uses title + abstract. "
+            "Goal: assess claim-driven in-domain queries."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_IN_TitleAbstractClaims_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
@@ -332,7 +418,15 @@ class Dapfam_IN_TitleAbstractClaims_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRet
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
-    metadata = _meta(__qualname__, "IN • Query: TA+Claims | Corpus: TA+Claims (paper)")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "In-domain retrieval: query and target share at least one IPC top-three code."
+            "Both queries and corpus use title, abstract, and claims. "
+            "Goal: reproduce the in-domain full-claims setup."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_IN_TitleAbstractClaims_TitleAbstractClaimsDescription(
@@ -342,16 +436,34 @@ class Dapfam_IN_TitleAbstractClaims_TitleAbstractClaimsDescription(
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
-    metadata = _meta(__qualname__, "IN • Query: TA+Claims | Corpus: TA+Claims+Desc")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "In-domain retrieval: query and target share at least one IPC top-three code."
+            "Queries use title, abstract, and claims; corpus adds description. "
+            "Goal: evaluate complete-text in-domain retrieval."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
-# ---------- OUT domain ----------
+# OUT-of-domain (no IPC top-three overlap) Tasks
+
+
 class Dapfam_OUT_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
-    metadata = _meta(__qualname__, "OUT • Query: TA  | Corpus: TA")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
+            "Queries use title + abstract; corpus uses title + abstract. "
+            "Goal: retrieve citation-linked patents across different IPC domains."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_OUT_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieval):
@@ -359,7 +471,15 @@ class Dapfam_OUT_TitleAbstract_TitleAbstractClaims(_DAPFAMMixin, AbsTaskRetrieva
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
-    metadata = _meta(__qualname__, "OUT • Query: TA  | Corpus: TA+Claims  (paper)")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
+            "Queries use title + abstract; corpus adds claims. "
+            "Goal: leverage claims for cross-domain patent retrieval."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_OUT_TitleAbstract_TitleAbstractClaimsDescription(
@@ -369,7 +489,15 @@ class Dapfam_OUT_TitleAbstract_TitleAbstractClaimsDescription(
     query_fields = _QUERY_FIELDS["TitleAbstract"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
-    metadata = _meta(__qualname__, "OUT • Query: TA  | Corpus: TA+Claims+Desc")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
+            "Queries use title + abstract; corpus uses title, abstract, claims, and description. "
+            "Goal: evaluate extended-text cross-domain retrieval."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_OUT_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
@@ -377,7 +505,15 @@ class Dapfam_OUT_TitleAbstractClaims_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieva
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
-    metadata = _meta(__qualname__, "OUT • Query: TA+Claims | Corpus: TA")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
+            "Queries use title, abstract, and claims; corpus uses title + abstract. "
+            "Goal: assess claim-driven cross-domain queries."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaims(
@@ -387,7 +523,15 @@ class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaims(
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
-    metadata = _meta(__qualname__, "OUT • Query: TA+Claims | Corpus: TA+Claims (paper)")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
+            "Both queries and corpus use title, abstract, and claims. "
+            "Goal: reproduce the out-of-domain full-claims setup."
+        ),
+        **_SHARED_METADATA,
+    )
 
 
 class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaimsDescription(
@@ -397,4 +541,12 @@ class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaimsDescription(
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
-    metadata = _meta(__qualname__, "OUT • Query: TA+Claims | Corpus: TA+Claims+Desc")
+    metadata = TaskMetadata(
+        name=__qualname__,
+        description=(
+            "Out-of-domain retrieval: query and target share no IPC top-three codes. "
+            "Queries use title, abstract, and claims; corpus adds description. "
+            "Goal: evaluate complete-text cross-domain retrieval."
+        ),
+        **_SHARED_METADATA,
+    )
