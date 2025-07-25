@@ -92,7 +92,7 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="BSARDRetrieval.v2",
-        description="BSARDRetrieval.v2 covers multi-article queries, fixing the issue #2906 with the data loader of v1. BSARD is a French native dataset for legal information retrieval.",
+        description="BSARD is a French native dataset for legal information retrieval. BSARDRetrieval.v2 covers multi-article queries, fixing issues (#2906) with the previous data loading. ",
         reference="https://huggingface.co/datasets/maastrichtlawtech/bsard",
         dataset={
             "path": "maastrichtlawtech/bsard",
