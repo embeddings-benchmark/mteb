@@ -71,7 +71,6 @@ class _DAPFAMMixin:
     corpus_fields: List[str] = []
     in_paper: bool = False
 
-    # ------------ data loading (identical for all variants) ------------
     def load_data(self, **_) -> Tuple[Dict, Dict, Dict]:
         ds_c = load_dataset(HF_REPO, "corpus", split="train")
         ds_q = load_dataset(HF_REPO, "queries", split="train")
