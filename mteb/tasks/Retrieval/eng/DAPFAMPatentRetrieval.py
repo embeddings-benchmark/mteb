@@ -536,10 +536,10 @@ class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaims(
 class Dapfam_OUT_TitleAbstractClaims_TitleAbstractClaimsDescription(
     _DAPFAMMixin, AbsTaskRetrieval
 ):
-    domain_filter = "OUT"
+     # In the paper
+        domain_filter = "OUT"
     query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
     corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
-    in_paper = False
     metadata = TaskMetadata(
         name=__qualname__,
         description=(
