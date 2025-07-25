@@ -12,8 +12,6 @@ from sklearn.metrics import average_precision_score
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ....abstasks.TaskMetadata import TaskMetadata
 
-# ───────────────────────────────────────────────────
-# GLOBAL CONSTANTS
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
 BIBTEX = r"""@misc{ayaou2025dapfam,
