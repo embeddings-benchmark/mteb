@@ -8,6 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class BSARDRetrieval(AbsTaskRetrieval):
+    superseded_by = "BSARDRetrieval.v2"
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
@@ -91,12 +92,11 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="BSARDRetrieval.v2",
-        description="The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native dataset for studying legal information retrieval. BSARD consists of more than 22,600 statutory articles from Belgian law and about 1,100 legal questions posed by Belgian citizens and labeled by experienced jurists with relevant articles from the corpus.",
+        description="BSARDRetrieval.v2 covers multi-article queries, fixing the issue #2906 with the data loader of v1. BSARD is a French native dataset for legal information retrieval.",
         reference="https://huggingface.co/datasets/maastrichtlawtech/bsard",
         dataset={
             "path": "maastrichtlawtech/bsard",
             "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
