@@ -1,4 +1,3 @@
-# mteb/tasks/Retrieval/eng/DAPFAMPatentRetrieval.py
 from __future__ import annotations
 
 import math
