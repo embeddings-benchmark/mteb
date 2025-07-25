@@ -2016,7 +2016,7 @@ R2MED = Benchmark(
         ]
     ),
     description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
-    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios. 
+    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
     It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
     """,
     reference="https://r2med.github.io/",
@@ -2026,6 +2026,72 @@ R2MED = Benchmark(
   journal = {arXiv preprint arXiv:2505.14558},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
   year = {2025},
+}
+""",
+)
+
+
+JINA_VDR = Benchmark(
+    name="JinaVDR",
+    display_name="Jina Visual Document Retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "JinaVDRMedicalPrescriptionsRetrieval",
+            "JinaVDRStanfordSlideRetrieval",
+            "JinaVDRDonutVQAISynHMPRetrieval",
+            "JinaVDRTableVQARetrieval",
+            "JinaVDRChartQARetrieval",
+            "JinaVDRTQARetrieval",
+            "JinaVDROpenAINewsRetrieval",
+            "JinaVDREuropeanaDeNewsRetrieval",
+            "JinaVDREuropeanaEsNewsRetrieval",
+            "JinaVDREuropeanaItScansRetrieval",
+            "JinaVDREuropeanaNlLegalRetrieval",
+            "JinaVDRHindiGovVQARetrieval",
+            "JinaVDRAutomobileCatelogRetrieval",
+            "JinaVDRBeveragesCatalogueRetrieval",
+            "JinaVDRRamensBenchmarkRetrieval",
+            "JinaVDRJDocQARetrieval",
+            "JinaVDRHungarianDocQARetrieval",
+            "JinaVDRArabicChartQARetrieval",
+            "JinaVDRArabicInfographicsVQARetrieval",
+            "JinaVDROWIDChartsRetrieval",
+            "JinaVDRMPMQARetrieval",
+            "JinaVDRJina2024YearlyBookRetrieval",
+            "JinaVDRWikimediaCommonsMapsRetrieval",
+            "JinaVDRPlotQARetrieval",
+            "JinaVDRMMTabRetrieval",
+            "JinaVDRCharXivOCRRetrieval",
+            "JinaVDRStudentEnrollmentSyntheticRetrieval",
+            "JinaVDRGitHubReadmeRetrieval",
+            "JinaVDRTweetStockSyntheticsRetrieval",
+            "JinaVDRAirbnbSyntheticRetrieval",
+            "JinaVDRShanghaiMasterPlanRetrieval",
+            "JinaVDRWikimediaCommonsDocumentsRetrieval",
+            "JinaVDREuropeanaFrNewsRetrieval",
+            "JinaVDRDocQAHealthcareIndustryRetrieval",
+            "JinaVDRDocQAAI",
+            "JinaVDRShiftProjectRetrieval",
+            "JinaVDRTatQARetrieval",
+            "JinaVDRInfovqaRetrieval",
+            "JinaVDRDocVQARetrieval",
+            "JinaVDRDocQAGovReportRetrieval",
+            "JinaVDRTabFQuadRetrieval",
+            "JinaVDRDocQAEnergyRetrieval",
+            "JinaVDRArxivQARetrieval",
+        ],
+    ),
+    description="Multilingual, domain-diverse and layout-rich document retrieval benchmark.",
+    reference="https://arxiv.org/abs/2506.18902",
+    citation=r"""
+@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      year={2025},
+      eprint={2506.18902},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.18902},
 }
 """,
 )

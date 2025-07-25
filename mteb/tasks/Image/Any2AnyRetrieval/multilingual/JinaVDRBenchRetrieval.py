@@ -1,0 +1,1011 @@
+from __future__ import annotations
+
+from collections import defaultdict
+
+from datasets import load_dataset
+
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+_LANGS = {
+    "ar": ["ara-Arab"],
+    "bn": ["ben-Beng"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "hu": ["hun-Latn"],
+    "id": ["ind-Latn"],
+    "it": ["ita-Latn"],
+    "jp": ["jpn-Jpan"],
+    "ko": ["kor-Hang"],
+    "my": ["mya-Mymr"],
+    "nl": ["nld-Latn"],
+    "pl": ["pol-Latn"],
+    "pt": ["por-Latn"],
+    "ru": ["rus-Cyrl"],
+    "th": ["tha-Thai"],
+    "tr": ["tur-Latn"],
+    "ur": ["urd-Arab"],
+    "vi": ["vie-Latn"],
+    "zh": ["zho-Hans"],
+}
+
+
+def get_langs(langs: list[str]) -> dict[str, list[str]]:
+    return {lang: _LANGS[lang] for lang in langs}
+
+
+COMMON_METADATA = {
+    "description": "Retrieve associated pages according to questions or related text.",
+    "reference": "https://arxiv.org/abs/2506.18902",
+    "type": "DocumentUnderstanding",
+    "category": "t2i",
+    "eval_splits": ["test"],
+    "main_score": "ndcg_at_5",
+    "task_subtypes": ["Image Text Retrieval"],
+    "dialect": [],
+    "modalities": ["text", "image"],
+    "bibtex_citation": r"""
+@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      year={2025},
+      eprint={2506.18902},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.18902},
+}
+""",
+    "prompt": {"query": "Find a screenshot that is relevant to the user's input."},
+}
+
+
+def _load_single_language(
+    path: str,
+    split: str,
+    lang: str | None = None,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+):
+    query_ds = load_dataset(
+        path,
+        data_dir=f"{lang}/queries" if lang else "queries",
+        split=split,
+        cache_dir=cache_dir,
+        revision=revision,
+    )
+    query_ds = query_ds.map(
+        lambda x: {
+            "id": f"query-{split}-{x['query-id']}",
+            "text": x["query"],
+            "image": None,
+            "modality": "text",
+        },
+        remove_columns=["query-id", "query"],
+    )
+
+    corpus_ds = load_dataset(
+        path,
+        data_dir=f"{lang}/corpus" if lang else "corpus",
+        split=split,
+        cache_dir=cache_dir,
+        revision=revision,
+    )
+    corpus_ds = corpus_ds.map(
+        lambda x: {
+            "id": f"corpus-{split}-{x['corpus-id']}",
+            "text": None,
+            "modality": "image",
+        },
+        remove_columns=["corpus-id"],
+    )
+
+    qrels_ds = load_dataset(
+        path,
+        data_dir=f"{lang}/qrels" if lang else "qrels",
+        split=split,
+        cache_dir=cache_dir,
+        revision=revision,
+    )
+
+    return query_ds, corpus_ds, qrels_ds
+
+
+def _load_data(
+    path: str,
+    splits: str,
+    langs: list | None = None,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+):
+    if langs is None or len(langs) == 1:
+        corpus = {}
+        queries = {}
+        relevant_docs = {}
+        langs = ["default"]
+    else:
+        corpus = {lang: {} for lang in langs}
+        queries = {lang: {} for lang in langs}
+        relevant_docs = {lang: {} for lang in langs}
+
+    for split in splits:
+        for lang in langs:
+            query_ds, corpus_ds, qrels_ds = _load_single_language(
+                path=path,
+                split=split,
+                lang=lang,
+                cache_dir=cache_dir,
+                revision=revision,
+            )
+
+            if lang == "default":
+                queries[split] = query_ds
+                corpus[split] = corpus_ds
+                relevant_docs[split] = defaultdict(dict)
+                for row in qrels_ds:
+                    qid = f"query-{split}-{row['query-id']}"
+                    did = f"corpus-{split}-{row['corpus-id']}"
+                    relevant_docs[split][qid][did] = int(row["score"])
+            else:
+                queries[lang][split] = query_ds
+
+                corpus[lang][split] = corpus_ds
+
+                relevant_docs[lang][split] = defaultdict(dict)
+                for row in qrels_ds:
+                    qid = f"query-{split}-{row['query-id']}"
+                    did = f"corpus-{split}-{row['corpus-id']}"
+                    relevant_docs[lang][split][qid][did] = int(row["score"])
+
+    return corpus, queries, relevant_docs
+
+
+def load_data(self, **kwargs):
+    if self.data_loaded:
+        return
+
+    self.corpus, self.queries, self.relevant_docs = _load_data(
+        path=self.metadata_dict["dataset"]["path"],
+        splits=self.metadata_dict["eval_splits"],
+        langs=self.metadata_dict["eval_langs"],
+        cache_dir=kwargs.get("cache_dir", None),
+        revision=self.metadata_dict["dataset"]["revision"],
+    )
+
+    self.data_loaded = True
+
+
+class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRMedicalPrescriptionsRetrieval",
+        dataset={
+            "path": "jinaai/medical-prescriptions_beir",
+            "revision": "f27559d1602523e1c6b66c83e68d337f7bb74fe2",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Medical"],
+        license="not specified",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRStanfordSlideRetrieval",
+        dataset={
+            "path": "jinaai/stanford_slide_beir",
+            "revision": "6444c24c59dfb271bdc01e0a56292753e196fc98",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Academic"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRDonutVQAISynHMPRetrieval",
+        dataset={
+            "path": "jinaai/donut_vqa_beir",
+            "revision": "38e38a676202d3d8fd365b152ab7832207a7aa35",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Medical"],
+        license="not specified",
+        annotations_creators="derived",
+        sample_creation="found",
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1.0,
+                    "num_documents": 800,
+                    "num_queries": 704,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
+        },
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRTableVQARetrieval",
+        dataset={
+            "path": "jinaai/table-vqa_beir",
+            "revision": "d60d6d1311296fac106b5c399873539d3d155393",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Academic"],
+        license="not specified",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRChartQARetrieval",
+        dataset={
+            "path": "jinaai/ChartQA_beir",
+            "revision": "9d9f9fa99f1150b5af04348de90799a24138d46c",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="not specified",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRTQARetrieval",
+        dataset={
+            "path": "jinaai/tqa_beir",
+            "revision": "33b48ad357ceffac3488630b6b0f2c86a9386978",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Academic"],
+        license="cc-by-nc-3.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDROpenAINewsRetrieval",
+        dataset={
+            "path": "jinaai/openai-news_beir",
+            "revision": "2c2d1f9910abe9093aa6fa82a76ab73dca525cfd",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["News", "Web"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDREuropeanaDeNewsRetrieval",
+        dataset={
+            "path": "jinaai/europeana-de-news_beir",
+            "revision": "bf226830eac4d22a2389cdccafd254bf1bc1bc5f",
+        },
+        eval_langs=["deu-Latn"],
+        domains=["News"],
+        license="cc0-1.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDREuropeanaEsNewsRetrieval",
+        dataset={
+            "path": "jinaai/europeana-es-news_beir",
+            "revision": "724aa71a59e6870eccf3d046e08145c61d0620cb",
+        },
+        eval_langs=["spa-Latn"],
+        domains=["News"],
+        license="cc0-1.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDREuropeanaItScansRetrieval",
+        dataset={
+            "path": "jinaai/europeana-it-scans_beir",
+            "revision": "8907ccacaa9c624218a2153598e57e444c76391e",
+        },
+        eval_langs=["ita-Latn"],
+        domains=["News"],
+        license="cc0-1.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDREuropeanaNlLegalRetrieval",
+        dataset={
+            "path": "jinaai/europeana-nl-legal_beir",
+            "revision": "f71c665cc5d4d24ee6045717598d1480c5d63bbc",
+        },
+        eval_langs=["nld-Latn"],
+        domains=["Legal"],
+        license="cc0-1.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRHindiGovVQARetrieval",
+        dataset={
+            "path": "jinaai/hindi-gov-vqa_beir",
+            "revision": "a1b96978b1ad0c217a62600e0713ce40ea583cde",
+        },
+        eval_langs=["hin-Deva"],
+        domains=["Government"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRAutomobileCatelogRetrieval",
+        dataset={
+            "path": "jinaai/automobile_catalogue_jp_beir",
+            "revision": "b83ca039723e1c705dbb444147b1fa0cc6358d5f",
+        },
+        eval_langs=["jpn-Jpan"],
+        domains=["Engineering", "Web"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRBeveragesCatalogueRetrieval",
+        dataset={
+            "path": "jinaai/beverages_catalogue_ru_beir",
+            "revision": "d1be95f14c1f8eedb0165303943cd5b69402e2b4",
+        },
+        eval_langs=["rus-Cyrl"],
+        domains=["Web"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRRamensBenchmarkRetrieval",
+        dataset={
+            "path": "jinaai/ramen_benchmark_jp_beir",
+            "revision": "ed0ca84e0d2441f9af2b6617ebcdbeefe8a65c1b",
+        },
+        eval_langs=["jpn-Jpan"],
+        domains=["Web"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRJDocQARetrieval",
+        dataset={
+            "path": "jinaai/jdocqa_beir",
+            "revision": "40a4c729550dfb560c479348775bcff99b6be91b",
+        },
+        eval_langs=["jpn-Jpan"],
+        domains=["Web"],
+        license="cc-by-4.0",
+        jannotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRHungarianDocQARetrieval",
+        dataset={
+            "path": "jinaai/hungarian_doc_qa_beir",
+            "revision": "4179a258d99ed8e9cd1fdca76a74484e842412f5",
+        },
+        eval_langs=["hun-Latn"],
+        domains=["Web"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRArabicChartQARetrieval",
+        dataset={
+            "path": "jinaai/arabic_chartqa_ar_beir",
+            "revision": "13a71ebb8e17fd7d7303a41831ac0092b61ef7c1",
+        },
+        eval_langs=["ara-Arab"],
+        domains=["Academic"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRArabicInfographicsVQARetrieval",
+        dataset={
+            "path": "jinaai/arabic_infographicsvqa_ar_beir",
+            "revision": "a78b0caf95636de35bb147db616181c8d3e5b9d3",
+        },
+        eval_langs=["ara-Arab"],
+        domains=["Academic"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDROWIDChartsRetrieval",
+        dataset={
+            "path": "jinaai/owid_charts_en_beir",
+            "revision": "cac5a7f322b9baa473bb878ff6dbdda8a52840e9",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRMPMQARetrieval",
+        dataset={
+            "path": "jinaai/mpmqa_small_beir",
+            "revision": "83deed2d9d7e16cb87aef80a419be16733cc954a",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="apache-2.0",
+        annotations_creators="human-annotated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRJina2024YearlyBookRetrieval",
+        dataset={
+            "path": "jinaai/jina_2024_yearly_book_beir",
+            "revision": "79cd892d672b0b0f25229a0b57ba893ee6ac69c1",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="apache-2.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRWikimediaCommonsMapsRetrieval",
+        dataset={
+            "path": "jinaai/wikimedia-commons-maps_beir",
+            "revision": "735c932678642e90909126f4d0948cc5fe1f406e",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRPlotQARetrieval",
+        dataset={
+            "path": "jinaai/plotqa_beir",
+            "revision": "64a321b8bbba18ebe04a9099f4c3485e1c78b583",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRMMTabRetrieval",
+        dataset={
+            "path": "jinaai/MMTab_beir",
+            "revision": "59e6a04a93a0eb082e2402717bb768d4b11795c7",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRCharXivOCRRetrieval",
+        dataset={
+            "path": "jinaai/CharXiv-en_beir",
+            "revision": "c38db7d063ee7d0c119eb41932e981943e37f702",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRStudentEnrollmentSyntheticRetrieval",
+        dataset={
+            "path": "jinaai/student-enrollment_beir",
+            "revision": "80859af7fc43313b5e6e7bb1087b5c922f030ce1",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Academic"],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRGitHubReadmeRetrieval",
+        dataset={
+            "path": "jinaai/github-readme-retrieval-multilingual_beir",
+            "revision": "a7b17c2eca814c32b9af6a852a5d6d7b5e6b9165",
+        },
+        eval_langs=get_langs(
+            [
+                "ar",
+                "bn",
+                "de",
+                "en",
+                "es",
+                "fr",
+                "hi",
+                "id",
+                "it",
+                "jp",
+                "ko",
+                "nl",
+                "pt",
+                "ru",
+                "th",
+                "vi",
+                "zh",
+            ]
+        ),
+        domains=["Web"],
+        license="multiple",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRTweetStockSyntheticsRetrieval",
+        dataset={
+            "path": "jinaai/tweet-stock-synthetic-retrieval_beir",
+            "revision": "955f2c8e171b3d9ff18c8b841cd814649209d4b0",
+        },
+        eval_langs=get_langs(
+            ["ar", "de", "en", "es", "fr", "hi", "hu", "jp", "ru", "zh"]
+        ),
+        domains=["Social"],
+        license="not specified",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRAirbnbSyntheticRetrieval",
+        dataset={
+            "path": "jinaai/airbnb-synthetic-retrieval_beir",
+            "revision": "14c4c816fff158d20719bebf414d495efeaedc20",
+        },
+        eval_langs=get_langs(
+            ["ar", "de", "en", "es", "fr", "hi", "hu", "jp", "ru", "zh"]
+        ),
+        domains=["Web"],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRShanghaiMasterPlanRetrieval",
+        dataset={
+            "path": "jinaai/shanghai_master_plan_beir",
+            "revision": "ba711c07aafbe43ef7970cf9429109fc6220c824",
+        },
+        eval_langs=["zho-Hans"],
+        domains=["Web"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRWikimediaCommonsDocumentsRetrieval(
+    MultilingualTask, AbsTaskAny2AnyRetrieval
+):
+    metadata = TaskMetadata(
+        name="JinaVDRWikimediaCommonsDocumentsRetrieval",
+        dataset={
+            "path": "jinaai/wikimedia-commons-documents-ml_beir",
+            "revision": "1307839f4deabc1dfa954ef6843ef4cf4fc038b8",
+        },
+        eval_langs=get_langs(
+            [
+                "ar",
+                "bn",
+                "de",
+                "en",
+                "es",
+                "fr",
+                "hi",
+                "hu",
+                "id",
+                "it",
+                "jp",
+                "ko",
+                "my",
+                "nl",
+                "pt",
+                "ru",
+                "th",
+                "ur",
+                "vi",
+                "zh",
+            ]
+        ),
+        domains=["Web"],
+        license="multiple",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDREuropeanaFrNewsRetrieval",
+        dataset={
+            "path": "jinaai/europeana-fr-news_beir",
+            "revision": "3abc89102ab1d64d02806ba612e7286d63624c01",
+        },
+        eval_langs=["fra-Latn"],
+        domains=["News"],
+        license="cc0-1.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRDocQAHealthcareIndustryRetrieval",
+        dataset={
+            "path": "jinaai/docqa_healthcare_industry_beir",
+            "revision": "810989fee9624ef58b3522c20e00c55d9fc69002",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Medical"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRDocQAAI",
+        dataset={
+            "path": "jinaai/docqa_artificial_intelligence_beir",
+            "revision": "9764d3c6b9b946b2b6302719e4a89bc99c83f975",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRShiftProjectRetrieval",
+        dataset={
+            "path": "jinaai/shiftproject_beir",
+            "revision": "c97b12a93e714c7c3eebea80888ab83483803028",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRTatQARetrieval",
+        dataset={
+            "path": "jinaai/tatqa_beir",
+            "revision": "78b7f06bd45d8cead8a61ec83ed20d7eb3c0f82a",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRInfovqaRetrieval",
+        dataset={
+            "path": "jinaai/infovqa_beir",
+            "revision": "682247a4c07b5f9da329b2e29fb57c87efd26a3f",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRDocVQARetrieval",
+        dataset={
+            "path": "jinaai/docvqa_beir",
+            "revision": "d77d5d00a0047597a0ffc1ed25555078710e21b4",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="cc-by-4.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRDocQAGovReportRetrieval",
+        dataset={
+            "path": "jinaai/docqa_gov_report_beir",
+            "revision": "76fd0c09bff018c2d503d4f50f0d3ddb68690af0",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Government"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRTabFQuadRetrieval",
+        dataset={
+            "path": "jinaai/tabfquad_beir",
+            "revision": "42f9ba0b1f1dd0a6b82be6e9547367e2fb555e21",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Academic"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRDocQAEnergyRetrieval",
+        dataset={
+            "path": "jinaai/docqa_energy_beir",
+            "revision": "25dac6859e7f5b7e0c309b6286534794b7d05a6c",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="mit",
+        annotations_creators="derived",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
+
+
+class JinaVDRArxivQARetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="JinaVDRArxivQARetrieval",
+        dataset={
+            "path": "jinaai/arxivqa_beir",
+            "revision": "d49798d601d4c53a1d15054acecf25f629f504f4",
+        },
+        eval_langs=["eng-Latn"],
+        domains=["Web"],
+        license="cc-by-4.0",
+        annotations_creators="LM-generated",
+        sample_creation="found",
+        **COMMON_METADATA,
+    )
+
+    load_data = load_data
