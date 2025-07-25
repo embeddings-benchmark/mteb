@@ -238,15 +238,6 @@ def _meta(name: str, desc: str) -> TaskMetadata:
     return TaskMetadata(name=name, description=desc, **_DEFAULT_META)
 
 
-# ───────────────────────────────────────────────────
-# 18 explicit task classes (no loops)
-
-# NOTE: Each class only sets class-level attributes
-
-# AbsTaskRetrieval.__init__ will call self.load_data() and compute metadata automatically.
-
-
-# ---------- ALL domain ----------
 class Dapfam_ALL_TitleAbstract_TitleAbstract(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
     query_fields = _QUERY_FIELDS["TitleAbstract"]
