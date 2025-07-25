@@ -105,7 +105,6 @@ class _DAPFAMMixin:
         self.data_loaded = True
         return self.corpus, self.queries, self.relevant_docs
 
-    # ------------ evaluation  (faithful to the paper) ------------
     def _dapfam_evaluate(
         self,
         model_wrapper,
