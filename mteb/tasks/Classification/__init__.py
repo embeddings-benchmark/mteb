@@ -112,6 +112,7 @@ from .multilingual.NusaParagraphEmotionClassification import *
 from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ru_nlu_intent_classification import *
+from .multilingual.RuSciBenchClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.ScandiSentClassification import *
 from .multilingual.SIB200Classification import *
