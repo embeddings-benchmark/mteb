@@ -73,20 +73,20 @@ def base_retrieval_datasplit() -> RetrievalSplitData:
         corpus=Dataset.from_list(
             [
                 {
-                    "id": "d1",
+                    "id": "d2",
                     "text": "This is a positive sentence",
                     "title": "Title of d1",
                 },
                 {
-                    "id": "d2",
+                    "id": "d1",
                     "text": "This is another positive sentence",
                     "title": "Title of d2",
                 },
             ]
         ),
         relevant_docs={
-            "q1": {"d1": 0, "d2": 1},
-            "q2": {"d1": 1, "d2": 0},
+            "q1": {"d1": 1, "d2": 0},
+            "q2": {"d1": 0, "d2": 1},
         },
         top_ranked={
             "q1": ["d1", "d2"],
