@@ -22,8 +22,7 @@ BIBTEX = r"""@misc{ayaou2025dapfam,
   primaryClass = {cs.CL}
 }"""
 
-# shared metadata
-_DEFAULT_META = dict(
+_SHARED_METADATA = dict(
     dataset={"path": HF_REPO, "revision": "main"},
     reference=REFERENCE,
     type="Retrieval",
