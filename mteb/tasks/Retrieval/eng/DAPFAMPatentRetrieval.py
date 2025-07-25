@@ -126,7 +126,7 @@ class _DAPFAMMixin:
         qry_ids, qry_texts = zip(*queries.items())
 
         encode_kwargs = kwargs.get("encode_kwargs", {})
-        quantize = kwargs.get("quantize", True)
+        quantize = kwargs.get("quantize", False)
 
         # check similarity function name :
         print(model_wrapper.model.similarity_fn_name)
