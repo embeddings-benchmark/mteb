@@ -9,37 +9,43 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class AudioSetMultilingualClassification(AbsTaskAudioMultilabelClassification):
     metadata = TaskMetadata(
         name="AudioSet",
-        description="Multilabel Audio Classification.",
+        description="AudioSet consists of an expanding ontology of 632 audio event classes and a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos.",
         reference="https://huggingface.co/datasets/agkphysics/AudioSet",
         dataset={
             "path": "agkphysics/AudioSet",
             "revision": "5a2fa42a1506470d275a47ff8e1fdac5b364e6ef",
-        },  # this is actually used to download the data
+        },
         type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=(
-            "2020-01-01",
-            "2020-01-30",
-        ),  # Estimated date when this dataset was committed, what should be the second tuple?
-        domains=["Web"],  # obtained from Freesound - online collaborative platform
+            "2016-01-01",
+            "2017-01-30",
+        ),
+        domains=["Web", "Music", "Speech", "Scene"],
         task_subtypes=[
-            "Environment Sound Classification"
-        ],  # Since this dataset has sounds of ALL types, this seems to be the best option
+            "Environment Sound Classification",
+            "Music Instrument Recognition",
+            "Vocal Sound Classification",
+            "Gunshot Audio Classification",
+        ],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{45857,title	= {Audio Set: An ontology and human-labeled dataset for audio events},author	= {Jort F. Gemmeke and Daniel P. W. Ellis and Dylan Freedman and Aren Jansen and Wade Lawrence and R. Channing Moore and Manoj Plakal and Marvin Ritter},year	= {2017},booktitle	= {Proc. IEEE ICASSP 2017},address	= {New Orleans, LA}}
-        """,
-        descriptive_stats={
-            "n_samples": {"test": 8961},  # Need to change
-        },
+        bibtex_citation=r"""
+@inproceedings{45857,
+  address = {New Orleans, LA},
+  author = {Jort F. Gemmeke and Daniel P. W. Ellis and Dylan Freedman and Aren Jansen and Wade Lawrence and R. Channing Moore and Manoj Plakal and Marvin Ritter},
+  booktitle = {Proc. IEEE ICASSP 2017},
+  title = {Audio Set: An ontology and human-labeled dataset for audio events},
+  year = {2017},
+}
+""",
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
-    samples_per_label: int = 8  # Need to change
