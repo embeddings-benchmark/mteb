@@ -20,7 +20,7 @@ class AudioSetMultilingualClassification(AbsTaskAudioMultilabelClassification):
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="lrap",
         date=(
             "2016-01-01",
             "2017-01-30",
@@ -66,7 +66,7 @@ class AudioSetMiniMultilingualClassification(AbsTaskAudioMultilabelClassificatio
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="lrap",
         date=(
             "2016-01-01",
             "2017-01-30",
