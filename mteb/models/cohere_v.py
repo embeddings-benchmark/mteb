@@ -10,21 +10,19 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-api_key = os.getenv("COHERE_API_KEY")
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def cohere_v_loader(**kwargs):
-    try:
-        import cohere
-    except ImportError:
-        raise ImportError("To use cohere models, please run `pip install cohere`.")
+    model_name = kwargs.get("model_name", "Cohere")
+    requires_package(
+        cohere_v_loader, "cohere", model_name, "pip install 'mteb[cohere]'"
+    )
+    import cohere
 
     class CohereMultiModalModelWrapper:
         def __init__(
@@ -32,15 +30,20 @@ def cohere_v_loader(**kwargs):
             model_name: str,
             **kwargs: Any,
         ):
-            self.model_name = model_name
-            self.client = cohere.ClientV2(api_key)
-            self.image_format = "JPEG"
-            """ Wrapper for Cohere multimodal embedding model,
-            
+            """Wrapper for Cohere multimodal embedding model,
+
             do `export COHERE_API_KEY=<Your_Cohere_API_KEY>` before running eval scripts.
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
+            requires_image_dependencies()
+            from torchvision import transforms
+
+            self.model_name = model_name
+            api_key = os.getenv("COHERE_API_KEY")
+            self.client = cohere.ClientV2(api_key)
+            self.image_format = "JPEG"
+            self.transform = transforms.Compose([transforms.PILToTensor()])
 
         def get_text_embeddings(
             self,
@@ -81,7 +84,7 @@ def cohere_v_loader(**kwargs):
                     for image in batch:
                         # cohere only supports 1 image per call
                         buffered = io.BytesIO()
-                        image = tensor_to_image(image)
+                        image = self.transform(image)
                         image.save(buffered, format=self.image_format)
                         image_bytes = buffered.getvalue()
                         stringified_buffer = base64.b64encode(image_bytes).decode(
@@ -142,8 +145,8 @@ def cohere_v_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             fusion_mode="sum",
             **kwargs: Any,
         ):
@@ -182,7 +185,7 @@ def cohere_v_loader(**kwargs):
 
 cohere_mult_3 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-multilingual-v3.0"),
-    name="embed-multilingual-v3.0-v",
+    name="Cohere/Cohere-embed-multilingual-v3.0",
     languages=[],  # Unknown, but support >100 languages
     revision="1",
     release_date="2024-10-24",
@@ -204,7 +207,7 @@ cohere_mult_3 = ModelMeta(
 
 cohere_eng_3 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-english-v3.0"),
-    name="embed-english-v3.0-v",
+    name="Cohere/Cohere-embed-english-v3.0",
     languages=["eng-Latn"],
     revision="1",
     release_date="2024-10-24",

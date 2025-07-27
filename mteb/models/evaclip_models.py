@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 
 def evaclip_loader(**kwargs):
@@ -36,6 +37,8 @@ def evaclip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             pretrained = "eva_clip"  # or "/path/to/EVA02_CLIP_B_psz16_s8B.pt"
@@ -86,10 +89,10 @@ def evaclip_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad(), torch.cuda.amp.autocast():
                     for batch in tqdm(images):
                         inputs = torch.vstack(
@@ -178,8 +181,8 @@ EVA02_CLIP_B_16 = ModelMeta(
         evaclip_loader,
         model_name="EVA02-CLIP-B-16",
     ),
-    name="EVA02-CLIP-B-16",
-    languages=["eng_Latn"],
+    name="QuanSun/EVA02-CLIP-B-16",
+    languages=["eng-Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
@@ -203,8 +206,8 @@ EVA02_CLIP_L_14 = ModelMeta(
         evaclip_loader,
         model_name="EVA02-CLIP-L-14",
     ),
-    name="EVA02-CLIP-L-14",
-    languages=["eng_Latn"],
+    name="QuanSun/EVA02-CLIP-L-14",
+    languages=["eng-Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
@@ -228,8 +231,8 @@ EVA02_CLIP_bigE_14 = ModelMeta(
         evaclip_loader,
         model_name="EVA02-CLIP-bigE-14",
     ),
-    name="EVA02-CLIP-bigE-14",
-    languages=["eng_Latn"],
+    name="QuanSun/EVA02-CLIP-bigE-14",
+    languages=["eng-Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
@@ -254,8 +257,8 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
         evaclip_loader,
         model_name="EVA02-CLIP-bigE-14-plus",
     ),
-    name="EVA02-CLIP-bigE-14-plus",
-    languages=["eng_Latn"],
+    name="QuanSun/EVA02-CLIP-bigE-14-plus",
+    languages=["eng-Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],

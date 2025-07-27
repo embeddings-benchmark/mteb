@@ -3,31 +3,25 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Mapping
-from datetime import date
 from pathlib import Path
-from typing import Annotated, Any, Union
+from typing import Any, Union
 
 from pydantic import (
-    AnyUrl,
     BaseModel,
-    BeforeValidator,
-    TypeAdapter,
     field_validator,
 )
 from typing_extensions import Literal, TypedDict
 
+from ..custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from ..encoder_interface import PromptType
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
+    check_language_code,
 )
-from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
+    "Accent identification",
     "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -59,17 +53,55 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Rendered semantic textual similarity",
+    "Intent classification",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
+    "Keyword Spotting",
     "Instrument Source Classification",
+    "Music Genre Classification",
+    "Music Instrument Recognition",
+    "Spoken Language Identification",
+    "Stroke Classification of Musical Instrument",
+    "Tonic Classification of Musical Instrument",
+    "Speaker Count Identification",
+    "Species Classification",
+    "Spoken Digit Classification",
     "Gender Clustering",
+    "Vocal Sound Classification",
+    "Music Clustering",
+    "Accent Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
+    "Rendered semantic textual similarity",
+    "Sentiment Analysis",
+    "Intent Classification",
+    "Vehicle Clustering",
+    "Environment Sound Clustering",
+    "Environment Sound Reranking",
+    "Emotion Reranking",
+    "Music Genre Reranking",
+    "Rendered semantic textual similarity",
+    "Gender Classification",
+    "Age Classification",
+    "Rendered semantic textual similarity",
+    "Intent classification",
+    "Song Lyrics Retrieval",
+    "Natural Sound Retrieval",
+    "Music Caption Retrieval",
+    "Speech Transcription Retrieval",
+    "Emotional Speech Retrieval",
+    "Environment Sound Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
+    "Bioacoustics",
     "Blog",
     "Constructed",
     "Encyclopaedic",
+    "Engineering",
     "Fiction",
     "Government",
     "Legal",
@@ -88,9 +120,9 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
-    "Chemistry",
-    "Financial",
     "Music",
+    "Speech",
+    "Entertainment",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -105,33 +137,52 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
-TASK_TYPE = Literal[
-    "AudioClustering",
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "Speed",
+
+MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
-    "Any2TextMutipleChoice",
+    "Any2AnyMultilingualRetrieval",
+    "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",
-    "ImageTextPairClassification",
-    "VisualSTS",
+    "DocumentUnderstanding",
+    "VisualSTS(eng)",
+    "VisualSTS(multi)",
     "ZeroShotClassification",
+    "Compositionality",
+)
+
+MAEB_TASK_TYPE = (
+    "AudioClustering",
     "AudioMultilabelClassification",
+    "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
-]
+    "AudioPairClassification",
+    "Any2AnyRetrieval",
+)
+
+_TASK_TYPE = (
+    (
+        "BitextMining",
+        "Classification",
+        "MultilabelClassification",
+        "Clustering",
+        "PairClassification",
+        "Reranking",
+        "Retrieval",
+        "STS",
+        "Summarization",
+        "InstructionRetrieval",
+        "Speed",
+    )
+    + MIEB_TASK_TYPE
+    + MAEB_TASK_TYPE
+)
+
+TASK_TYPE = Literal[_TASK_TYPE]
 
 
 TASK_CATEGORY = Literal[
@@ -164,69 +215,16 @@ ANNOTATOR_TYPE = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
+    "automatic",  # any postprocessing using (Audio/Image/Video) models
+    "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
-
-http_url_adapter = TypeAdapter(AnyUrl)
-STR_URL = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
-
-pastdate_adapter = TypeAdapter(date)
-STR_DATE = Annotated[
-    str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
-
-PROGRAMMING_LANGS = [
-    "python",
-    "javascript",
-    "typescript",
-    "go",
-    "ruby",
-    "java",
-    "php",
-    "c",
-    "c++",
-    "rust",
-    "swift",
-    "scala",
-    "shell",
-    "sql",
-]
-
-LICENSES = (  # this list can be extended as needed
-    Literal[  # we use lowercase for the licenses similar to the huggingface datasets
-        "not specified",  # or none found
-        "mit",
-        "cc-by-2.0",
-        "cc-by-3.0",
-        "cc-by-4.0",
-        "cc-by-sa-3.0",
-        "cc-by-sa-4.0",
-        "cc-by-nc-4.0",
-        "cc-by-nc-sa-3.0",
-        "cc-by-nc-sa-4.0",
-        "cc-by-nc-nd-4.0",
-        "openrail",
-        "openrail++",
-        "odc-by",
-        "afl-3.0",
-        "apache-2.0",
-        "cc-by-nd-2.1-jp",
-        "cc0-1.0",
-        "bsd-3-clause",
-        "gpl-3.0",
-        "cdla-sharing-1.0",
-        "mpl-2.0",
-        "msr-la-nc",
-        "multiple",
-    ]
-)
 
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
@@ -278,18 +276,16 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
-        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
     """
 
-    dataset: dict[str, Any]
     dataset: dict[str, Any]
 
     name: str
@@ -314,6 +310,7 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
+    adapted_from: list[str] | None = None
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -372,30 +369,10 @@ class TaskMetadata(BaseModel):
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    self._check_language_code(code)
+                    check_language_code(code)
         else:
             for code in eval_langs:
-                self._check_language_code(code)
-
-    @staticmethod
-    def _check_language_code(code):
-        """This method checks that the language code (e.g. "eng-Latn") is valid."""
-        lang, script = code.split("-")
-        if script == "Code":
-            if lang in PROGRAMMING_LANGS:
-                return  # override for code
-            else:
-                raise ValueError(
-                    f"Programming language {lang} is not a valid programming language."
-                )
-        if lang not in ISO_TO_LANGUAGE:
-            raise ValueError(
-                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
-            )
-        if script not in ISO_TO_SCRIPT:
-            raise ValueError(
-                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
-            )
+                check_language_code(code)
 
     @property
     def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
@@ -437,7 +414,7 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name != "prompt"
+            if field_name not in ["prompt", "adapted_from"]
         )
 
     @property
@@ -474,9 +451,11 @@ class TaskMetadata(BaseModel):
     def descriptive_stat_path(self) -> Path:
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if self.type in MIEB_TASK_TYPE:
+            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
+        task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
-        task_type_dir = descriptive_stat_base_dir / self.type
         if not task_type_dir.exists():
             task_type_dir.mkdir()
         return task_type_dir / f"{self.name}.json"

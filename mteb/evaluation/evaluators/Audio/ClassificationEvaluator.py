@@ -7,7 +7,6 @@ from typing import Any
 
 import numpy as np
 import torch
-from datasets import Audio
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -17,6 +16,7 @@ from sklearn.metrics import (
 from torch.utils.data import DataLoader
 from torchaudio import transforms
 
+from ..dataset_utils import AudioDataset, custom_collate_fn
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -28,34 +28,6 @@ def get_resample_transform(original_sample_rate: int, target_sample_rate: int):
 
 def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
     return -np.dot(a, b)
-
-
-class AudioDataset(torch.utils.data.Dataset):
-    def __init__(
-        self,
-        hf_dataset: Any,
-        audio_column_name: str = "audio",
-        transform: torch.nn.Module | None = None,  # anything from torchaudio.transforms
-    ) -> None:
-        self.dataset = hf_dataset.cast_column(audio_column_name, Audio())
-        self.transform = transform
-        self.audio_column_name = audio_column_name
-
-    def __len__(self):
-        return len(self.dataset)
-
-    def __getitem__(self, idx):
-        audio = self.dataset[idx][self.audio_column_name]
-        waveform = torch.tensor(audio["array"], dtype=torch.float32)
-        if self.transform:
-            waveform = self.transform(waveform)
-        if waveform.dim() == 1:
-            waveform = waveform.unsqueeze(0)
-        return waveform
-
-
-def custom_collate_fn(batch):
-    return batch
 
 
 class AudiologRegClassificationEvaluator(Evaluator):

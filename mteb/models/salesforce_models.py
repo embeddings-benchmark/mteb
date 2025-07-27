@@ -21,7 +21,6 @@ SFR_TRAINING_DATA = {  # inherits from e5
     **E5_MISTRAL_TRAINING_DATA,
     # From previously released blogpost which now have been taken down:
     "FiQA2018": ["train"],
-    "FiQA2018-PL": ["train"],
     "FiQA2018-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
@@ -30,6 +29,11 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
     "HotpotQA-NL": ["train"],  # translation not trained on
+    # source: https://github.com/embeddings-benchmark/leaderboard/issues/41
+    # qoute: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
+    "STS12": ["train"],
+    "STS22": ["train"],
+    "STSBenchmark": ["train"],
 }
 
 SFR_Embedding_2_R = ModelMeta(
@@ -46,7 +50,7 @@ SFR_Embedding_2_R = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-2_R",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
     release_date="2024-06-14",  # initial commit of hf model.
@@ -68,7 +72,7 @@ SFR_Embedding_2_R = ModelMeta(
 SFR_Embedding_Code_2B_R = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
+        model_name="Salesforce/SFR-Embedding-Code-2B_R",
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",
@@ -77,7 +81,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-Code-2B_R",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c73d8631a005876ed5abde34db514b1fb6566973",
     release_date="2025-01-17",  # initial commit of hf model.
@@ -108,7 +112,7 @@ SFR_Embedding_Mistral = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-Mistral",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="938c560d1c236aa563b2dbdf084f28ab28bccb11",
     release_date="2024-01-24",  # initial commit of hf model.

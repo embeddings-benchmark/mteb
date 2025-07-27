@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
     metadata = TaskMetadata(
-        name="UrbanSound8k_Zeroshot",
+        name="UrbanSound8kZeroshot",
         description="Environmental Sound Classification Dataset.",
         reference="https://huggingface.co/datasets/danavery/urbansound8K",
         dataset={
@@ -21,28 +21,29 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2014-11-01", "2014-11-03"),
-        domains=["Spoken"],
+        domains=["AudioScene"],
         task_subtypes=["Environment Sound Classification"],
         license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@article{Salamon2014ADA,
-        title={A Dataset and Taxonomy for Urban Sound Research},
-        author={Justin Salamon and Christopher Jacoby and Juan Pablo Bello},
-        journal={Proceedings of the 22nd ACM international conference on Multimedia},
-        year={2014},
-  url={https://api.semanticscholar.org/CorpusID:207217115}
-}""",
+        bibtex_citation=r"""
+@article{Salamon2014ADA,
+  author = {Justin Salamon and Christopher Jacoby and Juan Pablo Bello},
+  journal = {Proceedings of the 22nd ACM international conference on Multimedia},
+  title = {A Dataset and Taxonomy for Urban Sound Research},
+  url = {https://api.semanticscholar.org/CorpusID:207217115},
+  year = {2014},
+}
+""",
         descriptive_stats={
-            "n_samples": {"train": 8732},
+            "n_samples": {"train": 2048},
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "classID"
-    samples_per_label: int = 50
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
@@ -58,3 +59,8 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "This is a sound of siren",
             "This is a sound of street music",
         ]
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
+        )

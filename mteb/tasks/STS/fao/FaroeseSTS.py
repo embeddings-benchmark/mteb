@@ -27,20 +27,20 @@ class FaroeseSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{snaebjarnarson-etal-2023-transfer,
-            title = "{T}ransfer to a Low-Resource Language via Close Relatives: The Case Study on Faroese",
-            author = "Snæbjarnarson, Vésteinn  and
-            Simonsen, Annika  and
-            Glavaš, Goran  and
-            Vulić, Ivan",
-            booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = "may 22--24",
-            year = "2023",
-            address = "Tórshavn, Faroe Islands",
-            publisher = {Link{\"o}ping University Electronic Press, Sweden},
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{snaebjarnarson-etal-2023-transfer,
+  address = {Tórshavn, Faroe Islands},
+  author = {Snæbjarnarson, Vésteinn  and
+Simonsen, Annika  and
+Glavaš, Goran  and
+Vulić, Ivan},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  month = {may 22--24},
+  publisher = {Link{\"o}ping University Electronic Press, Sweden},
+  title = {{T}ransfer to a Low-Resource Language via Close Relatives: The Case Study on Faroese},
+  year = {2023},
+}
+""",
     )
 
     @property

@@ -18,7 +18,7 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
-        main_score="clustering_accuracy",
+        main_score="v_measure",
         date=("2024-01-01", "2024-12-31"),
         domains=["Spoken"],
         task_subtypes=["Gender Clustering"],
@@ -27,10 +27,18 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@InProceedings{Chung18b,
-              author       = "Chung, J.~S. and Nagrani, A. and Zisserman, A.",
-              title        = "VoxCeleb2: Deep Speaker Recognition",
-              booktitle    = "INTERSPEECH",
-              year         = "2018
-              }""",
+        bibtex_citation=r"""
+@inproceedings{Chung18b,
+  author = {Joon Son Chung and Arsha Nagrani and Andrew Zisserman},
+  booktitle = {Proceedings of Interspeech},
+  title = {VoxCeleb2: Deep Speaker Recognition},
+  year = {2018},
+}
+""",
     )
+    max_fraction_of_documents_to_embed = None
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
+        )

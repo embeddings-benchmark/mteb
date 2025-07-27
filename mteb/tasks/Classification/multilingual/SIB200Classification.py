@@ -212,7 +212,7 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
         dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is
         annotated in English for the topics,  science/technology, travel, politics, sports,
         health, entertainment, and geography. The labels are then transferred to the other languages
-        in Flores-200 which are machine-translated.
+        in Flores-200 which are human-translated.
         """,
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
@@ -232,12 +232,14 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
         annotations_creators="expert-annotated",  # expert annotated for English --> human translations
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""@article{adelani2023sib,
-            title={SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-            author={Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-            journal={arXiv preprint arXiv:2309.07445},
-            year={2023}
-        }""",
+        bibtex_citation=r"""
+@article{adelani2023sib,
+  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
+  journal = {arXiv preprint arXiv:2309.07445},
+  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

@@ -41,7 +41,6 @@ nvidia_training_datasets = {
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FiQA2018": ["train"],
-    "FiQA2018-PL": ["train"],  # translation not trained on
     "FiQA2018-NL": ["train"],  # translation not trained on
     "STS12": ["train"],
     "STS22": ["train"],
@@ -56,7 +55,6 @@ nvidia_training_datasets = {
     "ArxivClusteringP2P": ["train"],
     "ArxivClusteringP2P.v2": ["train"],
     "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringS2S.v2": ["train"],
     "BiorxivClusteringP2P": ["train"],
     "BiorxivClusteringP2P.v2": ["train"],
     "BiorxivClusteringS2S": ["train"],
@@ -67,14 +65,26 @@ nvidia_training_datasets = {
     "MedrxivClusteringS2S.v2": ["train"],
     "TwentyNewsgroupsClustering": ["train"],
     "TwentyNewsgroupsClustering.v2": ["train"],
+    "StackExchangeClustering": ["train"],
+    "StackExchangeClustering.v2": ["train"],
+    "StackExchangeClusteringP2P": ["train"],
+    "StackExchangeClusteringP2P.v2": ["train"],
+    "RedditClustering": ["train"],
+    "RedditClustering.v2": ["train"],
+    "RedditClusteringP2P": ["train"],
+    "RedditClusteringP2P.v2": ["train"],
     "STSBenchmark": ["train"],
     "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
 }
 
 NV_embed_v2 = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model="nvidia/NV-Embed-v2",
+        model_name="nvidia/NV-Embed-v2",
         revision="7604d305b621f14095a1aa23d351674c2859553a",
         instruction_template=instruction_template,
         trust_remote_code=True,
@@ -84,7 +94,7 @@ NV_embed_v2 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v2",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="7604d305b621f14095a1aa23d351674c2859553a",
     release_date="2024-09-09",  # initial commit of hf model.
@@ -105,7 +115,7 @@ NV_embed_v2 = ModelMeta(
 NV_embed_v1 = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model="nvidia/NV-Embed-v1",
+        model_name="nvidia/NV-Embed-v1",
         revision="7604d305b621f14095a1aa23d351674c2859553a",
         instruction_template=instruction_template,
         trust_remote_code=True,
@@ -115,7 +125,7 @@ NV_embed_v1 = ModelMeta(
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
     release_date="2024-09-13",  # initial commit of hf model.

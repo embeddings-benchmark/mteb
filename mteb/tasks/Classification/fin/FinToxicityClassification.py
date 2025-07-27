@@ -30,18 +30,19 @@ class FinToxicityClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated",
-        bibtex_citation="""
-        @inproceedings{eskelinen-etal-2023-toxicity,
-            title = "Toxicity Detection in {F}innish Using Machine Translation",
-            author = "Eskelinen, Anni  and
-            Silvala, Laura  and
-            Ginter, Filip  and
-            Pyysalo, Sampo  and
-            Laippala, Veronika",
-            booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = may,
-            year = "2023",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{eskelinen-etal-2023-toxicity,
+  author = {Eskelinen, Anni  and
+Silvala, Laura  and
+Ginter, Filip  and
+Pyysalo, Sampo  and
+Laippala, Veronika},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  month = may,
+  title = {Toxicity Detection in {F}innish Using Machine Translation},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

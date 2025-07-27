@@ -71,8 +71,10 @@ from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ind.IndonesianMongabayConservationClassification import *
+from .ita.DadoEvalCoarseClassification import *
 from .ita.ItaCaseholdClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
+from .ita.SardiStanceClassification import *
 from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
@@ -108,6 +110,7 @@ from .multilingual.NusaParagraphEmotionClassification import *
 from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
+from .multilingual.ScandiSentClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
@@ -129,9 +132,12 @@ from .rus.GeoreviewClassification import *
 from .rus.HeadlineClassification import *
 from .rus.InappropriatenessClassification import *
 from .rus.KinopoiskClassification import *
+from .rus.ru_nlu_intent_classification import *
+from .rus.ru_toixic_classification_okmlcup import *
 from .rus.RuReviewsClassification import *
 from .rus.RuSciBenchGRNTIClassification import *
 from .rus.RuSciBenchOECDClassification import *
+from .rus.senti_ru_eval import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *

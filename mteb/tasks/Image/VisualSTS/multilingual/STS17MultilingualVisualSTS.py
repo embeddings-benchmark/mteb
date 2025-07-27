@@ -33,7 +33,7 @@ class STS17MultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
             + "rendered into images."
         ),
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(multi)",
         category="i2i",
         modalities=["image"],
         eval_splits=_SPLITS,
@@ -41,17 +41,19 @@ class STS17MultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-12-31"),
         domains=["News", "Social", "Web", "Spoken", "Written"],
-        task_subtypes=[],
+        task_subtypes=["Rendered semantic textual similarity"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="rendered",
-        bibtex_citation="""@article{xiao2024pixel,
-  title={Pixel Sentence Representation Learning},
-  author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2402.08183},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{xiao2024pixel,
+  author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2402.08183},
+  title = {Pixel Sentence Representation Learning},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 10692},
             "avg_character_length": {"dev": 1.0, "test": 1.0},

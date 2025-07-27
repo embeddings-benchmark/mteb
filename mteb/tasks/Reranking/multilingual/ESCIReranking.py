@@ -15,12 +15,12 @@ _LANGUAGES = {
     "jp": ["jpn-Jpan"],
 }
 
-_CITATION = """@article{reddy2022shopping,
-    title={Shopping Queries Dataset: A Large-Scale {ESCI} Benchmark for Improving Product Search},
-    author={Chandan K. Reddy and Lluís Màrquez and Fran Valero and Nikhil Rao and Hugo Zaragoza and Sambaran Bandyopadhyay and Arnab Biswas and Anlu Xing and Karthik Subbian},
-    year={2022},
-    eprint={2206.06588},
-    archivePrefix={arXiv}
+_CITATION = r"""@article{reddy2022shopping,
+  archiveprefix = {arXiv},
+  author = {Chandan K. Reddy and Lluís Màrquez and Fran Valero and Nikhil Rao and Hugo Zaragoza and Sambaran Bandyopadhyay and Arnab Biswas and Anlu Xing and Karthik Subbian},
+  eprint = {2206.06588},
+  title = {Shopping Queries Dataset: A Large-Scale {ESCI} Benchmark for Improving Product Search},
+  year = {2022},
 }"""
 
 

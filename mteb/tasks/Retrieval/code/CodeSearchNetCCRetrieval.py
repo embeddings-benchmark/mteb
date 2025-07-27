@@ -95,15 +95,17 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{li2024coircomprehensivebenchmarkcode,
-        title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
-        author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
-        year={2024},
-        eprint={2407.02883},
-        archivePrefix={arXiv},
-        primaryClass={cs.IR},
-        url={https://arxiv.org/abs/2407.02883},
-        }""",
+        bibtex_citation=r"""
+@misc{li2024coircomprehensivebenchmarkcode,
+  archiveprefix = {arXiv},
+  author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+  eprint = {2407.02883},
+  primaryclass = {cs.IR},
+  title = {CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
+  url = {https://arxiv.org/abs/2407.02883},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):

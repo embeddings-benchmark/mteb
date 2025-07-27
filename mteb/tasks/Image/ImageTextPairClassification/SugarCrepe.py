@@ -20,7 +20,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
             "path": "yjkimstats/SUGARCREPE_fmt",
             "revision": "134abf9ade6a32f9fdae0e89022ff227a70b87e5",
         },
-        type="ImageTextPairClassification",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -36,13 +36,15 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""@article{hsieh2024sugarcrepe,
-  title={Sugarcrepe: Fixing hackable benchmarks for vision-language compositionality},
-  author={Hsieh, Cheng-Yu and Zhang, Jieyu and Ma, Zixian and Kembhavi, Aniruddha and Krishna, Ranjay},
-  journal={Advances in neural information processing systems},
-  volume={36},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{hsieh2024sugarcrepe,
+  author = {Hsieh, Cheng-Yu and Zhang, Jieyu and Ma, Zixian and Kembhavi, Aniruddha and Krishna, Ranjay},
+  journal = {Advances in neural information processing systems},
+  title = {Sugarcrepe: Fixing hackable benchmarks for vision-language compositionality},
+  volume = {36},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 7511},
             "avg_character_length": {"test": 1},

@@ -25,20 +25,21 @@ class BlurbsClusteringP2P(AbsTaskClustering):
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
-        domains=None,
+        domains=["Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{Remus2019GermEval2T,
-  title={GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
-  author={Steffen Remus and Rami Aly and Chris Biemann},
-  booktitle={Conference on Natural Language Processing},
-  year={2019},
-  url={https://api.semanticscholar.org/CorpusID:208334484}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Remus2019GermEval2T,
+  author = {Steffen Remus and Rami Aly and Chris Biemann},
+  booktitle = {Conference on Natural Language Processing},
+  title = {GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
+  url = {https://api.semanticscholar.org/CorpusID:208334484},
+  year = {2019},
+}
+""",
     )
 
 
@@ -72,13 +73,16 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{Remus2019GermEval2T,
-  title={GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
-  author={Steffen Remus and Rami Aly and Chris Biemann},
-  booktitle={Conference on Natural Language Processing},
-  year={2019},
-  url={https://api.semanticscholar.org/CorpusID:208334484}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Remus2019GermEval2T,
+  author = {Steffen Remus and Rami Aly and Chris Biemann},
+  booktitle = {Conference on Natural Language Processing},
+  title = {GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
+  url = {https://api.semanticscholar.org/CorpusID:208334484},
+  year = {2019},
+}
+""",
+        adapted_from=["BlurbsClusteringP2P"],
     )
 
     def dataset_transform(self):

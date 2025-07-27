@@ -6,6 +6,8 @@ from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
+# NOTE: In the paper, this is grouped with linear probe tasks.
+# See https://github.com/embeddings-benchmark/mteb/pull/2035#issuecomment-2661626309.
 class VOC2007Classification(AbsTaskImageMultilabelClassification):
     metadata = TaskMetadata(
         name="VOC2007",
@@ -17,7 +19,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "revision": "dbafdb9e1506c9c419c5c4672e409463cd21ba50",
             "trust_remote_code": True,
         },
-        type="ImageMultilabelClassification",
+        type="ImageClassification",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -33,17 +35,18 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@Article{Everingham10,
-            author = "Everingham, M. and Van~Gool, L. and Williams, C. K. I. and Winn, J. and Zisserman, A.",
-            title = "The Pascal Visual Object Classes (VOC) Challenge",
-            journal = "International Journal of Computer Vision",
-            volume = "88",
-            year = "2010",
-            number = "2",
-            month = jun,
-            pages = "303--338",
-        }
-        """,
+        bibtex_citation=r"""
+@article{Everingham10,
+  author = {Everingham, M. and Van~Gool, L. and Williams, C. K. I. and Winn, J. and Zisserman, A.},
+  journal = {International Journal of Computer Vision},
+  month = jun,
+  number = {2},
+  pages = {303--338},
+  title = {The Pascal Visual Object Classes (VOC) Challenge},
+  volume = {88},
+  year = {2010},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 4952},
             "avg_character_length": {"test": 431.4},

@@ -10,11 +10,11 @@ class SNLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SNLRetrieval",
         dataset={
-            "path": "navjordj/SNL_summarization",
+            "path": "adrlau/navjordj-SNL_summarization_copy",  # TODO: replace with mteb/SNLRetrieval after #2820 is resolved.
             "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
         },
         description="Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.",
-        reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
+        reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
         type="Retrieval",
         category="p2p",
         modalities=["text"],
@@ -27,12 +27,14 @@ class SNLRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@mastersthesis{navjord2023beyond,
-    title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
-    author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
-    year={2023},
-    school={Norwegian University of Life Sciences, {\AA}s}
-}""",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
         prompt={"query": "Given a lexicon headline in Norwegian, retrieve its article"},
         task_subtypes=["Article retrieval"],
     )

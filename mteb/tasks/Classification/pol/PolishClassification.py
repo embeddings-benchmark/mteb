@@ -26,15 +26,17 @@ class CbdClassification(AbsTaskClassification):
         annotations_creators="human-annotated",  # guess
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@proceedings{ogr:kob:19:poleval,
-  editor    = {Maciej Ogrodniczuk and Łukasz Kobyliński},
-  title     = {{Proceedings of the PolEval 2019 Workshop}},
-  year      = {2019},
-  address   = {Warsaw, Poland},
+        bibtex_citation=r"""
+@proceedings{ogr:kob:19:poleval,
+  address = {Warsaw, Poland},
+  editor = {Maciej Ogrodniczuk and Łukasz Kobyliński},
+  isbn = {978-83-63159-28-3},
   publisher = {Institute of Computer Science, Polish Academy of Sciences},
-  url       = {http://2019.poleval.pl/files/poleval2019.pdf},
-  isbn      = "978-83-63159-28-3"}
-}""",
+  title = {{Proceedings of the PolEval 2019 Workshop}},
+  url = {http://2019.poleval.pl/files/poleval2019.pdf},
+  year = {2019},
+}
+""",
     )
 
 
@@ -61,21 +63,23 @@ class PolEmo2InClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{kocon-etal-2019-multi,
-    title = "Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews",
-    author = "Koco{\'n}, Jan  and
-      Mi{\l}kowski, Piotr  and
-      Za{\'s}ko-Zieli{\'n}ska, Monika",
-    booktitle = "Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)",
-    month = nov,
-    year = "2019",
-    address = "Hong Kong, China",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/K19-1092",
-    doi = "10.18653/v1/K19-1092",
-    pages = "980--991",
-    abstract = "In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).",
-}""",
+        bibtex_citation=r"""
+@inproceedings{kocon-etal-2019-multi,
+  abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
+  address = {Hong Kong, China},
+  author = {Koco{\'n}, Jan  and
+Mi{\l}kowski, Piotr  and
+Za{\'s}ko-Zieli{\'n}ska, Monika},
+  booktitle = {Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)},
+  doi = {10.18653/v1/K19-1092},
+  month = nov,
+  pages = {980--991},
+  publisher = {Association for Computational Linguistics},
+  title = {Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews},
+  url = {https://aclanthology.org/K19-1092},
+  year = {2019},
+}
+""",
     )
 
 
@@ -122,14 +126,38 @@ class AllegroReviewsClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation=None,
+        date=(
+            "2020-06-22",
+            "2020-07-07",
+        ),  # best guess: based on commit dates in https://github.com/allegro/klejbenchmark-baselines
+        domains=["Reviews"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{rybak-etal-2020-klej,
+  abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
+  address = {Online},
+  author = {Rybak, Piotr  and
+Mroczkowski, Robert  and
+Tracz, Janusz  and
+Gawlik, Ireneusz},
+  booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+  doi = {10.18653/v1/2020.acl-main.111},
+  editor = {Jurafsky, Dan  and
+Chai, Joyce  and
+Schluter, Natalie  and
+Tetreault, Joel},
+  month = jul,
+  pages = {1191--1201},
+  publisher = {Association for Computational Linguistics},
+  title = {{KLEJ}: Comprehensive Benchmark for {P}olish Language Understanding},
+  url = {https://aclanthology.org/2020.acl-main.111/},
+  year = {2020},
+}
+""",
     )
 
 
@@ -156,13 +184,15 @@ class PacClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=[],
         sample_creation=None,
-        bibtex_citation="""@misc{augustyniak2022waydesigningcompilinglepiszcze,
-      title={This is the way: designing and compiling LEPISZCZE, a comprehensive NLP benchmark for Polish}, 
-      author={Łukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Szymczak and Marcin Wątroba and Arkadiusz Janz and Piotr Szymański and Mikołaj Morzy and Tomasz Kajdanowicz and Maciej Piasecki},
-      year={2022},
-      eprint={2211.13112},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2211.13112}, 
-}""",
+        bibtex_citation=r"""
+@misc{augustyniak2022waydesigningcompilinglepiszcze,
+  archiveprefix = {arXiv},
+  author = {Łukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Szymczak and Marcin Wątroba and Arkadiusz Janz and Piotr Szymański and Mikołaj Morzy and Tomasz Kajdanowicz and Maciej Piasecki},
+  eprint = {2211.13112},
+  primaryclass = {cs.CL},
+  title = {This is the way: designing and compiling LEPISZCZE, a comprehensive NLP benchmark for Polish},
+  url = {https://arxiv.org/abs/2211.13112},
+  year = {2022},
+}
+""",
     )

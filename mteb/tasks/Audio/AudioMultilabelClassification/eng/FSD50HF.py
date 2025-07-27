@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
     metadata = TaskMetadata(
-        name="FSD50HF",
+        name="FSD50K",
         description="Multilabel Audio Classification.",
         reference="https://huggingface.co/datasets/Chand0320/fsd50k_hf",
         dataset={
@@ -31,26 +31,36 @@ class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@dataset{eduardo_fonseca_2020_3612637,
-                author       = {Eduardo Fonseca and
-                                Manoj Plakal and
-                                Frederic Font and
-                                Daniel P. W. Ellis and
-                                Xavier Serra},
-                title        = {FSDKaggle2019},
-                month        = jan,
-                year         = 2020,
-                publisher    = {Zenodo},
-                version      = {1.0},
-                doi          = {10.5281/zenodo.3612637},
-                url          = {https://doi.org/10.5281/zenodo.3612637},
-                }
-        """,
-        descriptive_stats={
-            "n_samples": {"test": 8961},
-        },
+        bibtex_citation=r"""
+@article{9645159,
+  author = {Fonseca, Eduardo and Favory, Xavier and Pons, Jordi and Font, Frederic and Serra, Xavier},
+  doi = {10.1109/TASLP.2021.3133208},
+  journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},
+  keywords = {Videos;Task analysis;Labeling;Vocabulary;Speech recognition;Ontologies;Benchmark testing;Audio dataset;sound event;recognition;classification;tagging;data collection;environmental sound},
+  number = {},
+  pages = {829-852},
+  title = {FSD50K: An Open Dataset of Human-Labeled Sound Events},
+  volume = {30},
+  year = {2022},
+}
+""",
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
+
+    def dataset_transform(self):
+        # labels column is a string of comma separated labels, this function converts it to a list of labels
+        self.dataset = self.dataset.map(
+            lambda x: {
+                self.label_column_name: x[self.label_column_name].split(","),
+            }
+        )
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=self.seed,
+            splits=self.eval_splits,
+            label=self.label_column_name,
+            n_samples=2048,
+        )

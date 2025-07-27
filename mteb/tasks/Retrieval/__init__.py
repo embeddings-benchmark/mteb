@@ -30,6 +30,7 @@ from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
+from .eng.BuiltBenchRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
@@ -86,6 +87,7 @@ from .eng.NQRetrieval import *
 from .eng.PiqaRetrieval import *
 from .eng.QuailRetrieval import *
 from .eng.QuoraRetrieval import *
+from .eng.R2MEDRetrieval import *
 from .eng.RARbCodeRetrieval import *
 from .eng.RARbMathRetrieval import *
 from .eng.SCIDOCSRetrieval import *
@@ -111,9 +113,11 @@ from .fra.BSARDRetrieval import *
 from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
+from .jpn.JaCWIRRetrieval import *
 from .jpn.JaGovFaqsRetrieval import *
 from .jpn.JaqketRetrieval import *
 from .jpn.JaQuADRetrieval import *
+from .jpn.NLPJournalAbsArticleRetrieval import *
 from .jpn.NLPJournalAbsIntroRetrieval import *
 from .jpn.NLPJournalTitleAbsRetrieval import *
 from .jpn.NLPJournalTitleIntroRetrieval import *
@@ -127,6 +131,7 @@ from .multilingual.CUREv1Retrieval import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
+from .multilingual.MKQARetrieval import *
 from .multilingual.MLQARetrieval import *
 from .multilingual.MrTidyRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
@@ -134,6 +139,7 @@ from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.PublicHealthQARetrieval import *
 from .multilingual.StatcanDialogueDatasetRetrieval import *
+from .multilingual.WebFAQRetrieval import *
 from .multilingual.WikipediaRetrievalMultilingual import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
@@ -186,6 +192,8 @@ from .spa.SpanishPassageRetrievalS2S import *
 from .swe.SwednRetrieval import *
 from .swe.SweFaqRetrieval import *
 from .tur.TurHistQuad import *
+from .vie.GreenNodeTableMarkdownRetrieval import *
 from .vie.VieQuADRetrieval import *
+from .vie.ZacLegalTextRetrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *

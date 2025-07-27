@@ -17,7 +17,6 @@ import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
-from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
@@ -71,9 +70,9 @@ class MTEB:
             if isinstance(tasks[0], Benchmark):
                 self.benchmarks = tasks
                 self._tasks = self._tasks = list(chain.from_iterable(tasks))  # type: ignore
-            assert (
-                task_types is None and task_categories is None
-            ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
+            assert task_types is None and task_categories is None, (
+                "Cannot specify both `tasks` and `task_types`/`task_categories`"
+            )
         else:
             self._task_types = task_types
             self._task_categories = task_categories
@@ -467,7 +466,7 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
-            if isinstance(task, AbsTaskAggregate):
+            if task.is_aggregate:
                 self_ = MTEB(tasks=task.metadata.tasks)
                 task_results = self_.run(
                     model,
@@ -493,6 +492,18 @@ class MTEB:
             if "bm25s" in meta.name and task.metadata.type != "Retrieval":
                 logger.warning(
                     f"bm25s only supports Retrieval tasks, but the task type is {task.metadata.type}. Skipping task."
+                )
+                del self.tasks[0]  # empty memory
+                continue
+
+            # NOTE: skip evaluation if the model does not support all of the task's modalities.
+            # If the model covers more than the task's modalities, evaluation will still be run.
+            sorted_task_modalities = sorted(task.metadata.modalities)
+            if meta.modalities is not None and any(
+                m not in meta.modalities for m in sorted_task_modalities
+            ):
+                logger.info(
+                    f"{meta.name} only supports {meta.modalities}, but the task modalities are {sorted_task_modalities}."
                 )
                 del self.tasks[0]  # empty memory
                 continue

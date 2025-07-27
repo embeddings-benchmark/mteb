@@ -29,15 +29,16 @@ class EstonianValenceClassification(AbsTaskClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{Pajupuu2023,
-    author = "Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri",
-    title = "{Estonian Valence Corpus  / Eesti valentsikorpus}",
-    year = "2023",
-    month = "11",
-    url = "https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
-    doi = "10.6084/m9.figshare.24517054.v1"
-}""",
+  author = {Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri},
+  doi = {10.6084/m9.figshare.24517054.v1},
+  month = {11},
+  title = {{Estonian Valence Corpus  / Eesti valentsikorpus}},
+  url = {https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

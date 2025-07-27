@@ -4,13 +4,60 @@ from __future__ import annotations
 
 from functools import partial
 
+import torch
+
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.nomic_models import (
+    nomic_training_data,
+)
+
+GIGA_task_prompts = {
+    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise\nquery: ",
+    "STS22": "Retrieve semantically similar text\nquery: ",
+    "RuSTSBenchmarkSTS": "Retrieve semantically similar text\nquery: ",
+    "RUParaPhraserSTS": "Retrieve semantically similar text\nquery: ",
+    "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, удивление, страх, гнев или нейтрально) \nкомментарий: ",
+    "GeoreviewClassification": "Classify the organization rating based on the reviews\nquery: ",
+    "GeoreviewClusteringP2P": "Классифицируй рейтинг организации на основе отзыва \nотзыв: ",
+    "HeadlineClassification": "Классифицируй тему данного новостного заголовка \nзаголовок: ",
+    "InappropriatenessClassification": "Классифицируй данный комментарий как токсичный или не токсичный \nкомментарий: ",
+    "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text\nquery: ",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents\nquery: ",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios\nquery: ",
+    "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment\nquery: ",
+    "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchGRNTIClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts\nquery: ",
+    "RuSciBenchOECDClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации \nаннотация: ",
+    "SensitiveTopicsClassification": "Классифицируй чувствительную тему по запросу \nзапрос: ",
+    "RuBQRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "RuBQReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "RiaNewsRetrieval": {
+        "query": "Given a news title, retrieve relevant news article\nquery: ",
+        "passage": "",
+    },
+    "MIRACLReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+    "MIRACLRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
+        "passage": "",
+    },
+}
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="5441c5ea8026d4f6d7505ec004845409f1259fb1",
     release_date="2021-05-24",
@@ -34,7 +81,7 @@ rubert_tiny = ModelMeta(
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="dad72b8f77c5eef6995dd3e4691b758ba56b90c3",
     release_date="2021-10-28",
@@ -59,7 +106,7 @@ rubert_tiny2 = ModelMeta(
 
 sbert_large_nlu_ru = ModelMeta(
     name="ai-forever/sbert_large_nlu_ru",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="af977d5dfa46a3635e29bf0ef383f2df2a08d47a",
     release_date="2020-11-20",
@@ -74,19 +121,23 @@ sbert_large_nlu_ru = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    adapted_from="google/bert_uncased_L-12_H-768_A-12",
+    training_datasets={
+        # SNLI
+        # MNLI
+    },
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
     name="ai-forever/sbert_large_mt_nlu_ru",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="05300876c2b83f46d3ddd422a7f17e45cf633bb0",
     release_date="2021-05-18",
     n_parameters=427_000_000,
     memory_usage_mb=1629,
     embed_dim=1024,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
     similarity_fn_name="cosine",
@@ -108,7 +159,7 @@ user_base_ru = ModelMeta(
         model_prompts={"query": "query: ", "passage": "passage: "},
     ),
     name="deepvk/USER-base",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="436a489a2087d61aa670b3496a9915f84e46c861",
     release_date="2024-06-10",
@@ -164,7 +215,7 @@ user_bge_m3 = ModelMeta(
         revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
     ),
     name="deepvk/USER-bge-m3",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
     release_date="2024-07-05",
@@ -176,7 +227,7 @@ user_bge_m3 = ModelMeta(
     reference="https://huggingface.co/deepvk/USER-base",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    adapted_from="https://huggingface.co/BAAI/bge-m3",
+    adapted_from="BAAI/bge-m3",
     use_instructions=False,
     training_datasets={
         "BibleNLPBitextMining": ["train"],
@@ -184,7 +235,6 @@ user_bge_m3 = ModelMeta(
         "MLSUMClusteringP2P.v2": ["train"],
         "MLSUMClusteringS2S": ["train"],
         "MLSUMClusteringS2S.v2": ["train"],
-        **bge_m3_training_data,
         # not MTEB:
         # "deepvk/ru-HNP": ["train"],
         # "deepvk/ru-WANLI": ["train"],
@@ -207,7 +257,7 @@ user_bge_m3 = ModelMeta(
 
 deberta_v1_ru = ModelMeta(
     name="deepvk/deberta-v1-base",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="bdd30b0e19757e6940c92c7aff19e8fc0a60dff4",
     release_date="2023-02-07",
@@ -223,19 +273,27 @@ deberta_v1_ru = ModelMeta(
     # Wikipedia, Books, Twitter comments, Pikabu, Proza.ru, Film subtitles, News websites, and Social corpus
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        # 400 GB of filtered and deduplicated texts in total.
+        # A mix of the following data: Wikipedia, Books, Twitter comments, Pikabu, Proza.ru,
+        # Film subtitles, News websites, and Social corpus.
+        # wikipedia
+        "WikipediaRetrievalMultilingual": [],
+        "WikipediaRerankingMultilingual": [],
+        "RiaNewsRetrieval": [],  # probably
+    },
 )
 
 rubert_base_cased = ModelMeta(
     name="DeepPavlov/rubert-base-cased",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="4036cab694767a299f2b9e6492909664d9414229",
     release_date="2020-03-04",
     n_parameters=1280_000_000,
     memory_usage_mb=4883,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
     similarity_fn_name="cosine",
@@ -243,19 +301,24 @@ rubert_base_cased = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    adapted_from="google/bert_uncased_L-12_H-768_A-12",
+    training_datasets={
+        # wikipedia
+        "WikipediaRetrievalMultilingual": [],
+        "WikipediaRerankingMultilingual": [],
+    },
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
     name="DeepPavlov/distilrubert-small-cased-conversational",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="e348066b4a7279b97138038299bddc6580a9169a",
     release_date="2022-06-28",
     n_parameters=107_000_000,
     memory_usage_mb=408,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/distilrubert-small-cased-conversational",
     similarity_fn_name="cosine",
@@ -263,19 +326,22 @@ distilrubert_small_cased_conversational = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    adapted_from="DeepPavlov/distilrubert-base-cased-conversational",
+    training_datasets={
+        # OpenSubtitles[1], Dirty, Pikabu, and a Social Media segment of Taiga corpus
+    },
 )
 
 rubert_base_cased_sentence = ModelMeta(
     name="DeepPavlov/rubert-base-cased-sentence",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="78b5122d6365337dd4114281b0d08cd1edbb3bc8",
     release_date="2020-03-04",
     n_parameters=107_000_000,
     memory_usage_mb=408,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased-sentence",
     similarity_fn_name="cosine",
@@ -291,14 +357,14 @@ rubert_base_cased_sentence = ModelMeta(
 
 labse_en_ru = ModelMeta(
     name="cointegrated/LaBSE-en-ru",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="cf0714e606d4af551e14ad69a7929cd6b0da7f7e",
     release_date="2021-06-10",
     n_parameters=129_000_000,
     memory_usage_mb=492,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/cointegrated/LaBSE-en-ru",
     similarity_fn_name="cosine",
@@ -306,13 +372,18 @@ labse_en_ru = ModelMeta(
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        # https://translate.yandex.ru/corpus
+    },
     adapted_from="sentence-transformers/LaBSE",
 )
 
+turbo_models_datasets = {
+    # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+}
 rubert_tiny_turbo = ModelMeta(
     name="sergeyzh/rubert-tiny-turbo",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="8ce0cf757446ce9bb2d5f5a4ac8103c7a1049054",
     release_date="2024-06-21",
@@ -327,14 +398,39 @@ rubert_tiny_turbo = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
-    # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    training_datasets=turbo_models_datasets,
     adapted_from="cointegrated/rubert-tiny2",
+)
+
+rubert_mini_frida = ModelMeta(
+    name="sergeyzh/rubert-mini-frida",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="19b279b78afd945b5ccae78f63e284909814adc2",
+    release_date="2025-03-02",
+    n_parameters=32_300_000,
+    memory_usage_mb=123,
+    embed_dim=312,
+    license="mit",
+    max_tokens=2048,
+    reference="https://huggingface.co/sergeyzh/rubert-mini-frida",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    adapted_from="sergeyzh/rubert-mini-sts",
 )
 
 labse_ru_turbo = ModelMeta(
     name="sergeyzh/LaBSE-ru-turbo",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="1940b046c6b5e125df11722b899130329d0a46da",
     release_date="2024-06-27",
@@ -347,10 +443,35 @@ labse_ru_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    training_datasets=None,
-    # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    training_datasets=turbo_models_datasets,
     public_training_code=None,
     adapted_from="cointegrated/LaBSE-en-ru",
+    public_training_data=None,
+)
+
+berta = ModelMeta(
+    name="sergeyzh/BERTA",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
+    release_date="2025-03-10",
+    n_parameters=128_000_000,
+    memory_usage_mb=489,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/sergeyzh/BERTA",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    public_training_code=None,
+    adapted_from="sergeyzh/LaBSE-ru-turbo",
     public_training_data=None,
 )
 
@@ -385,7 +506,7 @@ rosberta_ru_en = ModelMeta(
         model_prompts=rosberta_prompts,
     ),
     name="ai-forever/ru-en-RoSBERTa",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
@@ -541,7 +662,7 @@ frida = ModelMeta(
         model_prompts=frida_prompts,
     ),
     name="ai-forever/FRIDA",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="7292217af9a9e6dbf07048f76b434ad1e2aa8b76",
     release_date="2024-12-29",
@@ -557,5 +678,187 @@ frida = ModelMeta(
     training_datasets=frida_training_datasets,
     public_training_data=None,
     public_training_code=None,
+    framework=["Sentence Transformers", "PyTorch"],
+)
+
+giga_embeddings = ModelMeta(
+    loader=partial(  # type: ignore
+        InstructSentenceTransformerWrapper,
+        model_name="ai-sage/Giga-Embeddings-instruct",
+        revision="40b27667b9ad586d7812675df76e5062ccc80b0e",
+        instruction_template="{instruction}",
+        max_seq_length=512,
+        apply_instruction_to_passages=False,
+        prompts_dict=GIGA_task_prompts,
+        trust_remote_code=True,
+        model_kwargs={
+            "torch_dtype": torch.bfloat16,
+        },
+    ),
+    name="ai-sage/Giga-Embeddings-instruct",
+    languages=["eng-Latn", "rus-Cyrl"],
+    open_weights=True,
+    revision="40b27667b9ad586d7812675df76e5062ccc80b0e",
+    release_date="2025-06-05",
+    n_parameters=3_227_176_961,
+    memory_usage_mb=12865,
+    embed_dim=2048,
+    license="mit",
+    max_tokens=4096,
+    reference="https://huggingface.co/ai-sage/Giga-Embeddings-instruct",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+)
+
+berta_training_datasets = {
+    **frida_training_datasets,  # distilled from FRIDA
+    # https://huggingface.co/datasets/IlyaGusev/gazeta
+    # https://huggingface.co/datasets/zloelias/lenta-ru
+    # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+    # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+}
+
+berta = ModelMeta(
+    name="sergeyzh/BERTA",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
+    release_date="2025-03-10",
+    n_parameters=128_000_000,
+    memory_usage_mb=489,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/sergeyzh/BERTA",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    training_datasets=berta_training_datasets,
+    public_training_code=None,
+    adapted_from="sergeyzh/LaBSE-ru-turbo",
+    public_training_data=None,
+)
+
+rubert_mini_frida = ModelMeta(
+    name="sergeyzh/rubert-mini-frida",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="19b279b78afd945b5ccae78f63e284909814adc2",
+    release_date="2025-03-02",
+    n_parameters=32_300_000,
+    memory_usage_mb=123,
+    embed_dim=312,
+    license="mit",
+    max_tokens=2048,
+    reference="https://huggingface.co/sergeyzh/rubert-mini-frida",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=berta_training_datasets,
+    adapted_from="sergeyzh/rubert-mini-sts",
+)
+
+
+user2_training_data = {
+    **nomic_training_data,
+    **bge_m3_training_data,
+    # deepvk/cultura_ru_edu
+    # AllNLI
+    # nyuuzyou/fishkinet-posts
+    # IlyaGusev/gazeta
+    # its5Q/habr_qna
+    # zloelias/lenta-ru
+    # unicamp-dl/mmarco
+    # deepvk/ru-HNP
+    # deepvk/ru-WANLI
+    # wikimedia/wikipedia
+    # CarlBrendt/Summ_Dialog_News
+    # RussianNLP/wikiomnia
+    # its5Q/yandex-q
+    # "mC4" ru
+    # "CC-News" ru
+    # MultiLongDocRetrieval
+}
+
+user2_prompts = {
+    # Override some prompts for ruMTEB tasks
+    "HeadlineClassification": "search_query: ",
+    "RuSciBenchGRNTIClassification": "clustering: ",
+    "RuSciBenchOECDClassification": "clustering: ",
+    "GeoreviewClusteringP2P": "search_query: ",
+    "SensitiveTopicsClassification": "search_query: ",
+    "STS22": "search_document: ",
+    "InappropriatenessClassification": "classification: ",
+    "CEDRClassification": "classification: ",
+    # Default
+    "Classification": "classification: ",
+    "MultilabelClassification": "classification: ",
+    "Clustering": "clustering: ",
+    "PairClassification": "classification: ",
+    "Reranking": "classification: ",
+    f"Reranking-{PromptType.query.value}": "search_query: ",
+    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    "STS": "classification: ",
+    "Summarization": "clustering: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+}
+user2_small = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="deepvk/USER2-small",
+        revision="23f65b34cf7632032061f5cc66c14714e6d4cee4",
+        model_prompts=user2_prompts,
+    ),
+    name="deepvk/USER2-small",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="23f65b34cf7632032061f5cc66c14714e6d4cee4",
+    release_date="2025-04-19",
+    use_instructions=True,
+    reference="https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f",
+    n_parameters=34_400_000,
+    memory_usage_mb=131,
+    max_tokens=8192,
+    embed_dim=384,
+    license="apache-2.0",
+    similarity_fn_name="cosine",
+    adapted_from="deepvk/RuModernBERT-small",
+    training_datasets=user2_training_data,
+    public_training_data=None,
+    public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
+    framework=["Sentence Transformers", "PyTorch"],
+)
+
+user2_base = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="deepvk/USER2-base",
+        revision="0942cf96909b6d52e61f79a01e2d30c7be640b27",
+        model_prompts=user2_prompts,
+    ),
+    name="deepvk/USER2-base",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="0942cf96909b6d52e61f79a01e2d30c7be640b27",
+    release_date="2025-04-19",
+    use_instructions=True,
+    reference="https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f",
+    n_parameters=149_000_000,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=768,
+    license="apache-2.0",
+    similarity_fn_name="cosine",
+    adapted_from="deepvk/RuModernBERT-base",
+    training_datasets=user2_training_data,
+    public_training_data=None,
+    public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
 )

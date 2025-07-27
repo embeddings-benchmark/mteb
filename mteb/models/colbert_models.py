@@ -11,6 +11,7 @@ import torch
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -34,12 +35,8 @@ class ColBERTWrapper(Wrapper):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the model.
         """
-        try:
-            from pylate import models as colbert_model
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`."
-            ) from e
+        requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
+        from pylate import models as colbert_model  # type: ignore[import]
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
@@ -122,16 +119,16 @@ class ColBERTWrapper(Wrapper):
             Matrix with res[i][j]  = max_sim(a[i], b[j])
         """  # noqa: D402
         if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a, dtype=torch.float32)
+            a = torch.tensor(a, dtype=torch.float32)  # type: ignore[no-untyped-call]
 
         if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b, dtype=torch.float32)
+            b = torch.tensor(b, dtype=torch.float32)  # type: ignore[no-untyped-call]
 
         if len(a.shape) == 2:
-            a = a.unsqueeze(0)
+            a = a.unsqueeze(0)  # type: ignore[no-untyped-call]
 
         if len(b.shape) == 2:
-            b = b.unsqueeze(0)
+            b = b.unsqueeze(0)  # type: ignore[no-untyped-call]
 
         scores = torch.einsum(
             "ash,bth->abst",
@@ -139,22 +136,22 @@ class ColBERTWrapper(Wrapper):
             b,
         )
 
-        return scores.max(axis=-1).values.sum(axis=-1)
+        return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[no-untyped-call]
 
 
 colbert_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         ColBERTWrapper,
         model_name="colbert-ir/colbertv2.0",
     ),
     name="colbert-ir/colbertv2.0",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
     public_training_code=None,
     public_training_data=None,
     release_date="2024-09-21",
-    n_parameters=110 * 1e6,
+    n_parameters=int(110 * 1e6),
     memory_usage_mb=418,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
@@ -172,7 +169,7 @@ colbert_v2 = ModelMeta(
 )
 
 jina_colbert_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore[call-arg]
         ColBERTWrapper,
         model_name="jinaai/jina-colbert-v2",
         query_prefix="[QueryMarker]",
@@ -210,7 +207,7 @@ jina_colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-08-16",
-    n_parameters=559 * 1e6,
+    n_parameters=int(559 * 1e6),
     memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token
@@ -226,5 +223,37 @@ jina_colbert_v2 = ModelMeta(
         "mMARCO-NL": ["train"],  # translation not trained on
         "DuRetrieval": [],
         "MIRACL": ["train"],
+    },
+)
+
+
+lightonai__GTE_ModernColBERT_v1 = ModelMeta(
+    loader=partial(  # type: ignore[call-arg]
+        ColBERTWrapper,
+        model_name="lightonai/GTE-ModernColBERT-v1",
+    ),
+    name="lightonai/GTE-ModernColBERT-v1",
+    languages=[
+        "eng-Latn",  # English
+    ],
+    open_weights=True,
+    revision="78d50a162b04dfdc45c3af6b4294ba77c24888a3",
+    public_training_code="https://gist.github.com/NohTow/3030fe16933d8276dd5b3e9877d89f0f",
+    public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
+    release_date="2025-04-30",
+    n_parameters=int(149 * 1e6),
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=None,  # Bag of Embeddings (128) for each token
+    license="apache-2.0",
+    similarity_fn_name="max_sim",
+    framework=["PyLate", "ColBERT"],
+    reference="https://huggingface.co/lightonai/GTE-ModernColBERT-v1",
+    use_instructions=False,
+    adapted_from="Alibaba-NLP/gte-modernbert-base",
+    superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
 )

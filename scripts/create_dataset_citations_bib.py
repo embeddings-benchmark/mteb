@@ -49,8 +49,7 @@ def create_citations_table(tasks: list[mteb.AbsTask]) -> str:
 \\setlength\\extrarowheight{7pt}
 \\begin{longtable}{L{3.5cm}|L{3.0cm}L{1.4cm}L{1.4cm}L{1.4cm}L{1.4cm}L{1.0cm}L{1.0cm}}
 \\toprule
-\\textbf{Dataset} & \\textbf{N. Langs} & \\textbf{Type} & \\textbf{Category} & \\textbf{Domains} & \\textbf{N. Docs} & 
-\\textbf{Avg. Length} \\\\ 
+\\textbf{Dataset} & \\textbf{N. Langs} & \\textbf{Type} & \\textbf{Category} & \\textbf{Domains} & \\textbf{N. Docs} \\\\
 \\midrule
 \\endhead \\\\"""
     for task in tasks:
@@ -75,14 +74,6 @@ def task_to_tex_row(task: mteb.AbsTask) -> str:
         else ""
     )
 
-    avg_character_length = (
-        "{:.2f}".format(
-            sum(task.metadata.avg_character_length.values())
-            / len(task.metadata.avg_character_length.keys())
-        )
-        if task.metadata.avg_character_length
-        else ""
-    )
     library = bibtexparser.parse_string(task.metadata.bibtex_citation)
     try:
         cite_key = library.entries[0].key
@@ -97,11 +88,11 @@ def task_to_tex_row(task: mteb.AbsTask) -> str:
     )
     lang = lang.replace("'", "")
 
-    return f"{name}{cite_key} & {lang} & {task.metadata.type} & {task.metadata.category} & {domains[1:-1]} & {n_samples} & {avg_character_length} \\\\"
+    return f"{name}{cite_key} & {lang} & {task.metadata.type} & {task.metadata.category} & {domains[1:-1]} & {n_samples}  \\\\"
 
 
 def main():
-    tasks = mteb.get_tasks()
+    tasks = mteb.get_tasks(modalities=["audio"])
     tasks = sorted(tasks, key=lambda x: x.metadata.name)
     extract_bibtex_to_file(tasks)
     print(create_citations_table(tasks))

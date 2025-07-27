@@ -32,22 +32,22 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{dimosthenis-etal-2022-twitter,
-            title = "{T}witter {T}opic {C}lassification",
-            author = "Antypas, Dimosthenis  and
-            Ushio, Asahi  and
-            Camacho-Collados, Jose  and
-            Neves, Leonardo  and
-            Silva, Vitor  and
-            Barbieri, Francesco",
-            booktitle = "Proceedings of the 29th International Conference on Computational Linguistics",
-            month = oct,
-            year = "2022",
-            address = "Gyeongju, Republic of Korea",
-            publisher = "International Committee on Computational Linguistics"
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{dimosthenis-etal-2022-twitter,
+  address = {Gyeongju, Republic of Korea},
+  author = {Antypas, Dimosthenis  and
+Ushio, Asahi  and
+Camacho-Collados, Jose  and
+Neves, Leonardo  and
+Silva, Vitor  and
+Barbieri, Francesco},
+  booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  month = oct,
+  publisher = {International Committee on Computational Linguistics},
+  title = {{T}witter {T}opic {C}lassification},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):

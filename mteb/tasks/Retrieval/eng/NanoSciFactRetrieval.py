@@ -30,15 +30,18 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{specter2020cohan,
-  title={SPECTER: Document-level Representation Learning using Citation-informed Transformers},
-  author={Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
-  booktitle={ACL},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@inproceedings{specter2020cohan,
+  author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
+  booktitle = {ACL},
+  title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
+  year = {2020},
+}
+""",
         prompt={
             "query": "Given a scientific claim, retrieve documents that support or refute the claim"
         },
+        adapted_from=["SciFact"],
     )
 
     def load_data(self, **kwargs):

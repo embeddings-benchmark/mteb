@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb import SentenceTransformerWrapper
 from mteb.encoder_interface import AudioBatch, PromptType
+from mteb.model_meta import ModelMeta
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
@@ -43,6 +44,28 @@ class MockTorchbf16Encoder(SentenceTransformer):
 
 
 class MockCLIPEncoder:
+    mteb_model_meta = ModelMeta(
+        name="mock/MockCLIPModel",
+        languages=["eng-Latn"],
+        revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+        release_date="2021-02-06",
+        modalities=["image", "text"],
+        n_parameters=86_600_000,
+        memory_usage_mb=330,
+        max_tokens=None,
+        embed_dim=768,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=["PyTorch"],
+        reference="https://huggingface.co/openai/clip-vit-base-patch32",
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+    model_card_data = mteb_model_meta
+
     def __init__(self):
         pass
 
@@ -67,6 +90,28 @@ class MockCLIPEncoder:
 
 
 class MockAudioEncoder:
+    mteb_model_meta = ModelMeta(
+        name="mock/MockAudioEncoder",
+        languages=["eng-Latn"],
+        revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
+        release_date="2024-01-01",
+        modalities=["audio"],
+        n_parameters=86_600_000,
+        memory_usage_mb=330,
+        max_tokens=None,
+        embed_dim=768,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=["PyTorch"],
+        reference="https://huggingface.co/facebook/wav2vec2-large-xlsr-53-english",
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+    model_card_data = mteb_model_meta
+
     def __init__(self):
         self.embedding_dim = 768
 
@@ -106,11 +151,52 @@ class MockAudioEncoder:
         return torch.randn(len(texts), self.embedding_dim)
 
 
+class MockMocoEncoder:
+    mteb_model_meta = ModelMeta(
+        name="mock/MockMocoModel",
+        languages=["eng-Latn"],
+        revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
+        release_date="2024-01-01",
+        modalities=["image"],
+        n_parameters=86_600_000,
+        memory_usage_mb=330,
+        max_tokens=None,
+        embed_dim=768,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=["PyTorch"],
+        reference="https://github.com/facebookresearch/moco-v3",
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+    model_card_data = mteb_model_meta
+
+    def __init__(self):
+        pass
+
+    def get_text_embeddings(self, texts, **kwargs):
+        pass
+
+    def get_image_embeddings(self, images, **kwargs):
+        pass
+
+    def get_fused_embeddings(self, texts, images, **kwargs):
+        pass
+
+    def calculate_probs(self, text_embeddings, image_embeddings):
+        pass
+
+
 class MockSentenceTransformer(SentenceTransformer):
     """A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # by default, in SentenceTransformer, prompts are `{"query": "", "document": ""}`
+        self.prompts = {}
 
     def encode(
         self,

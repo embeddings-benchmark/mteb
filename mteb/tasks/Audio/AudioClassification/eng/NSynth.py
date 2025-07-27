@@ -12,8 +12,8 @@ class NSynth(AbsTaskAudioClassification):
         description="Instrument Source Classification: one of acoustic, electronic, or synthetic.",
         reference="https://huggingface.co/datasets/anime-sh/NSYNTH_PITCH_HEAR",
         dataset={
-            "path": "anime-sh/NSYNTH_PITCH_HEAR",
-            "revision": "6e39b6b61d86d416e591230525e234cc0a5b753a",
+            "path": "mteb/nsynth-mini",
+            "revision": "e32dfe9b65e121e64229a821fe1ff177e8962635",
         },
         type="AudioClassification",
         category="a2t",
@@ -28,17 +28,19 @@ class NSynth(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@misc{engel2017neuralaudiosynthesismusical,
-            title={Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders}, 
-            author={Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Douglas Eck and Karen Simonyan and Mohammad Norouzi},
-            year={2017},
-            eprint={1704.01279},
-            archivePrefix={arXiv},
-            primaryClass={cs.LG},
-            url={https://arxiv.org/abs/1704.01279}, 
-        }""",
+        bibtex_citation=r"""
+@misc{engel2017neuralaudiosynthesismusical,
+  archiveprefix = {arXiv},
+  author = {Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Douglas Eck and Karen Simonyan and Mohammad Norouzi},
+  eprint = {1704.01279},
+  primaryclass = {cs.LG},
+  title = {Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders},
+  url = {https://arxiv.org/abs/1704.01279},
+  year = {2017},
+}
+""",
         descriptive_stats={
-            "n_samples": {"train": 289205, "validation": 12678, "test": 4096},
+            "n_samples": {"train": 3000, "validation": 3000, "test": 3000},
         },
     )
 

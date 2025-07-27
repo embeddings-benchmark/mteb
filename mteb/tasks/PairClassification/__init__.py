@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara.ArEntail import *
 from .ces.CTKFactsNLI import *
+from .dan.TalemaaderPC import *
 from .deu.FalseFriendsDeEnPC import *
 from .eng.LegalBenchPC import *
 from .eng.PubChemAISentenceParaphrasePC import *
@@ -15,6 +16,7 @@ from .fas.FaMTEBPairClassification import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
+from .ita.DisCoTexPairClassification import *
 from .kor.KlueNLI import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsXPairClassification import *

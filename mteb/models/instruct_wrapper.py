@@ -10,6 +10,7 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -20,12 +21,10 @@ def instruct_wrapper(
     instruction_template: str | Callable[[str], str] | None = None,
     **kwargs,
 ):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            f"Please install `pip install mteb[gritlm]` to use {model_name_or_path}."
-        )
+    requires_package(
+        instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
+    )
+    from gritlm import GritLM
 
     class InstructWrapper(GritLM, Wrapper):
         def __init__(
@@ -90,6 +89,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
         add_eos_token: bool = False,
+        prompts_dict: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
@@ -103,6 +103,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
             padding_side: Padding side. If None, the padding side will be read from the model config.
             add_eos_token: Whether to add the eos token to each input example.
+            prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
             **kwargs: Kwargs for Sentence Transformer model.
         """
         if (
@@ -122,6 +123,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.add_eos_token = add_eos_token
+        self.prompts_dict = prompts_dict
         if max_seq_length is not None:
             self.model.max_seq_length = max_seq_length
         if padding_side is not None:
@@ -140,7 +142,9 @@ class InstructSentenceTransformerWrapper(Wrapper):
                 example + self.model.tokenizer.eos_token for example in sentences
             ]
 
-        instruction = self.get_task_instruction(task_name, prompt_type)
+        instruction = self.get_task_instruction(
+            task_name, prompt_type, self.prompts_dict
+        )
 
         # to passage prompts won't be applied to passages
         if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:

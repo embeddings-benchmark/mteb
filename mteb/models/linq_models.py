@@ -6,6 +6,7 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
@@ -27,7 +28,7 @@ Linq_Embed_Mistral = ModelMeta(
         normalized=True,
     ),
     name="Linq-AI-Research/Linq-Embed-Mistral",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="0c1a0b0589177079acc552433cad51d7c9132379",
     release_date="2024-05-29",  # initial commit of hf model.
@@ -42,5 +43,6 @@ Linq_Embed_Mistral = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    training_datasets=E5_MISTRAL_TRAINING_DATA,
 )

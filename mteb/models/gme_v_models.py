@@ -12,15 +12,11 @@ from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 from transformers import AutoModelForVision2Seq, AutoProcessor
 
-import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
-
-HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
-HF_GME_QWEN2VL_7B = "Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
 
 
 class Encoder(torch.nn.Module):
@@ -130,10 +126,10 @@ class Encoder(torch.nn.Module):
         return embeddings
 
 
-class GmeQwen2VL:
+class GmeQwen2VL(Wrapper):
     def __init__(
         self,
-        model_name: str = HF_GME_QWEN2VL_2B,
+        model_name: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         min_image_tokens=4,
@@ -168,8 +164,7 @@ class GmeQwen2VL:
         )
 
     def encode_queries(self, queries: list[str], **kwargs):
-        kwargs.update(prompt_type=PromptType.query)
-        embeddings = self.encode(queries, **kwargs)
+        embeddings = self.encode(queries, prompt_type=PromptType.query, **kwargs)
         return embeddings
 
     def encode_corpus(self, corpus: list[dict[str, str]], **kwargs):
@@ -187,8 +182,7 @@ class GmeQwen2VL:
                 else doc["text"].strip()
                 for doc in corpus
             ]
-        kwargs.update(prompt_type=PromptType.passage)
-        embeddings = self.encode(sentences, is_query=False, **kwargs)
+        embeddings = self.encode(sentences, prompt_type=PromptType.passage**kwargs)
         return embeddings
 
     def get_image_embeddings(self, images: list[Image.Image] | DataLoader, **kwargs):
@@ -205,22 +199,6 @@ class GmeQwen2VL:
         logits = torch.matmul(image_embeddings, text_embeddings.T)
         probs = (logits * 100).softmax(dim=-1)
         return probs
-
-    ## FIXME: Might want to subclass from Wrapper.
-    def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
-        """Get the instruction/prompt to be used for encoding sentences."""
-        task = mteb.get_task(task_name=task_name)
-        task_metadata = task.metadata
-        if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if task_metadata.prompt.get(prompt_type.value):
-                return task_metadata.prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
-            )
-            return ""
-        if task_metadata.prompt:
-            return task_metadata.prompt
-        return task.abstask_prompt
 
     def get_fused_embeddings(
         self,
@@ -431,10 +409,10 @@ training_data = {
 gme_qwen2vl_2b = ModelMeta(
     loader=partial(
         GmeQwen2VL,
-        model_name=HF_GME_QWEN2VL_2B,
+        model_name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     ),
-    name=HF_GME_QWEN2VL_2B,
-    languages=["eng_Latn", "cmn-Hans"],
+    name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
     release_date="2024-12-24",
@@ -444,7 +422,7 @@ gme_qwen2vl_2b = ModelMeta(
     embed_dim=1536,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=True,
@@ -456,10 +434,10 @@ gme_qwen2vl_2b = ModelMeta(
 gme_qwen2vl_7b = ModelMeta(
     loader=partial(
         GmeQwen2VL,
-        model_name=HF_GME_QWEN2VL_7B,
+        model_name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     ),
-    name=HF_GME_QWEN2VL_7B,
-    languages=["eng_Latn", "cmn-Hans"],
+    name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
+    languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
     release_date="2024-12-24",
@@ -469,7 +447,7 @@ gme_qwen2vl_7b = ModelMeta(
     embed_dim=3584,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=True,

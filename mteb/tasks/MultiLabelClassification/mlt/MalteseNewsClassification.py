@@ -13,7 +13,7 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
         Articles. The data was collected from the press_mt subset from Korpus
         Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS,
         & repeated non-Maltese sub-headings. The labels are based on the category
-        field from this corpus. 
+        field from this corpus.
         """,
         reference="https://huggingface.co/datasets/MLRS/maltese_news_categories",
         dataset={
@@ -33,16 +33,18 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{maltese-news-datasets,
-            title = "Topic Classification and Headline Generation for {M}altese using a Public News Corpus",
-            author = "Chaudhary, Amit Kumar  and
-                    Micallef, Kurt  and
-                    Borg, Claudia",
-            booktitle = "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation",
-            month = may,
-            year = "2024",
-            publisher = "Association for Computational Linguistics",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{maltese-news-datasets,
+  author = {Chaudhary, Amit Kumar  and
+Micallef, Kurt  and
+Borg, Claudia},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation},
+  month = may,
+  publisher = {Association for Computational Linguistics},
+  title = {Topic Classification and Headline Generation for {M}altese using a Public News Corpus},
+  year = {2024},
+}
+""",
     )
 
     def dataset_transform(self):

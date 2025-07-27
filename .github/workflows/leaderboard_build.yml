@@ -1,0 +1,29 @@
+name: Leaderboard Build Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  leaderboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies (incl. leaderboard extra)
+        run: |
+          pip install ".[dev,leaderboard]"
+
+      - name: Run leaderboard build test
+        run: |
+          make leaderboard-build-test
