@@ -12,7 +12,7 @@ class GovReport(AbsTaskRetrieval):
             "revision": "4482db2a053706c0aef0ab7bf1878d29bb0295f8",
         },
         name="GovReport",
-        description="This dataset tests the ability of information retrieval models to identify US government reports.",
+        description="A dataset for evaluating the ability of information retrieval models to retrieve lengthy US government reports from their summaries.",
         reference="https://huggingface.co/datasets/launch/gov_report",
         type="Retrieval",
         category="t2t",
