@@ -22,7 +22,7 @@ class BillSumCA(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2024-08-14", "2025-07-18"),
         domains=["Legal", "Government"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc0-1.0",
         annotations_creators="expert-annotated",
         dialect=[],
