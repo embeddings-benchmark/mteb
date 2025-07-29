@@ -41,7 +41,8 @@ def corpus_to_dict(
         ]
         titles = corpus["title"]
         bodies = corpus["text"]
-    elif isinstance(corpus, Dataset) and isinstance(corpus[0], dict):
+    # will be tuple for reranking
+    elif isinstance(corpus, (Dataset, tuple, list)) and isinstance(corpus[0], dict):
         sentences = [
             (doc["title"] + " " + doc["text"]).strip()
             if "title" in doc
