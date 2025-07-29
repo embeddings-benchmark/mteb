@@ -83,12 +83,12 @@ class Qwen2AudioWrapper(Wrapper):
         if audio.ndim == 2:
             audio = audio.mean(dim=0)
         audio = audio.squeeze()
-        
+
         # Apply audio truncation (30 seconds max)
         max_length = 30 * self.sampling_rate  # 30 seconds
         if audio.shape[-1] > max_length:
             audio = audio[..., :max_length]
-            
+
         return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
@@ -99,12 +99,12 @@ class Qwen2AudioWrapper(Wrapper):
             resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
             waveform = resampler(waveform)
         waveform = waveform.squeeze()
-        
+
         # Apply audio truncation (30 seconds max)
         max_length = 30 * self.sampling_rate  # 30 seconds
         if waveform.shape[-1] > max_length:
             waveform = waveform[..., :max_length]
-            
+
         return waveform
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
@@ -126,7 +126,9 @@ class Qwen2AudioWrapper(Wrapper):
         embeddings_list: list[torch.Tensor] = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed), batch_size), disable=not show_progress_bar):
+            for i in tqdm(
+                range(0, len(processed), batch_size), disable=not show_progress_bar
+            ):
                 batch = processed[i : i + batch_size]
 
                 audio_list = [w.numpy() for w in batch]

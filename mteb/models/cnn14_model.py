@@ -93,12 +93,12 @@ class CNN14Wrapper(Wrapper):
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         audio = audio.squeeze()
-        
+
         # Apply audio truncation (30 seconds max)
         max_length = 30 * self.sampling_rate  # 30 seconds
         if audio.shape[-1] > max_length:
             audio = audio[..., :max_length]
-            
+
         return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
@@ -127,7 +127,10 @@ class CNN14Wrapper(Wrapper):
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size), disable=not show_progress_bar):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 # Convert batch to tensors and move to device

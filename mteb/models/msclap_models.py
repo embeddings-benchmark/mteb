@@ -170,7 +170,9 @@ class MSClapWrapper:
 
         if isinstance(audio, DataLoader):
             # Process all batches
-            for batch in tqdm(audio, desc="Processing audio batches", disable=not show_progress_bar):
+            for batch in tqdm(
+                audio, desc="Processing audio batches", disable=not show_progress_bar
+            ):
                 batch_features = self._process_audio_batch(batch)
                 all_features.extend(batch_features)
         else:

@@ -91,12 +91,12 @@ class MuQMuLanWrapper:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         audio = audio.squeeze().float()  # Ensure float32
-        
+
         # Apply audio truncation (30 seconds max)
         max_length = 30 * self.target_sampling_rate  # 30 seconds
         if audio.shape[-1] > max_length:
             audio = audio[..., :max_length]
-            
+
         return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
@@ -124,7 +124,9 @@ class MuQMuLanWrapper:
 
         if isinstance(audio, DataLoader):
             # Process all batches
-            for batch in tqdm(audio, desc="Processing audio batches", disable=not show_progress_bar):
+            for batch in tqdm(
+                audio, desc="Processing audio batches", disable=not show_progress_bar
+            ):
                 batch_features = []
 
                 # Process each item in the batch

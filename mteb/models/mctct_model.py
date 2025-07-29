@@ -174,7 +174,10 @@ class MCTCTWrapper(Wrapper):
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size), disable=not show_progress_bar):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 # Process each audio in the batch
