@@ -126,6 +126,11 @@ class MSClapWrapper:
                     resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
                     audio = resampler(audio)
 
+                # Apply audio truncation (30 seconds max)
+                max_length = 30 * self.sampling_rate  # 30 seconds
+                if audio.shape[-1] > max_length:
+                    audio = audio[..., :max_length]
+
                 return audio.squeeze()
 
             elif "path" in audio_item:
@@ -156,6 +161,8 @@ class MSClapWrapper:
     def get_audio_embeddings(
         self,
         audio: AudioBatch,
+        *,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         """Get audio embeddings using direct tensor processing (no temp files)"""
@@ -163,7 +170,7 @@ class MSClapWrapper:
 
         if isinstance(audio, DataLoader):
             # Process all batches
-            for batch in tqdm(audio, desc="Processing audio batches"):
+            for batch in tqdm(audio, desc="Processing audio batches", disable=not show_progress_bar):
                 batch_features = self._process_audio_batch(batch)
                 all_features.extend(batch_features)
         else:

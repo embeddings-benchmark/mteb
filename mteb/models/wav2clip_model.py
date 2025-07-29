@@ -63,6 +63,12 @@ class Wav2ClipZeroShotWrapper:
                         item["sampling_rate"], self.sampling_rate
                     )
                     tensor = resampler(tensor)
+                
+                # Apply audio truncation (30 seconds max)
+                max_length = 30 * self.sampling_rate  # 30 seconds
+                if tensor.shape[-1] > max_length:
+                    tensor = tensor[..., :max_length]
+                    
                 waveforms.append(tensor)
 
             # dict with path
@@ -98,13 +104,15 @@ class Wav2ClipZeroShotWrapper:
     def get_audio_embeddings(
         self,
         audio: AudioBatch,
+        *,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         all_embeddings = []
 
         if isinstance(audio, DataLoader):
             # Process each batch separately
-            for batch in tqdm(audio, desc="Processing audio batches"):
+            for batch in tqdm(audio, desc="Processing audio batches", disable=not show_progress_bar):
                 batch_embeddings = []
 
                 # Process each item in the batch individually

@@ -60,6 +60,11 @@ def vggish_loader(**kwargs):
             if audio.ndim > 1:
                 audio = audio.mean(dim=0)
 
+            # Apply audio truncation (30 seconds max)
+            max_length = 30 * self.sampling_rate  # 30 seconds
+            if audio.shape[-1] > max_length:
+                audio = audio[..., :max_length]
+
             # Normalize to [-1.0, 1.0]
             if audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
@@ -156,7 +161,7 @@ def vggish_loader(**kwargs):
             return input_tensor
 
         def get_audio_embeddings(
-            self, audio, *, task_name=None, prompt_type=None, batch_size=4, **kwargs
+            self, audio, *, task_name=None, prompt_type=None, batch_size=4, show_progress_bar=True, **kwargs
         ):
             """Generate embeddings for audio inputs."""
             processed_audio = self._process_audio(audio)
@@ -164,7 +169,7 @@ def vggish_loader(**kwargs):
 
             with torch.no_grad():
                 for i in tqdm(
-                    range(0, len(processed_audio), batch_size), desc="Processing audio"
+                    range(0, len(processed_audio), batch_size), desc="Processing audio", disable=not show_progress_bar
                 ):
                     batch = processed_audio[i : i + batch_size]
                     batch_embeddings = []

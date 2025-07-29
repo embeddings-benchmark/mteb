@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -81,7 +82,14 @@ class Qwen2AudioWrapper(Wrapper):
             audio = torch.from_numpy(audio)
         if audio.ndim == 2:
             audio = audio.mean(dim=0)
-        return audio.squeeze()
+        audio = audio.squeeze()
+        
+        # Apply audio truncation (30 seconds max)
+        max_length = 30 * self.sampling_rate  # 30 seconds
+        if audio.shape[-1] > max_length:
+            audio = audio[..., :max_length]
+            
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sr = torchaudio.load(path)
@@ -90,7 +98,14 @@ class Qwen2AudioWrapper(Wrapper):
         if sr != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+        waveform = waveform.squeeze()
+        
+        # Apply audio truncation (30 seconds max)
+        max_length = 30 * self.sampling_rate  # 30 seconds
+        if waveform.shape[-1] > max_length:
+            waveform = waveform[..., :max_length]
+            
+        return waveform
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
         max_len = max(w.shape[0] for w in batch)
@@ -104,13 +119,14 @@ class Qwen2AudioWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed = self._process_audio(audio)
         embeddings_list: list[torch.Tensor] = []
 
         with torch.no_grad():
-            for i in range(0, len(processed), batch_size):
+            for i in tqdm(range(0, len(processed), batch_size), disable=not show_progress_bar):
                 batch = processed[i : i + batch_size]
 
                 audio_list = [w.numpy() for w in batch]
