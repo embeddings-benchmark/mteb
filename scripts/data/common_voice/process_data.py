@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
-"""
-Script to read TSV files from a compressed Common Voice dataset file (tar.gz),
+"""Script to read TSV files from a compressed Common Voice dataset file (tar.gz),
 decompress it into the current project folder, aggregate clip names,
 compress audio files into tar archives with adaptive paths, and update metadata files.
 """
+from __future__ import annotations
 
-import os
-import csv
-import json
-import tarfile
-import shutil
 import argparse
-import tempfile
+import csv
 import hashlib
-from pathlib import Path
+import json
+import os
+import shutil
+import sys
+import tarfile
 from collections import defaultdict
+from pathlib import Path
+
+csv.field_size_limit(sys.maxsize)
 
 def extract_corpus_info_from_tarball(tarball_path):
-    """
-    Extract the corpus information from the tarball filename.
+    """Extract the corpus information from the tarball filename.
     
     Args:
         tarball_path: Path to the tar.gz file
@@ -75,8 +76,7 @@ def extract_corpus_info_from_tarball(tarball_path):
     return "cv-corpus-20.0-2024-12-06", "20_0", language_code
 
 def is_language_already_processed(language_code, version, output_dir=None):
-    """
-    Check if a language has already been processed.
+    """Check if a language has already been processed.
     
     Args:
         language_code: Language code (e.g., 'am')
@@ -120,13 +120,13 @@ def is_language_already_processed(language_code, version, output_dir=None):
     n_shards_file = base_dir / "n_shards.json"
     if n_shards_file.exists():
         try:
-            with open(n_shards_file, 'r', encoding='utf-8') as f:
+            with open(n_shards_file, encoding='utf-8') as f:
                 n_shards = json.load(f)
                 if language_code not in n_shards:
                     print(f"Language {language_code} not found in n_shards.json")
                     return False
         except (json.JSONDecodeError, FileNotFoundError):
-            print(f"Error reading n_shards.json")
+            print("Error reading n_shards.json")
             return False
     else:
         print(f"n_shards.json not found: {n_shards_file}")
@@ -136,8 +136,7 @@ def is_language_already_processed(language_code, version, output_dir=None):
     return True
 
 def extract_tarball(tarball_path, extract_dir, output_dir=None):
-    """
-    Extract a tar.gz file to the specified directory.
+    """Extract a tar.gz file to the specified directory.
     
     Args:
         tarball_path: Path to the tar.gz file
@@ -213,8 +212,7 @@ def extract_tarball(tarball_path, extract_dir, output_dir=None):
     return language_dir, language_code, version
 
 def move_tsv_files_to_transcripts(language_dir, language_code, version, output_dir=None):
-    """
-    Move TSV files from the extracted language directory to the transcripts folder.
+    """Move TSV files from the extracted language directory to the transcripts folder.
     
     Args:
         language_dir: Path to the language directory
@@ -257,13 +255,13 @@ def move_tsv_files_to_transcripts(language_dir, language_code, version, output_d
         dev_dest = os.path.join(transcripts_dir, "dev.tsv")
         if not os.path.exists(dev_dest):
             shutil.copy2(test_tsv, dev_dest)
-            print(f"  Created dev.tsv from test.tsv")
+            print("  Created dev.tsv from test.tsv")
 
 def extract_clip_paths(file_path):
     """Extract clip paths from a TSV file."""
     clip_paths = []
     
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter='\t')
         
         for row in reader:
@@ -273,8 +271,7 @@ def extract_clip_paths(file_path):
     return clip_paths
 
 def create_tar_archives(clips, clips_dir, output_dir, language, split, clips_per_archive=40000):
-    """
-    Create tar archives for a list of clip paths.
+    """Create tar archives for a list of clip paths.
     
     Args:
         clips: List of clip paths
@@ -333,7 +330,7 @@ def update_languages_file(language_code, language_name, version, output_dir=None
         return
     
     # Read the current content
-    with open(languages_file, 'r', encoding='utf-8') as f:
+    with open(languages_file, encoding='utf-8') as f:
         content = f.read()
     
     # Check if the language is already in the file
@@ -360,7 +357,7 @@ def update_n_shards_file(language_code, split_archives, version, output_dir=None
     
     # Read the current content if the file exists
     if n_shards_file.exists():
-        with open(n_shards_file, 'r', encoding='utf-8') as f:
+        with open(n_shards_file, encoding='utf-8') as f:
             try:
                 n_shards = json.load(f)
             except json.JSONDecodeError:
@@ -409,7 +406,7 @@ def compute_stats_from_tsv(language_code, split_clips, corpus_dir):
         if not tsv_path.exists():
             continue
         
-        with open(tsv_path, 'r', encoding='utf-8') as f:
+        with open(tsv_path, encoding='utf-8') as f:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 # Count unique users
@@ -650,7 +647,7 @@ def validate_global_stats_consistency(full_dict):
                     inconsistencies.append(f"{key}: actual={actual}, expected={expected}")
     
     if inconsistencies:
-        print(f"Warning: Global stats inconsistencies detected:")
+        print("Warning: Global stats inconsistencies detected:")
         for inconsistency in inconsistencies:
             print(f"  - {inconsistency}")
         return False
@@ -694,7 +691,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
         
         write_stats_dict(release_stats_file, full_dict)
         print(f"Created release_stats.py with {language_code} stats")
-        print(f"  Global stats initialized:")
+        print("  Global stats initialized:")
         print(f"    totalDuration: {full_dict['totalDuration']}")
         print(f"    totalValidDurationSecs: {full_dict['totalValidDurationSecs']}")
         print(f"    totalHrs: {full_dict['totalHrs']}")
@@ -702,7 +699,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
         return
     
     # Read the current content
-    with open(release_stats_file, 'r', encoding='utf-8') as f:
+    with open(release_stats_file, encoding='utf-8') as f:
         content = f.read()
     
     # Try to parse the existing dictionary first before checking structure
@@ -730,7 +727,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
         
         # The file has the expected structure but we couldn't parse it
         # This is likely due to a syntax error in the file
-        print(f"Warning: Could not parse release_stats.py, but it appears to have the correct structure.")
+        print("Warning: Could not parse release_stats.py, but it appears to have the correct structure.")
         print(f"Attempting to add/update {language_code} using string manipulation.")
         
         # Try to use string manipulation to add/update the language
@@ -780,7 +777,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
                     with open(release_stats_file, 'w', encoding='utf-8') as f:
                         f.write(updated_content)
                     print(f"Updated {language_code} stats using string manipulation")
-                    print(f"Note: Global stats were not updated. Run the script on all languages to update global stats.")
+                    print("Note: Global stats were not updated. Run the script on all languages to update global stats.")
                     return
             
             # If we get here, either the language doesn't exist or we couldn't find it
@@ -798,7 +795,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
                     with open(release_stats_file, 'w', encoding='utf-8') as f:
                         f.write(updated_content)
                     print(f"Added {language_code} stats using string manipulation")
-                    print(f"Note: Global stats were not updated. Run the script on all languages to update global stats.")
+                    print("Note: Global stats were not updated. Run the script on all languages to update global stats.")
                     return
             
             # If we get here, we couldn't find a good place to add the language
@@ -863,7 +860,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
     old_stats = full_dict['locales'].get(language_code, None)
     
     # Print current global stats before update
-    print(f"\nCurrent global stats:")
+    print("\nCurrent global stats:")
     print(f"  totalDuration: {full_dict.get('totalDuration', 0)}")
     print(f"  totalValidDurationSecs: {full_dict.get('totalValidDurationSecs', 0)}")
     print(f"  totalHrs: {full_dict.get('totalHrs', 0)}")
@@ -922,7 +919,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
             full_dict[key] = value
     
     # Print updated global stats
-    print(f"\nUpdated global stats:")
+    print("\nUpdated global stats:")
     print(f"  totalDuration: {full_dict.get('totalDuration', 0)}")
     print(f"  totalValidDurationSecs: {full_dict.get('totalValidDurationSecs', 0)}")
     print(f"  totalHrs: {full_dict.get('totalHrs', 0)}")
@@ -934,7 +931,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
         calculated_global = calculate_global_stats_from_locales(full_dict['locales'])
         for key, value in calculated_global.items():
             full_dict[key] = value
-        print(f"  Fixed global stats:")
+        print("  Fixed global stats:")
         print(f"    totalDuration: {full_dict['totalDuration']}")
         print(f"    totalValidDurationSecs: {full_dict['totalValidDurationSecs']}")
         print(f"    totalHrs: {full_dict['totalHrs']}")
@@ -962,7 +959,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
                     with open(release_stats_file, 'w', encoding='utf-8') as f:
                         f.write(updated_content)
                     print(f"Updated {language_code} stats using string manipulation")
-                    print(f"Note: Global stats were not updated. Run the script on all languages to update global stats.")
+                    print("Note: Global stats were not updated. Run the script on all languages to update global stats.")
             else:
                 # Try to add new entry
                 locales_pos = content.find("'locales': {") + len("'locales': {")
@@ -970,7 +967,7 @@ def update_release_stats_file(language_code, split_clips, version, corpus_dir, o
                 with open(release_stats_file, 'w', encoding='utf-8') as f:
                     f.write(updated_content)
                 print(f"Added {language_code} stats using string manipulation")
-                print(f"Note: Global stats were not updated. Run the script on all languages to update global stats.")
+                print("Note: Global stats were not updated. Run the script on all languages to update global stats.")
         except Exception as nested_e:
             print(f"Error with fallback string manipulation: {nested_e}")
 
@@ -1005,8 +1002,7 @@ def get_language_name(language_code):
     return language_map.get(language_code, f"Unknown ({language_code})")
 
 def process_language_data(language_dir, language_code, version, language_name=None, output_dir=None):
-    """
-    Process the language data from the extracted directory.
+    """Process the language data from the extracted directory.
     
     Args:
         language_dir: Path to the language directory
@@ -1100,8 +1096,7 @@ def process_language_data(language_dir, language_code, version, language_name=No
     print("\nProcessing completed successfully!")
 
 def find_tarballs(directory):
-    """
-    Find all tar.gz files in the specified directory.
+    """Find all tar.gz files in the specified directory.
     
     Args:
         directory: Directory to search for tar.gz files
@@ -1154,7 +1149,7 @@ def main():
             # Check if the language has already been processed
             if not args.force and is_language_already_processed(language_code, version, args.output_dir):
                 print(f"Language {language_code} (version {version}) has already been processed. Skipping...")
-                print(f"Use --force to reprocess this language if needed.")
+                print("Use --force to reprocess this language if needed.")
                 continue
             
             # Extract the tarball to the specified directory

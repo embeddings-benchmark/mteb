@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
+"""Script to upload Common Voice raw files (tar and tsv) directly to HuggingFace Hub
 """
-Script to upload Common Voice raw files (tar and tsv) directly to HuggingFace Hub
-"""
+from __future__ import annotations
 
-import os
 import argparse
+import os
 import time
 from pathlib import Path
-from typing import List, Tuple, Optional
-from tqdm import tqdm
-from huggingface_hub import HfApi, login, list_repo_files
+from typing import List, Optional, Tuple
+
+from huggingface_hub import HfApi, list_repo_files, login
 from huggingface_hub.utils import RepositoryNotFoundError
+from tqdm import tqdm
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Upload Common Voice raw files to HuggingFace Hub")
@@ -63,8 +65,7 @@ def parse_args():
     return parser.parse_args()
 
 def discover_files(base_dir: str, languages: Optional[List[str]] = None) -> List[Tuple[str, str]]:
-    """
-    Discover all tar and tsv files in the base directory.
+    """Discover all tar and tsv files in the base directory.
     
     Returns:
         List of tuples (local_path, repo_path)
@@ -119,8 +120,7 @@ def upload_file_with_retry(
     repo_id: str,
     max_retries: int = 3
 ) -> bool:
-    """
-    Upload a file with retry logic.
+    """Upload a file with retry logic.
     
     Returns:
         True if successful, False otherwise
