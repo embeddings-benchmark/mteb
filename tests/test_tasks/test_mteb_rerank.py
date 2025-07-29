@@ -345,6 +345,7 @@ def test_mteb_rerank(tmp_path: Path):
         eval_splits=["test"],
         previous_results=tmp_file,
         save_predictions=True,
+        co2_tracker=False,
     )
 
     # read in the results
@@ -352,7 +353,7 @@ def test_mteb_rerank(tmp_path: Path):
         results = json.load(f)
 
     results = sorted(
-        results["1"].keys(), key=lambda x: (results["1"][x], x), reverse=True
+        results["1"].keys(), key=lambda x: (results["1"][x], x)
     )[:2]
     # check that only the top two results are re-orderd
     assert "19238" not in results

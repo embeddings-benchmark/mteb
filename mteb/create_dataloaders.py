@@ -8,7 +8,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import BatchedInput, Conversation, ConversationTurn
+from mteb.types import BatchedInput, Conversation, ConversationTurn, CorpusDataset
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ def create_dataloader_from_texts(
 
 
 def corpus_to_dict(
-    corpus: Dataset,
+    corpus: CorpusDataset,
 ) -> dict[str, list[str | None]]:
     if isinstance(corpus, dict):
         sentences = [

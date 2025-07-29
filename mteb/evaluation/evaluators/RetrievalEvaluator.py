@@ -8,6 +8,7 @@ from datasets import Dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
+from mteb.types import CorpusDataset, QueryDataset
 
 from .Evaluator import Evaluator
 from .model_classes import (
@@ -24,8 +25,8 @@ logger = logging.getLogger(__name__)
 class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
-        corpus: Dataset,
-        queries: Dataset,
+        corpus: CorpusDataset,
+        queries: QueryDataset,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,

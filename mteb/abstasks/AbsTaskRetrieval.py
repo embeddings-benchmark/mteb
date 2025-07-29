@@ -10,7 +10,10 @@ from typing import Any, Callable
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
 from mteb.models.encoder_interface import Encoder
-from mteb.types import HFSubset, ScoresDict
+from mteb.types import (
+    HFSubset,
+    ScoresDict,
+)
 from mteb.types.statistics import (
     DescriptiveStatistics,
     RelevantDocsStatistics,
@@ -118,6 +121,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
     def convert_v1_dataset_format_to_v2(self):
+        # check if dataset is `v1` version
         if not hasattr(self, "queries"):
             return
         empty_dataset = Dataset.from_dict({})
@@ -471,7 +475,10 @@ class AbsTaskRetrieval(AbsTask):
 
                 if "top_ranked" in split_data and split_data["top_ranked"] is not None:
                     top_ranked.update(
-                        process_docs(split_data["top_ranked"], hf_subset, split)
+                        {
+                            f"{split}_{hf_subset}_{k}": v
+                            for k, v in split_data["top_ranked"].items()
+                        }
                     )
         else:
             if "default" in self.dataset and split != "default":
@@ -633,13 +640,6 @@ def calculate_corpus_length(
             doc_lens.append(len(doc))
 
     return doc_lens
-
-
-def process_docs(
-    collection: dict[str, list[str]], hf_subset: str, split: str
-) -> dict[str, list[str]]:
-    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
-    return {f"{split}_{hf_subset}_{k}": v for k, v in collection.items()}
 
 
 def map_indexes_for_ds(

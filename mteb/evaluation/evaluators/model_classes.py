@@ -15,13 +15,13 @@ from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
+from mteb.types import Array, BatchedInput, CorpusDataset, PromptType, QueryDataset
 
 from ...create_dataloaders import (
     create_dataloader_for_queries,
     create_dataloader_for_queries_conversation,
     create_dataloader_for_retrieval_corpus,
 )
-from ...types import Array, BatchedInput, PromptType
 from .utils import download
 
 logger = logging.getLogger(__name__)
@@ -71,8 +71,8 @@ class DenseRetrievalExactSearch:
 
     def search(
         self,
-        corpus: Dataset,
-        queries: Dataset,
+        corpus: CorpusDataset,
+        queries: QueryDataset,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -232,7 +232,7 @@ class DenseRetrievalExactSearch:
         self,
         query_ids: list[str],
         query_embeddings: np.ndarray,
-        corpus: Dataset,
+        corpus: CorpusDataset,
         top_ranked: dict[str, list[str]],
         top_k: int,
         task_metadata: TaskMetadata,
@@ -326,7 +326,7 @@ class DenseRetrievalExactSearch:
         self,
         query_ids: list[str],
         query_embeddings: np.ndarray,
-        corpus: Dataset,
+        corpus: CorpusDataset,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -427,8 +427,8 @@ class DenseRetrievalExactSearch:
 
     def search_cross_encoder(
         self,
-        corpus: Dataset,
-        queries: Dataset,
+        corpus: CorpusDataset,
+        queries: QueryDataset,
         top_k: int,
         hf_split: str,
         hf_subset: str,

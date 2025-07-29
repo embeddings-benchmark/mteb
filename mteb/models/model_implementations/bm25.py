@@ -3,11 +3,10 @@ from __future__ import annotations
 import logging
 from typing import Literal
 
-from datasets import Dataset
-
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+from mteb.types import CorpusDataset, QueryDataset
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +39,8 @@ def bm25_loader(model_name, **kwargs):
 
         def search(
             self,
-            corpus: Dataset,
-            queries: Dataset,
+            corpus: CorpusDataset,
+            queries: QueryDataset,
             top_k: int,
             **kwargs,
         ) -> dict[str, dict[str, float]]:

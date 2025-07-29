@@ -5,6 +5,7 @@ from typing import TypedDict, Union
 
 import numpy as np
 import torch
+from datasets import Dataset
 from PIL import Image
 
 # --- Output types ---
@@ -60,3 +61,7 @@ class BatchedInput(TypedDict, total=False):
     query: list[str]
     conversation: list[Conversation]
     instruction: list[str]
+
+
+QueryDataset: Dataset = Dataset
+CorpusDataset: Dataset = Dataset

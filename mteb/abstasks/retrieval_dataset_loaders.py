@@ -15,6 +15,8 @@ from datasets import (
     load_dataset,
 )
 
+from mteb.types import CorpusDataset, QueryDataset
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,8 +30,8 @@ class RetrievalSplitData(TypedDict):
     - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable). Columns: "query-id", "corpus-ids"
     """
 
-    corpus: Dataset
-    queries: Dataset
+    corpus: CorpusDataset
+    queries: QueryDataset
     relevant_docs: Mapping[str, Mapping[str, float]]
     instructions: Dataset | None
     top_ranked: Mapping[str, list[str]] | None
