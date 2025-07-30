@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class BengaliDocumentClassification(AbsTaskAnyClassification):
     superseded_by = "BengaliDocumentClassification.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BengaliDocumentClassification",
         description="Dataset for News Classification, categorized with 13 domains.",
         reference="https://aclanthology.org/2023.eacl-main.4",
@@ -55,7 +55,7 @@ Islam, Tanvir},
 
 
 class BengaliDocumentClassificationV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BengaliDocumentClassification.v2",
         description="""Dataset for News Classification, categorized with 13 domains.
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",

@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class MMMARCONL(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="mMARCO-NL",
         dataset={
             "path": "clips/beir-nl-mmarco",

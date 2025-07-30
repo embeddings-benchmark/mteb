@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class IFIRNFCorpus(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IFIRNFCorpus",
         dataset={
             "path": "if-ir/nfcorpus",

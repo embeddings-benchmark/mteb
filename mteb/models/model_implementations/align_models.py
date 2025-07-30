@@ -103,7 +103,7 @@ class ALIGNModel(AbsEncoder):
         raise ValueError
 
 
-align_base = ModelMeta(
+align_base = ModelMeta.model_construct(
     loader=ALIGNModel,
     name="kakaobrain/align-base",
     languages=["eng-Latn"],

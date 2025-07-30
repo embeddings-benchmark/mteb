@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class NQNL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NQ-NL",
         dataset={
             "path": "clips/beir-nl-nq",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class T2Reranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="T2Reranking",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
         reference="https://arxiv.org/abs/2304.03679",
@@ -41,7 +41,7 @@ class T2Reranking(AbsTaskRetrieval):
 
 
 class MMarcoReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MMarcoReranking",
         description="mMARCO is a multilingual version of the MS MARCO passage ranking dataset",
         reference="https://github.com/unicamp-dl/mMARCO",
@@ -77,7 +77,7 @@ class MMarcoReranking(AbsTaskRetrieval):
 
 
 class CMedQAv1(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CMedQAv1-reranking",
         description="Chinese community medical question answering",
         prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
@@ -115,7 +115,7 @@ class CMedQAv1(AbsTaskRetrieval):
 
 
 class CMedQAv2(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CMedQAv2-reranking",
         description="Chinese community medical question answering",
         prompt="Given a Chinese community medical question, retrieve replies that best answer the question",

@@ -58,7 +58,7 @@ GIGA_task_prompts = {
     },
 }
 
-rubert_tiny = ModelMeta(
+rubert_tiny = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny",
     languages=["rus-Cyrl"],
@@ -83,7 +83,7 @@ rubert_tiny = ModelMeta(
     public_training_data=None,
 )
 
-rubert_tiny2 = ModelMeta(
+rubert_tiny2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny2",
     languages=["rus-Cyrl"],
@@ -109,7 +109,7 @@ rubert_tiny2 = ModelMeta(
     public_training_data=None,
 )
 
-sbert_large_nlu_ru = ModelMeta(
+sbert_large_nlu_ru = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="ai-forever/sbert_large_nlu_ru",
     languages=["rus-Cyrl"],
@@ -134,7 +134,7 @@ sbert_large_nlu_ru = ModelMeta(
     },
 )
 
-sbert_large_mt_nlu_ru = ModelMeta(
+sbert_large_mt_nlu_ru = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="ai-forever/sbert_large_mt_nlu_ru",
     languages=["rus-Cyrl"],
@@ -158,7 +158,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
     },
 )
 
-user_base_ru = ModelMeta(
+user_base_ru = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts={"query": "query: ", "passage": "passage: "},
@@ -221,7 +221,7 @@ user_base_ru = ModelMeta(
     public_training_data=None,
 )
 
-user_bge_m3 = ModelMeta(
+user_bge_m3 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="deepvk/USER-bge-m3",
     languages=["rus-Cyrl"],
@@ -264,7 +264,7 @@ user_bge_m3 = ModelMeta(
     public_training_data=None,
 )
 
-deberta_v1_ru = ModelMeta(
+deberta_v1_ru = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="deepvk/deberta-v1-base",
     languages=["rus-Cyrl"],
@@ -294,7 +294,7 @@ deberta_v1_ru = ModelMeta(
     },
 )
 
-rubert_base_cased = ModelMeta(
+rubert_base_cased = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="DeepPavlov/rubert-base-cased",
     languages=["rus-Cyrl"],
@@ -329,7 +329,7 @@ rubert_base_cased = ModelMeta(
     }""",
 )
 
-distilrubert_small_cased_conversational = ModelMeta(
+distilrubert_small_cased_conversational = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="DeepPavlov/distilrubert-small-cased-conversational",
     languages=["rus-Cyrl"],
@@ -363,7 +363,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     }""",
 )
 
-rubert_base_cased_sentence = ModelMeta(
+rubert_base_cased_sentence = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="DeepPavlov/rubert-base-cased-sentence",
     languages=["rus-Cyrl"],
@@ -387,7 +387,7 @@ rubert_base_cased_sentence = ModelMeta(
     },
 )
 
-labse_en_ru = ModelMeta(
+labse_en_ru = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="cointegrated/LaBSE-en-ru",
     languages=["rus-Cyrl"],
@@ -414,7 +414,7 @@ labse_en_ru = ModelMeta(
 turbo_models_datasets = {
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
 }
-rubert_tiny_turbo = ModelMeta(
+rubert_tiny_turbo = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-tiny-turbo",
     languages=["rus-Cyrl"],
@@ -436,7 +436,7 @@ rubert_tiny_turbo = ModelMeta(
     adapted_from="cointegrated/rubert-tiny2",
 )
 
-rubert_mini_frida = ModelMeta(
+rubert_mini_frida = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-mini-frida",
     languages=["rus-Cyrl"],
@@ -463,7 +463,7 @@ rubert_mini_frida = ModelMeta(
     adapted_from="sergeyzh/rubert-mini-sts",
 )
 
-labse_ru_turbo = ModelMeta(
+labse_ru_turbo = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sergeyzh/LaBSE-ru-turbo",
     languages=["rus-Cyrl"],
@@ -485,7 +485,7 @@ labse_ru_turbo = ModelMeta(
     public_training_data=None,
 )
 
-berta = ModelMeta(
+berta = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sergeyzh/BERTA",
     languages=["rus-Cyrl"],
@@ -535,7 +535,7 @@ rosberta_prompts = {
     "STS22": "clustering: ",
 }
 
-rosberta_ru_en = ModelMeta(
+rosberta_ru_en = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=rosberta_prompts,
@@ -699,7 +699,7 @@ frida_training_datasets = {
     "Quora-NL": [],  # translation not trained on
 }
 
-frida = ModelMeta(
+frida = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=frida_prompts,
@@ -724,7 +724,7 @@ frida = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
 )
 
-giga_embeddings = ModelMeta(
+giga_embeddings = ModelMeta.model_construct(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template="{instruction}",
@@ -808,7 +808,7 @@ user2_prompts = {
     PromptType.query.value: "search_query: ",
     PromptType.passage.value: "search_document: ",
 }
-user2_small = ModelMeta(
+user2_small = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=user2_prompts,
@@ -833,7 +833,7 @@ user2_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
 )
 
-user2_base = ModelMeta(
+user2_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=user2_prompts,

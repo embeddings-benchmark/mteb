@@ -9,7 +9,7 @@ _LANGUAGES = {
 
 
 class LinceMTBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LinceMTBitextMining",
         dataset={
             "path": "gentaiscool/bitext_lincemt_miners",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TalemaaderPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TalemaaderPC",
         description="""\
 The Danish Language and Literature Society has developed a dataset for evaluating language models in Danish.

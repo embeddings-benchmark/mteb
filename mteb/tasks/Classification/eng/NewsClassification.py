@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NewsClassification",
         description="Large News Classification Dataset",
         dataset={

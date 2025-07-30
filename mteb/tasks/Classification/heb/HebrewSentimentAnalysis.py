@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
 class HebrewSentimentAnalysis(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HebrewSentimentAnalysis",
         dataset={
             "path": "omilab/hebrew_sentiment",

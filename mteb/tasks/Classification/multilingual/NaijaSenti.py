@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NaijaSenti(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NaijaSenti",
         description="NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset for the four most widely spoken languages in Nigeria — Hausa, Igbo, Nigerian-Pidgin, and Yorùbá — consisting of around 30,000 annotated tweets per language, including a significant fraction of code-mixed tweets.",
         reference="https://github.com/hausanlp/NaijaSenti",

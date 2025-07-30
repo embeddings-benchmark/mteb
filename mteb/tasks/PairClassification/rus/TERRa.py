@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class TERRa(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TERRa",
         dataset={
             "path": "ai-forever/terra-pairclassification",

@@ -335,7 +335,7 @@ class HakimModelWrapper(AbsEncoder):
         return np.array(all_embeddings, dtype=np.float32)
 
 
-hakim = ModelMeta(
+hakim = ModelMeta.model_construct(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim",
@@ -401,7 +401,7 @@ hakim = ModelMeta(
 )
 
 
-hakim_small = ModelMeta(
+hakim_small = ModelMeta.model_construct(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim-small",
@@ -466,7 +466,7 @@ hakim_small = ModelMeta(
     },
 )
 
-hakim_unsup = ModelMeta(
+hakim_unsup = ModelMeta.model_construct(
     loader=HakimModelWrapper,
     loader_kwargs=dict(
         api_model_name="hakim-unsup",

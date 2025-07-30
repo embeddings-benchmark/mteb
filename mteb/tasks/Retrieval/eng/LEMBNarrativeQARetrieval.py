@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LEMBNarrativeQARetrieval",
         dataset={
             "path": "dwzhu/LongEmbed",

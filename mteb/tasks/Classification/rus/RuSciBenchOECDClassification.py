@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuSciBenchOECDClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuSciBenchOECDClassification",
         dataset={
             "path": "ai-forever/ru-scibench-oecd-classification",

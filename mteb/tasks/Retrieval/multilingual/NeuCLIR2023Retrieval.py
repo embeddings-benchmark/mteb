@@ -56,7 +56,7 @@ def load_neuclir_data(
 
 
 class NeuCLIR2023Retrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NeuCLIR2023Retrieval",
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
         reference="https://neuclir.github.io/",
@@ -173,7 +173,7 @@ def load_neuclir_data_hard_negatives(
 
 
 class NeuCLIR2023RetrievalHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NeuCLIR2023RetrievalHardNegatives",
         description="The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://neuclir.github.io/",

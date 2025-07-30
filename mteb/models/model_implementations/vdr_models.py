@@ -19,7 +19,7 @@ vdr_languages = [
     "spa-Latn",
 ]
 
-vdr_2b_multi_v1 = ModelMeta(
+vdr_2b_multi_v1 = ModelMeta.model_construct(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,

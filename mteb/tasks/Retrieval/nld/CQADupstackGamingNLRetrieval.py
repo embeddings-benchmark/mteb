@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class CQADupstackGamingNLRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackGaming-NL",
         description="CQADupStack: A Benchmark Data Set for Community Question-Answering Research. This a "
         "Dutch-translated version.",

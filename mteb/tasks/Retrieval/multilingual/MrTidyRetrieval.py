@@ -85,7 +85,7 @@ def _load_data_retrieval(
 
 
 class MrTidyRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MrTidyRetrieval",
         description="Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typologically diverse languages. It is designed for monolingual retrieval, specifically to evaluate ranking with learned dense representations.",
         reference="https://huggingface.co/datasets/castorini/mr-tydi",

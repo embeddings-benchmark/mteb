@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SOPI2IRetrieval",
         description="Retrieve product photos of 22634 online products.",
         reference="https://paperswithcode.com/dataset/stanford-online-products",

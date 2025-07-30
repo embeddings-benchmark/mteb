@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class RiaNewsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RiaNewsRetrieval",
         dataset={
             "path": "ai-forever/ria-news-retrieval",
@@ -44,7 +44,7 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
 class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RiaNewsRetrievalHardNegatives",
         dataset={
             "path": "mteb/RiaNewsRetrieval_test_top_250_only_w_correct-v2",

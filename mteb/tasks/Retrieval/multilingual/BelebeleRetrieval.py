@@ -177,7 +177,7 @@ _LANGUAGES_MAPPING = get_lang_pairs()
 
 
 class BelebeleRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BelebeleRetrieval",
         dataset={
             "path": "facebook/belebele",

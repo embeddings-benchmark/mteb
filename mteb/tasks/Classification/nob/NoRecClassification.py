@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NoRecClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NoRecClassification",
         description="A Norwegian dataset for sentiment classification on review",
         reference="https://aclanthology.org/L18-1661/",

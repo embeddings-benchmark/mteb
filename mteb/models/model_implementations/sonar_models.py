@@ -209,7 +209,7 @@ sonar_langs = [
     "zul-Latn",
 ]
 
-sonar = ModelMeta(
+sonar = ModelMeta.model_construct(
     loader=None,
     name="facebook/SONAR",
     languages=sonar_langs,

@@ -14,7 +14,7 @@ _LANGS = {
 
 
 class RTE3(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RTE3",
         dataset={
             "path": "maximoss/rte3-multi",

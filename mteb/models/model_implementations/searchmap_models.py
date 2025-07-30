@@ -16,7 +16,7 @@ task_instructions = {
     "Summarization": "Generate a representation for this text that can be used for summarization:",
 }
 
-searchmap_preview = ModelMeta(
+searchmap_preview = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     loader_kwargs={
         "model_prompts": task_instructions,

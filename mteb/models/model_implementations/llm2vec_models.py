@@ -124,7 +124,7 @@ LLM2VEC_CITATION = """
 }"""
 
 
-llm2vec_llama3_8b_supervised = ModelMeta(
+llm2vec_llama3_8b_supervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
@@ -153,7 +153,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     citation=LLM2VEC_CITATION,
 )
 
-llm2vec_llama3_8b_unsupervised = ModelMeta(
+llm2vec_llama3_8b_unsupervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
@@ -181,7 +181,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     public_training_data=None,
 )
 
-llm2vec_mistral7b_supervised = ModelMeta(
+llm2vec_mistral7b_supervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
@@ -209,7 +209,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     public_training_data=None,
 )
 
-llm2vec_mistral7b_unsupervised = ModelMeta(
+llm2vec_mistral7b_unsupervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
@@ -237,7 +237,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     public_training_data=None,
 )
 
-llm2vec_llama2_7b_supervised = ModelMeta(
+llm2vec_llama2_7b_supervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
@@ -265,7 +265,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     public_training_data=None,
 )
 
-llm2vec_llama2_7b_unsupervised = ModelMeta(
+llm2vec_llama2_7b_unsupervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
@@ -293,7 +293,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     citation=LLM2VEC_CITATION,
 )
 
-llm2vec_sheared_llama_supervised = ModelMeta(
+llm2vec_sheared_llama_supervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
@@ -321,7 +321,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     public_training_data=None,
 )
 
-llm2vec_sheared_llama_unsupervised = ModelMeta(
+llm2vec_sheared_llama_unsupervised = ModelMeta.model_construct(
     loader=_loader(
         LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",

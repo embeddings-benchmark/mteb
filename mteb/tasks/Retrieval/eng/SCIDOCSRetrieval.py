@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SCIDOCS(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SCIDOCS",
         dataset={
             "path": "mteb/scidocs",

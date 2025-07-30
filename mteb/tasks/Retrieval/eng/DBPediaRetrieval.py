@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class DBPedia(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DBPedia",
         description="DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base",
         reference="https://github.com/iai-group/DBpedia-Entity/",
@@ -46,7 +46,7 @@ class DBPedia(AbsTaskRetrieval):
 
 
 class DBPediaHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DBPediaHardNegatives",
         description="DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://github.com/iai-group/DBpedia-Entity/",

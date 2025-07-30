@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FrenkEnClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FrenkEnClassification",
         description="English subset of the FRENK dataset",
         dataset={

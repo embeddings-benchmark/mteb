@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class PawsXPairClassification(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PawsXPairClassification",
         dataset={
             "path": "google-research-datasets/paws-x",

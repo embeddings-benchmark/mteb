@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OdiaNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OdiaNewsClassification",
         description="A Odia dataset for 3-class classification of Odia news articles",
         reference="https://github.com/goru001/nlp-for-odia",

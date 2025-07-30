@@ -54,7 +54,7 @@ _DATASET_COLUMN_MAP = [
 
 
 class LegalBenchPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LegalBenchPC",
         description="""This LegalBench pair classification task is a combination of the following datasets:
 

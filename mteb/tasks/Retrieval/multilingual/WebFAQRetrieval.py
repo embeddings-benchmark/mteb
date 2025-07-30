@@ -125,7 +125,7 @@ def _load_webfaq_data(
 
 
 class WebFAQRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WebFAQRetrieval",
         description="WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languages, gathered from FAQ pages on the web.",
         reference="https://huggingface.co/PaDaS-Lab",

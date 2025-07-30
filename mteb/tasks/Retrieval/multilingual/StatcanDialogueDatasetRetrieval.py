@@ -63,7 +63,7 @@ def _load_statcan_data(
 
 
 class StatcanDialogueDatasetRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StatcanDialogueDatasetRetrieval",
         description="A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.",
         dataset={

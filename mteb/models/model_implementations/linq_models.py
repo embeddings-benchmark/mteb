@@ -15,7 +15,7 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
 
-Linq_Embed_Mistral = ModelMeta(
+Linq_Embed_Mistral = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,

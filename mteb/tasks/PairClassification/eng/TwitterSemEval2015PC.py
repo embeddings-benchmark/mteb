@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class TwitterSemEval2015PC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TwitterSemEval2015",
         dataset={
             "path": "mteb/twittersemeval2015-pairclassification",

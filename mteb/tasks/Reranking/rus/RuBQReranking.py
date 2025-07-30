@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class RuBQReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuBQReranking",
         dataset={
             "path": "mteb/RuBQReranking",

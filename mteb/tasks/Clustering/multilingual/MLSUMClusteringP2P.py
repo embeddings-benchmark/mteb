@@ -22,7 +22,7 @@ N_SAMPLES = 2048
 
 class MLSUMClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "MLSUMClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MLSUMClusteringP2P",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
         reference="https://huggingface.co/datasets/mteb/mlsum",
@@ -94,7 +94,7 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MLSUMClusteringP2P.v2",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
         reference="https://huggingface.co/datasets/mteb/mlsum",

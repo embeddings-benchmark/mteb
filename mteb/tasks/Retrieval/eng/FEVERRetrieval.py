@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class FEVER(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FEVER",
         dataset={
             "path": "mteb/fever",
@@ -63,7 +63,7 @@ Stent, Amanda},
 class FEVERHardNegatives(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FEVERHardNegatives",
         dataset={
             "path": "mteb/FEVER_test_top_250_only_w_correct-v2",

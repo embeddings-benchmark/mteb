@@ -11,7 +11,7 @@ TEST_SAMPLES = 2048
 
 
 class VieQuADRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VieQuADRetrieval",
         description="A Vietnamese dataset for evaluating Machine Reading Comprehension from Wikipedia articles.",
         reference="https://aclanthology.org/2020.coling-main.233.pdf",

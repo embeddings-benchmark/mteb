@@ -9,7 +9,7 @@ class CIFAR10Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CIFAR10",
         description="Classifying images from 10 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar10",
@@ -50,7 +50,7 @@ class CIFAR100Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CIFAR100",
         description="Classifying images from 100 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar100",

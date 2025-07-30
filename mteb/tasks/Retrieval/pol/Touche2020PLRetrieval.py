@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class Touche2020PL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Touche2020-PL",
         description="Touché Task 1: Argument Retrieval for Controversial Questions",
         reference="https://webis.de/events/touche-20/shared-task-1.html",

@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class NQPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NQ-PL",
         description="Natural Questions: A Benchmark for Question Answering Research",
         reference="https://ai.google.com/research/NaturalQuestions/",
@@ -42,7 +42,7 @@ class NQPL(AbsTaskRetrieval):
 
 
 class NQPLHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NQ-PLHardNegatives",
         description="Natural Questions: A Benchmark for Question Answering Research. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://ai.google.com/research/NaturalQuestions/",

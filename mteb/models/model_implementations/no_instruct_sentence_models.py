@@ -95,7 +95,7 @@ class NoInstructModel(AbsEncoder):
         return np.concatenate(embeddings, axis=0)
 
 
-no_instruct_small_v0 = ModelMeta(
+no_instruct_small_v0 = ModelMeta.model_construct(
     loader=NoInstructModel,
     name="avsolatorio/NoInstruct-small-Embedding-v0",
     languages=["eng-Latn"],

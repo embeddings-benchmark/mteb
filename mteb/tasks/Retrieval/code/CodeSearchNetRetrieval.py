@@ -10,7 +10,7 @@ _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 
 class CodeSearchNetRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeSearchNetRetrieval",
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://huggingface.co/datasets/code_search_net/",

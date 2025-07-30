@@ -9,7 +9,7 @@ class UCF101Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="UCF101",
         description="""UCF101 is an action recognition data set of realistic
 action videos collected from YouTube, having 101 action categories. This

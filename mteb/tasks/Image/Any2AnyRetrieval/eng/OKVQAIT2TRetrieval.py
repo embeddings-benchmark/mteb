@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OKVQAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OKVQAIT2TRetrieval",
         description="Retrieval a Wiki passage to answer query about an image.",
         reference="https://okvqa.allenai.org",

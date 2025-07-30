@@ -43,7 +43,7 @@ LGAI_EMBEDDING_TRAINING_DATA = {
     "SNLI": ["train"],
 }
 
-lgai_embedding_en = ModelMeta(
+lgai_embedding_en = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="annamodels/LGAI-Embedding-Preview",
     languages=[

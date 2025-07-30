@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class STS14VisualSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STS14VisualSTS",
         dataset={
             "path": "Pixel-Linguist/rendered-sts14",

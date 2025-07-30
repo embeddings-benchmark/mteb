@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NordicLangClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",
         reference="https://aclanthology.org/2021.vardial-1.8/",

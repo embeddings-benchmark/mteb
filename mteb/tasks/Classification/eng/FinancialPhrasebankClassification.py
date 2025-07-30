@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FinancialPhrasebankClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FinancialPhrasebankClassification",
         description="Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral.",
         reference="https://arxiv.org/abs/1307.5336",

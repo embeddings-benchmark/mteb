@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LegalBenchConsumerContractsQA",
         description="The dataset includes questions and answers related to contracts.",
         reference="https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa",

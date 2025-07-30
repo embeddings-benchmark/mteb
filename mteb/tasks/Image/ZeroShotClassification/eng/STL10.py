@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class STL10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STL10ZeroShot",
         description="Classifying 96x96 images from 10 classes.",
         reference="https://cs.stanford.edu/~acoates/stl10/",

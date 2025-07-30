@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class ArguAnaPL(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArguAna-PL",
         description="ArguAna-PL",
         reference="https://huggingface.co/datasets/clarin-knext/arguana-pl",

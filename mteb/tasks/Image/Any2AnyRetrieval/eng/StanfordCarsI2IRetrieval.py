@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StanfordCarsI2IRetrieval",
         description="Retrieve car images from 196 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",

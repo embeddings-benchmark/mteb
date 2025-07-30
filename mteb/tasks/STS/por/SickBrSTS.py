@@ -8,7 +8,7 @@ N_SAMPLES = 1000
 
 
 class SickBrSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SICK-BR-STS",
         dataset={
             "path": "eduagarcia/sick-br",

@@ -106,7 +106,7 @@ class CLIPModel(AbsEncoder):
         raise ValueError
 
 
-clip_vit_large_patch14 = ModelMeta(
+clip_vit_large_patch14 = ModelMeta.model_construct(
     loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-large-patch14",
     languages=["eng-Latn"],
@@ -128,7 +128,7 @@ clip_vit_large_patch14 = ModelMeta(
     training_datasets=None,
 )
 
-clip_vit_base_patch32 = ModelMeta(
+clip_vit_base_patch32 = ModelMeta.model_construct(
     loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-base-patch32",
     languages=["eng-Latn"],
@@ -150,7 +150,7 @@ clip_vit_base_patch32 = ModelMeta(
     training_datasets=None,
 )
 
-clip_vit_base_patch16 = ModelMeta(
+clip_vit_base_patch16 = ModelMeta.model_construct(
     loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-base-patch16",
     languages=["eng-Latn"],

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EncyclopediaVQAIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EncyclopediaVQAIT2ITRetrieval",
         description="Retrieval Wiki passage and image and passage to answer query about an image.",
         reference="https://github.com/google-research/google-research/tree/master/encyclopedic_vqa",

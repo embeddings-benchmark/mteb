@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SensitiveTopicsClassification(AbsTaskMultilabelClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SensitiveTopicsClassification",
         dataset={
             "path": "ai-forever/sensitive-topics-classification",

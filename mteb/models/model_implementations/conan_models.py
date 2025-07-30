@@ -193,7 +193,7 @@ class ConanWrapper(AbsEncoder):
         return np.array(embeddings)
 
 
-Conan_embedding_v2 = ModelMeta(
+Conan_embedding_v2 = ModelMeta.model_construct(
     name="TencentBAC/Conan-embedding-v2",
     revision="e5c87c63889630bca87486f6a2645ed97c5ddb17",
     release_date="2025-04-10",

@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class AlphaNLI(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AlphaNLI",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on AlphaNLI.",
         reference="https://leaderboard.allenai.org/anli/submissions/get-started",

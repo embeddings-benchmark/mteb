@@ -102,7 +102,7 @@ def _load_miracl_data(
 
 
 class MIRACLRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MIRACLRetrieval",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="http://miracl.ai",
@@ -299,7 +299,7 @@ def _load_miracl_data_hard_negatives(
 
 
 class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MIRACLRetrievalHardNegatives",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="http://miracl.ai",

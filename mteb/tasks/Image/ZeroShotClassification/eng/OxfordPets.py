@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OxfordPetsZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OxfordPetsZeroShot",
         description="Classifying animal images.",
         reference="https://arxiv.org/abs/1306.5151",

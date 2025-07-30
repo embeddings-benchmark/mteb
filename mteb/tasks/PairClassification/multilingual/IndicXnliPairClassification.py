@@ -20,7 +20,7 @@ _LANGUAGES = {
 
 
 class IndicXnliPairClassification(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicXnliPairClassification",
         dataset={
             "path": "Divyanshu/indicxnli",

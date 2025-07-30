@@ -229,7 +229,7 @@ vista_training_datasets = {
     # VISTA_S2
 }
 
-visualized_bge_base = ModelMeta(
+visualized_bge_base = ModelMeta.model_construct(
     loader=vista_loader,
     loader_kwargs=dict(
         model_weight="visualized_base_en_V1.5.pth",
@@ -255,7 +255,7 @@ visualized_bge_base = ModelMeta(
     training_datasets=vista_training_datasets,
 )
 
-visualized_bge_m3 = ModelMeta(
+visualized_bge_m3 = ModelMeta.model_construct(
     loader=vista_loader,
     loader_kwargs=dict(
         model_weight="visualized_m3.pth",

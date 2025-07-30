@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MarathiNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MarathiNewsClassification",
         description="A Marathi dataset for 3-class classification of Marathi news articles",
         reference="https://github.com/goru001/nlp-for-marathi",

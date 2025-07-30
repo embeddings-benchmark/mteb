@@ -119,7 +119,7 @@ def _load_xm3600_data(
 
 
 class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XM3600T2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
         reference="https://aclanthology.org/2022.emnlp-main.45/",

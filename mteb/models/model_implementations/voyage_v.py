@@ -194,7 +194,7 @@ def voyage_v_loader(model_name, **kwargs):
     return VoyageMultiModalModelWrapper(model_name, **kwargs)
 
 
-voyage_v = ModelMeta(
+voyage_v = ModelMeta.model_construct(
     loader=voyage_v_loader,  # type: ignore
     name="voyageai/voyage-multimodal-3",
     languages=[],  # Unknown

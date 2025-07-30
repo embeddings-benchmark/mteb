@@ -40,7 +40,7 @@ _LANGUAGES = {
 
 class MultilingualSentimentClassification(AbsTaskAnyClassification):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MultilingualSentimentClassification",
         dataset={
             "path": "mteb/multilingual-sentiment-classification",

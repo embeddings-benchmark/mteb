@@ -145,7 +145,7 @@ class E5VModel(AbsEncoder):
         raise ValueError
 
 
-e5_v = ModelMeta(
+e5_v = ModelMeta.model_construct(
     loader=E5VModel,
     loader_kwargs=dict(
         device_map="auto",

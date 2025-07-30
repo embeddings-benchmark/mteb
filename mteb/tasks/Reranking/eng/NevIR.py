@@ -7,7 +7,7 @@ from ....evaluation.evaluators.retrieval_metrics import paired_accuracy
 
 
 class NevIR(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NevIR",
         description="Paired evaluation of real world negation in retrieval, with questions and passages. Since models generally prefer one passage over the other always, there are two questions that the model must get right to understand the negation (hence the `paired_accuracy` metric).",
         reference="https://github.com/orionw/NevIR",

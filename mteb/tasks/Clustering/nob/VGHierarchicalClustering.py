@@ -15,7 +15,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VGHierarchicalClusteringP2P",
         dataset={
             "path": "navjordj/VG_summarization",
@@ -62,7 +62,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VGHierarchicalClusteringS2S",
         dataset={
             "path": "navjordj/VG_summarization",

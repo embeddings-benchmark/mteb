@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoHotpotQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoHotpotQARetrieval",
         description="NanoHotpotQARetrieval is a smaller subset of the "
         + "HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong"

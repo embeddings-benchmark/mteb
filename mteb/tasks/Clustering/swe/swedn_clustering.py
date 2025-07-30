@@ -25,7 +25,7 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 class SwednClustering(AbsTaskAnyClustering):
     superseded_by = "SwednClusteringP2P"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SwednClustering",
         dataset={
             "path": "sbx/superlim-2",

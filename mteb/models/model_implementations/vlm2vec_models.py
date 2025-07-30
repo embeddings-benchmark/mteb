@@ -263,7 +263,7 @@ vlm2vec_training_datasets = {
     # MMEB-train
 }
 
-vlm2vec_lora = ModelMeta(
+vlm2vec_lora = ModelMeta.model_construct(
     loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-LoRA",
     languages=["eng-Latn"],
@@ -285,7 +285,7 @@ vlm2vec_lora = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
 )
 
-vlm2vec_full = ModelMeta(
+vlm2vec_full = ModelMeta.model_construct(
     loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-Full",
     languages=["eng-Latn"],

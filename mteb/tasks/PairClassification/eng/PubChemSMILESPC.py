@@ -34,7 +34,7 @@ _DATASET_COLUMN_MAP = [
 
 
 class PubChemSMILESPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PubChemSMILESPC",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",

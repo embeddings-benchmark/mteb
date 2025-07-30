@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetSentimentExtractionClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetSentimentExtractionClassification",
         description="",
         reference="https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview",

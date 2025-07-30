@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class RuBQRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuBQRetrieval",
         dataset={
             "path": "ai-forever/rubq-retrieval",

@@ -323,7 +323,7 @@ bgem3_languages = [
     "zho-Hans",  # zh
 ]
 
-bge_small_en_v1_5 = ModelMeta(
+bge_small_en_v1_5 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -348,7 +348,7 @@ bge_small_en_v1_5 = ModelMeta(
     citation=BGE_15_CITATION,
 )
 
-bge_base_en_v1_5 = ModelMeta(
+bge_base_en_v1_5 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -373,7 +373,7 @@ bge_base_en_v1_5 = ModelMeta(
     citation=BGE_15_CITATION,
 )
 
-bge_large_en_v1_5 = ModelMeta(
+bge_large_en_v1_5 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -398,7 +398,7 @@ bge_large_en_v1_5 = ModelMeta(
     training_datasets=bge_training_data,
 )
 
-bge_small_zh = ModelMeta(
+bge_small_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
@@ -423,7 +423,7 @@ bge_small_zh = ModelMeta(
     superseded_by="BAAI/bge-small-zh-v1.5",
 )
 
-bge_base_zh = ModelMeta(
+bge_base_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
@@ -448,7 +448,7 @@ bge_base_zh = ModelMeta(
     superseded_by="BAAI/bge-base-zh-v1.5",
 )
 
-bge_large_zh = ModelMeta(
+bge_large_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
@@ -473,7 +473,7 @@ bge_large_zh = ModelMeta(
     superseded_by="BAAI/bge-large-zh-v1.5",
 )
 
-bge_small_en = ModelMeta(
+bge_small_en = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -498,7 +498,7 @@ bge_small_en = ModelMeta(
     superseded_by="BAAI/bge-small-en-v1.5",
 )
 
-bge_base_en = ModelMeta(
+bge_base_en = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -523,7 +523,7 @@ bge_base_en = ModelMeta(
     superseded_by="BAAI/bge-base-en-v1.5",
 )
 
-bge_large_en = ModelMeta(
+bge_large_en = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -549,7 +549,7 @@ bge_large_en = ModelMeta(
 )
 
 
-bge_small_zh_v1_5 = ModelMeta(
+bge_small_zh_v1_5 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
@@ -573,7 +573,7 @@ bge_small_zh_v1_5 = ModelMeta(
     training_datasets=bge_chinese_training_data,
 )
 
-bge_base_zh_v1_5 = ModelMeta(
+bge_base_zh_v1_5 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
@@ -597,7 +597,7 @@ bge_base_zh_v1_5 = ModelMeta(
     training_datasets=bge_chinese_training_data,
 )
 
-bge_large_zh_v1_5 = ModelMeta(
+bge_large_zh_v1_5 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts_zh,
@@ -621,7 +621,7 @@ bge_large_zh_v1_5 = ModelMeta(
     training_datasets=bge_chinese_training_data,
 )
 
-bge_m3 = ModelMeta(
+bge_m3 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="BAAI/bge-m3",
     languages=bgem3_languages,
@@ -699,7 +699,7 @@ bge_full_data = {
 }
 
 
-bge_multilingual_gemma2 = ModelMeta(
+bge_multilingual_gemma2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="BAAI/bge-multilingual-gemma2",
     languages=[
@@ -734,7 +734,7 @@ bge_multilingual_gemma2 = ModelMeta(
     },
 )
 
-bge_en_icl = ModelMeta(
+bge_en_icl = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="BAAI/bge-en-icl",
     languages=[
@@ -761,7 +761,7 @@ bge_en_icl = ModelMeta(
     adapted_from="intfloat/e5-mistral-7b-instruct",
 )
 
-manu__bge_m3_custom_fr = ModelMeta(
+manu__bge_m3_custom_fr = ModelMeta.model_construct(
     name="manu/bge-m3-custom-fr",
     revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
     release_date="2024-04-11",

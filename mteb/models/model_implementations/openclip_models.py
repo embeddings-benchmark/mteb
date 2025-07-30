@@ -113,7 +113,7 @@ def openclip_loader(model_name, **kwargs):
     return OpenCLIPModel(model_name, **kwargs)
 
 
-CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
+CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     languages=["eng-Latn"],
@@ -137,7 +137,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
     },
 )
 
-CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
+CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
     languages=["eng-Latn"],
@@ -161,7 +161,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     },
 )
 
-CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
+CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
     languages=["eng-Latn"],
@@ -185,7 +185,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
     },
 )
 
-CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
+CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
     languages=["eng-Latn"],
@@ -209,7 +209,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     },
 )
 
-CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
+CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
     languages=["eng-Latn"],
@@ -233,7 +233,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     },
 )
 
-CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
+CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
     languages=["eng-Latn"],
@@ -257,7 +257,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     },
 )
 
-CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
+CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta.model_construct(
     loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
     languages=["eng-Latn"],
@@ -281,7 +281,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     },
 )
 
-CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
+CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta.model_construct(
     loader=openclip_loader,
     name="laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
     languages=["eng-Latn"],

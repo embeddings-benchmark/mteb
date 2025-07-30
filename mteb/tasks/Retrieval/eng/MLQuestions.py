@@ -12,7 +12,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class MLQuestionsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MLQuestions",
         dataset={
             "path": "McGill-NLP/mlquestions",

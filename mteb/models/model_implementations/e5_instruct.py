@@ -32,7 +32,7 @@ E5_MISTRAL_TRAINING_DATA = {
     "MIRACLReranking": ["train"],  # https://arxiv.org/pdf/2402.09906, section M
 }
 
-e5_instruct = ModelMeta(
+e5_instruct = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
@@ -68,7 +68,7 @@ e5_instruct = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,
 )
 
-e5_mistral = ModelMeta(
+e5_mistral = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
@@ -115,7 +115,7 @@ e5_mistral = ModelMeta(
     adapted_from="mistralai/Mistral-7B-v0.1",
 )
 
-zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
+zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
@@ -197,7 +197,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
 )
 
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"
-BeastyZ__e5_R_mistral_7b = ModelMeta(
+BeastyZ__e5_R_mistral_7b = ModelMeta.model_construct(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_R_MISTRAL_7B_INSTRUCTION,

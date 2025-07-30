@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ZacLegalTextRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ZacLegalTextRetrieval",
         description="Zalo Legal Text documents",
         reference="https://challenge.zalo.ai",

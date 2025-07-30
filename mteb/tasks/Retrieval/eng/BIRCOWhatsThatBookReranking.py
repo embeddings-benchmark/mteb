@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BIRCOWhatsThatBookReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BIRCO-WTB",
         description=(
             "Retrieval task using the WhatsThatBook dataset from BIRCO. This dataset contains 100 queries where each query "

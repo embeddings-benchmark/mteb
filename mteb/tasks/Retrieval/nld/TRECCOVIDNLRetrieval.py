@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class TRECCOVIDNL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TRECCOVID-NL",
         description="TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific "
         "articles related to the COVID-19 pandemic. TRECCOVID-NL is a Dutch translation. ",

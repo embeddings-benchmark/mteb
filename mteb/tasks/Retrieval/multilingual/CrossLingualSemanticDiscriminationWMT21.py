@@ -30,7 +30,7 @@ _EVAL_LANGS = extend_lang_pairs()
 
 
 class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CrossLingualSemanticDiscriminationWMT21",
         dataset={
             "path": "Andrianos/clsd_wmt19_21",

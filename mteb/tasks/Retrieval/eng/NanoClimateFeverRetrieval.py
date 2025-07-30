@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoClimateFeverRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoClimateFeverRetrieval",
         description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
         reference="https://arxiv.org/abs/2012.00614",

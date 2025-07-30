@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class TweetEmotionClassification(AbsTaskAnyClassification):
     superseded_by = "TweetEmotionClassification.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetEmotionClassification",
         dataset={
             "path": "mteb/TweetEmotionClassification",
@@ -41,7 +41,7 @@ class TweetEmotionClassification(AbsTaskAnyClassification):
 
 
 class TweetEmotionClassificationV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetEmotionClassification.v2",
         dataset={
             "path": "mteb/TweetEmotionClassification",

@@ -8,7 +8,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ClusTrecCovid(AbsTaskClusteringFast, MultilingualTask):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ClusTREC-Covid",
         description="A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-19 related topics.",
         reference="https://github.com/katzurik/Knowledge_Navigator/tree/main/Benchmarks/CLUSTREC%20COVID",

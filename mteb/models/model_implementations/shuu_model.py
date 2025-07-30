@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-codemodernbert_crow_meta = ModelMeta(
+codemodernbert_crow_meta = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
     languages=["eng-Latn"],

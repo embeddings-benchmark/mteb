@@ -121,7 +121,7 @@ _LANGUAGES = {
 
 class TatoebaBitextMining(AbsTaskBitextMining):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Tatoeba",
         dataset={
             "path": "mteb/tatoeba-bitext-mining",

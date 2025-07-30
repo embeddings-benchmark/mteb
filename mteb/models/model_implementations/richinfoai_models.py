@@ -8,7 +8,7 @@ from mteb.models.sentence_transformer_wrapper import (
 from .bge_models import bge_full_data, bge_m3_training_data
 from .stella_models import stella_zh_datasets
 
-ritrieve_zh_v1 = ModelMeta(
+ritrieve_zh_v1 = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     name="richinfoai/ritrieve_zh_v1",
     languages=["zho-Hans"],

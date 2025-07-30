@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SyntecRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["test"]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SyntecRetrieval",
         description="This dataset has been built from the Syntec Collective bargaining agreement.",
         reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p",

@@ -63,7 +63,7 @@ def _load_publichealthqa_data(
 
 
 class PublicHealthQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PublicHealthQA",
         description="A multilingual dataset for public health question answering, based on FAQ sourced from CDC and WHO.",
         dataset={

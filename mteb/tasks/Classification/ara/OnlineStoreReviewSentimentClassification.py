@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class OnlineStoreReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "OnlineStoreReviewSentimentClassification.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OnlineStoreReviewSentimentClassification",
         dataset={
             "path": "Ruqiya/Arabic_Reviews_of_SHEIN",
@@ -37,7 +37,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskAnyClassification):
 
 
 class OnlineStoreReviewSentimentClassificationV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OnlineStoreReviewSentimentClassification.v2",
         dataset={
             "path": "mteb/online_store_review_sentiment",

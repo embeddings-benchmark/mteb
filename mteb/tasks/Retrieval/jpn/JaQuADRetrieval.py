@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class JaQuADRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="JaQuADRetrieval",
         dataset={
             "path": "SkelterLabsInc/JaQuAD",

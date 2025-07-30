@@ -192,7 +192,7 @@ NOMIC_CITATION = """
 }
 """
 
-nomic_embed_v1_5 = ModelMeta(
+nomic_embed_v1_5 = ModelMeta.model_construct(
     loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -220,7 +220,7 @@ nomic_embed_v1_5 = ModelMeta(
     training_datasets=nomic_training_data,
 )
 
-nomic_embed_v1 = ModelMeta(
+nomic_embed_v1 = ModelMeta.model_construct(
     loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -248,7 +248,7 @@ nomic_embed_v1 = ModelMeta(
     public_training_data=None,
 )
 
-nomic_embed_v1_ablated = ModelMeta(
+nomic_embed_v1_ablated = ModelMeta.model_construct(
     loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -275,7 +275,7 @@ nomic_embed_v1_ablated = ModelMeta(
     public_training_data=None,
 )
 
-nomic_embed_v1_unsupervised = ModelMeta(
+nomic_embed_v1_unsupervised = ModelMeta.model_construct(
     loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -302,7 +302,7 @@ nomic_embed_v1_unsupervised = ModelMeta(
     public_training_data=None,
 )
 
-nomic_modern_bert_embed = ModelMeta(
+nomic_modern_bert_embed = ModelMeta.model_construct(
     loader=NomicWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,

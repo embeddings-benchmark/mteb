@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoNFCorpusRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoNFCorpusRetrieval",
         description="NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval.",
         reference="https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",

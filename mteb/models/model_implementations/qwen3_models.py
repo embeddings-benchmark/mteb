@@ -122,7 +122,7 @@ def q3e_instruct_loader(model_name_or_path: str, revision: str, **kwargs) -> Enc
     return model
 
 
-Qwen3_Embedding_0B6 = ModelMeta(
+Qwen3_Embedding_0B6 = ModelMeta.model_construct(
     loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-0.6B",
     languages=multilingual_langs,
@@ -143,7 +143,7 @@ Qwen3_Embedding_0B6 = ModelMeta(
     training_datasets=training_data,
 )
 
-Qwen3_Embedding_4B = ModelMeta(
+Qwen3_Embedding_4B = ModelMeta.model_construct(
     loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-4B",
     languages=multilingual_langs,
@@ -164,7 +164,7 @@ Qwen3_Embedding_4B = ModelMeta(
     training_datasets=training_data,
 )
 
-Qwen3_Embedding_8B = ModelMeta(
+Qwen3_Embedding_8B = ModelMeta.model_construct(
     loader=q3e_instruct_loader,
     name="Qwen/Qwen3-Embedding-8B",
     languages=multilingual_langs,

@@ -7,7 +7,7 @@ _EVAL_SPLIT = "test"
 
 
 class CodeFeedbackST(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeFeedbackST",
         description="The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.",
         reference="https://arxiv.org/abs/2407.02883",

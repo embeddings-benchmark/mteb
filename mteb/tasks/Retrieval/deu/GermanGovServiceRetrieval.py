@@ -12,7 +12,7 @@ _EVAL_SPLIT = "test"
 
 
 class GermanGovServiceRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GermanGovServiceRetrieval",
         description="LHM-Dienstleistungen-QA is a German question answering dataset for government services of the Munich city administration. It associates questions with a textual context containing the answer",
         reference="https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA",

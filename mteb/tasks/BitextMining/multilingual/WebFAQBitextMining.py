@@ -198,7 +198,7 @@ _SPLITS = ["default"]
 
 
 class WebFAQBitextMiningQuestions(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WebFAQBitextMiningQuestions",
         description="""The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages.
 A sentence in the "WebFAQBitextMiningQuestions" task is the question originating from an aligned QA.
@@ -254,7 +254,7 @@ The dataset is sourced from FAQ pages on the web.""",
 
 
 class WebFAQBitextMiningQAs(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WebFAQBitextMiningQAs",
         description="""The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages.
 A sentence in the "WebFAQBitextMiningQAs" task is a concatenation of a question and its corresponding answer.

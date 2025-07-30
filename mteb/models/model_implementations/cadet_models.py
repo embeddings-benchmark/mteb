@@ -28,7 +28,7 @@ cadet_training_data = {
 }
 
 
-cadet_embed = ModelMeta(
+cadet_embed = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts={

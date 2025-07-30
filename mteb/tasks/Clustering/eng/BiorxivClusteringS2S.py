@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BiorxivClusteringS2SFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BiorxivClusteringS2S.v2",
         description="Clustering of titles from biorxiv across 26 categories.",
         reference="https://api.biorxiv.org/",
@@ -42,7 +42,7 @@ class BiorxivClusteringS2SFast(AbsTaskClusteringFast):
 
 class BiorxivClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "BiorxivClusteringS2S.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BiorxivClusteringS2S",
         description="Clustering of titles from biorxiv. Clustering of 10 sets, based on the main category.",
         reference="https://api.biorxiv.org/",

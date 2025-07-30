@@ -97,7 +97,7 @@ _LANGUAGES_MAPPING = get_lang_pairs()
 
 
 class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicGenBenchFloresBitextMining",
         dataset={
             "path": "google/IndicGenBench_flores_in",

@@ -15,7 +15,7 @@ from ....abstasks.AbsTaskClusteringFast import (
 
 
 class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StackExchangeClusteringP2P.v2",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
@@ -80,7 +80,7 @@ Iryna Gurevych},
 
 class StackExchangeClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "StackExchangeClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StackExchangeClusteringP2P",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",

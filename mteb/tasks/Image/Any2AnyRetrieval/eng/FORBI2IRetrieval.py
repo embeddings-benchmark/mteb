@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FORBI2I(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FORBI2IRetrieval",
         description="Retrieve flat object images from 8 classes.",
         reference="https://github.com/pxiangwu/FORB",

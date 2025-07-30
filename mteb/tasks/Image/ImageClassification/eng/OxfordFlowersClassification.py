@@ -9,7 +9,7 @@ class OxfordFlowersClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OxfordFlowersClassification",
         description="Classifying flowers",
         reference="https://huggingface.co/datasets/nelorth/oxford-flowers/viewer/default/train",

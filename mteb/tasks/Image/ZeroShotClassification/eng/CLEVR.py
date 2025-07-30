@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CLEVR(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CLEVRZeroShot",
         description="CLEVR closest object distance identification task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
@@ -56,7 +56,7 @@ class CLEVR(AbsTaskAnyZeroShotClassification):
 
 
 class CLEVRCount(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CLEVRCountZeroShot",
         description="CLEVR count objects task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",

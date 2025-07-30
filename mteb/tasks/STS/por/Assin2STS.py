@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Assin2STS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Assin2STS",
         dataset={
             "path": "nilc-nlp/assin2",

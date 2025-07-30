@@ -171,7 +171,7 @@ llm2clip_training_sets = {
     # Recap-DataComp-1B(30M subset)
 }
 
-llm2clip_openai_l_14_336 = ModelMeta(
+llm2clip_openai_l_14_336 = ModelMeta.model_construct(
     loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-336",
     languages=["eng-Latn"],
@@ -194,7 +194,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
 )
 
 ## NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
-llm2clip_openai_l_14_224 = ModelMeta(
+llm2clip_openai_l_14_224 = ModelMeta.model_construct(
     loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-224",
     languages=["eng-Latn"],
@@ -216,7 +216,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     training_datasets=llm2clip_training_sets,
 )
 
-llm2clip_openai_b_16 = ModelMeta(
+llm2clip_openai_b_16 = ModelMeta.model_construct(
     loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-B-16",
     languages=["eng-Latn"],

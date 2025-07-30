@@ -9,7 +9,7 @@ class EuroSATClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EuroSAT",
         description="Classifying satellite images.",
         reference="https://ieeexplore.ieee.org/document/8736785",

@@ -10,7 +10,7 @@ class PatchCamelyonClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PatchCamelyon",
         description="""Histopathology diagnosis classification dataset.""",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-00934-2_24",

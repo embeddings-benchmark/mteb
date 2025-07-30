@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoFiQA2018Retrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoFiQA2018Retrieval",
         description="NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question Answering dataset.",
         reference="https://sites.google.com/view/fiqa/",

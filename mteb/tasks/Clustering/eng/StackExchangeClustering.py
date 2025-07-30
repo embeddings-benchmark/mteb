@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StackExchangeClustering.v2",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
@@ -76,7 +76,7 @@ Iryna Gurevych},
 
 class StackExchangeClustering(AbsTaskAnyClustering):
     superseded_by = "StackExchangeClustering.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StackExchangeClustering",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",

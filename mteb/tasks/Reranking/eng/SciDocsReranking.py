@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SciDocsReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
         reference="https://allenai.org/data/scidocs",

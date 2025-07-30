@@ -218,7 +218,7 @@ model_prompts = {
     PromptType.passage.value: "search_document",
 }
 
-cohere_mult_3 = ModelMeta(
+cohere_mult_3 = ModelMeta.model_construct(
     loader=CohereTextEmbeddingModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -242,7 +242,7 @@ cohere_mult_3 = ModelMeta(
     training_datasets=None,
 )
 
-cohere_eng_3 = ModelMeta(
+cohere_eng_3 = ModelMeta.model_construct(
     loader=CohereTextEmbeddingModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -266,7 +266,7 @@ cohere_eng_3 = ModelMeta(
     training_datasets=None,
 )
 
-cohere_mult_light_3 = ModelMeta(
+cohere_mult_light_3 = ModelMeta.model_construct(
     loader=CohereTextEmbeddingModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -290,7 +290,7 @@ cohere_mult_light_3 = ModelMeta(
     training_datasets=None,
 )
 
-cohere_eng_light_3 = ModelMeta(
+cohere_eng_light_3 = ModelMeta.model_construct(
     loader=CohereTextEmbeddingModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,

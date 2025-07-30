@@ -88,7 +88,7 @@ def transform_choices(example):
 
 
 class CVBenchCount(AbsTaskAny2AnyMultiChoice):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CVBenchCount",
         description="count the number of objects in the image.",
         reference="https://arxiv.org/pdf/2406.16860",
@@ -131,7 +131,7 @@ class CVBenchCount(AbsTaskAny2AnyMultiChoice):
 
 
 class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CVBenchRelation",
         description="decide the relation of the objects in the image.",
         reference="https://arxiv.org/pdf/2406.16860",
@@ -174,7 +174,7 @@ class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
 
 
 class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CVBenchDepth",
         description="judge the depth of the objects in the image with similarity matching.",
         reference="https://arxiv.org/pdf/2406.16860",
@@ -217,7 +217,7 @@ class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
 
 
 class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CVBenchDistance",
         description="judge the distance of the objects in the image with similarity matching.",
         reference="https://arxiv.org/pdf/2406.16860",

@@ -144,7 +144,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         )
 
 
-google_text_emb_004 = ModelMeta(
+google_text_emb_004 = ModelMeta.model_construct(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         model_name="text-embedding-004",
@@ -169,7 +169,7 @@ google_text_emb_004 = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
 )
 
-google_text_emb_005 = ModelMeta(
+google_text_emb_005 = ModelMeta.model_construct(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         model_name="text-embedding-005",
@@ -194,7 +194,7 @@ google_text_emb_005 = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
 )
 
-google_text_multilingual_emb_002 = ModelMeta(
+google_text_multilingual_emb_002 = ModelMeta.model_construct(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         model_name="text-embedding-002",
@@ -219,7 +219,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
 )
 
-google_gemini_embedding_001 = ModelMeta(
+google_gemini_embedding_001 = ModelMeta.model_construct(
     loader=GoogleTextEmbeddingModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         model_name="gemini-embedding-001",

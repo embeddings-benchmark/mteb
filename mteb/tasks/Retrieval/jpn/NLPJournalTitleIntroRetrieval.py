@@ -9,7 +9,7 @@ _EVAL_SPLIT = "test"
 
 
 class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NLPJournalTitleIntroRetrieval.V2",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
@@ -80,7 +80,7 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
 
 
 class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NLPJournalTitleIntroRetrieval",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "

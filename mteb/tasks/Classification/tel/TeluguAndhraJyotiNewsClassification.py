@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TeluguAndhraJyotiNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TeluguAndhraJyotiNewsClassification",
         description="A Telugu dataset for 5-class classification of Telugu news articles",
         reference="https://github.com/AnushaMotamarri/Telugu-Newspaper-Article-Dataset",

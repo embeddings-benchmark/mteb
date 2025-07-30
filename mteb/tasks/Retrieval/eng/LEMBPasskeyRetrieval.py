@@ -19,7 +19,7 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
         "test_32768",
     ]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LEMBPasskeyRetrieval",
         dataset={
             "path": "dwzhu/LongEmbed",

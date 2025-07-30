@@ -9,7 +9,7 @@ class SUN397Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SUN397",
         description="Large scale scene recognition in 397 categories.",
         reference="https://ieeexplore.ieee.org/abstract/document/5539970",

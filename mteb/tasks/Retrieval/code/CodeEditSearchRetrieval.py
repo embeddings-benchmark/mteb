@@ -24,7 +24,7 @@ _LANGS = [
 
 class CodeEditSearchRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "train"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeEditSearchRetrieval",
         description="The dataset is a collection of unified diffs of code changes, paired with a short instruction that describes the change. The dataset is derived from the CommitPackFT dataset.",
         reference="https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer",

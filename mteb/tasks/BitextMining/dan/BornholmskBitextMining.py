@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BornholmBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BornholmBitextMining",
         dataset={
             "path": "strombergnlp/bornholmsk_parallel",

@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class JSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="JSTS",
         dataset={
             "path": "mteb/JSTS",

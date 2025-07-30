@@ -16,7 +16,7 @@ _LANGUAGES = {
 
 
 class OpusparcusPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OpusparcusPC",
         dataset={
             "path": "GEM/opusparcus",

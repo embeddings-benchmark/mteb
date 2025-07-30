@@ -205,7 +205,7 @@ _LANGS = {
 
 
 class SIB200Classification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SIB200Classification",
         description="""SIB-200 is the largest publicly available topic classification
         dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is

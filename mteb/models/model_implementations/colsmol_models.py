@@ -40,7 +40,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         )
 
 
-colsmol_256m = ModelMeta(
+colsmol_256m = ModelMeta.model_construct(
     loader=ColSmolWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -68,7 +68,7 @@ colsmol_256m = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
-colsmol_500m = ModelMeta(
+colsmol_500m = ModelMeta.model_construct(
     loader=ColSmolWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,

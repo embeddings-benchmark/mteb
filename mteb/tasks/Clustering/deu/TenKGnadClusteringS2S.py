@@ -8,7 +8,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class TenKGnadClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "TenKGnadClusteringS2S.v2"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TenKGnadClusteringS2S",
         description="Clustering of news article titles. Clustering of 10 splits on the news article category.",
         reference="https://tblock.github.io/10kGNAD/",
@@ -37,7 +37,7 @@ class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
     max_document_to_embed = 10267
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TenKGnadClusteringS2S.v2",
         description="Clustering of news article titles. Clustering of 10 splits on the news article category.",
         reference="https://tblock.github.io/10kGNAD/",

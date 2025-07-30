@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class IndonesianIdClickbaitClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndonesianIdClickbaitClassification",
         dataset={
             "path": "manandey/id_clickbait",

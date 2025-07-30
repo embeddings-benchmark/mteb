@@ -74,7 +74,7 @@ def _load_code_search_code_retrieval(
 
 class COIRCodeSearchNetRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="COIRCodeSearchNetRetrieval",
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code summary given a code snippet.",
         reference="https://huggingface.co/datasets/code_search_net/",

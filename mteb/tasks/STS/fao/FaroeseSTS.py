@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class FaroeseSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FaroeseSTS",
         dataset={
             "path": "vesteinn/faroese-sts",

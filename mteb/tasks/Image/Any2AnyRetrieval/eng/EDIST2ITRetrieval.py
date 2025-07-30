@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EDIST2ITRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EDIST2ITRetrieval",
         description="Retrieve news images and titles based on news content.",
         reference="https://aclanthology.org/2023.emnlp-main.297/",

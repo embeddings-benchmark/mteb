@@ -103,7 +103,7 @@ listconranker_training_datasets = {
     # 'CSL': ['train'],
 }
 
-listconranker = ModelMeta(
+listconranker = ModelMeta.model_construct(
     loader=ListConRanker,
     loader_kwargs=dict(
         fp_options="float16",

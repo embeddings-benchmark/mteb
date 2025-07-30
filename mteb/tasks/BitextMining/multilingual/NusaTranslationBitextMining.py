@@ -19,7 +19,7 @@ _LANGUAGES = {
 
 
 class NusaTranslationBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NusaTranslationBitextMining",
         dataset={
             "path": "gentaiscool/bitext_nusatranslation_miners",

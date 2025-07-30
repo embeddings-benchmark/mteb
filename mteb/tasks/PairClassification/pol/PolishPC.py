@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class SickePLPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SICK-E-PL",
         dataset={
             "path": "PL-MTEB/sicke-pl-pairclassification",
@@ -67,7 +67,7 @@ Piperidis, Stelios},
 
 
 class PpcPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PpcPC",
         dataset={
             "path": "PL-MTEB/ppc-pairclassification",
@@ -115,7 +115,7 @@ class PpcPC(AbsTaskPairClassification):
 
 
 class CdscePC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CDSC-E",
         dataset={
             "path": "PL-MTEB/cdsce-pairclassification",
@@ -162,7 +162,7 @@ Kan, Min-Yen},
 
 
 class PscPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PSC",
         dataset={
             "path": "PL-MTEB/psc-pairclassification",

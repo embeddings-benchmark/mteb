@@ -8,7 +8,7 @@ N_SAMPLES = 1000
 
 
 class FinParaSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FinParaSTS",
         dataset={
             "path": "TurkuNLP/turku_paraphrase_corpus",

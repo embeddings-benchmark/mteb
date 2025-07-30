@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 
 class ArxivClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringS2S"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArxivClusteringS2S",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",

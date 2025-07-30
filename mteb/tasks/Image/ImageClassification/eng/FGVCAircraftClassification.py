@@ -11,7 +11,7 @@ class FGVCAircraftClassification(AbsTaskAnyClassification):
     # could be family, manufacturer, or variant. Variant has the higher number of classes.
     label_column_name: str = "variant"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FGVCAircraft",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
         reference="https://arxiv.org/abs/1306.5151",

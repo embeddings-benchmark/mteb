@@ -9,7 +9,7 @@ class DTDClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DTD",
         description="Describable Textures Dataset in 47 categories.",
         reference="https://www.robots.ox.ac.uk/~vgg/data/dtd/",

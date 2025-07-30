@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CzechSubjectivityClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CzechSubjectivityClassification",
         description="An Czech dataset for subjectivity classification.",
         reference="https://arxiv.org/abs/2009.08712",

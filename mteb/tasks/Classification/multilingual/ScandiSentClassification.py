@@ -14,7 +14,7 @@ _LANGUAGES = {
 
 
 class ScandiSentClassification(MultilingualTask, AbsTaskClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ScandiSentClassification",
         dataset={
             "path": "mteb/scandisent",

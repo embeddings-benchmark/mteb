@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MalayalamNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MalayalamNewsClassification",
         description="A Malayalam dataset for 3-class classification of Malayalam news articles",
         reference="https://github.com/goru001/nlp-for-malyalam",

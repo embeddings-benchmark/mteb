@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class BengaliHateSpeechClassification(AbsTaskAnyClassification):
     superseded_by = "BengaliHateSpeechClassification.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BengaliHateSpeechClassification",
         description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.",
         reference="https://huggingface.co/datasets/bn_hate_speech",
@@ -45,7 +45,7 @@ class BengaliHateSpeechClassification(AbsTaskAnyClassification):
 
 
 class BengaliHateSpeechClassificationV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BengaliHateSpeechClassification.v2",
         description="""The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",

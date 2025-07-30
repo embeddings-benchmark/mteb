@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class HotpotQA(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HotpotQA",
         dataset={
             "path": "mteb/hotpotqa",
@@ -62,7 +62,7 @@ Tsujii, Jun{'}ichi},
 
 
 class HotpotQAHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HotpotQAHardNegatives",
         dataset={
             "path": "mteb/HotpotQA_test_top_250_only_w_correct-v2",

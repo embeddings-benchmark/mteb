@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class BiossesSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BIOSSES",
         dataset={
             "path": "mteb/biosses-sts",

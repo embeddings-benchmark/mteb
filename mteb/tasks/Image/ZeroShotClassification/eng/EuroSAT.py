@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EuroSATZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EuroSATZeroShot",
         description="Classifying satellite images.",
         reference="https://ieeexplore.ieee.org/document/8736785",

@@ -29,7 +29,7 @@ _LANGUAGES = [
 
 
 class HinDialectClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HinDialectClassification",
         dataset={
             "path": "mlexplorer008/hin_dialect_classification",

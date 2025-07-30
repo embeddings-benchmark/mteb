@@ -44,7 +44,7 @@ _CITATION = r"""@article{10.1162/tacl_a_00595,
 
 
 class MIRACLReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MIRACLReranking",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="https://project-miracl.github.io/",

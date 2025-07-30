@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KinopoiskClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="KinopoiskClassification",
         dataset={
             "path": "ai-forever/kinopoisk-sentiment-classification",

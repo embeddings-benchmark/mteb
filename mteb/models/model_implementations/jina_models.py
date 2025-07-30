@@ -318,7 +318,7 @@ def get_programming_task_override(
     return current_task_name
 
 
-jina_embeddings_v4 = ModelMeta(
+jina_embeddings_v4 = ModelMeta.model_construct(
     loader=JinaV4Wrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -349,7 +349,7 @@ jina_embeddings_v4 = ModelMeta(
 )
 
 
-jina_embeddings_v3 = ModelMeta(
+jina_embeddings_v3 = ModelMeta.model_construct(
     loader=JinaWrapper,  # type: ignore
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -414,7 +414,7 @@ jina_embeddings_v3 = ModelMeta(
     """,
 )
 
-jina_embeddings_v2_base_en = ModelMeta(
+jina_embeddings_v2_base_en = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -471,7 +471,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     public_training_data=None,
 )
 
-jina_embeddings_v2_small_en = ModelMeta(
+jina_embeddings_v2_small_en = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -528,7 +528,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     public_training_data=None,
 )
 
-jina_embedding_b_en_v1 = ModelMeta(
+jina_embedding_b_en_v1 = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     name="jinaai/jina-embedding-b-en-v1",
     languages=["eng-Latn"],
@@ -578,7 +578,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     public_training_data=None,
 )
 
-jina_embedding_s_en_v1 = ModelMeta(
+jina_embedding_s_en_v1 = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     name="jinaai/jina-embedding-s-en-v1",
     languages=["eng-Latn"],

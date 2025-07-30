@@ -232,7 +232,7 @@ TASK_NAME_TO_INSTRUCTION = {
 DEFAULT_INSTRUCTION = "Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: "
 
 
-seed_embedding = ModelMeta(
+seed_embedding = ModelMeta.model_construct(
     name="ByteDance-Seed/Seed1.5-Embedding",
     revision="4",
     release_date="2025-04-25",

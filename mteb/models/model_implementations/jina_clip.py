@@ -114,7 +114,7 @@ class JinaCLIPModel(AbsEncoder):
         raise ValueError
 
 
-jina_clip_v1 = ModelMeta(
+jina_clip_v1 = ModelMeta.model_construct(
     loader=JinaCLIPModel,  # type: ignore
     name="jinaai/jina-clip-v1",
     languages=["eng-Latn"],

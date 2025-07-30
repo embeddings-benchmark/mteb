@@ -24,7 +24,7 @@ _CITATION = r"""@article{reddy2022shopping,
 
 
 class ESCIReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ESCIReranking",
         description="",
         reference="https://github.com/amazon-science/esci-data/",

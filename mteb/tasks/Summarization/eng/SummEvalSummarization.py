@@ -11,7 +11,7 @@ class SummEvalSummarization(AbsTaskSummarization):
     superseded_by = "SummEvalSummarization.v2"
     evalutor = DeprecatedSummarizationEvaluator
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SummEval",
         description="News Article Summary Semantic Similarity Estimation.",
         reference="https://github.com/Yale-LILY/SummEval",
@@ -47,7 +47,7 @@ class SummEvalSummarization(AbsTaskSummarization):
 
 
 class SummEvalSummarizationv2(AbsTaskSummarization):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SummEvalSummarization.v2",
         description="News Article Summary Semantic Similarity Estimation. This version fixes a bug in the evaluation script that caused the main score to be computed incorrectly.",
         reference="https://github.com/Yale-LILY/SummEval",

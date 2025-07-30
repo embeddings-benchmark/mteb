@@ -15,7 +15,7 @@ Typically it only requires that you fill in metadata about the model and add it 
 ```python
 from mteb.model_meta import ModelMeta
 
-my_model = ModelMeta(
+my_model = ModelMeta.model_construct(
     name="model_name",
     languages=["eng-Latn"], # follows ISO 639-3 and BCP-47
     open_weights=True,
@@ -57,7 +57,7 @@ You can directly add the prompts when saving and uploading your model to the Hub
 However, you can also add these directly to the model configuration:
 
 ```python
-model = ModelMeta(
+model = ModelMeta.model_construct(
     loader=sentence_transformers_loader
     loader_kwargs=dict(
         model_prompts={
@@ -104,7 +104,7 @@ class CustomModel():
 Then you can specify the `loader` parameter in the `ModelMeta` class:
 
 ```python
-your_model = ModelMeta(
+your_model = ModelMeta.model_construct(
     loader=CustomModel
     ...
 )

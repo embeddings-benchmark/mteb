@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RESISC45ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RESISC45ZeroShot",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",
         reference="https://ieeexplore.ieee.org/abstract/document/7891544",

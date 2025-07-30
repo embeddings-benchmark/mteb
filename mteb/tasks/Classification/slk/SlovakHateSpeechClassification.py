@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SlovakHateSpeechClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SlovakHateSpeechClassification",
         description="The dataset contains posts from a social network with human annotations for hateful or offensive language in Slovak.",
         reference="https://huggingface.co/datasets/TUKE-KEMT/hate_speech_slovak",

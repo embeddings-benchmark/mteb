@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MedicalQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MedicalQARetrieval",
         description="The dataset consists 2048 medical question and answer pairs.",
         reference="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4",

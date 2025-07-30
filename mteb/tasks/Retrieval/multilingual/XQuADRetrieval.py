@@ -25,7 +25,7 @@ _LANGUAGES = {
 
 
 class XQuADRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XQuADRetrieval",
         dataset={
             "path": "google/xquad",

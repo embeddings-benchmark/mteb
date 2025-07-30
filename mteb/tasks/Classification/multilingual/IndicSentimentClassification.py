@@ -22,7 +22,7 @@ _LANGUAGES = {
 
 class IndicSentimentClassification(AbsTaskAnyClassification):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicSentimentClassification",
         dataset={
             "path": "mteb/IndicSentiment",

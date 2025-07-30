@@ -5,7 +5,7 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-parsbert = ModelMeta(
+parsbert = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="HooshvareLab/bert-base-parsbert-uncased",
     languages=["fas-Arab"],
@@ -31,7 +31,7 @@ parsbert = ModelMeta(
     },
 )
 
-bert_zwnj = ModelMeta(
+bert_zwnj = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="m3hrdadfi/bert-zwnj-wnli-mean-tokens",
     languages=["fas-Arab"],
@@ -56,7 +56,7 @@ bert_zwnj = ModelMeta(
     },
 )
 
-roberta_zwnj = ModelMeta(
+roberta_zwnj = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
     languages=["fas-Arab"],
@@ -80,7 +80,7 @@ roberta_zwnj = ModelMeta(
     },
 )
 
-sentence_transformer_parsbert = ModelMeta(
+sentence_transformer_parsbert = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="myrkur/sentence-transformer-parsbert-fa",
     languages=["fas-Arab"],
@@ -104,7 +104,7 @@ sentence_transformer_parsbert = ModelMeta(
     },
 )
 
-tooka_bert_base = ModelMeta(
+tooka_bert_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="PartAI/TookaBERT-Base",
     languages=["fas-Arab"],
@@ -130,7 +130,7 @@ tooka_bert_base = ModelMeta(
     },
 )
 
-tooka_sbert = ModelMeta(
+tooka_sbert = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT",
     languages=["fas-Arab"],
@@ -151,7 +151,7 @@ tooka_sbert = ModelMeta(
     training_datasets=None,
 )
 
-fa_bert = ModelMeta(
+fa_bert = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sbunlp/fabert",
     languages=["fas-Arab"],
@@ -175,7 +175,7 @@ fa_bert = ModelMeta(
     },
 )
 
-tooka_sbert_v2_small = ModelMeta(
+tooka_sbert_v2_small = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT-V2-Small",
     languages=["fas-Arab"],
@@ -196,7 +196,7 @@ tooka_sbert_v2_small = ModelMeta(
     training_datasets=None,
 )
 
-tooka_sbert_v2_large = ModelMeta(
+tooka_sbert_v2_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT-V2-Large",
     languages=["fas-Arab"],

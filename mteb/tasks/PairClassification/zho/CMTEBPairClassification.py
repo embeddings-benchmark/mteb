@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Ocnli(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Ocnli",
         description="Original Chinese Natural Language Inference dataset",
         reference="https://arxiv.org/abs/2010.05444",
@@ -45,7 +45,7 @@ class Ocnli(AbsTaskPairClassification):
 
 
 class Cmnli(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Cmnli",
         description="Chinese Multi-Genre NLI",
         reference="https://huggingface.co/datasets/clue/viewer/cmnli",

@@ -147,7 +147,7 @@ model_prompts = {
     PromptType.passage.value: "document",
 }
 
-voyage_large_2_instruct = ModelMeta(
+voyage_large_2_instruct = ModelMeta.model_construct(
     name="voyageai/voyage-large-2-instruct",
     revision="1",
     release_date="2024-05-05",
@@ -171,7 +171,7 @@ voyage_large_2_instruct = ModelMeta(
     public_training_data=None,
 )
 
-voyage_finance_2 = ModelMeta(
+voyage_finance_2 = ModelMeta.model_construct(
     name="voyageai/voyage-finance-2",
     revision="1",
     release_date="2024-05-30",
@@ -195,7 +195,7 @@ voyage_finance_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_law_2 = ModelMeta(
+voyage_law_2 = ModelMeta.model_construct(
     name="voyageai/voyage-law-2",
     revision="1",
     release_date="2024-04-15",
@@ -219,7 +219,7 @@ voyage_law_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_code_2 = ModelMeta(
+voyage_code_2 = ModelMeta.model_construct(
     name="voyageai/voyage-code-2",
     revision="1",
     release_date="2024-01-23",
@@ -243,7 +243,7 @@ voyage_code_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_code_3 = ModelMeta(
+voyage_code_3 = ModelMeta.model_construct(
     name="voyageai/voyage-code-3",
     revision="1",
     release_date="2024-12-04",
@@ -268,7 +268,7 @@ voyage_code_3 = ModelMeta(
 )
 
 
-voyage_large_2 = ModelMeta(
+voyage_large_2 = ModelMeta.model_construct(
     name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",
     release_date="2023-10-29",
@@ -292,7 +292,7 @@ voyage_large_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_2 = ModelMeta(
+voyage_2 = ModelMeta.model_construct(
     name="voyageai/voyage-2",
     revision="1",
     release_date="2023-10-29",
@@ -315,7 +315,7 @@ voyage_2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
-voyage_multilingual_2 = ModelMeta(
+voyage_multilingual_2 = ModelMeta.model_construct(
     name="voyageai/voyage-multilingual-2",
     revision="1",
     release_date="2024-06-10",
@@ -339,7 +339,7 @@ voyage_multilingual_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_3 = ModelMeta(
+voyage_3 = ModelMeta.model_construct(
     name="voyageai/voyage-3",
     revision="1",
     release_date="2024-09-18",
@@ -363,7 +363,7 @@ voyage_3 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_3_lite = ModelMeta(
+voyage_3_lite = ModelMeta.model_construct(
     name="voyageai/voyage-3-lite",
     revision="1",
     release_date="2024-09-18",
@@ -387,7 +387,7 @@ voyage_3_lite = ModelMeta(
     public_training_data=None,
 )
 
-voyage_3_exp = ModelMeta(
+voyage_3_exp = ModelMeta.model_construct(
     name="voyageai/voyage-3-m-exp",
     revision="1",
     release_date="2025-01-08",

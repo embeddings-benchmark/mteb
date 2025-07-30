@@ -21,7 +21,7 @@ _LANGUAGES = {
 
 
 class IndicReviewsClusteringP2P(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicReviewsClusteringP2P",
         dataset={
             "path": "mteb/IndicReviewsClusteringP2P",

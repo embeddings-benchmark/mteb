@@ -9,7 +9,7 @@ class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuSciBenchGRNTIClusteringP2P",
         dataset={
             # here we use the same split for clustering

@@ -58,7 +58,7 @@ class SwednClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SwednClusteringP2P",
         dataset={
             "path": "sbx/superlim-2",
@@ -100,7 +100,7 @@ class SwednClusteringFastS2S(AbsTaskClusteringFast):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SwednClusteringS2S",
         dataset={
             "path": "sbx/superlim-2",

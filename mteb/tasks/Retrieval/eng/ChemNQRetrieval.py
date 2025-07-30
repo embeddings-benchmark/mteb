@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ChemNQRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ChemNQRetrieval",
         dataset={
             "path": "BASF-AI/ChemNQRetrieval",

@@ -20,7 +20,7 @@ _SPLITS = ["dev", "test"]
 
 
 class STSBenchmarkMultilingualVisualSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STSBenchmarkMultilingualVisualSTS",
         dataset={
             "path": "Pixel-Linguist/rendered-stsb",

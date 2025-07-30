@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MultiEURLEXMultilabelClassification",
         dataset={
             "path": "mteb/eurlex-multilingual",

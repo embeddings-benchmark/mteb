@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DanishPoliticalCommentsClassification",
         dataset={
             "path": "community-datasets/danish_political_comments",

@@ -24,7 +24,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class SciDocsReranking(AbsTaskReranking):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
         reference="https://allenai.org/data/scidocs",
@@ -84,7 +84,7 @@ Often the dataset from HuggingFace is not in the format expected by MTEB. To res
 
 ```python
 class VGClustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VGClustering",
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",

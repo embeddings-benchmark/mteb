@@ -17,7 +17,7 @@ N_SAMPLES = 2048
 
 class EightTagsClustering(AbsTaskAnyClustering):
     superseded_by = "EightTagsClustering.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EightTagsClustering",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
         + "food, medicine, motorization, work, sport and technology.",
@@ -78,7 +78,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EightTagsClustering.v2",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
         + "food, medicine, motorization, work, sport and technology.",
@@ -155,7 +155,7 @@ Piperidis, Stelios},
 
 class PlscClusteringS2S(AbsTaskClusteringFast):
     superseded_by = "PlscClusteringS2S.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PlscClusteringS2S",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
         + "on the scientific field or discipline.",
@@ -182,7 +182,7 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
 
 
 class PlscClusteringS2SFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PlscClusteringS2S.v2",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
         + "on the scientific field or discipline.",
@@ -237,7 +237,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
 
 class PlscClusteringP2P(AbsTaskClusteringFast):
     superseded_by = "PlscClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PlscClusteringP2P",
         description="Clustering of Polish article titles+abstracts from Library of Science "
         + "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
@@ -264,7 +264,7 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
 
 
 class PlscClusteringP2PFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PlscClusteringP2P.v2",
         description="Clustering of Polish article titles+abstracts from Library of Science "
         + "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",

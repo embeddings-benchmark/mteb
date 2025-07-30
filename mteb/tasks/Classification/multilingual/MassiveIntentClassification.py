@@ -60,7 +60,7 @@ _LANGUAGES = {
 
 class MassiveIntentClassification(AbsTaskAnyClassification):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MassiveIntentClassification",
         dataset={
             "path": "mteb/amazon_massive_intent",

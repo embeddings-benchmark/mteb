@@ -61,7 +61,7 @@ class JasperModel(AbsEncoder):
         return embeddings
 
 
-jasper_en_v1 = ModelMeta(
+jasper_en_v1 = ModelMeta.model_construct(
     loader=JasperModel,
     loader_kwargs=dict(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},

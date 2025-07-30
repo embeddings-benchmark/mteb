@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TwitterHjerneRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TwitterHjerneRetrieval",
         dataset={
             "path": "sorenmulli/da-hashtag-twitterhjerne",

@@ -29,7 +29,7 @@ _LANGUAGES = {
 
 class WikiClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "WikiClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WikiClusteringP2P",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
         reference="https://github.com/Rysias/wiki-clustering",
@@ -58,7 +58,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WikiClusteringP2P.v2",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
         reference="https://github.com/Rysias/wiki-clustering",

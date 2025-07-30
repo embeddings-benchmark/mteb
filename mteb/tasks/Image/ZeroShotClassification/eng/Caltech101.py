@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Caltech101ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Caltech101ZeroShot",
         description="Classifying images of 101 widely varied objects.",
         reference="https://ieeexplore.ieee.org/document/1384978",

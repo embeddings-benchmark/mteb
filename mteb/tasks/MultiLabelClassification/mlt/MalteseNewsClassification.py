@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MalteseNewsClassification(AbsTaskMultilabelClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MalteseNewsClassification",
         description="""A multi-label topic classification dataset for Maltese News
         Articles. The data was collected from the press_mt subset from Korpus

@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class LeCaRDv2(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LeCaRDv2",
         description="The task involves identifying and retrieving the case document that best matches or is most relevant to the scenario described in each of the provided queries.",
         reference="https://github.com/THUIR/LeCaRDv2",

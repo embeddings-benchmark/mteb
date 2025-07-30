@@ -14,7 +14,7 @@ _LANGUAGES = {
 
 
 class MTOPIntentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MTOPIntentClassification",
         dataset={
             "path": "mteb/mtop_intent",

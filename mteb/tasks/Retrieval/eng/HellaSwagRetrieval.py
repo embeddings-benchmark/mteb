@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class HellaSwag(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HellaSwag",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on HellaSwag.",
         reference="https://rowanzellers.com/hellaswag/",

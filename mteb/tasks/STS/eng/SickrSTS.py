@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class SickrSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SICK-R",
         dataset={
             "path": "mteb/sickr-sts",

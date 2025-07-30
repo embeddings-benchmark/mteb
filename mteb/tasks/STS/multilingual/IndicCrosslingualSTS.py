@@ -20,7 +20,7 @@ _LANGUAGES = {
 
 
 class IndicCrosslingualSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicCrosslingualSTS",
         dataset={
             "path": "mteb/IndicCrosslingualSTS",

@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SlovakSumRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SlovakSumRetrieval",
         description="""
             SlovakSum, a Slovak news summarization dataset consisting of over 200 thousand

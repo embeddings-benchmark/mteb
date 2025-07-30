@@ -21,7 +21,7 @@ _SPLITS = ["test"]
 
 
 class STS17MultilingualVisualSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STS17MultilingualVisualSTS",
         dataset={
             "path": "Pixel-Linguist/rendered-sts17",

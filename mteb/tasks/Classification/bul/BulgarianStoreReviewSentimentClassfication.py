@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BulgarianStoreReviewSentimentClassfication(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BulgarianStoreReviewSentimentClassfication",
         description="Bulgarian online store review dataset for sentiment classification.",
         reference="https://doi.org/10.7910/DVN/TXIK9P",

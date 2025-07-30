@@ -37,7 +37,7 @@ inf_retreiver_v1_training_data = {
     ## and other private data of INF TECH (not in MTEB),
 }
 
-inf_retriever_v1 = ModelMeta(
+inf_retriever_v1 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -62,7 +62,7 @@ inf_retriever_v1 = ModelMeta(
     training_datasets=inf_retreiver_v1_training_data,
 )
 
-inf_retriever_v1_1_5B = ModelMeta(
+inf_retriever_v1_1_5B = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         trust_remote_code=True,

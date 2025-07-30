@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SIQA(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SIQA",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SIQA.",
         reference="https://leaderboard.allenai.org/socialiqa/submissions/get-started",

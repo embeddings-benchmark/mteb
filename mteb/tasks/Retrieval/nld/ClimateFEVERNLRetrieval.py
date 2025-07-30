@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ClimateFEVERNL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ClimateFEVER-NL",
         description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world "
         "claims regarding climate-change. ClimateFEVER-NL is a Dutch translation.",

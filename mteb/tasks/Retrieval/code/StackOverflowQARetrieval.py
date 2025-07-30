@@ -7,7 +7,7 @@ _EVAL_SPLIT = "test"
 
 
 class StackOverflowQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StackOverflowQA",
         description="The dataset is a collection of natural language queries and their corresponding response which may include some text mixed with code snippets. The task is to retrieve the most relevant response for a given query.",
         reference="https://arxiv.org/abs/2407.02883",

@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BeytooteClustering(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BeytooteClustering",
         description="Beytoote Website Articles Clustering",
         reference="https://mcinext.com/",
@@ -45,7 +45,7 @@ class BeytooteClustering(AbsTaskClusteringFast):
 
 
 class DigikalamagClustering(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DigikalamagClustering",
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
         reference="https://hooshvare.github.io/docs/datasets/tc",
@@ -84,7 +84,7 @@ class DigikalamagClustering(AbsTaskClusteringFast):
 
 
 class HamshahriClustring(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HamshahriClustring",
         description="These datasets have been extracted from the RSS feed of two Farsi news agency websites.",
         reference="https://github.com/mallahyari/Farsi-datasets",
@@ -142,7 +142,7 @@ class HamshahriClustring(AbsTaskClusteringFast):
 
 
 class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NLPTwitterAnalysisClustering",
         description="Clustering of tweets from twitter across 26 categories.",
         reference="https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/commits/main",
@@ -178,7 +178,7 @@ class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
 
 
 class SIDClustring(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SIDClustring",
         description="Clustering of summariesfrom SIDClustring across categories.",
         reference="https://www.sid.com/",

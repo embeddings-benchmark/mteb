@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SiswatiNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SiswatiNewsClassification",
         description="Siswati News Classification Dataset",
         reference="https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news",

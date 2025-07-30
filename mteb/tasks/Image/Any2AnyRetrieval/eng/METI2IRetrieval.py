@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="METI2IRetrieval",
         description="Retrieve photos of more than 224k artworks.",
         reference="https://arxiv.org/abs/2202.01747",

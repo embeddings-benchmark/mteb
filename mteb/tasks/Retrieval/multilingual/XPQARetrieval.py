@@ -62,7 +62,7 @@ _LANG_CONVERSION = {
 
 
 class XPQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XPQARetrieval",
         description="XPQARetrieval",
         reference="https://arxiv.org/abs/2305.09249",

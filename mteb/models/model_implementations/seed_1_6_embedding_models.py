@@ -401,7 +401,7 @@ TASK_NAME_TO_INSTRUCTION = {
 }
 
 
-seed_embedding = ModelMeta(
+seed_embedding = ModelMeta.model_construct(
     name="Bytedance/Seed1.6-embedding",
     revision="1",
     release_date="2025-06-18",

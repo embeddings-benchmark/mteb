@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorHateClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="KorHateClassification",
         description="""The dataset was created to provide the first human-labeled Korean corpus for
         toxic speech detection from a Korean online entertainment news aggregator. Recently,

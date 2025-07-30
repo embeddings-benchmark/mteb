@@ -126,7 +126,7 @@ TRAINING_DATA = {
     "wiki-ss-nq": ["train"],
 }
 
-llama_nemoretriever_colembed_1b_v1 = ModelMeta(
+llama_nemoretriever_colembed_1b_v1 = ModelMeta.model_construct(
     loader=llama_nemoretriever_colembed,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -151,7 +151,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
 )
 
-llama_nemoretriever_colembed_3b_v1 = ModelMeta(
+llama_nemoretriever_colembed_3b_v1 = ModelMeta.model_construct(
     loader=llama_nemoretriever_colembed,
     loader_kwargs=dict(
         trust_remote_code=True,

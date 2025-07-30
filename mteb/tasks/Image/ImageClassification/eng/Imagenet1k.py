@@ -10,7 +10,7 @@ class Imagenet1kClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Imagenet1k",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",
         reference="https://ieeexplore.ieee.org/document/5206848",

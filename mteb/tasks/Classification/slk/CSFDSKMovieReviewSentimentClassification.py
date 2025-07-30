@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CSFDSKMovieReviewSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CSFDSKMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Slovak.",
         reference="https://arxiv.org/abs/2304.01922",

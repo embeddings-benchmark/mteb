@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TswanaNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TswanaNewsClassification",
         description="Tswana News Classification Dataset",
         reference="https://link.springer.com/chapter/10.1007/978-3-031-49002-6_17",

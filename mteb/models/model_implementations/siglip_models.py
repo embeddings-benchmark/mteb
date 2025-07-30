@@ -113,7 +113,7 @@ siglip_training_datasets = {
     # WebLI https://arxiv.org/abs/2209.06794
 }
 
-siglip_so400m_patch14_224 = ModelMeta(
+siglip_so400m_patch14_224 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-so400m-patch14-224",
     languages=["eng-Latn"],
@@ -135,7 +135,7 @@ siglip_so400m_patch14_224 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_so400m_patch14_384 = ModelMeta(
+siglip_so400m_patch14_384 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-so400m-patch14-384",
     languages=["eng-Latn"],
@@ -157,7 +157,7 @@ siglip_so400m_patch14_384 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_so400m_patch16_256_i18n = ModelMeta(
+siglip_so400m_patch16_256_i18n = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-so400m-patch16-256-i18n",
     languages=["eng-Latn"],
@@ -179,7 +179,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_base_patch16_256_multilingual = ModelMeta(
+siglip_base_patch16_256_multilingual = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-256-multilingual",
     languages=["eng-Latn"],
@@ -201,7 +201,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_base_patch16_256 = ModelMeta(
+siglip_base_patch16_256 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-256",
     languages=["eng-Latn"],
@@ -223,7 +223,7 @@ siglip_base_patch16_256 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_base_patch16_512 = ModelMeta(
+siglip_base_patch16_512 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-512",
     languages=["eng-Latn"],
@@ -245,7 +245,7 @@ siglip_base_patch16_512 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_base_patch16_384 = ModelMeta(
+siglip_base_patch16_384 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-384",
     languages=["eng-Latn"],
@@ -267,7 +267,7 @@ siglip_base_patch16_384 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_base_patch16_224 = ModelMeta(
+siglip_base_patch16_224 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-224",
     languages=["eng-Latn"],
@@ -289,7 +289,7 @@ siglip_base_patch16_224 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_large_patch16_256 = ModelMeta(
+siglip_large_patch16_256 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-large-patch16-256",
     languages=["eng-Latn"],
@@ -311,7 +311,7 @@ siglip_large_patch16_256 = ModelMeta(
     training_datasets=siglip_training_datasets,
 )
 
-siglip_large_patch16_384 = ModelMeta(
+siglip_large_patch16_384 = ModelMeta.model_construct(
     loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-large-patch16-384",
     languages=["eng-Latn"],

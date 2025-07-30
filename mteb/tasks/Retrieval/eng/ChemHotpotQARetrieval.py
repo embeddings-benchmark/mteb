@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ChemHotpotQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ChemHotpotQARetrieval",
         dataset={
             "path": "BASF-AI/ChemHotpotQARetrieval",

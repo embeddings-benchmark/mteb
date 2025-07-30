@@ -18,7 +18,7 @@ _LANGUAGES = {
 
 
 class NusaParagraphEmotionClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NusaParagraphEmotionClassification",
         dataset={
             "path": "gentaiscool/nusaparagraph_emot",

@@ -8,7 +8,7 @@ TEST_SAMPLES = 2048
 
 
 class GreenNodeTableMarkdownRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GreenNodeTableMarkdownRetrieval",
         description="GreenNodeTable documents",
         reference="https://huggingface.co/GreenNode",

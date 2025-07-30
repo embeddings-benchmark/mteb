@@ -14,7 +14,7 @@ CORPUS_HF_NAME, CORPUS_HF_VERSION, CORPUS_HF_SPLIT = (
 
 
 class TopiOCQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TopiOCQA",
         dataset={
             "path": "McGill-NLP/TopiOCQA",
@@ -98,7 +98,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
 
 
 class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TopiOCQAHardNegatives",
         dataset={
             "path": "mteb/TopiOCQA_validation_top_250_only_w_correct-v2",

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
-amazon_titan_text_embeddings_v2 = ModelMeta(
+amazon_titan_text_embeddings_v2 = ModelMeta.model_construct(
     loader=None,
     name="amazon/Titan-text-embeddings-v2",
     revision="1",

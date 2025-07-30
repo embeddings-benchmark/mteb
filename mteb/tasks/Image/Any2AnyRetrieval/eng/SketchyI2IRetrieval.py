@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SketchyI2IRetrieval",
         description="Retrieve photos from sketches.",
         reference="https://arxiv.org/abs/2202.01747",

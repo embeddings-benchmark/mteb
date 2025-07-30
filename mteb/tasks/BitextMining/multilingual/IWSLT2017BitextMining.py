@@ -34,7 +34,7 @@ _SPLITS = ["validation"]
 
 
 class IWSLT2017BitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IWSLT2017BitextMining",
         dataset={
             "path": "mteb/IWSLT2017BitextMining",

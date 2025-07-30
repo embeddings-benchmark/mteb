@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KlueYnatMrcCategoryClustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="KlueYnatMrcCategoryClustering",
         description="this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MRC  dataset. News_category: IT/Science, Sports, Media/Culture, Ecomomy/Finance, Real Estate",
         reference="https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title",

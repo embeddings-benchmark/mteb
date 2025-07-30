@@ -24,7 +24,7 @@ mini_gte_datasets = {
     # BERRI
 }
 
-mini_gte = ModelMeta(
+mini_gte = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="prdev/mini-gte",
     languages=["eng-Latn"],

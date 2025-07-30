@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class TwitterURLCorpusPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TwitterURLCorpus",
         dataset={
             "path": "mteb/twitterurlcorpus-pairclassification",

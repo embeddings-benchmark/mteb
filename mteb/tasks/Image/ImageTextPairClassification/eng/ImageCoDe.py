@@ -24,7 +24,7 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
         "false_image_9",
     ]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ImageCoDe",
         description="Identify the correct image from a set of similar images based on a precise caption.",
         reference="https://aclanthology.org/2022.acl-long.241.pdf",

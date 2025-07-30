@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class Touche2020(AbsTaskRetrieval):
     superseded_by = "Touche2020Retrieval.v3"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Touche2020",
         description="Touché Task 1: Argument Retrieval for Controversial Questions",
         reference="https://webis.de/events/touche-20/shared-task-1.html",
@@ -55,7 +55,7 @@ Questions}},
 
 
 class Touche2020v3Retrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Touche2020Retrieval.v3",
         description="Touché Task 1: Argument Retrieval for Controversial Questions",
         reference="https://github.com/castorini/touche-error-analysis",

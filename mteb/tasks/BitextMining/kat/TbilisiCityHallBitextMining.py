@@ -18,7 +18,7 @@ _EVAL_SPLIT = "test"
 
 
 class TbilisiCityHallBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TbilisiCityHallBitextMining",
         dataset={
             "path": "jupyterjazz/tbilisi-city-hall-titles",

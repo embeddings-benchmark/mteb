@@ -16,7 +16,7 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
         "hard_text_4",
     ]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AROCocoOrder",
         description="Compositionality Evaluation of images to their captions."
         + "Each capation has four hard negatives created by order permutations.",

@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SciMMIR(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SciMMIR",
         description="SciMMIR.",
         reference="https://huggingface.co/datasets/m-a-p/SciMMIR",

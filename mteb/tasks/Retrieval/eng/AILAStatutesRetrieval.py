@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class AILAStatutes(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AILAStatutes",
         description="This dataset is structured for the task of identifying the most relevant statutes for a given situation.",
         reference="https://zenodo.org/records/4063986",

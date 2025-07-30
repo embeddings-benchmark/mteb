@@ -81,7 +81,7 @@ _CITATION = r"""
 
 
 class XGlueWPRReranking(AbsTaskReranking):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XGlueWPRReranking",
         description="""XGLUE is a new benchmark dataset to evaluate the performance of cross-lingual pre-trained models
         with respect to cross-lingual natural language understanding and generation. XGLUE is composed of 11 tasks spans 19 languages.""",

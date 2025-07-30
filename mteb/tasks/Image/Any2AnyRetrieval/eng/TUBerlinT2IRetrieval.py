@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TUBerlinT2IRetrieval",
         description="Retrieve sketch images based on text descriptions.",
         reference="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540",

@@ -158,7 +158,7 @@ class BedrockModel(AbsEncoder):
         return np.array(response[key])
 
 
-amazon_titan_embed_text_v1 = ModelMeta(
+amazon_titan_embed_text_v1 = ModelMeta.model_construct(
     name="bedrock/amazon-titan-embed-text-v1",
     revision="1",
     release_date="2023-09-27",
@@ -184,7 +184,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     use_instructions=False,
 )
 
-amazon_titan_embed_text_v2 = ModelMeta(
+amazon_titan_embed_text_v2 = ModelMeta.model_construct(
     name="bedrock/amazon-titan-embed-text-v2",
     revision="1",
     release_date="2024-04-30",
@@ -212,7 +212,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
 # Note: For the original Cohere API implementation, refer to:
 # https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
 # This implementation uses the Amazon Bedrock endpoint for Cohere models.
-cohere_embed_english_v3 = ModelMeta(
+cohere_embed_english_v3 = ModelMeta.model_construct(
     loader=BedrockModel,
     loader_kwargs=dict(
         model_id="cohere.embed-english-v3",
@@ -239,7 +239,7 @@ cohere_embed_english_v3 = ModelMeta(
     use_instructions=True,
 )
 
-cohere_embed_multilingual_v3 = ModelMeta(
+cohere_embed_multilingual_v3 = ModelMeta.model_construct(
     loader=BedrockModel,
     loader_kwargs=dict(
         model_id="cohere.embed-multilingual-v3",

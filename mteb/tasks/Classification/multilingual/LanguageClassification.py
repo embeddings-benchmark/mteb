@@ -28,7 +28,7 @@ _LANGUAGES = [
 
 
 class LanguageClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LanguageClassification",
         dataset={
             "path": "papluca/language-identification",

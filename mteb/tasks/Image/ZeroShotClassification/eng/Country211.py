@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Country211ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Country211ZeroShot",
         description="Classifying images of 211 countries.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",

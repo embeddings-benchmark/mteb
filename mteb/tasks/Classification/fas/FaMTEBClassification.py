@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SynPerChatbotConvSAAnger(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAAnger",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Anger",
         reference="https://mcinext.com/",
@@ -32,7 +32,7 @@ class SynPerChatbotConvSAAnger(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSASatisfaction(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSASatisfaction",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Satisfaction",
         reference="https://mcinext.com/",
@@ -59,7 +59,7 @@ class SynPerChatbotConvSASatisfaction(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSAFriendship(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAFriendship",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Friendship",
         reference="https://mcinext.com/",
@@ -86,7 +86,7 @@ class SynPerChatbotConvSAFriendship(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSAFear(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAFear",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Fear",
         reference="https://mcinext.com/",
@@ -113,7 +113,7 @@ class SynPerChatbotConvSAFear(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSAJealousy(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAJealousy",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Jealousy",
         reference="https://mcinext.com/",
@@ -140,7 +140,7 @@ class SynPerChatbotConvSAJealousy(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSASurprise(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSASurprise",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Surprise",
         reference="https://mcinext.com/",
@@ -167,7 +167,7 @@ class SynPerChatbotConvSASurprise(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSALove(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSALove",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Love",
         reference="https://mcinext.com/",
@@ -194,7 +194,7 @@ class SynPerChatbotConvSALove(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSASadness(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSASadness",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Sadness",
         reference="https://mcinext.com/",
@@ -221,7 +221,7 @@ class SynPerChatbotConvSASadness(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSAHappiness(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAHappiness",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Happiness",
         reference="https://mcinext.com/",
@@ -248,7 +248,7 @@ class SynPerChatbotConvSAHappiness(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSAToneChatbotClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAToneChatbotClassification",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Tone Chatbot Classification",
         reference="https://mcinext.com/",
@@ -275,7 +275,7 @@ class SynPerChatbotConvSAToneChatbotClassification(AbsTaskAnyClassification):
 
 
 class SynPerChatbotConvSAToneUserClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotConvSAToneUserClassification",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Tone User",
         reference="https://mcinext.com/",
@@ -302,7 +302,7 @@ class SynPerChatbotConvSAToneUserClassification(AbsTaskAnyClassification):
 
 
 class SynPerChatbotSatisfactionLevelClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotSatisfactionLevelClassification",
         description="Synthetic Persian Chatbot Satisfaction Level Classification",
         reference="https://mcinext.com/",
@@ -329,7 +329,7 @@ class SynPerChatbotSatisfactionLevelClassification(AbsTaskAnyClassification):
 
 
 class SynPerChatbotRAGToneChatbotClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotRAGToneChatbotClassification",
         description="Synthetic Persian Chatbot RAG Tone Chatbot Classification",
         reference="https://mcinext.com/",
@@ -356,7 +356,7 @@ class SynPerChatbotRAGToneChatbotClassification(AbsTaskAnyClassification):
 
 
 class SynPerChatbotRAGToneUserClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotRAGToneUserClassification",
         description="Synthetic Persian Chatbot RAG Tone User Classification",
         reference="https://mcinext.com/",
@@ -383,7 +383,7 @@ class SynPerChatbotRAGToneUserClassification(AbsTaskAnyClassification):
 
 
 class SynPerChatbotToneChatbotClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotToneChatbotClassification",
         description="Synthetic Persian Chatbot Tone Chatbot Classification",
         reference="https://mcinext.com/",
@@ -410,7 +410,7 @@ class SynPerChatbotToneChatbotClassification(AbsTaskAnyClassification):
 
 
 class SynPerChatbotToneUserClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotToneUserClassification",
         description="Synthetic Persian Chatbot Tone User Classification",
         reference="https://mcinext.com/",
@@ -437,7 +437,7 @@ class SynPerChatbotToneUserClassification(AbsTaskAnyClassification):
 
 
 class SynPerTextToneClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerTextToneClassification",
         description="Persian Text Tone",
         reference="https://mcinext.com/",
@@ -464,7 +464,7 @@ class SynPerTextToneClassification(AbsTaskAnyClassification):
 
 
 class SIDClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SIDClassification",
         description="SID Classification",
         reference="https://mcinext.com/",
@@ -491,7 +491,7 @@ class SIDClassification(AbsTaskAnyClassification):
 
 
 class DeepSentiPers(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DeepSentiPers",
         description="Persian Sentiment Analysis Dataset",
         reference="https://github.com/JoyeBright/DeepSentiPers",
@@ -521,7 +521,7 @@ class DeepSentiPers(AbsTaskAnyClassification):
 
 
 class PersianTextEmotion(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PersianTextEmotion",
         description="Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
         reference="https://huggingface.co/datasets/SeyedAli/Persian-Text-Emotion",
@@ -548,7 +548,7 @@ class PersianTextEmotion(AbsTaskAnyClassification):
 
 
 class SentimentDKSF(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SentimentDKSF",
         description="The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.",
         reference="https://github.com/hezarai/hezar",
@@ -575,7 +575,7 @@ class SentimentDKSF(AbsTaskAnyClassification):
 
 
 class NLPTwitterAnalysisClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NLPTwitterAnalysisClassification",
         description="Twitter Analysis Classification",
         reference="https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/tree/main",
@@ -605,7 +605,7 @@ class NLPTwitterAnalysisClassification(AbsTaskAnyClassification):
 
 
 class DigikalamagClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DigikalamagClassification",
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
         reference="https://hooshvare.github.io/docs/datasets/tc",

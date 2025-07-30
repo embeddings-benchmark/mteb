@@ -36,7 +36,7 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "STSBenchmark": ["train"],
 }
 
-SFR_Embedding_2_R = ModelMeta(
+SFR_Embedding_2_R = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -75,7 +75,7 @@ SFR_Embedding_2_R = ModelMeta(
     """,
 )
 
-SFR_Embedding_Code_2B_R = ModelMeta(
+SFR_Embedding_Code_2B_R = ModelMeta.model_construct(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -105,7 +105,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     training_datasets=None,
 )
 
-SFR_Embedding_Mistral = ModelMeta(
+SFR_Embedding_Mistral = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,

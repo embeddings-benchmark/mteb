@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class Farsick(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Farsick",
         description="A Persian Semantic Textual Similarity And Natural Language Inference Dataset",
         reference="https://github.com/ZahraGhasemi-AI/FarSick",
@@ -33,7 +33,7 @@ class Farsick(AbsTaskAnySTS):
 
 
 class SynPerSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerSTS",
         description="Synthetic Persian Semantic Textual Similarity Dataset",
         reference="https://mcinext.com/",
@@ -60,7 +60,7 @@ class SynPerSTS(AbsTaskAnySTS):
 
 
 class Query2Query(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Query2Query",
         description="Query to Query Datasets.",
         reference="https://mcinext.com/",

@@ -30,7 +30,7 @@ GTE_CITATION = """
 }
 """
 
-gte_Qwen2_7B_instruct = ModelMeta(
+gte_Qwen2_7B_instruct = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -63,7 +63,7 @@ gte_Qwen2_7B_instruct = ModelMeta(
     max_tokens=32_768,
 )
 
-gte_Qwen1_5_7B_instruct = ModelMeta(
+gte_Qwen1_5_7B_instruct = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -93,7 +93,7 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     training_datasets=None,
 )
 
-gte_Qwen2_1_5B_instruct = ModelMeta(
+gte_Qwen2_1_5B_instruct = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -123,7 +123,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     training_datasets=None,
 )
 
-gte_small_zh = ModelMeta(
+gte_small_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="thenlper/gte-small-zh",
     languages=["zho-Hans"],
@@ -144,7 +144,7 @@ gte_small_zh = ModelMeta(
     training_datasets=None,  # Not disclosed
 )
 
-gte_base_zh = ModelMeta(
+gte_base_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="thenlper/gte-base-zh",
     languages=["zho-Hans"],
@@ -165,7 +165,7 @@ gte_base_zh = ModelMeta(
     training_datasets=None,  # Not disclosed
 )
 
-gte_large_zh = ModelMeta(
+gte_large_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="thenlper/gte-large-zh",
     languages=["zho-Hans"],
@@ -287,7 +287,7 @@ gte_multi_training_data = {
     #   - Multi-CPR
 }
 
-gte_multilingual_base = ModelMeta(
+gte_multilingual_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="Alibaba-NLP/gte-multilingual-base",
     languages=gte_multilingual_langs,
@@ -308,7 +308,7 @@ gte_multilingual_base = ModelMeta(
     training_datasets=gte_multi_training_data,
 )
 
-gte_modernbert_base = ModelMeta(
+gte_modernbert_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="Alibaba-NLP/gte-modernbert-base",
     languages=["eng-Latn"],
@@ -330,7 +330,7 @@ gte_modernbert_base = ModelMeta(
 )
 
 
-gte_base_en_v15 = ModelMeta(
+gte_base_en_v15 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="Alibaba-NLP/gte-base-en-v1.5",
     languages=["eng-Latn"],

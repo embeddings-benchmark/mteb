@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Touche2020NL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Touche2020-NL",
         description="Touché Task 1: Argument Retrieval for Controversial Questions. Touche2020-NL is a Dutch translation.",
         reference="https://huggingface.co/datasets/clips/beir-nl-webis-touche2020",

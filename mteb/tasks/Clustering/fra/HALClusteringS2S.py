@@ -18,7 +18,7 @@ NUM_SAMPLES = 2048
 class HALClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "HALClusteringS2S.v2"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HALClusteringS2S",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
         reference="https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s",
@@ -67,7 +67,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HALClusteringS2S.v2",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
         reference="https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s",

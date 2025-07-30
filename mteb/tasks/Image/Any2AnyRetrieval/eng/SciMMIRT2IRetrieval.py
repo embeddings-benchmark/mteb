@@ -64,7 +64,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
 
 
 class SciMMIRT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SciMMIRT2IRetrieval",
         description="Retrieve figures and tables based on captions.",
         reference="https://aclanthology.org/2024.findings-acl.746/",

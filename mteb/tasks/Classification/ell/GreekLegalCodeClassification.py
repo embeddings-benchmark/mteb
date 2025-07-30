@@ -7,7 +7,7 @@ TEST_SAMPLES = 2048
 
 
 class GreekLegalCodeClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GreekLegalCodeClassification",
         description="Greek Legal Code Dataset for Classification. (subset = chapter)",
         reference="https://arxiv.org/abs/2109.15298",

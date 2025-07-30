@@ -10,7 +10,7 @@ from mteb.evaluation.evaluators.SummarizationEvaluator import (
 class SummEvalFrSummarization(AbsTaskSummarization):
     superseded_by = "SummEvalFrSummarization.v2"
     evalutor = DeprecatedSummarizationEvaluator
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SummEvalFr",
         description="News Article Summary Semantic Similarity Estimation translated from english to french with DeepL.",
         reference="https://github.com/Yale-LILY/SummEval",
@@ -46,7 +46,7 @@ class SummEvalFrSummarization(AbsTaskSummarization):
 
 
 class SummEvalFrSummarizationv2(AbsTaskSummarization):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SummEvalFrSummarization.v2",
         description="News Article Summary Semantic Similarity Estimation translated from english to french with DeepL. This version fixes a bug in the evaluation script that caused the main score to be computed incorrectly.",
         reference="https://github.com/Yale-LILY/SummEval",

@@ -64,7 +64,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
 
 
 class HatefulMemesT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HatefulMemesT2IRetrieval",
         description="Retrieve captions based on memes to assess OCR abilities.",
         reference="https://arxiv.org/pdf/2005.04790",

@@ -859,7 +859,7 @@ _LANGUAGES_MAPPING = extend_lang_pairs_english_centric()
 
 
 class BibleNLPBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BibleNLPBitextMining",
         dataset={
             "path": "davidstap/biblenlp-corpus-mmteb",

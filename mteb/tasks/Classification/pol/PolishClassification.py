@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CbdClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CBD",
         description="Polish Tweets annotated for cyberbullying detection.",
         reference="http://2019.poleval.pl/files/poleval2019.pdf",
@@ -41,7 +41,7 @@ class CbdClassification(AbsTaskAnyClassification):
 
 
 class PolEmo2InClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PolEmo2.0-IN",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
         + "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) reviews.",
@@ -84,7 +84,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
 
 
 class PolEmo2OutClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PolEmo2.0-OUT",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
         + "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
@@ -112,7 +112,7 @@ class PolEmo2OutClassification(AbsTaskAnyClassification):
 
 
 class AllegroReviewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AllegroReviews",
         description="A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.",
         reference="https://aclanthology.org/2020.acl-main.111.pdf",
@@ -162,7 +162,7 @@ Tetreault, Joel},
 
 
 class PacClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PAC",
         description="Polish Paraphrase Corpus",
         reference="https://arxiv.org/pdf/2211.13112.pdf",

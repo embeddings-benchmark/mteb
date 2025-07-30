@@ -9,7 +9,7 @@ class MNISTClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MNIST",
         description="Classifying handwritten digits.",
         reference="https://en.wikipedia.org/wiki/MNIST_database",

@@ -10,7 +10,7 @@ _EVAL_SPLIT = "test"
 
 
 class GeorgianFAQRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GeorgianFAQRetrieval",
         dataset={
             "path": "jupyterjazz/georgian-faq",

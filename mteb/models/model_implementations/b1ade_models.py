@@ -9,7 +9,7 @@ b1ade_training_data = {
     "MSMARCO": [],
 }
 
-b1ade_embed = ModelMeta(
+b1ade_embed = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="w601sxs/b1ade-embed",
     languages=["eng-Latn"],

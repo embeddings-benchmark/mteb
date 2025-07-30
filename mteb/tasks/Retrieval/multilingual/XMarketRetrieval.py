@@ -64,7 +64,7 @@ def _load_xmarket_data(
 
 
 class XMarket(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XMarket",
         description="XMarket",
         reference=None,

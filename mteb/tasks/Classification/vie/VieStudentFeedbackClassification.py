@@ -7,7 +7,7 @@ TEST_SAMPLES = 2048
 
 
 class VieStudentFeedbackClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VieStudentFeedbackClassification",
         description="A Vietnamese dataset for classification of student feedback",
         reference="https://ieeexplore.ieee.org/document/8573337",

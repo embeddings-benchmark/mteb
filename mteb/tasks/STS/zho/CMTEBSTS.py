@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class ATEC(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ATEC",
         dataset={
             "path": "C-MTEB/ATEC",
@@ -56,7 +56,7 @@ Yih, Scott Wen-tau},
 
 
 class BQ(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BQ",
         dataset={
             "path": "C-MTEB/BQ",
@@ -95,7 +95,7 @@ class BQ(AbsTaskAnySTS):
 
 
 class LCQMC(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LCQMC",
         dataset={
             "path": "C-MTEB/LCQMC",
@@ -134,7 +134,7 @@ class LCQMC(AbsTaskAnySTS):
 
 
 class PAWSX(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PAWSX",
         dataset={
             "path": "C-MTEB/PAWSX",
@@ -173,7 +173,7 @@ class PAWSX(AbsTaskAnySTS):
 
 
 class STSB(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STSB",
         dataset={
             "path": "C-MTEB/STSB",
@@ -212,7 +212,7 @@ class STSB(AbsTaskAnySTS):
 
 
 class AFQMC(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AFQMC",
         dataset={
             "path": "C-MTEB/AFQMC",
@@ -262,7 +262,7 @@ Yih, Scott Wen-tau},
 
 
 class QBQTC(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="QBQTC",
         dataset={
             "path": "C-MTEB/QBQTC",

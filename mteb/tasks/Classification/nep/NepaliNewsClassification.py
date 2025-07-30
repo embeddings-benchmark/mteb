@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NepaliNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NepaliNewsClassification",
         description="A Nepali dataset for 7500 news articles ",
         reference="https://github.com/goru001/nlp-for-nepali",

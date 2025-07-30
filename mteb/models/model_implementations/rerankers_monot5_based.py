@@ -306,7 +306,7 @@ Passage: {text}"""
         return no_token_id, yes_token_id
 
 
-monot5_small = ModelMeta(
+monot5_small = ModelMeta.model_construct(
     loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -339,7 +339,7 @@ monot5_small = ModelMeta(
     }""",
 )
 
-monot5_base = ModelMeta(
+monot5_base = ModelMeta.model_construct(
     loader=MonoT5Reranker,  # type: ignore
     loader_kwargs=dict(
         fp_options="float16",
@@ -372,7 +372,7 @@ monot5_base = ModelMeta(
     is_cross_encoder=True,
 )
 
-monot5_large = ModelMeta(
+monot5_large = ModelMeta.model_construct(
     loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -405,7 +405,7 @@ monot5_large = ModelMeta(
     }""",
 )
 
-monot5_3b = ModelMeta(
+monot5_3b = ModelMeta.model_construct(
     loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -438,7 +438,7 @@ monot5_3b = ModelMeta(
     }""",
 )
 
-flant5_base = ModelMeta(
+flant5_base = ModelMeta.model_construct(
     loader=FLANT5Reranker,  # type: ignore
     loader_kwargs=dict(
         fp_options="float16",
@@ -484,7 +484,7 @@ flant5_base = ModelMeta(
     is_cross_encoder=True,
 )
 
-flant5_large = ModelMeta(
+flant5_large = ModelMeta.model_construct(
     loader=FLANT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -530,7 +530,7 @@ flant5_large = ModelMeta(
     is_cross_encoder=True,
 )
 
-flant5_xl = ModelMeta(
+flant5_xl = ModelMeta.model_construct(
     loader=FLANT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -576,7 +576,7 @@ flant5_xl = ModelMeta(
     is_cross_encoder=True,
 )
 
-flant5_xxl = ModelMeta(
+flant5_xxl = ModelMeta.model_construct(
     loader=FLANT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -623,7 +623,7 @@ flant5_xxl = ModelMeta(
 )
 
 
-llama2_7b = ModelMeta(
+llama2_7b = ModelMeta.model_construct(
     loader=LlamaReranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -656,7 +656,7 @@ llama2_7b = ModelMeta(
     is_cross_encoder=True,
 )
 
-llama2_7b_chat = ModelMeta(
+llama2_7b_chat = ModelMeta.model_construct(
     loader=LlamaReranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -689,7 +689,7 @@ llama2_7b_chat = ModelMeta(
     is_cross_encoder=True,
 )
 
-mistral_7b = ModelMeta(
+mistral_7b = ModelMeta.model_construct(
     loader=MistralReranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -722,7 +722,7 @@ mistral_7b = ModelMeta(
     is_cross_encoder=True,
 )
 
-followir_7b = ModelMeta(
+followir_7b = ModelMeta.model_construct(
     loader=FollowIRReranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -861,7 +861,7 @@ mt5_languages = [
     "zul-Latn",
 ]
 
-mt5_base_mmarco_v2 = ModelMeta(
+mt5_base_mmarco_v2 = ModelMeta.model_construct(
     loader=MonoT5Reranker,
     loader_kwargs=dict(
         fp_options="float16",
@@ -894,7 +894,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     is_cross_encoder=True,
 )
 
-mt5_13b_mmarco_100k = ModelMeta(
+mt5_13b_mmarco_100k = ModelMeta.model_construct(
     loader=MonoT5Reranker,  # type: ignore
     loader_kwargs=dict(
         fp_options="float16",

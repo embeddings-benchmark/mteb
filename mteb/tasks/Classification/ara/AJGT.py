@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class AJGT(AbsTaskAnyClassification):
     superseded_by = "AJGT.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AJGT",
         dataset={
             "path": "komari6/ajgt_twitter_ar",
@@ -41,7 +41,7 @@ class AJGT(AbsTaskAnyClassification):
 
 
 class AJGTV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AJGT.v2",
         dataset={
             "path": "mteb/ajgt",

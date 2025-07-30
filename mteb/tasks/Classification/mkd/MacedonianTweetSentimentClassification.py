@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MacedonianTweetSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MacedonianTweetSentimentClassification",
         description="An Macedonian dataset for tweet sentiment classification.",
         reference="https://aclanthology.org/R15-1034/",

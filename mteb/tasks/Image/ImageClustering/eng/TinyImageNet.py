@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TinyImageNet(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TinyImageNetClustering",
         description="Clustering over 200 classes.",
         reference="https://huggingface.co/datasets/zh-plus/tiny-imagenet/viewer/default/valid",

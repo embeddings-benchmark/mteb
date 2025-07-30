@@ -8,7 +8,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
     max_document_to_embed = 1107
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LivedoorNewsClustering.v2",
         description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics). Version 2 updated on LivedoorNewsClustering by removing pairs where one of entries contain an empty sentences.",
         reference="https://github.com/sbintuitions/JMTEB",
@@ -52,7 +52,7 @@ class LivedoorNewsClustering(AbsTaskClusteringFast):
     max_fraction_of_documents_to_embed = None
     superseded_by = "LivedoorNewsClustering.v2"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LivedoorNewsClustering",
         description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics).",
         reference="https://github.com/sbintuitions/JMTEB",

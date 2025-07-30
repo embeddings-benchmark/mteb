@@ -8,7 +8,7 @@ _EVAL_SPLIT = "test"
 
 
 class STSES(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STSES",
         dataset={
             "path": "PlanTL-GOB-ES/sts-es",

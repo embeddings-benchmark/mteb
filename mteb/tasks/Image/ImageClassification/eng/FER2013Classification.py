@@ -10,7 +10,7 @@ class FER2013Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FER2013",
         description="Classifying facial emotions.",
         reference="https://arxiv.org/abs/1412.6572",

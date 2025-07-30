@@ -148,7 +148,7 @@ class NomicVisionModel(AbsEncoder):
         raise ValueError
 
 
-nomic_embed_vision_v1_5 = ModelMeta(
+nomic_embed_vision_v1_5 = ModelMeta.model_construct(
     loader=NomicVisionModel,
     loader_kwargs={
         "text_model_name": "nomic-ai/nomic-embed-text-v1.5",

@@ -9,7 +9,7 @@ HF_SUBSETS = [f"{d}_{t}" for d in DOMAINS for t in DOMAINS_TYPES]
 
 
 class LoTTERetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LoTTE",
         dataset={
             "path": "mteb/LoTTE",

@@ -7,7 +7,7 @@ TEST_SAMPLES = 2048
 
 
 class PersianFoodSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PersianFoodSentimentClassification",
         description="Persian Food Review Dataset",
         reference="https://hooshvare.github.io/docs/datasets/sa",

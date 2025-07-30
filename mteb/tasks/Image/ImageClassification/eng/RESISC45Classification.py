@@ -9,7 +9,7 @@ class RESISC45Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RESISC45",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",
         reference="https://ieeexplore.ieee.org/abstract/document/7891544",

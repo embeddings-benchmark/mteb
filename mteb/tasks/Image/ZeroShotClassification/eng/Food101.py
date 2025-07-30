@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Food101ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Food101ZeroShot",
         description="Classifying food.",
         reference="https://huggingface.co/datasets/ethz/food101",

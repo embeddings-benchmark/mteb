@@ -15,7 +15,7 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 1300
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SNLHierarchicalClusteringP2P",
         dataset={
             "path": "mteb/SNLHierarchicalClusteringP2P",
@@ -53,7 +53,7 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
     max_document_to_embed = 1300
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SNLHierarchicalClusteringS2S",
         dataset={
             "path": "mteb/SNLHierarchicalClusteringS2S",

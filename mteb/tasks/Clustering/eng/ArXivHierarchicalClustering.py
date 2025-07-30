@@ -16,7 +16,7 @@ def split_labels(record: dict) -> dict:
 
 
 class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArXivHierarchicalClusteringP2P",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
@@ -56,7 +56,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
 
 
 class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArXivHierarchicalClusteringS2S",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",

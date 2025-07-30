@@ -24,7 +24,7 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 
 class VGClustering(AbsTaskAnyClustering):
     superseded_by = "VGHierarchicalClusteringP2P"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VGClustering",
         dataset={
             "path": "navjordj/VG_summarization",

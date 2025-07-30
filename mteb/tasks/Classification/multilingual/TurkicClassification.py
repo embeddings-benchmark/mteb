@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TurkicClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TurkicClassification",
         description="A dataset of news classification in three Turkic languages.",
         dataset={

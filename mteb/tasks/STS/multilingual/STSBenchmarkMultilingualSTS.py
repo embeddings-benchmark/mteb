@@ -21,7 +21,7 @@ _SPLITS = ["dev", "test"]
 
 class STSBenchmarkMultilingualSTS(AbsTaskAnySTS):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STSBenchmarkMultilingualSTS",
         dataset={
             "path": "mteb/stsb_multi_mt",

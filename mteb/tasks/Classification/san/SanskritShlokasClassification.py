@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SanskritShlokasClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SanskritShlokasClassification",
         description="This data set contains ~500 Shlokas  ",
         reference="https://github.com/goru001/nlp-for-sanskrit",

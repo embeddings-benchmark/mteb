@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ImageNetDog15Clustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ImageNetDog15Clustering",
         description="Clustering images from a 15-class dogs-only subset of the dog classes in ImageNet.",
         reference="http://vision.stanford.edu/aditya86/ImageNetDogs/main.html",
@@ -45,7 +45,7 @@ class ImageNetDog15Clustering(AbsTaskAnyClustering):
 
 
 class ImageNet10Clustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ImageNet10Clustering",
         description="Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.",
         reference="https://www.kaggle.com/datasets/liusha249/imagenet10",

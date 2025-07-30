@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SadeemQuestionRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SadeemQuestionRetrieval",
         dataset={
             "path": "sadeem-ai/sadeem-ar-eval-retrieval-questions",

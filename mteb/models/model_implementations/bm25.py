@@ -110,7 +110,7 @@ def bm25_loader(model_name, **kwargs):
     return BM25Search(**kwargs)
 
 
-bm25_s = ModelMeta(
+bm25_s = ModelMeta.model_construct(
     loader=bm25_loader,
     name="bm25s",
     languages=["eng-Latn"],

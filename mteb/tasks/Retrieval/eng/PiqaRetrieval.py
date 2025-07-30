@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class PIQA(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PIQA",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on PIQA.",
         reference="https://arxiv.org/abs/1911.11641",

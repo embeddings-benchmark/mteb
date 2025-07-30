@@ -33,7 +33,7 @@ GRITLM_CITATION = """
 """
 
 
-gritlm7b = ModelMeta(
+gritlm7b = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=gritlm_instruction,
@@ -61,7 +61,7 @@ gritlm7b = ModelMeta(
     citation=GRITLM_CITATION,
 )
 
-gritlm8x7b = ModelMeta(
+gritlm8x7b = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=gritlm_instruction,

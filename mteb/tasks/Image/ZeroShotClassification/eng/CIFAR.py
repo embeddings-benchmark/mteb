@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CIFAR10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CIFAR10ZeroShot",
         description="Classifying images from 10 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar10",
@@ -50,7 +50,7 @@ class CIFAR10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
 
 
 class CIFAR100ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CIFAR100ZeroShot",
         description="Classifying images from 100 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar100",

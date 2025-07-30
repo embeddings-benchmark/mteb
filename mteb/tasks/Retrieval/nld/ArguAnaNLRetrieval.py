@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class ArguAnaNL(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArguAna-NL",
         description="ArguAna involves the task of retrieval of the best counterargument to an argument. ArguAna-NL is "
         "a Dutch translation.",

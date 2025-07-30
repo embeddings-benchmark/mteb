@@ -80,7 +80,7 @@ nvidia_training_datasets = {
     "MrTidyRetrieval": ["train"],
 }
 
-NV_embed_v2 = ModelMeta(
+NV_embed_v2 = ModelMeta.model_construct(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -109,7 +109,7 @@ NV_embed_v2 = ModelMeta(
     public_training_data=None,
 )
 
-NV_embed_v1 = ModelMeta(
+NV_embed_v1 = ModelMeta.model_construct(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,

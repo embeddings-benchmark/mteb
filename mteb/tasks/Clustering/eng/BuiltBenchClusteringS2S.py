@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BuiltBenchClusteringS2S(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BuiltBenchClusteringS2S",
         description="Clustering of built asset names/titles based on categories identified within industry classification systems such as IFC, Uniclass, etc.",
         reference="https://arxiv.org/abs/2411.12056",

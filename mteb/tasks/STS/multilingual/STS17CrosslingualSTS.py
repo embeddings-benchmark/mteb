@@ -20,7 +20,7 @@ _LANGUAGES = {
 
 class STS17Crosslingual(AbsTaskAnySTS):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STS17",
         dataset={
             "path": "mteb/sts17-crosslingual-sts",

@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SKQuadRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SKQuadRetrieval",
         description=(
             "Retrieval SK Quad evaluates Slovak search performance using questions and answers "

@@ -28,7 +28,7 @@ def load_retrieval_data(dataset_path, eval_splits):
 
 
 class GermanQuADRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GermanQuAD-Retrieval",
         description="Context Retrieval for German Question Answering",
         reference="https://huggingface.co/datasets/deepset/germanquad",

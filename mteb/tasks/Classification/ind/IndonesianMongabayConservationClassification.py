@@ -10,7 +10,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class IndonesianMongabayConservationClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndonesianMongabayConservationClassification",
         description="Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)",
         reference="https://aclanthology.org/2023.sealp-1.4/",

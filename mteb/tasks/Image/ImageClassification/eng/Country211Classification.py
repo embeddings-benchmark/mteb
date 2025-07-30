@@ -10,7 +10,7 @@ class Country211Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Country211",
         description="Classifying images of 211 countries.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",

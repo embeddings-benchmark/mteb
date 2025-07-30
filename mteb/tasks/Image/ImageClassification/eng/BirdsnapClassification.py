@@ -10,7 +10,7 @@ class BirdsnapClassification(AbsTaskAnyClassification):
     n_experiments: int = 5
     label_column_name: str = "common"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Birdsnap",
         description="Classifying bird images from 500 species.",
         reference="https://openaccess.thecvf.com/content_cvpr_2014/html/Berg_Birdsnap_Large-scale_Fine-grained_2014_CVPR_paper.html",

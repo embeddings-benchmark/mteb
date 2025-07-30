@@ -10,7 +10,7 @@ class AROVisualRelation(AbsTaskImageTextPairClassification):
     images_column_names = ["image"]
     texts_column_names = ["true_caption", "false_caption"]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AROVisualRelation",
         description="Compositionality Evaluation of images to their captions.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",

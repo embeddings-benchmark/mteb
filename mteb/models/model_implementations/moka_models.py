@@ -83,7 +83,7 @@ m3e_dataset = {
     # - SQuAD
 }
 
-m3e_base = ModelMeta(
+m3e_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="moka-ai/m3e-base",
     languages=["zho-Hans", "eng-Latn"],
@@ -107,7 +107,7 @@ m3e_base = ModelMeta(
     training_datasets=m3e_dataset,
 )
 
-m3e_small = ModelMeta(
+m3e_small = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="moka-ai/m3e-small",
     languages=["zho-Hans", "eng-Latn"],
@@ -131,7 +131,7 @@ m3e_small = ModelMeta(
     training_datasets=m3e_dataset,
 )
 
-m3e_large = ModelMeta(
+m3e_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="moka-ai/m3e-large",
     languages=["zho-Hans", "eng-Latn"],

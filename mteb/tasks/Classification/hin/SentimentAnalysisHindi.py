@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SentimentAnalysisHindi(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SentimentAnalysisHindi",
         description="Hindi Sentiment Analysis Dataset",
         reference="https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi",

@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ARCChallenge(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ARCChallenge",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on ARC-Challenge.",
         reference="https://allenai.org/data/arc",

@@ -74,7 +74,7 @@ def _load_xflickrco_data(
 
 
 class XFlickr30kCoT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XFlickr30kCoT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
         reference="https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf",

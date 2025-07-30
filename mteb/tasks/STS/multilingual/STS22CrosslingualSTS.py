@@ -27,7 +27,7 @@ _LANGUAGES = {
 
 class STS22CrosslingualSTSv2(AbsTaskAnySTS):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STS22.v2",
         dataset={
             "path": "mteb/sts22-crosslingual-sts",
@@ -88,7 +88,7 @@ Ratan, Shyam},
 class STS22CrosslingualSTS(AbsTaskAnySTS):
     superseded_by = "STS22.v2"
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STS22",
         dataset={
             "path": "mteb/sts22-crosslingual-sts",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuNLUIntentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuNLUIntentClassification",
         dataset={
             "path": "mteb/RuNLUIntentClassification",

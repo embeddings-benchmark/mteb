@@ -34,7 +34,7 @@ class CUREv1Splits(str, Enum):
 
 
 class CUREv1Retrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         dataset={
             "path": "clinia/CUREv1",
             "revision": "3bcf51c91e04d04a8a3329dfbe988b964c5cbe83",

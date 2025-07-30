@@ -17,7 +17,7 @@ _LANGUAGES = {
 
 class TweetSentimentClassification(AbsTaskAnyClassification):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetSentimentClassification",
         dataset={
             "path": "mteb/tweet_sentiment_multilingual",

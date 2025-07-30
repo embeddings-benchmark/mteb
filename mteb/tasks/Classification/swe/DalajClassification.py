@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DalajClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DalajClassification",
         dataset={
             "path": "AI-Sweden/SuperLim",

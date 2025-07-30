@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EstonianValenceClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EstonianValenceClassification",
         dataset={
             "path": "kardosdrur/estonian-valence",

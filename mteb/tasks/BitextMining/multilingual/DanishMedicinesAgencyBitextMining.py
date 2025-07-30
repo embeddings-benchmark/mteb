@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DanishMedicinesAgencyBitextMining",
         dataset={
             "path": "mteb/english-danish-parallel-corpus",

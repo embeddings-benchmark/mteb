@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BIRCODorisMaeReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BIRCO-DorisMae",
         description=(
             "Retrieval task using the DORIS-MAE dataset from BIRCO. This dataset contains 60 queries "

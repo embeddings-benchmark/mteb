@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class MSMARCO(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MSMARCO",
         dataset={
             "path": "mteb/msmarco",
@@ -70,7 +70,7 @@ Li Deng},
 class MSMARCOHardNegatives(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MSMARCOHardNegatives",
         dataset={
             "path": "mteb/MSMARCO_test_top_250_only_w_correct-v2",

@@ -9,7 +9,7 @@ class STSBenchmarkSTS(AbsTaskAnySTS):
     min_score = 0
     max_score = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STSBenchmark",
         dataset={
             "path": "mteb/stsbenchmark-sts",

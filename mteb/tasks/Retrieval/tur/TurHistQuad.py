@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TurHistQuadRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TurHistQuadRetrieval",
         dataset={
             "path": "asparius/TurHistQuAD",

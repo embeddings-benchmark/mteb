@@ -91,7 +91,7 @@ def _load_wit_data(
 
 
 class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WITT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
         reference="https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf",

@@ -130,7 +130,7 @@ laion_2b = {
     # LAION-2B
 }
 
-EVA02_CLIP_B_16 = ModelMeta(
+EVA02_CLIP_B_16 = ModelMeta.model_construct(
     loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-B-16",
     languages=["eng-Latn"],
@@ -152,7 +152,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     training_datasets=training_datasets,
 )
 
-EVA02_CLIP_L_14 = ModelMeta(
+EVA02_CLIP_L_14 = ModelMeta.model_construct(
     loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-L-14",
     languages=["eng-Latn"],
@@ -174,7 +174,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     training_datasets=training_datasets,
 )
 
-EVA02_CLIP_bigE_14 = ModelMeta(
+EVA02_CLIP_bigE_14 = ModelMeta.model_construct(
     loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-bigE-14",
     languages=["eng-Latn"],
@@ -197,7 +197,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
 )
 
 
-EVA02_CLIP_bigE_14_plus = ModelMeta(
+EVA02_CLIP_bigE_14_plus = ModelMeta.model_construct(
     loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-bigE-14-plus",
     languages=["eng-Latn"],

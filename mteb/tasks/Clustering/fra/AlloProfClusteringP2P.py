@@ -14,7 +14,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class AlloProfClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "AlloProfClusteringP2P.v2"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AlloProfClusteringP2P",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
@@ -73,7 +73,7 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
     max_document_to_embed = 2556
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AlloProfClusteringP2P.v2",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",

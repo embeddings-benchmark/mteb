@@ -63,7 +63,7 @@ LANG_MAP = {
 
 
 class IndicLangClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicLangClassification",
         dataset={
             "path": "ai4bharat/Bhasha-Abhijnaanam",

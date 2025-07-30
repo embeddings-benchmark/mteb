@@ -14,7 +14,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class TwentyNewsgroupsClustering(AbsTaskAnyClustering):
     superseded_by = "TwentyNewsgroupsClustering.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TwentyNewsgroupsClustering",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
         reference="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html",
@@ -55,7 +55,7 @@ class TwentyNewsgroupsClustering(AbsTaskAnyClustering):
 
 
 class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TwentyNewsgroupsClustering.v2",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
         reference="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html",

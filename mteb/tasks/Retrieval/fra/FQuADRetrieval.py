@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class FQuADRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["test", "validation"]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FQuADRetrieval",
         description="This dataset has been built from the French SQuad dataset.",
         reference="https://huggingface.co/datasets/manu/fquad2_test",

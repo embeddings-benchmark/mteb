@@ -27,7 +27,7 @@ _LANGUAGES = {
 
 
 class MasakhaNEWSClusteringP2P(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MasakhaNEWSClusteringP2P",
         description="Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.",
         reference="https://huggingface.co/datasets/masakhane/masakhanews",

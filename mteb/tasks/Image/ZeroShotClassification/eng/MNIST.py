@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MNISTZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MNISTZeroShot",
         description="Classifying handwritten digits.",
         reference="https://en.wikipedia.org/wiki/MNIST_database",

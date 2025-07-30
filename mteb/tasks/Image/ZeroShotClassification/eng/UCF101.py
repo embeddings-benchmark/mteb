@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class UCF101ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="UCF101ZeroShot",
         description="""UCF101 is an action recognition data set of realistic
 action videos collected from YouTube, having 101 action categories. This

@@ -20,7 +20,7 @@ _LANGUAGES = {
 
 
 class PubChemWikiPairClassification(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PubChemWikiPairClassification",
         dataset={
             "path": "BASF-AI/PubChemWikiMultilingualPC",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class InfoSeekIT2TRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="InfoSeekIT2TRetrieval",
         description="Retrieve source information to answer questions about images.",
         reference="https://aclanthology.org/2023.emnlp-main.925",

@@ -494,7 +494,7 @@ have your found contamination in the training data of a model? Please let us kno
 annotating the training datasets of the model:
 
 ```py
-model_w_contamination = ModelMeta(
+model_w_contamination = ModelMeta.model_construct(
     name = "model-with-contamination"
     ...
     training_datasets: {"ArguAna": # name of dataset within MTEB

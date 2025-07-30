@@ -21,7 +21,7 @@ SPLIT = "test"
 
 
 class IndicQARetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicQARetrieval",
         dataset={
             "path": "mteb/IndicQARetrieval",

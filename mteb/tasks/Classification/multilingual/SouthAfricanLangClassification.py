@@ -19,7 +19,7 @@ _LANGUAGES = [
 
 
 class SouthAfricanLangClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SouthAfricanLangClassification",
         dataset={
             "path": "mlexplorer008/south_african_language_identification",

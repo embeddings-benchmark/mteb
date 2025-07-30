@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class TweetSarcasmClassification(AbsTaskAnyClassification):
     superseded_by = "TweetSarcasmClassification.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetSarcasmClassification",
         dataset={
             "path": "iabufarha/ar_sarcasm",
@@ -59,7 +59,7 @@ Mubarak, Hamdy},
 
 
 class TweetSarcasmClassificationV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetSarcasmClassification.v2",
         dataset={
             "path": "mteb/tweet_sarcasm",

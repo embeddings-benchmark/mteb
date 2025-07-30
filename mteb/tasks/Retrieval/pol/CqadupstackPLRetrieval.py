@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Wordpress-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-wordpress-pl",
@@ -41,7 +41,7 @@ class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackWebmastersRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Webmasters-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-webmasters-pl",
@@ -77,7 +77,7 @@ class CQADupstackWebmastersRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackUnixRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Unix-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-unix-pl",
@@ -113,7 +113,7 @@ class CQADupstackUnixRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackTexRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Tex-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-tex-pl",
@@ -149,7 +149,7 @@ class CQADupstackTexRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackStatsRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Stats-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-stats-pl",
@@ -185,7 +185,7 @@ class CQADupstackStatsRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackProgrammersRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Programmers-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-programmers-pl",
@@ -221,7 +221,7 @@ class CQADupstackProgrammersRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackPhysicsRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Physics-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-physics-pl",
@@ -257,7 +257,7 @@ class CQADupstackPhysicsRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackMathematicaRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Mathematica-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-mathematica-pl",
@@ -293,7 +293,7 @@ class CQADupstackMathematicaRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackGisRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Gis-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-gis-pl",
@@ -329,7 +329,7 @@ class CQADupstackGisRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackGamingRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Gaming-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-gaming-pl",
@@ -365,7 +365,7 @@ class CQADupstackGamingRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackEnglishRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-English-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-english-pl",
@@ -401,7 +401,7 @@ class CQADupstackEnglishRetrievalPL(AbsTaskRetrieval):
 
 
 class CQADupstackAndroidRetrievalPL(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstack-Android-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
         reference="https://huggingface.co/datasets/clarin-knext/cqadupstack-android-pl",

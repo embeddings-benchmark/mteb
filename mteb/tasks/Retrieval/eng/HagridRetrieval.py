@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class HagridRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HagridRetrieval",
         dataset={
             "path": "miracl/hagrid",

@@ -16,7 +16,7 @@ _SPLITS = ["test"]
 
 class BUCCBitextMiningFast(AbsTaskBitextMining):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BUCC.v2",
         dataset={
             "path": "mteb/bucc-bitext-mining",

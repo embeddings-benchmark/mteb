@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class TempReasonL1(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TempReasonL1",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l1.",
         reference="https://github.com/DAMO-NLP-SG/TempReason",

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class BUCCBitextMining(AbsTaskBitextMining):
     superseded_by = "BUCC.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BUCC",
         dataset={
             "path": "mteb/bucc-bitext-mining",

@@ -102,7 +102,7 @@ def load_data(self, **kwargs):
 
 class BrightRetrieval(AbsTaskRetrieval):
     is_long = False
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BrightRetrieval",
         dataset={
             "path": "xlangai/BRIGHT",

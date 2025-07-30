@@ -43,7 +43,7 @@ common_args = {
 
 
 class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeRAGProgrammingSolutions",
         description="Evaluation of programming solution retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant programming solutions given code-related queries.",
         dataset={
@@ -100,7 +100,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
 
 
 class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeRAGOnlineTutorials",
         description="Evaluation of online programming tutorial retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant tutorials from online platforms given code-related queries.",
         dataset={
@@ -160,7 +160,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
 
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeRAGLibraryDocumentationSolutions",
         description="Evaluation of code library documentation retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant Python library documentation sections given code-related queries.",
         dataset={
@@ -217,7 +217,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
 
 
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeRAGStackoverflowPosts",
         description="Evaluation of StackOverflow post retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant StackOverflow posts given code-related queries.",
         dataset={

@@ -9,7 +9,7 @@ _LANGUAGES = {
 
 
 class PhincBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PhincBitextMining",
         dataset={
             "path": "gentaiscool/bitext_phinc_miners",

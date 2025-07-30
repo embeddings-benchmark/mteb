@@ -157,7 +157,7 @@ blip2_training_datasets = {
     # LAION400M
 }
 
-blip2_opt_2_7b = ModelMeta(
+blip2_opt_2_7b = ModelMeta.model_construct(
     loader=blip2_loader,
     name="Salesforce/blip2-opt-2.7b",
     languages=["eng-Latn"],
@@ -179,7 +179,7 @@ blip2_opt_2_7b = ModelMeta(
     training_datasets=blip2_training_datasets,
 )
 
-blip2_opt_6_7b_coco = ModelMeta(
+blip2_opt_6_7b_coco = ModelMeta.model_construct(
     loader=blip2_loader,
     name="Salesforce/blip2-opt-6.7b-coco",
     languages=["eng-Latn"],

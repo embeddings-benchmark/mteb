@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CUB200I2I(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CUB200I2IRetrieval",
         description="Retrieve bird images from 200 classes.",
         reference="https://www.florian-schroff.de/publications/CUB-200.pdf",

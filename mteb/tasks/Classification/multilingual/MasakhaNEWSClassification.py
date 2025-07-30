@@ -24,7 +24,7 @@ _LANGUAGES = {
 
 
 class MasakhaNEWSClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MasakhaNEWSClassification",
         dataset={
             "path": "mteb/masakhanews",

@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DTDZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DTDZeroShot",
         description="Describable Textures Dataset in 47 categories.",
         reference="https://www.robots.ox.ac.uk/~vgg/data/dtd/",

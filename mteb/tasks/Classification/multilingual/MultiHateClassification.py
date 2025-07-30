@@ -20,7 +20,7 @@ _LANGUAGES = {
 
 class MultiHateClassification(AbsTaskAnyClassification):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MultiHateClassification",
         dataset={
             "path": "mteb/multi-hatecheck",

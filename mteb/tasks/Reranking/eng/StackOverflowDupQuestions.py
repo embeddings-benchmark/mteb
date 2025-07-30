@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class StackOverflowDupQuestions(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StackOverflowDupQuestions",
         description="Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaScript and Python",
         reference="https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",

@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class T2Retrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="T2Retrieval",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
         reference="https://arxiv.org/abs/2304.03679",
@@ -54,7 +54,7 @@ class T2Retrieval(AbsTaskRetrieval):
 class MMarcoRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MMarcoRetrieval",
         description="MMarcoRetrieval",
         reference="https://arxiv.org/abs/2309.07597",
@@ -92,7 +92,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
 
 
 class DuRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DuRetrieval",
         description="A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
         reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
@@ -130,7 +130,7 @@ class DuRetrieval(AbsTaskRetrieval):
 
 
 class CovidRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CovidRetrieval",
         description="COVID-19 news articles",
         reference="https://arxiv.org/abs/2203.03367",
@@ -169,7 +169,7 @@ class CovidRetrieval(AbsTaskRetrieval):
 
 
 class CmedqaRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CmedqaRetrieval",
         description="Online medical consultation text. Used the CMedQAv2 as its underlying dataset.",
         reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
@@ -211,7 +211,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
 class EcomRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EcomRetrieval",
         description="EcomRetrieval",
         reference="https://arxiv.org/abs/2203.03367",
@@ -252,7 +252,7 @@ class EcomRetrieval(AbsTaskRetrieval):
 class MedicalRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MedicalRetrieval",
         description="MedicalRetrieval",
         reference="https://arxiv.org/abs/2203.03367",
@@ -293,7 +293,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
 class VideoRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VideoRetrieval",
         description="VideoRetrieval",
         reference="https://arxiv.org/abs/2203.03367",

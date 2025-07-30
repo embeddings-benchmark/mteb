@@ -73,7 +73,7 @@ def _load_code_search_code_retrieval(
 
 
 class CodeSearchNetCCRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeSearchNetCCRetrieval",
         description="The dataset is a collection of code snippets. The task is to retrieve the most relevant code snippet for a given code snippet.",
         reference="https://arxiv.org/abs/2407.02883",

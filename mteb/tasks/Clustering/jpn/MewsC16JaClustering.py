@@ -8,7 +8,7 @@ class MewsC16JaClustering(AbsTaskClusteringFast):
     max_document_to_embed = 992
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MewsC16JaClustering",
         description="""MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) is constructed from Wikinews.
         This dataset is the Japanese split of MewsC-16, containing topic sentences from Wikinews articles in 12 categories.

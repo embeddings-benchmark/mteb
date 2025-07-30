@@ -12,7 +12,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
     images_column_names = ["images"]
     texts_column_names = ["caption", "negative_caption"]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SugarCrepe",
         description="Compositionality Evaluation of images to their captions.",
         reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",

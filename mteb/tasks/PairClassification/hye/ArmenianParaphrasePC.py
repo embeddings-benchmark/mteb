@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ArmenianParaphrasePC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArmenianParaphrasePC",
         description="asparius/Armenian-Paraphrase-PC",
         reference="https://github.com/ivannikov-lab/arpa-paraphrase-corpus",

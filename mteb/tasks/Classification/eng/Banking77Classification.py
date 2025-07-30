@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Banking77Classification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Banking77Classification",
         description="Dataset composed of online banking queries annotated with their corresponding intents.",
         reference="https://arxiv.org/abs/2003.04807",

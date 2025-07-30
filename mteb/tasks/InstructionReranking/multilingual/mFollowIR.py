@@ -154,7 +154,7 @@ def load_qrel_diff(metadata: TaskMetadata, hf_subset: str) -> dict[str, list[str
 
 
 class mFollowIRCrossLingual(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="mFollowIRCrossLingual",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
         reference="https://neuclir.github.io/",
@@ -223,7 +223,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
 
 
 class mFollowIR(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
         reference="https://neuclir.github.io/",

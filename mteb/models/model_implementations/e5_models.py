@@ -165,7 +165,7 @@ ME5_TRAINING_DATA = {
     "MrTidyRetrieval": ["train"],
 }
 
-e5_mult_small = ModelMeta(
+e5_mult_small = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -191,7 +191,7 @@ e5_mult_small = ModelMeta(
     citation=MULTILINGUAL_E5_CITATION,
 )
 
-e5_mult_base = ModelMeta(
+e5_mult_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -217,7 +217,7 @@ e5_mult_base = ModelMeta(
     citation=MULTILINGUAL_E5_CITATION,
 )
 
-e5_mult_large = ModelMeta(
+e5_mult_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -243,7 +243,7 @@ e5_mult_large = ModelMeta(
     citation=MULTILINGUAL_E5_CITATION,
 )
 
-e5_eng_small_v2 = ModelMeta(
+e5_eng_small_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -269,7 +269,7 @@ e5_eng_small_v2 = ModelMeta(
     citation=E5_CITATION,
 )
 
-e5_eng_small = ModelMeta(
+e5_eng_small = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -295,7 +295,7 @@ e5_eng_small = ModelMeta(
     citation=E5_CITATION,
 )
 
-e5_eng_base_v2 = ModelMeta(
+e5_eng_base_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -322,7 +322,7 @@ e5_eng_base_v2 = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
 )
 
-e5_eng_large_v2 = ModelMeta(
+e5_eng_large_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -349,7 +349,7 @@ e5_eng_large_v2 = ModelMeta(
     citation=E5_CITATION,
 )
 
-e5_large = ModelMeta(
+e5_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,
@@ -376,7 +376,7 @@ e5_large = ModelMeta(
     citation=E5_CITATION,
 )
 
-e5_base = ModelMeta(
+e5_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts=model_prompts,

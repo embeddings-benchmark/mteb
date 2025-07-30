@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CzechSoMeSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CzechSoMeSentimentClassification",
         description="User comments on Facebook",
         reference="https://aclanthology.org/W13-1609/",

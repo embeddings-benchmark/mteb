@@ -27,7 +27,7 @@ _LANGUAGES = {
 
 
 class MasakhaNEWSClusteringS2S(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MasakhaNEWSClusteringS2S",
         dataset={
             "path": "masakhane/masakhanews",

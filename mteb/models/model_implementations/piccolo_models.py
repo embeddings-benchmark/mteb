@@ -5,7 +5,7 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-piccolo_base_zh = ModelMeta(
+piccolo_base_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-base-zh",
     languages=["zho-Hans"],
@@ -28,7 +28,7 @@ piccolo_base_zh = ModelMeta(
     training_datasets=None,  # They don't specify
 )
 
-piccolo_large_zh_v2 = ModelMeta(
+piccolo_large_zh_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-large-zh-v2",
     languages=["zho-Hans"],

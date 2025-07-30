@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 # NOTE: In the paper, this is grouped with linear probe tasks.
 # See https://github.com/embeddings-benchmark/mteb/pull/2035#issuecomment-2661626309.
 class VOC2007Classification(AbsTaskImageMultilabelClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VOC2007",
         description="Classifying bird images from 500 species.",
         reference="http://host.robots.ox.ac.uk/pascal/VOC/",

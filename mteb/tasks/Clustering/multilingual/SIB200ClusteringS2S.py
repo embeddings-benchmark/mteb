@@ -210,7 +210,7 @@ class SIB200ClusteringFast(AbsTaskClusteringFast):
     max_document_to_embed = 1004
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SIB200ClusteringS2S",
         description="""SIB-200 is the largest publicly available topic classification
         dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is

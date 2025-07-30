@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class LitSearchRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LitSearchRetrieval",
         description="""
         The dataset contains the query set and retrieval corpus for the paper LitSearch: A Retrieval Benchmark for

@@ -15,7 +15,7 @@ mixedbread_training_data = {
     "MSMARCO": [],
 }
 
-mxbai_embed_large_v1 = ModelMeta(
+mxbai_embed_large_v1 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_prompts={
@@ -56,7 +56,7 @@ mxbai_embed_large_v1 = ModelMeta(
     training_datasets=None,
 )
 
-mxbai_embed_2d_large_v1 = ModelMeta(
+mxbai_embed_2d_large_v1 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
     languages=["eng-Latn"],
@@ -80,7 +80,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
 )
 
 
-mxbai_embed_xsmall_v1 = ModelMeta(
+mxbai_embed_xsmall_v1 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
     languages=["eng-Latn"],

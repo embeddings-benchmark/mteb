@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RenderedSST2(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RenderedSST2",
         description="RenderedSST2.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_renderedsst2",

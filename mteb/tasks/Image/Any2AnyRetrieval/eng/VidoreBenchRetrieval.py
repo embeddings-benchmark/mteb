@@ -71,7 +71,7 @@ def _load_data(
 
 
 class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreArxivQARetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -115,7 +115,7 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreDocVQARetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -159,7 +159,7 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreInfoVQARetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -203,7 +203,7 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreTabfquadRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -247,7 +247,7 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreTatdqaRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -291,7 +291,7 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreShiftProjectRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -335,7 +335,7 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreSyntheticDocQAAIRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -379,7 +379,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreSyntheticDocQAEnergyRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -423,7 +423,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreSyntheticDocQAGovernmentReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -467,7 +467,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",

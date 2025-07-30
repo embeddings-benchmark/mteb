@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SpanishSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SpanishSentimentClassification",
         description="A Spanish dataset for sentiment classification.",
         reference="https://huggingface.co/datasets/sepidmnorozy/Spanish_sentiment",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DutchBookReviewSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DutchBookReviewSentimentClassification",
         description="A Dutch book review for sentiment classification.",
         reference="https://github.com/benjaminvdb/DBRD",

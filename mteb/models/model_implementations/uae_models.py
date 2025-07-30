@@ -53,7 +53,7 @@ class UAEWrapper(SentenceTransformerWrapper):
         return embeddings
 
 
-uae_large_v1 = ModelMeta(
+uae_large_v1 = ModelMeta.model_construct(
     loader=UAEWrapper,
     loader_kwargs=dict(
         # https://github.com/SeanLee97/AnglE/blob/b04eae166d8596b47293c75b4664d3ad820d7331/angle_emb/angle.py#L291-L314

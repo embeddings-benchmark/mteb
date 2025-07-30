@@ -11,7 +11,7 @@ TEST_SAMPLES = 2048
 
 
 class VieMedEVBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VieMedEVBitextMining",
         dataset={
             "path": "nhuvo/MedEV",

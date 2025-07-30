@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DadoEvalCoarseClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DadoEvalCoarseClassification",
         dataset={
             "path": "MattiaSangermano/DaDoEval",

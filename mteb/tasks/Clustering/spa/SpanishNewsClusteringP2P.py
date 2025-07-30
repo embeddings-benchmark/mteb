@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 
 
 class SpanishNewsClusteringP2P(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SpanishNewsClusteringP2P",
         description="Clustering of news articles, 7 topics in total.",
         reference="https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification",

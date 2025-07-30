@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class InappropriatenessClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="InappropriatenessClassification",
         dataset={
             "path": "ai-forever/inappropriateness-classification",
@@ -66,7 +66,7 @@ Robnik-{\v{S}}ikonja, Marko},
 
 
 class InappropriatenessClassificationv2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="InappropriatenessClassificationv2",
         dataset={
             "path": "mteb/InappropriatenessClassificationv2",

@@ -13,7 +13,7 @@ NUM_SAMPLES = 2048
 class BigPatentClustering(AbsTaskAnyClustering):
     superseded_by = "BigPatentClustering.v2"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BigPatentClustering",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
         + " belonging to a single category, with a total of 9 categories.",
@@ -61,7 +61,7 @@ Summarization},
 
 class BigPatentClusteringFast(AbsTaskClusteringFast):
     max_depth = 1
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BigPatentClustering.v2",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
         + " belonging to a single category, with a total of 9 categories.",

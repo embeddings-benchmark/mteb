@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class ROxfordEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ROxfordEasyI2IRetrieval",
         description="Retrieve photos of landmarks in Oxford, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
@@ -45,7 +45,7 @@ class ROxfordEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieva
 
 
 class ROxfordMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ROxfordMediumI2IRetrieval",
         description="Retrieve photos of landmarks in Oxford, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
@@ -80,7 +80,7 @@ class ROxfordMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrie
 
 
 class ROxfordHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ROxfordHardI2IRetrieval",
         description="Retrieve photos of landmarks in Oxford, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TamilNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TamilNewsClassification",
         description="A Tamil dataset for 6-class classification of Tamil news articles",
         reference="https://github.com/vanangamudi/tamil-news-classification",

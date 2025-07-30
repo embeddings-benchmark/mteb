@@ -97,7 +97,7 @@ class ColBERTModel(AbsEncoder):
         return pred.cpu().numpy()
 
 
-colbert_v2 = ModelMeta(
+colbert_v2 = ModelMeta.model_construct(
     loader=ColBERTModel,
     name="colbert-ir/colbertv2.0",
     languages=["eng-Latn"],
@@ -123,7 +123,7 @@ colbert_v2 = ModelMeta(
     },
 )
 
-jina_colbert_v2 = ModelMeta(
+jina_colbert_v2 = ModelMeta.model_construct(
     loader=ColBERTModel,
     loader_kwargs=dict(
         query_prefix="[QueryMarker]",
@@ -181,7 +181,7 @@ jina_colbert_v2 = ModelMeta(
 )
 
 
-lightonai__GTE_ModernColBERT_v1 = ModelMeta(
+lightonai__GTE_ModernColBERT_v1 = ModelMeta.model_construct(
     loader=ColBERTModel,
     name="lightonai/GTE-ModernColBERT-v1",
     languages=[

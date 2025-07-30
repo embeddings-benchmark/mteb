@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MedrxivClusteringP2P.v2",
         description="Clustering of titles+abstract from medrxiv across 51 categories.",
         reference="https://api.medrxiv.org/",
@@ -53,7 +53,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
 
 class MedrxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "MedrxivClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MedrxivClusteringP2P",
         description="Clustering of titles+abstract from medrxiv. Clustering of 10 sets, based on the main category.",
         reference="https://api.medrxiv.org/",

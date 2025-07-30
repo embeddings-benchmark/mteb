@@ -10,7 +10,7 @@ _LANGS = {
 
 
 class CataloniaTweetClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CataloniaTweetClassification",
         description="""This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter
         messages for automatic stance detection. The data was collected over 12 days during February and March

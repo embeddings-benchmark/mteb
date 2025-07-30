@@ -24,7 +24,7 @@ xyz_zh_datasets = {
 # "retrieval_data_llm":"https://huggingface.co/datasets/infgrad/retrieval_data_llm",
 # "Huatuo26M-Lite":"https://huggingface.co/datasets/FreedomIntelligence/Huatuo26M-Lite"
 
-xyz_embedding = ModelMeta(
+xyz_embedding = ModelMeta.model_construct(
     name="fangxq/XYZ-embedding",
     languages=["zho-Hans"],
     loader=sentence_transformers_loader,

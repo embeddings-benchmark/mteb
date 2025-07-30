@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class ArxivClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "ArXivHierarchicalClusteringP2P"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArxivClusteringP2P",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
@@ -51,7 +51,7 @@ class ArxivClusteringP2PFast(AbsTaskAnyClustering):
     # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArxivClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",

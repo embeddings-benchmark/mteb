@@ -428,7 +428,7 @@ KaLM_X_task_prompts = {
 
 KaLM_INSTRUCTION = "Instruct: {instruction} \n Query: "
 
-HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
+HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta.model_construct(
     loader=KALMWrapper,
     loader_kwargs=dict(
         instruction_template=KaLM_INSTRUCTION,
@@ -457,7 +457,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     superseded_by=None,
 )
 
-HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
+HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="HIT-TMG/KaLM-embedding-multilingual-mini-v1",
     revision="8a82a0cd2b322b91723e252486f7cce6fd8ac9d3",
@@ -480,7 +480,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
     superseded_by=None,
 )
 
-HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
+HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta.model_construct(
     loader=KALMWrapper,
     loader_kwargs=dict(
         instruction_template=KaLM_INSTRUCTION,
@@ -510,7 +510,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
 )
 
 
-# KaLM_Embedding_X_0605 = ModelMeta(
+# KaLM_Embedding_X_0605 = ModelMeta.model_construct(
 #     loader=partial(
 #         KALMWrapper,
 #         model_name="KaLM-Team/KaLM-Embedding-X-0605",

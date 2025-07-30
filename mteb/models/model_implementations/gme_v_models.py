@@ -331,7 +331,7 @@ training_data = {
 }
 
 
-gme_qwen2vl_2b = ModelMeta(
+gme_qwen2vl_2b = ModelMeta.model_construct(
     loader=GmeQwen2VL,
     name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     languages=["eng-Latn", "cmn-Hans"],
@@ -353,7 +353,7 @@ gme_qwen2vl_2b = ModelMeta(
     training_datasets=training_data,
 )
 
-gme_qwen2vl_7b = ModelMeta(
+gme_qwen2vl_7b = ModelMeta.model_construct(
     loader=GmeQwen2VL,
     name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     languages=["eng-Latn", "cmn-Hans"],

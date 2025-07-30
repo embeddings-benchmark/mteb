@@ -129,7 +129,7 @@ def _load_miracl_data(
 
 
 class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MIRACLVisionRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",

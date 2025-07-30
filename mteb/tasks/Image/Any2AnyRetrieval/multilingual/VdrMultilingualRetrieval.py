@@ -99,7 +99,7 @@ def _load_vdr_multilingual_data(
 
 
 class VDRMultilingualRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VDRMultilingualRetrieval",
         description="Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Spanish, English, French and German",
         reference="https://huggingface.co/datasets/llamaindex/vdr-multilingual-test",

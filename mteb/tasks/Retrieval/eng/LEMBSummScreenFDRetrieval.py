@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "validation"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LEMBSummScreenFDRetrieval",
         dataset={
             "path": "dwzhu/LongEmbed",

@@ -41,7 +41,7 @@ stella_zh_datasets = {
 # https://huggingface.co/datasets/Skywork/SkyPile-150B
 # https://huggingface.co/datasets/m-a-p/Matrix
 
-stella_en_400M = ModelMeta(
+stella_en_400M = ModelMeta.model_construct(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
     loader=instruct_wrapper,
     loader_kwargs=dict(
@@ -69,7 +69,7 @@ stella_en_400M = ModelMeta(
     public_training_data=None,
 )
 
-stella_en_1_5b = ModelMeta(
+stella_en_1_5b = ModelMeta.model_construct(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         attn="cccc",
@@ -96,7 +96,7 @@ stella_en_1_5b = ModelMeta(
     public_training_data=None,
 )
 
-stella_large_zh_v3_1792d = ModelMeta(
+stella_large_zh_v3_1792d = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="dunzhang/stella-large-zh-v3-1792d",
     languages=["zho-Hans"],
@@ -124,7 +124,7 @@ stella_large_zh_v3_1792d = ModelMeta(
     },
 )
 
-stella_base_zh_v3_1792d = ModelMeta(
+stella_base_zh_v3_1792d = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="infgrad/stella-base-zh-v3-1792d",
     languages=["zho-Hans"],
@@ -153,7 +153,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 )
 
 
-stella_mrl_large_zh_v3_5_1792d = ModelMeta(
+stella_mrl_large_zh_v3_5_1792d = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     languages=["zho-Hans"],
@@ -176,7 +176,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     training_datasets=stella_zh_datasets,
 )
 
-zpoint_large_embedding_zh = ModelMeta(
+zpoint_large_embedding_zh = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="iampanda/zpoint_large_embedding_zh",
     languages=["zho-Hans"],

@@ -16,7 +16,7 @@ _LANGUAGES = {
 
 
 class IndicNLPNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IndicNLPNewsClassification",
         dataset={
             "path": "Sakshamrzt/IndicNLP-Multilingual",

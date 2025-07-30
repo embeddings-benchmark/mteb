@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BLINKIT2IMultiChoice",
         description="Retrieve images based on images and specific retrieval instructions.",
         reference="https://arxiv.org/abs/2404.12390",

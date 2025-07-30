@@ -214,7 +214,7 @@ class JinaReranker(RerankerWrapper):
         return scores
 
 
-monobert_large = ModelMeta(
+monobert_large = ModelMeta.model_construct(
     loader=MonoBERTReranker,  # type: ignore
     loader_kwargs=dict(
         fp_options="float16",
@@ -239,7 +239,7 @@ monobert_large = ModelMeta(
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
-jina_reranker_multilingual = ModelMeta(
+jina_reranker_multilingual = ModelMeta.model_construct(
     loader=JinaReranker,  # type: ignore
     loader_kwargs=dict(
         fp_options="float16",
@@ -263,7 +263,7 @@ jina_reranker_multilingual = ModelMeta(
     is_cross_encoder=True,
 )
 
-bge_reranker_v2_m3 = ModelMeta(
+bge_reranker_v2_m3 = ModelMeta.model_construct(
     loader=BGEReranker,  # type: ignore
     loader_kwargs=dict(
         fp_options="float16",

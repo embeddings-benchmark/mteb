@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NorwegianCourtsBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NorwegianCourtsBitextMining",
         dataset={
             "path": "kardosdrur/norwegian-courts",

@@ -19,7 +19,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         "test_32768",
     ]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LEMBNeedleRetrieval",
         dataset={
             "path": "dwzhu/LongEmbed",

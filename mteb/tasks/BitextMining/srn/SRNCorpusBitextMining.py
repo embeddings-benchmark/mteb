@@ -23,7 +23,7 @@ _EVAL_LANGS = {
 
 
 class SRNCorpusBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SRNCorpusBitextMining",
         dataset={
             "path": "davidstap/sranantongo",

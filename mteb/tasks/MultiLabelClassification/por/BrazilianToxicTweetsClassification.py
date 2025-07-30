@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BrazilianToxicTweetsClassification",
         description="""
         ToLD-Br is the biggest dataset for toxic tweets in Brazilian Portuguese, crowdsourced by 42 annotators selected from

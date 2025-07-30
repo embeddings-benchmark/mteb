@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CTKFactsNLI(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CTKFactsNLI",
         dataset={
             "path": "ctu-aic/ctkfacts_nli",

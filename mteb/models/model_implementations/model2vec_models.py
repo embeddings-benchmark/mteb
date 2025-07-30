@@ -153,7 +153,7 @@ class Model2VecModel(AbsEncoder):
         return self.model.encode(sentences).astype(np.float32)
 
 
-m2v_base_glove_subword = ModelMeta(
+m2v_base_glove_subword = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/M2V_base_glove_subword",
     languages=["eng-Latn"],
@@ -177,7 +177,7 @@ m2v_base_glove_subword = ModelMeta(
 )
 
 
-m2v_base_glove = ModelMeta(
+m2v_base_glove = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/M2V_base_glove",
     languages=["eng-Latn"],
@@ -200,7 +200,7 @@ m2v_base_glove = ModelMeta(
     public_training_data=None,
 )
 
-m2v_base_output = ModelMeta(
+m2v_base_output = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/M2V_base_output",
     languages=["eng-Latn"],
@@ -223,7 +223,7 @@ m2v_base_output = ModelMeta(
     public_training_data=None,
 )
 
-m2v_multilingual_output = ModelMeta(
+m2v_multilingual_output = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/M2V_multilingual_output",
     languages=["eng-Latn"],
@@ -246,7 +246,7 @@ m2v_multilingual_output = ModelMeta(
     public_training_data=None,
 )
 
-potion_base_2m = ModelMeta(
+potion_base_2m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/potion-base-2M",
     languages=["eng-Latn"],
@@ -269,7 +269,7 @@ potion_base_2m = ModelMeta(
     public_training_data=None,
 )
 
-potion_base_4m = ModelMeta(
+potion_base_4m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/potion-base-4M",
     languages=["eng-Latn"],
@@ -292,7 +292,7 @@ potion_base_4m = ModelMeta(
     public_training_data=None,
 )
 
-potion_base_8m = ModelMeta(
+potion_base_8m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/potion-base-8M",
     languages=["eng-Latn"],
@@ -315,7 +315,7 @@ potion_base_8m = ModelMeta(
     public_training_data=None,
 )
 
-potion_multilingual_128m = ModelMeta(
+potion_multilingual_128m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="minishlab/potion-multilingual-128M",
     languages=_POTION_MULTILINGUAL_128M_LANGUAGES,
@@ -338,7 +338,7 @@ potion_multilingual_128m = ModelMeta(
     public_training_data=None,
 )
 
-pubmed_bert_100k = ModelMeta(
+pubmed_bert_100k = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-100K",
     languages=["eng-Latn"],
@@ -361,7 +361,7 @@ pubmed_bert_100k = ModelMeta(
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
 
-pubmed_bert_500k = ModelMeta(
+pubmed_bert_500k = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-500K",
     languages=["eng-Latn"],
@@ -384,7 +384,7 @@ pubmed_bert_500k = ModelMeta(
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
 
-pubmed_bert_1m = ModelMeta(
+pubmed_bert_1m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-1M",
     languages=["eng-Latn"],
@@ -407,7 +407,7 @@ pubmed_bert_1m = ModelMeta(
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
 
-pubmed_bert_2m = ModelMeta(
+pubmed_bert_2m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-2M",
     languages=["eng-Latn"],
@@ -430,7 +430,7 @@ pubmed_bert_2m = ModelMeta(
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
 
-pubmed_bert_8m = ModelMeta(
+pubmed_bert_8m = ModelMeta.model_construct(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-8M",
     languages=["eng-Latn"],

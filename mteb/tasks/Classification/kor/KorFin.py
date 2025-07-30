@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
 class KorFin(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="KorFin",
         dataset={
             "path": "amphora/korfin-asc",

@@ -9,7 +9,7 @@ from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change
 
 
 class Robust04InstructionRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Robust04InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",

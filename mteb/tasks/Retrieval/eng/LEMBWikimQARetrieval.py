@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class LEMBWikimQARetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LEMBWikimQARetrieval",
         dataset={
             "path": "dwzhu/LongEmbed",

@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class StanfordCarsZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="StanfordCarsZeroShot",
         description="Classifying car images from 96 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",

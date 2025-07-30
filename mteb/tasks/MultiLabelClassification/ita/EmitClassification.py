@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EmitClassification(AbsTaskMultilabelClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="EmitClassification",
         description="""The EMit dataset is a comprehensive resource for the detection of emotions in Italian social media texts.
         The EMit dataset consists of social media messages about TV shows, TV series, music videos, and advertisements.

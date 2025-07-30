@@ -7,7 +7,7 @@ _EVAL_SPLIT = "test"
 
 
 class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeTransOceanContest",
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet",
         reference="https://arxiv.org/abs/2310.04951",

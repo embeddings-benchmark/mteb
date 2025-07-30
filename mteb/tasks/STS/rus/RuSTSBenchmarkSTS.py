@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
 class RuSTSBenchmarkSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuSTSBenchmarkSTS",
         dataset={
             "path": "ai-forever/ru-stsbenchmark-sts",

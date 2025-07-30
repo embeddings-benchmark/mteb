@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TNews(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TNews",
         description="Short Text Classification for News",
         reference="https://www.cluebenchmarks.com/introduce.html",
@@ -78,7 +78,7 @@ Lan, Zhenzhong },
 
 
 class IFlyTek(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IFlyTek",
         description="Long Text classification for the description of Apps",
         reference="https://www.cluebenchmarks.com/introduce.html",
@@ -153,7 +153,7 @@ Lan, Zhenzhong },
 
 
 class MultilingualSentiment(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MultilingualSentiment",
         description="A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative",
         reference="https://github.com/tyqiangz/multilingual-sentiment-datasets",
@@ -182,7 +182,7 @@ class MultilingualSentiment(AbsTaskAnyClassification):
 
 
 class JDReview(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="JDReview",
         description="review for iphone",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
@@ -218,7 +218,7 @@ class JDReview(AbsTaskAnyClassification):
 
 
 class OnlineShopping(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OnlineShopping",
         description="Sentiment Analysis of User Reviews on Online Shopping Websites",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
@@ -254,7 +254,7 @@ class OnlineShopping(AbsTaskAnyClassification):
 
 
 class Waimai(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Waimai",
         description="Sentiment Analysis of user reviews on takeaway platforms",
         reference="https://aclanthology.org/2023.nodalida-1.20/",

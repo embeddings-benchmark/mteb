@@ -111,7 +111,7 @@ mocov3_training_datasets = {
     # imagenet
 }
 
-mocov3_vit_base = ModelMeta(
+mocov3_vit_base = ModelMeta.model_construct(
     loader=mocov3_loader,  # type: ignore
     name="nyu-visionx/moco-v3-vit-b",
     languages=["eng-Latn"],
@@ -133,7 +133,7 @@ mocov3_vit_base = ModelMeta(
     training_datasets=mocov3_training_datasets,
 )
 
-mocov3_vit_large = ModelMeta(
+mocov3_vit_large = ModelMeta.model_construct(
     loader=mocov3_loader,  # type: ignore
     name="nyu-visionx/moco-v3-vit-l",
     languages=["eng-Latn"],

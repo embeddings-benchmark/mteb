@@ -18,7 +18,7 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CLSClusteringS2S.v2",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
@@ -77,7 +77,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CLSClusteringP2P.v2",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
@@ -134,7 +134,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
 
 class CLSClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "CLSClusteringS2S.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CLSClusteringS2S",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
@@ -169,7 +169,7 @@ class CLSClusteringS2S(AbsTaskAnyClustering):
 
 class CLSClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "CLSClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CLSClusteringP2P",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
@@ -206,7 +206,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ThuNewsClusteringS2S.v2",
         dataset={
             "path": "C-MTEB/ThuNewsClusteringS2S",
@@ -265,7 +265,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ThuNewsClusteringP2P.v2",
         dataset={
             "path": "C-MTEB/ThuNewsClusteringP2P",
@@ -322,7 +322,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
 
 class ThuNewsClusteringS2S(AbsTaskAnyClustering):
     superseded_by = "ThuNewsClusteringS2S.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ThuNewsClusteringS2S",
         dataset={
             "path": "C-MTEB/ThuNewsClusteringS2S",
@@ -365,7 +365,7 @@ class ThuNewsClusteringS2S(AbsTaskAnyClustering):
 
 class ThuNewsClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "ThuNewsClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ThuNewsClusteringP2P",
         dataset={
             "path": "C-MTEB/ThuNewsClusteringP2P",

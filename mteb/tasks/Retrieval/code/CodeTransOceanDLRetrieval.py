@@ -7,7 +7,7 @@ _EVAL_SPLIT = "test"
 
 
 class CodeTransOceanDLRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CodeTransOceanDL",
         description="The dataset is a collection of equivalent Python Deep Learning code snippets written in different machine learning framework. The task is to retrieve the equivalent code snippet in another framework, given a query code snippet from one framework.",
         reference="https://arxiv.org/abs/2310.04951",

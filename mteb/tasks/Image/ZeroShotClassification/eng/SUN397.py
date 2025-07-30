@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SUN397ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SUN397ZeroShot",
         description="Large scale scene recognition in 397 categories.",
         reference="https://ieeexplore.ieee.org/abstract/document/5539970",

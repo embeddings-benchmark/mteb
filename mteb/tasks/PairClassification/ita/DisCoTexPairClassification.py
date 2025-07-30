@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DisCoTexPairClassification(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DisCoTexPairClassification",
         description="The DisCoTEX dataset aims at assessing discourse coherence in Italian texts. This dataset focuses on Italian real-world texts and provides resources to model coherence in natural language.",
         reference="https://github.com/davidecolla/DisCoTex",

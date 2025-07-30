@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class NarrativeQARetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NarrativeQARetrieval",
         dataset={
             "path": "deepmind/narrativeqa",

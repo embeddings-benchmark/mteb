@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SprintDuplicateQuestions",
         description="Duplicate questions from the Sprint community.",
         reference="https://www.aclweb.org/anthology/D18-1131/",

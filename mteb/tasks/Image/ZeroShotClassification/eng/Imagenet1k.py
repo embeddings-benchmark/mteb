@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Imagenet1kZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Imagenet1kZeroShot",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",
         reference="https://ieeexplore.ieee.org/document/5206848",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AfriSentiLangClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AfriSentiLangClassification",
         description="AfriSentiLID is the largest LID classification dataset for African Languages.",
         dataset={

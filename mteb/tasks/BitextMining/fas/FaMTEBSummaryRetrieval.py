@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SAMSumFa(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SAMSumFa",
         description="Translated Version of SAMSum Dataset for summary retrieval.",
         reference="https://huggingface.co/datasets/MCINext/samsum-fa",
@@ -36,7 +36,7 @@ class SAMSumFa(AbsTaskBitextMining):
 
 
 class SynPerChatbotSumSRetrieval(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotSumSRetrieval",
         description="Synthetic Persian Chatbot Summary Dataset for summary retrieval.",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-summary-retrieval",
@@ -67,7 +67,7 @@ class SynPerChatbotSumSRetrieval(AbsTaskBitextMining):
 
 
 class SynPerChatbotRAGSumSRetrieval(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotRAGSumSRetrieval",
         description="Synthetic Persian Chatbot RAG Summary Dataset for summary retrieval.",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-summary-retrieval",

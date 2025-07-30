@@ -11,7 +11,7 @@ _EVAL_SPLIT = "test"
 class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NLPJournalAbsArticleRetrieval.V2",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "
@@ -84,7 +84,7 @@ class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
 class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NLPJournalAbsArticleRetrieval",
         description=(
             "This dataset was created from the Japanese NLP Journal LaTeX Corpus. "

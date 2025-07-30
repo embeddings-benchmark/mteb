@@ -185,7 +185,7 @@ COLPALI_TRAINING_DATA = {
     "arXivQA": ["train"],
 }
 
-colpali_v1_1 = ModelMeta(
+colpali_v1_1 = ModelMeta.model_construct(
     loader=ColPaliWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -210,7 +210,7 @@ colpali_v1_1 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
-colpali_v1_2 = ModelMeta(
+colpali_v1_2 = ModelMeta.model_construct(
     loader=ColPaliWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -235,7 +235,7 @@ colpali_v1_2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
-colpali_v1_3 = ModelMeta(
+colpali_v1_3 = ModelMeta.model_construct(
     loader=ColPaliWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,

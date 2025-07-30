@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 
 
 class WikiCitiesClustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WikiCitiesClustering",
         description="Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.",
         reference="https://huggingface.co/datasets/wikipedia",

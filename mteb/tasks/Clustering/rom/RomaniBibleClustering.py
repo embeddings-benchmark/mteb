@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RomaniBibleClustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RomaniBibleClustering",
         description="Clustering verses from the Bible in Kalderash Romani by book.",
         reference="https://romani.global.bible/info",

@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class ArguAnaFa(AbsTaskRetrieval):
     ignore_identical_ids = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ArguAna-Fa",
         description="ArguAna-Fa",
         reference="https://huggingface.co/datasets/MCINext/arguana-fa",
@@ -34,7 +34,7 @@ class ArguAnaFa(AbsTaskRetrieval):
 
 
 class ClimateFEVERFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ClimateFEVER-Fa",
         description="ClimateFEVER-Fa",
         reference="https://huggingface.co/datasets/MCINext/climate-fever-fa",
@@ -61,7 +61,7 @@ class ClimateFEVERFa(AbsTaskRetrieval):
 
 
 class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackAndroidRetrieval-Fa",
         description="CQADupstackAndroidRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-android-fa",
@@ -88,7 +88,7 @@ class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackEnglishRetrieval-Fa",
         description="CQADupstackEnglishRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-english-fa",
@@ -115,7 +115,7 @@ class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackGamingRetrieval-Fa",
         description="CQADupstackGamingRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-gaming-fa",
@@ -142,7 +142,7 @@ class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackGisRetrieval-Fa",
         description="CQADupstackGisRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-gis-fa",
@@ -169,7 +169,7 @@ class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackMathematicaRetrieval-Fa",
         description="CQADupstackMathematicaRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-mathematica-fa",
@@ -196,7 +196,7 @@ class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackPhysicsRetrieval-Fa",
         description="CQADupstackPhysicsRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-physics-fa",
@@ -223,7 +223,7 @@ class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackProgrammersRetrieval-Fa",
         description="CQADupstackProgrammersRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-programmers-fa",
@@ -250,7 +250,7 @@ class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackStatsRetrieval-Fa",
         description="CQADupstackStatsRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-stats-fa",
@@ -277,7 +277,7 @@ class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackTexRetrieval-Fa",
         description="CQADupstackTexRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-tex-fa",
@@ -304,7 +304,7 @@ class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackUnixRetrieval-Fa",
         description="CQADupstackUnixRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-unix-fa",
@@ -331,7 +331,7 @@ class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackWebmastersRetrieval-Fa",
         description="CQADupstackWebmastersRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-webmasters-fa",
@@ -358,7 +358,7 @@ class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
 
 
 class CQADupstackWordpressRetrievalFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CQADupstackWordpressRetrieval-Fa",
         description="CQADupstackWordpressRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-wordpress-fa",
@@ -385,7 +385,7 @@ class CQADupstackWordpressRetrievalFa(AbsTaskRetrieval):
 
 
 class DBPediaFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DBPedia-Fa",
         description="DBPedia-Fa",
         reference="https://huggingface.co/datasets/MCINext/dbpedia-fa",
@@ -414,7 +414,7 @@ class DBPediaFa(AbsTaskRetrieval):
 class FiQA2018Fa(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FiQA2018-Fa",
         description="FiQA2018-Fa",
         reference="https://huggingface.co/datasets/MCINext/fiqa-fa",
@@ -441,7 +441,7 @@ class FiQA2018Fa(AbsTaskRetrieval):
 
 
 class HotpotQAFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HotpotQA-Fa",
         description="HotpotQA-Fa",
         reference="https://huggingface.co/datasets/MCINext/hotpotqa-fa",
@@ -470,7 +470,7 @@ class HotpotQAFa(AbsTaskRetrieval):
 class MSMARCOFa(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MSMARCO-Fa",
         description="MSMARCO-Fa",
         reference="https://huggingface.co/datasets/MCINext/msmarco-fa",
@@ -497,7 +497,7 @@ class MSMARCOFa(AbsTaskRetrieval):
 
 
 class NFCorpusFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NFCorpus-Fa",
         description="NFCorpus-Fa",
         reference="https://huggingface.co/datasets/MCINext/nfcorpus-fa",
@@ -524,7 +524,7 @@ class NFCorpusFa(AbsTaskRetrieval):
 
 
 class NQFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NQ-Fa",
         description="NQ-Fa",
         reference="https://huggingface.co/datasets/MCINext/nq-fa",
@@ -553,7 +553,7 @@ class NQFa(AbsTaskRetrieval):
 class QuoraRetrievalFa(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="QuoraRetrieval-Fa",
         description="QuoraRetrieval-Fa",
         reference="https://huggingface.co/datasets/MCINext/quora-fa",
@@ -580,7 +580,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
 
 
 class SCIDOCSFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SCIDOCS-Fa",
         description="SCIDOCS-Fa",
         reference="https://huggingface.co/datasets/MCINext/scidocs-fa",
@@ -607,7 +607,7 @@ class SCIDOCSFa(AbsTaskRetrieval):
 
 
 class SciFactFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SciFact-Fa",
         description="SciFact-Fa",
         reference="https://huggingface.co/datasets/MCINext/scifact-fa",
@@ -634,7 +634,7 @@ class SciFactFa(AbsTaskRetrieval):
 
 
 class TRECCOVIDFa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TRECCOVID-Fa",
         description="TRECCOVID-Fa",
         reference="https://huggingface.co/datasets/MCINext/trec-covid-fa",
@@ -661,7 +661,7 @@ class TRECCOVIDFa(AbsTaskRetrieval):
 
 
 class Touche2020Fa(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Touche2020-Fa",
         description="Touche2020-Fa",
         reference="https://huggingface.co/datasets/MCINext/touche2020-fa",

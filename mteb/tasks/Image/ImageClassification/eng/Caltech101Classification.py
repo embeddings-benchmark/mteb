@@ -9,7 +9,7 @@ class Caltech101Classification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Caltech101",
         description="Classifying images of 101 widely varied objects.",
         reference="https://ieeexplore.ieee.org/document/1384978",

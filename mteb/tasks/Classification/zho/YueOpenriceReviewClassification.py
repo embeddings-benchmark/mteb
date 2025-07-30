@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class YueOpenriceReviewClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="YueOpenriceReviewClassification",
         description="A Cantonese dataset for review classification",
         reference="https://github.com/Christainx/Dataset_Cantonese_Openrice",

@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class AILACasedocs(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AILACasedocs",
         description="The task is to retrieve the case document that most closely matches or is most relevant to the scenario described in the provided query.",
         reference="https://zenodo.org/records/4063986",

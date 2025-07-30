@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class NQ(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NQ",
         dataset={
             "path": "mteb/nq",
@@ -46,7 +46,7 @@ Linguistics},
 
 
 class NQHardNegatives(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NQHardNegatives",
         dataset={
             "path": "mteb/NQ_test_top_250_only_w_correct-v2",

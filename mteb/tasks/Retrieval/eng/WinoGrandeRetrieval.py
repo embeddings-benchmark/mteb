@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class WinoGrande(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="WinoGrande",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on winogrande.",
         reference="https://winogrande.allenai.org/",

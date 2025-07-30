@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NorwegianParliamentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NorwegianParliamentClassification",
         description="Norwegian parliament speeches annotated for sentiment",
         reference="https://huggingface.co/datasets/NbAiLab/norwegian_parliament",

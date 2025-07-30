@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CIFAR10Clustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CIFAR10Clustering",
         description="Clustering images from 10 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar10",
@@ -44,7 +44,7 @@ class CIFAR10Clustering(AbsTaskAnyClustering):
 
 
 class CIFAR100Clustering(AbsTaskAnyClustering):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CIFAR100Clustering",
         description="Clustering images from 100 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar100",

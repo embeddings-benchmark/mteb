@@ -60,7 +60,7 @@ _LANGUAGES = {
 
 class MassiveScenarioClassification(AbsTaskAnyClassification):
     fast_loading = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MassiveScenarioClassification",
         dataset={
             "path": "mteb/amazon_massive_scenario",

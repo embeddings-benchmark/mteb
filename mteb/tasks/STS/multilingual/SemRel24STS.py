@@ -22,7 +22,7 @@ _SPLITS = ["test"]
 
 
 class SemRel24STS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SemRel24STS",
         dataset={
             "path": "SemRel/SemRel2024",

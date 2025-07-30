@@ -29,7 +29,7 @@ qodo_languages = [
 ]
 
 
-Qodo_Embed_1_1_5B = ModelMeta(
+Qodo_Embed_1_1_5B = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-1.5B",
     languages=qodo_languages,
@@ -51,7 +51,7 @@ Qodo_Embed_1_1_5B = ModelMeta(
     adapted_from="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
 )
 
-Qodo_Embed_1_7B = ModelMeta(
+Qodo_Embed_1_7B = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-7B",
     languages=qodo_languages,

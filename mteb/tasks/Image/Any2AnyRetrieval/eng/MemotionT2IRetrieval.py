@@ -85,7 +85,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
 
 
 class MemotionT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MemotionT2IRetrieval",
         description="Retrieve memes based on captions.",
         reference="https://aclanthology.org/2020.semeval-1.99/",

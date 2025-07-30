@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuSciBenchGRNTIClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuSciBenchGRNTIClassification",
         dataset={
             "path": "ai-forever/ru-scibench-grnti-classification",

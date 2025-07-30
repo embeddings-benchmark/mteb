@@ -5,7 +5,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerWrapper,
 )
 
-nb_sbert = ModelMeta(
+nb_sbert = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     name="NbAiLab/nb-sbert-base",
     languages=["nno-Latn", "nob-Latn", "swe-Latn", "dan-Latn"],

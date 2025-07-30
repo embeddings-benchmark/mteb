@@ -12,7 +12,7 @@ codesage_languages = [
     "php-Code",
 ]
 
-codesage_large = ModelMeta(
+codesage_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="codesage/codesage-large-v2",
     languages=codesage_languages,
@@ -37,7 +37,7 @@ codesage_large = ModelMeta(
     },
 )
 
-codesage_base = ModelMeta(
+codesage_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="codesage/codesage-base-v2",
     languages=codesage_languages,
@@ -62,7 +62,7 @@ codesage_base = ModelMeta(
     },
 )
 
-codesage_small = ModelMeta(
+codesage_small = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="codesage/codesage-small-v2",
     languages=codesage_languages,

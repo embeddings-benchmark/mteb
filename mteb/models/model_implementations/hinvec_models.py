@@ -29,7 +29,7 @@ hinvec_training_datasets = {
     "AmazonReviewsClassification": ["train"],
 }
 
-Hinvec_bidir = ModelMeta(
+Hinvec_bidir = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         instruction_template=instruction_template,

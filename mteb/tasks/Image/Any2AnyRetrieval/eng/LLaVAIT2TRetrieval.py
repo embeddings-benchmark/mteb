@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class LLaVAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LLaVAIT2TRetrieval",
         description="Retrieve responses to answer questions about images.",
         reference="https://github.com/LinWeizheDragon/FLMR/blob/main/docs/Datasets.md",

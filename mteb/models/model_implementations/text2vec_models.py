@@ -6,7 +6,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 # I couldn't find the large model on HF for some reason
-text2vec_base_chinese = ModelMeta(
+text2vec_base_chinese = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="shibing624/text2vec-base-chinese",
     languages=["zho-Hans"],
@@ -34,7 +34,7 @@ text2vec_base_chinese = ModelMeta(
     memory_usage_mb=390,
 )
 
-text2vec_base_chinese_paraphrase = ModelMeta(
+text2vec_base_chinese_paraphrase = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="shibing624/text2vec-base-chinese-paraphrase",
     languages=["zho-Hans"],
@@ -75,7 +75,7 @@ text2vec_multi_langs = [
     "rus-Cyrl",  # Russian (ru)
     "zho-Hans",  # Chinese (Simplified, zh)
 ]
-text2vec_base_multilingual = ModelMeta(
+text2vec_base_multilingual = ModelMeta.model_construct(
     name="shibing624/text2vec-base-multilingual",
     languages=text2vec_multi_langs,
     open_weights=True,

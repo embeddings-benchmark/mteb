@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoQuoraRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoQuoraRetrieval",
         description="NanoQuoraRetrieval is a smaller subset of the "
         + "QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a"

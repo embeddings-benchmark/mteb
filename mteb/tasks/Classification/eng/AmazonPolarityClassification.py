@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AmazonPolarityClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AmazonPolarityClassification",
         description="Amazon Polarity Classification Dataset.",
         reference="https://huggingface.co/datasets/amazon_polarity",

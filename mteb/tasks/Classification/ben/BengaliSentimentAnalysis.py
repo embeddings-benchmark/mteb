@@ -6,7 +6,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class BengaliSentimentAnalysis(AbsTaskAnyClassification):
     superseded_by = "BengaliSentimentAnalysis.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BengaliSentimentAnalysis",
         description="dataset contains 3307 Negative reviews and 8500 Positive reviews collected and manually annotated from Youtube Bengali drama.",
         reference="https://data.mendeley.com/datasets/p6zc7krs37/4",
@@ -45,7 +45,7 @@ class BengaliSentimentAnalysis(AbsTaskAnyClassification):
 
 
 class BengaliSentimentAnalysisV2(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BengaliSentimentAnalysis.v2",
         description="""dataset contains 2854 Negative reviews and 7238 Positive reviews collected and manually annotated from Youtube Bengali drama.
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",

@@ -22,7 +22,7 @@ _LANGS = {
 
 
 class XNLI(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XNLI",
         dataset={
             "path": "mteb/xnli",
@@ -107,7 +107,7 @@ _LANGS_2 = {
 
 
 class XNLIV2(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XNLIV2",
         dataset={
             "path": "mteb/XNLIV2",

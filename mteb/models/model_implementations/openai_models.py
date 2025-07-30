@@ -160,7 +160,7 @@ class OpenAIModel(AbsEncoder):
         return np.array([e.embedding for e in embedding_response.data])
 
 
-text_embedding_3_small = ModelMeta(
+text_embedding_3_small = ModelMeta.model_construct(
     name="openai/text-embedding-3-small",
     revision="3",
     release_date="2024-01-25",
@@ -184,7 +184,7 @@ text_embedding_3_small = ModelMeta(
     public_training_data=None,  # assumed
     training_datasets=None,
 )
-text_embedding_3_large = ModelMeta(
+text_embedding_3_large = ModelMeta.model_construct(
     name="openai/text-embedding-3-large",
     revision="3",
     release_date="2024-01-25",
@@ -208,7 +208,7 @@ text_embedding_3_large = ModelMeta(
     license=None,
     similarity_fn_name=None,
 )
-text_embedding_ada_002 = ModelMeta(
+text_embedding_ada_002 = ModelMeta.model_construct(
     name="openai/text-embedding-ada-002",
     revision="3",
     release_date="2022-12-15",

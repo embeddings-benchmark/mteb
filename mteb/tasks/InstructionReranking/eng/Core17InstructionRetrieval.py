@@ -9,7 +9,7 @@ from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change
 
 
 class Core17InstructionRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Core17InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Core17 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",

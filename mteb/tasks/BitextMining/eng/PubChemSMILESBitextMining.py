@@ -19,7 +19,7 @@ EVAL_LANGS = {
 
 
 class PubChemSMILESBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PubChemSMILESBitextMining",
         dataset={
             "path": "BASF-AI/PubChemSMILESBitextMining",

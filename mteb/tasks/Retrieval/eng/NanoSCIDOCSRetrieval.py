@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoSCIDOCSRetrieval",
         description="NanoFiQA2018 is a smaller subset of "
         + "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"

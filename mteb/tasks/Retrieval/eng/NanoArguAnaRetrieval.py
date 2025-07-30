@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NanoArguAnaRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NanoArguAnaRetrieval",
         description="NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in debate contexts.",
         reference="http://argumentation.bplaced.net/arguana/data",

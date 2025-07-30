@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class GerDaLIR(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GerDaLIR",
         description="GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform.",
         reference="https://github.com/lavis-nlp/GerDaLIR",

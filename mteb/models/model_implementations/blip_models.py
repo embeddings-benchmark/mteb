@@ -117,7 +117,7 @@ class BLIPModel(AbsEncoder):
 
 
 # in descending order of usage (downloads from huggingface)
-blip_image_captioning_large = ModelMeta(
+blip_image_captioning_large = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-image-captioning-large",
     languages=["eng-Latn"],
@@ -143,7 +143,7 @@ blip_image_captioning_large = ModelMeta(
     },
 )
 
-blip_image_captioning_base = ModelMeta(
+blip_image_captioning_base = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-image-captioning-base",
     languages=["eng-Latn"],
@@ -170,7 +170,7 @@ blip_image_captioning_base = ModelMeta(
 )
 
 
-blip_vqa_base = ModelMeta(
+blip_vqa_base = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-vqa-base",
     languages=["eng-Latn"],
@@ -195,7 +195,7 @@ blip_vqa_base = ModelMeta(
     },
 )
 
-blip_vqa_capfilt_large = ModelMeta(
+blip_vqa_capfilt_large = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-vqa-capfilt-large",
     languages=["eng-Latn"],
@@ -220,7 +220,7 @@ blip_vqa_capfilt_large = ModelMeta(
     },
 )
 
-blip_itm_base_coco = ModelMeta(
+blip_itm_base_coco = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-base-coco",
     languages=["eng-Latn"],
@@ -245,7 +245,7 @@ blip_itm_base_coco = ModelMeta(
     },
 )
 
-blip_itm_large_coco = ModelMeta(
+blip_itm_large_coco = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-large-coco",
     languages=["eng-Latn"],
@@ -271,7 +271,7 @@ blip_itm_large_coco = ModelMeta(
     },
 )
 
-blip_itm_base_flickr = ModelMeta(
+blip_itm_base_flickr = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-base-flickr",
     languages=["eng-Latn"],
@@ -297,7 +297,7 @@ blip_itm_base_flickr = ModelMeta(
     },
 )
 
-blip_itm_large_flickr = ModelMeta(
+blip_itm_large_flickr = ModelMeta.model_construct(
     loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-large-flickr",
     languages=["eng-Latn"],

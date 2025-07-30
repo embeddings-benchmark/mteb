@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ImageCoDeT2IRetrieval",
         description="Retrieve a specific video frame based on a precise caption.",
         reference="https://aclanthology.org/2022.acl-long.241.pdf",

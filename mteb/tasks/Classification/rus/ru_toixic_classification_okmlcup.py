@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuToxicOKMLCUPClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RuToxicOKMLCUPClassification",
         dataset={
             "path": "mteb/RuToxicOKMLCUPClassification",

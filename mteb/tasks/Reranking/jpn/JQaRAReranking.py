@@ -10,7 +10,7 @@ _EVAL_SPLIT = "test"
 
 
 class JQaRAReranking(AbsTaskReranking):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="JQaRAReranking",
         description=(
             "JQaRA: Japanese Question Answering with Retrieval Augmentation "

@@ -7,7 +7,7 @@ from ....evaluation.evaluators.retrieval_metrics import robustness_at_10
 
 
 class InstructIR(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="InstructIR",
         description='A benchmark specifically designed to evaluate the instruction following ability in information retrieval models. Our approach focuses on user-aligned instructions tailored to each query instance, reflecting the diverse characteristics inherent in real-world search scenarios. **NOTE**: scores on this may differ unless you include instruction first, then "[SEP]" and then the query via redefining `combine_query_and_instruction` in your model.',
         reference="https://github.com/kaistAI/InstructIR/tree/main",

@@ -18,7 +18,7 @@ _LANGUAGES = {
 
 
 class NusaParagraphTopicClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NusaParagraphTopicClassification",
         dataset={
             "path": "gentaiscool/nusaparagraph_topic",

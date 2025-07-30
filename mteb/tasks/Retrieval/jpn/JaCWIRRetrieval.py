@@ -11,7 +11,7 @@ _EVAL_SPLIT = "test"
 class JaCWIRRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="JaCWIRRetrieval",
         description="""JaCWIR is a small-scale Japanese information retrieval evaluation dataset consisting of
 5000 question texts and approximately 500k web page titles and web page introductions or summaries

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GeorgianSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GeorgianSentimentClassification",
         description="Goergian Sentiment Dataset",
         reference="https://aclanthology.org/2022.lrec-1.173",

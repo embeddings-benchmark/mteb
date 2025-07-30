@@ -68,7 +68,7 @@ def check_uniques(example, uniques):
 
 class IN22ConvBitextMining(AbsTaskBitextMining):
     parallel_subsets = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="IN22ConvBitextMining",
         dataset={
             "path": "mteb/IN22-Conv",

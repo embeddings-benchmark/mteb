@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SentiRuEval2016Classification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SentiRuEval2016",
         dataset={
             "path": "mteb/SentiRuEval2016",

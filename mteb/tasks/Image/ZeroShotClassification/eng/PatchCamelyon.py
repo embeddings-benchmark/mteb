@@ -9,7 +9,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class PatchCamelyonZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PatchCamelyonZeroShot",
         description="""Histopathology diagnosis classification dataset.""",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-00934-2_24",

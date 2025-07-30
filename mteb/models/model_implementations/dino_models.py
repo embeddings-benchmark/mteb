@@ -105,7 +105,7 @@ dinov2_training_datasets = {
 }
 
 
-dinov2_small = ModelMeta(
+dinov2_small = ModelMeta.model_construct(
     loader=DINOModel,  # type: ignore
     name="facebook/dinov2-small",
     languages=["eng-Latn"],
@@ -127,7 +127,7 @@ dinov2_small = ModelMeta(
     training_datasets=dinov2_training_datasets,
 )
 
-dinov2_base = ModelMeta(
+dinov2_base = ModelMeta.model_construct(
     loader=DINOModel,  # type: ignore
     name="facebook/dinov2-base",
     languages=["eng-Latn"],
@@ -149,7 +149,7 @@ dinov2_base = ModelMeta(
     training_datasets=dinov2_training_datasets,
 )
 
-dinov2_large = ModelMeta(
+dinov2_large = ModelMeta.model_construct(
     loader=DINOModel,  # type: ignore
     name="facebook/dinov2-large",
     languages=["eng-Latn"],
@@ -171,7 +171,7 @@ dinov2_large = ModelMeta(
     training_datasets=dinov2_training_datasets,
 )
 
-dinov2_giant = ModelMeta(
+dinov2_giant = ModelMeta.model_construct(
     loader=DINOModel,  # type: ignore
     name="facebook/dinov2-giant",
     languages=["eng-Latn"],
@@ -197,7 +197,7 @@ webssl_dino_training_datasets = {
     # MetaCLIP 2B samples
 }
 
-webssl_dino300m_full2b = ModelMeta(
+webssl_dino300m_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino300m-full2b-224",
     languages=["eng-Latn"],
@@ -219,7 +219,7 @@ webssl_dino300m_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino1b_full2b = ModelMeta(
+webssl_dino1b_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino1b-full2b-224",
     languages=["eng-Latn"],
@@ -241,7 +241,7 @@ webssl_dino1b_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino2b_full2b = ModelMeta(
+webssl_dino2b_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino2b-full2b-224",
     languages=["eng-Latn"],
@@ -263,7 +263,7 @@ webssl_dino2b_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino3b_full2b = ModelMeta(
+webssl_dino3b_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino3b-full2b-224",
     languages=["eng-Latn"],
@@ -285,7 +285,7 @@ webssl_dino3b_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino5b_full2b = ModelMeta(
+webssl_dino5b_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino5b-full2b-224",
     languages=["eng-Latn"],
@@ -307,7 +307,7 @@ webssl_dino5b_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino7b_full8b_224 = ModelMeta(
+webssl_dino7b_full8b_224 = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino7b-full8b-224",
     languages=["eng-Latn"],
@@ -329,7 +329,7 @@ webssl_dino7b_full8b_224 = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino7b_full8b_378 = ModelMeta(
+webssl_dino7b_full8b_378 = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino7b-full8b-378",
     languages=["eng-Latn"],
@@ -351,7 +351,7 @@ webssl_dino7b_full8b_378 = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino7b_full8b_518 = ModelMeta(
+webssl_dino7b_full8b_518 = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino7b-full8b-518",
     languages=["eng-Latn"],
@@ -374,7 +374,7 @@ webssl_dino7b_full8b_518 = ModelMeta(
 )
 
 
-webssl_dino2b_light2b = ModelMeta(
+webssl_dino2b_light2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino2b-light2b-224",
     languages=["eng-Latn"],
@@ -396,7 +396,7 @@ webssl_dino2b_light2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino2b_heavy2b = ModelMeta(
+webssl_dino2b_heavy2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino2b-heavy2b-224",
     languages=["eng-Latn"],
@@ -418,7 +418,7 @@ webssl_dino2b_heavy2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino3b_light2b = ModelMeta(
+webssl_dino3b_light2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino3b-light2b-224",
     languages=["eng-Latn"],
@@ -440,7 +440,7 @@ webssl_dino3b_light2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_dino3b_heavy2b = ModelMeta(
+webssl_dino3b_heavy2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-dino3b-heavy2b-224",
     languages=["eng-Latn"],
@@ -462,7 +462,7 @@ webssl_dino3b_heavy2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_mae300m_full2b = ModelMeta(
+webssl_mae300m_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-mae300m-full2b-224",
     languages=["eng-Latn"],
@@ -484,7 +484,7 @@ webssl_mae300m_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_mae700m_full2b = ModelMeta(
+webssl_mae700m_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-mae700m-full2b-224",
     languages=["eng-Latn"],
@@ -506,7 +506,7 @@ webssl_mae700m_full2b = ModelMeta(
     training_datasets=webssl_dino_training_datasets,
 )
 
-webssl_mae1b_full2b = ModelMeta(
+webssl_mae1b_full2b = ModelMeta.model_construct(
     loader=DINOModel,
     name="facebook/webssl-mae1b-full2b-224",
     languages=["eng-Latn"],

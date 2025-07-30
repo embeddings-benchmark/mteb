@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SickrPLSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SICK-R-PL",
         dataset={
             "path": "PL-MTEB/sickr-pl-sts",
@@ -64,7 +64,7 @@ Piperidis, Stelios},
 
 
 class CdscrSTS(AbsTaskAnySTS):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="CDSC-R",
         dataset={
             "path": "PL-MTEB/cdscr-sts",

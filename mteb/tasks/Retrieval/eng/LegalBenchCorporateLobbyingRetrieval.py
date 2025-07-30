@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class LegalBenchCorporateLobbying(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LegalBenchCorporateLobbying",
         description="The dataset includes bill titles and bill summaries related to corporate lobbying.",
         reference="https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying",

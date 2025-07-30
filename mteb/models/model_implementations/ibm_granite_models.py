@@ -86,7 +86,7 @@ granite_training_data = {
     # IBM Internal Title-Body Pairs
 }
 
-granite_107m_multilingual = ModelMeta(
+granite_107m_multilingual = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-107m-multilingual",
     languages=GRANITE_LANGUAGES,
@@ -109,7 +109,7 @@ granite_107m_multilingual = ModelMeta(
     training_datasets=granite_training_data,
 )
 
-granite_278m_multilingual = ModelMeta(
+granite_278m_multilingual = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-278m-multilingual",
     languages=GRANITE_LANGUAGES,
@@ -132,7 +132,7 @@ granite_278m_multilingual = ModelMeta(
     training_datasets=granite_training_data,
 )
 
-granite_30m_english = ModelMeta(
+granite_30m_english = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-30m-english",
     languages=["eng-Latn"],
@@ -155,7 +155,7 @@ granite_30m_english = ModelMeta(
     training_datasets=granite_training_data,
 )
 
-granite_125m_english = ModelMeta(
+granite_125m_english = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-125m-english",
     languages=["eng-Latn"],

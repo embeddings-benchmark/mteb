@@ -193,7 +193,7 @@ cde_model_prompts = {
     PromptType.passage.value: "search_document: ",
 }
 
-cde_small_v1 = ModelMeta(
+cde_small_v1 = ModelMeta.model_construct(
     loader=CDEWrapper,
     loader_kwargs=dict(
         model_prompts=cde_model_prompts,
@@ -220,7 +220,7 @@ cde_small_v1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
 )
 
-cde_small_v2 = ModelMeta(
+cde_small_v2 = ModelMeta.model_construct(
     loader=CDEWrapper,
     loader_kwargs=dict(
         model_prompts=cde_model_prompts,

@@ -64,7 +64,7 @@ PROMPTRIEVER_CITATION = """
 """
 
 
-promptriever_llama2 = ModelMeta(
+promptriever_llama2 = ModelMeta.model_construct(
     loader=_loader(
         PromptrieverModel,
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
@@ -93,7 +93,7 @@ promptriever_llama2 = ModelMeta(
     public_training_data=None,
 )
 
-promptriever_llama3 = ModelMeta(
+promptriever_llama3 = ModelMeta.model_construct(
     loader=_loader(
         PromptrieverModel,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B",
@@ -125,7 +125,7 @@ promptriever_llama3 = ModelMeta(
     public_training_data=None,
 )
 
-promptriever_llama3_instruct = ModelMeta(
+promptriever_llama3_instruct = ModelMeta.model_construct(
     loader=_loader(
         PromptrieverModel,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B-Instruct",
@@ -157,7 +157,7 @@ promptriever_llama3_instruct = ModelMeta(
     public_training_data=None,
 )
 
-promptriever_mistral_v1 = ModelMeta(
+promptriever_mistral_v1 = ModelMeta.model_construct(
     loader=_loader(
         PromptrieverModel,
         base_model_name_or_path="mistralai/Mistral-7B-v0.1",

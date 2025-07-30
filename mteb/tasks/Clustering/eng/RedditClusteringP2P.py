@@ -15,7 +15,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class RedditClusteringP2P(AbsTaskAnyClustering):
     superseded_by = "RedditClusteringP2P.v2"
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RedditClusteringP2P",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
@@ -56,7 +56,7 @@ Iryna Gurevych},
 
 
 class RedditFastClusteringP2P(AbsTaskClusteringFast):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RedditClusteringP2P.v2",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",

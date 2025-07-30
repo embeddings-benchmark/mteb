@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GujaratiNewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="GujaratiNewsClassification",
         description="A Gujarati dataset for 3-class classification of Gujarati news articles",
         reference="https://github.com/goru001/nlp-for-gujarati",

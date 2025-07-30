@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class VisualNewsI2TRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="VisualNewsI2TRetrieval",
         description="Retrieval entity-rich captions for news images.",
         reference="https://aclanthology.org/2021.emnlp-main.542/",

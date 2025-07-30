@@ -7,7 +7,7 @@ TEST_SAMPLES = 2048
 
 
 class RomanianSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="RomanianSentimentClassification",
         description="An Romanian dataset for sentiment classification.",
         reference="https://arxiv.org/abs/2009.08712",

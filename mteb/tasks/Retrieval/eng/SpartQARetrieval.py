@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SpartQA(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SpartQA",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SpartQA.",
         reference="https://github.com/HLR/SpartQA_generation",

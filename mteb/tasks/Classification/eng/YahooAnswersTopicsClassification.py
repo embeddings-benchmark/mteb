@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class YahooAnswersTopicsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="YahooAnswersTopicsClassification",
         description="Dataset composed of questions and answers from Yahoo Answers, categorized into topics.",
         reference="https://huggingface.co/datasets/yahoo_answers_topics",

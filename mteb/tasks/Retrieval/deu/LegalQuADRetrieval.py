@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class LegalQuAD(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="LegalQuAD",
         description="The dataset consists of questions and legal documents in German.",
         reference="https://github.com/Christoph911/AIKE2021_Appendix",

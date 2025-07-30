@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KurdishSentimentClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="KurdishSentimentClassification",
         description="Kurdish Sentiment Dataset",
         reference="https://link.springer.com/article/10.1007/s10579-023-09716-6",

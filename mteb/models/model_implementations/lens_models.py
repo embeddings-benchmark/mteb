@@ -4,7 +4,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .bge_models import bge_full_data
 
-lens_d4000 = ModelMeta(
+lens_d4000 = ModelMeta.model_construct(
     loader=None,
     name="yibinlei/LENS-d4000",
     languages=None,
@@ -25,7 +25,7 @@ lens_d4000 = ModelMeta(
     max_tokens=32768,
 )
 
-lens_d8000 = ModelMeta(
+lens_d8000 = ModelMeta.model_construct(
     loader=None,
     name="yibinlei/LENS-d8000",
     languages=None,

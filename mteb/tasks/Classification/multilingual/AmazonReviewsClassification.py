@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AmazonReviewsClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AmazonReviewsClassification",
         dataset={
             "path": "mteb/AmazonReviewsClassification",

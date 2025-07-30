@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SpanishPassageRetrievalS2S",
         description="Test collection for passage retrieval from health-related Web resources in Spanish.",
         reference="https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/",

@@ -129,7 +129,7 @@ def cohere_v_loader(model_name, **kwargs):
     return CohereMultiModalModelWrapper(model_name, **kwargs)
 
 
-cohere_mult_3 = ModelMeta(
+cohere_mult_3 = ModelMeta.model_construct(
     loader=cohere_v_loader,  # type: ignore
     loader_kwargs={"model_name": "embed-multilingual-v3.0"},
     name="cohere/embed-multilingual-v3.0",
@@ -152,7 +152,7 @@ cohere_mult_3 = ModelMeta(
     training_datasets=None,
 )
 
-cohere_eng_3 = ModelMeta(
+cohere_eng_3 = ModelMeta.model_construct(
     loader=cohere_v_loader,  # type: ignore
     loader_kwargs={"model_name": "embed-english-v3.0"},
     name="cohere/embed-english-v3.0",

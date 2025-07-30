@@ -12,7 +12,7 @@ _LANGUAGES = {
 
 
 class NollySentiBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="NollySentiBitextMining",
         dataset={
             "path": "gentaiscool/bitext_nollysenti_miners",

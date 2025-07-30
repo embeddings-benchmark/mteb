@@ -9,7 +9,7 @@ class OxfordPetsClassification(AbsTaskAnyClassification):
     samples_per_label: int = 16
     n_experiments: int = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="OxfordPets",
         description="Classifying animal images.",
         reference="https://ieeexplore.ieee.org/abstract/document/6248092",

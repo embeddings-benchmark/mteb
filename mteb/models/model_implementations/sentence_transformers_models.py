@@ -112,7 +112,7 @@ sent_trf_training_dataset = {
     # "embedding-data/WikiAnswers": ["train"],
 }
 
-all_MiniLM_L6_v2 = ModelMeta(
+all_MiniLM_L6_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
@@ -136,7 +136,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     citation=SBERT_CITATION,
 )
 
-all_MiniLM_L12_v2 = ModelMeta(
+all_MiniLM_L12_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L12-v2",
     languages=["eng-Latn"],
@@ -160,7 +160,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     public_training_data=None,
 )
 
-paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
+paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     languages=paraphrase_langs,
@@ -184,7 +184,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     public_training_data=None,
 )
 
-paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
+paraphrase_multilingual_mpnet_base_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     languages=paraphrase_langs,
@@ -219,7 +219,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     public_training_data=None,
 )
 
-labse = ModelMeta(
+labse = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/LaBSE",
     languages=paraphrase_langs,
@@ -256,7 +256,7 @@ labse = ModelMeta(
     public_training_data=None,
 )
 
-multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
+multi_qa_MiniLM_L6_cos_v1 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     languages=["eng-Latn"],
@@ -280,7 +280,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     citation=SBERT_CITATION,
 )
 
-all_mpnet_base_v2 = ModelMeta(
+all_mpnet_base_v2 = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-mpnet-base-v2",
     languages=["eng-Latn"],
@@ -380,7 +380,7 @@ static_multi_languages = [
     "zho-Hans",
 ]
 
-static_similarity_mrl_multilingual_v1 = ModelMeta(
+static_similarity_mrl_multilingual_v1 = ModelMeta.model_construct(
     name="sentence-transformers/static-similarity-mrl-multilingual-v1",
     loader=SentenceTransformerWrapper,
     loader_kwargs=dict(
@@ -406,7 +406,7 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     public_training_data="https://huggingface.co/collections/sentence-transformers/embedding-model-datasets-6644d7a3673a511914aa7552",
 )
 
-contriever = ModelMeta(
+contriever = ModelMeta.model_construct(
     loader=SentenceTransformerWrapper,
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
@@ -435,7 +435,7 @@ contriever = ModelMeta(
     training_datasets=None,
 )
 
-microllama_text_embedding = ModelMeta(
+microllama_text_embedding = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="keeeeenw/MicroLlama-text-embedding",
     languages=["eng-Latn"],
@@ -469,7 +469,7 @@ microllama_text_embedding = ModelMeta(
     public_training_data=None,
 )
 
-sentence_t5_base = ModelMeta(
+sentence_t5_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-base",
     languages=["eng-Latn"],
@@ -490,7 +490,7 @@ sentence_t5_base = ModelMeta(
     training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
 
-sentence_t5_large = ModelMeta(
+sentence_t5_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-large",
     languages=["eng-Latn"],
@@ -511,7 +511,7 @@ sentence_t5_large = ModelMeta(
     training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
 
-sentence_t5_xl = ModelMeta(
+sentence_t5_xl = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xl",
     languages=["eng-Latn"],
@@ -532,7 +532,7 @@ sentence_t5_xl = ModelMeta(
     training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
 
-sentence_t5_xxl = ModelMeta(
+sentence_t5_xxl = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xxl",
     languages=["eng-Latn"],
@@ -552,7 +552,7 @@ sentence_t5_xxl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
-gtr_t5_large = ModelMeta(
+gtr_t5_large = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-large",
     languages=["eng-Latn"],  # in format eng-Latn
@@ -585,7 +585,7 @@ gtr_t5_large = ModelMeta(
     },
 )
 
-gtr_t5_xl = ModelMeta(
+gtr_t5_xl = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xl",
     languages=["eng-Latn"],  # in format eng-Latn
@@ -617,7 +617,7 @@ gtr_t5_xl = ModelMeta(
         "Community QA": ["train"],
     },
 )
-gtr_t5_xxl = ModelMeta(
+gtr_t5_xxl = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xxl",
     languages=["eng-Latn"],  # in format eng-Latn
@@ -650,7 +650,7 @@ gtr_t5_xxl = ModelMeta(
     },
 )
 
-gtr_t5_base = ModelMeta(
+gtr_t5_base = ModelMeta.model_construct(
     loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-base",
     languages=["eng-Latn"],  # in format eng-Latn

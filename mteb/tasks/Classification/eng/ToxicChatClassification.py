@@ -7,7 +7,7 @@ _EVAL_SPLITS = ["test"]
 
 
 class ToxicChatClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ToxicChatClassification",
         description="""This dataset contains toxicity annotations on 10K user
             prompts collected from the Vicuna online demo. We utilize a human-AI

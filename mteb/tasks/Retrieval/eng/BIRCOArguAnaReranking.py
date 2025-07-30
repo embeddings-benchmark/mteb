@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BIRCOArguAnaReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="BIRCO-ArguAna",
         description=(
             "Retrieval task using the ArguAna dataset from BIRCO. This dataset contains 100 queries where both queries "

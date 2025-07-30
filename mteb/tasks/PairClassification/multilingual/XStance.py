@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class XStance(AbsTaskPairClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="XStance",
         dataset={
             "path": "ZurichNLP/x_stance",

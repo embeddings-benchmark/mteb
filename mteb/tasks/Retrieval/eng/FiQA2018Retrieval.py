@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class FiQA2018(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FiQA2018",
         description="Financial Opinion Mining and Question Answering",
         reference="https://sites.google.com/view/fiqa/",

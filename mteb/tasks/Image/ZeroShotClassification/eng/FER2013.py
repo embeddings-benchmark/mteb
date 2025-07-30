@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FER2013ZeroShotClassification(AbsTaskAnyZeroShotClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="FER2013ZeroShot",
         description="Classifying facial emotions.",
         reference="https://arxiv.org/abs/1412.6572",

@@ -10,7 +10,7 @@ class Winoground(AbsTaskImageTextPairClassification):
     images_column_names = ["image_0", "image_1"]
     texts_column_names = ["caption_0", "caption_1"]
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Winoground",
         description="Compositionality Evaluation of images to their captions.",
         reference="https://openaccess.thecvf.com/content/CVPR2022/html/Thrush_Winoground_Probing_Vision_and_Language_Models_for_Visio-Linguistic_Compositionality_CVPR_2022_paper",

@@ -42,7 +42,7 @@ def load_r2med_data(
 
 
 class R2MEDBiologyRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDBiologyRetrieval",
         dataset={
             "path": "R2MED/Biology",
@@ -87,7 +87,7 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDBioinformaticsRetrieval",
         dataset={
             "path": "R2MED/Bioinformatics",
@@ -132,7 +132,7 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDMedicalSciencesRetrieval",
         dataset={
             "path": "R2MED/Medical-Sciences",
@@ -177,7 +177,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDMedXpertQAExamRetrieval",
         dataset={
             "path": "R2MED/MedXpertQA-Exam",
@@ -222,7 +222,7 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDMedQADiagRetrieval",
         dataset={
             "path": "R2MED/MedQA-Diag",
@@ -267,7 +267,7 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDPMCTreatmentRetrieval",
         dataset={
             "path": "R2MED/PMC-Treatment",
@@ -312,7 +312,7 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDPMCClinicalRetrieval",
         dataset={
             "path": "R2MED/PMC-Clinical",
@@ -357,7 +357,7 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
 
 
 class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="R2MEDIIYiClinicalRetrieval",
         dataset={
             "path": "R2MED/IIYi-Clinical",

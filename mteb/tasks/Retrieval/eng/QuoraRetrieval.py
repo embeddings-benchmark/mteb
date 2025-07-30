@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class QuoraRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="QuoraRetrieval",
         dataset={
             "path": "mteb/quora",
@@ -50,7 +50,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
 class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
     ignore_identical_ids = True
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="QuoraRetrievalHardNegatives",
         dataset={
             "path": "mteb/QuoraRetrieval_test_top_250_only_w_correct-v2",

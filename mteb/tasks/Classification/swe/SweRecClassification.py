@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SweRecClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SweRecClassification",
         description="A Swedish dataset for sentiment classification on review",
         reference="https://aclanthology.org/2023.nodalida-1.20/",

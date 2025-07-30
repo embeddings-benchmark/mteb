@@ -99,7 +99,7 @@ def _load_data(
 
 
 class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Vidore2ESGReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -147,7 +147,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Vidore2EconomicsReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -195,7 +195,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Vidore2BioMedicalLecturesRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
@@ -243,7 +243,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Vidore2ESGReportsHLRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",

@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MSCOCOI2TRetrieval",
         description="Retrieve captions based on images.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",

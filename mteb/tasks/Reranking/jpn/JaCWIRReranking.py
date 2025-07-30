@@ -10,7 +10,7 @@ _EVAL_SPLIT = "test"
 
 
 class JaCWIRReranking(AbsTaskReranking):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="JaCWIRReranking",
         description=(
             "JaCWIR is a small-scale Japanese information retrieval evaluation dataset consisting of "

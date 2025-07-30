@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class Quail(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Quail",
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on Quail.",
         reference="https://text-machine.cs.uml.edu/lab2/projects/quail/",

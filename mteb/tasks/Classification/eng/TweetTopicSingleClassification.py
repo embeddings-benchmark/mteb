@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetTopicSingleClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="TweetTopicSingleClassification",
         description="""Topic classification dataset on Twitter with 6 labels. Each instance of
         TweetTopic comes with a timestamp which distributes from September 2019 to August 2021.

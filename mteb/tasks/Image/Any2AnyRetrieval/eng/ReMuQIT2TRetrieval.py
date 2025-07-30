@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ReMuQIT2TRetrieval(AbsTaskAny2AnyRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="ReMuQIT2TRetrieval",
         description="Retrieval of a Wiki passage to answer a query about an image.",
         reference="https://github.com/luomancs/ReMuQ",

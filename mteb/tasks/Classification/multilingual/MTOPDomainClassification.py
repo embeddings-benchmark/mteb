@@ -14,7 +14,7 @@ _LANGUAGES = {
 
 
 class MTOPDomainClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="MTOPDomainClassification",
         dataset={
             "path": "mteb/mtop_domain",

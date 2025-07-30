@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AmazonCounterfactualClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AmazonCounterfactualClassification",
         dataset={
             "path": "mteb/amazon_counterfactual",

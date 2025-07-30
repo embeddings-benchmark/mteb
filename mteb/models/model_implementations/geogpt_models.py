@@ -7,7 +7,7 @@ import torch
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 
-geoembedding = ModelMeta(
+geoembedding = ModelMeta.model_construct(
     name="GeoGPT-Research-Project/GeoEmbedding",
     languages=["eng-Latn"],
     open_weights=True,

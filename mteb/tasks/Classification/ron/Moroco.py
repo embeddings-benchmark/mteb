@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
 class Moroco(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="Moroco",
         dataset={
             "path": "universityofbucharest/moroco",

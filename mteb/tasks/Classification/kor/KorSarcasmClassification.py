@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorSarcasmClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="KorSarcasmClassification",
         description="""
         The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original

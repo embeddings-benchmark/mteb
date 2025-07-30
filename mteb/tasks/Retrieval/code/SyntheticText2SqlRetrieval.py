@@ -7,7 +7,7 @@ _EVAL_SPLIT = "test"
 
 
 class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SyntheticText2SQL",
         description="The dataset is a collection of natural language queries and their corresponding sql snippets. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://huggingface.co/datasets/gretelai/synthetic_text_to_sql",

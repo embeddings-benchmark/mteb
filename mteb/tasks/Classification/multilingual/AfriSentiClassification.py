@@ -14,7 +14,7 @@ def _transform(dataset, lang):
 
 
 class AfriSentiClassification(AbsTaskAnyClassification):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",
         dataset={

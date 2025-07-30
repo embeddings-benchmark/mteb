@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="HunSum2AbstractiveRetrieval",
         dataset={
             "path": "SZTAKI-HLT/HunSum-2-abstractive",

@@ -65,7 +65,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):
         )
 
 
-colqwen2 = ModelMeta(
+colqwen2 = ModelMeta.model_construct(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -93,7 +93,7 @@ colqwen2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
-colqwen2_5 = ModelMeta(
+colqwen2_5 = ModelMeta.model_construct(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -121,7 +121,7 @@ colqwen2_5 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
-colnomic_7b = ModelMeta(
+colnomic_7b = ModelMeta.model_construct(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -158,7 +158,7 @@ COLNOMIC_LANGUAGES = [
     "ita-Latn",  # Italian
 ]
 
-colnomic_3b = ModelMeta(
+colnomic_3b = ModelMeta.model_construct(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
@@ -186,7 +186,7 @@ colnomic_3b = ModelMeta(
     training_datasets=COLNOMIC_TRAINING_DATA,
 )
 
-colnomic_7b = ModelMeta(
+colnomic_7b = ModelMeta.model_construct(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,

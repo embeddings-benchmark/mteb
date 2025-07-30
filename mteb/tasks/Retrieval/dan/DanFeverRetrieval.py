@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DanFeverRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DanFeverRetrieval",
         dataset={
             "path": "strombergnlp/danfever",
@@ -109,7 +109,7 @@ class DanFever(AbsTaskRetrieval):
     ignore_identical_ids = True
     superseded_by = "DanFeverRetrieval"
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="DanFEVER",
         dataset={
             "path": "strombergnlp/danfever",

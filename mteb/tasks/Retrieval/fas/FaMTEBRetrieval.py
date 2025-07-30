@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class SynPerQARetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerQARetrieval",
         description="Synthetic Persian QA Retrieval",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/",
@@ -34,7 +34,7 @@ class SynPerQARetrieval(AbsTaskRetrieval):
 
 class SynPerChatbotTopicsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotTopicsRetrieval",
         description="Synthetic Persian Chatbot Topics Retrieval",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-topics-retrieval",
@@ -61,7 +61,7 @@ class SynPerChatbotTopicsRetrieval(AbsTaskRetrieval):
 
 class SynPerChatbotRAGTopicsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotRAGTopicsRetrieval",
         description="Synthetic Persian Chatbot RAG Topics Retrieval",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-topics-retrieval",
@@ -88,7 +88,7 @@ class SynPerChatbotRAGTopicsRetrieval(AbsTaskRetrieval):
 
 class SynPerChatbotRAGFAQRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="SynPerChatbotRAGFAQRetrieval",
         description="Synthetic Persian Chatbot RAG FAQ Retrieval",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-faq-retrieval",
@@ -115,7 +115,7 @@ class SynPerChatbotRAGFAQRetrieval(AbsTaskRetrieval):
 
 class PersianWebDocumentRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="PersianWebDocumentRetrieval",
         description="Persian dataset designed specifically for the task of text information retrieval through the web.",
         reference="https://ieeexplore.ieee.org/document/10553090",

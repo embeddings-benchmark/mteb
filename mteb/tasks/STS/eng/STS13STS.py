@@ -9,7 +9,7 @@ class STS13STS(AbsTaskAnySTS):
     min_score = 0
     max_score = 5
 
-    metadata = TaskMetadata(
+    metadata = TaskMetadata.model_construct(
         name="STS13",
         dataset={
             "path": "mteb/sts13-sts",
