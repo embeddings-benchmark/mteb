@@ -5,6 +5,7 @@ from .Clotho import *
 from .CMU_Arctic import *
 from .EmoVDB import *
 from .HiFiTTS import *
+from .JLCorpus import *
 from .MACS import *
 from .multilingual.JamAlt import *
 from .MusicCaps import *
