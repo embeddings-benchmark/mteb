@@ -89,15 +89,15 @@ jasper_en_v1 = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
-    training_datasets={
+    training_datasets=set(
         # stage 1, 2, 3
         #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/NovaSearch/jasper_en_vision_language_v1
-        **nvidia_training_datasets,
         # fineweb-edu
         # https://huggingface.co/datasets/sentence-transformers/embedding-training-data
         # stage 4
         # BAAI/Infinity-MM
-    },
+    )
+    | nvidia_training_datasets,
     # training logs https://api.wandb.ai/links/dunnzhang0/z8jqoqpb
     # more codes https://huggingface.co/NovaSearch/jasper_en_vision_language_v1/commit/da9b77d56c23d9398fa8f93af449102784f74e1d
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",

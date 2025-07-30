@@ -64,8 +64,5 @@ lgai_embedding_en = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="mistralai/Mistral-7B-v0.1",
-    training_datasets={
-        **E5_MISTRAL_TRAINING_DATA,
-        **LGAI_EMBEDDING_TRAINING_DATA,
-    },
+    training_datasets=E5_MISTRAL_TRAINING_DATA | LGAI_EMBEDDING_TRAINING_DATA,
 )

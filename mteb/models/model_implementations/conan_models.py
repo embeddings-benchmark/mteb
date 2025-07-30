@@ -215,11 +215,7 @@ Conan_embedding_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets={
-        **E5_MISTRAL_TRAINING_DATA,
-        **bge_full_data,
-        **conan_zh_datasets,
-    },
+    training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data | conan_zh_datasets,
     public_training_code=None,
     public_training_data=None,
 )

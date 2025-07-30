@@ -83,9 +83,9 @@ promptriever_llama2 = ModelMeta(
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",
-    training_datasets={
+    training_datasets=set(
         # "samaya-ai/msmarco-w-instructions"
-    },
+    ),
     reference="https://huggingface.co/samaya-ai/promptriever-llama2-7b-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],

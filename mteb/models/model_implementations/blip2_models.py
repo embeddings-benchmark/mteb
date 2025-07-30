@@ -151,11 +151,11 @@ def blip2_loader(model_name, **kwargs):
     return BLIP2Model(model_name, **kwargs)
 
 
-blip2_training_datasets = {
+blip2_training_datasets = set(
     # COCO
     # CC3M+CC12M+SBU
     # LAION400M
-}
+)
 
 blip2_opt_2_7b = ModelMeta(
     loader=blip2_loader,

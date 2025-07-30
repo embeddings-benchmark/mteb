@@ -108,8 +108,8 @@ sent_trf_training_dataset = {
     # "embedding-data/simple-wiki",
     # "embedding-data/QQP",
     # "embedding-data/SPECTER",
-    # "embedding-data/PAQ_pairs": ["train"],
-    # "embedding-data/WikiAnswers": ["train"],
+    # "embedding-data/PAQ_pairs",
+    # "embedding-data/WikiAnswers",
 }
 
 all_MiniLM_L6_v2 = ModelMeta(
@@ -237,11 +237,11 @@ labse = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    training_datasets={
+    training_datasets=set(
         # CommonCrawl
         # wiki  05-21-2020 dump
         # The translation corpus is constructed from web pages using a bitext mining system
-    },
+    ),
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     citation="""@misc{feng2022languageagnosticbertsentenceembedding,
@@ -306,19 +306,19 @@ all_mpnet_base_v2 = ModelMeta(
 
 static_multi_datasets = {
     # wikititles
-    "TatoebaBitextMining": [],
+    "TatoebaBitextMining",
     # talks
     # europarl
     # global_voices
     # muse
     # wikimatrix
     # opensubtitles
-    "StackExchangeClustering.v2": [],
-    "StackExchangeClusteringP2P.v2": [],
+    "StackExchangeClustering.v2",
+    "StackExchangeClusteringP2P.v2",
     # quora
-    "QuoraRetrieval": [],
-    "NanoQuoraRetrieval": [],
-    "Quora-NL": [],  # translation not trained on
+    "QuoraRetrieval",
+    "NanoQuoraRetrieval",
+    "Quora-NL",  # translation not trained on
     # wikianswers_duplicates
     # all_nli - the "triplet" subset
     # simple_wiki
@@ -454,16 +454,16 @@ microllama_text_embedding = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets={
-        "NQ": ["train"],
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "NQ-NL": ["train"],  # translation not trained on
+        "NQ",
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "NQ-NL",  # translation not trained on
         # not in MTEB
-        # "sentence-transformers/all-nli": ["train"],
-        # "sentence-transformers/stsb": ["train"],
-        # "sentence-transformers/quora-duplicates": ["train"],
-        # "sentence-transformers/natural-questions": ["train"],
+        # "sentence-transformers/all-nli",
+        # "sentence-transformers/stsb",
+        # "sentence-transformers/quora-duplicates",
+        # "sentence-transformers/natural-questions",
     },
     public_training_code=None,
     public_training_data=None,
@@ -487,7 +487,7 @@ sentence_t5_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+    training_datasets={"SNLI", "Community QA"},
 )
 
 sentence_t5_large = ModelMeta(
@@ -508,7 +508,7 @@ sentence_t5_large = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+    training_datasets={"SNLI", "Community QA"},
 )
 
 sentence_t5_xl = ModelMeta(
@@ -529,7 +529,7 @@ sentence_t5_xl = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+    training_datasets={"SNLI", "Community QA"},
 )
 
 sentence_t5_xxl = ModelMeta(
@@ -550,7 +550,7 @@ sentence_t5_xxl = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+    training_datasets={"SNLI", "Community QA"},
 )
 gtr_t5_large = ModelMeta(
     loader=sentence_transformers_loader,
@@ -571,17 +571,17 @@ gtr_t5_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQ-NL": ["train"],  # translation not trained on
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "Community QA": ["train"],
+        "MSMARCO",
+        "MSMARCOHardNegatives",
+        "NanoMSMARCORetrieval",
+        "MSMARCO-PL",  # translation not trained on
+        "mMARCO-NL",  # translation not trained on
+        "NQ",
+        "NQ-NL",  # translation not trained on
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "Community QA",
     },
 )
 
@@ -604,17 +604,17 @@ gtr_t5_xl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQ-NL": ["train"],  # translation not trained on
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "Community QA": ["train"],
+        "MSMARCO",
+        "MSMARCOHardNegatives",
+        "NanoMSMARCORetrieval",
+        "MSMARCO-PL",  # translation not trained on
+        "mMARCO-NL",  # translation not trained on
+        "NQ",
+        "NQ-NL",  # translation not trained on
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "Community QA",
     },
 )
 gtr_t5_xxl = ModelMeta(
@@ -636,17 +636,17 @@ gtr_t5_xxl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQ-NL": ["train"],  # translation not trained on
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "Community QA": ["train"],
+        "MSMARCO",
+        "MSMARCOHardNegatives",
+        "NanoMSMARCORetrieval",
+        "MSMARCO-PL",  # translation not trained on
+        "mMARCO-NL",  # translation not trained on
+        "NQ",
+        "NQ-NL",  # translation not trained on
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "Community QA",
     },
 )
 
@@ -669,16 +669,16 @@ gtr_t5_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQ-NL": ["train"],  # translation not trained on
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "Community QA": ["train"],
+        "MSMARCO",
+        "MSMARCOHardNegatives",
+        "NanoMSMARCORetrieval",
+        "MSMARCO-PL",  # translation not trained on
+        "mMARCO-NL",  # translation not trained on
+        "NQ",
+        "NQ-NL",  # translation not trained on
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "Community QA",
     },
 )

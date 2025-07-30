@@ -356,7 +356,7 @@ pubmed_bert_100k = ModelMeta(
     use_instructions=False,
     adapted_from="NeuML/pubmedbert-base-embeddings",
     superseded_by=None,
-    training_datasets={},
+    training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-100K#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
@@ -379,7 +379,7 @@ pubmed_bert_500k = ModelMeta(
     use_instructions=False,
     adapted_from="NeuML/pubmedbert-base-embeddings",
     superseded_by=None,
-    training_datasets={},
+    training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-500K#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
@@ -402,7 +402,7 @@ pubmed_bert_1m = ModelMeta(
     use_instructions=False,
     adapted_from="NeuML/pubmedbert-base-embeddings",
     superseded_by=None,
-    training_datasets={},
+    training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-1M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
@@ -425,7 +425,7 @@ pubmed_bert_2m = ModelMeta(
     use_instructions=False,
     adapted_from="NeuML/pubmedbert-base-embeddings",
     superseded_by=None,
-    training_datasets={},
+    training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-2M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
@@ -448,7 +448,7 @@ pubmed_bert_8m = ModelMeta(
     use_instructions=False,
     adapted_from="NeuML/pubmedbert-base-embeddings",
     superseded_by=None,
-    training_datasets={},
+    training_datasets=set(),
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-8M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )

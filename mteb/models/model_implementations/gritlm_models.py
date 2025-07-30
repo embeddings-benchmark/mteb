@@ -9,10 +9,9 @@ from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 logger = logging.getLogger(__name__)
 
-GRIT_LM_TRAINING_DATA = {
-    **E5_MISTRAL_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
-    # Note that some models in their ablations also use MEDI2 but not the main GritLM-7B & GritLM-8x7B models
-}
+GRIT_LM_TRAINING_DATA = E5_MISTRAL_TRAINING_DATA
+# source https://arxiv.org/pdf/2402.09906
+# Note that some models in their ablations also use MEDI2 but not the main GritLM-7B & GritLM-8x7B models
 
 
 def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:

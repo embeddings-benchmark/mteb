@@ -100,11 +100,11 @@ rubert_tiny2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1mSWfIQ6PIlteLVZ9DKKpcorycgLIKZLf?usp=sharing",
-    training_datasets={
+    training_datasets=set(
         # https://huggingface.co/datasets/cointegrated/ru-paraphrase-NMT-Leipzig
         # Wikipedia https://huggingface.co/datasets/Madjogger/JamSpell_dataset
         # https://huggingface.co/datasets/imvladikon/leipzig_corpora_collection
-    },
+    ),
     adapted_from="cointegrated/rubert-tiny",
     public_training_data=None,
 )
@@ -128,10 +128,10 @@ sbert_large_nlu_ru = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="google/bert_uncased_L-12_H-768_A-12",
-    training_datasets={
+    training_datasets=set(
         # SNLI
         # MNLI
-    },
+    ),
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
@@ -152,10 +152,10 @@ sbert_large_mt_nlu_ru = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # SNLI, MNLI
         # https://github.com/brmson/dataset-sts
-    },
+    ),
 )
 
 user_base_ru = ModelMeta(
@@ -348,9 +348,9 @@ distilrubert_small_cased_conversational = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="DeepPavlov/distilrubert-base-cased-conversational",
-    training_datasets={
+    training_datasets=set(
         # OpenSubtitles[1], Dirty, Pikabu, and a Social Media segment of Taiga corpus
-    },
+    ),
     citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
       doi = {10.48550/ARXIV.2205.02340},
       url = {https://arxiv.org/abs/2205.02340},
@@ -381,10 +381,10 @@ rubert_base_cased_sentence = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # "SNLI",
-        "XNLI": ["dev"]
-    },
+        "XNLI"
+    ),
 )
 
 labse_en_ru = ModelMeta(
@@ -405,15 +405,15 @@ labse_en_ru = ModelMeta(
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # https://translate.yandex.ru/corpus
-    },
+    ),
     adapted_from="sentence-transformers/LaBSE",
 )
 
-turbo_models_datasets = {
+turbo_models_datasets = set(
     # Not MTEB: {"IlyaGusev/gazeta", "zloelias/lenta-ru"},
-}
+)
 rubert_tiny_turbo = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-tiny-turbo",
@@ -454,12 +454,12 @@ rubert_mini_frida = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # https://huggingface.co/datasets/IlyaGusev/gazeta
         # https://huggingface.co/datasets/zloelias/lenta-ru
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb
-    },
+    ),
     adapted_from="sergeyzh/rubert-mini-sts",
 )
 
@@ -501,12 +501,12 @@ berta = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    training_datasets={
+    training_datasets=set(
         # https://huggingface.co/datasets/IlyaGusev/gazeta
         # https://huggingface.co/datasets/zloelias/lenta-ru
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb
-    },
+    ),
     public_training_code=None,
     adapted_from="sergeyzh/LaBSE-ru-turbo",
     public_training_data=None,
@@ -756,12 +756,12 @@ giga_embeddings = ModelMeta(
 )
 
 berta_training_datasets = (
-    {
+    set(
         # https://huggingface.co/datasets/IlyaGusev/gazeta
         # https://huggingface.co/datasets/zloelias/lenta-ru
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb
-    }
+    )
     | frida_training_datasets
 )  # distilled from FRIDA
 

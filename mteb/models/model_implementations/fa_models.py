@@ -23,12 +23,12 @@ parsbert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # It's just a base model
         # https://github.com/miras-tech/MirasText/tree/master/MirasText
         # Persian Wikipedia
         # Other data crawled from websites like bigbangpage.com, chetor.com, eligasht.com/blog, digikala.com/mag, and ted.com/talks.
-    },
+    ),
 )
 
 bert_zwnj = ModelMeta(
@@ -98,10 +98,10 @@ sentence_transformer_parsbert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # This model is finetuned from HooshvareLab/bert-base-parsbert-uncased
         # https://huggingface.co/datasets/Gholamreza/pquad
-    },
+    ),
 )
 
 tooka_bert_base = ModelMeta(
@@ -122,12 +122,12 @@ tooka_bert_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
         # https://huggingface.co/datasets/Targoman/TLPC
         # https://huggingface.co/datasets/allenai/MADLAD-400 (cleaned Persian subset)
-    },
+    ),
 )
 
 tooka_sbert = ModelMeta(
@@ -169,10 +169,10 @@ fa_bert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
-    },
+    ),
 )
 
 tooka_sbert_v2_small = ModelMeta(

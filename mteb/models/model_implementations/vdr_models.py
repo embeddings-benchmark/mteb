@@ -43,7 +43,7 @@ vdr_2b_multi_v1 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/llamaindex/vdr-multilingual-train",
-    training_datasets={
+    training_datasets=set(
         # llamaindex/vdr-multilingual-train
-    },
+    ),
 )

@@ -748,10 +748,7 @@ bge_en_icl = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
-    training_datasets={
-        **E5_MISTRAL_TRAINING_DATA,
-        **bge_full_data,
-    },
+    training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data,
     adapted_from="intfloat/e5-mistral-7b-instruct",
 )
 

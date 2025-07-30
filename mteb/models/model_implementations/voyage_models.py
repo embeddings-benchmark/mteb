@@ -13,10 +13,10 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
-VOYAGE_TRAINING_DATA = {
+VOYAGE_TRAINING_DATA = set(
     # Self-reported (message from VoyageAI member)
     # synthetic data
-}
+)
 
 
 def token_limit(max_tpm: int, interval: int = 60):

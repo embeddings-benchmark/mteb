@@ -109,9 +109,9 @@ class SiglipModelWrapper(AbsEncoder):
         raise ValueError
 
 
-siglip_training_datasets = {
+siglip_training_datasets = set(
     # WebLI https://arxiv.org/abs/2209.06794
-}
+)
 
 siglip_so400m_patch14_224 = ModelMeta(
     loader=SiglipModelWrapper,  # type: ignore

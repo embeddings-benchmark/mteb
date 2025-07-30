@@ -116,12 +116,10 @@ stella_large_zh_v3_1792d = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **stella_zh_datasets
-        # Not in MTEB:
-        # - infgrad/dialogue_rewrite_llm
-        # - infgrad/retrieval_data_llm
-    },
+    training_datasets=stella_zh_datasets,
+    # Not in MTEB:
+    # - infgrad/dialogue_rewrite_llm
+    # - infgrad/retrieval_data_llm
 )
 
 stella_base_zh_v3_1792d = ModelMeta(
@@ -144,12 +142,10 @@ stella_base_zh_v3_1792d = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **stella_zh_datasets
-        # Not in MTEB:
-        # - infgrad/dialogue_rewrite_llm
-        # - infgrad/retrieval_data_llm
-    },
+    training_datasets=stella_zh_datasets,
+    # Not in MTEB:
+    # - infgrad/dialogue_rewrite_llm
+    # - infgrad/retrieval_data_llm
 )
 
 

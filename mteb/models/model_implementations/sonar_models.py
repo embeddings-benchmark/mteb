@@ -225,10 +225,10 @@ sonar = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     reference="https://ai.meta.com/research/publications/sonar-sentence-level-multimodal-and-language-agnostic-representations/",
-    training_datasets={
+    training_datasets=set(
         # "FloresBitextMining", # I believe it only used for evaluation
         # "IndicGenBenchFloresBitextMining", # extension of Flores so I would say not trained on
-    },
+    ),
     public_training_code="https://github.com/facebookresearch/SONAR",
     public_training_data=None,  # couldn't find this
 )

@@ -209,7 +209,7 @@ Jaume__gemma_2b_embeddings = ModelMeta(
     reference="https://huggingface.co/Jaume/gemma-2b-embeddings",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={},
+    training_datasets=set(),
     adapted_from="google/gemma-2b",
     superseded_by=None,
 )
@@ -496,7 +496,7 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabert-all-nli-triplet-Matryoshka",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={},  # not in MTEB: {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
+    training_datasets=set(),  # not in MTEB: {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="aubmindlab/bert-base-arabertv02",
     superseded_by=None,
 )
@@ -614,7 +614,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={},  # not in MTEB: "Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
+    training_datasets=set(),  # not in MTEB: "Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="UBC-NLP/MARBERTv2",
     superseded_by=None,
 )
@@ -888,9 +888,7 @@ dwzhu__e5_base_4k = ModelMeta(
     reference="https://huggingface.co/dwzhu/e5-base-4k",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={
-        **E5_TRAINING_DATA,
-    },
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/e5-base-v2",
     superseded_by=None,
 )
@@ -956,7 +954,7 @@ sdadas__mmlw_roberta_base = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-roberta-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={"MSMARCO": ["train"]},
+    training_datasets={"MSMARCO"},
     adapted_from="sdadas/polish-roberta-base-v2",
     superseded_by=None,
 )
@@ -978,13 +976,13 @@ sdadas__mmlw_roberta_large = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-roberta-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={"MSMARCO": ["train"]},
+    training_datasets={"MSMARCO"},
     adapted_from="sdadas/polish-roberta-large-v2",
     superseded_by=None,
 )
 
 udever_dataset = {  # discussed here: https://github.com/embeddings-benchmark/mteb/issues/2193
-    "MSMARCO": [],
+    "MSMARCO",
     # SNLI
     # MultiNLI
 }
@@ -1144,23 +1142,23 @@ avsolatorio__GIST_Embedding_v0 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        **bge_training_data,
         # not in mteb:
         # MEDI
         # all MTEB CLF datasets that has a train split:
-        "AmazonPolarityClassification": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "EmotionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPDomainClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "MassiveIntentClassification": ["train"],
-        "MassiveScenarioClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "AmazonCounterfactualClassification": ["train"],
-    },
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "EmotionClassification",
+        "ImdbClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "Banking77Classification",
+        "AmazonCounterfactualClassification",
+    }
+    | bge_training_data,
     adapted_from="BAAI/bge-large-en-v1.5",
     superseded_by=None,
 )
@@ -1183,23 +1181,23 @@ avsolatorio__GIST_all_MiniLM_L6_v2 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        **bge_training_data,
         # not in mteb:
         # MEDI
         # all MTEB CLF datasets that has a train split:
-        "AmazonPolarityClassification": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "EmotionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPDomainClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "MassiveIntentClassification": ["train"],
-        "MassiveScenarioClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "AmazonCounterfactualClassification": ["train"],
-    },
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "EmotionClassification",
+        "ImdbClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "Banking77Classification",
+        "AmazonCounterfactualClassification",
+    }
+    | bge_training_data,
     adapted_from=None,
     superseded_by=None,
 )
@@ -1222,23 +1220,23 @@ avsolatorio__GIST_large_Embedding_v0 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        **bge_training_data,
         # not in mteb:
         # MEDI
         # all MTEB CLF datasets that has a train split:
-        "AmazonPolarityClassification": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "EmotionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPDomainClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "MassiveIntentClassification": ["train"],
-        "MassiveScenarioClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "AmazonCounterfactualClassification": ["train"],
-    },
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "EmotionClassification",
+        "ImdbClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "Banking77Classification",
+        "AmazonCounterfactualClassification",
+    }
+    | bge_training_data,
     adapted_from=None,
     superseded_by=None,
 )
@@ -1261,23 +1259,23 @@ avsolatorio__GIST_small_Embedding_v0 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        **bge_training_data,
         # not in mteb:
         # MEDI
         # all MTEB CLF datasets that has a train split:
-        "AmazonPolarityClassification": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "EmotionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPDomainClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "MassiveIntentClassification": ["train"],
-        "MassiveScenarioClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "AmazonCounterfactualClassification": ["train"],
-    },
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "EmotionClassification",
+        "ImdbClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "Banking77Classification",
+        "AmazonCounterfactualClassification",
+    }
+    | bge_training_data,
     adapted_from=None,
     superseded_by=None,
 )
@@ -1322,7 +1320,7 @@ aari1995__German_Semantic_STS_V2 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=None,  # couldn't figure out the source model
-    # {"stsb_multi_mt": ["train"]},
+    # {"stsb_multi_mt"},
     adapted_from="/content/drive/MyDrive/Stanford_NLU/Project/false_friends/gbert_large_sts_only",
     superseded_by=None,
 )
@@ -1345,14 +1343,14 @@ abhinand__MedEmbed_small_v0_1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        "MedicalQARetrieval": ["train"],
-        "NFCorpus": ["train"],
-        "NFCorpus-NL": ["train"],  # translation not trained on
-        "PublicHealthQA": ["train"],
-        "TRECCOVID": ["train"],
-        "ArguAna": ["train"],
-        "TRECCOVID-NL": ["train"],  # translation not trained on
-        "ArguAna-NL": ["train"],  # translation not trained on
+        "MedicalQARetrieval",
+        "NFCorpus",
+        "NFCorpus-NL",  # translation not trained on
+        "PublicHealthQA",
+        "TRECCOVID",
+        "ArguAna",
+        "TRECCOVID-NL",  # translation not trained on
+        "ArguAna-NL",  # translation not trained on
     },
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
@@ -1548,7 +1546,7 @@ shibing624__text2vec_base_multilingual = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=sent_trf_training_dataset,
-    # not MTEB: {"shibing624/nli-zh-all": ["train"]},
+    # not MTEB: {"shibing624/nli-zh-all"},
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     superseded_by=None,
 )
@@ -1594,8 +1592,8 @@ sbert_chinese_general_v1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        "PAWSX": ["train"],
-        "PawsXPairClassification": ["train"],  # they do not specify which one
+        "PAWSX",
+        "PawsXPairClassification",  # they do not specify which one
         # They might have trained on other datasets too, they don't say:
         # "trained on semantically similar datasets such as NLI, PAWS-X, PKU-Paraphrase-Bank, and STS."
     },

@@ -117,7 +117,7 @@ arctic_v2_training_datasets = {
     "MIRACLRetrieval",
     "MIRACLRetrievalHardNegatives",
     "MIRACLReranking",
-}.union(arctic_v1_training_datasets)
+} | arctic_v1_training_datasets
 
 arctic_embed_xs = ModelMeta(
     loader=sentence_transformers_loader,

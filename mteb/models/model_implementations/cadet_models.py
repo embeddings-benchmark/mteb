@@ -18,14 +18,7 @@ cadet_training_data = {
     "FEVER",
     "HotpotQA",
     "ArguAna",
-}
-
-for k, v in bge_m3_training_data.items():
-    cadet_training_data.setdefault(k, []).extend(v)
-# deduplicate
-cadet_training_data = {
-    k: list(dict.fromkeys(v)) for k, v in cadet_training_data.items()
-}
+} | bge_m3_training_data
 
 
 cadet_embed = ModelMeta(
