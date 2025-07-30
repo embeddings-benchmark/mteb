@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 N_SAMPLES = 2048
 
+
 class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "CSFDSKMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
