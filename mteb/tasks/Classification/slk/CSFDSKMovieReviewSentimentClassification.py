@@ -3,6 +3,8 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+N_SAMPLES = 2048
+
 
 class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "CSFDSKMovieReviewSentimentClassification.v2"
@@ -43,8 +45,6 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     samples_per_label = 20
 
     def dataset_transform(self):
-        N_SAMPLES = 2048
-
         self.dataset = self.dataset.rename_columns(
             {"comment": "text", "rating_int": "label"}
         )
