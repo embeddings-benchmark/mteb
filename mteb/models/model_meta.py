@@ -139,6 +139,11 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
+        dict_repr["training_datasets"] = (
+            list(dict_repr["training_datasets"])
+            if isinstance(dict_repr["training_datasets"], set)
+            else dict_repr["training_datasets"]
+        )
         dict_repr["loader"] = _get_loader_name(loader)
         return dict_repr
 

@@ -14,8 +14,8 @@ from tests.test_benchmark.mock_tasks import MockRetrievalTask
 @pytest.mark.parametrize(
     "training_datasets",
     [
-        {"Touche2020": []},  # parent task
-        {"Touche2020-NL": []},  # child task
+        {"Touche2020"},  # parent task
+        {"Touche2020-NL"},  # child task
     ],
 )
 def test_model_similar_tasks(training_datasets):
