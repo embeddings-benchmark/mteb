@@ -128,7 +128,9 @@ class MuQMuLanWrapper:
         processed_audio = self._process_audio(audio)
 
         for i in tqdm(
-            range(0, len(processed_audio), batch_size), desc="Processing audio batches", disable=not show_progress_bar,
+            range(0, len(processed_audio), batch_size),
+            desc="Processing audio batches",
+            disable=not show_progress_bar,
         ):
             batch = processed_audio[i : i + batch_size]
             batch_features = self._process_audio_batch(batch)
