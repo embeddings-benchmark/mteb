@@ -25,29 +25,29 @@ def llm2vec_instruction(instruction):
 llm2vec_supervised_training_data = {
     # source, section g1: https://arxiv.org/pdf/2404.05961
     # splits assumed but unkown
-    "HotpotQA": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "NanoFEVERRetrieval": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "MrTidyRetrieval": ["train"],
-    "T2Reranking": ["train"],
+    "HotpotQA",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
+    "HotpotQAHardNegatives",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
+    "FEVER",
+    "FEVERHardNegatives",
+    "NanoFEVERRetrieval",
+    "FEVER-NL",  # translation not trained on
+    "MrTidyRetrieval",
+    "T2Reranking",
 }
 
 
@@ -177,7 +177,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     use_instructions=True,
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
-    training_datasets={},
+    training_datasets=set(),
     public_training_data=None,
 )
 
@@ -233,7 +233,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     use_instructions=True,
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
-    training_datasets={},
+    training_datasets=set(),
     public_training_data=None,
 )
 
@@ -288,7 +288,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
-    training_datasets={},
+    training_datasets=set(),
     public_training_data=None,
     citation=LLM2VEC_CITATION,
 )
@@ -345,6 +345,6 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     use_instructions=True,
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
-    training_datasets={},
+    training_datasets=set(),
     public_training_data=None,
 )

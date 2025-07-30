@@ -164,12 +164,12 @@ def llm2clip_loader(model_name, **kwargs):
     return LLM2CLIPAbsEncoder(model_name, **kwargs)
 
 
-llm2clip_training_sets = {
+llm2clip_training_sets = set(
     # CC3M
     # CC12M
     # YFCC15M
     # Recap-DataComp-1B(30M subset)
-}
+)
 
 llm2clip_openai_l_14_336 = ModelMeta(
     loader=llm2clip_loader,  # type: ignore

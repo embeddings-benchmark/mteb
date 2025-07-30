@@ -179,10 +179,10 @@ class ColPaliWrapper(ColPaliEngineWrapper):
 
 COLPALI_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA": ["train"],
-    "InfoVQA": ["train"],
-    "TATDQA": ["train"],
-    "arXivQA": ["train"],
+    "DocVQA",
+    "InfoVQA",
+    "TATDQA",
+    "arXivQA",
 }
 
 colpali_v1_1 = ModelMeta(

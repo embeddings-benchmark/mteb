@@ -108,22 +108,22 @@ class llama_nemoretriever_colembed(AbsEncoder):
 
 TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA": ["train"],
-    "InfoVQA": ["train"],
-    "TATDQA": ["train"],
-    "arXivQA": ["train"],
-    "hotpotqa": ["train"],
-    "miracl": ["train"],
-    "NQ": ["train"],
-    "stackexchange": ["train"],
-    "SQuAD": ["train"],
-    "WebInstructSub": ["train"],
-    "docmatix-ir": ["train"],
-    "vdr-multilingual-train": ["train"],
-    "colpali_train_set": ["train"],  # as it contains PDFs
-    "VisRAG-Ret-Train-Synthetic-data": ["train"],
-    "VisRAG-Ret-Train-In-domain-data": ["train"],
-    "wiki-ss-nq": ["train"],
+    "DocVQA",
+    "InfoVQA",
+    "TATDQA",
+    "arXivQA",
+    "hotpotqa",
+    "miracl",
+    "NQ",
+    "stackexchange",
+    "SQuAD",
+    "WebInstructSub",
+    "docmatix-ir",
+    "vdr-multilingual-train",
+    "colpali_train_set",  # as it contains PDFs
+    "VisRAG-Ret-Train-Synthetic-data",
+    "VisRAG-Ret-Train-In-domain-data",
+    "wiki-ss-nq",
 }
 
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(

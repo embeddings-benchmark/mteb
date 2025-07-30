@@ -16,17 +16,17 @@ def instruction_template(
 
 
 hinvec_training_datasets = {
-    "MintakaRetrieval": ["train"],
-    "HindiDiscourseClassification": ["train"],
-    "SentimentAnalysisHindi": ["train"],
-    "MassiveScenarioClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "LinceMTBitextMining": ["train"],
-    "PhincBitextMining": ["train"],
-    "XNLI": ["train"],
-    "MLQARetrieval": ["validation"],
-    "FloresBitextMining": ["dev"],
-    "AmazonReviewsClassification": ["train"],
+    "MintakaRetrieval",
+    "HindiDiscourseClassification",
+    "SentimentAnalysisHindi",
+    "MassiveScenarioClassification",
+    "MTOPIntentClassification",
+    "LinceMTBitextMining",
+    "PhincBitextMining",
+    "XNLI",
+    "MLQARetrieval",
+    "FloresBitextMining",
+    "AmazonReviewsClassification",
 }
 
 Hinvec_bidir = ModelMeta(

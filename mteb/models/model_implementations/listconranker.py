@@ -93,10 +93,10 @@ class ListConRanker(RerankerWrapper):
 
 
 listconranker_training_datasets = {
-    "CMedQAv1-reranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "MMarcoReranking": ["train"],
-    "T2Reranking": ["train"],
+    "CMedQAv1-reranking",
+    "CMedQAv2-reranking",
+    "MMarcoReranking",
+    "T2Reranking",
     # 'Huatuo26M-Lite': ['train'],
     # 'MARC': ['train'],
     # 'XL-sum-chinese_simplified': ['train'],

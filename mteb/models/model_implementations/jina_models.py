@@ -124,30 +124,30 @@ XLMR_LANGUAGES = [
 ]
 
 JinaV4_TRAINING_DATA = {
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
-    "STS12": ["train"],
-    "SICK-R": ["train"],
-    "CodeSearchNetRetrieval": ["train"],
-    "CodeFeedbackST": ["train"],
-    "CodeFeedbackMT": ["train"],
-    "AppsRetrieval": ["train"],
-    "StackOverflowQA": ["train"],
-    "CornStack": [],
-    "VDRMultilingualRetrieval": ["train"],
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
+    "STS12",
+    "SICK-R",
+    "CodeSearchNetRetrieval",
+    "CodeFeedbackST",
+    "CodeFeedbackMT",
+    "AppsRetrieval",
+    "StackOverflowQA",
+    "CornStack",
+    "VDRMultilingualRetrieval",
     # from https://huggingface.co/datasets/vidore/colpali_train_set
-    "DocVQA": ["train"],
-    "InfoVQA": ["train"],
-    "TATDQA": ["train"],
-    "arXivQA": ["train"],
-    # "other": [], # inhouse dataset including synthetic datasets
+    "DocVQA",
+    "InfoVQA",
+    "TATDQA",
+    "arXivQA",
+    # "other", # inhouse dataset including synthetic datasets
 }
 
 
@@ -384,20 +384,20 @@ jina_embeddings_v3 = ModelMeta(
     public_training_data=None,
     training_datasets={
         # CulturaX
-        "STS12": [],
-        # "SICK": [],
-        # "WMT19": [],
-        # "MADLAD-3B": [],
+        "STS12",
+        # "SICK",
+        # "WMT19",
+        # "MADLAD-3B",
         # NLI
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "NQ-NL": ["train"],  # translation not trained on
+        "MSMARCO",
+        "MSMARCOHardNegatives",
+        "NanoMSMARCORetrieval",
+        "mMARCO-NL",  # translation not trained on
+        "NQ",
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "NQ-NL",  # translation not trained on
         # oasst1, oasst2
     },
     adapted_from="XLM-RoBERTa",
@@ -436,36 +436,34 @@ jina_embeddings_v2_base_en = ModelMeta(
     superseded_by=None,
     adapted_from="jina-bert-base-en-v1",  # pretrained on C4 with Alibi to support longer context.
     training_datasets={
-        "PAQ": ["train"],
-        "GooAQ": ["train"],
-        "WikiAnswers": ["train"],
-        "AmazonQA": ["train"],
-        "ELI5": ["train"],
-        "SentenceCompression": ["train"],
-        "SimpleWikipedia": ["train"],
-        "Specter": ["train"],
-        "Squad2": ["train"],
-        "Tmdb": ["train"],
-        "TrivialQA": ["train"],
-        "TweetQA": ["train"],
-        "WikiHow": ["train"],
-        "Xmarket": [],  # adopted from Cross-Market Recommendation (XMRec).
-        "S2ORC": [],  # title abstract pair.
-        "YahooAnswers": [],  # question answer pair.
-        "MSMARCO": ["train"],  # pairs and mined hard negative.
-        "StackExchange": [],  # title body pair.
-        "QuoraQA": ["train"],  # duplicate question pairs.
-        "MsCocoCaptions": ["train"],  # pairs describe the same image.
-        "Flickr30k": ["train"],  # pairs describe the same image.
-        "SNLI": ["train"],  # random negative.
-        "ESCI": ["train"],  # exact match as positive match and mined hard negative.
-        "NegationDataset": [
-            "train"
-        ],  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
-        "NQ": ["train"],  # mined hard negative.
-        "HotpotQA": ["train"],  # mined hard negative.
-        "FEVER": ["train"],  # mined hard negative.
-        "CC-NEWS": [],  # title-content with random negative.
+        "PAQ",
+        "GooAQ",
+        "WikiAnswers",
+        "AmazonQA",
+        "ELI5",
+        "SentenceCompression",
+        "SimpleWikipedia",
+        "Specter",
+        "Squad2",
+        "Tmdb",
+        "TrivialQA",
+        "TweetQA",
+        "WikiHow",
+        "Xmarket",  # adopted from Cross-Market Recommendation (XMRec).
+        "S2ORC",  # title abstract pair.
+        "YahooAnswers",  # question answer pair.
+        "MSMARCO",  # pairs and mined hard negative.
+        "StackExchange",  # title body pair.
+        "QuoraQA",  # duplicate question pairs.
+        "MsCocoCaptions",  # pairs describe the same image.
+        "Flickr30k",  # pairs describe the same image.
+        "SNLI",  # random negative.
+        "ESCI",  # exact match as positive match and mined hard negative.
+        "NegationDataset",  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
+        "NQ",  # mined hard negative.
+        "HotpotQA",  # mined hard negative.
+        "FEVER",  # mined hard negative.
+        "CC-NEWS",  # title-content with random negative.
     },
     public_training_code=None,
     public_training_data=None,
@@ -493,36 +491,34 @@ jina_embeddings_v2_small_en = ModelMeta(
     superseded_by=None,
     adapted_from="jina-bert-smalll-en-v1",  # pretrained on C4 with Alibi to support longer context
     training_datasets={
-        "PAQ": ["train"],
-        "GooAQ": ["train"],
-        "WikiAnswers": ["train"],
-        "AmazonQA": ["train"],
-        "ELI5": ["train"],
-        "SentenceCompression": ["train"],
-        "SimpleWikipedia": ["train"],
-        "Specter": ["train"],
-        "Squad2": ["train"],
-        "Tmdb": ["train"],
-        "TrivialQA": ["train"],
-        "TweetQA": ["train"],
-        "WikiHow": ["train"],
-        "Xmarket": [],  # adopted from Cross-Market Recommendation (XMRec).
-        "S2ORC": [],  # title abstract pair.
-        "YahooAnswers": [],  # question answer pair.
-        "MSMARCO": ["train"],  # pairs and mined hard negative.
-        "StackExchange": [],  # title body pair.
-        "QuoraQA": ["train"],  # duplicate question pairs.
-        "MsCocoCaptions": ["train"],  # pairs describe the same image.
-        "Flickr30k": ["train"],  # pairs describe the same image.
-        "SNLI": ["train"],  # random negative.
-        "ESCI": ["train"],  # exact match as positive match and mined hard negative.
-        "NegationDataset": [
-            "train"
-        ],  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
-        "NQ": ["train"],  # mined hard negative.
-        "HotpotQA": ["train"],  # mined hard negative.
-        "FEVER": ["train"],  # mined hard negative.
-        "CC-NEWS": [],  # title content with random negative.
+        "PAQ",
+        "GooAQ",
+        "WikiAnswers",
+        "AmazonQA",
+        "ELI5",
+        "SentenceCompression",
+        "SimpleWikipedia",
+        "Specter",
+        "Squad2",
+        "Tmdb",
+        "TrivialQA",
+        "TweetQA",
+        "WikiHow",
+        "Xmarket",  # adopted from Cross-Market Recommendation (XMRec).
+        "S2ORC",  # title abstract pair.
+        "YahooAnswers",  # question answer pair.
+        "MSMARCO",  # pairs and mined hard negative.
+        "StackExchange",  # title body pair.
+        "QuoraQA",  # duplicate question pairs.
+        "MsCocoCaptions",  # pairs describe the same image.
+        "Flickr30k",  # pairs describe the same image.
+        "SNLI",  # random negative.
+        "ESCI",  # exact match as positive match and mined hard negative.
+        "NegationDataset",  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
+        "NQ",  # mined hard negative.
+        "HotpotQA",  # mined hard negative.
+        "FEVER",  # mined hard negative.
+        "CC-NEWS",  # title content with random negative.
     },
     public_training_code=None,
     public_training_data=None,
@@ -547,32 +543,30 @@ jina_embedding_b_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-base-en",
     adapted_from="google-t5/t5-base",
     training_datasets={
-        "PAQ": ["train"],
-        "GooAQ": ["train"],
-        "WikiAnswers": ["train"],
-        "AmazonQA": ["train"],
-        "ELI5": ["train"],
-        "SentenceCompression": ["train"],
-        "SimpleWikipedia": ["train"],
-        "Specter": ["train"],
-        "Squad2": ["train"],
-        "Tmdb": ["train"],
-        "TrivialQA": ["train"],
-        "TweetQA": ["train"],
-        "WikiHow": ["train"],
-        "Xmarket": [],  # adopted from Cross-Market Recommendation (XMRec).
-        "S2ORC": [],  # title abstract pair.
-        "YahooAnswers": [],  # question answer pair.
-        "MSMARCO": ["train"],  # pairs and mined hard negative.
-        "StackExchange": [],  # title body pair.
-        "QuoraQA": ["train"],  # duplicate question pairs.
-        "MsCocoCaptions": ["train"],  # pairs describe the same image.
-        "Flickr30k": ["train"],  # pairs describe the same image.
-        "SNLI": ["train"],  # random negative.
-        "ESCI": ["train"],  # exact match as positive match and mined hard negative.
-        "NegationDataset": [
-            "train"
-        ],  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
+        "PAQ",
+        "GooAQ",
+        "WikiAnswers",
+        "AmazonQA",
+        "ELI5",
+        "SentenceCompression",
+        "SimpleWikipedia",
+        "Specter",
+        "Squad2",
+        "Tmdb",
+        "TrivialQA",
+        "TweetQA",
+        "WikiHow",
+        "Xmarket",  # adopted from Cross-Market Recommendation (XMRec).
+        "S2ORC",  # title abstract pair.
+        "YahooAnswers",  # question answer pair.
+        "MSMARCO",  # pairs and mined hard negative.
+        "StackExchange",  # title body pair.
+        "QuoraQA",  # duplicate question pairs.
+        "MsCocoCaptions",  # pairs describe the same image.
+        "Flickr30k",  # pairs describe the same image.
+        "SNLI",  # random negative.
+        "ESCI",  # exact match as positive match and mined hard negative.
+        "NegationDataset",  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
     },
     public_training_code=None,
     public_training_data=None,
@@ -597,32 +591,30 @@ jina_embedding_s_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-small-en",
     adapted_from="google-t5/t5-small",
     training_datasets={
-        "PAQ": ["train"],
-        "GooAQ": ["train"],
-        "WikiAnswers": ["train"],
-        "AmazonQA": ["train"],
-        "ELI5": ["train"],
-        "SentenceCompression": ["train"],
-        "SimpleWikipedia": ["train"],
-        "Specter": ["train"],
-        "Squad2": ["train"],
-        "Tmdb": ["train"],
-        "TrivialQA": ["train"],
-        "TweetQA": ["train"],
-        "WikiHow": ["train"],
-        "Xmarket": [],  # adopted from Cross-Market Recommendation (XMRec).
-        "S2ORC": [],  # title abstract pair.
-        "YahooAnswers": [],  # question answer pair.
-        "MSMARCO": ["train"],  # pairs and mined hard negative.
-        "StackExchange": [],  # title body pair.
-        "QuoraQA": ["train"],  # duplicate question pairs.
-        "MsCocoCaptions": ["train"],  # pairs describe the same image.
-        "Flickr30k": ["train"],  # pairs describe the same image.
-        "SNLI": ["train"],  # random negative.
-        "ESCI": ["train"],  # exact match as positive match and mined hard negative.
-        "NegationDataset": [
-            "train"
-        ],  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
+        "PAQ",
+        "GooAQ",
+        "WikiAnswers",
+        "AmazonQA",
+        "ELI5",
+        "SentenceCompression",
+        "SimpleWikipedia",
+        "Specter",
+        "Squad2",
+        "Tmdb",
+        "TrivialQA",
+        "TweetQA",
+        "WikiHow",
+        "Xmarket",  # adopted from Cross-Market Recommendation (XMRec).
+        "S2ORC",  # title abstract pair.
+        "YahooAnswers",  # question answer pair.
+        "MSMARCO",  # pairs and mined hard negative.
+        "StackExchange",  # title body pair.
+        "QuoraQA",  # duplicate question pairs.
+        "MsCocoCaptions",  # pairs describe the same image.
+        "Flickr30k",  # pairs describe the same image.
+        "SNLI",  # random negative.
+        "ESCI",  # exact match as positive match and mined hard negative.
+        "NegationDataset",  # synthetically generated negation dataset https://huggingface.co/datasets/jinaai/negation-dataset
     },
     public_training_code=None,
     public_training_data=None,

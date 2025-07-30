@@ -225,9 +225,9 @@ def vista_loader(model_name, **kwargs):
     return VisualizedBGEWrapper(model_name, **kwargs)
 
 
-vista_training_datasets = {
+vista_training_datasets = set(
     # VISTA_S2
-}
+)
 
 visualized_bge_base = ModelMeta(
     loader=vista_loader,

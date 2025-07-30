@@ -149,7 +149,7 @@ colnomic_7b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
-COLNOMIC_TRAINING_DATA = {"VDRMultilingual": ["Train"], **COLPALI_TRAINING_DATA}
+COLNOMIC_TRAINING_DATA = {"VDRMultilingual"} | COLPALI_TRAINING_DATA
 COLNOMIC_LANGUAGES = [
     "deu-Latn",  # German
     "spa-Latn",  # Spanish

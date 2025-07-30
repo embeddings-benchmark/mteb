@@ -27,23 +27,23 @@ granite_training_data = {
     # Multilingual Webhose
     # English Wikipedia
     # Multilingual Wikimedia
-    "WikipediaRetrievalMultilingual": [],
-    "WikipediaRerankingMultilingual": [],
+    "WikipediaRetrievalMultilingual",
+    "WikipediaRerankingMultilingual",
     # Miracl Corpus (Title-Body)
     # Stack Exchange Duplicate questions (titles)
     # Stack Exchange Duplicate questions (titles)
     # Stack Exchange Duplicate questions (bodies)
-    "StackOverflowDupQuestions": [],
-    "AskUbuntuDupQuestions": [],
+    "StackOverflowDupQuestions",
+    "AskUbuntuDupQuestions",
     # Stack Exchange (Title, Answer) pairs
     # Stack Exchange (Title, Body) pairs
     # Stack Exchange (Title, Body) pairs
     # Machine Translations of Stack Exchange Duplicate questions (titles)
     # Machine Translations of Stack Exchange (Title+Body, Answer) pairs
-    "StackExchangeClusteringP2P": [],
-    "StackExchangeClusteringP2P.v2": [],
-    "StackExchangeClustering": [],
-    "StackExchangeClustering.v2": [],
+    "StackExchangeClusteringP2P",
+    "StackExchangeClusteringP2P.v2",
+    "StackExchangeClustering",
+    "StackExchangeClustering.v2",
     # SearchQA
     # S2ORC (Title, Abstract)
     # WikiAnswers Duplicate question pairs
@@ -54,30 +54,30 @@ granite_training_data = {
     # SPECTER citation triplets
     # Machine Translations of SPECTER citation triplets
     # Natural Questions (NQ)
-    "NQ": ["test"],
-    "NQ-NL": ["test"],  # translation not trained on
-    "NQHardNegatives": ["test"],
+    "NQ",
+    "NQ-NL",  # translation not trained on
+    "NQHardNegatives",
     # SQuAD2.0
     # HotpotQA
-    "HotPotQA": ["test"],
-    "HotPotQAHardNegatives": ["test"],
-    "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
+    "HotPotQA",
+    "HotPotQAHardNegatives",
+    "HotPotQA-PL",  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL",  # translated from hotpotQA (not trained on)
     # Fever
-    "FEVER": ["test"],
-    "FEVERHardNegatives": ["test"],
-    "FEVER-NL": ["test"],  # translated from hotpotQA (not trained on)
+    "FEVER",
+    "FEVERHardNegatives",
+    "FEVER-NL",  # translated from hotpotQA (not trained on)
     # PubMed
     # Multilingual Miracl Triples
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
     # Multilingual MrTydi Triples
-    "MrTidyRetrieval": ["train"],
+    "MrTidyRetrieval",
     # Sadeeem Question Asnwering
     # DBPedia Title-Body Pairs
-    "DBPedia": ["train"],
-    "DBPedia-NL": ["train"],  # translated from hotpotQA (not trained on)
+    "DBPedia",
+    "DBPedia-NL",  # translated from hotpotQA (not trained on)
     # Synthetic: English Query-Wikipedia Passage
     # Synthetic: English Fact Verification
     # Synthetic: Multilingual Query-Wikipedia Passage

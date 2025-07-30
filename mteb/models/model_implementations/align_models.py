@@ -122,7 +122,7 @@ align_base = ModelMeta(
     reference="https://huggingface.co/kakaobrain/align-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         #  COYO-700M
-    },
+    ),
 )

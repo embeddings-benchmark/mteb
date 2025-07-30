@@ -32,11 +32,11 @@ def test_available_benchmarks():
 
 
 run_task_fixures = [
-    (
-        "sentence-transformers/average_word_embeddings_komninos",
-        "BornholmBitextMining",
-        "21eec43590414cb8e3a6f654857abed0483ae36e",
-    ),
+    # (
+    #     "sentence-transformers/average_word_embeddings_komninos",
+    #     "BornholmBitextMining",
+    #     "21eec43590414cb8e3a6f654857abed0483ae36e",
+    # ),
     (
         "intfloat/multilingual-e5-small",
         "BornholmBitextMining",

@@ -17,24 +17,23 @@ def instruction_template(
 
 
 SFR_TRAINING_DATA = {  # inherits from e5
-    **E5_MISTRAL_TRAINING_DATA,
     # From previously released blogpost which now have been taken down:
-    "FiQA2018": ["train"],
-    "FiQA2018-NL": ["train"],  # translation not trained on
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "FEVER-PL": ["train"],  # translation not trained on
-    "HotpotQA": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
+    "FiQA2018",
+    "FiQA2018-NL",  # translation not trained on
+    "FEVER",
+    "FEVERHardNegatives",
+    "FEVER-NL",  # translation not trained on
+    "FEVER-PL",  # translation not trained on
+    "HotpotQA",
+    "HotpotQAHardNegatives",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
     # source: https://github.com/embeddings-benchmark/leaderboard/issues/41
     # qoute: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
-    "STS12": ["train"],
-    "STS22": ["train"],
-    "STSBenchmark": ["train"],
-}
+    "STS12",
+    "STS22",
+    "STSBenchmark",
+} | E5_MISTRAL_TRAINING_DATA
 
 SFR_Embedding_2_R = ModelMeta(
     loader=instruct_wrapper,

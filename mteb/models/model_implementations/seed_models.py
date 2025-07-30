@@ -21,12 +21,12 @@ logger = logging.getLogger(__name__)
 
 seed_1_5_training_data = (
     {
-        "PAWSX": ["train"],
-        "QBQTC": ["train"],
-        "STSB": ["train"],
-        "TNews": ["train"],
-        "Waimai": ["train"],
-        "IFlyTek": ["train"],
+        "PAWSX",
+        "QBQTC",
+        "STSB",
+        "TNews",
+        "Waimai",
+        "IFlyTek",
     }
     | bge_chinese_training_data
     | nvidia_training_datasets

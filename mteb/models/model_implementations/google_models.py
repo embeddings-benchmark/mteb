@@ -45,10 +45,10 @@ MODEL_PROMPTS = {
 
 GECKO_TRAINING_DATA = {
     # Ones that are available from HF.
-    "NQHardNegatives": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
+    "NQHardNegatives",
+    "FEVERHardNegatives",
+    "HotpotQAHardNegatives",
+    "MIRACLRetrievalHardNegatives",
 }
 
 
