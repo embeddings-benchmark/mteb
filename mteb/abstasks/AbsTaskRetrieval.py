@@ -444,20 +444,14 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
                 split_data = self.dataset[hf_subset][split]
-                cur_queries = split_data["queries"].map(
-                    map_indexes_for_ds, fn_kwargs=dict(hf_subset=hf_subset, split=split)
-                )
-                cur_corpus = split_data["corpus"].map(
-                    map_indexes_for_ds, fn_kwargs=dict(hf_subset=hf_subset, split=split)
-                )
                 if queries is None:
-                    queries = cur_queries
+                    queries = split_data["queries"]
                 else:
-                    queries = concatenate_datasets([queries, cur_queries])
+                    queries = concatenate_datasets([queries, split_data["queries"]])
                 if corpus is None:
-                    corpus = cur_corpus
+                    corpus = split_data["corpus"]
                 else:
-                    corpus = concatenate_datasets([corpus, cur_corpus])
+                    corpus = concatenate_datasets([corpus, split_data["corpus"]])
 
                 relevant_docs.update(
                     process_relevant_docs(split_data["relevant_docs"], hf_subset, split)
@@ -623,41 +617,6 @@ class AbsTaskRetrieval(AbsTask):
                 f"{subset}-top_ranked" if subset != "default" else "top_ranked",
                 lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
             )
-
-
-def calculate_queries_length(queries: dict[str, str]) -> list[int] | None:
-    queries_lens = []
-    for query in queries.values():
-        if query is None or len(query) == 0:
-            continue
-
-        if isinstance(query[0], str):
-            queries_lens.append(len(query))
-        else:
-            queries_lens.extend([len(turn) for turn in query])
-    return queries_lens
-
-
-def calculate_corpus_length(
-    corpus: dict[str, str | dict[str, str]],
-) -> list[int] | None:
-    doc_lens = []
-    if corpus is None:
-        return None
-    for doc in corpus.values():
-        if isinstance(doc, dict):
-            doc_lens.append(len(doc["text"]) + len(doc.get("title", "")))
-        else:
-            doc_lens.append(len(doc))
-
-    return doc_lens
-
-
-def map_indexes_for_ds(
-    row: dict[str, Any], hf_subset: str, split: str
-) -> dict[str, Any]:
-    row["id"] = f"{split}_{hf_subset}_{row['id']}"
-    return row
 
 
 def process_relevant_docs(
