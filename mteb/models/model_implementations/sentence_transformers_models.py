@@ -78,36 +78,36 @@ SBERT_CITATION = """@inproceedings{reimers-2019-sentence-bert,
 
 sent_trf_training_dataset = {
     # derived from datasheets
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
     # not in MTEB
-    # "s2orc": ["train"],
-    # "flax-sentence-embeddings/stackexchange_xml": ["train"],
-    # "ms_marco": ["train"],
-    # "gooaq": ["train"],
-    # "yahoo_answers_topics": ["train"],
-    # "code_search_net": ["train"],
-    # "search_qa": ["train"],
-    # "eli5": ["train"],
-    # "snli": ["train"],
-    # "multi_nli": ["train"],
-    # "wikihow": ["train"],
-    # "natural_questions": ["train"],
-    # "trivia_qa": ["train"],
-    # "embedding-data/sentence-compression": ["train"],
-    # "embedding-data/flickr30k-captions": ["train"],
-    # "embedding-data/altlex": ["train"],
-    # "embedding-data/simple-wiki": ["train"],
-    # "embedding-data/QQP": ["train"],
-    # "embedding-data/SPECTER": ["train"],
+    # "s2orc",
+    # "flax-sentence-embeddings/stackexchange_xml",
+    # "ms_marco",
+    # "gooaq",
+    # "yahoo_answers_topics",
+    # "code_search_net",
+    # "search_qa",
+    # "eli5",
+    # "snli",
+    # "multi_nli",
+    # "wikihow",
+    # "natural_questions",
+    # "trivia_qa",
+    # "embedding-data/sentence-compression",
+    # "embedding-data/flickr30k-captions",
+    # "embedding-data/altlex",
+    # "embedding-data/simple-wiki",
+    # "embedding-data/QQP",
+    # "embedding-data/SPECTER",
     # "embedding-data/PAQ_pairs": ["train"],
     # "embedding-data/WikiAnswers": ["train"],
 }

@@ -51,7 +51,7 @@ bert_zwnj = ModelMeta(
     public_training_data=None,
     training_datasets={
         # This model is finetuned from HooshvareLab/bert-base-parsbert-uncased
-        "FarsTail": [],
+        "FarsTail",
         # https://github.com/m3hrdadfi/sentence-transformers?tab=readme-ov-file
     },
 )
@@ -75,7 +75,7 @@ roberta_zwnj = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "FarsTail": [],
+        "FarsTail",
         # https://github.com/m3hrdadfi/sentence-transformers?tab=readme-ov-file
     },
 )

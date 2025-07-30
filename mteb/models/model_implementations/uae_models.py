@@ -87,9 +87,9 @@ uae_large_v1 = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2309.12871
         # not in MTEB
-        "MNLI": [],
-        "NLI": [],
-        "SNLI": [],
+        "MNLI",
+        "NLI",
+        "SNLI",
     },
     public_training_code=None,
     public_training_data=None,

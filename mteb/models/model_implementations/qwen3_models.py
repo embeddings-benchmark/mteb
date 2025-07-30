@@ -93,17 +93,17 @@ multilingual_langs = [
 ]
 
 training_data = {
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "MMarcoReranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "NQ": ["train"],
-    "MSMARCO": ["train"],
-    "HotpotQA": ["train"],
-    "FEVER": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "MIRACLRetrieval": ["train"],
-    "CodeSearchNet": ["train"],
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
+    "NQ",
+    "MSMARCO",
+    "HotpotQA",
+    "FEVER",
+    "MrTidyRetrieval",
+    "MIRACLRetrieval",
+    "CodeSearchNet",
 }
 
 

@@ -12,7 +12,7 @@ mixedbread_training_data = {
     # (https://www.mixedbread.com/blog/mxbai-embed-large-v1#built-for-rag-and-real-world-use-cases:~:text=During%20the%20whole,related%20use%20cases.)
     # We do not train on any data (except the MSMarco training split) of MTEB. We have a strong filtering process to ensure the OOD setting. That's true
     # for all of our models. Keep up the good work and let me know if you have any questions.
-    "MSMARCO": [],
+    "MSMARCO",
 }
 
 mxbai_embed_large_v1 = ModelMeta(

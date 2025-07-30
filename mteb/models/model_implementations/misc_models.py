@@ -62,64 +62,64 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
         # SciTail
         # Vitamin C
         # Trains on all of MTEB
-        "AlphaNLI": ["train"],
-        "RTE3": ["train"],
-        "AmazonPolarityClassification": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "ArguAna": ["train"],
-        "ArxivClusteringP2P": ["train"],
-        "ArxivClusteringS2S": ["train"],
-        "AskUbuntuDupQuestions": ["train"],
-        "BIOSSES": ["train"],
-        "Banking77Classification": ["train"],
-        "BiorxivClusteringP2P": ["train"],
-        "BiorxivClusteringS2S": ["train"],
-        "CQADupstackRetrieval": ["train"],
-        "ClimateFEVER": ["train"],
-        "DBPedia": ["train"],
-        "EmotionClassification": ["train"],
-        "FEVER": ["train"],
-        "FiQA2018": ["train"],
-        "HotpotQA": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPDomainClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "MassiveIntentClassification": ["train"],
-        "MassiveScenarioClassification": ["train"],
-        "MedrxivClusteringP2P": ["train"],
-        "MedrxivClusteringS2S": ["train"],
-        "MindSmallReranking": ["train"],
-        "NFCorpus": ["train"],
-        "NQ": ["train"],
-        "QuoraRetrieval": ["train"],
-        "RedditClustering": ["train"],
-        "RedditClusteringP2P": ["train"],
-        "SCIDOCS": ["train"],
-        "SICK-R": ["train"],
-        "STS12": ["train"],
-        "STS13": ["train"],
-        "STS14": ["train"],
-        "STS15": ["train"],
-        "STS16": ["train"],
-        "STSBenchmark": ["train"],
-        "SciDocsRR": ["train"],
-        "SciFact": ["train"],
-        "SprintDuplicateQuestions": ["train"],
-        "StackExchangeClustering": ["train"],
-        "StackExchangeClusteringP2P": ["train"],
-        "StackOverflowDupQuestions": ["train"],
-        "SummEval": ["train"],
-        "TRECCOVID": ["train"],
-        "Touche2020": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "TwentyNewsgroupsClustering": ["train"],
-        "TwitterSemEval2015": ["train"],
-        "TwitterURLCorpus": ["train"],
-        "MSMARCO": ["train"],
-        "AmazonCounterfactualClassification": ["train"],
-        "STS17": ["train"],
-        "STS22": ["train"],
+        "AlphaNLI",
+        "RTE3",
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "ArguAna",
+        "ArxivClusteringP2P",
+        "ArxivClusteringS2S",
+        "AskUbuntuDupQuestions",
+        "BIOSSES",
+        "Banking77Classification",
+        "BiorxivClusteringP2P",
+        "BiorxivClusteringS2S",
+        "CQADupstackRetrieval",
+        "ClimateFEVER",
+        "DBPedia",
+        "EmotionClassification",
+        "FEVER",
+        "FiQA2018",
+        "HotpotQA",
+        "ImdbClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "MedrxivClusteringP2P",
+        "MedrxivClusteringS2S",
+        "MindSmallReranking",
+        "NFCorpus",
+        "NQ",
+        "QuoraRetrieval",
+        "RedditClustering",
+        "RedditClusteringP2P",
+        "SCIDOCS",
+        "SICK-R",
+        "STS12",
+        "STS13",
+        "STS14",
+        "STS15",
+        "STS16",
+        "STSBenchmark",
+        "SciDocsRR",
+        "SciFact",
+        "SprintDuplicateQuestions",
+        "StackExchangeClustering",
+        "StackExchangeClusteringP2P",
+        "StackOverflowDupQuestions",
+        "SummEval",
+        "TRECCOVID",
+        "Touche2020",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "TwentyNewsgroupsClustering",
+        "TwitterSemEval2015",
+        "TwitterURLCorpus",
+        "MSMARCO",
+        "AmazonCounterfactualClassification",
+        "STS17",
+        "STS22",
     },
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
@@ -144,19 +144,19 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "NQ-NL": ["train"],  # translation not trained on
+        "MSMARCO",
+        "MSMARCOHardNegatives",
+        "NanoMSMARCORetrieval",
+        "MSMARCO-PL",  # translation not trained on
+        "mMARCO-NL",  # translation not trained on
+        "NQ",
+        "NQHardNegatives",
+        "NanoNQRetrieval",
+        "NQ-PL",  # translation not trained on
+        "NQ-NL",  # translation not trained on
         # not in MTEB
-        # "s2orc": ["train"],
-        # "flax-sentence-embeddings/stackexchange_title_body_jsonl": ["train"],
+        # "s2orc",
+        # "flax-sentence-embeddings/stackexchange_title_body_jsonl",
         # "flax-sentence-embeddings/stackexchange_titlebody_best_voted_answer_jsonl": [
         #     "train"
         # ],
@@ -166,27 +166,27 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
         # "flax-sentence-embeddings/stackexchange_titlebody_best_and_down_voted_answer_jsonl": [
         #     "train"
         # ],
-        # "sentence-transformers/reddit-title-body": ["train"],
-        # "msmarco": ["train"],
-        # "gooaq": ["train"],
-        # "yahoo_answers_topics": ["train"],
-        # "code_search_net": ["train"],
-        # "search_qa": ["train"],
-        # "eli5": ["train"],
-        # "snli": ["train"],
-        # "multi_nli": ["train"],
-        # "wikihow": ["train"],
-        # "natural_questions": ["train"],
-        # "trivia_qa": ["train"],
-        # "embedding-data/sentence-compression": ["train"],
-        # "embedding-data/flickr30k-captions": ["train"],
-        # "embedding-data/altlex": ["train"],
-        # "embedding-data/simple-wiki": ["train"],
-        # "embedding-data/QQP": ["train"],
-        # "embedding-data/SPECTER": ["train"],
-        # "embedding-data/PAQ_pairs": ["train"],
-        # "embedding-data/WikiAnswers": ["train"],
-        # "sentence-transformers/embedding-training-data": ["train"],
+        # "sentence-transformers/reddit-title-body",
+        # "msmarco",
+        # "gooaq",
+        # "yahoo_answers_topics",
+        # "code_search_net",
+        # "search_qa",
+        # "eli5",
+        # "snli",
+        # "multi_nli",
+        # "wikihow",
+        # "natural_questions",
+        # "trivia_qa",
+        # "embedding-data/sentence-compression",
+        # "embedding-data/flickr30k-captions",
+        # "embedding-data/altlex",
+        # "embedding-data/simple-wiki",
+        # "embedding-data/QQP",
+        # "embedding-data/SPECTER",
+        # "embedding-data/PAQ_pairs",
+        # "embedding-data/WikiAnswers",
+        # "sentence-transformers/embedding-training-data",
     },
     adapted_from="hum-lodestone-v1",
     superseded_by=None,
@@ -215,9 +215,9 @@ Jaume__gemma_2b_embeddings = ModelMeta(
 )
 
 bilingual_embedding_training_data = {
-    "STSBenchmark": ["train"],
-    "STSBenchmarkMultilingualSTS": ["train"],
-    "XNLI": ["train"],
+    "STSBenchmark",
+    "STSBenchmarkMultilingualSTS",
+    "XNLI",
     # not in mteb
     # SNLI
 }
@@ -316,7 +316,7 @@ Mihaiii__Bulbasaur = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=None,  # source model is GTE-tiny where training data is unknown
-    # {"Mihaiii/qa-assistant": ["train"]},
+    # {"Mihaiii/qa-assistant"},
     adapted_from="Mihaiii/dwsdwass",
     superseded_by=None,
 )
@@ -339,7 +339,7 @@ Mihaiii__Ivysaur = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=None,  # source model is GTE-tiny where training data is unknown
-    # not MTEB: {"Mihaiii/qa-assistant": ["train"]},
+    # not MTEB: {"Mihaiii/qa-assistant"},
     adapted_from="Mihaiii/jhjghjgh",
     superseded_by=None,
 )
@@ -362,7 +362,7 @@ Mihaiii__Squirtle = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=bge_training_data,  # source model is bge-base-en-v1.5
-    # not MTEB: {"Mihaiii/qa-assistant": ["train"]},
+    # not MTEB: {"Mihaiii/qa-assistant"},
     adapted_from="Mihaiii/test21",
     superseded_by=None,
 )
@@ -385,7 +385,7 @@ Mihaiii__Venusaur = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=None,  # source model is unkown
-    # {"Mihaiii/qa-assistant": ["train"]},
+    # {"Mihaiii/qa-assistant"},
     adapted_from="Mihaiii/test14",
     superseded_by=None,
 )
@@ -408,7 +408,7 @@ Mihaiii__Wartortle = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=bge_training_data,  # distill from  bge-base-en-v1.5
-    # {"Mihaiii/qa-assistant": ["train"]},
+    # {"Mihaiii/qa-assistant"},
     adapted_from="Mihaiii/test22",
     superseded_by=None,
 )
@@ -496,7 +496,7 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabert-all-nli-triplet-Matryoshka",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={},  # not in MTEB: {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets={},  # not in MTEB: {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="aubmindlab/bert-base-arabertv02",
     superseded_by=None,
 )
@@ -520,7 +520,7 @@ Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMet
     use_instructions=None,
     training_datasets=sent_trf_training_dataset,
     # not in MTEB
-    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     superseded_by=None,
 )
@@ -544,7 +544,7 @@ Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
     use_instructions=None,
     training_datasets=sent_trf_training_dataset,  # derived from
     # not in MTEB:
-    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
@@ -568,7 +568,7 @@ Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     use_instructions=None,
     training_datasets=None,  # derived from labSE
     # as well as:
-    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
 )
@@ -592,7 +592,7 @@ Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     use_instructions=None,
     training_datasets=sent_trf_training_dataset,
     # not in MTEB:
-    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="tomaarsen/mpnet-base-all-nli-triplet",
     superseded_by=None,
 )
@@ -614,7 +614,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
-    training_datasets={},  # not in MTEB: "Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets={},  # not in MTEB: "Omartificial-Intelligence-Space/Arabic-NLi-Triplet"},
     adapted_from="UBC-NLP/MARBERTv2",
     superseded_by=None,
 )
@@ -664,12 +664,12 @@ consciousAI__cai_stellaris_text_embeddings = ModelMeta(
 )
 
 SENTENCE_CROISSANT_TRAINING_DATA = {
-    "STS12": ["train"],
-    "STSBenchmark": ["train"],
-    "STSBenchmarkMultilingualSTS": ["train"],
-    "QuoraRetrieval": ["train"],
-    "MSMARCO": ["train"],
-    "STSB": ["train"],
+    "STS12",
+    "STSBenchmark",
+    "STSBenchmarkMultilingualSTS",
+    "QuoraRetrieval",
+    "MSMARCO",
+    "STSB",
 }
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.2",
@@ -734,7 +734,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
-    # Not in MTEB: {"manu/embedding_data_v2_100k": ["train"]},
+    # Not in MTEB: {"manu/embedding_data_v2_100k"},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
 )

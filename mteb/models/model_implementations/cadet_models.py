@@ -8,16 +8,16 @@ from .bge_models import bge_m3_training_data
 cadet_training_data = {
     # we train with the corpora of FEVER, MSMARCO, and DBPEDIA. We only train with synthetic generated queries.
     # However, we do use queries from MSMARCO as examples for synthetic query generation.
-    "MSMARCO": ["train"],
-    "DBPedia": [],
+    "MSMARCO",
+    "DBPedia",
     # We distill from RankT5 which trains using MSMARCO + NQ.
     # source: https://arxiv.org/pdf/2210.10634
-    "NQ": ["train"],
+    "NQ",
     # We also distill from bge-rerankerv2.5-gemma2-lightweight, which utilizes the BGE-M3 dataset for training, along with Arguana, HotpotQA, and FEVER.
     # source: https://arxiv.org/pdf/2409.15700
-    "FEVER": ["train"],
-    "HotpotQA": ["train"],
-    "ArguAna": ["train"],
+    "FEVER",
+    "HotpotQA",
+    "ArguAna",
 }
 
 for k, v in bge_m3_training_data.items():

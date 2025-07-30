@@ -25,29 +25,29 @@ def llm2vec_instruction(instruction):
 llm2vec_supervised_training_data = {
     # source, section g1: https://arxiv.org/pdf/2404.05961
     # splits assumed but unkown
-    "HotpotQA": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "NanoFEVERRetrieval": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "MrTidyRetrieval": ["train"],
-    "T2Reranking": ["train"],
+    "HotpotQA",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
+    "HotpotQAHardNegatives",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
+    "FEVER",
+    "FEVERHardNegatives",
+    "NanoFEVERRetrieval",
+    "FEVER-NL",  # translation not trained on
+    "MrTidyRetrieval",
+    "T2Reranking",
 }
 
 

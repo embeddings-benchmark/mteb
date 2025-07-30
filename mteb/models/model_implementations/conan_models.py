@@ -22,18 +22,18 @@ from .bge_models import bge_full_data
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 conan_zh_datasets = {
-    "BQ": ["train"],
-    "LCQMC": ["train"],
-    "PAWSX": ["train"],
-    "STS-B": ["train"],
-    "DuRetrieval": ["train"],
-    "AFQMC": ["train"],
-    "Cmnli": ["train"],
-    "Ocnli": ["train"],
-    "T2Retrieval": ["train"],
-    "T2Reranking": ["train"],
-    "MMarcoReranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
+    "BQ",
+    "LCQMC",
+    "PAWSX",
+    "STS-B",
+    "DuRetrieval",
+    "AFQMC",
+    "Cmnli",
+    "Ocnli",
+    "T2Retrieval",
+    "T2Reranking",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
 }
 
 logger = logging.getLogger(__name__)

@@ -261,25 +261,23 @@ gte_multilingual_langs = [
 ]
 # Source: https://arxiv.org/pdf/2407.19669
 gte_multi_training_data = {
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "MMarcoReranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "NQ-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "MSMARCO": ["train"],
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "HotpotQA": ["train"],
-    "HotpotQA-NL": ["train"],
-    "FEVER": ["train"],
-    "FEVER-NL": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "MultiLongDocRetrieval": ["train"],
-    "MIRACLReranking": ["train"],
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": [
-        "train"
-    ],  # https://arxiv.org/pdf/2407.19669, Table 11
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
+    "NQ-NL",  # translation not trained on
+    "NQ",
+    "MSMARCO",
+    "mMARCO-NL",  # translation not trained on
+    "HotpotQA",
+    "HotpotQA-NL",
+    "FEVER",
+    "FEVER-NL",
+    "MrTidyRetrieval",
+    "MultiLongDocRetrieval",
+    "MIRACLReranking",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",  # https://arxiv.org/pdf/2407.19669, Table 11
     # not in MTEB:
     #   - TriviaQA
     #   - SQuAD
