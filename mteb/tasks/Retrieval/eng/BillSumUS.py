@@ -27,15 +27,16 @@ class BillSumUS(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""\
+        bibtex_citation=r"""
 @inproceedings{Eidelman_2019,
-   title={BillSum: A Corpus for Automatic Summarization of US Legislation},
-   url={http://dx.doi.org/10.18653/v1/D19-5406},
-   DOI={10.18653/v1/d19-5406},
-   booktitle={Proceedings of the 2nd Workshop on New Frontiers in Summarization},
-   publisher={Association for Computational Linguistics},
-   author={Eidelman, Vladimir},
-   year={2019},
-   pages={48–56} }
+  author = {Eidelman, Vladimir},
+  booktitle = {Proceedings of the 2nd Workshop on New Frontiers in Summarization},
+  doi = {10.18653/v1/d19-5406},
+  pages = {48–56},
+  publisher = {Association for Computational Linguistics},
+  title = {BillSum: A Corpus for Automatic Summarization of US Legislation},
+  url = {http://dx.doi.org/10.18653/v1/D19-5406},
+  year = {2019},
+}
 """,
     )
