@@ -29,6 +29,8 @@ from .eng.AILAStatutesRetrieval import *
 from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
+from .eng.BillSumCA import *
+from .eng.BillSumUS import *
 from .eng.BrightRetrieval import *
 from .eng.BuiltBenchRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
