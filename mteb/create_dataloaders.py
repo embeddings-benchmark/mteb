@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from typing import Any, Callable
 
 import torch
@@ -9,7 +8,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import BatchedInput, Conversation, ConversationTurn, CorpusDataset
+from mteb.types import BatchedInput, Conversation, ConversationTurn
 
 logger = logging.getLogger(__name__)
 
@@ -31,51 +30,30 @@ def create_dataloader_from_texts(
 
 
 def corpus_to_dict(
-    corpus: CorpusDataset,
-) -> dict[str, list[str | None]]:
-    if isinstance(corpus, dict):
-        sentences = [
-            (corpus["title"][i] + " " + corpus["text"][i]).strip()
-            if "title" in corpus
-            else corpus["text"][i].strip()
-            for i in range(len(corpus["text"]))
-        ]
-        titles = corpus["title"]
-        bodies = corpus["text"]
-    # will be tuple in reranking
-    elif isinstance(corpus, (Dataset, Sequence)) and isinstance(corpus[0], dict):
-        sentences = [
-            (doc["title"] + " " + doc["text"]).strip()
-            if "title" in doc
-            else doc["text"].strip()
-            for doc in corpus
-        ]
-        titles = [doc.get("title", "") for doc in corpus]
-        bodies = [doc.get("text", "") for doc in corpus]
-    else:
-        sentences = corpus
-        titles = [""] * len(corpus)
-        bodies = corpus
+    row: dict[str, str],
+) -> dict[str, str]:
     return {
-        "text": sentences,
-        "title": titles,
-        "body": bodies,
+        "text": (row["title"] + " " + row["text"]).strip()
+        if "title" in row
+        else row["text"].strip(),
+        "title": row.get("title", None),
+        "body": row.get("text", None),
     }
 
 
 def create_dataloader_for_retrieval_corpus(
-    inputs: Dataset, **dataloader_kwargs
+    dataset: Dataset, **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a corpus.
 
     Args:
-        inputs: Corpus
+        dataset: Corpus
         dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
         A dataloader with the corpus.
     """
-    dataset = Dataset.from_dict(corpus_to_dict(inputs))
+    dataset = dataset.map(corpus_to_dict)
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 

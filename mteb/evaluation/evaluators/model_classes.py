@@ -512,7 +512,7 @@ class DenseRetrievalExactSearch:
             )
 
             corpus_dataset = create_dataloader_for_retrieval_corpus(
-                corpus_in_pair,
+                Dataset.from_list(corpus_in_pair),
             )
 
             if not (
