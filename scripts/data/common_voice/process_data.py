@@ -747,9 +747,9 @@ def update_release_stats_file(
         "totalValidDurationSecs": 0,
         "totalHrs": 0,
         "totalValidHrs": 0,
-        "version": f'{version.replace("_", ".")}.0',
+        "version": f"{version.replace('_', '.')}.0",
         "date": "2024-12-10",  # This should ideally be dynamically generated
-        "name": f'Common Voice Corpus {version.replace("_", ".")}',
+        "name": f"Common Voice Corpus {version.replace('_', '.')}",
         "multilingual": True,
     }
 
@@ -1308,9 +1308,9 @@ def main():
     # Process each tarball
     for tarball in tarballs:
         try:
-            print(f"\n{'='*80}")
+            print(f"\n{'=' * 80}")
             print(f"Processing tarball: {tarball}")
-            print(f"{'='*80}\n")
+            print(f"{'=' * 80}\n")
 
             # Extract corpus information from the tarball filename
             _, version, language_code = extract_corpus_info_from_tarball(tarball)
