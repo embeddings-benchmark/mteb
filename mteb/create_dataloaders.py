@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from typing import Any, Callable
 
 import torch
@@ -41,8 +42,8 @@ def corpus_to_dict(
         ]
         titles = corpus["title"]
         bodies = corpus["text"]
-    # will be tuple for reranking
-    elif isinstance(corpus, (Dataset, tuple, list)) and isinstance(corpus[0], dict):
+    # will be tuple in reranking
+    elif isinstance(corpus, (Dataset, Sequence)) and isinstance(corpus[0], dict):
         sentences = [
             (doc["title"] + " " + doc["text"]).strip()
             if "title" in doc

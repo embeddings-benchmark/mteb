@@ -546,40 +546,52 @@ class AbsTaskRetrieval(AbsTask):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         self.convert_v1_dataset_format_to_v2()
 
-        def push_section(
+        def _push_section(
             data: dict[str, dict[Any, Any]],
-            column: str,
-            suffix: str,
-            converter: Callable[[Any, Any], dict[str, Any]],
+            subset_item: str,
+            hf_subset_name: str,
+            converter: Callable[[Any, Any], dict[str, Any]] | None = None,
         ) -> None:
+            """Helper function to push dataset
+
+            Args:
+                data: Dataset with all items
+                subset_item: Select which part to take. E. g. corpus, queries etc
+                hf_subset_name: Name of the current item on HF
+                converter: Function to convert dict to datasets format
+            """
             sections = {}
             for split in data.keys():
                 # skip empty instructions and top ranked
-                if column not in data[split] or data[split][column] is None:
+                if subset_item not in data[split] or data[split][subset_item] is None:
                     continue
-                sections[split] = Dataset.from_list(
-                    [converter(idx, item) for idx, item in data[split][column].items()]
-                )
+                if isinstance(sections[split], Dataset):
+                    sections[split] = data[split][subset_item]
+                elif converter is not None:
+                    sections[split] = Dataset.from_list(
+                        [
+                            converter(idx, item)
+                            for idx, item in data[split][subset_item].items()
+                        ]
+                    )
+                else:
+                    raise ValueError(
+                        f"Unexpected subset item type {subset_item} without converter"
+                    )
             if len(sections) > 0:
-                DatasetDict(sections).push_to_hub(repo_name, suffix)
+                DatasetDict(sections).push_to_hub(repo_name, hf_subset_name)
 
         for subset in self.dataset:
             logger.info(f"Converting {subset} of {self.metadata.name}")
-            push_section(
+            _push_section(
                 self.dataset[subset],
                 "queries",
                 f"{subset}-queries" if subset != "default" else "queries",
-                lambda idx, text: {"_id": idx, "text": text},
             )
-            push_section(
+            _push_section(
                 self.dataset[subset],
                 "corpus",
                 f"{subset}-corpus" if subset != "default" else "corpus",
-                lambda idx, text: {
-                    "_id": idx,
-                    "text": text["text"],
-                    "title": text.get("title", ""),
-                },
             )
             # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
@@ -600,13 +612,12 @@ class AbsTaskRetrieval(AbsTask):
                 repo_name, f"{subset}-qrels" if subset != "default" else "qrels"
             )
 
-            push_section(
+            _push_section(
                 self.dataset[subset],
                 "instructions",
                 f"{subset}-instruction" if subset != "default" else "instruction",
-                lambda idx, text: {"query-id": idx, "instruction": text},
             )
-            push_section(
+            _push_section(
                 self.dataset[subset],
                 "top_ranked",
                 f"{subset}-top_ranked" if subset != "default" else "top_ranked",
