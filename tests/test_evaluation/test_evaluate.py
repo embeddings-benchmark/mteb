@@ -7,6 +7,7 @@ import pytest
 import mteb
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
+from mteb.models import model_meta
 from mteb.models.encoder_interface import Encoder
 from tests.test_benchmark.mock_models import MockSentenceTransformer
 from tests.test_benchmark.mock_tasks import (
@@ -52,8 +53,10 @@ def test_evaluate_with_cache(
         results.model_name.replace("/", "__"),
         results.model_revision,  # type: ignore
     )
+    model_meta_path = path.parent / "model_meta.json"
     assert path.exists() and path.is_file(), "cache file should exist"
     assert path.suffix == ".json", "cache file should be a json file"
+    assert model_meta_path.exists(), "no model meta path is saved"
 
     result = results[0]
     assert result.task_name == task.metadata.name, "results should match the task"
