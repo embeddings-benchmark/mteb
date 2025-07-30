@@ -10,8 +10,6 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, cast
 
-from idna import encode
-
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult

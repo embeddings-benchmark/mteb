@@ -7,7 +7,6 @@ import pytest
 import mteb
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
-from mteb.models import model_meta
 from mteb.models.encoder_interface import Encoder
 from tests.test_benchmark.mock_models import MockSentenceTransformer
 from tests.test_benchmark.mock_tasks import (
