@@ -8,7 +8,7 @@ import subprocess
 from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, cast
+from typing import cast
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
@@ -138,7 +138,6 @@ class ResultCache:
         task_result: TaskResult,
         model_name: str | ModelMeta,
         model_revision: str | None = None,
-        encode_kwargs: dict[str, Any] | None = None,
     ) -> None:
         """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json. Where model_name is a
         path-normalized model name. In addition we also save a model_meta.json in the revision folder to preserve the model metadata.
