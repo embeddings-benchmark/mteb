@@ -147,18 +147,16 @@ def calculate_top_ranked_statistics(
 
 
 def calculate_relevant_docs_statistics(
-    relevant_docs: dict[str, dict[str, float]], queries_ids: list[str]
+    relevant_docs: dict[str, dict[str, float]],
 ) -> RelevantDocsStatistics:
-    qrels_lengths = [
-        len(relevant_docs[qid]) for qid in relevant_docs if qid in queries_ids
-    ]
+    qrels_lengths = [len(relevant_docs[qid]) for qid in relevant_docs]
     unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
     # number of qrels that are not 0
     num_qrels_non_zero = sum(
         sum(1 for doc_id in docs if docs[doc_id] != 0)
         for docs in relevant_docs.values()
     )
-    qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if len(queries_ids) else 0
+    qrels_per_doc = num_qrels_non_zero / len(relevant_docs)
 
     return RelevantDocsStatistics(
         num_relevant_docs=num_qrels_non_zero,

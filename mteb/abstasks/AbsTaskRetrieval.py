@@ -486,14 +486,12 @@ class AbsTaskRetrieval(AbsTask):
             instructions = split_data["instructions"]
             top_ranked = split_data["top_ranked"]
 
-        corpus = corpus_to_dict(corpus)["text"]
+        corpus = corpus.map(corpus_to_dict)["text"]
         queries_texts = [q for q in queries["text"] if isinstance(q, str)]
         num_documents = len(corpus)
         num_queries = len(queries_texts)
 
-        relevant_docs_statistics = calculate_relevant_docs_statistics(
-            relevant_docs, queries["id"]
-        )
+        relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
 
         if instructions is not None and len(instructions) > 0:
             instruction_statistics = calculate_text_statistics(
