@@ -11,6 +11,7 @@ from .CUREv1Retrieval import CUREv1Retrieval
 from .IndicQARetrieval import IndicQARetrieval
 from .MintakaRetrieval import MintakaRetrieval
 from .MIRACLRetrieval import MIRACLRetrieval, MIRACLRetrievalHardNegatives
+from .MKQARetrieval import MKQARetrieval
 from .MLQARetrieval import MLQARetrieval
 from .MrTidyRetrieval import MrTidyRetrieval
 from .MultiLongDocRetrieval import MultiLongDocRetrieval
@@ -52,5 +53,6 @@ __all__ = [
     "WikipediaRetrievalMultilingual",
     "XMarket",
     "XPQARetrieval",
+    "MKQARetrieval",
     "XQuADRetrieval",
 ]
