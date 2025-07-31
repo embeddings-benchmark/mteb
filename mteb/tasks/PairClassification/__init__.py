@@ -8,6 +8,7 @@ from .eng import *
 from .fas import *
 from .hye import *
 from .ind import *
+from .ita import *
 from .kor import *
 from .multilingual import *
 from .pol import *
