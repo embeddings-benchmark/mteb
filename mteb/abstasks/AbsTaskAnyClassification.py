@@ -19,7 +19,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
+from ..evaluation.evaluators.classification_evaluator import ClassificationEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
