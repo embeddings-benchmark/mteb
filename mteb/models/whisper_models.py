@@ -118,13 +118,13 @@ class WhisperAudioWrapper(Wrapper):
                 disable=not show_progress_bar,
             ):
                 batch = processed_audio[i : i + batch_size]
-                batch = self._pad_audio_batch(batch)
+                batch_arrays = [tensor.numpy() for tensor in batch]
 
-                inputs = self.processor.feature_extractor(
-                    batch,
+                inputs = self.processor(
+                    batch_arrays,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding="longest",
+                    padding="max_length",
                     truncation=True,
                     max_length=30 * self.sampling_rate,  # 30 seconds max
                     return_attention_mask=True,
