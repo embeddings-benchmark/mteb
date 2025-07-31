@@ -27,7 +27,7 @@ from ..retrieval_metrics import (
     recall_cap,
     top_k_accuracy,
 )
-from ..utils import download
+from .._download import download
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
