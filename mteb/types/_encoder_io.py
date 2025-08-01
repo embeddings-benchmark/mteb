@@ -64,4 +64,8 @@ class BatchedInput(TypedDict, total=False):
 
 
 QueryDataset: Dataset = Dataset
+"""Retrieval query dataset, containing queries. Should have columns `id`, `text`."""
 CorpusDataset: Dataset = Dataset
+"""Retrieval corpus dataset, containing documents. Should have columns `id`, `title`, `body`."""
+InstructionDataset: Dataset = Dataset
+"""Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""

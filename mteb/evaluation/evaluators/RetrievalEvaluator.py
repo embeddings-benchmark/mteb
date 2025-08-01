@@ -4,11 +4,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from datasets import Dataset
-
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
-from mteb.types import CorpusDataset, QueryDataset
+from mteb.types import CorpusDataset, InstructionDataset, QueryDataset
 
 from .Evaluator import Evaluator
 from .model_classes import (
@@ -31,7 +29,7 @@ class RetrievalEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        instructions: Dataset | None = None,
+        instructions: InstructionDataset | None = None,
         top_ranked: dict[str, list[str]] | None = None,
         qid: str | None = None,
         **kwargs,

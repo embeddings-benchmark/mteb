@@ -15,7 +15,7 @@ from datasets import (
     load_dataset,
 )
 
-from mteb.types import CorpusDataset, QueryDataset
+from mteb.types import CorpusDataset, InstructionDataset, QueryDataset
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class RetrievalSplitData(TypedDict):
     corpus: CorpusDataset
     queries: QueryDataset
     relevant_docs: Mapping[str, Mapping[str, float]]
-    instructions: Dataset | None
+    instructions: InstructionDataset | None
     top_ranked: Mapping[str, list[str]] | None
 
 
@@ -111,7 +111,7 @@ class RetrievalDatasetLoader:
             revision=self.revision,
         )
 
-    def _load_corpus(self) -> Dataset:
+    def _load_corpus(self) -> CorpusDataset:
         logger.info("Loading Corpus...")
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
@@ -123,7 +123,7 @@ class RetrievalDatasetLoader:
         logger.info("Doc Example: %s", corpus_ds[0])
         return corpus_ds
 
-    def _load_queries(self) -> Dataset:
+    def _load_queries(self) -> QueryDataset:
         logger.info("Loading Queries...")
 
         config = f"{self.config}-queries" if self.config is not None else "queries"
@@ -192,7 +192,7 @@ class RetrievalDatasetLoader:
         logger.info(f"Top ranked loaded: {len(top_ranked_ds) if top_ranked_ds else 0}")
         return top_ranked_dict
 
-    def _load_instructions(self) -> Dataset:
+    def _load_instructions(self) -> InstructionDataset:
         logger.info("Loading Instructions")
 
         config = (

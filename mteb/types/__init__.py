@@ -6,6 +6,7 @@ from ._encoder_io import (
     Conversation,
     ConversationTurn,
     CorpusDataset,
+    InstructionDataset,
     PromptType,
     QueryDataset,
 )
@@ -44,4 +45,5 @@ __all__ = [
     "Revision",
     "QueryDataset",
     "CorpusDataset",
+    "InstructionDataset",
 ]
