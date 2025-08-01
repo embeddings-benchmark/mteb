@@ -99,3 +99,5 @@ class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput
 BatchedInput = (
     TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
 )
+
+TextBatchedInput = TextInput | CorpusInput | QueryInput
