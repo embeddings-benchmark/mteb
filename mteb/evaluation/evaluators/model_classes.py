@@ -18,10 +18,11 @@ from mteb.models.encoder_interface import Encoder
 from mteb.types import (
     Array,
     BatchedInput,
-    CorpusDataset,
-    InstructionDataset,
+    CorpusDatasetType,
+    InstructionDatasetType,
     PromptType,
-    QueryDataset,
+    QueryDatasetType,
+    TopRankedDocumentsType,
 )
 
 from ...create_dataloaders import (
@@ -78,16 +79,16 @@ class DenseRetrievalExactSearch:
 
     def search(
         self,
-        corpus: CorpusDataset,
-        queries: QueryDataset,
+        corpus: CorpusDatasetType,
+        queries: QueryDatasetType,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         request_qid: str | None = None,
         return_sorted: bool = False,
-        instructions: InstructionDataset | None = None,
-        top_ranked: dict[str, list[str]] | None = None,
+        instructions: InstructionDatasetType | None = None,
+        top_ranked: TopRankedDocumentsType | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         """Perform semantic search (retrieval or reranking).
@@ -239,8 +240,8 @@ class DenseRetrievalExactSearch:
         self,
         query_ids: list[str],
         query_embeddings: np.ndarray,
-        corpus: CorpusDataset,
-        top_ranked: dict[str, list[str]],
+        corpus: CorpusDatasetType,
+        top_ranked: TopRankedDocumentsType,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -333,7 +334,7 @@ class DenseRetrievalExactSearch:
         self,
         query_ids: list[str],
         query_embeddings: np.ndarray,
-        corpus: CorpusDataset,
+        corpus: CorpusDatasetType,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -434,13 +435,13 @@ class DenseRetrievalExactSearch:
 
     def search_cross_encoder(
         self,
-        corpus: CorpusDataset,
-        queries: QueryDataset,
+        corpus: CorpusDatasetType,
+        queries: QueryDatasetType,
         top_k: int,
         hf_split: str,
         hf_subset: str,
         task_metadata: TaskMetadata,
-        instructions: InstructionDataset | None = None,
+        instructions: InstructionDatasetType | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).

@@ -6,7 +6,13 @@ from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
-from mteb.types import CorpusDataset, InstructionDataset, QueryDataset
+from mteb.types import (
+    CorpusDatasetType,
+    InstructionDatasetType,
+    QueryDatasetType,
+    RelevantDocumentsType,
+    TopRankedDocumentsType,
+)
 
 from .Evaluator import Evaluator
 from .model_classes import (
@@ -23,14 +29,14 @@ logger = logging.getLogger(__name__)
 class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
-        corpus: CorpusDataset,
-        queries: QueryDataset,
+        corpus: CorpusDatasetType,
+        queries: QueryDatasetType,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        instructions: InstructionDataset | None = None,
-        top_ranked: dict[str, list[str]] | None = None,
+        instructions: InstructionDatasetType | None = None,
+        top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
         **kwargs,
     ):
@@ -88,7 +94,7 @@ class RetrievalEvaluator(Evaluator):
 
     def evaluate(
         self,
-        qrels: dict[str, dict[str, int]],
+        qrels: RelevantDocumentsType,
         results: dict[str, dict[str, float]],
         k_values: list[int],
         ignore_identical_ids: bool = False,

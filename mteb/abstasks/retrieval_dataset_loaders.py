@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from collections.abc import Mapping
 from typing import TypedDict
 
 from datasets import (
@@ -15,7 +14,13 @@ from datasets import (
     load_dataset,
 )
 
-from mteb.types import CorpusDataset, InstructionDataset, QueryDataset
+from mteb.types import (
+    CorpusDatasetType,
+    InstructionDatasetType,
+    QueryDatasetType,
+    RelevantDocumentsType,
+    TopRankedDocumentsType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +35,11 @@ class RetrievalSplitData(TypedDict):
     - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable). Columns: "query-id", "corpus-ids"
     """
 
-    corpus: CorpusDataset
-    queries: QueryDataset
-    relevant_docs: Mapping[str, Mapping[str, float]]
-    instructions: InstructionDataset | None
-    top_ranked: Mapping[str, list[str]] | None
+    corpus: CorpusDatasetType
+    queries: QueryDatasetType
+    relevant_docs: RelevantDocumentsType
+    instructions: InstructionDatasetType | None
+    top_ranked: TopRankedDocumentsType | None
 
 
 class RetrievalDatasetLoader:
@@ -111,7 +116,7 @@ class RetrievalDatasetLoader:
             revision=self.revision,
         )
 
-    def _load_corpus(self) -> CorpusDataset:
+    def _load_corpus(self) -> CorpusDatasetType:
         logger.info("Loading Corpus...")
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
@@ -123,7 +128,7 @@ class RetrievalDatasetLoader:
         logger.info("Doc Example: %s", corpus_ds[0])
         return corpus_ds
 
-    def _load_queries(self) -> QueryDataset:
+    def _load_queries(self) -> QueryDatasetType:
         logger.info("Loading Queries...")
 
         config = f"{self.config}-queries" if self.config is not None else "queries"
@@ -138,7 +143,7 @@ class RetrievalDatasetLoader:
 
         return queries_ds
 
-    def _load_qrels(self) -> dict[str, dict[str, float]]:
+    def _load_qrels(self) -> RelevantDocumentsType:
         logger.info("Loading qrels...")
 
         config = f"{self.config}-qrels" if self.config is not None else "default"
@@ -172,7 +177,7 @@ class RetrievalDatasetLoader:
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
         return qrels_dict
 
-    def _load_top_ranked(self) -> dict[str, list[str]]:
+    def _load_top_ranked(self) -> TopRankedDocumentsType:
         logger.info("Loading Top Ranked")
 
         config = (
@@ -192,7 +197,7 @@ class RetrievalDatasetLoader:
         logger.info(f"Top ranked loaded: {len(top_ranked_ds) if top_ranked_ds else 0}")
         return top_ranked_dict
 
-    def _load_instructions(self) -> InstructionDataset:
+    def _load_instructions(self) -> InstructionDatasetType:
         logger.info("Loading Instructions")
 
         config = (

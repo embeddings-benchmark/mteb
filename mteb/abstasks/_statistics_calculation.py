@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
+from mteb.types import TopRankedDocumentsType
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -118,7 +119,7 @@ def calculate_score_statistics(scores: list[int | float]) -> ScoreStatistics:
 
 
 def calculate_top_ranked_statistics(
-    top_ranked: dict[str, list[str]], num_queries: int
+    top_ranked: TopRankedDocumentsType, num_queries: int
 ) -> TopRankedStatistics:
     """Calculate statistics for top-ranked items.
 

@@ -12,6 +12,7 @@ from datasets import Dataset, DatasetDict, concatenate_datasets
 from mteb.models.encoder_interface import Encoder
 from mteb.types import (
     HFSubset,
+    RelevantDocumentsType,
     ScoresDict,
 )
 from mteb.types.statistics import (
@@ -418,7 +419,7 @@ class AbsTaskRetrieval(AbsTask):
     def task_specific_scores(
         self,
         scores: dict[str, dict[str, float]],
-        qrels: dict[str, dict[str, int]],
+        qrels: RelevantDocumentsType,
         results: dict[str, dict[str, float]],
         hf_split: str,
         hf_subset: str,

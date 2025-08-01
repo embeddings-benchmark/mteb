@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from enum import Enum
 from typing import TypedDict, Union
 
@@ -63,9 +64,17 @@ class BatchedInput(TypedDict, total=False):
     instruction: list[str]
 
 
-QueryDataset: Dataset = Dataset
+QueryDatasetType: Dataset = Dataset
 """Retrieval query dataset, containing queries. Should have columns `id`, `text`."""
-CorpusDataset: Dataset = Dataset
+CorpusDatasetType: Dataset = Dataset
 """Retrieval corpus dataset, containing documents. Should have columns `id`, `title`, `body`."""
-InstructionDataset: Dataset = Dataset
+InstructionDatasetType: Dataset = Dataset
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
+RelevantDocumentsType: Mapping[str, Mapping[str, float]] = Mapping[
+    str, Mapping[str, float]
+]
+"""Relevant documents for each query, mapping query IDs to a mapping of document IDs and their relevance
+scores. Should have columns `query-id`, `corpus-id`, `score`."""
+TopRankedDocumentsType: Mapping[str, list[str]] = Mapping[str, list[str]]
+"""Top-ranked documents for each query, mapping query IDs to a list of document IDs. Should
+have columns `query-id`, `corpus-ids`."""

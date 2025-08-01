@@ -6,7 +6,7 @@ from typing import Literal
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import requires_package
-from mteb.types import CorpusDataset, QueryDataset
+from mteb.types import CorpusDatasetType, QueryDatasetType
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +39,8 @@ def bm25_loader(model_name, **kwargs):
 
         def search(
             self,
-            corpus: CorpusDataset,
-            queries: QueryDataset,
+            corpus: CorpusDatasetType,
+            queries: QueryDatasetType,
             top_k: int,
             **kwargs,
         ) -> dict[str, dict[str, float]]:
