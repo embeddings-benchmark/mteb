@@ -18,6 +18,7 @@ from mteb.create_dataloaders import create_image_dataloader
 from mteb.models.encoder_interface import Encoder
 from mteb.types import PromptType
 
+from .._download import download
 from ..Evaluator import Evaluator
 from ..retrieval_metrics import (
     confidence_scores,
@@ -27,7 +28,6 @@ from ..retrieval_metrics import (
     recall_cap,
     top_k_accuracy,
 )
-from .._download import download
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
