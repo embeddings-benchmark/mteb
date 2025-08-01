@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import NotRequired, TypedDict, Union
+from typing import TypedDict
 
 import numpy as np
 import torch
 from PIL import Image
+from typing_extensions import NotRequired
 
 # --- Output types ---
-Array = Union[np.ndarray, torch.Tensor]
+Array = np.ndarray | torch.Tensor
 
 
 # --- Input types ---
