@@ -8,7 +8,14 @@ from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import BatchedInput, Conversation, ConversationTurn
+from mteb.types import (
+    BatchedInput,
+    Conversation,
+    ConversationTurn,
+    InstructionDatasetType,
+    PromptType,
+    QueryDatasetType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -58,8 +65,8 @@ def create_dataloader_for_retrieval_corpus(
 
 
 def create_dataloader_for_queries(
-    queries: list[str],
-    instructions: list[str] | None = None,
+    queries: QueryDatasetType,
+    instructions: InstructionDatasetType | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
@@ -93,63 +100,58 @@ def create_dataloader_for_queries(
 
 
 def convert_conv_history_to_query(
-    conversations: list[list[str] | Conversation],
-) -> tuple[list[str], list[Conversation]]:
-    conversations_converted = []
-    parsed_conversations = []
+    row: dict[str, list[list[str] | Conversation]],
+) -> dict[str, str | Conversation]:
+    conversation = row["text"]
+    # if it's a list of strings, just join them
+    if isinstance(conversation, list) and isinstance(conversation[0], str):
+        conv_str = "; ".join(conversation)
+        current_conversation = [
+            ConversationTurn(role="user", content=message) for message in conversation
+        ]
 
-    for conversation in conversations:
-        # if it's a list of strings, just join them
-        if isinstance(conversation, list) and isinstance(conversation[0], str):
-            conv_str = "; ".join(conversation)
-            current_conversation = [
-                ConversationTurn(role="user", content=message)
-                for message in conversation
-            ]
-
-            logger.warning(
-                "Conversations are a list of strings. Used 'user' role for all turns."
+        logger.warning(
+            "Conversations are a list of strings. Used 'user' role for all turns."
+        )
+    # otherwise, it's a list of dictionaries, which we need to convert to strings
+    elif isinstance(conversation, list) and isinstance(conversation[0], dict):
+        conv = []
+        current_conversation = []
+        for i, turn in enumerate(conversation):
+            error_msg = (
+                "When converting conversations lists of dictionary to string, each turn in the conversation "
+                + "must be a dictionary with 'role' and 'content' keys"
             )
-        # otherwise, it's a list of dictionaries, which we need to convert to strings
-        elif isinstance(conversation, list) and isinstance(conversation[0], dict):
-            conv = []
-            current_conversation = []
-            for i, turn in enumerate(conversation):
-                error_msg = (
-                    "When converting conversations lists of dictionary to string, each turn in the conversation "
-                    + "must be a dictionary with 'role' and 'content' keys"
-                )
-                if not isinstance(turn, dict):
-                    raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)
+            if not isinstance(turn, dict):
+                raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)
 
-                # check for keys 'role' and 'content' in the dictionary, if not found, raise an error
-                if "role" not in turn:
-                    raise ValueError(
-                        "Key 'role' not found in the dictionary. " + error_msg
-                    )
-                if "content" not in turn:
-                    raise ValueError(
-                        "Key 'content' not found in the dictionary. " + error_msg
-                    )
-                current_conversation.append(
-                    ConversationTurn(role=turn["role"], content=turn["content"])
+            # check for keys 'role' and 'content' in the dictionary, if not found, raise an error
+            if "role" not in turn:
+                raise ValueError("Key 'role' not found in the dictionary. " + error_msg)
+            if "content" not in turn:
+                raise ValueError(
+                    "Key 'content' not found in the dictionary. " + error_msg
                 )
-                conv.append(f"{turn['role']}: {turn['content']}")
-            conv_str = "; ".join(conv)
-        else:
-            raise ValueError(
-                "Conversations must be a list consisting of strings or dictionaries with 'role' and 'content' keys"
+            current_conversation.append(
+                ConversationTurn(role=turn["role"], content=turn["content"])
             )
+            conv.append(f"{turn['role']}: {turn['content']}")
+        conv_str = "; ".join(conv)
+    else:
+        raise ValueError(
+            "Conversations must be a list consisting of strings or dictionaries with 'role' and 'content' keys"
+        )
 
-        conversations_converted.append(conv_str)
-        parsed_conversations.append(current_conversation)
-
-    return conversations_converted, parsed_conversations
+    return {
+        "text": conv_str,
+        "query": conv_str,
+        "conversation": current_conversation,
+    }
 
 
 def create_dataloader_for_queries_conversation(
-    queries: list[Conversation],
-    instructions: list[str] | None = None,
+    queries: QueryDatasetType,
+    instructions: InstructionDatasetType | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
@@ -164,28 +166,31 @@ def create_dataloader_for_queries_conversation(
     Returns:
         A dataloader with the queries.
     """
-    converted_queries, converted_conversation = convert_conv_history_to_query(queries)
-    if instructions is None:
-        dataset = Dataset.from_dict(
-            {
-                "text": converted_queries,
-                "query": converted_queries,
-                "conversation": converted_conversation,
-            }
-        )
-    else:
-        dataset = Dataset.from_dict(
-            {
-                "text": [
-                    combine_query_and_instruction(q, i)
-                    for q, i in zip(converted_queries, instructions)
-                ],
-                "instruction": instructions,
-                "query": converted_queries,
-                "conversation": converted_conversation,
-            }
-        )
-    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
+    return DataLoader(
+        queries.map(convert_conv_history_to_query),
+        **dataloader_kwargs,
+    )
+    # if instructions is None:
+    #     dataset = Dataset.from_dict(
+    #         {
+    #             "text": converted_queries,
+    #             "query": converted_queries,
+    #             "conversation": converted_conversation,
+    #         }
+    #     )
+    # else:
+    #     dataset = Dataset.from_dict(
+    #         {
+    #             "text": [
+    #                 combine_query_and_instruction(q, i)
+    #                 for q, i in zip(converted_queries, instructions)
+    #             ],
+    #             "instruction": instructions,
+    #             "query": converted_queries,
+    #             "conversation": converted_conversation,
+    #         }
+    #     )
+    # return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
 def transform_image_to_rgb(
@@ -271,16 +276,37 @@ def create_image_dataloader(
 def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
+    prompt_type: PromptType | None = None,
     input_column: str | None = None,
-    batch_size: int = 32,
+    **dataloader_kwargs: dict[str, Any],
 ) -> DataLoader:
     if "image" in task_metadata.modalities:
         return create_image_dataloader(
             (dataset.select_columns(input_column).rename_column(input_column, "image")),
-            batch_size=batch_size,
+            **dataloader_kwargs,
         )
     if "text" in task_metadata.modalities and input_column is not None:
+        if prompt_type is PromptType.passage:
+            return create_dataloader_for_retrieval_corpus(
+                dataset,
+                **dataloader_kwargs,
+            )
+        if prompt_type is PromptType.query:
+            if not isinstance(dataset["text"][0], list):
+                return create_dataloader_for_queries(
+                    dataset,
+                    **dataloader_kwargs,
+                )
+            else:
+                return create_dataloader_for_queries_conversation(
+                    dataset,
+                    **dataloader_kwargs,
+                )
         return create_dataloader_from_texts(
-            dataset[input_column], batch_size=batch_size
+            dataset[input_column],
+            **dataloader_kwargs,
         )
-    return DataLoader(dataset, batch_size=batch_size)
+    return DataLoader(
+        dataset,
+        **dataloader_kwargs,
+    )

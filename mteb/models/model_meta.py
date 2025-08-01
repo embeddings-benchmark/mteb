@@ -16,7 +16,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.languages import check_language_code
-from mteb.models.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder, SearchInterface
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 logger = logging.getLogger(__name__)
@@ -61,6 +61,8 @@ class ModelMeta(BaseModel):
     Attributes:
             loader: the function that loads the model. If None it will assume that the model is not implemented.
             loader_kwargs: The keyword arguments to pass to the loader function.
+            search_loader: the function that loads the search model. If None it will assume that the model is not implemented.
+            search_loader_kwargs: The keyword arguments to pass to the search loader function.
             name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
             n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
                 if the loader returns a SentenceTransformer model from which it can be derived.
@@ -81,7 +83,6 @@ class ModelMeta(BaseModel):
                 in the Latin script.
             use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
                 input, such as "query: {document}" or "passage: {document}".
-            training_datasets: A dictionary of datasets that the model was trained on. Names should be names as they appear in `mteb` for example
             citation: The citation for the model. This is a bibtex string.
             training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
                 {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
@@ -94,12 +95,17 @@ class ModelMeta(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    name: str | None
-    revision: str | None
-    release_date: StrDate | None
-    languages: list[ISOLanguageScript] | None
+    # loaders
     loader: Callable[..., Encoder] | type[Encoder] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
+    search_loader: Callable[..., SearchInterface] | type[SearchInterface] | None = None
+    search_loader_kwargs: dict[str, Any] = field(default_factory=dict)
+    # metadata (required)
+    name: str | None
+    revision: str | None
+    # metadata (optional)
+    release_date: StrDate | None
+    languages: list[ISOLanguageScript] | None
     n_parameters: int | None
     memory_usage_mb: float | None
     max_tokens: float | None

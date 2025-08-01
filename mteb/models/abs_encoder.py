@@ -17,7 +17,16 @@ from mteb.similarity_functions import (
     pairwise_dot_score,
     pairwise_max_sim,
 )
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import (
+    Array,
+    BatchedInput,
+    CorpusDatasetType,
+    InstructionDatasetType,
+    PromptType,
+    QueryDatasetType,
+    RetrievalOutput,
+    TopRankedDocumentsType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -291,18 +300,76 @@ class AbsEncoder(ABC):
             return self.format_instruction(instruction)
         return instruction
 
-    def combine_query_and_instruction(
+    def index(
         self,
-        query: str,
-        instruction: str,
-    ) -> str:
-        """Combines a query with an instruction.
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encoding_kwargs: dict[str, Any],
+    ) -> None:
+        """Index the corpus for retrieval.
 
         Args:
-            query: The query text to combine.
-            instruction: The instruction text to combine with the query.
+            corpus: Corpus dataset to index.
+            task_metadata: Metadata of the task, used to determine how to index the corpus.
+            hf_split: Split of current task, allows to know some additional information about current split.
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            encoding_kwargs: Additional arguments to pass to the encoder during indexing.
+        """
+        ...
+
+    def rerank(
+        self,
+        queries: QueryDatasetType,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encoding_kwargs: dict[str, Any],
+        instructions: InstructionDatasetType | None = None,
+    ) -> RetrievalOutput:
+        """Rerank the top-ranked documents for the given queries.
+
+        Args:
+            queries: Queries to find
+            task_metadata: Task metadata
+            hf_split: split of the dataset
+            hf_subset: subset of the dataset
+            encoding_kwargs: Additional arguments to pass to the encoder during indexing.
+            instructions: Optional instructions to use for the search.
 
         Returns:
-            The combined query and instruction text.
+            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
-        return f"{query} {instruction}"
+        ...
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encoding_kwargs: dict[str, Any],
+        instructions: InstructionDatasetType | None = None,
+        top_ranked: TopRankedDocumentsType | None = None,
+        top_k: int | None = None,
+    ) -> RetrievalOutput:
+        """Search the corpus for the given queries.
+
+        Args:
+            queries: Queries to find
+            task_metadata: Task metadata
+            hf_split: split of the dataset
+            hf_subset: subset of the dataset
+            instructions: Optional instructions to use for the search.
+            top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
+                Passed only from Reranking tasks.
+            top_k: Optional number of top documents to return for each query. If None, all documents are returned.
+            encoding_kwargs: Additional arguments to pass to the encoder during indexing.
+
+        Returns:
+            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
+        """
+        ...
