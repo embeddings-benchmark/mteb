@@ -273,6 +273,21 @@ def create_image_dataloader(
     )
 
 
+def create_text_queries_dataloader(
+    dataset: Dataset,
+    **dataloader_kwargs: dict[str, Any],
+) -> DataLoader[BatchedInput]:
+    if not isinstance(dataset["text"][0], list):
+        return create_dataloader_for_queries(
+            dataset,
+            **dataloader_kwargs,
+        )
+    return create_dataloader_for_queries_conversation(
+        dataset,
+        **dataloader_kwargs,
+    )
+
+
 def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
@@ -292,20 +307,10 @@ def create_dataloader(
                 **dataloader_kwargs,
             )
         if prompt_type is PromptType.query:
-            if not isinstance(dataset["text"][0], list):
-                return create_dataloader_for_queries(
-                    dataset,
-                    **dataloader_kwargs,
-                )
-            else:
-                return create_dataloader_for_queries_conversation(
-                    dataset,
-                    **dataloader_kwargs,
-                )
-        return create_dataloader_from_texts(
-            dataset[input_column],
-            **dataloader_kwargs,
-        )
+            return create_text_queries_dataloader(
+                dataset,
+                **dataloader_kwargs,
+            )
     return DataLoader(
         dataset,
         **dataloader_kwargs,

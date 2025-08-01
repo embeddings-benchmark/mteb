@@ -28,7 +28,7 @@ class SearchInterface(Protocol):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encoding_kwargs: dict[str, Any],
+        encode_kwargs: dict[str, Any],
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -37,7 +37,7 @@ class SearchInterface(Protocol):
             task_metadata: Metadata of the task, used to determine how to index the corpus.
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
-            encoding_kwargs: Additional arguments to pass to the encoder during indexing.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
         """
         ...
 
@@ -48,7 +48,7 @@ class SearchInterface(Protocol):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encoding_kwargs: dict[str, Any],
+        encode_kwargs: dict[str, Any],
         instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutput:
@@ -62,7 +62,7 @@ class SearchInterface(Protocol):
             instructions: Optional instructions to use for the search.
             top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
                 Passed only from Reranking tasks.
-            encoding_kwargs: Additional arguments to pass to the encoder during indexing.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -181,7 +181,8 @@ class CrossEncoderProtocol(Protocol, SearchInterface):
 
     def predict(
         self,
-        inputs: DataLoader[tuple[BatchedInput, BatchedInput]],
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
         *,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -192,7 +193,8 @@ class CrossEncoderProtocol(Protocol, SearchInterface):
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
         Args:
-            inputs: First Dataloader of inputs to encode.
+            inputs1: First Dataloader of inputs to encode.
+            inputs2: Second Dataloader of inputs to encode.
             task_metadata: Metadata of the current task.
             hf_split: Split of current task, allows to know some additional information about current split.
                 E.g. Current language
