@@ -39,8 +39,7 @@ def get_langs(langs: list[str]) -> dict[str, list[str]]:
 
 
 COMMON_METADATA = {
-    "description": "Retrieve associated pages according to questions or related text.",
-    "reference": "https://arxiv.org/abs/2506.18902",
+    "description": "Please refer to the reference repo in order to get more information about the benchmark.",
     "type": "DocumentUnderstanding",
     "category": "t2i",
     "eval_splits": ["test"],
@@ -48,17 +47,15 @@ COMMON_METADATA = {
     "task_subtypes": ["Image Text Retrieval"],
     "dialect": [],
     "modalities": ["text", "image"],
-    "bibtex_citation": r"""
-@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
-      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
-      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
-      year={2025},
-      eprint={2506.18902},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2506.18902},
-}
-""",
+    "bibtex_citation": r"""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+  archiveprefix = {arXiv},
+  author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+  eprint = {2506.18902},
+  primaryclass = {cs.AI},
+  title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+  url = {https://arxiv.org/abs/2506.18902},
+  year = {2025},
+}""",
     "prompt": {"query": "Find a screenshot that is relevant to the user's input."},
 }
 
@@ -181,6 +178,7 @@ def load_data(self, **kwargs):
 class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMedicalPrescriptionsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/medical-prescriptions_beir",
         dataset={
             "path": "jinaai/medical-prescriptions_beir",
             "revision": "f27559d1602523e1c6b66c83e68d337f7bb74fe2",
@@ -199,6 +197,7 @@ class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRStanfordSlideRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/stanford_slide_beir",
         dataset={
             "path": "jinaai/stanford_slide_beir",
             "revision": "6444c24c59dfb271bdc01e0a56292753e196fc98",
@@ -217,6 +216,7 @@ class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDonutVQAISynHMPRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/donut_vqa_beir",
         dataset={
             "path": "jinaai/donut_vqa_beir",
             "revision": "38e38a676202d3d8fd365b152ab7832207a7aa35",
@@ -246,6 +246,7 @@ class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTableVQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/table-vqa_beir",
         dataset={
             "path": "jinaai/table-vqa_beir",
             "revision": "d60d6d1311296fac106b5c399873539d3d155393",
@@ -264,6 +265,7 @@ class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRChartQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/ChartQA_beir",
         dataset={
             "path": "jinaai/ChartQA_beir",
             "revision": "9d9f9fa99f1150b5af04348de90799a24138d46c",
@@ -281,6 +283,7 @@ class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/tqa_beir",
         dataset={
             "path": "jinaai/tqa_beir",
             "revision": "33b48ad357ceffac3488630b6b0f2c86a9386978",
@@ -299,6 +302,7 @@ class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDROpenAINewsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/openai-news_beir",
         dataset={
             "path": "jinaai/openai-news_beir",
             "revision": "2c2d1f9910abe9093aa6fa82a76ab73dca525cfd",
@@ -317,6 +321,7 @@ class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaDeNewsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/europeana-de-news_beir",
         dataset={
             "path": "jinaai/europeana-de-news_beir",
             "revision": "bf226830eac4d22a2389cdccafd254bf1bc1bc5f",
@@ -335,6 +340,7 @@ class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaEsNewsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/europeana-es-news_beir",
         dataset={
             "path": "jinaai/europeana-es-news_beir",
             "revision": "724aa71a59e6870eccf3d046e08145c61d0620cb",
@@ -353,6 +359,7 @@ class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaItScansRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/europeana-it-scans_beir",
         dataset={
             "path": "jinaai/europeana-it-scans_beir",
             "revision": "8907ccacaa9c624218a2153598e57e444c76391e",
@@ -371,6 +378,7 @@ class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaNlLegalRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/europeana-nl-legal_beir",
         dataset={
             "path": "jinaai/europeana-nl-legal_beir",
             "revision": "f71c665cc5d4d24ee6045717598d1480c5d63bbc",
@@ -389,6 +397,7 @@ class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRHindiGovVQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/hindi-gov-vqa_beir",
         dataset={
             "path": "jinaai/hindi-gov-vqa_beir",
             "revision": "a1b96978b1ad0c217a62600e0713ce40ea583cde",
@@ -407,6 +416,7 @@ class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAutomobileCatelogRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/automobile_catalogue_jp_beir",
         dataset={
             "path": "jinaai/automobile_catalogue_jp_beir",
             "revision": "b83ca039723e1c705dbb444147b1fa0cc6358d5f",
@@ -425,6 +435,7 @@ class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRBeveragesCatalogueRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/beverages_catalogue_ru_beir",
         dataset={
             "path": "jinaai/beverages_catalogue_ru_beir",
             "revision": "d1be95f14c1f8eedb0165303943cd5b69402e2b4",
@@ -443,6 +454,7 @@ class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRRamensBenchmarkRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/ramen_benchmark_jp_beir",
         dataset={
             "path": "jinaai/ramen_benchmark_jp_beir",
             "revision": "ed0ca84e0d2441f9af2b6617ebcdbeefe8a65c1b",
@@ -461,6 +473,7 @@ class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRJDocQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/jdocqa_beir",
         dataset={
             "path": "jinaai/jdocqa_beir",
             "revision": "40a4c729550dfb560c479348775bcff99b6be91b",
@@ -479,6 +492,7 @@ class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRHungarianDocQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/hungarian_doc_qa_beir",
         dataset={
             "path": "jinaai/hungarian_doc_qa_beir",
             "revision": "4179a258d99ed8e9cd1fdca76a74484e842412f5",
@@ -497,6 +511,7 @@ class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArabicChartQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/arabic_chartqa_ar_beir",
         dataset={
             "path": "jinaai/arabic_chartqa_ar_beir",
             "revision": "13a71ebb8e17fd7d7303a41831ac0092b61ef7c1",
@@ -515,6 +530,7 @@ class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArabicInfographicsVQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/arabic_infographicsvqa_ar_beir",
         dataset={
             "path": "jinaai/arabic_infographicsvqa_ar_beir",
             "revision": "a78b0caf95636de35bb147db616181c8d3e5b9d3",
@@ -533,6 +549,7 @@ class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDROWIDChartsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/owid_charts_en_beir",
         dataset={
             "path": "jinaai/owid_charts_en_beir",
             "revision": "cac5a7f322b9baa473bb878ff6dbdda8a52840e9",
@@ -551,6 +568,7 @@ class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMPMQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/mpmqa_small_beir",
         dataset={
             "path": "jinaai/mpmqa_small_beir",
             "revision": "83deed2d9d7e16cb87aef80a419be16733cc954a",
@@ -569,6 +587,7 @@ class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRJina2024YearlyBookRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/jina_2024_yearly_book_beir",
         dataset={
             "path": "jinaai/jina_2024_yearly_book_beir",
             "revision": "79cd892d672b0b0f25229a0b57ba893ee6ac69c1",
@@ -587,6 +606,7 @@ class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsMapsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/wikimedia-commons-maps_beir",
         dataset={
             "path": "jinaai/wikimedia-commons-maps_beir",
             "revision": "735c932678642e90909126f4d0948cc5fe1f406e",
@@ -605,6 +625,7 @@ class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRPlotQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/plotqa_beir",
         dataset={
             "path": "jinaai/plotqa_beir",
             "revision": "64a321b8bbba18ebe04a9099f4c3485e1c78b583",
@@ -623,6 +644,7 @@ class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMMTabRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/MMTab_beir",
         dataset={
             "path": "jinaai/MMTab_beir",
             "revision": "59e6a04a93a0eb082e2402717bb768d4b11795c7",
@@ -641,6 +663,7 @@ class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRCharXivOCRRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/CharXiv-en_beir",
         dataset={
             "path": "jinaai/CharXiv-en_beir",
             "revision": "c38db7d063ee7d0c119eb41932e981943e37f702",
@@ -659,6 +682,7 @@ class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRStudentEnrollmentSyntheticRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/student-enrollment_beir",
         dataset={
             "path": "jinaai/student-enrollment_beir",
             "revision": "80859af7fc43313b5e6e7bb1087b5c922f030ce1",
@@ -677,6 +701,7 @@ class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRGitHubReadmeRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/github-readme-retrieval-multilingual_beir",
         dataset={
             "path": "jinaai/github-readme-retrieval-multilingual_beir",
             "revision": "a7b17c2eca814c32b9af6a852a5d6d7b5e6b9165",
@@ -715,6 +740,7 @@ class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
 class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTweetStockSyntheticsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/tweet-stock-synthetic-retrieval_beir",
         dataset={
             "path": "jinaai/tweet-stock-synthetic-retrieval_beir",
             "revision": "955f2c8e171b3d9ff18c8b841cd814649209d4b0",
@@ -735,6 +761,7 @@ class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetri
 class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAirbnbSyntheticRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/airbnb-synthetic-retrieval_beir",
         dataset={
             "path": "jinaai/airbnb-synthetic-retrieval_beir",
             "revision": "14c4c816fff158d20719bebf414d495efeaedc20",
@@ -755,6 +782,7 @@ class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval)
 class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRShanghaiMasterPlanRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/shanghai_master_plan_beir",
         dataset={
             "path": "jinaai/shanghai_master_plan_beir",
             "revision": "ba711c07aafbe43ef7970cf9429109fc6220c824",
@@ -775,6 +803,7 @@ class JinaVDRWikimediaCommonsDocumentsRetrieval(
 ):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsDocumentsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/wikimedia-commons-documents-ml_beir",
         dataset={
             "path": "jinaai/wikimedia-commons-documents-ml_beir",
             "revision": "1307839f4deabc1dfa954ef6843ef4cf4fc038b8",
@@ -816,6 +845,7 @@ class JinaVDRWikimediaCommonsDocumentsRetrieval(
 class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaFrNewsRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/europeana-fr-news_beir",
         dataset={
             "path": "jinaai/europeana-fr-news_beir",
             "revision": "3abc89102ab1d64d02806ba612e7286d63624c01",
@@ -834,6 +864,7 @@ class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAHealthcareIndustryRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/docqa_healthcare_industry_beir",
         dataset={
             "path": "jinaai/docqa_healthcare_industry_beir",
             "revision": "810989fee9624ef58b3522c20e00c55d9fc69002",
@@ -852,6 +883,7 @@ class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAAI",
+        reference="https://huggingface.co/datasets/jinaai/docqa_artificial_intelligence_beir",
         dataset={
             "path": "jinaai/docqa_artificial_intelligence_beir",
             "revision": "9764d3c6b9b946b2b6302719e4a89bc99c83f975",
@@ -870,6 +902,7 @@ class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
 class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRShiftProjectRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/shiftproject_beir",
         dataset={
             "path": "jinaai/shiftproject_beir",
             "revision": "c97b12a93e714c7c3eebea80888ab83483803028",
@@ -888,6 +921,7 @@ class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTatQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/tatqa_beir",
         dataset={
             "path": "jinaai/tatqa_beir",
             "revision": "78b7f06bd45d8cead8a61ec83ed20d7eb3c0f82a",
@@ -906,6 +940,7 @@ class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRInfovqaRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/infovqa_beir",
         dataset={
             "path": "jinaai/infovqa_beir",
             "revision": "682247a4c07b5f9da329b2e29fb57c87efd26a3f",
@@ -924,6 +959,7 @@ class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocVQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/docvqa_beir",
         dataset={
             "path": "jinaai/docvqa_beir",
             "revision": "d77d5d00a0047597a0ffc1ed25555078710e21b4",
@@ -942,6 +978,7 @@ class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAGovReportRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/docqa_gov_report_beir",
         dataset={
             "path": "jinaai/docqa_gov_report_beir",
             "revision": "76fd0c09bff018c2d503d4f50f0d3ddb68690af0",
@@ -960,6 +997,7 @@ class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTabFQuadRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/tabfquad_beir",
         dataset={
             "path": "jinaai/tabfquad_beir",
             "revision": "42f9ba0b1f1dd0a6b82be6e9547367e2fb555e21",
@@ -978,6 +1016,7 @@ class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAEnergyRetrieval",
+        reference="https://huggingface.co/datasets/jinaai/docqa_energy_beir",
         dataset={
             "path": "jinaai/docqa_energy_beir",
             "revision": "25dac6859e7f5b7e0c309b6286534794b7d05a6c",
@@ -996,6 +1035,7 @@ class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRArxivQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArxivQARetrieval",
+        reference="https://huggingface.co/datasets/jinaai/arxivqa_beir",
         dataset={
             "path": "jinaai/arxivqa_beir",
             "revision": "d49798d601d4c53a1d15054acecf25f629f504f4",
