@@ -15,7 +15,7 @@ from mteb.create_dataloaders import (
 from mteb.models.encoder_interface import Encoder
 from mteb.similarity_functions import similarity
 
-from .Evaluator import Evaluator
+from ._evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
