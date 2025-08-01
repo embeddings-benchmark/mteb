@@ -337,8 +337,6 @@ class JinaV4Wrapper(Wrapper):
         else:
             self.vector_type = "single_vector"
 
-        if not isinstance(texts, list):
-            texts = list(texts)
         with torch.no_grad():
             return self.model.encode_text(
                 texts=texts,
