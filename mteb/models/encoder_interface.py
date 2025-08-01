@@ -16,7 +16,7 @@ from mteb.types import (
 class Encoder(Protocol):
     """The interface for an encoder in MTEB.
 
-    Besides the required functions specified below, the encoder can additionally specify the the following signatures seen below.
+    Besides the required functions specified below, the encoder can additionally specify the following signatures seen below.
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
