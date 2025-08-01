@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ._evaluator import Evaluator
+from .evaluator import Evaluator
 from .AnySTSEvaluator import AnySTSEvaluator
 from .BitextMiningEvaluator import BitextMiningEvaluator
 from .ClassificationEvaluator import ClassificationEvaluator

@@ -19,7 +19,7 @@ from mteb.models.encoder_interface import Encoder
 from mteb.types import PromptType
 
 from .._download import download
-from .._evaluator import Evaluator
+from ..evaluator import Evaluator
 from ..retrieval_metrics import (
     confidence_scores,
     hole,

@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
 
 from ...create_dataloaders import create_dataloader_from_texts
-from ._evaluator import Evaluator
+from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
