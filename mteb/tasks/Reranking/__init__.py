@@ -18,3 +18,6 @@ from .multilingual.WikipediaRerankingMultilingual import *
 from .multilingual.XGlueWPRReranking import *
 from .rus.RuBQReranking import *
 from .zho.CMTEBReranking import *
+from .vie.AskUbuntuDupQuestionsVN import *
+from .vie.SciDocsRerankingVN import *
+from .vie.StackOverflowDupQuestionsVN import *

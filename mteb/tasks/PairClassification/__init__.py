@@ -29,3 +29,6 @@ from .por.Assin2RTE import *
 from .por.SickBrPC import *
 from .rus.TERRa import *
 from .zho.CMTEBPairClassification import *
+from .vie.SprintDuplicateQuestionsPCVN import *
+from .vie.TwitterSemEval2015PCVN import *
+from .vie.TwitterURLCorpusPCVN import *

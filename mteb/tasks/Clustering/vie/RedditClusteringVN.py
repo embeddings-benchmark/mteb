@@ -1,0 +1,44 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskClustering import AbsTaskClustering
+
+
+class RedditClusteringVN(AbsTaskClustering):
+    metadata = TaskMetadata(
+        name="RedditClustering-VN",
+        description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
+        reference="https://arxiv.org/abs/2104.07081",
+        dataset={
+            "path": "GreenNode/reddit-clustering-vn",
+            "revision": "7f7d4097979633181b2df3f73905218f74c4665d",
+        },
+        type="Clustering",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["vie-Latn"],
+        main_score="v_measure",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation="""
+@misc{pham2025vnmtebvietnamesemassivetext,
+    title={VN-MTEB: Vietnamese Massive Text Embedding Benchmark},
+    author={Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
+    year={2025},
+    eprint={2507.21500},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2507.21500}
+}
+""",
+        n_samples={"test": 420464},
+        avg_character_length={"test": 64.7},
+    )
