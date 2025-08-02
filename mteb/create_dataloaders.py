@@ -91,7 +91,7 @@ def create_dataloader_for_queries(
 
 
 def convert_conv_history_to_query(
-    row: dict[str, list[list[str] | Conversation]],
+    row: dict[str, list[str] | Conversation],
 ) -> dict[str, str | Conversation]:
     conversation = row["text"]
     # if it's a list of strings, just join them
