@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import TypedDict
+from typing import TypedDict, Union
 
 import numpy as np
 import torch
@@ -9,7 +9,8 @@ from PIL import Image
 from typing_extensions import NotRequired
 
 # --- Output types ---
-Array = np.ndarray | torch.Tensor
+# should be as Union, because `|` won't work for python3.9
+Array = Union[np.ndarray, torch.Tensor]
 
 
 # --- Input types ---
