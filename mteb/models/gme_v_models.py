@@ -182,7 +182,7 @@ class GmeQwen2VL(Wrapper):
                 else doc["text"].strip()
                 for doc in corpus
             ]
-        embeddings = self.encode(sentences, prompt_type=PromptType.passage**kwargs)
+        embeddings = self.encode(sentences, prompt_type=PromptType.document**kwargs)
         return embeddings
 
     def get_image_embeddings(self, images: list[Image.Image] | DataLoader, **kwargs):
@@ -210,7 +210,7 @@ class GmeQwen2VL(Wrapper):
         instruction=None,
         **kwargs: Any,
     ):
-        if prompt_type == PromptType.passage:
+        if prompt_type == PromptType.document:
             instruction = None
         elif instruction is None:
             instruction = self.get_instruction(task_name, prompt_type)

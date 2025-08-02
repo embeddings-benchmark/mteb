@@ -7,6 +7,7 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -39,7 +40,10 @@ class ColPaliEngineWrapper:
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, revision=revision, device_map=self.device, **kwargs
+            model_name,
+            device_map=self.device,
+            adapter_kwargs={"revision": revision},
+            **kwargs,
         )
         self.mdl.eval()
 
@@ -68,14 +72,13 @@ class ColPaliEngineWrapper:
             iterator = DataLoader(images, batch_size=batch_size)
 
         with torch.no_grad():
-            for batch in iterator:
+            for batch in tqdm(iterator):
                 # batch may be list of tensors or PIL
                 imgs = [
                     F.to_pil_image(b.to("cpu")) if not isinstance(b, Image.Image) else b
                     for b in batch
                 ]
-                inputs = self.processor.process_images(imgs)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                inputs = self.processor.process_images(imgs).to(self.device)
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
 
@@ -92,10 +95,14 @@ class ColPaliEngineWrapper:
     ):
         all_embeds = []
         with torch.no_grad():
-            for i in range(0, len(texts), batch_size):
-                batch = texts[i : i + batch_size]
-                inputs = self.processor.process_queries(batch)
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            for i in tqdm(range(0, len(texts), batch_size)):
+                batch = [
+                    self.processor.query_prefix
+                    + t
+                    + self.processor.query_augmentation_token * 10
+                    for t in texts[i : i + batch_size]
+                ]
+                inputs = self.processor.process_texts(batch).to(self.device)
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
 
@@ -120,11 +127,11 @@ class ColPaliEngineWrapper:
         )
 
     def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
+        scores = self.similarity(text_embeddings, image_embeddings).T
+        return scores.softmax(dim=-1)
 
     def similarity(self, a, b):
-        return self.processor.score_multi_vector(a, b)
+        return self.processor.score(a, b)
 
 
 class ColPaliWrapper(ColPaliEngineWrapper):
@@ -164,6 +171,7 @@ colpali_v1_1 = ModelMeta(
     loader=partial(
         ColPaliWrapper,
         model_name="vidore/colpali-v1.1",
+        revision="a0f15e3bcf97110e7ac1bb4be4bcd30eeb31992a",
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.1",
@@ -190,6 +198,7 @@ colpali_v1_2 = ModelMeta(
     loader=partial(
         ColPaliWrapper,
         model_name="vidore/colpali-v1.2",
+        revision="6b89bc63c16809af4d111bfe412e2ac6bc3c9451",
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.2",
@@ -216,6 +225,7 @@ colpali_v1_3 = ModelMeta(
     loader=partial(
         ColPaliWrapper,
         model_name="vidore/colpali-v1.3",
+        revision="1b5c8929330df1a66de441a9b5409a878f0de5b0",
         torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.3",

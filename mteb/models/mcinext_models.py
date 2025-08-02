@@ -256,7 +256,7 @@ class HakimModelWrapper(Wrapper):
         if task_id == 3:
             if sub == "sentence1" or (prompt_type and prompt_type.value == "query"):
                 return f"{task_prompt} | متن اول : {sample}"
-            if sub == "sentence2" or (prompt_type and prompt_type.value == "passage"):
+            if sub == "sentence2" or (prompt_type and prompt_type.value == "document"):
                 return f"{task_prompt} | متن دوم : {sample}"
         return sample
 

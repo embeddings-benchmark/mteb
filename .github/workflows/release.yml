@@ -31,7 +31,7 @@ jobs:
 
       - name: Python Semantic Release
         id: release
-        uses: python-semantic-release/python-semantic-release@v8.0.4
+        uses: python-semantic-release/python-semantic-release@v9.8.9
         with:
           github_token: ${{ secrets.RELEASE }}
           changelog: "false"
@@ -44,7 +44,7 @@ jobs:
         # publisher must already be configured on PyPI.
 
       - name: Publish package distributions to GitHub Releases
-        uses: python-semantic-release/upload-to-gh-release@main
+        uses: python-semantic-release/upload-to-gh-release@v9.8.9
         if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.RELEASE }}

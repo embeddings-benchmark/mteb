@@ -11,3 +11,4 @@ from .MusicCaps import *
 from .SoundDescs import *
 from .UrbanSound8kRetrieval import *
 from .CommonVoice import *
+from .Fleurs import *

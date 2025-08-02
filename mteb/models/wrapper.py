@@ -35,7 +35,7 @@ class Wrapper:
         Args:
             task_to_prompt: The tasks names and their corresponding prompt_names
             task_name: The task name to use for building the encoding prompt
-            prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
+            prompt_type: The prompt type (e.g. "query" | "document") to use for building the encoding prompt
         """
         task = mteb.get_task(task_name=task_name)
         task_type = task.metadata.type
@@ -74,7 +74,7 @@ class Wrapper:
         prompt_types = [e.value for e in PromptType]
         for task_name in task_to_prompt_name:
             if "-" in task_name and task_name.endswith(
-                (f"-{PromptType.query.value}", f"-{PromptType.passage.value}")
+                (f"-{PromptType.query.value}", f"-{PromptType.document.value}")
             ):
                 task_name, prompt_type = task_name.rsplit("-", 1)
                 if prompt_type not in prompt_types:
