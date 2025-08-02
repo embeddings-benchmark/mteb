@@ -17,67 +17,67 @@ def instruction_template(
 
 nvidia_training_datasets = {
     # source: https://arxiv.org/pdf/2405.17428
-    "ArguAna": ["train"],
-    "ArguAna-PL": ["train"],
-    "ArguAna-NL": ["train"],  # translation not trained on
-    "NanoArguAnaRetrieval": ["train"],
-    "HotpotQA": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
-    "FEVER": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "FEVERHardNegatives": ["train"],
-    "NanoFEVERRetrieval": ["train"],
-    "FiQA2018": ["train"],
-    "FiQA2018-NL": ["train"],  # translation not trained on
-    "STS12": ["train"],
-    "STS22": ["train"],
-    "AmazonReviewsClassification": ["train"],
-    "AmazonCounterfactualClassification": ["train"],
-    "Banking77Classification": ["train"],
-    "EmotionClassification": ["train"],
-    "ImdbClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "ToxicConversationsClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
-    "ArxivClusteringP2P": ["train"],
-    "ArxivClusteringP2P.v2": ["train"],
-    "ArxivClusteringS2S": ["train"],
-    "BiorxivClusteringP2P": ["train"],
-    "BiorxivClusteringP2P.v2": ["train"],
-    "BiorxivClusteringS2S": ["train"],
-    "BiorxivClusteringS2S.v2": ["train"],
-    "MedrxivClusteringP2P": ["train"],
-    "MedrxivClusteringP2P.v2": ["train"],
-    "MedrxivClusteringS2S": ["train"],
-    "MedrxivClusteringS2S.v2": ["train"],
-    "TwentyNewsgroupsClustering": ["train"],
-    "TwentyNewsgroupsClustering.v2": ["train"],
-    "StackExchangeClustering": ["train"],
-    "StackExchangeClustering.v2": ["train"],
-    "StackExchangeClusteringP2P": ["train"],
-    "StackExchangeClusteringP2P.v2": ["train"],
-    "RedditClustering": ["train"],
-    "RedditClustering.v2": ["train"],
-    "RedditClusteringP2P": ["train"],
-    "RedditClusteringP2P.v2": ["train"],
-    "STSBenchmark": ["train"],
-    "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "MrTidyRetrieval": ["train"],
+    "ArguAna",
+    "ArguAna-PL",
+    "ArguAna-NL",  # translation not trained on
+    "NanoArguAnaRetrieval",
+    "HotpotQA",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
+    "HotpotQAHardNegatives",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
+    "FEVER",
+    "FEVER-NL",  # translation not trained on
+    "FEVERHardNegatives",
+    "NanoFEVERRetrieval",
+    "FiQA2018",
+    "FiQA2018-NL",  # translation not trained on
+    "STS12",
+    "STS22",
+    "AmazonReviewsClassification",
+    "AmazonCounterfactualClassification",
+    "Banking77Classification",
+    "EmotionClassification",
+    "ImdbClassification",
+    "MTOPIntentClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
+    "ArxivClusteringP2P",
+    "ArxivClusteringP2P.v2",
+    "ArxivClusteringS2S",
+    "BiorxivClusteringP2P",
+    "BiorxivClusteringP2P.v2",
+    "BiorxivClusteringS2S",
+    "BiorxivClusteringS2S.v2",
+    "MedrxivClusteringP2P",
+    "MedrxivClusteringP2P.v2",
+    "MedrxivClusteringS2S",
+    "MedrxivClusteringS2S.v2",
+    "TwentyNewsgroupsClustering",
+    "TwentyNewsgroupsClustering.v2",
+    "StackExchangeClustering",
+    "StackExchangeClustering.v2",
+    "StackExchangeClusteringP2P",
+    "StackExchangeClusteringP2P.v2",
+    "RedditClustering",
+    "RedditClustering.v2",
+    "RedditClusteringP2P",
+    "RedditClusteringP2P.v2",
+    "STSBenchmark",
+    "STSBenchmarkMultilingualSTS",  # translated, not trained on
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "MrTidyRetrieval",
 }
 
 NV_embed_v2 = ModelMeta(

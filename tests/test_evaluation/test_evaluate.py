@@ -52,8 +52,10 @@ def test_evaluate_with_cache(
         results.model_name.replace("/", "__"),
         results.model_revision,  # type: ignore
     )
+    model_meta_path = path.parent / "model_meta.json"
     assert path.exists() and path.is_file(), "cache file should exist"
     assert path.suffix == ".json", "cache file should be a json file"
+    assert model_meta_path.exists(), "no model meta path is saved"
 
     result = results[0]
     assert result.task_name == task.metadata.name, "results should match the task"

@@ -77,7 +77,7 @@ rubert_tiny = ModelMeta(
     public_training_code="https://gist.github.com/avidale/7bc6350f26196918bf339c01261f5c60",
     training_datasets={
         # [Yandex Translate corpus](https://translate.yandex.ru/corpus), [OPUS-100](https://huggingface.co/datasets/opus100)
-        "Tatoeba": ["train"],
+        "Tatoeba",
     },
     adapted_from="google-bert/bert-base-multilingual-cased",
     public_training_data=None,
@@ -100,11 +100,11 @@ rubert_tiny2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1mSWfIQ6PIlteLVZ9DKKpcorycgLIKZLf?usp=sharing",
-    training_datasets={
+    training_datasets=set(
         # https://huggingface.co/datasets/cointegrated/ru-paraphrase-NMT-Leipzig
         # Wikipedia https://huggingface.co/datasets/Madjogger/JamSpell_dataset
         # https://huggingface.co/datasets/imvladikon/leipzig_corpora_collection
-    },
+    ),
     adapted_from="cointegrated/rubert-tiny",
     public_training_data=None,
 )
@@ -128,10 +128,10 @@ sbert_large_nlu_ru = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="google/bert_uncased_L-12_H-768_A-12",
-    training_datasets={
+    training_datasets=set(
         # SNLI
         # MNLI
-    },
+    ),
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
@@ -152,10 +152,10 @@ sbert_large_mt_nlu_ru = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # SNLI, MNLI
         # https://github.com/brmson/dataset-sts
-    },
+    ),
 )
 
 user_base_ru = ModelMeta(
@@ -187,26 +187,26 @@ user_base_ru = ModelMeta(
     }
     """,
     training_datasets={
-        "BibleNLPBitextMining": ["train"],
+        "BibleNLPBitextMining",
         # https://github.com/unicamp-dl/mMARCO
         # deepvk/ru-HNP
         # deepvk/ru-WANLI
         # MedNLI
         # RCB
-        "TERRa": ["train"],
+        "TERRa",
         # Tapaco
         # Opus100
         # BiblePar
         # RudetoxifierDataDetox
         # RuParadetox
-        "MIRACL": ["train"],
+        "MIRACL",
         # MLDR
         # Lenta
-        "MLSUMClusteringP2P": ["train"],
-        "MLSUMClusteringP2P.v2": ["train"],
-        "MLSUMClusteringS2S": ["train"],
-        "MLSUMClusteringS2S.v2": ["train"],
-        "MrTidyRetrieval": ["train"],
+        "MLSUMClusteringP2P",
+        "MLSUMClusteringP2P.v2",
+        "MLSUMClusteringS2S",
+        "MLSUMClusteringS2S.v2",
+        "MrTidyRetrieval",
         # "Panorama"
         # PravoIsrael
         # xlsum
@@ -239,26 +239,26 @@ user_bge_m3 = ModelMeta(
     adapted_from="BAAI/bge-m3",
     use_instructions=False,
     training_datasets={
-        "BibleNLPBitextMining": ["train"],
-        "MLSUMClusteringP2P": ["train"],
-        "MLSUMClusteringP2P.v2": ["train"],
-        "MLSUMClusteringS2S": ["train"],
-        "MLSUMClusteringS2S.v2": ["train"],
+        "BibleNLPBitextMining",
+        "MLSUMClusteringP2P",
+        "MLSUMClusteringP2P.v2",
+        "MLSUMClusteringS2S",
+        "MLSUMClusteringS2S.v2",
         # not MTEB:
-        # "deepvk/ru-HNP": ["train"],
-        # "deepvk/ru-WANLI": ["train"],
-        # "Shitao/bge-m3-data": ["train"],
-        # "RussianNLP/russian_super_glue": ["train"],
-        # "reciTAL/mlsum": ["train"],
-        # "Helsinki-NLP/opus-100": ["train"],
-        # "Helsinki-NLP/bible_para": ["train"],
-        # "d0rj/rudetoxifier_data_detox": ["train"],
-        # "s-nlp/ru_paradetox": ["train"],
-        # "Milana/russian_keywords": ["train"],
-        # "IlyaGusev/gazeta": ["train"],
-        # "d0rj/gsm8k-ru": ["train"],
-        # "bragovo/dsum_ru": ["train"],
-        # "CarlBrendt/Summ_Dialog_News": ["train"],
+        # "deepvk/ru-HNP",
+        # "deepvk/ru-WANLI",
+        # "Shitao/bge-m3-data",
+        # "RussianNLP/russian_super_glue",
+        # "reciTAL/mlsum",
+        # "Helsinki-NLP/opus-100",
+        # "Helsinki-NLP/bible_para",
+        # "d0rj/rudetoxifier_data_detox",
+        # "s-nlp/ru_paradetox",
+        # "Milana/russian_keywords",
+        # "IlyaGusev/gazeta",
+        # "d0rj/gsm8k-ru",
+        # "bragovo/dsum_ru",
+        # "CarlBrendt/Summ_Dialog_News",
     },
     public_training_code=None,
     public_training_data=None,
@@ -288,9 +288,9 @@ deberta_v1_ru = ModelMeta(
         # A mix of the following data: Wikipedia, Books, Twitter comments, Pikabu, Proza.ru,
         # Film subtitles, News websites, and Social corpus.
         # wikipedia
-        "WikipediaRetrievalMultilingual": [],
-        "WikipediaRerankingMultilingual": [],
-        "RiaNewsRetrieval": [],  # probably
+        "WikipediaRetrievalMultilingual",
+        "WikipediaRerankingMultilingual",
+        "RiaNewsRetrieval",  # probably
     },
 )
 
@@ -315,8 +315,8 @@ rubert_base_cased = ModelMeta(
     adapted_from="google/bert_uncased_L-12_H-768_A-12",
     training_datasets={
         # wikipedia
-        "WikipediaRetrievalMultilingual": [],
-        "WikipediaRerankingMultilingual": [],
+        "WikipediaRetrievalMultilingual",
+        "WikipediaRerankingMultilingual",
     },
     citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
       title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language},
@@ -348,9 +348,9 @@ distilrubert_small_cased_conversational = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     adapted_from="DeepPavlov/distilrubert-base-cased-conversational",
-    training_datasets={
+    training_datasets=set(
         # OpenSubtitles[1], Dirty, Pikabu, and a Social Media segment of Taiga corpus
-    },
+    ),
     citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
       doi = {10.48550/ARXIV.2205.02340},
       url = {https://arxiv.org/abs/2205.02340},
@@ -381,10 +381,10 @@ rubert_base_cased_sentence = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        # "SNLI": [],
-        "XNLI": ["dev"]
-    },
+    training_datasets=set(
+        # "SNLI",
+        "XNLI"
+    ),
 )
 
 labse_en_ru = ModelMeta(
@@ -405,15 +405,15 @@ labse_en_ru = ModelMeta(
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # https://translate.yandex.ru/corpus
-    },
+    ),
     adapted_from="sentence-transformers/LaBSE",
 )
 
-turbo_models_datasets = {
-    # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
-}
+turbo_models_datasets = set(
+    # Not MTEB: {"IlyaGusev/gazeta", "zloelias/lenta-ru"},
+)
 rubert_tiny_turbo = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-tiny-turbo",
@@ -454,12 +454,12 @@ rubert_mini_frida = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
+    training_datasets=set(
         # https://huggingface.co/datasets/IlyaGusev/gazeta
         # https://huggingface.co/datasets/zloelias/lenta-ru
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb
-    },
+    ),
     adapted_from="sergeyzh/rubert-mini-sts",
 )
 
@@ -501,12 +501,12 @@ berta = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    training_datasets={
+    training_datasets=set(
         # https://huggingface.co/datasets/IlyaGusev/gazeta
         # https://huggingface.co/datasets/zloelias/lenta-ru
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
         # https://huggingface.co/datasets/HuggingFaceFW/fineweb
-    },
+    ),
     public_training_code=None,
     adapted_from="sergeyzh/LaBSE-ru-turbo",
     public_training_data=None,
@@ -563,13 +563,13 @@ rosberta_ru_en = ModelMeta(
         # https://huggingface.co/datasets/its5Q/habr_qna
         # NewsCommentary
         # MultiParaCrawl
-        "XNLI": [],
-        "XNLIV2": [],
-        "LanguageClassification": [],  # XNLI
-        "MIRACLReranking": ["train"],
-        "MIRACLRetrieval": ["train"],
-        "MIRACLRetrievalHardNegatives": ["train"],
-        "MrTidyRetrieval": ["train"],
+        "XNLI",
+        "XNLIV2",
+        "LanguageClassification",  # XNLI
+        "MIRACLReranking",
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        "MrTidyRetrieval",
     },
     public_training_data=None,
     public_training_code=None,
@@ -618,85 +618,85 @@ frida_prompts = {
 frida_training_datasets = {
     # Fine-tune sets
     # Retrieval
-    "MIRACLReranking": ["train"],
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
+    "MIRACLReranking",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MrTidyRetrieval",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
     # STS
-    "STS12": ["train"],
-    "STS22": ["train"],
-    "STSBenchmark": ["train"],
-    "STSBenchmarkMultilingualSTS": ["train"],  # translation not trained on
-    "RUParaPhraserSTS": ["train"],
+    "STS12",
+    "STS22",
+    "STSBenchmark",
+    "STSBenchmarkMultilingualSTS",  # translation not trained on
+    "RUParaPhraserSTS",
     # Classification & Clustering
-    "AmazonCounterfactualClassification": ["train"],
-    "AmazonPolarityClassification": ["train"],
-    "AmazonReviewsClassification": ["train"],
-    "ArxivClusteringP2P.v2": ["train"],
-    "ArxivClusteringP2P": ["train"],
-    "Banking77Classification": ["train"],
-    "BiorxivClusteringP2P.v2": ["train"],
-    "BiorxivClusteringP2P": ["train"],
-    "CEDRClassification": ["train"],
-    "DBpediaClassification": ["train"],
-    "EmotionClassification": ["train"],
-    "FinancialPhrasebankClassification": ["train"],
-    "FrenkEnClassification": ["train"],
-    "GeoreviewClassification": ["train"],
-    "GeoreviewClusteringP2P": ["train"],
-    "HeadlineClassification": ["train"],
-    "ImdbClassification": ["train"],
-    "InappropriatenessClassification": ["train"],
-    "KinopoiskClassification": ["train"],
-    "MasakhaNEWSClassification": ["train"],
-    "MassiveIntentClassification": ["train"],
-    "MassiveScenarioClassification": ["train"],
-    "MedrxivClusteringP2P.v2": ["train"],
-    "MedrxivClusteringP2P": ["train"],
-    "MTOPDomainClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "MultiHateClassification": ["train"],
-    "MultilingualSentimentClassification": ["train"],
-    "NewsClassification": ["train"],
-    "NusaX-senti": ["train"],
-    "PoemSentimentClassification": ["train"],
-    "RuReviewsClassification": ["train"],
-    "RuSciBenchGRNTIClassification": ["train"],
-    "RuSciBenchOECDClassification": ["train"],
-    "SensitiveTopicsClassification": ["train"],
-    "SIB200Classification": ["train"],
-    "ToxicChatClassification": ["train"],
-    "ToxicConversationsClassification": ["train"],
-    "TweetSentimentClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
-    "TweetTopicSingleClassification": ["train"],
-    "YahooAnswersTopicsClassification": ["train"],
-    "YelpReviewFullClassification": ["train"],
+    "AmazonCounterfactualClassification",
+    "AmazonPolarityClassification",
+    "AmazonReviewsClassification",
+    "ArxivClusteringP2P.v2",
+    "ArxivClusteringP2P",
+    "Banking77Classification",
+    "BiorxivClusteringP2P.v2",
+    "BiorxivClusteringP2P",
+    "CEDRClassification",
+    "DBpediaClassification",
+    "EmotionClassification",
+    "FinancialPhrasebankClassification",
+    "FrenkEnClassification",
+    "GeoreviewClassification",
+    "GeoreviewClusteringP2P",
+    "HeadlineClassification",
+    "ImdbClassification",
+    "InappropriatenessClassification",
+    "KinopoiskClassification",
+    "MasakhaNEWSClassification",
+    "MassiveIntentClassification",
+    "MassiveScenarioClassification",
+    "MedrxivClusteringP2P.v2",
+    "MedrxivClusteringP2P",
+    "MTOPDomainClassification",
+    "MTOPIntentClassification",
+    "MultiHateClassification",
+    "MultilingualSentimentClassification",
+    "NewsClassification",
+    "NusaX-senti",
+    "PoemSentimentClassification",
+    "RuReviewsClassification",
+    "RuSciBenchGRNTIClassification",
+    "RuSciBenchOECDClassification",
+    "SensitiveTopicsClassification",
+    "SIB200Classification",
+    "ToxicChatClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentClassification",
+    "TweetSentimentExtractionClassification",
+    "TweetTopicSingleClassification",
+    "YahooAnswersTopicsClassification",
+    "YelpReviewFullClassification",
     # Pre-train sets (not mentioned above)
     # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/data/contrastive_pretrain.yaml
     # reddit_title_body
-    "RedditClustering": [],
-    "RedditClusteringP2P": [],
-    "RedditClustering.v2": [],
+    "RedditClustering",
+    "RedditClusteringP2P",
+    "RedditClustering.v2",
     # codesearch
-    "CodeSearchNetCCRetrieval": [],
-    "COIRCodeSearchNetRetrieval": [],
+    "CodeSearchNetCCRetrieval",
+    "COIRCodeSearchNetRetrieval",
     # stackexchange_body_body
-    "StackExchangeClustering.v2": [],
-    "StackExchangeClusteringP2P.v2": [],
+    "StackExchangeClustering.v2",
+    "StackExchangeClusteringP2P.v2",
     # wikipedia
-    "WikipediaRetrievalMultilingual": [],
-    "WikipediaRerankingMultilingual": [],
+    "WikipediaRetrievalMultilingual",
+    "WikipediaRerankingMultilingual",
     # quora
-    "QuoraRetrieval": [],
-    "NanoQuoraRetrieval": [],
-    "Quora-NL": [],  # translation not trained on
+    "QuoraRetrieval",
+    "NanoQuoraRetrieval",
+    "Quora-NL",  # translation not trained on
 }
 
 frida = ModelMeta(
@@ -755,35 +755,39 @@ giga_embeddings = ModelMeta(
     training_datasets=None,
 )
 
-berta_training_datasets = {
-    **frida_training_datasets,  # distilled from FRIDA
-    # https://huggingface.co/datasets/IlyaGusev/gazeta
-    # https://huggingface.co/datasets/zloelias/lenta-ru
-    # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
-    # https://huggingface.co/datasets/HuggingFaceFW/fineweb
-}
+berta_training_datasets = (
+    set(
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    )
+    | frida_training_datasets
+)  # distilled from FRIDA
 
 
-user2_training_data = {
-    **nomic_training_data,
-    **bge_m3_training_data,
-    # deepvk/cultura_ru_edu
-    # AllNLI
-    # nyuuzyou/fishkinet-posts
-    # IlyaGusev/gazeta
-    # its5Q/habr_qna
-    # zloelias/lenta-ru
-    # unicamp-dl/mmarco
-    # deepvk/ru-HNP
-    # deepvk/ru-WANLI
-    # wikimedia/wikipedia
-    # CarlBrendt/Summ_Dialog_News
-    # RussianNLP/wikiomnia
-    # its5Q/yandex-q
-    # "mC4" ru
-    # "CC-News" ru
-    # MultiLongDocRetrieval
-}
+user2_training_data = (
+    set(
+        # deepvk/cultura_ru_edu
+        # AllNLI
+        # nyuuzyou/fishkinet-posts
+        # IlyaGusev/gazeta
+        # its5Q/habr_qna
+        # zloelias/lenta-ru
+        # unicamp-dl/mmarco
+        # deepvk/ru-HNP
+        # deepvk/ru-WANLI
+        # wikimedia/wikipedia
+        # CarlBrendt/Summ_Dialog_News
+        # RussianNLP/wikiomnia
+        # its5Q/yandex-q
+        # "mC4" ru
+        # "CC-News" ru
+        # MultiLongDocRetrieval
+    )
+    | nomic_training_data
+    | bge_m3_training_data
+)
 
 user2_prompts = {
     # Override some prompts for ruMTEB tasks

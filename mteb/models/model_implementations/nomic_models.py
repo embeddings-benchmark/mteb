@@ -93,15 +93,15 @@ class NomicWrapper(SentenceTransformerWrapper):
 nomic_training_data = {
     # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/data/contrastive_pretrain.yaml
     # reddit_title_body
-    "RedditClustering": [],
-    "RedditClusteringP2P": [],
-    "RedditClustering.v2": [],
-    "RedditClusteringP2P.v2": [],
+    "RedditClustering",
+    "RedditClusteringP2P",
+    "RedditClustering.v2",
+    "RedditClusteringP2P.v2",
     # amazon_reviews
     # amazonqa
-    "AmazonPolarityClassification": [],
-    "AmazonReviewsClassification": [],
-    "AmazonCounterfactualClassification": [],
+    "AmazonPolarityClassification",
+    "AmazonReviewsClassification",
+    "AmazonCounterfactualClassification",
     # paq
     # s2orc_citation_titles
     # s2orc_title_abstract
@@ -109,16 +109,16 @@ nomic_training_data = {
     # s2orc_abstract_body
     # wikianswers
     # wikipedia
-    "WikipediaRetrievalMultilingual": [],
-    "WikipediaRerankingMultilingual": [],
+    "WikipediaRetrievalMultilingual",
+    "WikipediaRerankingMultilingual",
     # gooaq
     # codesearch
-    "CodeSearchNetCCRetrieval": [],
-    "COIRCodeSearchNetRetrieval": [],
+    "CodeSearchNetCCRetrieval",
+    "COIRCodeSearchNetRetrieval",
     # yahoo_title_answer
     # yahoo_qa
     # yahoo_title_question
-    "YahooAnswersTopicsClassification": [],
+    "YahooAnswersTopicsClassification",
     # agnews
     # ccnews
     # npr
@@ -127,30 +127,30 @@ nomic_training_data = {
     # stackexchange_duplicate_questions
     # stackexchange_title_body
     # stackexchange_body_body
-    "StackExchangeClustering.v2": [],
-    "StackExchangeClusteringP2P.v2": [],
+    "StackExchangeClustering.v2",
+    "StackExchangeClusteringP2P.v2",
     # sentence_compression
     # wikihow
     # altlex
     # quora
-    "QuoraRetrieval": [],
-    "Quora-NL": [],  # translation not trained on
-    "NanoQuoraRetrieval": [],
+    "QuoraRetrieval",
+    "Quora-NL",  # translation not trained on
+    "NanoQuoraRetrieval",
     # simplewiki
     # squad
-    "FQuADRetrieval": [],
+    "FQuADRetrieval",
     # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/data/finetune_triplets.yaml
     # msmaro
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "mMARCO-NL": ["train"],
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "mMARCO-NL",
     # nq_triples
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
     # nli_triplets
     # reddit
     # medi_wiki
@@ -158,14 +158,14 @@ nomic_training_data = {
     # medi_flickr
     # medi_supernli
     # hotpot
-    "HotPotQA": ["test"],
-    "HotPotQAHardNegatives": ["test"],
-    "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
+    "HotPotQA",
+    "HotPotQAHardNegatives",
+    "HotPotQA-PL",  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL",  # translated from hotpotQA (not trained on)
     # fever
-    "FEVER": ["test"],
-    "FEVERHardNegatives": ["test"],
-    "FEVER-NL": ["test"],  # translated, not trained on
+    "FEVER",
+    "FEVERHardNegatives",
+    "FEVER-NL",  # translated, not trained on
 }
 
 # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L142-L159

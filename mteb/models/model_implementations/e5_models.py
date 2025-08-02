@@ -136,34 +136,33 @@ model_prompts = {
 E5_TRAINING_DATA = {
     # from 4.2 in https://arxiv.org/pdf/2212.03533
     # also pre-training data from a variety of sources (stackexchange, semantic scholar, reddit, CC, ...)
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "NQ-NL",  # translation not trained on
 }
 
 ME5_TRAINING_DATA = {
-    **E5_TRAINING_DATA,
-    "XQuADRetrieval": ["train"],  # trained on SQuAD train dataset
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "FEVER-PL": ["train"],  # translation not trained on
-    "HotpotQA": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "MrTidyRetrieval": ["train"],
-}
+    "XQuADRetrieval",  # trained on SQuAD train dataset
+    "FEVER",
+    "FEVERHardNegatives",
+    "FEVER-NL",  # translation not trained on
+    "FEVER-PL",  # translation not trained on
+    "HotpotQA",
+    "HotpotQAHardNegatives",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "MrTidyRetrieval",
+} | E5_TRAINING_DATA
 
 e5_mult_small = ModelMeta(
     loader=sentence_transformers_loader,

@@ -99,10 +99,10 @@ class DINOModel(AbsEncoder):
         raise ValueError("No text or image data found.")
 
 
-dinov2_training_datasets = {
+dinov2_training_datasets = set(
     # LVD-142M
     #  ImageNet-22k
-}
+)
 
 
 dinov2_small = ModelMeta(
@@ -193,9 +193,9 @@ dinov2_giant = ModelMeta(
     training_datasets=dinov2_training_datasets,
 )
 
-webssl_dino_training_datasets = {
+webssl_dino_training_datasets = set(
     # MetaCLIP 2B samples
-}
+)
 
 webssl_dino300m_full2b = ModelMeta(
     loader=DINOModel,

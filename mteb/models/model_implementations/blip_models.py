@@ -136,11 +136,11 @@ blip_image_captioning_large = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-image-captioning-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # COCO
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )
 
 blip_image_captioning_base = ModelMeta(
@@ -162,11 +162,11 @@ blip_image_captioning_base = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-image-captioning-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # COCO
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )
 
 
@@ -189,10 +189,10 @@ blip_vqa_base = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-vqa-base",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )
 
 blip_vqa_capfilt_large = ModelMeta(
@@ -214,10 +214,10 @@ blip_vqa_capfilt_large = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-vqa-capfilt-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )
 
 blip_itm_base_coco = ModelMeta(
@@ -239,10 +239,10 @@ blip_itm_base_coco = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-itm-base-coco",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )
 
 blip_itm_large_coco = ModelMeta(
@@ -264,11 +264,11 @@ blip_itm_large_coco = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-itm-large-coco",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # COCO
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )
 
 blip_itm_base_flickr = ModelMeta(
@@ -290,11 +290,11 @@ blip_itm_base_flickr = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-itm-base-flickr",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # CC3M+CC12M+SBU
         # LAION115M
         # Flickr30k
-    },
+    ),
 )
 
 blip_itm_large_flickr = ModelMeta(
@@ -316,8 +316,8 @@ blip_itm_large_flickr = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip-itm-large-flickr",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # CC3M+CC12M+SBU
         # LAION115M
-    },
+    ),
 )

@@ -122,13 +122,13 @@ def evaclip_loader(model_name, **kwargs):
 
 
 training_code = "https://github.com/baaivision/EVA/tree/master/EVA-CLIP"
-training_datasets = {
+training_datasets = set(
     # COYO-700M, random sample 400M. https://github.com/kakaobrain/coyo-dataset
     # LAION-2B, random sample 1.6B. https://laion.ai/blog/laion-5b/
-}
-laion_2b = {
+)
+laion_2b = set(
     # LAION-2B
-}
+)
 
 EVA02_CLIP_B_16 = ModelMeta(
     loader=evaclip_loader,

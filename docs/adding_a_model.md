@@ -32,7 +32,7 @@ my_model = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/user-or-org/my-training-code",
     public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
-    training_datasets={"MSMARCO": ["train"]}, # if you trained on the MSMARCO training set
+    training_datasets={"MSMARCO"}, # if you trained on the MSMARCO training set
 )
 ```
 

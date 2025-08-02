@@ -213,5 +213,5 @@ voyage_v = ModelMeta(
     public_training_data=None,
     reference="https://huggingface.co/voyageai/voyage-multimodal-3",
     use_instructions=None,
-    training_datasets={},  # No overlap with MTEB according to Voyage, could overlap with MIEB, didn't ask
+    training_datasets=set(),  # No overlap with MTEB according to Voyage, could overlap with MIEB, didn't ask
 )

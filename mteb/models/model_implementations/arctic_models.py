@@ -88,37 +88,36 @@ arctic_v1_training_datasets = {
     # source: https://arxiv.org/pdf/2405.05374
     # splits not specified to assuming everything
     # in MTEB
-    "NQ": ["test"],
-    "NQ-NL": ["test"],  # translated from NQ (not trained on)
-    "NQHardNegatives": ["test"],
-    "NQ-PL": ["test"],
-    "HotPotQA": ["test"],  # translated, not trained on
-    "HotPotQAHardNegatives": ["test"],
-    "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
-    "FEVER": ["test"],
-    "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
-    "FEVERHardNegatives": ["test"],
+    "NQ",
+    "NQ-NL",  # translated from NQ (not trained on)
+    "NQHardNegatives",
+    "NQ-PL",
+    "HotPotQA",  # translated, not trained on
+    "HotPotQAHardNegatives",
+    "HotPotQA-PL",  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL",  # translated from hotpotQA (not trained on)
+    "FEVER",
+    "FEVER-NL",  # translated from FEVER (not trained on)
+    "FEVERHardNegatives",
     # not in MTEB
     # trained on stack exchange (title-body)
-    # "stackexchange": [],
+    # "stackexchange",
     # potentially means that:
-    # "StackExchangeClusteringP2P": ["test"],
-    # "StackExchangeClusteringP2P.v2": ["test"],
-    # "StackExchangeClustering": ["test"],
-    # "StackExchangeClustering.v2": ["test"],
+    # "StackExchangeClusteringP2P",
+    # "StackExchangeClusteringP2P.v2",
+    # "StackExchangeClustering",
+    # "StackExchangeClustering.v2",
     # not in MTEB
-    # "paq": [],
-    # "s2orc": [],
-    # "other": [],  # undisclosed including webdata
+    # "paq",
+    # "s2orc",
+    # "other",  # undisclosed including webdata
 }  # also use synthetic
 
 arctic_v2_training_datasets = {
-    **arctic_v1_training_datasets,
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-}
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+} | arctic_v1_training_datasets
 
 arctic_embed_xs = ModelMeta(
     loader=sentence_transformers_loader,

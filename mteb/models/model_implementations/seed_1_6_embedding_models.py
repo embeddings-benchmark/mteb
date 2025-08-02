@@ -131,13 +131,13 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
 
 doubao_embedding_training_data = (
     {
-        "PAWSX": ["train"],
-        "QBQTC": ["train"],
-        "STSB": ["train"],
-        "TNews": ["train"],
-        "Waimai": ["train"],
-        "IFlyTek": ["train"],
-        "MassiveScenarioClassification": ["train"],
+        "PAWSX",
+        "QBQTC",
+        "STSB",
+        "TNews",
+        "Waimai",
+        "IFlyTek",
+        "MassiveScenarioClassification",
     }
     | bge_chinese_training_data
     | nvidia_training_datasets

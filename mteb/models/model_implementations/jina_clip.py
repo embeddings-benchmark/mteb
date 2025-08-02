@@ -136,7 +136,7 @@ jina_clip_v1 = ModelMeta(
     training_datasets={
         # LAION400M
         # ShareGPT4V
-        "MSMARCO": ["train"],
+        "MSMARCO",
         # NQ
         # HotpotQA
         # Natural Language Inference (NLI) dataset (Bowman et al., 2015)

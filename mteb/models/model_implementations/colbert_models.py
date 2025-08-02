@@ -118,8 +118,8 @@ colbert_v2 = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     training_datasets={
-        "MSMARCO": ["train"],  # dev?
-        "mMARCO-NL": ["train"],  # translation not trained on
+        "MSMARCO",  # dev?
+        "mMARCO-NL",  # translation not trained on
     },
 )
 
@@ -173,10 +173,10 @@ jina_colbert_v2 = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "mMARCO-NL": ["train"],  # translation not trained on
-        "DuRetrieval": [],
-        "MIRACL": ["train"],
+        "MSMARCO",
+        "mMARCO-NL",  # translation not trained on
+        "DuRetrieval",
+        "MIRACL",
     },
 )
 
@@ -204,7 +204,7 @@ lightonai__GTE_ModernColBERT_v1 = ModelMeta(
     adapted_from="Alibaba-NLP/gte-modernbert-base",
     superseded_by=None,
     training_datasets={
-        "MSMARCO": ["train"],
-        "mMARCO-NL": ["train"],  # translation not trained on
+        "MSMARCO",
+        "mMARCO-NL",  # translation not trained on
     },
 )

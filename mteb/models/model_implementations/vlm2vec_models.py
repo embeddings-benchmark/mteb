@@ -259,9 +259,9 @@ class VLM2VecWrapper(AbsEncoder):
         raise ValueError
 
 
-vlm2vec_training_datasets = {
+vlm2vec_training_datasets = set(
     # MMEB-train
-}
+)
 
 vlm2vec_lora = ModelMeta(
     loader=VLM2VecWrapper,

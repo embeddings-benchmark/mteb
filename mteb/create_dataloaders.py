@@ -8,14 +8,15 @@ from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.types import BatchedInput, Conversation, ConversationTurn
+from mteb.types import Conversation, ConversationTurn
+from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
 
 logger = logging.getLogger(__name__)
 
 
 def create_dataloader_from_texts(
     text: list[str], **dataloader_kwargs
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[TextInput]:
     """Create a dataloader from a list of text.
 
     Args:
@@ -43,7 +44,7 @@ def corpus_to_dict(
 
 def create_dataloader_for_retrieval_corpus(
     dataset: Dataset, **dataloader_kwargs
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[CorpusInput]:
     """Create a dataloader from a corpus.
 
     Args:
@@ -62,7 +63,7 @@ def create_dataloader_for_queries(
     instructions: list[str] | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
     Args:
@@ -152,7 +153,7 @@ def create_dataloader_for_queries_conversation(
     instructions: list[str] | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
     Args:
@@ -255,7 +256,7 @@ def create_image_dataloader(
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
     This should mirror the behavior of the old code.
     """

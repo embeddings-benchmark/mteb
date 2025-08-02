@@ -25,12 +25,12 @@ text2vec_base_chinese = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,  # Couldn't find it
-    training_datasets={
+    training_datasets=set(
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
         # Not in MTEB
         # - shibing624/nli-zh-all/text2vec-base-chinese-sentence-dataset
         # (Could have overlaps I'm not aware of)
-    },
+    ),
     memory_usage_mb=390,
 )
 
@@ -54,12 +54,12 @@ text2vec_base_chinese_paraphrase = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,  # Couldn't find it
-    training_datasets={
+    training_datasets=set(
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
         # Not in MTEB
         # - shibing624/nli-zh-all/text2vec-base-chinese-paraphrase
         # (Could have overlaps I'm not aware of)
-    },
+    ),
 )
 
 
@@ -97,10 +97,10 @@ text2vec_base_multilingual = ModelMeta(
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     public_training_code=None,
     public_training_data=None,  # Couldn't find it
-    training_datasets={
+    training_datasets=set(
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
         # Not in MTEB
         # - shibing624/nli-zh-all/tree/main/text2vec-base-multilingual-dataset
         # # (Could have overlaps I'm not aware of)
-    },
+    ),
 )

@@ -167,7 +167,7 @@ e5_v = ModelMeta(
     reference="https://huggingface.co/royokong/e5-v",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets={
+    training_datasets=set(
         # princeton-nlp/datasets-for-simcse
-    },
+    ),
 )
