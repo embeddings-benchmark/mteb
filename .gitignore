@@ -154,3 +154,6 @@ mteb/leaderboard/__cached_results.json
 
 # codecarbon
 powermetrics_log.txt
+
+# vscode
+.vscode/launch.json

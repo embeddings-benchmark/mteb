@@ -18,7 +18,7 @@ from mteb.models.model_meta import ScoringFunction
 
 from ...create_dataloaders import create_dataloader_from_texts
 from ...similarity_functions import compute_pairwise_similarity
-from .Evaluator import Evaluator
+from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 

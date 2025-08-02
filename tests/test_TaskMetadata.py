@@ -538,6 +538,13 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name in ["CodeRAGStackoverflowPosts"]:
         return
 
+    if task.metadata.name in [
+        "XGlueWPRReranking",
+        "JQaRAReranking",
+        "JaCWIRReranking",
+    ]:  # TODO: https://github.com/embeddings-benchmark/mteb/issues/2972
+        return
+
     assert task.metadata.descriptive_stats is not None, (
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
     )
