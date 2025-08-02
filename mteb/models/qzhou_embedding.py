@@ -2,7 +2,7 @@
 from mteb.model_meta import ModelMeta
 
 my_model = ModelMeta(
-    name="QZhou-Embedding",
+    name="Kingsoft-LLM/QZhou-Embedding",
     languages=["eng-Latn"， "zho-Hans"], 
     open_weights=True,
     revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
