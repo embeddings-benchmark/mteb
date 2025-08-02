@@ -481,13 +481,7 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus_statistics = calculate_text_statistics(corpus)
         if isinstance(queries["text"][0], (dict, list)):
-
-            def process_conversational_query(row: dict[str, Any]) -> dict[str, Any]:
-                parsed_queries, _ = convert_conv_history_to_query([row["text"]])
-                row["text"] = parsed_queries[0]
-                return row
-
-            queries = queries.map(process_conversational_query)
+            queries = queries.map(convert_conv_history_to_query)
         queries = combine_quries_with_instructions(queries)
         queries_statistics = calculate_text_statistics(queries["text"])
 
