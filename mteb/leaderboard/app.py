@@ -16,10 +16,10 @@ import pandas as pd
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
-from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.custom_validators import MODALITIES
 from mteb.leaderboard.benchmark_selector import (
     BENCHMARK_ENTRIES,
+    DEFAULT_BENCHMARK_NAME,
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
@@ -57,9 +57,6 @@ def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     url = f"{base_url}?{params}"
     md = f"```\n{url}\n```"
     return md
-
-
-DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
 
 def set_benchmark_on_load(request: gr.Request):
