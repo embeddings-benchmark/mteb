@@ -82,6 +82,7 @@ class RetrievalDatasetLoader:
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked()
 
+        # TODO combine instructions with queries
         if any(c.endswith("instruction") for c in self.dataset_configs):
             instructions = self._load_instructions()
 
