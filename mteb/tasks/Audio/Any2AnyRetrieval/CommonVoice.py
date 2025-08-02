@@ -10,52 +10,53 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 _EVAL_LANGS = {
-    "ab": ["Abkhazian-Latn"],
-    "af": ["Afrikaans-Latn"],
-    "am": ["Amharic-Ethi"],
-    "ar": ["Arabic-Arab"],
-    "as": ["Assamese-Beng"],
-    "ast": ["Asturian-Latn"],
-    "az": ["Azerbaijani-Latn"],
-    "ba": ["Bashkir-Cyrl"],
-    "bas": ["Basaa-Latn"],
-    "be": ["Belarusian-Cyrl"],
-    "bg": ["Bulgarian-Cyrl"],
-    "bn": ["Bengali-Beng"],
-    "br": ["Breton-Latn"],
-    "ca": ["Catalan-Latn"],
-    "ckb": ["Central Kurdish (Sorani)-Arab"],
-    "cnh": ["Hakha Chin-Latn"],
-    "cs": ["Czech-Latn"],
-    "cv": ["Chuvash-Cyrl"],
-    "cy": ["Welsh-Latn"],
-    "da": ["Danish-Latn"],
-    "de": ["German-Latn"],
-    "dv": ["Divehi-Thaa"],
-    "dyu": ["Dyula-Latn"],
-    "el": ["Greek-Grek"],
-    "en": ["English-Latn"],
-    "eo": ["Esperanto-Latn"],
-    "es": ["Spanish-Latn"],
-    "et": ["Estonian-Latn"],
-    "eu": ["Basque-Latn"],
-    "fa": ["Persian-Arab"],
-    "fi": ["Finnish-Latn"],
-    "fr": ["French-Latn"],
-    "fy-NL": ["Frisian (Netherlands)-Latn"],
-    "ga-IE": ["Irish (Ireland)-Latn"],
-    "gl": ["Galician-Latn"],
-    "gn": ["Guarani-Latn"],
-    "ha": ["Hausa-Latn"],
-    "he": ["Hebrew-Hebr"],
-    "hi": ["Hindi-Deva"],
-    "hsb": ["Upper Sorbian-Latn"],
-    "hu": ["Hungarian-Latn"],
-    "hy-AM": ["Armenian (Armenia)-Armn"],
-    "ia": ["Interlingua-Latn"],
-    "id": ["Indonesian-Latn"],
-    "ig": ["Igbo-Latn"],
+    "abk": ["abk-Latn"],  # Abkhaz
+    "afr": ["afr-Latn"],  # Afrikaans
+    "amh": ["amh-Ethi"],  # Amharic
+    "ara": ["ara-Arab"],  # Arabic
+    "asm": ["asm-Beng"],  # Assamese
+    "ast": ["ast-Latn"],  # Asturian
+    "aze": ["aze-Latn"],  # Azerbaijani
+    "bak": ["bak-Cyrl"],  # Bashkir
+    "bas": ["bas-Latn"],  # Basaa
+    "bel": ["bel-Cyrl"],  # Belarusian
+    "bul": ["bul-Cyrl"],  # Bulgarian
+    "ben": ["ben-Beng"],  # Bengali
+    "bre": ["bre-Latn"],  # Breton
+    "cat": ["cat-Latn"],  # Catalan
+    "ckb": ["ckb-Arab"],  # Central Kurdish (Sorani)
+    "cnh": ["cnh-Latn"],  # Hakha Chin
+    "ces": ["ces-Latn"],  # Czech
+    "chv": ["chv-Cyrl"],  # Chuvash
+    "cym": ["cym-Latn"],  # Welsh
+    "dan": ["dan-Latn"],  # Danish
+    "deu": ["deu-Latn"],  # German
+    "div": ["div-Thaa"],  # Divehi
+    "dyu": ["dyu-Latn"],  # Dyula
+    "ell": ["ell-Grek"],  # Greek
+    "eng": ["eng-Latn"],  # English
+    "epo": ["epo-Latn"],  # Esperanto
+    "spa": ["spa-Latn"],  # Spanish
+    "est": ["est-Latn"],  # Estonian
+    "eus": ["eus-Latn"],  # Basque
+    "fas": ["fas-Arab"],  # Persian
+    "fin": ["fin-Latn"],  # Finnish
+    "fra": ["fra-Latn"],  # French
+    "fry": ["fry-Latn"],  # Frisian (Netherlands)
+    "gle": ["gle-Latn"],  # Irish (Ireland)
+    "glg": ["glg-Latn"],  # Galician
+    "grn": ["grn-Latn"],  # Guarani
+    "hau": ["hau-Latn"],  # Hausa
+    "heb": ["heb-Hebr"],  # Hebrew
+    "hin": ["hin-Deva"],  # Hindi
+    "hsb": ["hsb-Latn"],  # Upper Sorbian
+    "hun": ["hun-Latn"],  # Hungarian
+    "hye": ["hye-Armn"],  # Armenian (Armenia)
+    "ina": ["ina-Latn"],  # Interlingua
+    "ind": ["ind-Latn"],  # Indonesian
+    "ibo": ["ibo-Latn"],  # Igbo
 }
 
 
