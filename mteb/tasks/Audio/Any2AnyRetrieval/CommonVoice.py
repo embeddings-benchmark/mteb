@@ -11,51 +11,51 @@ from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_LANGS = {
-    "ab": ["Abkhaz"],
-    "af": ["Afrikaans"],
-    "am": ["Amharic"],
-    "ar": ["Arabic"],
-    "as": ["Assamese"],
-    "ast": ["Asturian"],
-    "az": ["Azerbaijani"],
-    "ba": ["Bashkir"],
-    "bas": ["Basaa"],
-    "be": ["Belarusian"],
-    "bg": ["Bulgarian"],
-    "bn": ["Bengali"],
-    "br": ["Breton"],
-    "ca": ["Catalan"],
-    "ckb": ["Central Kurdish (Sorani)"],
-    "cnh": ["Hakha Chin"],
-    "cs": ["Czech"],
-    "cv": ["Chuvash"],
-    "cy": ["Welsh"],
-    "da": ["Danish"],
-    "de": ["German"],
-    "dv": ["Divehi"],
-    "dyu": ["Dyula"],
-    "el": ["Greek"],
-    "en": ["English"],
-    "eo": ["Esperanto"],
-    "es": ["Spanish"],
-    "et": ["Estonian"],
-    "eu": ["Basque"],
-    "fa": ["Persian"],
-    "fi": ["Finnish"],
-    "fr": ["French"],
-    "fy-NL": ["Frisian (Netherlands)"],
-    "ga-IE": ["Irish (Ireland)"],
-    "gl": ["Galician"],
-    "gn": ["Guarani"],
-    "ha": ["Hausa"],
-    "he": ["Hebrew"],
-    "hi": ["Hindi"],
-    "hsb": ["Upper Sorbian"],
-    "hu": ["Hungarian"],
-    "hy-AM": ["Armenian (Armenia)"],
-    "ia": ["Interlingua"],
-    "id": ["Indonesian"],
-    "ig": ["Igbo"],
+    "ab": ["Abkhazian-Latn"],
+    "af": ["Afrikaans-Latn"],
+    "am": ["Amharic-Ethi"],
+    "ar": ["Arabic-Arab"],
+    "as": ["Assamese-Beng"],
+    "ast": ["Asturian-Latn"],
+    "az": ["Azerbaijani-Latn"],
+    "ba": ["Bashkir-Cyrl"],
+    "bas": ["Basaa-Latn"],
+    "be": ["Belarusian-Cyrl"],
+    "bg": ["Bulgarian-Cyrl"],
+    "bn": ["Bengali-Beng"],
+    "br": ["Breton-Latn"],
+    "ca": ["Catalan-Latn"],
+    "ckb": ["Central Kurdish (Sorani)-Arab"],
+    "cnh": ["Hakha Chin-Latn"],
+    "cs": ["Czech-Latn"],
+    "cv": ["Chuvash-Cyrl"],
+    "cy": ["Welsh-Latn"],
+    "da": ["Danish-Latn"],
+    "de": ["German-Latn"],
+    "dv": ["Divehi-Thaa"],
+    "dyu": ["Dyula-Latn"],
+    "el": ["Greek-Grek"],
+    "en": ["English-Latn"],
+    "eo": ["Esperanto-Latn"],
+    "es": ["Spanish-Latn"],
+    "et": ["Estonian-Latn"],
+    "eu": ["Basque-Latn"],
+    "fa": ["Persian-Arab"],
+    "fi": ["Finnish-Latn"],
+    "fr": ["French-Latn"],
+    "fy-NL": ["Frisian (Netherlands)-Latn"],
+    "ga-IE": ["Irish (Ireland)-Latn"],
+    "gl": ["Galician-Latn"],
+    "gn": ["Guarani-Latn"],
+    "ha": ["Hausa-Latn"],
+    "he": ["Hebrew-Hebr"],
+    "hi": ["Hindi-Deva"],
+    "hsb": ["Upper Sorbian-Latn"],
+    "hu": ["Hungarian-Latn"],
+    "hy-AM": ["Armenian (Armenia)-Armn"],
+    "ia": ["Interlingua-Latn"],
+    "id": ["Indonesian-Latn"],
+    "ig": ["Igbo-Latn"],
 }
 
 
@@ -81,15 +81,14 @@ class CommonVoice17A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{ardila2019common,
-  title={Common voice: A massively-multilingual speech corpus},
-  author={Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle={Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages={4218--4222},
-  year={2020}
+        bibtex_citation = """@inproceedings{ardila2019common,
+  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
+  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
+  pages = {4218--4222},
+  title = {Common voice: A massively-multilingual speech corpus},
+  year = {2020},
 }
-""",
+"""
     )
 
     def load_data(self, **kwargs):
@@ -173,13 +172,12 @@ class CommonVoice17T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{ardila2019common,
-  title={Common voice: A massively-multilingual speech corpus},
-  author={Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle={Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages={4218--4222},
-  year={2020}
+        bibtex_citation = """@inproceedings{ardila2019common,
+  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
+  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
+  pages = {4218--4222},
+  title = {Common voice: A massively-multilingual speech corpus},
+  year = {2020},
 }
 """,
     )
@@ -258,15 +256,14 @@ class CommonVoice21A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{ardila2019common,
-  title={Common voice: A massively-multilingual speech corpus},
-  author={Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle={Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages={4218--4222},
-  year={2020}
+        bibtex_citation = """@inproceedings{ardila2019common,
+  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
+  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
+  pages = {4218--4222},
+  title = {Common voice: A massively-multilingual speech corpus},
+  year = {2020},
 }
-""",
+"""
     )
 
     def load_data(self, **kwargs):
@@ -350,15 +347,15 @@ class CommonVoice21T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{ardila2019common,
-  title={Common voice: A massively-multilingual speech corpus},
-  author={Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle={Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages={4218--4222},
-  year={2020}
+        bibtex_citation = """@inproceedings{ardila2019common,
+  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
+  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
+  pages = {4218--4222},
+  title = {Common voice: A massively-multilingual speech corpus},
+  year = {2020},
 }
-""",
+"""
+
     )
 
     def load_data(self, **kwargs):
