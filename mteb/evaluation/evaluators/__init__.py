@@ -10,7 +10,6 @@ from .Image import (
     Any2AnyRetrievalEvaluator,
     ImageTextPairClassificationEvaluator,
 )
-from .model_classes import DenseRetrievalExactSearch
 from .PairClassificationEvaluator import PairClassificationEvaluator
 from .RetrievalEvaluator import RetrievalEvaluator
 from .SummarizationEvaluator import (
@@ -25,7 +24,6 @@ __all__ = [
     "SummarizationEvaluator",
     "DeprecatedSummarizationEvaluator",
     "RetrievalEvaluator",
-    "DenseRetrievalExactSearch",
     "ClusteringEvaluator",
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",

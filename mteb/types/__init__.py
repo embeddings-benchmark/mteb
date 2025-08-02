@@ -10,7 +10,7 @@ from ._encoder_io import (
     PromptType,
     QueryDatasetType,
     RelevantDocumentsType,
-    RetrievalOutput,
+    RetrievalOutputType,
     TopRankedDocumentsType,
 )
 from ._metadata import (
@@ -51,5 +51,5 @@ __all__ = [
     "InstructionDatasetType",
     "RelevantDocumentsType",
     "TopRankedDocumentsType",
-    "RetrievalOutput",
+    "RetrievalOutputType",
 ]

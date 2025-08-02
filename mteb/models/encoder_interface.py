@@ -12,7 +12,7 @@ from mteb.types import (
     InstructionDatasetType,
     PromptType,
     QueryDatasetType,
-    RetrievalOutput,
+    RetrievalOutputType,
     TopRankedDocumentsType,
 )
 
@@ -48,10 +48,11 @@ class SearchInterface(Protocol):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        top_k: int,
         encode_kwargs: dict[str, Any],
         instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
-    ) -> RetrievalOutput:
+    ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
 
         Args:
@@ -62,6 +63,7 @@ class SearchInterface(Protocol):
             instructions: Optional instructions to use for the search.
             top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
                 Passed only from Reranking tasks.
+            top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
 
         Returns:
@@ -162,7 +164,7 @@ class Encoder(Protocol):
 
 
 @runtime_checkable
-class CrossEncoderProtocol(Protocol, SearchInterface):
+class CrossEncoderProtocol(Protocol):
     """The interface for an CrossEncoder in MTEB.
 
     Besides the required functions specified below, the cross-encoder can additionally specify the following signatures seen below.

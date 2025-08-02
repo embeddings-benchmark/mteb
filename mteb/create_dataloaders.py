@@ -12,7 +12,6 @@ from mteb.types import (
     BatchedInput,
     Conversation,
     ConversationTurn,
-    InstructionDatasetType,
     PromptType,
     QueryDatasetType,
 )
@@ -66,37 +65,29 @@ def create_dataloader_for_retrieval_corpus(
 
 def create_dataloader_for_queries(
     queries: QueryDatasetType,
-    instructions: InstructionDatasetType | None = None,
-    combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of queries.
 
     Args:
         queries: A list of queries.
-        instructions: A list of instructions. If None, the dataloader will only contain the queries.
-        combine_query_and_instruction: A function that combines a query with an instruction. If None, the default function will be used.
         dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
         A dataloader with the queries.
     """
-    # cross encoder can produce list of None
-    any_none_instruction = instructions is None or any(i is None for i in instructions)
-    if instructions is None or any_none_instruction:
-        dataset = Dataset.from_dict({"text": queries, "query": queries})
-    else:
-        dataset = Dataset.from_dict(
-            {
-                "text": [
-                    combine_query_and_instruction(q, i)
-                    for q, i in zip(queries, instructions)
-                ],
-                "instruction": instructions,
-                "query": queries,
-            }
-        )
-    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
+
+    def process_queries(row: dict[str, str]) -> dict[str, str]:
+        row["query"] = row["text"]
+
+        if "instruction" in row:
+            row["text"] = row["query"] + " " + row["instruction"]
+        else:
+            row["text"] = row["query"]
+        return row
+
+    queries = queries.map(process_queries, desc="Processing queries for dataloading")
+    return torch.utils.data.DataLoader(queries, **dataloader_kwargs)
 
 
 def convert_conv_history_to_query(
@@ -142,25 +133,24 @@ def convert_conv_history_to_query(
             "Conversations must be a list consisting of strings or dictionaries with 'role' and 'content' keys"
         )
 
-    return {
-        "text": conv_str,
-        "query": conv_str,
-        "conversation": current_conversation,
-    }
+    row["query"] = conv_str
+
+    if "instruction" in row:
+        conv_str = row["instruction"] + conv_str
+
+    row["text"] = conv_str
+    row["conversation"] = current_conversation
+    return row
 
 
 def create_dataloader_for_queries_conversation(
     queries: QueryDatasetType,
-    instructions: InstructionDatasetType | None = None,
-    combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of queries.
 
     Args:
         queries: A list of queries.
-        instructions: A list of instructions. If None, the dataloader will only contain the queries.
-        combine_query_and_instruction: A function that combines a query with an instruction. If None, the default function will be used.
         dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
@@ -170,27 +160,6 @@ def create_dataloader_for_queries_conversation(
         queries.map(convert_conv_history_to_query),
         **dataloader_kwargs,
     )
-    # if instructions is None:
-    #     dataset = Dataset.from_dict(
-    #         {
-    #             "text": converted_queries,
-    #             "query": converted_queries,
-    #             "conversation": converted_conversation,
-    #         }
-    #     )
-    # else:
-    #     dataset = Dataset.from_dict(
-    #         {
-    #             "text": [
-    #                 combine_query_and_instruction(q, i)
-    #                 for q, i in zip(converted_queries, instructions)
-    #             ],
-    #             "instruction": instructions,
-    #             "query": converted_queries,
-    #             "conversation": converted_conversation,
-    #         }
-    #     )
-    # return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
 def transform_image_to_rgb(

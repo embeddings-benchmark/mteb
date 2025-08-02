@@ -9,7 +9,6 @@ from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
@@ -19,7 +18,7 @@ from .bge_models import bge_m3_training_data
 logger = logging.getLogger(__name__)
 
 
-class RerankerWrapper(DenseRetrievalExactSearch):
+class RerankerWrapper:
     def __init__(
         self,
         model_name_or_path: str,
