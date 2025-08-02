@@ -98,8 +98,9 @@ class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput
     pass
 
 
-BatchedInput = (
-    TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
-)
+# should be as Union, because `|` won't work for python3.9
+BatchedInput = Union[
+    TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, MultimodalInput
+]
 
-TextBatchedInput = TextInput | CorpusInput | QueryInput
+TextBatchedInput = Union[TextInput, CorpusInput, QueryInput]
