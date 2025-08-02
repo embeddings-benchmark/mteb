@@ -51,3 +51,8 @@ from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *
 from .zho.CMTEBClustering import *
+from .vie.RedditClusteringVN import *
+from .vie.RedditClusteringP2PVN import *
+from .vie.StackExchangeClusteringVN import *
+from .vie.StackExchangeClusteringP2PVN import *
+from .vie.TwentyNewsgroupsClusteringVN import *
