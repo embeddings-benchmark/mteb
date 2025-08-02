@@ -67,7 +67,7 @@ class SearchEncoder:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
         raise NotImplementedError(
-            "The search method is not supported by the by cross encoders. "
+            "The search method is not supported by cross encoders. "
         )
 
     def rerank(
