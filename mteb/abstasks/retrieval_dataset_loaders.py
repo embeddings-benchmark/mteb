@@ -16,7 +16,6 @@ from datasets import (
 
 from mteb.types import (
     CorpusDatasetType,
-    InstructionDatasetType,
     QueryDatasetType,
     RelevantDocumentsType,
     TopRankedDocumentsType,
@@ -31,14 +30,12 @@ class RetrievalSplitData(TypedDict):
     - `corpus`: A mapping of document IDs to their text or title and text. Columns: "id", "title", "text"
     - `queries`: A mapping of query IDs to their text. Columns: "id", "text" (can be `Conversation`)
     - `relevant_docs`: A mapping of query IDs to a mapping of document IDs and their relevance scores.
-    - `instructions`: A mapping of query IDs to their instructions (if applicable). Columns: "query-id", "instruction"
     - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable). Columns: "query-id", "corpus-ids"
     """
 
     corpus: CorpusDatasetType
     queries: QueryDatasetType
     relevant_docs: RelevantDocumentsType
-    instructions: InstructionDatasetType | None
     top_ranked: TopRankedDocumentsType | None
 
 
@@ -82,15 +79,14 @@ class RetrievalDatasetLoader:
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked()
 
-        # TODO combine instructions with queries https://github.com/embeddings-benchmark/mteb/issues/2969
         if any(c.endswith("instruction") for c in self.dataset_configs):
             instructions = self._load_instructions()
+            queries = self._combine_queries_with_instructions(queries, instructions)
 
         return RetrievalSplitData(
             corpus=corpus,
             queries=queries,
             relevant_docs=qrels,
-            instructions=instructions,
             top_ranked=top_ranked,
         )
 
@@ -198,7 +194,7 @@ class RetrievalDatasetLoader:
         logger.info(f"Top ranked loaded: {len(top_ranked_ds) if top_ranked_ds else 0}")
         return top_ranked_dict
 
-    def _load_instructions(self) -> InstructionDatasetType:
+    def _load_instructions(self) -> Dataset:
         logger.info("Loading Instructions")
 
         config = (
@@ -214,3 +210,18 @@ class RetrievalDatasetLoader:
             )
         ).select_columns(["query-id", "instruction"])
         return instructions_ds
+
+    def _combine_queries_with_instructions(
+        self,
+        queries_dataset: QueryDatasetType,
+        instruction_dataset: Dataset,
+    ) -> QueryDatasetType:
+        instruction_to_query_idx = {
+            row["query-id"]: row["instruction"] for row in instruction_dataset
+        }
+
+        def add_instruction_to_query(row: dict[str, str]) -> dict[str, str]:
+            row["instruction"] = instruction_to_query_idx[row["id"]]
+            return row
+
+        return queries_dataset.map(add_instruction_to_query)

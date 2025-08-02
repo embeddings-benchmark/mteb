@@ -8,7 +8,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import SearchInterface
 from mteb.types import (
     CorpusDatasetType,
-    InstructionDatasetType,
     QueryDatasetType,
     RelevantDocumentsType,
     RetrievalOutputType,
@@ -32,7 +31,6 @@ class RetrievalEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
         **kwargs,
@@ -40,7 +38,6 @@ class RetrievalEvaluator(Evaluator):
         super().__init__(**kwargs)
         self.corpus = corpus
         self.queries = queries
-        self.instructions = instructions
         self.top_ranked = top_ranked
 
         self.task_metadata = task_metadata
@@ -74,7 +71,6 @@ class RetrievalEvaluator(Evaluator):
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
-            instructions=self.instructions,
             top_ranked=self.top_ranked,
         )
 
