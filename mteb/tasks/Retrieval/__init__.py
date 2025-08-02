@@ -53,6 +53,7 @@ from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
+from .eng.GovReport import *
 from .eng.HagridRetrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
