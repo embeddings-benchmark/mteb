@@ -63,6 +63,12 @@ class Wav2ClipZeroShotWrapper:
                         item["sampling_rate"], self.sampling_rate
                     )
                     tensor = resampler(tensor)
+
+                # Apply audio truncation (30 seconds max)
+                max_length = 30 * self.sampling_rate  # 30 seconds
+                if tensor.shape[-1] > max_length:
+                    tensor = tensor[..., :max_length]
+
                 waveforms.append(tensor)
 
             # dict with path
@@ -99,6 +105,7 @@ class Wav2ClipZeroShotWrapper:
         self,
         audio: AudioBatch,
         *,
+        show_progress_bar: bool = True,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
@@ -108,7 +115,9 @@ class Wav2ClipZeroShotWrapper:
 
         if isinstance(audio, DataLoader):
             # Process each DataLoader batch separately
-            for batch in tqdm(audio, desc="Processing audio batches"):
+            for batch in tqdm(
+                audio, desc="Processing audio batches", disable=not show_progress_bar
+            ):
                 wavs = self._handle_batch(batch)
                 batch_embeddings = self._process_audio_batch(wavs, batch_size)
                 all_embeddings.extend(batch_embeddings)
