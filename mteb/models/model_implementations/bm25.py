@@ -6,6 +6,7 @@ from typing import Literal
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+from mteb.types import CorpusDatasetType, QueryDatasetType
 
 logger = logging.getLogger(__name__)
 
@@ -38,28 +39,14 @@ def bm25_loader(model_name, **kwargs):
 
         def search(
             self,
-            corpus: dict[str, dict[str, str]],
-            queries: dict[str, str | list[str]],
+            corpus: CorpusDatasetType,
+            queries: QueryDatasetType,
             top_k: int,
             **kwargs,
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
-            corpus_ids = list(corpus.keys())
-            corpus_with_ids = [
-                {
-                    "doc_id": cid,
-                    **(
-                        {"text": corpus[cid]}
-                        if isinstance(corpus[cid], str)
-                        else corpus[cid]
-                    ),
-                }
-                for cid in corpus_ids
-            ]
-
             corpus_texts = [
-                "\n".join([doc.get("title", ""), doc["text"]])
-                for doc in corpus_with_ids
+                "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus
             ]  # concatenate all document values (title, text, ...)
             encoded_corpus = self.encode(corpus_texts)
 
@@ -72,16 +59,16 @@ def bm25_loader(model_name, **kwargs):
             retriever.index(encoded_corpus)
 
             logger.info("Encoding Queries...")
-            query_ids = list(queries.keys())
+            query_ids = list(queries["id"])
             self.results = {qid: {} for qid in query_ids}
-            queries_texts = [queries[qid] for qid in queries]
+            queries_texts = queries["text"]
 
             query_token_strs = self.encode(queries_texts, return_ids=False)
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
 
             queries_results, queries_scores = retriever.retrieve(
-                query_token_strs, corpus=corpus_with_ids, k=top_k
+                query_token_strs, corpus=corpus.to_list(), k=top_k
             )
 
             # Iterate over queries
@@ -95,7 +82,7 @@ def bm25_loader(model_name, **kwargs):
                 for ri in range(len(query_results)):
                     doc = query_results[ri]
                     score = scores[ri]
-                    doc_id = doc["doc_id"]
+                    doc_id = doc["id"]
 
                     doc_id_to_score[doc_id] = float(score)
 

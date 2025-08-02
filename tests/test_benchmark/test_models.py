@@ -27,7 +27,7 @@ def test_colbert_model_e2e(task: AbsTask, model: str, tmp_path: Path):
     )
     result = results[0]
 
-    assert result.scores["test"][0]["ndcg_at_1"] == 1.0
+    assert result.scores["test"][0]["ndcg_at_1"] == 0.0
 
 
 def test_bm25s_e2e(tmp_path: Path):

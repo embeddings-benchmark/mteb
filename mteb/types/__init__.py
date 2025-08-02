@@ -5,7 +5,12 @@ from ._encoder_io import (
     BatchedInput,
     Conversation,
     ConversationTurn,
+    CorpusDatasetType,
+    InstructionDatasetType,
     PromptType,
+    QueryDatasetType,
+    RelevantDocumentsType,
+    TopRankedDocumentsType,
 )
 from ._metadata import (
     ISOLanguage,
@@ -40,4 +45,9 @@ __all__ = [
     "HFSubset",
     "ModelName",
     "Revision",
+    "QueryDatasetType",
+    "CorpusDatasetType",
+    "InstructionDatasetType",
+    "RelevantDocumentsType",
+    "TopRankedDocumentsType",
 ]

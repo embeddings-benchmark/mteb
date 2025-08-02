@@ -148,7 +148,7 @@ class CDEWrapper(SentenceTransformerWrapper):
             task.load_data()
             task.convert_v1_dataset_format_to_v2()
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
-            sentences = corpus_to_dict(list(cur_ds.values()))["text"]
+            sentences = cur_ds.map(corpus_to_dict)["text"]
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskAnyClassification = mteb.get_task(task_metadata.name)
             task.load_data()
