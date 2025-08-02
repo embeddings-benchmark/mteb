@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class SciDocsRerankingVN(AbsTaskReranking):
