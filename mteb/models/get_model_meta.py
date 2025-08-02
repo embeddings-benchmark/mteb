@@ -10,7 +10,7 @@ from huggingface_hub.errors import RepositoryNotFoundError
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.models.encoder_interface import Encoder
+from mteb.models.encoder_interface import Encoder, SearchInterface
 from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
@@ -76,7 +76,9 @@ def get_model_metas(
     return res
 
 
-def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> Encoder:
+def get_model(
+    model_name: str, revision: str | None = None, **kwargs: Any
+) -> Encoder | SearchInterface:
     """A function to fetch a model object by name.
 
     Args:

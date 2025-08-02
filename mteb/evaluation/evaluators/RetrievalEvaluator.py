@@ -5,20 +5,17 @@ from pathlib import Path
 from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.encoder_interface import Encoder
+from mteb.models.encoder_interface import SearchInterface
 from mteb.types import (
     CorpusDatasetType,
     InstructionDatasetType,
     QueryDatasetType,
     RelevantDocumentsType,
+    RetrievalOutputType,
     TopRankedDocumentsType,
 )
 
 from .Evaluator import Evaluator
-from .model_classes import (
-    DenseRetrievalExactSearch,
-    is_cross_encoder_compatible,
-)
 from .retrieval_metrics import (
     calculate_retrieval_scores,
 )
@@ -54,42 +51,31 @@ class RetrievalEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: SearchInterface,
         encode_kwargs: dict[str, Any],
         previous_results: str | Path | None = None,
         **kwargs: Any,
-    ) -> dict[str, dict[str, float]]:
-        self.is_cross_encoder = is_cross_encoder_compatible(model)
-        if self.is_cross_encoder:
-            logger.info(
-                "The custom predict function of the model will be used if not a SentenceTransformer CrossEncoder"
+    ) -> RetrievalOutputType:
+        if not isinstance(model, SearchInterface):
+            raise TypeError(
+                f"RetrievalEvaluator expects a SearchInterface, got {type(model)}"
             )
-        self.retriever = DenseRetrievalExactSearch(
-            model, encode_kwargs=encode_kwargs, previous_results=previous_results
-        )
-
-        if self.is_cross_encoder:
-            score_function = self.retriever.search_cross_encoder
-        elif (
-            hasattr(model, "mteb_model_meta")
-            and model.mteb_model_meta is not None
-            and model.mteb_model_meta.name == "bm25s"
-        ):
-            score_function = self.retriever.model.search
-        else:
-            score_function = self.retriever.search
-
-        return score_function(
-            self.corpus,
-            self.queries,
-            self.top_k,
-            instructions=self.instructions,
-            top_ranked=self.top_ranked,
-            request_qid=self.qid,
+        model.index(
+            corpus=self.corpus,
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
-            **kwargs,
+            encode_kwargs=encode_kwargs,
+        )
+        return model.search(
+            queries=self.queries,
+            top_k=self.top_k,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            encode_kwargs=encode_kwargs,
+            instructions=self.instructions,
+            top_ranked=self.top_ranked,
         )
 
     def evaluate(
@@ -99,6 +85,7 @@ class RetrievalEvaluator(Evaluator):
         k_values: list[int],
         ignore_identical_ids: bool = False,
     ) -> tuple[
+        # todo add NamedTuple
         dict[str, dict[str, float]],
         dict[str, float],
         dict[str, float],

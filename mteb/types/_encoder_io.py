@@ -120,3 +120,6 @@ scores. Should have columns `query-id`, `corpus-id`, `score`."""
 TopRankedDocumentsType = Mapping[str, list[str]]
 """Top-ranked documents for each query, mapping query IDs to a list of document IDs. Should
 have columns `query-id`, `corpus-ids`."""
+
+RetrievalOutputType = dict[str, dict[str, float]]
+"""Retrieval output, containing the scores for each query-document pair."""
