@@ -19,14 +19,15 @@ class BiossesSTSVN(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="cosine_spearman",
-        date=None,
+        date=("2025-07-29", "2025-07-30"),
         form=None,
         domains=None,
         task_subtypes=None,
-        license=None,
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated",
         socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
         text_creation=None,
         bibtex_citation="""
 @misc{pham2025vnmtebvietnamesemassivetext,
@@ -39,8 +40,7 @@ class BiossesSTSVN(AbsTaskSTS):
     url={https://arxiv.org/abs/2507.21500}
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        adapted_from=["BIOSSES"],
     )
 
     @property

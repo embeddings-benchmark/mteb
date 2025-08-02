@@ -19,15 +19,16 @@ class SciDocsRerankingVN(AbsTaskReranking):
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="map",
-        date=("2000-01-01", "2020-12-31"),  # best guess
-        form=["written"],
-        domains=["Academic", "Non-fiction"],
-        task_subtypes=["Scientific Reranking"],
-        license="cc-by-4.0",
-        socioeconomic_status="high",
-        annotations_creators=None,
-        dialect=None,
-        text_creation="found",
+        date=("2025-07-29", "2025-07-30"),
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated",
+        socioeconomic_status=None,
+        text_creation=None,
         bibtex_citation="""
 @misc{pham2025vnmtebvietnamesemassivetext,
     title={VN-MTEB: Vietnamese Massive Text Embedding Benchmark},
@@ -39,6 +40,5 @@ class SciDocsRerankingVN(AbsTaskReranking):
     url={https://arxiv.org/abs/2507.21500}
 }
 """,
-        n_samples={"test": 19599},
-        avg_character_length={"test": 69.0},
+        adapted_from=["SciDocsRR"],
     )

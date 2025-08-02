@@ -19,14 +19,15 @@ class RedditClusteringP2PVN(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="v_measure",
-        date=None,
+        date=("2025-07-29", "2025-07-30"),
         form=None,
         domains=None,
         task_subtypes=None,
-        license=None,
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated",
         socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
         text_creation=None,
         bibtex_citation="""
 @misc{pham2025vnmtebvietnamesemassivetext,
@@ -39,6 +40,5 @@ class RedditClusteringP2PVN(AbsTaskClustering):
     url={https://arxiv.org/abs/2507.21500}
 }
 """,
-        n_samples={"test": 459399},
-        avg_character_length={"test": 727.7},
+        adapted_from=["RedditClusteringP2P"],
     )

@@ -18,14 +18,15 @@ class MassiveScenarioVNClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",
-        date=None,
+        date=("2025-07-29", "2025-07-30"),
         form=None,
         domains=None,
         task_subtypes=None,
-        license=None,
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated",
         socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
         text_creation=None,
         bibtex_citation="""
 @misc{pham2025vnmtebvietnamesemassivetext,
@@ -38,6 +39,5 @@ class MassiveScenarioVNClassification(AbsTaskClassification):
     url={https://arxiv.org/abs/2507.21500}
 }
 """,
-        n_samples={"validation": 2033, "test": 2974},
-        avg_character_length={"validation": 34.8, "test": 34.6},
+        adapted_from=["MassiveScenarioClassification"],
     )
