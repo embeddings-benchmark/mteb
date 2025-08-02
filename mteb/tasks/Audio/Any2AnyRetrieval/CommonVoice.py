@@ -81,14 +81,14 @@ class CommonVoice17A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation = """@inproceedings{ardila2019common,
+        bibtex_citation="""@inproceedings{ardila2019common,
   author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
   booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
   pages = {4218--4222},
   title = {Common voice: A massively-multilingual speech corpus},
   year = {2020},
 }
-"""
+""",
     )
 
     def load_data(self, **kwargs):
@@ -172,7 +172,7 @@ class CommonVoice17T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation = """@inproceedings{ardila2019common,
+        bibtex_citation="""@inproceedings{ardila2019common,
   author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
   booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
   pages = {4218--4222},
@@ -256,14 +256,14 @@ class CommonVoice21A2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation = """@inproceedings{ardila2019common,
+        bibtex_citation="""@inproceedings{ardila2019common,
   author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
   booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
   pages = {4218--4222},
   title = {Common voice: A massively-multilingual speech corpus},
   year = {2020},
 }
-"""
+""",
     )
 
     def load_data(self, **kwargs):
@@ -347,15 +347,14 @@ class CommonVoice21T2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation = """@inproceedings{ardila2019common,
+        bibtex_citation="""@inproceedings{ardila2019common,
   author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
   booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
   pages = {4218--4222},
   title = {Common voice: A massively-multilingual speech corpus},
   year = {2020},
 }
-"""
-
+""",
     )
 
     def load_data(self, **kwargs):
