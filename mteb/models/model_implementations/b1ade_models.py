@@ -6,7 +6,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 b1ade_training_data = {
     # We are in teh process of submitting a paper outlining our process of creating b1ade using model merging and knowledge distillation.
     # Similar to mixedbread models, we do not train on any data (except the MSMarco training split) of MTEB.
-    "MSMARCO": [],
+    "MSMARCO",
 }
 
 b1ade_embed = ModelMeta(

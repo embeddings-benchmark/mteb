@@ -21,11 +21,11 @@ xlm_roberta_ua_distilled = ModelMeta(
     framework=["Sentence Transformers"],
     reference="https://github.com/panalexeu/xlm-roberta-ua-distilled/tree/main",
     languages=["eng-Latn", "ukr-Cyrl"],
-    training_datasets={
-        #  "sentence-transformers/parallel-sentences-talks": ["train"],
-        #  "sentence-transformers/parallel-sentences-wikimatrix": ["train"],
-        #  "sentence-transformers/parallel-sentences-tatoeba": ["train"],
-    },
+    training_datasets=set(
+        #  "sentence-transformers/parallel-sentences-talks",
+        #  "sentence-transformers/parallel-sentences-wikimatrix",
+        #  "sentence-transformers/parallel-sentences-tatoeba",
+    ),
     adapted_from="FacebookAI/xlm-roberta-base",
     modalities=["text"],
     public_training_data=None,

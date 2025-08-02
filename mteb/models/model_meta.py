@@ -118,7 +118,7 @@ class ModelMeta(BaseModel):
     reference: StrURL | None = None
     similarity_fn_name: ScoringFunction | None
     use_instructions: bool | None
-    training_datasets: dict[str, list[str]] | None
+    training_datasets: set[str] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
     modalities: list[Modalities] = ["text"]
@@ -146,6 +146,11 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
+        dict_repr["training_datasets"] = (
+            list(dict_repr["training_datasets"])
+            if isinstance(dict_repr["training_datasets"], set)
+            else dict_repr["training_datasets"]
+        )
         dict_repr["loader"] = _get_loader_name(loader)
         return dict_repr
 
@@ -205,7 +210,7 @@ class ModelMeta(BaseModel):
         # If no tasks were specified, we're obviously zero-shot
         if training_datasets is None:
             return None
-        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
+
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
@@ -213,7 +218,7 @@ class ModelMeta(BaseModel):
             benchmark_datasets = set()
             for task in tasks:
                 benchmark_datasets.add(task.metadata.name)
-        intersection = model_datasets & benchmark_datasets
+        intersection = training_datasets & benchmark_datasets
         return len(intersection) == 0
 
     def get_training_datasets(self) -> dict[str, list[str]] | None:
@@ -240,7 +245,7 @@ class ModelMeta(BaseModel):
 
         for dataset in training_datasets:
             similar_tasks = collect_similar_tasks(dataset, visited)
-            return_dataset |= {task: [] for task in similar_tasks}
+            return_dataset |= similar_tasks
 
         return return_dataset
 
@@ -251,13 +256,12 @@ class ModelMeta(BaseModel):
         training_datasets = self.get_training_datasets()
         if (training_datasets is None) or (not tasks):
             return None
-        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
             tasks = cast(Sequence[AbsTask], tasks)
             benchmark_datasets = {task.metadata.name for task in tasks}
-        overlap = model_datasets & benchmark_datasets
+        overlap = training_datasets & benchmark_datasets
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
         return int(100 - perc_overlap)
 

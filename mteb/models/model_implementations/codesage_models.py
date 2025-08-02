@@ -32,8 +32,8 @@ codesage_large = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
-        "CodeSearchNetRetrieval": ["train"],
-        "CodeSearchNetCCRetrieval": ["train"],
+        "CodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
     },
 )
 
@@ -57,8 +57,8 @@ codesage_base = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
-        "CodeSearchNetRetrieval": ["train"],
-        "CodeSearchNetCCRetrieval": ["train"],
+        "CodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
     },
 )
 
@@ -82,7 +82,7 @@ codesage_small = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
-        "CodeSearchNetRetrieval": ["train"],
-        "CodeSearchNetCCRetrieval": ["train"],
+        "CodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
     },
 )

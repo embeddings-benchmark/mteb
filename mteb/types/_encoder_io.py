@@ -8,8 +8,10 @@ import numpy as np
 import torch
 from datasets import Dataset
 from PIL import Image
+from typing_extensions import NotRequired
 
 # --- Output types ---
+# should be as Union, because `|` won't work for python3.9
 Array = Union[np.ndarray, torch.Tensor]
 
 
@@ -34,34 +36,76 @@ class ConversationTurn(TypedDict):
 Conversation = list[ConversationTurn]
 
 
-class BatchedInput(TypedDict, total=False):
-    """The input to the encoder. This is the input to the encoder when using the encode function.
-
+class TextInput(TypedDict):
+    """The input to the encoder for text.
 
     Args:
-        text: The text to encode.
-        image: The image to encode. Can be a list of images or a list of lists of images.
-        audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
-
-        Retrieval corpus:
-            title: The title of the text to encode.
-            body: The body of the text to encode.
-
-        Retrieval query:
-            query: The query to encode.
-            instruction: The instruction to encode.
+        text: The text to encode. Can be a list of texts or a list of lists of texts.
     """
 
     text: list[str]
-    image: list[list[Image.Image]]
-    audio: list[list[bytes]]
-    # Retrieval corpus
+
+
+class CorpusInput(TextInput):
+    """The input to the encoder for retrieval corpus.
+
+    Args:
+        title: The title of the text to encode. Can be a list of titles or a
+            list of lists of titles.
+        body: The body of the text to encode. Can be a list of bodies or a
+            list of lists of bodies.
+    """
+
     title: list[str]
     body: list[str]
-    # Retrieval query
+
+
+class QueryInput(TextInput):
+    """The input to the encoder for queries.
+
+    Args:
+        query: The query to encode. Can be a list of queries or a list of lists of queries.
+        conversation: Optional. A list of conversations, each conversation is a list of messages.
+        instruction: Optional. A list of instructions to encode.
+    """
+
     query: list[str]
-    conversation: list[Conversation]
-    instruction: list[str]
+    conversation: NotRequired[list[Conversation]]
+    instruction: NotRequired[list[str]]
+
+
+class ImageInput(TypedDict):
+    """The input to the encoder for images.
+
+    Args:
+        image: The image to encode. Can be a list of images or a list of lists of images.
+    """
+
+    image: list[list[Image.Image]]
+
+
+class AudioInput(TypedDict):
+    """The input to the encoder for audio.
+
+    Args:
+        audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
+    """
+
+    audio: list[list[bytes]]
+
+
+class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):
+    """The input to the encoder for multimodal data."""
+
+    pass
+
+
+# should be as Union, because `|` won't work for python3.9
+BatchedInput = Union[
+    TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, MultimodalInput
+]
+
+TextBatchedInput = Union[TextInput, CorpusInput, QueryInput]
 
 
 QueryDatasetType = Dataset

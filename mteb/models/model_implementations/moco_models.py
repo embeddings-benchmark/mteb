@@ -107,9 +107,9 @@ def mocov3_loader(model_name, **kwargs):
     return MOCOv3Model(model_name, **kwargs)
 
 
-mocov3_training_datasets = {
+mocov3_training_datasets = set(
     # imagenet
-}
+)
 
 mocov3_vit_base = ModelMeta(
     loader=mocov3_loader,  # type: ignore

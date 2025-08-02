@@ -19,7 +19,7 @@ def benchmark_results() -> BenchmarkResults:
 
     os.environ["MTEB_CACHE"] = str(tests_path)
 
-    results = mteb.load_results(download_latest=False)
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
 
     return results
 

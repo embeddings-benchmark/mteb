@@ -7,14 +7,14 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 from .nvidia_models import nvidia_training_datasets
 
 stella_zh_datasets = {
-    "BQ": [],
-    "LCQMC": [],
-    "PAWSX": [],
-    "STS-B": [],
-    "DuRetrieval": [],
-    "AFQMC": [],
-    "Cmnli": [],
-    "Ocnli": [],
+    "BQ",
+    "LCQMC",
+    "PAWSX",
+    "STS-B",
+    "DuRetrieval",
+    "AFQMC",
+    "Cmnli",
+    "Ocnli",
 }
 
 # Derived from conversation:
@@ -116,12 +116,10 @@ stella_large_zh_v3_1792d = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **stella_zh_datasets
-        # Not in MTEB:
-        # - infgrad/dialogue_rewrite_llm
-        # - infgrad/retrieval_data_llm
-    },
+    training_datasets=stella_zh_datasets,
+    # Not in MTEB:
+    # - infgrad/dialogue_rewrite_llm
+    # - infgrad/retrieval_data_llm
 )
 
 stella_base_zh_v3_1792d = ModelMeta(
@@ -144,12 +142,10 @@ stella_base_zh_v3_1792d = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **stella_zh_datasets
-        # Not in MTEB:
-        # - infgrad/dialogue_rewrite_llm
-        # - infgrad/retrieval_data_llm
-    },
+    training_datasets=stella_zh_datasets,
+    # Not in MTEB:
+    # - infgrad/dialogue_rewrite_llm
+    # - infgrad/retrieval_data_llm
 )
 
 
@@ -200,11 +196,11 @@ zpoint_large_embedding_zh = ModelMeta(
         # It's a bit unclear what they have trained on to be honest, because they don't list all
         # And they also have some rather cryptic description of their training procedure, but at
         # Least they disclose that they have trained on these:
-        "MIRACLRetrieval": ["train"],
-        "MIRACLReranking": ["train"],
-        "DuRetrieval": ["train"],
-        "T2Retrieval": ["train"],
-        "MultiLongDocRetrieval": ["train"],
+        "MIRACLRetrieval",
+        "MIRACLReranking",
+        "DuRetrieval",
+        "T2Retrieval",
+        "MultiLongDocRetrieval",
         #  Not in MTEB:
         #  - Shitao/bge-reranker-data
         #  - FreedomIntelligence/Huatuo26M-Lite

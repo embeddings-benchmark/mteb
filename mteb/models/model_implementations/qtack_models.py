@@ -4,16 +4,16 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 mini_gte_datasets = {
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "HotPotQA": ["train"],
-    "HotPotQAHardNegatives": ["train"],
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "HotPotQA",
+    "HotPotQAHardNegatives",
+    "FEVER",
+    "FEVERHardNegatives",
     # Other Datasets (see GTE-series)
     # TriviaQA
     # SNLI

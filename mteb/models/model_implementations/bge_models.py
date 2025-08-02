@@ -21,32 +21,32 @@ model_prompts_zh = {"query": "为这个句子生成表示以用于检索相关�
 
 bge_m3_training_data = {
     # source: https://arxiv.org/abs/2402.03216
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "LeCaRDv2": ["train"],
-    "CMedQAv1-reranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "T2Reranking": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQ-NL": ["train"],  # translation not trained on
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "HotpotQA": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "MMarcoReranking": ["train"],
-    "CodeSearchNet": ["train"],
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "LeCaRDv2",
+    "CMedQAv1-reranking",
+    "CMedQAv2-reranking",
+    "MrTidyRetrieval",
+    "T2Reranking",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQ-NL",  # translation not trained on
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
+    "HotpotQA",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
+    "HotpotQAHardNegatives",
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CodeSearchNet",
     # not in mteb
     # "s2orc"
     # Wikipedia
@@ -70,18 +70,12 @@ bge_m3_training_data = {
 
 bge_training_data = {
     # source: https://data.baai.ac.cn/details/BAAI-MTP
-    "NQ": ["test"],
-    "NQ-NL": ["test"],  # translation not trained on
-    "NQHardNegatives": ["test"],
-    "AmazonReviewsClassification": [
-        "validation",
-        "test",
-    ],  # assumed from: amazon_reviews_multi
-    "MLQARetrieval": [
-        "validation",
-        "test",
-    ],  # assumed from mlqa	(question, context)
-    "DuRetrieval": ["train"],
+    "NQ",
+    "NQ-NL",  # translation not trained on
+    "NQHardNegatives",
+    "AmazonReviewsClassification",  # assumed from: amazon_reviews_multi
+    "MLQARetrieval",  # assumed from mlqa	(question, context)
+    "DuRetrieval",
     # not in mteb
     # Dataset	Pairs
     # wudao	(title, passage)
@@ -92,40 +86,40 @@ bge_training_data = {
     # wiki_atomic_edits	(base_sentence, edited_sentence)
     # mlqa	(question, context)
     # xlsum	(title, summary) (title, text)
-    # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
-    # "wikipedia": [],  # title + section title, passage
-    # "reddit": [],  # title, body
-    # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
-    # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
+    # "sentence-transformers data",  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+    # "wikipedia",  # title + section title, passage
+    # "reddit",  # title, body
+    # "stackexchange",  # (title, upvoted answer) (title+body, upvoted answer)
+    # "s2orc",  # (title, abstract) (title, citation title) (abstract, citation abstract)
 }
 
 bge_chinese_training_data = {
     # source: https://arxiv.org/pdf/2309.07597
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "MMarcoReranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "Cmnli": ["train"],
-    "Ocnli": ["train"],
+    "T2Retrieval",
+    "DuRetrieval",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
+    "Cmnli",
+    "Ocnli",
     # from https://github.com/FlagOpen/FlagEmbedding/blob/1.1/FlagEmbedding/baai_general_embedding/README.md
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "NQ": ["test"],
-    "NQHardNegatives": ["test"],
-    "HotpotQA": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
-    "QuoraRetrieval": ["train"],
-    "QuoraRetrievalHardNegatives": ["train"],
-    "Quora-PLHardNegatives": ["train"],
-    "QuoraRetrieval-Fa": ["train"],
-    "Quora-PL": ["train"],
-    # "StackExchangeClusteringP2P": ["test"],
-    # "StackExchangeClusteringP2P.v2": ["test"],
-    # "StackExchangeClustering": ["test"],
-    # "StackExchangeClustering.v2": ["test"],
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "NQ",
+    "NQHardNegatives",
+    "HotpotQA",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQAHardNegatives",
+    "QuoraRetrieval",
+    "QuoraRetrievalHardNegatives",
+    "Quora-PLHardNegatives",
+    "QuoraRetrieval-Fa",
+    "Quora-PL",
+    # "StackExchangeClusteringP2P",
+    # "StackExchangeClusteringP2P.v2",
+    # "StackExchangeClustering",
+    # "StackExchangeClustering.v2",
     # not in mteb
     #  - multi-cpr
     #  - NLI-zh
@@ -140,10 +134,10 @@ bge_chinese_training_data = {
     # mlqa	(question, context)
     # xlsum	(title, summary) (title, text)
     # s2orc
-    # "wikipedia": [],  # title + section title, passage
-    # "reddit": [],  # title, body
-    # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
-    # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
+    # "wikipedia",  # title + section title, passage
+    # "reddit",  # title, body
+    # "stackexchange",  # (title, upvoted answer) (title+body, upvoted answer)
+    # "s2orc",  # (title, abstract) (title, citation title) (abstract, citation abstract)
 }
 
 # https://huggingface.co/BAAI/bge-m3/discussions/29
@@ -652,50 +646,50 @@ bge_full_data = {
     # SQuaD
     # TriviaQA
     # QuoraDuplicateQuestions
-    "HotpotQA": ["train"],
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "FEVER": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "MSMARCO": ["train"],
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQ-NL": ["train"],  # translation not trained on
-    "ArguAna": ["train"],
-    "ArguAna-NL": ["train"],  # translation not trained on
-    "FiQA2018": ["train"],
-    "FiQA2018-NL": ["train"],  # translation not trained on
+    "HotpotQA",
+    "HotpotQA-NL",  # translation not trained on
+    "FEVER",
+    "FEVER-NL",  # translation not trained on
+    "MSMARCO",
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQ-NL",  # translation not trained on
+    "ArguAna",
+    "ArguAna-NL",  # translation not trained on
+    "FiQA2018",
+    "FiQA2018-NL",  # translation not trained on
     # |Reranking|
-    "SciDocsReranking": ["train"],
-    "StackOverflowDupQuestions": ["train"],
+    "SciDocsReranking",
+    "StackOverflowDupQuestions",
     # |Classification|
-    "AmazonReviewsClassification": ["train"],
-    "AmazonCounterfactualClassification": ["train"],
-    "Banking77Classification": ["train"],
-    "EmotionClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "ImdbClassification": ["train"],
-    "ToxicConversationsClassification": ["train"],
+    "AmazonReviewsClassification",
+    "AmazonCounterfactualClassification",
+    "Banking77Classification",
+    "EmotionClassification",
+    "TweetSentimentExtractionClassification",
+    "MTOPIntentClassification",
+    "ImdbClassification",
+    "ToxicConversationsClassification",
     # |Clustering|
-    "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringP2P": ["train"],
-    "BiorxivClusteringS2S": ["train"],
-    "BiorxivClusteringP2P": ["train"],
-    "MedrxivClusteringS2S": ["train"],
-    "MedrxivClusteringP2P": ["train"],
-    "BiorxivClusteringS2S.v2": ["train"],
-    "BiorxivClusteringP2P.v2": ["train"],
-    "MedrxivClusteringS2S.v2": ["train"],
-    "MedrxivClusteringP2P.v2": ["train"],
-    "RedditClusteringP2P": ["train"],
-    "RedditClustering": ["train"],
-    "RedditClustering.v2": ["train"],
-    "TwentyNewsgroupsClustering": ["train"],
-    "TwentyNewsgroupsClustering.v2": ["train"],
+    "ArxivClusteringS2S",
+    "ArxivClusteringP2P",
+    "BiorxivClusteringS2S",
+    "BiorxivClusteringP2P",
+    "MedrxivClusteringS2S",
+    "MedrxivClusteringP2P",
+    "BiorxivClusteringS2S.v2",
+    "BiorxivClusteringP2P.v2",
+    "MedrxivClusteringS2S.v2",
+    "MedrxivClusteringP2P.v2",
+    "RedditClusteringP2P",
+    "RedditClustering",
+    "RedditClustering.v2",
+    "TwentyNewsgroupsClustering",
+    "TwentyNewsgroupsClustering.v2",
     # |STS|
-    "STS22": ["train"],
-    "STS22.v2": ["train"],
-    "STSBenchmark": ["train"],
+    "STS22",
+    "STS22.v2",
+    "STSBenchmark",
 }
 
 
@@ -727,11 +721,11 @@ bge_multilingual_gemma2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        **bge_full_data,
-        **bge_m3_training_data,
-        "MIRACLReranking": ["train"],
-        "MrTidyRetrieval": ["train"],
-    },
+        "MIRACLReranking",
+        "MrTidyRetrieval",
+    }
+    | bge_full_data
+    | bge_m3_training_data,
 )
 
 bge_en_icl = ModelMeta(
@@ -754,10 +748,7 @@ bge_en_icl = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
-    training_datasets={
-        **E5_MISTRAL_TRAINING_DATA,
-        **bge_full_data,
-    },
+    training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data,
     adapted_from="intfloat/e5-mistral-7b-instruct",
 )
 

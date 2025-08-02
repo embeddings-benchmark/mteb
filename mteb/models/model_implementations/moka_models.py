@@ -7,55 +7,56 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 sent_trf_training_dataset = {
     # derived from datasheets
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQ-NL": ["train"],  # translation not trained on
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "MSMARCO-PL",  # translation not trained on
+    "mMARCO-NL",  # translation not trained on
+    "NQ",
+    "NQ-NL",  # translation not trained on
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "NQ-PL",  # translation not trained on
     # not in MTEB
-    # "s2orc": ["train"],
-    # "flax-sentence-embeddings/stackexchange_xml": ["train"],
-    # "ms_marco": ["train"],
-    # "gooaq": ["train"],
-    # "yahoo_answers_topics": ["train"],
-    # "code_search_net": ["train"],
-    # "search_qa": ["train"],
-    # "eli5": ["train"],
-    # "snli": ["train"],
-    # "multi_nli": ["train"],
-    # "wikihow": ["train"],
-    # "natural_questions": ["train"],
-    # "trivia_qa": ["train"],
-    # "embedding-data/sentence-compression": ["train"],
-    # "embedding-data/flickr30k-captions": ["train"],
-    # "embedding-data/altlex": ["train"],
-    # "embedding-data/simple-wiki": ["train"],
-    # "embedding-data/QQP": ["train"],
-    # "embedding-data/SPECTER": ["train"],
-    # "embedding-data/PAQ_pairs": ["train"],
-    # "embedding-data/WikiAnswers": ["train"],
+    # "s2orc",
+    # "flax-sentence-embeddings/stackexchange_xml",
+    # "ms_marco",
+    # "gooaq",
+    # "yahoo_answers_topics",
+    # "code_search_net",
+    # "search_qa",
+    # "eli5",
+    # "snli",
+    # "multi_nli",
+    # "wikihow",
+    # "natural_questions",
+    # "trivia_qa",
+    # "embedding-data/sentence-compression",
+    # "embedding-data/flickr30k-captions",
+    # "embedding-data/altlex",
+    # "embedding-data/simple-wiki",
+    # "embedding-data/QQP",
+    # "embedding-data/SPECTER",
+    # "embedding-data/PAQ_pairs",
+    # "embedding-data/WikiAnswers",
 }
-medi_dataset = {
-    **sent_trf_training_dataset,
-    # not in MTEB:
-    # - Super-NI
-    # - KILT (https://arxiv.org/abs/2009.02252)
-    # - MedMCQA (https://proceedings.mlr.press/v174/pal22a/pal22a.pdf)
-}
+medi_dataset = (
+    set(
+        # not in MTEB:
+        # - Super-NI
+        # - KILT (https://arxiv.org/abs/2009.02252)
+        # - MedMCQA (https://proceedings.mlr.press/v174/pal22a/pal22a.pdf)
+    )
+    | sent_trf_training_dataset
+)
 m3e_dataset = {
-    **medi_dataset,
-    "AmazonReviewsClassification": ["train"],  # Possibly also test, hard to know
-    "Ocnli": ["train"],
-    "BQ": ["train"],
-    "LCQMC": ["train"],
-    "MIRACLReranking": ["train"],
-    "PAWSX": ["train"],
-    "DuRetrieval": [],
+    "AmazonReviewsClassification",  # Possibly also test, hard to know
+    "Ocnli",
+    "BQ",
+    "LCQMC",
+    "MIRACLReranking",
+    "PAWSX",
+    "DuRetrieval",
     # not in MTEB:
     # - cmrc2018
     # - belle_2m
@@ -81,7 +82,7 @@ m3e_dataset = {
     # - webtext2019zh
     # - SimCLUE
     # - SQuAD
-}
+} | medi_dataset
 
 m3e_base = ModelMeta(
     loader=sentence_transformers_loader,

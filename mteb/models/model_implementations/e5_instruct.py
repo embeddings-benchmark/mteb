@@ -19,18 +19,17 @@ MISTRAL_LANGUAGES = ["eng-Latn", "fra-Latn", "deu-Latn", "ita-Latn", "spa-Latn"]
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
 E5_MISTRAL_TRAINING_DATA = {
-    **ME5_TRAINING_DATA,
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "HotpotQA": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],  # https://arxiv.org/pdf/2402.09906, section M
-}
+    "FEVER",
+    "FEVERHardNegatives",
+    "FEVER-NL",  # translation not trained on
+    "HotpotQA",
+    "HotpotQAHardNegatives",
+    "HotpotQA-PL",  # translation not trained on
+    "HotpotQA-NL",  # translation not trained on
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",  # https://arxiv.org/pdf/2402.09906, section M
+} | ME5_TRAINING_DATA
 
 e5_instruct = ModelMeta(
     loader=instruct_wrapper,
@@ -144,14 +143,13 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets={
-        **E5_MISTRAL_TRAINING_DATA,
         # copied from e5
         # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQ-NL": ["test"],  # translation not trained on
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ",
+        "NQ-NL",  # translation not trained on
+        "NQHardNegatives",
+        "MSMARCO",  # dev?
+        "mMARCO-NL",  # translation not trained on
         # source: https://www.zeta-alpha.com/post/fine-tuning-an-llm-for-state-of-the-art-retrieval-zeta-alpha-s-top-10-submission-to-the-the-mteb-be
         # "Arguana",
         # "FEVER",
@@ -168,30 +166,31 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
         # "SciRepEval"
         # mteb
         # https://huggingface.co/datasets/mteb/raw_arxiv
-        # "ArxivClusteringS2S": ["train"],
-        # "ArxivClusteringP2P": ["train"],
+        # "ArxivClusteringS2S",
+        # "ArxivClusteringP2P",
         # https://huggingface.co/datasets/mteb/raw_biorxiv
-        # "BiorxivClusteringS2S": ["train"],
-        # "BiorxivClusteringP2P": ["train"],
+        # "BiorxivClusteringS2S",
+        # "BiorxivClusteringP2P",
         # https://huggingface.co/datasets/mteb/raw_medrxiv
-        # "MedrxivClusteringS2S": ["train"],
-        # "MedrxivClusteringP2P": ["train"],
+        # "MedrxivClusteringS2S",
+        # "MedrxivClusteringP2P",
         # as their train datasets
-        "AmazonCounterfactualClassification": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "EmotionClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "STS12": ["train"],
-        "STS22": ["train"],
-        "STSBenchmark": ["train"],
-        "MIRACLRetrieval": ["train"],
-        "MIRACLRetrievalHardNegatives": ["train"],
-        "MIRACLReranking": ["train"],  # https://arxiv.org/pdf/2402.05672, table 2
-    },
+        "AmazonCounterfactualClassification",
+        "AmazonReviewsClassification",
+        "Banking77Classification",
+        "EmotionClassification",
+        "MTOPIntentClassification",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "ImdbClassification",
+        "STS12",
+        "STS22",
+        "STSBenchmark",
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        "MIRACLReranking",  # https://arxiv.org/pdf/2402.05672, table 2
+    }
+    | E5_MISTRAL_TRAINING_DATA,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
@@ -220,7 +219,7 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=True,
     training_datasets=E5_MISTRAL_TRAINING_DATA,
-    # not MTEB: {"BeastyZ/E5-R": ["train"]},
+    # not MTEB: {"BeastyZ/E5-R"},
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
