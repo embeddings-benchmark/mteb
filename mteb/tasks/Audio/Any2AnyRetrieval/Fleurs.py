@@ -138,11 +138,8 @@ class FleursA2TRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         bibtex_citation="""@inproceedings{conneau2023fleurs,
   author = {Conneau, Alexis and Kocmi, Tom and Ruder, Sebastian and Sainz, Oscar and Chaudhary, Vishrav and Guzmán, Francisco and Joulin, Armand and Khandelwal, Kartikay and Kumar, Shubham and Moehs, Florian and Pino, Juan and Poncelas, Alberto and Seedat, Saadia and Stojanovski, Daan and Wang, Jingfei and Wang, Mona and Wenzek, Guillaume and Wrona, Piotr and Zhou, Wei},
-  title = {FLEURS: Language Identification and Multilingual ASR Benchmark for Under-Resourced Languages},
   booktitle = {Proceedings of the 23rd Annual Conference of the International Speech Communication Association (INTERSPEECH 2023)},
   year = {2023},
-  address = {Dublin, Ireland},
-  url = {https://arxiv.org/abs/2205.12446}
 }
 """,
     )
@@ -229,11 +226,8 @@ class FleursT2ARetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         bibtex_citation="""@inproceedings{conneau2023fleurs,
   author = {Conneau, Alexis and Kocmi, Tom and Ruder, Sebastian and Sainz, Oscar and Chaudhary, Vishrav and Guzmán, Francisco and Joulin, Armand and Khandelwal, Kartikay and Kumar, Shubham and Moehs, Florian and Pino, Juan and Poncelas, Alberto and Seedat, Saadia and Stojanovski, Daan and Wang, Jingfei and Wang, Mona and Wenzek, Guillaume and Wrona, Piotr and Zhou, Wei},
-  title = {FLEURS: Language Identification and Multilingual ASR Benchmark for Under-Resourced Languages},
   booktitle = {Proceedings of the 23rd Annual Conference of the International Speech Communication Association (INTERSPEECH 2023)},
   year = {2023},
-  address = {Dublin, Ireland},
-  url = {https://arxiv.org/abs/2205.12446}
 }
 """,
     )
