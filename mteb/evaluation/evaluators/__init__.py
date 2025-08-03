@@ -4,7 +4,7 @@ from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .dense_retrieval_exact_search import DenseRetrievalExactSearch
 from .evaluator import Evaluator
-from .image import (
+from ._image import (
     Any2AnyMultiChoiceEvaluator,
     Any2AnyRetrievalEvaluator,
     ImageTextPairClassificationEvaluator,
