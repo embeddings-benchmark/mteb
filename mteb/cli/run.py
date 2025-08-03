@@ -1,6 +1,4 @@
-# CLI
-
-This described the is the command line interface for `mteb`.
+"""This is the command line interface for `mteb`.
 
 `mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
 
@@ -82,3 +80,85 @@ model-index:
       value: 84.49350649350649
 ---
 ```
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+from pathlib import Path
+
+import torch
+
+import mteb
+
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(__name__)
+
+
+def _save_model_metadata(model: mteb.Encoder, output_folder: Path) -> None:
+    meta = model.mteb_model_meta  # type: ignore
+
+    revision = meta.revision if meta.revision is not None else "no_revision_available"
+
+    save_path = output_folder / meta.model_name_as_path() / revision / "model_meta.json"
+
+    with save_path.open("w") as f:
+        json.dump(meta.to_dict(), f)
+
+
+def run(args: argparse.Namespace) -> None:
+    # set logging based on verbosity level
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+    logger.info("Running with parameters: %s", args)
+
+    if args.device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    else:
+        device = args.device
+
+    model = mteb.get_model(args.model, args.model_revision, device=device)
+
+    if args.benchmarks:
+        tasks = mteb.get_benchmarks(names=args.benchmarks)
+    else:
+        tasks = mteb.get_tasks(
+            categories=args.categories,
+            task_types=args.task_types,
+            languages=args.languages,
+            tasks=args.tasks,
+        )
+
+    eval = mteb.MTEB(tasks=tasks)
+
+    encode_kwargs = {}
+    if args.batch_size is not None:
+        encode_kwargs["batch_size"] = args.batch_size
+
+    save_predictions = (
+        args.save_predictions if hasattr(args, "save_predictions") else False
+    )
+
+    enable_co2_tracker = not args.disable_co2_tracker
+
+    eval.run(
+        model,
+        verbosity=args.verbosity,
+        output_folder=args.output_folder,
+        eval_splits=args.eval_splits,
+        co2_tracker=enable_co2_tracker,
+        overwrite_results=args.overwrite,
+        encode_kwargs=encode_kwargs,
+        save_predictions=save_predictions,
+    )
+
+    _save_model_metadata(model, Path(args.output_folder))
