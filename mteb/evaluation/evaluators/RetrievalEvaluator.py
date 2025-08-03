@@ -7,8 +7,8 @@ from typing import Any
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
 
-from .Evaluator import Evaluator
-from .model_classes import (
+from .evaluator import Evaluator
+from .dense_retrieval_exact_search import (
     DenseRetrievalExactSearch,
     is_cross_encoder_compatible,
 )

@@ -21,7 +21,7 @@ from ...create_dataloaders import (
     create_dataloader_for_retrieval_corpus,
 )
 from ...types import Array, BatchedInput, PromptType
-from .utils import download
+from ._download import download
 
 logger = logging.getLogger(__name__)
 
