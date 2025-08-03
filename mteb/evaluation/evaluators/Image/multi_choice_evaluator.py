@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
-class Any2AnyMultiChoiceSearch:
+class Any2AnyMultiChoiceSearch:  # TODO: Is this actually any2any? -> Seems like it should be ImageMultiChoiceSearch
     def __init__(
         self,
         model: Encoder,

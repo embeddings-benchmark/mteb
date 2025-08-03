@@ -23,7 +23,7 @@ from .evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-class AnySTSEvaluator(Evaluator):
+class AnySTSEvaluator(Evaluator):  # TODO: Should we rename this to just STSEvaluator?
     def __init__(
         self,
         dataset: Dataset,
