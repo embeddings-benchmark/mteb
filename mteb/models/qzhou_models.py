@@ -6,10 +6,18 @@ from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
-def instruction_template(instruction: str) -> str:
-    if not instruction: return ''
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    if not instruction or prompt_type == PromptType.passage:
+        return ""
+    if isinstance(instruction, dict):
+        if prompt_type is None:
+            instruction = list(instruction.values())[0]  # TODO
+        else:
+            instruction = instruction[prompt_type]
+    return f"Instruct: {instruction}\nQuery:"
 
-    return 'Instruct: {}\nQuery: '.format(instruction)
 
 
 def qzhou_instruct_loader(model_name, **kwargs):
