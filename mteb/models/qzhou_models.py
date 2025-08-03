@@ -129,7 +129,7 @@ QZhou_Embedding = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data="https://huggingface.co/cfli/datasets",
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets={
         **bge_m3_training_data_qzhou_use,
         **bge_chinese_training_data_qzhou_use,
