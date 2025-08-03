@@ -13,7 +13,7 @@ def instruction_template(
         return ""
     if isinstance(instruction, dict):
         if prompt_type is None:
-            instruction = list(instruction.values())[0]  # TODO
+            instruction = "Given a web search query, retrieve relevant passages that answer the query"
         else:
             instruction = instruction[prompt_type]
     return f"Instruct: {instruction}\nQuery:"
