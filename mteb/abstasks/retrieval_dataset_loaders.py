@@ -38,7 +38,6 @@ class RetrievalSplitData(TypedDict):
     corpus: CorpusDatasetType
     queries: QueryDatasetType
     relevant_docs: RelevantDocumentsType
-    instructions: InstructionDatasetType | None
     top_ranked: TopRankedDocumentsType | None
 
 
@@ -69,7 +68,6 @@ class RetrievalDatasetLoader:
 
     def load(self) -> RetrievalSplitData:
         top_ranked = None
-        instructions = None
 
         qrels = self._load_qrels()
         corpus = self._load_corpus()
@@ -82,15 +80,14 @@ class RetrievalDatasetLoader:
         if any(c.endswith("top_ranked") for c in self.dataset_configs):
             top_ranked = self._load_top_ranked()
 
-        # TODO combine instructions with queries https://github.com/embeddings-benchmark/mteb/issues/2969
         if any(c.endswith("instruction") for c in self.dataset_configs):
             instructions = self._load_instructions()
+            queries = combine_queries_with_instructions_datasets(queries, instructions)
 
         return RetrievalSplitData(
             corpus=corpus,
             queries=queries,
             relevant_docs=qrels,
-            instructions=instructions,
             top_ranked=top_ranked,
         )
 
@@ -214,3 +211,18 @@ class RetrievalDatasetLoader:
             )
         ).select_columns(["query-id", "instruction"])
         return instructions_ds
+
+
+def combine_queries_with_instructions_datasets(
+    queries_dataset: QueryDatasetType,
+    instruction_dataset: InstructionDatasetType,
+) -> Dataset:
+    instruction_to_query_idx = {
+        row["query-id"]: row["instruction"] for row in instruction_dataset
+    }
+
+    def add_instruction_to_query(row: dict[str, str]) -> dict[str, str]:
+        row["instruction"] = instruction_to_query_idx[row["id"]]
+        return row
+
+    return queries_dataset.map(add_instruction_to_query)
