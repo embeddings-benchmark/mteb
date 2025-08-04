@@ -15,7 +15,6 @@ from mteb.types import (
     PromptType,
     QueryDatasetType,
 )
-from mteb.types import Conversation, ConversationTurn
 from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
 
 logger = logging.getLogger(__name__)
@@ -65,6 +64,22 @@ def create_dataloader_for_retrieval_corpus(
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
+def combine_quries_with_instructions(
+    queries: QueryDatasetType,
+) -> Dataset:
+    def process_queries(row: dict[str, str]) -> dict[str, str]:
+        row["query"] = row["text"]
+
+        if "instruction" in row:
+            row["text"] = row["query"] + " " + row["instruction"]
+        else:
+            row["text"] = row["query"]
+        return row
+
+    queries = queries.map(process_queries, desc="Processing queries for dataloading")
+    return queries
+
+
 def create_dataloader_for_queries(
     queries: QueryDatasetType,
     **dataloader_kwargs,
@@ -78,17 +93,7 @@ def create_dataloader_for_queries(
     Returns:
         A dataloader with the queries.
     """
-
-    def process_queries(row: dict[str, str]) -> dict[str, str]:
-        row["query"] = row["text"]
-
-        if "instruction" in row:
-            row["text"] = row["query"] + " " + row["instruction"]
-        else:
-            row["text"] = row["query"]
-        return row
-
-    queries = queries.map(process_queries, desc="Processing queries for dataloading")
+    queries = combine_quries_with_instructions(queries)
     return torch.utils.data.DataLoader(queries, **dataloader_kwargs)
 
 

@@ -144,7 +144,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 "corpus": corpus[hf_subset][split],
                 "queries": queries[hf_subset][split],
                 "relevant_docs": relevant_docs[hf_subset][split],
-                "instructions": None,
                 "top_ranked": top_ranked[hf_subset][split],
             }
         self.data_loaded = True

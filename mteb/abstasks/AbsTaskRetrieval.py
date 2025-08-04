@@ -23,6 +23,7 @@ from mteb.types.statistics import (
 )
 
 from ..create_dataloaders import (
+    combine_quries_with_instructions,
     convert_conv_history_to_query,
     corpus_to_dict,
 )
@@ -49,7 +50,6 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
         documents_statistics: Statistics for documents
         queries_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
-        instructions_statistics: Statistics for instructions (if available)
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 
@@ -60,9 +60,6 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     queries_statistics: TextStatistics
 
     relevant_docs_statistics: RelevantDocsStatistics
-
-    # these are for datasets with instructions
-    instructions_statistics: TextStatistics | None
 
     # this is for datasets that do reranking
     top_ranked_statistics: TopRankedStatistics | None
@@ -78,22 +75,7 @@ class AbsTaskRetrieval(AbsTask):
         {
             hf_subset: {
                 split: {
-                    'corpus': dict[str, dict[str, str]],  # doc_id -> doc
-                        Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
-                        E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
-                    'queries': dict[str, str | list[str]]],  # query_id -> query
-                        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
-                        E.g. {"test": {"q1": "query"}}
-                        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
-                    'relevant_docs': dict[str, dict[str, int]],  # query_id -> doc_id -> score
-                        Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
-                        E.g.: {"test": {"q1": {"document_one": 1}}}
-                    'instructions': Optional[dict[str, str]],  # query_id -> instruction
-                        Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
-                        E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
-                    'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
-                        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
-                        E.g. {"test": {"query-id1": "instruction text"}}
+                    RetrievalSplitData
                 }
             }
         }
@@ -115,7 +97,6 @@ class AbsTaskRetrieval(AbsTask):
                     corpus=empty_dataset,
                     queries=empty_dataset,
                     relevant_docs={},
-                    instructions=None,
                     top_ranked=None,
                 )
             )
@@ -133,11 +114,16 @@ class AbsTaskRetrieval(AbsTask):
                     corpus=empty_dataset,
                     queries=empty_dataset,
                     relevant_docs={},
-                    instructions=None,
                     top_ranked=None,
                 )
             )
         )
+
+        def add_instruction_to_query(
+            row: dict[str, str], instruction_to_query_idx: dict[str, Any]
+        ) -> dict[str, str]:
+            row["instruction"] = instruction_to_query_idx[row["id"]]
+            return row
 
         if self.metadata.is_multilingual:
             for subset in self.queries:
@@ -162,8 +148,11 @@ class AbsTaskRetrieval(AbsTask):
                     ][split]
                     if hasattr(self, "instructions"):
                         instructions = self.instructions[subset][split]
-                        self.dataset[subset][split]["instructions"] = Dataset.from_list(
-                            [{"id": k, "text": v} for k, v in instructions.items()]
+                        self.dataset[subset][split]["queries"] = self.dataset[subset][
+                            split
+                        ]["queries"].map(
+                            add_instruction_to_query,
+                            fn_kwargs={"instruction_to_query_idx": instructions},
                         )
                     if hasattr(self, "top_ranked"):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
@@ -192,8 +181,11 @@ class AbsTaskRetrieval(AbsTask):
                 ].copy()
                 if hasattr(self, "instructions"):
                     instructions = self.instructions[split]
-                    self.dataset[subset][split]["instructions"] = Dataset.from_list(
-                        [{"id": k, "text": v} for k, v in instructions.items()]
+                    self.dataset[subset][split]["queries"] = self.dataset[subset][
+                        split
+                    ]["queries"].map(
+                        add_instruction_to_query,
+                        fn_kwargs={"instruction_to_query_idx": instructions},
                     )
                 if hasattr(self, "top_ranked"):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
@@ -314,7 +306,6 @@ class AbsTaskRetrieval(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
-            instructions=data_split["instructions"],
             top_ranked=data_split["top_ranked"],
             top_k=self.top_k,
             **kwargs,
@@ -435,12 +426,10 @@ class AbsTaskRetrieval(AbsTask):
             queries = split_data["queries"]
             corpus = split_data["corpus"]
             relevant_docs = split_data["relevant_docs"]
-            instructions = split_data["instructions"]
             top_ranked = split_data["top_ranked"]
         elif compute_overall:
             queries = None
             corpus = None
-            instructions = None
             relevant_docs = {}
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
@@ -457,16 +446,6 @@ class AbsTaskRetrieval(AbsTask):
                 relevant_docs.update(
                     process_relevant_docs(split_data["relevant_docs"], hf_subset, split)
                 )
-                if (
-                    "instructions" in split_data
-                    and split_data["instructions"] is not None
-                ):
-                    if instructions is None:
-                        instructions = split_data["instructions"]
-                    else:
-                        instructions = concatenate_datasets(
-                            [instructions, split_data["instructions"]]
-                        )
 
                 if "top_ranked" in split_data and split_data["top_ranked"] is not None:
                     top_ranked.update(
@@ -484,7 +463,6 @@ class AbsTaskRetrieval(AbsTask):
             queries = split_data["queries"]
             corpus = split_data["corpus"]
             relevant_docs = split_data["relevant_docs"]
-            instructions = split_data["instructions"]
             top_ranked = split_data["top_ranked"]
 
         corpus = corpus.map(corpus_to_dict)["text"]
@@ -493,13 +471,6 @@ class AbsTaskRetrieval(AbsTask):
         num_queries = len(queries_texts)
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
-
-        if instructions is not None and len(instructions) > 0:
-            instruction_statistics = calculate_text_statistics(
-                instructions["instruction"]
-            )
-        else:
-            instruction_statistics = None
 
         if top_ranked is not None and num_queries and len(top_ranked) > 0:
             top_ranked_statistics = calculate_top_ranked_statistics(
@@ -510,21 +481,14 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus_statistics = calculate_text_statistics(corpus)
         if isinstance(queries["text"][0], (dict, list)):
-
-            def process_conversational_query(row: dict[str, Any]) -> dict[str, Any]:
-                parsed_queries, _ = convert_conv_history_to_query([row["text"]])
-                row["text"] = parsed_queries[0]
-                return row
-
-            queries = queries.map(process_conversational_query)
+            queries = queries.map(convert_conv_history_to_query)
+        queries = combine_quries_with_instructions(queries)
         queries_statistics = calculate_text_statistics(queries["text"])
 
         number_of_characters = (
             corpus_statistics["total_text_length"]
             + queries_statistics["total_text_length"]
         )
-        if instruction_statistics is not None:
-            number_of_characters += instruction_statistics["total_text_length"]
 
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
@@ -532,7 +496,6 @@ class AbsTaskRetrieval(AbsTask):
             documents_statistics=corpus_statistics,
             queries_statistics=queries_statistics,
             relevant_docs_statistics=relevant_docs_statistics,
-            instructions_statistics=instruction_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
 
@@ -605,11 +568,6 @@ class AbsTaskRetrieval(AbsTask):
                 repo_name, f"{subset}-qrels" if subset != "default" else "qrels"
             )
 
-            _push_section(
-                self.dataset[subset],
-                "instructions",
-                f"{subset}-instruction" if subset != "default" else "instruction",
-            )
             _push_section(
                 self.dataset[subset],
                 "top_ranked",
