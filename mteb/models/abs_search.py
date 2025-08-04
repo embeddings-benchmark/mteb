@@ -227,7 +227,7 @@ class AbsEncoderSearch(Encoder):
             query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
 
             # Ensure query embedding is on the correct device and has correct shape
-            query_embedding = query_embeddings[query_idx].unsqueeze(0)
+            query_embedding = torch.as_tensor(query_embeddings[query_idx]).unsqueeze(0)
 
             scores = self.similarity(
                 query_embedding,

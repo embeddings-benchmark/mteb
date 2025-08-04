@@ -283,6 +283,11 @@ def create_dataloader(
                 dataset,
                 **dataloader_kwargs,
             )
+        if input_column is not None:
+            return create_dataloader_from_texts(
+                dataset[input_column],
+                **dataloader_kwargs,
+            )
     return DataLoader(
         dataset,
         **dataloader_kwargs,
