@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Protocol, runtime_checkable
+from typing import Any, Protocol, Union, runtime_checkable
 
 from torch.utils.data import DataLoader
 
@@ -210,4 +210,4 @@ class CrossEncoderProtocol(Protocol):
         ...
 
 
-MtebSupportedModelProtocols = Encoder | CrossEncoderProtocol | SearchProtocol
+MtebSupportedModelProtocols = Union[Encoder, CrossEncoderProtocol, SearchProtocol]
