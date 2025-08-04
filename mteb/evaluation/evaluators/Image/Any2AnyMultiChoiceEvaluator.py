@@ -15,7 +15,7 @@ from PIL import Image
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 from mteb.types import PromptType
 
 from .._download import download

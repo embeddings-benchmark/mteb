@@ -9,7 +9,7 @@ from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
 from ..evaluation.evaluators import PairClassificationEvaluator
-from ..models.encoder_interface import Encoder
+from ..models.models_protocols import Encoder
 from ._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,

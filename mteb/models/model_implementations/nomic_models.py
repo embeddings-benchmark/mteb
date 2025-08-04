@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 MODERN_BERT_TRANSFORMERS_MIN_VERSION = "4.48.0"
 
 
-class NomicWrapper(SentenceTransformerWrapper):
+class NomicWrapper(SentenceTransformerEncoderWrapper):
     """following the hf model card documentation."""
 
     def __init__(

@@ -9,7 +9,7 @@ from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
 from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
-from ...models.encoder_interface import Encoder
+from ...models.models_protocols import Encoder
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

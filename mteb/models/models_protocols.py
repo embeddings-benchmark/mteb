@@ -18,7 +18,7 @@ from mteb.types import (
 
 
 @runtime_checkable
-class SearchInterface(Protocol):
+class SearchProtocol(Protocol):
     """Interface for searching models."""
 
     def index(
@@ -195,8 +195,8 @@ class CrossEncoderProtocol(Protocol):
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
         Args:
-            inputs1: First Dataloader of inputs to encode.
-            inputs2: Second Dataloader of inputs to encode.
+            inputs1: First Dataloader of inputs to encode. For reranking will be queries.
+            inputs2: Second Dataloader of inputs to encode. For reranking will be documents.
             task_metadata: Metadata of the current task.
             hf_split: Split of current task, allows to know some additional information about current split.
                 E.g. Current language
@@ -208,3 +208,6 @@ class CrossEncoderProtocol(Protocol):
             The predicted relevance scores for each inputs pair.
         """
         ...
+
+
+MtebSupportedModelProtocols = Encoder | CrossEncoderProtocol | SearchProtocol

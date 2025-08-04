@@ -9,7 +9,7 @@ from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 from mteb.types import (
     HFSubset,
     RelevantDocumentsType,
@@ -105,6 +105,8 @@ class AbsTaskRetrieval(AbsTask):
     top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
     cross_encoder_top_k: int = 100
+    support_cross_encoder: bool = True
+    support_search: bool = True
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -8,7 +8,6 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata, TaskType
-from mteb.models.abs_search import AbsEncoderSearch
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.similarity_functions import (
     cos_sim,
@@ -165,7 +164,7 @@ class ModelMixin:
         return instruction
 
 
-class AbsEncoder(ABC, ModelMixin, AbsEncoderSearch):
+class AbsEncoder(ABC, ModelMixin):
     """Base class to indicate that this is a wrapper for a model.
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
