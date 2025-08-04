@@ -215,11 +215,14 @@ class RetrievalDatasetLoader:
 
 def combine_queries_with_instructions_datasets(
     queries_dataset: QueryDatasetType,
-    instruction_dataset: InstructionDatasetType,
+    instruction_dataset: InstructionDatasetType | dict[str, str],
 ) -> Dataset:
-    instruction_to_query_idx = {
-        row["query-id"]: row["instruction"] for row in instruction_dataset
-    }
+    if isinstance(instruction_dataset, Dataset):
+        instruction_to_query_idx = {
+            row["query-id"]: row["instruction"] for row in instruction_dataset
+        }
+    else:
+        instruction_to_query_idx = instruction_dataset
 
     def add_instruction_to_query(row: dict[str, str]) -> dict[str, str]:
         row["instruction"] = instruction_to_query_idx[row["id"]]
