@@ -103,19 +103,19 @@ class AbsEncoder(ABC):
             return
         task_types = get_args(TaskType)
         prompt_types = [e.value for e in PromptType]
-        for task_name in self.model_prompts:
-            if "-" in task_name and task_name.endswith(
+        for full_task_name in self.model_prompts:
+            if "-" in full_task_name and full_task_name.endswith(
                 (f"-{PromptType.query.value}", f"-{PromptType.passage.value}")
             ):
-                task_name, prompt_type = task_name.rsplit("-", 1)
+                task_name, prompt_type = full_task_name.rsplit("-", 1)
                 if prompt_type not in prompt_types:
                     msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
                     logger.warning(msg)
                     raise KeyError(msg)
-            if task_name not in task_types and task_name not in prompt_types:
-                task = mteb.get_task(task_name=task_name)
+            if full_task_name not in task_types and full_task_name not in prompt_types:
+                task = mteb.get_task(task_name=full_task_name)
                 if not task:
-                    msg = f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
+                    msg = f"Task name {full_task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
                     logger.warning(msg)
                     raise KeyError(msg)
 
