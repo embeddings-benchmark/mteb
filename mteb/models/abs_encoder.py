@@ -23,8 +23,6 @@ from mteb.types import (
     PromptType,
 )
 
-from .models_protocols import Encoder
-
 logger = logging.getLogger(__name__)
 
 
@@ -33,7 +31,7 @@ class AbsEncoder(ABC):
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
 
-    model: Encoder
+    model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType], str] | None = None

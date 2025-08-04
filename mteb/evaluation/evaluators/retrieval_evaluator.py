@@ -55,7 +55,7 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> RetrievalOutputType:
-        if isinstance(model, Encoder):
+        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
             search_model = SearchEncoderWrapper(model)
         elif isinstance(model, CrossEncoderProtocol):
             search_model = SearchCrossEncoderWrapper(model)
