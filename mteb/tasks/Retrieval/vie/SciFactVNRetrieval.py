@@ -26,7 +26,7 @@ class SciFactVN(AbsTaskRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Academic", "Medical", "Written"],
         task_subtypes=[],
         bibtex_citation=r"""

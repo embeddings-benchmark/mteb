@@ -28,7 +28,7 @@ class FEVERVN(AbsTaskRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Claim verification"],
         bibtex_citation=r"""

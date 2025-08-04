@@ -26,7 +26,7 @@ class NFCorpusVN(AbsTaskRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Medical", "Academic", "Written"],
         task_subtypes=["Article retrieval"],
         bibtex_citation=r"""

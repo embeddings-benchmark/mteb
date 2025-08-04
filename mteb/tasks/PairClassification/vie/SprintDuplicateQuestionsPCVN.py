@@ -26,7 +26,7 @@ class SprintDuplicateQuestionsPCVN(AbsTaskPairClassification):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Programming", "Written"],
         task_subtypes=["Duplicate Detection"],
         bibtex_citation=r"""

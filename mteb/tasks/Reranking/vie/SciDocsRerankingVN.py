@@ -26,7 +26,7 @@ class SciDocsRerankingVN(AbsTaskReranking):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],
         bibtex_citation=r"""

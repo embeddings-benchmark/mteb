@@ -26,7 +26,7 @@ class TwentyNewsgroupsClusteringVN(AbsTaskClustering):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["News", "Written"],
         task_subtypes=["Thematic clustering"],
         bibtex_citation=r"""

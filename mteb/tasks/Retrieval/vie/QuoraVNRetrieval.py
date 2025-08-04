@@ -27,7 +27,7 @@ class QuoraVN(AbsTaskRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Written", "Web", "Blog"],
         task_subtypes=["Question answering"],
         bibtex_citation=r"""

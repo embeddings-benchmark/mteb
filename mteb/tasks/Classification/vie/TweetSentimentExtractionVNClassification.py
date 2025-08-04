@@ -26,7 +26,7 @@ class TweetSentimentExtractionVNClassification(AbsTaskClassification):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         bibtex_citation=r"""

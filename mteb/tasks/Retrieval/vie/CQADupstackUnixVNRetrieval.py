@@ -26,7 +26,7 @@ class CQADupstackUnixVN(AbsTaskRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated",
+        sample_creation="machine-translated and LM verified",
         domains=["Written", "Web", "Programming"],
         task_subtypes=["Question answering", "Duplicate Detection"],
         bibtex_citation=r"""
