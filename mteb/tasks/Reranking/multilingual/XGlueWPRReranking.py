@@ -142,3 +142,4 @@ class XGlueWPRReranking(AbsTaskReranking):
                 ds[eval_split] = datasets.Dataset.from_pandas(grouped_df)
 
             self.dataset[lang] = datasets.DatasetDict(ds)
+        self.transform_old_dataset_format(self.dataset)
