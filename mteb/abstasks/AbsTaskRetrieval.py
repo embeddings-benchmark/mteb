@@ -163,7 +163,10 @@ class AbsTaskRetrieval(AbsTask):
                     if hasattr(self, "instructions"):
                         instructions = self.instructions[subset][split]
                         self.dataset[subset][split]["instructions"] = Dataset.from_list(
-                            [{"id": k, "text": v} for k, v in instructions.items()]
+                            [
+                                {"query-id": k, "instruction": v}
+                                for k, v in instructions.items()
+                            ]
                         )
                     if hasattr(self, "top_ranked"):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
@@ -193,7 +196,10 @@ class AbsTaskRetrieval(AbsTask):
                 if hasattr(self, "instructions"):
                     instructions = self.instructions[split]
                     self.dataset[subset][split]["instructions"] = Dataset.from_list(
-                        [{"id": k, "text": v} for k, v in instructions.items()]
+                        [
+                            {"query-id": k, "instruction": v}
+                            for k, v in instructions.items()
+                        ]
                     )
                 if hasattr(self, "top_ranked"):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
