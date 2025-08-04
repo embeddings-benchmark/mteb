@@ -7,13 +7,13 @@ import traceback
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 import datasets
 import orjson
 import pandas as pd
 import typer
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, DatasetDict
 from huggingface_hub import HfApi
 from tqdm import tqdm
 
@@ -777,7 +777,7 @@ def update_v2_metadata_dataset(
     lines, ds_deleted = _update_dataset_dict(lines, call_node, new_path, new_revision)
     lines = _update_eval_splits(lines, call_node, module)
 
-    all_deleted_indices = sorted(list(set(desc_deleted + ds_deleted)), reverse=True)
+    all_deleted_indices = sorted(set(desc_deleted + ds_deleted), reverse=True)
     for i in all_deleted_indices:
         del lines[i]
 
@@ -984,7 +984,7 @@ def create_and_prepare(
         "scripts/data/cleaning_reports", exists=True, dir_okay=True
     ),
     username: str = "mteb",
-    start_lang: Optional[str] = None,
+    start_lang: str | None = None,
     verbose: bool = typer.Option(False, "--verbose"),
 ) -> None:
     changed_tasks: list[tuple[str, int]] = []
@@ -1020,7 +1020,7 @@ def create_and_prepare(
             report_folder, folder.name, all_original_records, all_filter_records
         )
 
-        unique_changed = sorted(list(set(changed_tasks)))
+        unique_changed = sorted(set(changed_tasks))
         tasks_str = " ".join(
             f"{task_name} {task_name}.v{version}"
             for task_name, version in unique_changed
@@ -1038,7 +1038,7 @@ def compare_results(
     results_dir: Path = typer.Option(
         "/home/admin/vatolin/experiments/mteb/results", exists=True, dir_okay=True
     ),
-    tasks_file: Optional[Path] = typer.Option(
+    tasks_file: Path | None = typer.Option(
         None,
         "--tasks-file",
         "-f",
