@@ -31,50 +31,30 @@ def create_dataloader_from_texts(
 
 
 def corpus_to_dict(
-    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
-) -> CorpusInput:
-    if isinstance(corpus, dict):
-        sentences = [
-            (corpus["title"][i] + " " + corpus["text"][i]).strip()
-            if "title" in corpus
-            else corpus["text"][i].strip()
-            for i in range(len(corpus["text"]))
-        ]
-        titles = corpus["title"]
-        bodies = corpus["text"]
-    elif isinstance(corpus, list) and isinstance(corpus[0], dict):
-        sentences = [
-            (doc["title"] + " " + doc["text"]).strip()
-            if "title" in doc
-            else doc["text"].strip()
-            for doc in corpus
-        ]
-        titles = [doc.get("title", "") for doc in corpus]
-        bodies = [doc.get("text", "") for doc in corpus]
-    else:
-        sentences = corpus
-        titles = [""] * len(corpus)
-        bodies = [""] * len(corpus)
+    row: dict[str, str],
+) -> dict[str, str]:
     return {
-        "text": sentences,
-        "title": titles,
-        "body": bodies,
+        "text": (row["title"] + " " + row["text"]).strip()
+        if "title" in row
+        else row["text"].strip(),
+        "title": row.get("title", None),
+        "body": row.get("text", None),
     }
 
 
 def create_dataloader_for_retrieval_corpus(
-    inputs: list[dict[str, str]] | dict[str, list[str]] | list[str], **dataloader_kwargs
+    dataset: Dataset, **dataloader_kwargs
 ) -> DataLoader[CorpusInput]:
     """Create a dataloader from a corpus.
 
     Args:
-        inputs: Corpus
+        dataset: Corpus
         dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
         A dataloader with the corpus.
     """
-    dataset = Dataset.from_dict(corpus_to_dict(inputs))
+    dataset = dataset.map(corpus_to_dict)
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 

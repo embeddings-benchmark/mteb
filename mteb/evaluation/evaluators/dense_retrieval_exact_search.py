@@ -10,17 +10,26 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
+from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.encoder_interface import Encoder
+from mteb.types import (
+    Array,
+    BatchedInput,
+    CorpusDatasetType,
+    InstructionDatasetType,
+    PromptType,
+    QueryDatasetType,
+    TopRankedDocumentsType,
+)
 
 from ...create_dataloaders import (
     create_dataloader_for_queries,
     create_dataloader_for_queries_conversation,
     create_dataloader_for_retrieval_corpus,
 )
-from ...types import Array, BatchedInput, PromptType
 from ._download import download
 
 logger = logging.getLogger(__name__)
@@ -70,16 +79,16 @@ class DenseRetrievalExactSearch:
 
     def search(
         self,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, str | list[str] | list[dict[str, str]]],
+        corpus: CorpusDatasetType,
+        queries: QueryDatasetType,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
         return_sorted: bool = False,
-        top_ranked: dict[str, list[str]] | None = None,
+        instructions: InstructionDatasetType | None = None,
+        top_ranked: TopRankedDocumentsType | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         """Perform semantic search (retrieval or reranking).
@@ -98,16 +107,26 @@ class DenseRetrievalExactSearch:
             **kwargs: Additional keyword arguments passed to the underlying model
         """
         logger.info("Encoding Queries.")
-        query_ids = list(queries.keys())
+        query_ids = queries["id"]
+        query_list = queries["text"]
+        query_idx_to_row = dict(zip(query_ids, range(len(query_ids))))
         self.results = {qid: {} for qid in query_ids}
-        query_ids, query_list = zip(*queries.items())
 
         # Prepare query-instruction pairs if instructions are provided
         if instructions:
-            query_instruction_pairs = [
-                (query_list[q_idx], instructions[qid])
-                for q_idx, qid in enumerate(query_ids)
-            ]
+            query_instruction_pairs = []
+            for qid, instruction in zip(
+                instructions["query-id"], instructions["instruction"]
+            ):
+                if qid not in self.results:
+                    raise ValueError(
+                        f"Instruction for query ID {qid} not found in queries. "
+                        "Ensure that the instruction dataset matches the query IDs."
+                    )
+                query_instruction_pairs.append(
+                    (query_list[query_idx_to_row[qid]], instruction)
+                )
+
         else:
             query_instruction_pairs = [(query, None) for query in query_list]
 
@@ -221,8 +240,8 @@ class DenseRetrievalExactSearch:
         self,
         query_ids: list[str],
         query_embeddings: np.ndarray,
-        corpus: dict[str, dict[str, str]],
-        top_ranked: dict[str, list[str]],
+        corpus: CorpusDatasetType,
+        top_ranked: TopRankedDocumentsType,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -239,24 +258,10 @@ class DenseRetrievalExactSearch:
         query_embeddings = torch.as_tensor(query_embeddings).to(device)
 
         result_heaps = {qid: [] for qid in query_ids}
+        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(corpus)}
 
-        # Get unique document IDs across all queries
-        unique_doc_ids = list(
-            {
-                doc_id
-                for qid in query_ids
-                if qid in top_ranked
-                for doc_id in top_ranked[qid]
-            }
-        )
-
-        # Create mapping from unique doc IDs to their index in the embedding matrix
-        doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(unique_doc_ids)}
-
-        # Encode unique documents only once
-        unique_docs = [corpus[doc_id] for doc_id in unique_doc_ids]
         all_doc_embeddings = self.model.encode(
-            create_dataloader_for_retrieval_corpus(unique_docs),
+            create_dataloader_for_retrieval_corpus(corpus),
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -329,7 +334,7 @@ class DenseRetrievalExactSearch:
         self,
         query_ids: list[str],
         query_embeddings: np.ndarray,
-        corpus: dict[str, dict[str, str]],
+        corpus: CorpusDatasetType,
         top_k: int,
         task_metadata: TaskMetadata,
         hf_split: str,
@@ -341,10 +346,6 @@ class DenseRetrievalExactSearch:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Using device: {device}")
 
-        logger.info("Sorting Corpus by document length (Longest first)...")
-        corpus_ids = sorted(corpus, reverse=True)
-        corpus = [corpus[cid] for cid in corpus_ids]
-
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         itr = range(0, len(corpus), self.corpus_chunk_size)
 
@@ -355,8 +356,8 @@ class DenseRetrievalExactSearch:
             # Encode chunk of corpus
             sub_corpus_embeddings = self.model.encode(
                 create_dataloader_for_retrieval_corpus(
-                    corpus[corpus_start_idx:corpus_end_idx]
-                ),  # type: ignore
+                    corpus.select(range(corpus_start_idx, corpus_end_idx))
+                ),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
@@ -391,7 +392,7 @@ class DenseRetrievalExactSearch:
                     cos_scores_top_k_idx[query_itr].cpu().tolist(),
                     cos_scores_top_k_values[query_itr].cpu().tolist(),
                 ):
-                    corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
+                    corpus_id = corpus[corpus_start_idx + sub_corpus_id]["id"]
                     if len(result_heaps[query_id]) < top_k:
                         # push item on the heap
                         heapq.heappush(result_heaps[query_id], (score, corpus_id))
@@ -434,13 +435,13 @@ class DenseRetrievalExactSearch:
 
     def search_cross_encoder(
         self,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, str | list[str]],
+        corpus: CorpusDatasetType,
+        queries: QueryDatasetType,
         top_k: int,
         hf_split: str,
         hf_subset: str,
         task_metadata: TaskMetadata,
-        instructions: dict[str, str] | None = None,
+        instructions: InstructionDatasetType | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
@@ -448,13 +449,15 @@ class DenseRetrievalExactSearch:
         Note: you must provide the path to the results to rerank to the __init__ function as `previous_results` or else rerank all documents in the corpus
         """
         pairs = []  # create the pairs for reranking
-        for qid in tqdm.tqdm(queries.keys()):
+        doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(corpus["id"])}
+        for row in tqdm.tqdm(queries):
+            qid = row["id"]
             if self.previous_results is None:
                 # try to use all of them
                 logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
-                q_results = dict.fromkeys(corpus.keys(), 0.0)
+                q_results = dict.fromkeys(corpus["id"], 0.0)
             else:
                 q_results = self.previous_results[qid]
             # take the top-k only
@@ -462,18 +465,26 @@ class DenseRetrievalExactSearch:
                 sorted(q_results.items(), key=lambda item: item[1], reverse=True)
             )
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
-            query = queries[qid]
+            query = row["text"]
             query = (
                 self.convert_conv_history_to_query(self.model, [query])[0]
                 if isinstance(query, list)
                 else query
             )
+            if instructions:
+                instruction_qid_to_idx = {
+                    row["query-id"]: instruction_idx
+                    for instruction_idx, row in instructions
+                }
+
             for doc_id in top_n:
                 pairs.append(
                     (
                         query,
-                        corpus[doc_id],
-                        instructions[qid] if instructions is not None else None,
+                        corpus[doc_id_to_idx[doc_id]],
+                        instructions[instruction_qid_to_idx[qid]]
+                        if instructions is not None
+                        else None,
                         qid,
                         doc_id,
                     )
@@ -481,7 +492,7 @@ class DenseRetrievalExactSearch:
 
         logger.info(f"Reranking the top {top_k} in batches... This might take a while!")
 
-        results = {qid: {} for qid in queries.keys()}
+        results = {qid: {} for qid in queries["id"]}
         for batch_num, corpus_start_idx in enumerate(
             tqdm.tqdm(
                 range(0, len(pairs), self.batch_size),
@@ -509,7 +520,7 @@ class DenseRetrievalExactSearch:
             )
 
             corpus_dataset = create_dataloader_for_retrieval_corpus(
-                corpus_in_pair,
+                Dataset.from_list(corpus_in_pair),
             )
 
             if not (
