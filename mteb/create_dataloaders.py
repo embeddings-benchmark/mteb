@@ -15,7 +15,6 @@ from mteb.types import (
     PromptType,
     QueryDatasetType,
 )
-from mteb.types import Conversation, ConversationTurn
 from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInput
 
 logger = logging.getLogger(__name__)
@@ -280,6 +279,11 @@ def create_dataloader(
         if prompt_type is PromptType.query:
             return create_text_queries_dataloader(
                 dataset,
+                **dataloader_kwargs,
+            )
+        if input_column is not None:
+            return create_dataloader_from_texts(
+                dataset[input_column],
                 **dataloader_kwargs,
             )
     return DataLoader(

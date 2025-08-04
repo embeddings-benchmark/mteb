@@ -38,12 +38,12 @@ class AnySTSEvaluator(Evaluator):
         self.first_column = create_dataloader(
             dataset,
             task_metadata,
-            sentences_column_names[0],
+            input_column=sentences_column_names[0],
         )
         self.second_column = create_dataloader(
             dataset,
             task_metadata,
-            sentences_column_names[1],
+            input_column=sentences_column_names[1],
         )
         self.gold_scores = gold_scores
         self.task_metadata = task_metadata
