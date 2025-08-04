@@ -295,3 +295,9 @@ def build_cli() -> argparse.ArgumentParser:
     _add_create_meta_parser(subparsers)
 
     return parser
+
+def main() -> None:
+    """Main entry point for the MTEB CLI."""
+    parser = build_cli()
+    args = parser.parse_args()
+    args.func(args)
