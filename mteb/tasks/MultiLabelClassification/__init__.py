@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ita import *
 from .kor import *
 from .mlt import *
 from .multilingual import *

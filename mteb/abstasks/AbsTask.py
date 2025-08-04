@@ -16,7 +16,7 @@ import transformers
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks.stratification import _iterative_train_test_split
+from mteb.abstasks._stratification import _iterative_train_test_split
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.encoder_interface import Encoder

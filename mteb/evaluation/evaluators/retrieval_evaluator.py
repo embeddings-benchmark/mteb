@@ -14,11 +14,11 @@ from mteb.types import (
     TopRankedDocumentsType,
 )
 
-from .Evaluator import Evaluator
-from .model_classes import (
+from .dense_retrieval_exact_search import (
     DenseRetrievalExactSearch,
     is_cross_encoder_compatible,
 )
+from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
 )

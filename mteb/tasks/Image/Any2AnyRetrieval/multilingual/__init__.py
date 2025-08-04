@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from .MIRACLVisionRetrieval import MIRACLVisionRetrieval
+from .VdrMultilingualRetrieval import VDRMultilingualRetrieval
 from .Vidore2BenchRetrieval import (
     Vidore2BioMedicalLecturesRetrieval,
     Vidore2EconomicsReportsRetrieval,
@@ -18,4 +20,6 @@ __all__ = [
     "WITT2IRetrieval",
     "XFlickr30kCoT2IRetrieval",
     "XM3600T2IRetrieval",
+    "VDRMultilingualRetrieval",
+    "MIRACLVisionRetrieval",
 ]

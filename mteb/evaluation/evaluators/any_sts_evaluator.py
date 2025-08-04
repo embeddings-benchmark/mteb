@@ -18,7 +18,7 @@ from ...create_dataloaders import (
     create_dataloader,
 )
 from ...similarity_functions import compute_pairwise_similarity
-from .Evaluator import Evaluator
+from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
