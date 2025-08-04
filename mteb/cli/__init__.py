@@ -5,8 +5,8 @@ from .main import (
     available_tasks,
     build_cli,
     create_meta,
+    main,
     run,
-    main
 )
 
 __all__ = [
@@ -16,4 +16,5 @@ __all__ = [
     "available_benchmarks",
     "available_tasks",
     "main",
+    "build_cli",
 ]

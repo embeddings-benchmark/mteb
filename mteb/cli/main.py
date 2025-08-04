@@ -296,6 +296,7 @@ def build_cli() -> argparse.ArgumentParser:
 
     return parser
 
+
 def main() -> None:
     """Main entry point for the MTEB CLI."""
     parser = build_cli()
