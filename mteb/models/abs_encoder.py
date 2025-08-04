@@ -23,10 +23,17 @@ from mteb.types import (
     PromptType,
 )
 
+from .models_protocols import Encoder
+
 logger = logging.getLogger(__name__)
 
 
-class ModelMixin:
+class AbsEncoder(ABC):
+    """Base class to indicate that this is a wrapper for a model.
+    Also contains some utility functions for wrappers for working with prompts and instructions.
+    """
+
+    model: Encoder
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType], str] | None = None
@@ -162,14 +169,6 @@ class ModelMixin:
         if self.instruction_template and len(instruction) > 0:
             return self.format_instruction(instruction)
         return instruction
-
-
-class AbsEncoder(ABC, ModelMixin):
-    """Base class to indicate that this is a wrapper for a model.
-    Also contains some utility functions for wrappers for working with prompts and instructions.
-    """
-
-    model: Any
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         if self.mteb_model_meta is None or (
