@@ -15,7 +15,7 @@ from mteb.types import (
     TopRankedDocumentsType,
 )
 
-from .Evaluator import Evaluator
+from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
 )

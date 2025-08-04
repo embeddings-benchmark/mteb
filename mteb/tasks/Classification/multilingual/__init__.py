@@ -24,6 +24,7 @@ from .NusaParagraphEmotionClassification import NusaParagraphEmotionClassificati
 from .NusaParagraphTopicClassification import NusaParagraphTopicClassification
 from .NusaXSenti import NusaXSentiClassification
 from .ScalaClassification import ScalaClassification
+from .ScandiSentClassification import ScandiSentClassification
 from .SIB200Classification import SIB200Classification
 from .SouthAfricanLangClassification import SouthAfricanLangClassification
 from .SwissJudgementClassification import SwissJudgementClassification
@@ -58,6 +59,7 @@ __all__ = [
     "ScalaClassification",
     "SouthAfricanLangClassification",
     "SwissJudgementClassification",
+    "ScandiSentClassification",
     "TurkicClassification",
     "TweetSentimentClassification",
 ]

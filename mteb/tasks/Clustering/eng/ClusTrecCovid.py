@@ -3,11 +3,10 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
 )
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ClusTrecCovid(AbsTaskClusteringFast, MultilingualTask):
+class ClusTrecCovid(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="ClusTREC-Covid",
         description="A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-19 related topics.",
@@ -17,7 +16,7 @@ class ClusTrecCovid(AbsTaskClusteringFast, MultilingualTask):
             "revision": "7f3489153b8dad7336a54f63202deb1414c33309",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={"title and abstract": ["eng-Latn"], "title": ["eng-Latn"]},
