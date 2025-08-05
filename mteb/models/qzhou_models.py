@@ -21,23 +21,12 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery:"
 
 
-
-def qzhou_instruct_loader(model_name, **kwargs):
-    model = InstructSentenceTransformerWrapper(
-        model_name,
-        revision=kwargs.pop("revision", None),
-        instruction_template=kwargs.pop("instruction_template", None),
-        apply_instruction_to_passages=False,
-        **kwargs,
-    )
-    return model
-
 QZhou_Embedding = ModelMeta(
-    loader = partial(
-        qzhou_instruct_loader,
+    loader = InstructSentenceTransformerWrapper(
         model_name="Kingsoft-LLM/QZhou-Embedding",
         revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
-        instruction_template=instruction_template
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
     ),
     name="Kingsoft-LLM/QZhou-Embedding",
     languages=["eng-Latn", "zho-Hans"], 
