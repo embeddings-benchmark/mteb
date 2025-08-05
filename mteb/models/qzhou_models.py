@@ -25,20 +25,19 @@ def instruction_template(
 def qzhou_instruct_loader(model_name, **kwargs):
     model = InstructSentenceTransformerWrapper(
         model_name,
-        revision=kwargs.pop("model_revision", None),
+        revision=kwargs.pop("revision", None),
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
         **kwargs,
     )
-    encoder = model.model._first_module()
-    encoder.tokenizer.padding_side = "left"
     return model
 
 QZhou_Embedding = ModelMeta(
     loader = partial(
         qzhou_instruct_loader,
         model_name="Kingsoft-LLM/QZhou-Embedding",
-        model_revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
+        revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
+        instruction_template=instruction_template
     ),
     name="Kingsoft-LLM/QZhou-Embedding",
     languages=["eng-Latn", "zho-Hans"], 
@@ -60,6 +59,7 @@ QZhou_Embedding = ModelMeta(
         **bge_m3_training_data,
         **bge_chinese_training_data,
         **bge_full_data,
+        **E5_MISTRAL_TRAINING_DATA,
         "Shitao/MLDR": ["train"],
         "FreedomIntelligence/Huatuo26M-Lite": ["train"],
         "infgrad/retrieval_data_llm": ["train"],
