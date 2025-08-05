@@ -6,6 +6,7 @@ from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.bge_models import bge_m3_training_data, bge_full_data, bge_chinese_training_data
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -33,81 +34,6 @@ def qzhou_instruct_loader(model_name, **kwargs):
     encoder.tokenizer.padding_side = "left"
     return model
 
-bge_m3_training_data_qzhou_use = {
-    # source: https://arxiv.org/abs/2402.03216
-    "MIRACLRetrieval": ["train"],
-    "CMedQAv1-reranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "T2Reranking": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NQ": ["train"],
-    "HotpotQA": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "MMarcoReranking": ["train"]
-}
-
-bge_chinese_training_data_qzhou_use = {
-    # source: https://arxiv.org/pdf/2309.07597
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "MMarcoReranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "Cmnli": ["train"],
-    "Ocnli": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NQ": ["test"],
-    "NQHardNegatives": ["test"],
-    "HotpotQA": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "QuoraRetrieval": ["train"],
-    "QuoraRetrievalHardNegatives": ["train"],
-}
-
-
-bge_full_data_qzhou_use = {
-    # source: https://arxiv.org/pdf/2409.15700
-    "HotpotQA": ["train"],
-    "FEVER": ["train"],
-    "MSMARCO": ["train"],
-    "NQ": ["train"],
-    "ArguAna": ["train"],
-    "FiQA2018": ["train"],
-    "SciDocsReranking": ["train"],
-    "StackOverflowDupQuestions": ["train"],
-    "AmazonReviewsClassification": ["train"],
-    "AmazonCounterfactualClassification": ["train"],
-    "Banking77Classification": ["train"],
-    "EmotionClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "ImdbClassification": ["train"],
-    "ToxicConversationsClassification": ["train"],
-    "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringP2P": ["train"],
-    "BiorxivClusteringS2S": ["train"],
-    "BiorxivClusteringP2P": ["train"],
-    "MedrxivClusteringS2S": ["train"],
-    "MedrxivClusteringP2P": ["train"],
-    "BiorxivClusteringS2S.v2": ["train"],
-    "BiorxivClusteringP2P.v2": ["train"],
-    "MedrxivClusteringS2S.v2": ["train"],
-    "MedrxivClusteringP2P.v2": ["train"],
-    "RedditClusteringP2P": ["train"],
-    "RedditClustering": ["train"],
-    "RedditClustering.v2": ["train"],
-    "TwentyNewsgroupsClustering": ["train"],
-    "TwentyNewsgroupsClustering.v2": ["train"],
-    "STS22": ["train"],
-    "STS22.v2": ["train"],
-    "STSBenchmark": ["train"],
-}
-
-
 QZhou_Embedding = ModelMeta(
     loader = partial(
         qzhou_instruct_loader,
@@ -131,9 +57,9 @@ QZhou_Embedding = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets={
-        **bge_m3_training_data_qzhou_use,
-        **bge_chinese_training_data_qzhou_use,
-        **bge_full_data_qzhou_use,
+        **bge_m3_training_data,
+        **bge_chinese_training_data,
+        **bge_full_data,
         "Shitao/MLDR": ["train"],
         "FreedomIntelligence/Huatuo26M-Lite": ["train"],
         "infgrad/retrieval_data_llm": ["train"],
