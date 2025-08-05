@@ -29,3 +29,4 @@ from .por.Assin2RTE import *
 from .por.SickBrPC import *
 from .rus.TERRa import *
 from .zho.CMTEBPairClassification import *
+from .fra.gqnli import *
