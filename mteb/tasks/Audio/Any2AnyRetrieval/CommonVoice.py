@@ -10,7 +10,6 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
 _EVAL_LANGS = {
     "abk": ["abk-Latn"],  # Abkhaz
     "afr": ["afr-Latn"],  # Afrikaans
