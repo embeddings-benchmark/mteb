@@ -26,7 +26,7 @@ def qzhou_instruct_loader(model_name, **kwargs):
     model = InstructSentenceTransformerWrapper(
         model_name,
         revision=kwargs.pop("revision", None),
-        instruction_template=instruction_template,
+        instruction_template=kwargs.pop("instruction_template", None),
         apply_instruction_to_passages=False,
         **kwargs,
     )
