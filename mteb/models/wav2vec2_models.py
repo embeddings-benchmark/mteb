@@ -159,13 +159,17 @@ class Wav2Vec2AudioWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size)):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 inputs = self.feature_extractor(
@@ -173,6 +177,8 @@ class Wav2Vec2AudioWrapper(Wrapper):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
+                    truncation=True,
+                    max_length=30 * self.sampling_rate,  # 30 seconds max
                     return_attention_mask=True,
                 ).to(self.device)
 

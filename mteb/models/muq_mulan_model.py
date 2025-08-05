@@ -90,7 +90,14 @@ class MuQMuLanWrapper:
         """Convert audio data to torch tensor."""
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze().float()  # Ensure float32
+        audio = audio.squeeze().float()  # Ensure float32
+
+        # Apply audio truncation (30 seconds max)
+        max_length = 30 * self.target_sampling_rate  # 30 seconds
+        if audio.shape[-1] > max_length:
+            audio = audio[..., :max_length]
+
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         """Load audio file and resample to target sampling rate."""
@@ -109,6 +116,7 @@ class MuQMuLanWrapper:
         self,
         audio: AudioBatch,
         *,
+        show_progress_bar: bool = True,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
@@ -116,10 +124,13 @@ class MuQMuLanWrapper:
     ) -> np.ndarray:
         """Get audio embeddings using MuQ-MuLan."""
         all_features = []
+
         processed_audio = self._process_audio(audio)
 
         for i in tqdm(
-            range(0, len(processed_audio), batch_size), desc="Processing audio batches"
+            range(0, len(processed_audio), batch_size),
+            desc="Processing audio batches",
+            disable=not show_progress_bar,
         ):
             batch = processed_audio[i : i + batch_size]
             batch_features = self._process_audio_batch(batch)
