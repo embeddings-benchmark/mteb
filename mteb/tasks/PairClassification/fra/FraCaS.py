@@ -66,7 +66,6 @@ class FracasTask(AbsTaskPairClassification):
             for split in self.metadata.eval_splits:  # ['train']
                 ds = self.dataset[split]
                 # Affiche les labels pour debugging
-                print("FRACAS labels disponibles :", sorted(set(ds["label"])))
                 # Filtrer hors 'undef'
                 ds = ds.filter(lambda x: x["label"] != "undef")
                 # Remapper '1'→1 (positif), '0' et '2'→0 (négatif)
