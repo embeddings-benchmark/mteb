@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -109,17 +108,13 @@ class WavlmWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(
-                range(0, len(processed_audio), batch_size),
-                disable=not show_progress_bar,
-            ):
+            for i in range(0, len(processed_audio), batch_size):
                 batch = processed_audio[i : i + batch_size]
 
                 batch_tensor = self._pad_audio_batch(batch)
