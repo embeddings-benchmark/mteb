@@ -17,7 +17,7 @@ class FracasTask(AbsTaskPairClassification):
         eval_splits=["train"],
         eval_langs=["fra-Latn"],
         main_score="max_accuracy",
-        date=("2025-08-05", "2025-08-05"),
+        date = ("2020-01-01", "2020-12-31"),
         domains=["Academic"],
         task_subtypes=["Textual Entailment"],
         license="cc-by-4.0",
