@@ -226,3 +226,25 @@ cohere_eng_3 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
 )
+
+cohere_embed_v4_multimodal = ModelMeta(
+    loader=partial(cohere_v_loader, model_name="embed-v4.0"),
+    name="Cohere/embed-v4.0-multimodal",
+    languages=[],  # Unknown, but supports 100+ languages
+    revision="1",
+    release_date="2024-12-01",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=128000,
+    embed_dim=1536,
+    license=None,
+    similarity_fn_name="cosine",
+    framework=[],
+    modalities=["image", "text"],
+    open_weights=False,
+    public_training_code=None,
+    public_training_data=None,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    use_instructions=False,
+    training_datasets=None,
+)

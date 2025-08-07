@@ -313,3 +313,28 @@ cohere_eng_light_3 = ModelMeta(
     public_training_data=None,  # assumed
     training_datasets=None,
 )
+
+cohere_embed_v4 = ModelMeta(
+    loader=partial(
+        CohereTextEmbeddingModel,
+        model_name="embed-v4.0",
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/embed-v4.0",
+    languages=supported_languages,
+    open_weights=False,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    revision="1",
+    release_date="2024-12-01",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=128000,
+    embed_dim=1536,
+    license=None,
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+)
