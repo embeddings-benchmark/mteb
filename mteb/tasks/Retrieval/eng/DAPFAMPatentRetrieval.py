@@ -129,7 +129,7 @@ class _DAPFAMMixin:
         quantize = kwargs.get("quantize", False)
 
         # check similarity function name :
-        print(model_wrapper.model.similarity_fn_name)
+        logger.info(model_wrapper.model.similarity_fn_name)
         emb_c = model_wrapper.model.encode(
             list(corp_texts), **encode_kwargs, show_progress_bar=True
         )
