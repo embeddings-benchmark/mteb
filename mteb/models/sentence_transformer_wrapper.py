@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-import numpy as np
 import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
@@ -20,14 +18,16 @@ logger = logging.getLogger(__name__)
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, **kwargs
-) -> SentenceTransformerWrapper:
-    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
+) -> SentenceTransformerEncoderWrapper:
+    return SentenceTransformerEncoderWrapper(
+        model=model_name, revision=revision, **kwargs
+    )
 
 
-class SentenceTransformerWrapper(AbsEncoder):
+class SentenceTransformerEncoderWrapper(AbsEncoder):
     def __init__(
         self,
-        model: str | SentenceTransformer | CrossEncoder,
+        model: str | SentenceTransformer,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
@@ -64,9 +64,6 @@ class SentenceTransformerWrapper(AbsEncoder):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model_prompts = model_prompts
             self.validate_task_to_prompt_name()
-
-        if isinstance(self.model, CrossEncoder):
-            self.predict = self.handle_instructions_predict
 
     def encode(
         self,
@@ -123,18 +120,20 @@ class SentenceTransformerWrapper(AbsEncoder):
             embeddings = embeddings.cpu().detach().float()
         return embeddings
 
-    def _predict(
-        self,
-        sentences: Sequence[tuple[str, str]],
-        **kwargs: Any,
-    ) -> np.ndarray:
-        return self.model.predict(
-            sentences,
-            convert_to_numpy=True,
-            **kwargs,
-        )
 
-    def handle_instructions_predict(
+class CrossEncoderWrapper:
+    def __init__(
+        self,
+        model: CrossEncoder | str,
+        revision: str | None = None,
+        **kwargs,
+    ) -> None:
+        if isinstance(model, CrossEncoder):
+            self.model = model
+        elif isinstance(model, str):
+            self.model = CrossEncoder(model, revision=revision, **kwargs)
+
+    def predict(
         self,
         inputs1: DataLoader[BatchedInput],
         inputs2: DataLoader[BatchedInput],
@@ -145,20 +144,6 @@ class SentenceTransformerWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        """Handles the prediction for cross-encoders with instructions.
-
-        Args:
-            inputs1: Queries with optional instructions to encode.
-            inputs2: Passages to encode.
-            task_metadata: Task metadata.
-            hf_split: Split of the task
-            hf_subset: Split of the subset
-            prompt_type: The type of prompt to use (query or passage).
-            **kwargs: Kwargs to pass to the model.
-
-        Returns:
-            Similarity scores for the query-passage pairs.
-        """
         all_queries_with_instructions = [
             text for batch in inputs1 for text in batch["text"]
         ]
@@ -166,7 +151,7 @@ class SentenceTransformerWrapper(AbsEncoder):
             text for batch in inputs2 for text in batch["text"]
         ]
 
-        return self._predict(
+        return self.model.predict(
             list(zip(all_queries_with_instructions, all_corpus_with_instructions)),
             **kwargs,
         )

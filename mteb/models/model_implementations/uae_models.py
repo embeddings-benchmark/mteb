@@ -8,13 +8,13 @@ from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class UAEWrapper(SentenceTransformerWrapper):
+class UAEWrapper(SentenceTransformerEncoderWrapper):
     """following the hf model card documentation."""
 
     def encode(

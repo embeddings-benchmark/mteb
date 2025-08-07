@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -151,7 +151,7 @@ JinaV4_TRAINING_DATA = {
 }
 
 
-class JinaWrapper(SentenceTransformerWrapper):
+class JinaWrapper(SentenceTransformerEncoderWrapper):
     """following the hf model card documentation."""
 
     jina_task_to_prompt = {
@@ -218,7 +218,7 @@ class JinaWrapper(SentenceTransformerWrapper):
         return embeddings
 
 
-class JinaV4Wrapper(SentenceTransformerWrapper):
+class JinaV4Wrapper(SentenceTransformerEncoderWrapper):
     """following the hf model card documentation."""
 
     jina_task_to_prompt = {
@@ -415,7 +415,7 @@ jina_embeddings_v3 = ModelMeta(
 )
 
 jina_embeddings_v2_base_en = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -470,7 +470,7 @@ jina_embeddings_v2_base_en = ModelMeta(
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -525,7 +525,7 @@ jina_embeddings_v2_small_en = ModelMeta(
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     name="jinaai/jina-embedding-b-en-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -573,7 +573,7 @@ jina_embedding_b_en_v1 = ModelMeta(
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     name="jinaai/jina-embedding-s-en-v1",
     languages=["eng-Latn"],
     open_weights=True,

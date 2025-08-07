@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 from .bge_models import bge_full_data, bge_m3_training_data
 from .stella_models import stella_zh_datasets
 
 ritrieve_zh_v1 = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     name="richinfoai/ritrieve_zh_v1",
     languages=["zho-Hans"],
     open_weights=True,

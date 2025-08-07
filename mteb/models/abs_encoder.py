@@ -17,7 +17,11 @@ from mteb.similarity_functions import (
     pairwise_dot_score,
     pairwise_max_sim,
 )
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import (
+    Array,
+    BatchedInput,
+    PromptType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +36,137 @@ class AbsEncoder(ABC):
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType], str] | None = None
     prompts_dict: dict[str, str] | None = None
+
+    def get_prompt_name(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str | None:
+        """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
+        The order of priorities for prompt selection are:
+            1. Composed prompt of task name + prompt type (query or passage)
+            2. Specific task prompt
+            3. Composed prompt of task type + prompt type (query or passage)
+            4. Specific task type prompt
+            5. Specific prompt type (query or passage)
+
+
+        Args:
+            task_metadata: The task name to use for building the encoding prompt
+            prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
+        """
+        if self.model_prompts is None:
+            return None
+        task_type = task_metadata.type
+        prompt_type_value = prompt_type.value if prompt_type else None
+        task_name = task_metadata.name
+
+        if (
+            task_name
+            and prompt_type
+            and f"{task_name}-{prompt_type_value}" in self.model_prompts
+        ):
+            return f"{task_name}-{prompt_type_value}"
+        if task_name and task_name in self.model_prompts:
+            return task_name
+        if (
+            task_type
+            and prompt_type
+            and f"{task_type}-{prompt_type_value}" in self.model_prompts
+        ):
+            return f"{task_type}-{prompt_type_value}"
+        if task_type and task_type in self.model_prompts:
+            return task_type
+        if prompt_type and prompt_type_value in self.model_prompts:
+            return prompt_type_value
+        logger.info(
+            "No combination of task name and prompt type was found in model prompts."
+        )
+        return None
+
+    def get_prompt(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str | None:
+        if not self.model_prompts:
+            return None
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        return self.model_prompts.get(prompt_name)  # type: ignore
+
+    def validate_task_to_prompt_name(self) -> None:
+        """Validate the task name and prompt type against the model prompts.
+
+        All keys in model_prompts should be valid task names, prompt types or the combination of both.
+        """
+        if self.model_prompts is None:
+            return
+        task_types = get_args(TaskType)
+        prompt_types = [e.value for e in PromptType]
+        for task_name in self.model_prompts:
+            if "-" in task_name and task_name.endswith(
+                (f"-{PromptType.query.value}", f"-{PromptType.passage.value}")
+            ):
+                task_name, prompt_type = task_name.rsplit("-", 1)
+                if prompt_type not in prompt_types:
+                    msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
+                    logger.warning(msg)
+                    raise KeyError(msg)
+            if task_name not in task_types and task_name not in prompt_types:
+                task = mteb.get_task(task_name=task_name)
+                if not task:
+                    msg = f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
+                    logger.warning(msg)
+                    raise KeyError(msg)
+
+    def get_instruction(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str:
+        """Get the instruction/prompt to be used for encoding sentences."""
+        prompt = task_metadata.prompt
+        if self.prompts_dict and task_metadata.name in self.prompts_dict:
+            prompt = self.prompts_dict[task_metadata.name]
+
+        if isinstance(prompt, dict) and prompt_type:
+            if prompt.get(prompt_type.value):
+                return prompt[prompt_type.value]
+            logger.warning(
+                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
+            )
+            return ""
+
+        if prompt:
+            return prompt
+
+        abstask = mteb.get_task(task_name=task_metadata.name)
+        return abstask.abstask_prompt
+
+    def format_instruction(
+        self, instruction: str, prompt_type: PromptType | None = None
+    ) -> str:
+        if self.instruction_template is None:
+            raise ValueError(
+                "Attempting to format an instruction without an instruction template."
+            )
+        if isinstance(self.instruction_template, str):
+            if "{instruction}" not in self.instruction_template:
+                raise ValueError(
+                    "Instruction template must contain the string '{instruction}'."
+                )
+            return self.instruction_template.format(instruction=instruction)
+        return self.instruction_template(instruction, prompt_type)
+
+    def get_task_instruction(
+        self,
+        task_metadata: TaskMetadata,
+        prompt_type: PromptType | None,
+    ) -> str:
+        instruction = self.get_instruction(task_metadata, prompt_type)
+        if self.instruction_template and len(instruction) > 0:
+            return self.format_instruction(instruction)
+        return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         if self.mteb_model_meta is None or (
@@ -117,192 +252,3 @@ class AbsEncoder(ABC):
         raise NotImplementedError(
             "The encode method must be implemented in the subclass."
         )
-
-    def predict(
-        self,
-        inputs1: DataLoader[BatchedInput],
-        inputs2: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        """Predicts relevance scores for pairs of inputs.
-
-        Args:
-            inputs1: First Dataloader of inputs to encode.
-            inputs2: Second Dataloader of inputs to encode.
-            task_metadata: Metadata of the current task.
-            hf_split: Split of current task, allows to know some additional information about current split.
-                E.g. Current language
-            hf_subset: Subset of current task. Similar to `hf_split` to get more information
-            prompt_type: The name type of prompt. (query or passage)
-            **kwargs: Additional arguments to pass to the cross-encoder.
-
-        Returns:
-            The predicted relevance scores for each inputs pair.
-        """
-        embeddings1 = self.encode(
-            inputs1,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=PromptType.query,
-            **kwargs,
-        )
-        embeddings2 = self.encode(
-            inputs2,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=PromptType.passage,
-            **kwargs,
-        )
-        return self.similarity_pairwise(embeddings1, embeddings2)
-
-    def get_prompt_name(
-        self,
-        task_metadata: TaskMetadata,
-        prompt_type: PromptType | None,
-    ) -> str | None:
-        """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
-        The order of priorities for prompt selection are:
-            1. Composed prompt of task name + prompt type (query or passage)
-            2. Specific task prompt
-            3. Composed prompt of task type + prompt type (query or passage)
-            4. Specific task type prompt
-            5. Specific prompt type (query or passage)
-
-
-        Args:
-            task_metadata: The task name to use for building the encoding prompt
-            prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
-        """
-        if self.model_prompts is None:
-            return None
-        task_type = task_metadata.type
-        prompt_type_value = prompt_type.value if prompt_type else None
-        task_name = task_metadata.name
-
-        if (
-            task_name
-            and prompt_type
-            and f"{task_name}-{prompt_type_value}" in self.model_prompts
-        ):
-            return f"{task_name}-{prompt_type_value}"
-        if task_name and task_name in self.model_prompts:
-            return task_name
-        if (
-            task_type
-            and prompt_type
-            and f"{task_type}-{prompt_type_value}" in self.model_prompts
-        ):
-            return f"{task_type}-{prompt_type_value}"
-        if task_type and task_type in self.model_prompts:
-            return task_type
-        if prompt_type and prompt_type_value in self.model_prompts:
-            return prompt_type_value
-        logger.info(
-            "No combination of task name and prompt type was found in model prompts."
-        )
-        return None
-
-    def get_prompt(
-        self,
-        task_metadata: TaskMetadata,
-        prompt_type: PromptType | None,
-    ) -> str | None:
-        if not self.model_prompts:
-            return None
-        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name)  # type: ignore
-
-    def validate_task_to_prompt_name(self) -> None:
-        """Validate the task name and prompt type against the model prompts.
-
-        All keys in model_prompts should be valid task names, prompt types or the combination of both.
-        """
-        if self.model_prompts is None:
-            return
-        task_types = get_args(TaskType)
-        prompt_types = [e.value for e in PromptType]
-        for task_name in self.model_prompts:
-            if "-" in task_name:
-                task_name, prompt_type = task_name.split("-")
-                if prompt_type not in prompt_types:
-                    msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
-                    logger.warning(msg)
-                    raise KeyError(msg)
-            if task_name not in task_types and task_name not in prompt_types:
-                task = mteb.get_task(task_name=task_name)
-                if not task:
-                    msg = f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
-                    logger.warning(msg)
-                    raise KeyError(msg)
-
-    def get_instruction(
-        self,
-        task_metadata: TaskMetadata,
-        prompt_type: PromptType | None,
-    ) -> str:
-        """Get the instruction/prompt to be used for encoding sentences."""
-        prompt = task_metadata.prompt
-        if self.prompts_dict and task_metadata.name in self.prompts_dict:
-            prompt = self.prompts_dict[task_metadata.name]
-
-        if isinstance(prompt, dict) and prompt_type:
-            if prompt.get(prompt_type.value):
-                return prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
-            )
-            return ""
-
-        if prompt:
-            return prompt
-
-        abstask = mteb.get_task(task_name=task_metadata.name)
-        return abstask.abstask_prompt
-
-    def format_instruction(
-        self, instruction: str, prompt_type: PromptType | None = None
-    ) -> str:
-        if self.instruction_template is None:
-            raise ValueError(
-                "Attempting to format an instruction without an instruction template."
-            )
-        if isinstance(self.instruction_template, str):
-            if "{instruction}" not in self.instruction_template:
-                raise ValueError(
-                    "Instruction template must contain the string '{instruction}'."
-                )
-            return self.instruction_template.format(instruction=instruction)
-        return self.instruction_template(instruction, prompt_type)
-
-    def get_task_instruction(
-        self,
-        task_metadata: TaskMetadata,
-        prompt_type: PromptType | None,
-    ) -> str:
-        instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template and len(instruction) > 0:
-            return self.format_instruction(instruction)
-        return instruction
-
-    def combine_query_and_instruction(
-        self,
-        query: str,
-        instruction: str,
-    ) -> str:
-        """Combines a query with an instruction.
-
-        Args:
-            query: The query text to combine.
-            instruction: The instruction text to combine with the query.
-
-        Returns:
-            The combined query and instruction text.
-        """
-        return f"{query} {instruction}"

@@ -12,7 +12,7 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 
 from ...create_dataloaders import (
     create_dataloader,
@@ -38,12 +38,12 @@ class AnySTSEvaluator(Evaluator):
         self.first_column = create_dataloader(
             dataset,
             task_metadata,
-            sentences_column_names[0],
+            input_column=sentences_column_names[0],
         )
         self.second_column = create_dataloader(
             dataset,
             task_metadata,
-            sentences_column_names[1],
+            input_column=sentences_column_names[1],
         )
         self.gold_scores = gold_scores
         self.task_metadata = task_metadata

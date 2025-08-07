@@ -92,13 +92,26 @@ def base_retrieval_datasplit() -> RetrievalSplitData:
             "q1": ["d1", "d2"],
             "q2": ["d2", "d1"],
         },
-        instructions=Dataset.from_list(
-            [
-                {"query-id": "q1", "instruction": "This is a test instruction"},
-                {"query-id": "q2", "instruction": "This is another test instruction"},
-            ]
-        ),
     )
+
+
+def instruction_retrieval_datasplit() -> RetrievalSplitData:
+    base_ds = base_retrieval_datasplit()
+    base_ds["queries"] = Dataset.from_list(
+        [
+            {
+                "id": "q1",
+                "text": "This is a test sentence",
+                "instruction": "This is a test instruction",
+            },
+            {
+                "id": "q2",
+                "text": "This is another test sentence",
+                "instruction": "This is another test instruction",
+            },
+        ]
+    )
+    return base_ds
 
 
 class MockClassificationTask(AbsTaskAnyClassification):
@@ -1461,7 +1474,6 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
                 "min_top_ranked_per_query": 2,
@@ -1480,7 +1492,6 @@ class MockRerankingTask(AbsTaskRetrieval):
 
     def load_data(self, **kwargs):
         base_datasplit = base_retrieval_datasplit()
-        base_datasplit["instructions"] = None
 
         self.dataset["default"]["test"] = base_datasplit
         self.data_loaded = True
@@ -1512,7 +1523,6 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 4,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
                 "min_top_ranked_per_query": 2,
@@ -1544,7 +1554,6 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
                     },
-                    "instructions_statistics": None,
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -1576,7 +1585,6 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
                     },
-                    "instructions_statistics": None,
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
                         "min_top_ranked_per_query": 2,
@@ -1598,7 +1606,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
     def load_data(self, **kwargs):
         base_datasplit = base_retrieval_datasplit()
-        base_datasplit["instructions"] = None
+
         self.dataset["eng"]["test"] = base_datasplit
         self.dataset["fra"]["test"] = base_datasplit
 
@@ -1632,7 +1640,6 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": None,
         },
         "test": {
@@ -1659,7 +1666,6 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": None,
         },
     }
@@ -1673,7 +1679,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
 
     def load_data(self, **kwargs):
         base_datasplit = base_retrieval_datasplit()
-        base_datasplit["instructions"] = None
+
         base_datasplit["top_ranked"] = None
 
         self.dataset["default"]["test"] = base_datasplit
@@ -1708,7 +1714,6 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": None,
         },
         "test": {
@@ -1735,7 +1740,6 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": None,
         },
     }
@@ -1749,7 +1753,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
 
     def load_data(self, **kwargs):
         base_datasplit = base_retrieval_datasplit()
-        base_datasplit["instructions"] = None
+
         base_datasplit["top_ranked"] = None
         base_datasplit["queries"] = Dataset.from_dict(
             {
@@ -1804,7 +1808,6 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 4,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -1831,7 +1834,6 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
                     },
-                    "instructions_statistics": None,
                     "top_ranked_statistics": None,
                 },
                 "fra": {
@@ -1858,7 +1860,6 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
                     },
-                    "instructions_statistics": None,
                     "top_ranked_statistics": None,
                 },
             },
@@ -1887,7 +1888,6 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 4,
             },
-            "instructions_statistics": None,
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -1914,7 +1914,6 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
                     },
-                    "instructions_statistics": None,
                     "top_ranked_statistics": None,
                 },
                 "fra": {
@@ -1941,7 +1940,6 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
                     },
-                    "instructions_statistics": None,
                     "top_ranked_statistics": None,
                 },
             },
@@ -1958,7 +1956,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
 
     def load_data(self, **kwargs):
         base_datasplit = base_retrieval_datasplit()
-        base_datasplit["instructions"] = None
+
         base_datasplit["top_ranked"] = None
 
         for subset in ["eng", "fra"]:
@@ -2203,7 +2201,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 194,
+            "number_of_characters": 196,
             "documents_statistics": {
                 "total_text_length": 84,
                 "min_text_length": 39,
@@ -2212,10 +2210,10 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 52,
-                "min_text_length": 23,
-                "average_text_length": 26.0,
-                "max_text_length": 29,
+                "total_text_length": 112,
+                "min_text_length": 50,
+                "average_text_length": 56.0,
+                "max_text_length": 62,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -2224,13 +2222,6 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
-            },
-            "instructions_statistics": {
-                "total_text_length": 58,
-                "min_text_length": 26,
-                "average_text_length": 29.0,
-                "max_text_length": 32,
-                "unique_texts": 2,
             },
             "top_ranked_statistics": None,
         }
@@ -2244,7 +2235,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        base_datasplit = base_retrieval_datasplit()
+        base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
         self.dataset["default"]["test"] = base_datasplit
@@ -2255,7 +2246,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 194,
+            "number_of_characters": 196,
             "documents_statistics": {
                 "total_text_length": 84,
                 "min_text_length": 39,
@@ -2264,10 +2255,10 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 52,
-                "min_text_length": 23,
-                "average_text_length": 26.0,
-                "max_text_length": 29,
+                "total_text_length": 112,
+                "min_text_length": 50,
+                "average_text_length": 56.0,
+                "max_text_length": 62,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -2276,13 +2267,6 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 2,
-            },
-            "instructions_statistics": {
-                "total_text_length": 58,
-                "min_text_length": 26,
-                "average_text_length": 29.0,
-                "max_text_length": 32,
-                "unique_texts": 2,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
@@ -2301,7 +2285,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        base_datasplit = base_retrieval_datasplit()
+        base_datasplit = instruction_retrieval_datasplit()
 
         self.dataset["default"]["test"] = base_datasplit
         self.data_loaded = True
@@ -2311,7 +2295,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
-            "number_of_characters": 388,
+            "number_of_characters": 392,
             "documents_statistics": {
                 "total_text_length": 168,
                 "min_text_length": 39,
@@ -2320,10 +2304,10 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 104,
-                "min_text_length": 23,
-                "average_text_length": 26.0,
-                "max_text_length": 29,
+                "total_text_length": 224,
+                "min_text_length": 50,
+                "average_text_length": 56.0,
+                "max_text_length": 62,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -2333,18 +2317,11 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 4,
             },
-            "instructions_statistics": {
-                "total_text_length": 116,
-                "min_text_length": 26,
-                "average_text_length": 29.0,
-                "max_text_length": 32,
-                "unique_texts": 2,
-            },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 194,
+                    "number_of_characters": 196,
                     "documents_statistics": {
                         "total_text_length": 84,
                         "min_text_length": 39,
@@ -2353,10 +2330,10 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 52,
-                        "min_text_length": 23,
-                        "average_text_length": 26.0,
-                        "max_text_length": 29,
+                        "total_text_length": 112,
+                        "min_text_length": 50,
+                        "average_text_length": 56.0,
+                        "max_text_length": 62,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2365,19 +2342,12 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
-                    },
-                    "instructions_statistics": {
-                        "total_text_length": 58,
-                        "min_text_length": 26,
-                        "average_text_length": 29.0,
-                        "max_text_length": 32,
-                        "unique_texts": 2,
                     },
                     "top_ranked_statistics": None,
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 194,
+                    "number_of_characters": 196,
                     "documents_statistics": {
                         "total_text_length": 84,
                         "min_text_length": 39,
@@ -2386,10 +2356,10 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 52,
-                        "min_text_length": 23,
-                        "average_text_length": 26.0,
-                        "max_text_length": 29,
+                        "total_text_length": 112,
+                        "min_text_length": 50,
+                        "average_text_length": 56.0,
+                        "max_text_length": 62,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2398,13 +2368,6 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
-                    },
-                    "instructions_statistics": {
-                        "total_text_length": 58,
-                        "min_text_length": 26,
-                        "average_text_length": 29.0,
-                        "max_text_length": 32,
-                        "unique_texts": 2,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -2421,7 +2384,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        base_datasplit = base_retrieval_datasplit()
+        base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
         for subset in ["eng", "fra"]:
@@ -2433,7 +2396,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
-            "number_of_characters": 388,
+            "number_of_characters": 392,
             "documents_statistics": {
                 "total_text_length": 168,
                 "min_text_length": 39,
@@ -2442,10 +2405,10 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 104,
-                "min_text_length": 23,
-                "average_text_length": 26.0,
-                "max_text_length": 29,
+                "total_text_length": 224,
+                "min_text_length": 50,
+                "average_text_length": 56.0,
+                "max_text_length": 62,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -2454,13 +2417,6 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 2,
                 "unique_relevant_docs": 4,
-            },
-            "instructions_statistics": {
-                "total_text_length": 116,
-                "min_text_length": 26,
-                "average_text_length": 29.0,
-                "max_text_length": 32,
-                "unique_texts": 2,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
@@ -2471,7 +2427,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 194,
+                    "number_of_characters": 196,
                     "documents_statistics": {
                         "total_text_length": 84,
                         "min_text_length": 39,
@@ -2480,10 +2436,10 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 52,
-                        "min_text_length": 23,
-                        "average_text_length": 26.0,
-                        "max_text_length": 29,
+                        "total_text_length": 112,
+                        "min_text_length": 50,
+                        "average_text_length": 56.0,
+                        "max_text_length": 62,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2492,13 +2448,6 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
-                    },
-                    "instructions_statistics": {
-                        "total_text_length": 58,
-                        "min_text_length": 26,
-                        "average_text_length": 29.0,
-                        "max_text_length": 32,
-                        "unique_texts": 2,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -2509,7 +2458,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 194,
+                    "number_of_characters": 196,
                     "documents_statistics": {
                         "total_text_length": 84,
                         "min_text_length": 39,
@@ -2518,10 +2467,10 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_texts": 2,
                     },
                     "queries_statistics": {
-                        "total_text_length": 52,
-                        "min_text_length": 23,
-                        "average_text_length": 26.0,
-                        "max_text_length": 29,
+                        "total_text_length": 112,
+                        "min_text_length": 50,
+                        "average_text_length": 56.0,
+                        "max_text_length": 62,
                         "unique_texts": 2,
                     },
                     "relevant_docs_statistics": {
@@ -2530,13 +2479,6 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 2,
                         "unique_relevant_docs": 2,
-                    },
-                    "instructions_statistics": {
-                        "total_text_length": 58,
-                        "min_text_length": 26,
-                        "average_text_length": 29.0,
-                        "max_text_length": 32,
-                        "unique_texts": 2,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -2558,7 +2500,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        base_datasplit = base_retrieval_datasplit()
+        base_datasplit = instruction_retrieval_datasplit()
 
         for subset in ["eng", "fra"]:
             for split in ["test", "val"]:

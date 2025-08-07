@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 nb_sbert = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     name="NbAiLab/nb-sbert-base",
     languages=["nno-Latn", "nob-Latn", "swe-Latn", "dan-Latn"],
     open_weights=True,

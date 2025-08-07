@@ -5,8 +5,8 @@ import shutil
 import numpy as np
 import pytest
 
-from mteb.models.encoder_interface import Encoder
 from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
+from mteb.models.models_protocols import Encoder
 
 
 class DummyModel(Encoder):

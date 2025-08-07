@@ -10,7 +10,7 @@ import numpy as np
 import torch
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 
 logger = logging.getLogger(__name__)
 

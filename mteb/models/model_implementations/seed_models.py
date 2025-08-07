@@ -9,8 +9,8 @@ import torch
 import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.encoder_interface import PromptType
 from mteb.models.model_meta import ModelMeta
+from mteb.models.models_protocols import PromptType
 from mteb.requires_package import requires_package
 
 from .bge_models import bge_chinese_training_data

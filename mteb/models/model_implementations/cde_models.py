@@ -12,9 +12,9 @@ from transformers import AutoConfig
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import corpus_to_dict
-from mteb.models.encoder_interface import PromptType
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.models_protocols import PromptType
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import Array, BatchedInput
 
 from .bge_models import bge_full_data
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class CDEWrapper(SentenceTransformerWrapper):
+class CDEWrapper(SentenceTransformerEncoderWrapper):
     dataset_embeddings: torch.Tensor | None = None
     prev_embeddings_key: tuple[str, str] | None = None
     classification_task_types = (
