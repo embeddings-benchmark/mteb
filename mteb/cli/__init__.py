@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .main import (
+from .build_cli import (
     available_benchmarks,
     available_tasks,
     build_cli,
@@ -10,11 +10,11 @@ from .main import (
 )
 
 __all__ = [
-    "main",
+    "build_cli",
     "run",
     "create_meta",
     "available_benchmarks",
     "available_tasks",
-    "main",
+    "build_cli",
     "build_cli",
 ]
