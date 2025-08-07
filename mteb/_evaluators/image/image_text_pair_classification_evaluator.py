@@ -9,11 +9,11 @@ from datasets import Dataset
 from PIL.Image import Image
 from torch.utils.data import DataLoader
 
+from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
     transform_image_to_rgb,
 )
-from mteb._evaluators.evaluator import Evaluator
 from mteb.models.encoder_interface import Encoder
 from mteb.requires_package import requires_image_dependencies
 
