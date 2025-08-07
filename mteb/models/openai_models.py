@@ -224,3 +224,57 @@ text_embedding_ada_002 = ModelMeta(
     license=None,
     similarity_fn_name=None,
 )
+
+text_embedding_3_small_512 = ModelMeta(
+    name="openai/text-embedding-3-small-dim-512",
+    revision="3",
+    release_date="2024-01-25",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        OpenAIWrapper,
+        model_name="text-embedding-3-small",
+        tokenizer_name="cl100k_base",
+        max_tokens=8191,
+        embed_dim=512,
+    ),
+    max_tokens=8191,
+    embed_dim=512,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
+)
+
+text_embedding_3_large_512 = ModelMeta(
+    name="openai/text-embedding-3-large-dim-512",
+    revision="3",
+    release_date="2024-01-25",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        OpenAIWrapper,
+        model_name="text-embedding-3-large",
+        tokenizer_name="cl100k_base",
+        max_tokens=8191,
+        embed_dim=512,
+    ),
+    max_tokens=8191,
+    embed_dim=512,
+    open_weights=False,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
+    framework=["API"],
+    use_instructions=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
+    license=None,
+    similarity_fn_name=None,
+)
