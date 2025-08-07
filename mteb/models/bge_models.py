@@ -312,6 +312,11 @@ bgem3_languages = [
     "zho-Hans",  # zh
 ]
 
+
+greennode_embedding_large_vn_v1_training_data = {
+    "GreenNodeTableMarkdownRetrieval": ["train"],
+}
+
 bge_small_en_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -804,4 +809,76 @@ manu__bge_m3_custom_fr = ModelMeta(
     training_datasets=bge_m3_training_data,
     adapted_from="BAAI/bge-m3",
     superseded_by=None,
+)
+
+greennode_embedding_large_vn_v1 = ModelMeta(
+    name="GreenNode/GreenNode-Embedding-Large-VN-V1",
+    revision="660def1f6e1c8ecdf39f6f9c95829e3cf0cef837",
+    release_date="2024-04-11",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=None,
+    open_weights=True,
+    n_parameters=568_000_000,
+    memory_usage_mb=2167,
+    embed_dim=1024,
+    license="cc-by-4.0",
+    max_tokens=8194,
+    reference="https://huggingface.co/GreenNode/GreenNode-Embedding-Large-VN-V1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN",
+    training_datasets=greennode_embedding_large_vn_v1_training_data,
+    adapted_from="BAAI/bge-m3",
+)
+
+greennode_embedding_large_vn_mixed_v1 = ModelMeta(
+    name="GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
+    revision="1d3dddb3862292dab4bd3eddf0664c0335ad5843",
+    release_date="2024-04-11",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=None,
+    open_weights=True,
+    n_parameters=568_000_000,
+    memory_usage_mb=2167,
+    embed_dim=1024,
+    license="cc-by-4.0",
+    max_tokens=8194,
+    reference="https://huggingface.co/GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/GreenNode/GreenNode-Table-Markdown-Retrieval-VN",
+    training_datasets=greennode_embedding_large_vn_v1_training_data,
+    adapted_from="BAAI/bge-m3",
+)
+
+aiteamvn_vietnamese_embeddings = ModelMeta(
+    name="AITeamVN/Vietnamese_Embedding",
+    revision="fcbbb905e6c3757d421aaa5db6fd7c53d038f6fb",
+    release_date="2024-03-17",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=None,
+    open_weights=True,
+    n_parameters=568_000_000,
+    memory_usage_mb=2166,
+    embed_dim=1024,
+    license="cc-by-4.0",
+    max_tokens=8194,
+    reference="https://huggingface.co/AITeamVN/Vietnamese_Embedding",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="BAAI/bge-m3",
 )

@@ -388,3 +388,28 @@ e5_base = ModelMeta(
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
+
+
+hiieu_halong_embedding = ModelMeta(
+    name="hiieu/halong_embedding",
+    revision="b57776031035f70ed2030d2e35ecc533eb0f8f71",
+    release_date="2024-07-06",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=None,
+    use_instructions=False,
+    open_weights=True,
+    n_parameters=278_000_000,
+    memory_usage_mb=1061,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=514,
+    reference="https://huggingface.co/hiieu/halong_embedding",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="intfloat/multilingual-e5-base",
+)
