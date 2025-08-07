@@ -23,7 +23,7 @@ class FracasTask(AbsTaskPairClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="found",
+        sample_creation="translated",
         bibtex_citation=r"""
 @inproceedings{amblard-etal-2020-french,
     title = "A {F}rench Version of the {F}ra{C}a{S} Test Suite",
