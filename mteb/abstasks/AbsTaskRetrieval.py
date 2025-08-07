@@ -163,7 +163,7 @@ class AbsTaskRetrieval(AbsTask):
                     ][split]
                     if hasattr(self, "instructions"):
                         instructions = self.instructions[subset][split]
-                        combine_queries_with_instructions_datasets(
+                        self.dataset[subset][split]["queries"] = combine_queries_with_instructions_datasets(
                             self.dataset[subset][split]["queries"],
                             instructions,
                         )

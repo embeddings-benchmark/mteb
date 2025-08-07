@@ -100,4 +100,5 @@ class JQaRAReranking(AbsTaskReranking):
         # Convert to Dataset
         self.dataset = {_EVAL_SPLIT: Dataset.from_list(transformed_data)}
         self.dataset_transform()  # do nothing
+        self.transform_old_dataset_format(self.dataset)
         self.data_loaded = True
