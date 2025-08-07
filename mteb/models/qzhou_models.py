@@ -1,12 +1,17 @@
 from __future__ import annotations
 
-import os
 from functools import partial
-from mteb.model_meta import ModelMeta
+
 from mteb.encoder_interface import PromptType
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.model_meta import ModelMeta
+from mteb.models.bge_models import (
+    bge_chinese_training_data,
+    bge_full_data,
+    bge_m3_training_data,
+)
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
-from mteb.models.bge_models import bge_m3_training_data, bge_full_data, bge_chinese_training_data
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -22,7 +27,7 @@ def instruction_template(
 
 
 QZhou_Embedding = ModelMeta(
-    loader = partial(
+    loader=partial(
         InstructSentenceTransformerWrapper,
         model_name="Kingsoft-LLM/QZhou-Embedding",
         revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
@@ -30,7 +35,7 @@ QZhou_Embedding = ModelMeta(
         apply_instruction_to_passages=False,
     ),
     name="Kingsoft-LLM/QZhou-Embedding",
-    languages=["eng-Latn", "zho-Hans"], 
+    languages=["eng-Latn", "zho-Hans"],
     open_weights=True,
     revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
     release_date="2025-08-01",
