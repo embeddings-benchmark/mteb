@@ -2071,7 +2071,7 @@ R2MED = Benchmark(
 
 
 VN_MTEB = Benchmark(
-    name="VN-MTEB MTEB(vie, v1)",
+    name="VN-MTEB (vie, v1)",
     display_name="Vietnamese",
     icon="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/vn.svg",
     tasks=get_tasks(
