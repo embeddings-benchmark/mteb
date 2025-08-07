@@ -7,7 +7,7 @@ from datasets import load_dataset
 from sentence_transformers.quantization import quantize_embeddings
 from sklearn.metrics import average_precision_score
 
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval, logger
 from ....abstasks.TaskMetadata import TaskMetadata
 
 HF_REPO = "datalyes/DAPFAM_patent"
@@ -22,7 +22,7 @@ BIBTEX = r"""@misc{ayaou2025dapfam,
 }"""
 
 _SHARED_METADATA = dict(
-    dataset={"path": HF_REPO, "revision": "main"},
+    dataset={"path": HF_REPO, "revision": "3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544"},
     reference=REFERENCE,
     type="Retrieval",
     category="p2p",
@@ -70,9 +70,9 @@ class _DAPFAMMixin:
     in_paper: bool = False
 
     def load_data(self, **_) -> tuple[dict, dict, dict]:
-        ds_c = load_dataset(HF_REPO, "corpus", split="train")
-        ds_q = load_dataset(HF_REPO, "queries", split="train")
-        ds_r = load_dataset(HF_REPO, "relations", split="train")
+        ds_c = load_dataset(HF_REPO, "corpus", split="train",revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544")
+        ds_q = load_dataset(HF_REPO, "queries", split="train", revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544")
+        ds_r = load_dataset(HF_REPO, "relations", split="train", revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544")
 
         self.corpus = {
             "test": {
