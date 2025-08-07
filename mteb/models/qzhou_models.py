@@ -50,8 +50,9 @@ QZhou_Embedding = ModelMeta(
         **bge_chinese_training_data,
         **bge_full_data,
         **E5_MISTRAL_TRAINING_DATA,
-        "Shitao/MLDR": ["train"],
-        "FreedomIntelligence/Huatuo26M-Lite": ["train"],
-        "infgrad/retrieval_data_llm": ["train"],
+        # Not in MTEB:
+        # "Shitao/MLDR": ["train"],
+        # "FreedomIntelligence/Huatuo26M-Lite": ["train"],
+        # "infgrad/retrieval_data_llm": ["train"],
     },
 )
