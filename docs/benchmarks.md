@@ -44,6 +44,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [NanoBEIR](https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6) | NanoBEIR | 13 | Retrieval: 13 | [Academic, Encyclopaedic, Medical, News, Non-fiction, Social, Web, Written] | eng |
 | [R2MED](https://r2med.github.io/) | Reasoning-driven medical retrieval | 8 | Retrieval: 8 | [Medical] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
+| [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
 | [ViDoRe(v2)](https://arxiv.org/abs/2407.01449) | ViDoRe(v2) | 4 | DocumentUnderstanding: 4 | [Academic] | deu,eng,fra,spa |
 | [VisualDocumentRetrieval](https://arxiv.org/abs/2407.01449) | Visual Document Retrieval | 14 | DocumentUnderstanding: 14 | [Academic] | deu,eng,fra,spa |

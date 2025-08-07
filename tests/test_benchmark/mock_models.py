@@ -171,7 +171,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
             model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
             revision: The revision of the model to use.
             model_prompts: A dictionary mapping task names to prompt names.
-                First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
+                First priority is given to the composed prompt of task name + prompt type (query or document), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.

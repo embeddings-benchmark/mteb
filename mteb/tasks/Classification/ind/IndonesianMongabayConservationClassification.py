@@ -10,6 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class IndonesianMongabayConservationClassification(AbsTaskClassification):
+    superseded_by = "IndonesianMongabayConservationClassification.v2"
     metadata = TaskMetadata(
         name="IndonesianMongabayConservationClassification",
         description="Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)",
@@ -100,3 +101,53 @@ Purwarianti, Ayu},
             )
 
         self.dataset = datasets.DatasetDict(ds)
+
+
+class IndonesianMongabayConservationClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="IndonesianMongabayConservationClassification.v2",
+        description="""Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://aclanthology.org/2023.sealp-1.4/",
+        dataset={
+            "path": "mteb/indonesian_mongabay_conservation",
+            "revision": "04863a3b6885470071f649a4d4dcd7e9d8e98cf8",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        date=("2012-01-01", "2023-12-31"),
+        eval_splits=["validation", "test"],
+        eval_langs=["ind-Latn"],
+        main_score="f1",
+        domains=["Web", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{fransiska-etal-2023-utilizing,
+  address = {Nusa Dua, Bali, Indonesia},
+  author = {Fransiska, Mega  and
+Pitaloka, Diah  and
+Saripudin, Saripudin  and
+Putra, Satrio  and
+Sutawika*, Lintang},
+  booktitle = {Proceedings of the First Workshop in South East Asian Language Processing},
+  doi = {10.18653/v1/2023.sealp-1.4},
+  editor = {Wijaya, Derry  and
+Aji, Alham Fikri  and
+Vania, Clara  and
+Winata, Genta Indra  and
+Purwarianti, Ayu},
+  month = nov,
+  pages = {30--54},
+  publisher = {Association for Computational Linguistics},
+  title = {Utilizing Weak Supervision to Generate {I}ndonesian Conservation Datasets},
+  url = {https://aclanthology.org/2023.sealp-1.4},
+  year = {2023},
+}
+""",
+        adapted_from=["IndonesianMongabayConservationClassification"],
+    )

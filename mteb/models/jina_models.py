@@ -549,7 +549,7 @@ jina_embeddings_v4 = ModelMeta(
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
-            "Retrieval-passage": "retrieval.passage",
+            "Retrieval-document": "retrieval.passage",
             "STS": "text-matching",
             "DocumentUnderstanding": "retrieval.query",
         },
@@ -584,7 +584,7 @@ jina_embeddings_v3 = ModelMeta(
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
-            "Retrieval-passage": "retrieval.passage",
+            "Retrieval-document": "retrieval.passage",
             "Clustering": "separation",
             "Classification": "classification",
             "STS": "text-matching",

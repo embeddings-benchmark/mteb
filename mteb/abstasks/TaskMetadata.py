@@ -114,15 +114,16 @@ MIEB_TASK_TYPE = (
 _TASK_TYPE = (
     "BitextMining",
     "Classification",
-    "MultilabelClassification",
     "Clustering",
+    "InstructionRetrieval",
+    "MultilabelClassification",
     "PairClassification",
+    "Regression",
     "Reranking",
     "Retrieval",
+    "Speed",
     "STS",
     "Summarization",
-    "InstructionRetrieval",
-    "Speed",
 ) + MIEB_TASK_TYPE
 
 TASK_TYPE = Literal[_TASK_TYPE]

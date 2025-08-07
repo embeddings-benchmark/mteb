@@ -29,6 +29,8 @@ from .eng.AILAStatutesRetrieval import *
 from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
+from .eng.BillSumCA import *
+from .eng.BillSumUS import *
 from .eng.BrightRetrieval import *
 from .eng.BuiltBenchRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
@@ -138,6 +140,7 @@ from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.PublicHealthQARetrieval import *
+from .multilingual.RuSciBenchRetrieval import *
 from .multilingual.StatcanDialogueDatasetRetrieval import *
 from .multilingual.WebFAQRetrieval import *
 from .multilingual.WikipediaRetrievalMultilingual import *
