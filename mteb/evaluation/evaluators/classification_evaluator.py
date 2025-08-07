@@ -16,7 +16,7 @@ from sklearn.metrics import (
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 
 from ...create_dataloaders import create_image_dataloader
 from .evaluator import Evaluator

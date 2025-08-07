@@ -12,11 +12,11 @@ from transformers import AutoModel, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.encoder_interface import Encoder
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
+from mteb.models.models_protocols import Encoder
 from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 

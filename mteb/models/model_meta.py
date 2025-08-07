@@ -16,7 +16,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.languages import check_language_code
-from mteb.models.encoder_interface import Encoder, SearchInterface
+from mteb.models.models_protocols import Encoder, MtebSupportedModelProtocols
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 logger = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class ModelMeta(BaseModel):
             input, such as "query: {document}" or "passage: {document}".
         citation: The citation for the model. This is a bibtex string.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
-            {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
+            {"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
@@ -94,16 +94,10 @@ class ModelMeta(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     # loaders
-    loader: (
-        Callable[..., Encoder | SearchInterface]
-        | type[Encoder | SearchInterface]
-        | None
-    )
+    loader: Callable[..., MtebSupportedModelProtocols] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
-    # metadata (required)
     name: str | None
     revision: str | None
-    # metadata (optional)
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None

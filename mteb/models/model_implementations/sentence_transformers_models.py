@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerWrapper,
+    SentenceTransformerEncoderWrapper,
     sentence_transformers_loader,
 )
 
@@ -382,7 +382,7 @@ static_multi_languages = [
 
 static_similarity_mrl_multilingual_v1 = ModelMeta(
     name="sentence-transformers/static-similarity-mrl-multilingual-v1",
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         device="cpu",  # CPU is just as quick, if not quicker
     ),
@@ -407,7 +407,7 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
 )
 
 contriever = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
     open_weights=True,

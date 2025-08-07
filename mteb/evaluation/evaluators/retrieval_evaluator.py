@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.encoder_interface import SearchInterface
+from mteb.models.models_protocols import CrossEncoderProtocol, Encoder, SearchProtocol
+from mteb.models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from mteb.types import (
     CorpusDatasetType,
     QueryDatasetType,
@@ -48,23 +48,29 @@ class RetrievalEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: SearchInterface,
+        model: SearchProtocol | Encoder | CrossEncoderProtocol,
         encode_kwargs: dict[str, Any],
-        previous_results: str | Path | None = None,
         **kwargs: Any,
     ) -> RetrievalOutputType:
-        if not isinstance(model, SearchInterface):
+        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
+            search_model = SearchEncoderWrapper(model)
+        elif isinstance(model, CrossEncoderProtocol):
+            search_model = SearchCrossEncoderWrapper(model)
+        elif isinstance(model, SearchProtocol):
+            search_model = model
+        else:
             raise TypeError(
-                f"RetrievalEvaluator expects a SearchInterface, got {type(model)}"
+                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
             )
-        model.index(
+
+        search_model.index(
             corpus=self.corpus,
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
         )
-        return model.search(
+        return search_model.search(
             queries=self.queries,
             top_k=self.top_k,
             task_metadata=self.task_metadata,

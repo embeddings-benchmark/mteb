@@ -8,7 +8,6 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata, TaskType
-from mteb.models.abs_search import AbsEncoderSearch
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.similarity_functions import (
     cos_sim,
@@ -27,7 +26,12 @@ from mteb.types import (
 logger = logging.getLogger(__name__)
 
 
-class ModelMixin:
+class AbsEncoder(ABC):
+    """Base class to indicate that this is a wrapper for a model.
+    Also contains some utility functions for wrappers for working with prompts and instructions.
+    """
+
+    model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType], str] | None = None
@@ -163,14 +167,6 @@ class ModelMixin:
         if self.instruction_template and len(instruction) > 0:
             return self.format_instruction(instruction)
         return instruction
-
-
-class AbsEncoder(ABC, ModelMixin, AbsEncoderSearch):
-    """Base class to indicate that this is a wrapper for a model.
-    Also contains some utility functions for wrappers for working with prompts and instructions.
-    """
-
-    model: Any
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         if self.mteb_model_meta is None or (

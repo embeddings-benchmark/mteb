@@ -10,7 +10,7 @@ import tqdm
 from scipy.stats import pearsonr, spearmanr
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 from mteb.similarity_functions import cos_sim, dot_score
 
 from ...create_dataloaders import create_dataloader_from_texts

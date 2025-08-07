@@ -5,6 +5,7 @@ import logging
 from typing import Any
 
 import torch
+from datasets import Dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
@@ -20,14 +21,18 @@ from mteb.types import (
     TopRankedDocumentsType,
 )
 
-from .encoder_interface import Encoder
+from .models_protocols import CrossEncoderProtocol, Encoder
 
 logger = logging.getLogger(__name__)
 
 
-class AbsEncoderSearch(Encoder):
+class SearchEncoderWrapper:
     corpus_chunk_size = 50_000
-    task_corpus: CorpusDatasetType | None = None
+    task_corpus: CorpusDatasetType | None
+
+    def __init__(self, model: Encoder):
+        self.model = model
+        self.task_corpus = None
 
     def index(
         self,
@@ -83,7 +88,7 @@ class AbsEncoderSearch(Encoder):
             queries, batch_size=encode_kwargs.get("batch_size", 32)
         )
 
-        query_embeddings = self.encode(
+        query_embeddings = self.model.encode(
             queries_dataloader,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -91,12 +96,12 @@ class AbsEncoderSearch(Encoder):
             prompt_type=PromptType.query,
             **encode_kwargs,
         )
-        query_ids = queries["id"]
+        query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
 
         if top_ranked is not None:
             logger.info("Performing reranking on pre-ranked documents...")
             result_heaps = self._rerank_documents(
-                query_ids=query_ids,
+                query_idx_to_id=query_idx_to_id,
                 query_embeddings=query_embeddings,
                 top_ranked=top_ranked,
                 top_k=top_k,
@@ -108,7 +113,7 @@ class AbsEncoderSearch(Encoder):
         else:
             logger.info("Performing full corpus search...")
             result_heaps = self._full_corpus_search(
-                query_ids=query_ids,
+                query_idx_to_id=query_idx_to_id,
                 query_embeddings=query_embeddings,
                 task_metadata=task_metadata,
                 hf_subset=hf_subset,
@@ -120,7 +125,7 @@ class AbsEncoderSearch(Encoder):
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
 
-        results = {qid: {} for qid in query_ids}
+        results = {qid: {} for qid in query_idx_to_id.values()}
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
                 results[qid][corpus_id] = score
@@ -129,7 +134,7 @@ class AbsEncoderSearch(Encoder):
 
     def _full_corpus_search(
         self,
-        query_ids: list[str],
+        query_idx_to_id: dict[int, str],
         query_embeddings: Array,
         task_metadata: TaskMetadata,
         hf_subset: str,
@@ -140,7 +145,7 @@ class AbsEncoderSearch(Encoder):
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
 
-        result_heaps = {qid: [] for qid in query_ids}
+        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
@@ -149,7 +154,7 @@ class AbsEncoderSearch(Encoder):
             sub_corpus = self.task_corpus.select(
                 range(corpus_start_idx, corpus_end_idx)
             )
-            sub_corpus_embeddings = self.encode(
+            sub_corpus_embeddings = self.model.encode(
                 create_dataloader_for_retrieval_corpus(
                     sub_corpus, batch_size=encode_kwargs.get("batch_size", 32)
                 ),
@@ -162,7 +167,7 @@ class AbsEncoderSearch(Encoder):
 
             # Compute similarities using either cosine-similarity or dot product
             logging.info("Computing Similarities...")
-            scores = self.similarity(query_embeddings, sub_corpus_embeddings)
+            scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
@@ -176,7 +181,7 @@ class AbsEncoderSearch(Encoder):
             )
 
             for query_itr in range(len(query_embeddings)):
-                query_id = query_ids[query_itr]
+                query_id = query_idx_to_id[query_itr]
                 for sub_corpus_id, score in zip(
                     cos_scores_top_k_idx[query_itr].cpu().tolist(),
                     cos_scores_top_k_values[query_itr].cpu().tolist(),
@@ -192,7 +197,7 @@ class AbsEncoderSearch(Encoder):
 
     def _rerank_documents(
         self,
-        query_ids: list[str],
+        query_idx_to_id: dict[int, str],
         query_embeddings: Array,
         top_ranked: TopRankedDocumentsType,
         top_k: int,
@@ -202,10 +207,10 @@ class AbsEncoderSearch(Encoder):
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank documents based on pre-ranked documents."""
-        result_heaps = {qid: [] for qid in query_ids}
+        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
-        all_doc_embeddings = self.encode(
+        all_doc_embeddings = self.model.encode(
             create_dataloader_for_retrieval_corpus(
                 self.task_corpus, batch_size=encode_kwargs.get("batch_size", 32)
             ),
@@ -217,7 +222,8 @@ class AbsEncoderSearch(Encoder):
         )
 
         # Process each query
-        for query_idx, query_id in enumerate(query_ids):
+        for query_idx, query_embedding in enumerate(query_embeddings):
+            query_id = query_idx_to_id[query_idx]
             if query_id not in top_ranked:
                 logger.warning(f"No pre-ranked documents found for query {query_id}")
                 continue
@@ -227,9 +233,9 @@ class AbsEncoderSearch(Encoder):
             query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
 
             # Ensure query embedding is on the correct device and has correct shape
-            query_embedding = torch.as_tensor(query_embeddings[query_idx]).unsqueeze(0)
+            query_embedding = torch.as_tensor(query_embedding).unsqueeze(0)
 
-            scores = self.similarity(
+            scores = self.model.similarity(
                 query_embedding,
                 query_doc_embeddings,
             )
@@ -262,3 +268,77 @@ class AbsEncoderSearch(Encoder):
                 heapq.heappush(result_heaps[query_id], (score, corpus_id))
 
         return result_heaps
+
+
+class SearchCrossEncoderWrapper:
+    task_corpus: CorpusDatasetType | None
+
+    def __init__(self, model: CrossEncoderProtocol):
+        self.model = model
+        self.task_corpus = None
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
+    ) -> None:
+        self.task_corpus = corpus
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: dict[str, Any],
+        top_ranked: TopRankedDocumentsType | None = None,
+    ) -> RetrievalOutputType:
+        if top_ranked is None:
+            raise ValueError(
+                "CrossEncoder search requires top_ranked documents for reranking."
+            )
+
+        query_id_to_idx = {row["id"]: i for i, row in enumerate(queries)}
+        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
+
+        total_queries = []
+        total_docs = []
+        doc_pairs_ids: list[tuple[str, str]] = []
+        for query_id, corpus_ids in top_ranked.items():
+            if query_id not in top_ranked:
+                logger.warning(f"No pre-ranked documents found for query {query_id}")
+                continue
+
+            query_idx = query_id_to_idx[query_id]
+            total_queries.append(queries[query_idx])
+            for corpus_id in corpus_ids:
+                doc_pairs_ids.append((query_id, corpus_id))
+                total_docs.append(self.task_corpus[doc_id_to_idx[corpus_id]])
+
+        queries_loader = create_text_queries_dataloader(
+            Dataset.from_list(total_queries),
+            batch_size=encode_kwargs.get("batch_size", 32),
+        )
+        corpus_loader = create_text_queries_dataloader(
+            Dataset.from_list(total_docs),
+            batch_size=encode_kwargs.get("batch_size", 32),
+        )
+        predictions = self.model.predict(
+            inputs1=queries_loader,
+            inputs2=corpus_loader,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+        )
+
+        results = {qid: {} for qid in queries["id"]}
+        for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
+            results[query_id][corpus_id] = float(score)
+
+        return results

@@ -12,7 +12,7 @@ from mteb.create_dataloaders import (
     create_dataloader_from_texts,
     create_image_dataloader,
 )
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import Encoder
 from mteb.similarity_functions import similarity
 
 from .evaluator import Evaluator
