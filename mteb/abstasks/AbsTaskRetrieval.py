@@ -9,6 +9,8 @@ from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
+from mteb._evaluators.retrieval_evaluator import RetrievalEvaluator
+from mteb._evaluators.retrieval_metrics import make_score_dict
 from mteb.models.encoder_interface import Encoder
 from mteb.types import (
     HFSubset,
@@ -26,8 +28,6 @@ from ..create_dataloaders import (
     convert_conv_history_to_query,
     corpus_to_dict,
 )
-from ..evaluation.evaluators import RetrievalEvaluator
-from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_text_statistics,

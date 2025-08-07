@@ -8,11 +8,10 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import cluster, metrics
 from torch.utils.data import DataLoader
 
+from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.models.encoder_interface import Encoder
-
-from ...create_dataloaders import create_image_dataloader
-from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 

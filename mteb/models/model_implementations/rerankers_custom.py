@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.evaluation.evaluators.retrieval_evaluator import DenseRetrievalExactSearch
+from mteb._evaluators.retrieval_evaluator import DenseRetrievalExactSearch
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType

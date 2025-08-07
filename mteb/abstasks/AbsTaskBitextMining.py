@@ -5,11 +5,11 @@ from typing import Any
 
 from datasets import Dataset, DatasetDict
 
+from mteb._evaluators.text.text_bitext_mining_evaluator import TextBitextMiningEvaluator
 from mteb.models.encoder_interface import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, TextStatistics
 
-from ..evaluation.evaluators import BitextMiningEvaluator
 from ._statistics_calculation import calculate_text_statistics
 from .AbsTask import AbsTask
 
@@ -118,7 +118,7 @@ class AbsTaskBitextMining(AbsTask):
     ) -> ScoresDict:
         pairs = self.get_pairs(parallel)
 
-        evaluator = BitextMiningEvaluator(
+        evaluator = TextBitextMiningEvaluator(
             data_split,
             task_metadata=self.metadata,
             pair_columns=pairs,  # type: ignore

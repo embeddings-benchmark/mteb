@@ -5,10 +5,12 @@ from collections import defaultdict
 
 from datasets import Dataset
 
+from mteb._evaluators.text.text_pair_classification_evaluator import (
+    TextPairClassificationEvaluator,
+)
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
-from ..evaluation.evaluators import PairClassificationEvaluator
 from ..models.encoder_interface import Encoder
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -68,7 +70,7 @@ class AbsTaskPairClassification(AbsTask):
         logging.getLogger(
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
-        evaluator = PairClassificationEvaluator(
+        evaluator = TextPairClassificationEvaluator(
             data_split["sentence1"],
             data_split["sentence2"],
             data_split["labels"],

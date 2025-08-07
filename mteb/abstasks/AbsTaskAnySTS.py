@@ -5,6 +5,7 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb._evaluators.sts_evaluator import STSEvaluator
 from mteb.models.encoder_interface import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
@@ -14,7 +15,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import STSEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,

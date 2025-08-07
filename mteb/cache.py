@@ -8,13 +8,15 @@ import subprocess
 from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
-from mteb.types import ModelName, Revision
+
+if TYPE_CHECKING:
+    from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 

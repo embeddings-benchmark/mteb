@@ -6,11 +6,13 @@ from typing import Any
 import numpy as np
 from datasets import Dataset
 
+from mteb._evaluators.text.text_summarization_evaluator import (
+    TextSummarizationEvaluator,
+)
 from mteb.models.encoder_interface import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
-from ..evaluation.evaluators import TextSummarizationEvaluator
 from ._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,

@@ -12,18 +12,17 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models.encoder_interface import Encoder
 from mteb.models.model_meta import ScoringFunction
-
-from ....create_dataloaders import create_dataloader_from_texts
-from ....similarity_functions import compute_pairwise_similarity
-from ..evaluator import Evaluator
+from mteb.similarity_functions import compute_pairwise_similarity
 
 logger = logging.getLogger(__name__)
 
 
-class PairClassificationEvaluator(Evaluator):
+class TextPairClassificationEvaluator(Evaluator):
     """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
     dissimilar sentences.
     The metrics are the cosine similarity as well as euclidean and Manhattan distance
@@ -189,18 +188,20 @@ class PairClassificationEvaluator(Evaluator):
         Returns:
             The metrics for the given scores and labels.
         """
-        acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
-            scores, labels, high_score_more_similar
+        acc, acc_threshold = (
+            TextPairClassificationEvaluator.find_best_acc_and_threshold(
+                scores, labels, high_score_more_similar
+            )
         )
         (
             f1,
             precision,
             recall,
             f1_threshold,
-        ) = PairClassificationEvaluator.find_best_f1_and_threshold(
+        ) = TextPairClassificationEvaluator.find_best_f1_and_threshold(
             scores, labels, high_score_more_similar
         )
-        ap = PairClassificationEvaluator.ap_score(
+        ap = TextPairClassificationEvaluator.ap_score(
             scores, labels, high_score_more_similar
         )
 

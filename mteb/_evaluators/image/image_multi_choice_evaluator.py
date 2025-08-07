@@ -179,7 +179,7 @@ class Image2TextMultiChoiceSearch:
         return previous_results
 
 
-class Any2AnyMultiChoiceEvaluator(Evaluator):
+class ImageMultiChoiceEvaluator(Evaluator):
     def __init__(
         self,
         retriever=None,
@@ -321,7 +321,7 @@ class Any2AnyMultiChoiceEvaluator(Evaluator):
                 sum(cv_recall[f"CV_Recall@{k}"]) / len(scores), 5
             )
 
-        naucs = Any2AnyMultiChoiceEvaluator.evaluate_abstention(
+        naucs = ImageMultiChoiceEvaluator.evaluate_abstention(
             results,
             {**all_ndcgs, **all_aps, **all_recalls, **all_precisions, **all_cv_recalls},
         )
@@ -354,7 +354,7 @@ class Any2AnyMultiChoiceEvaluator(Evaluator):
         ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
 
-        naucs = Any2AnyMultiChoiceEvaluator.evaluate_abstention(results, metric_scores)
+        naucs = ImageMultiChoiceEvaluator.evaluate_abstention(results, metric_scores)
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs
