@@ -12,11 +12,12 @@ import tqdm
 from datasets import Features, Value, load_dataset
 from PIL import Image
 
+from mteb._evaluators.image.image_multi_choice_evaluator import (
+    ImageMultiChoiceEvaluator,
+)
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
-
-from ...evaluation.evaluators import Any2AnyMultiChoiceEvaluator
 
 logger = logging.getLogger(__name__)
 
@@ -336,7 +337,7 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         encode_kwargs: dict[str, Any],
         **kwargs,
     ):
-        retriever = Any2AnyMultiChoiceEvaluator(
+        retriever = ImageMultiChoiceEvaluator(
             retriever=model,
             encode_kwargs=encode_kwargs,
             **kwargs,
@@ -693,7 +694,7 @@ class MultiChoiceEvaluationMixin:
         **kwargs,
     ):
         # Use Any2AnyMultiChoiceEvaluator instead of Any2AnyRetrievalEvaluator
-        evaluator = Any2AnyMultiChoiceEvaluator(
+        evaluator = ImageMultiChoiceEvaluator(
             retriever=model,
             task_name=self.metadata.name,
             encode_kwargs=encode_kwargs if encode_kwargs is not None else {},

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.evaluation.evaluators.retrieval_metrics import calculate_pmrr
+from mteb._evaluators.retrieval_metrics import calculate_pmrr
 
 
 def test_p_mrr():

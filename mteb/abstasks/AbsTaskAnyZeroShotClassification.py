@@ -5,6 +5,9 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb._evaluators.zeroshot_classification_evaluator import (
+    ZeroShotClassificationEvaluator,
+)
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -13,7 +16,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import ZeroShotClassificationEvaluator
 from ..models.encoder_interface import Encoder
 from ._statistics_calculation import (
     calculate_image_statistics,

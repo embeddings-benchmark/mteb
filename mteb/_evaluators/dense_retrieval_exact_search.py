@@ -14,6 +14,11 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import (
+    create_dataloader_for_queries,
+    create_dataloader_for_queries_conversation,
+    create_dataloader_for_retrieval_corpus,
+)
 from mteb.models.encoder_interface import Encoder
 from mteb.types import (
     Array,
@@ -25,11 +30,6 @@ from mteb.types import (
     TopRankedDocumentsType,
 )
 
-from ...create_dataloaders import (
-    create_dataloader_for_queries,
-    create_dataloader_for_queries_conversation,
-    create_dataloader_for_retrieval_corpus,
-)
 from ._download import download
 
 logger = logging.getLogger(__name__)

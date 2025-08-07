@@ -7,6 +7,7 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
+from mteb._evaluators.clustering_evaluator import ClusteringEvaluator
 from mteb.models.encoder_interface import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
@@ -16,7 +17,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import ClusteringEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,

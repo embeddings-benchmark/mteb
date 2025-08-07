@@ -5,10 +5,12 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb._evaluators.image.image_text_pair_classification_evaluator import (
+    ImageTextPairClassificationEvaluator,
+)
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
-from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
 from ...models.encoder_interface import Encoder
 from ..AbsTask import AbsTask
 

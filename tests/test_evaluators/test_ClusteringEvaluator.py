@@ -4,7 +4,7 @@ import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
-from mteb.evaluation.evaluators import ClusteringEvaluator
+from mteb.evaluation._evaluators import ClusteringEvaluator
 from tests.test_benchmark.mock_tasks import MockClusteringTask
 
 
