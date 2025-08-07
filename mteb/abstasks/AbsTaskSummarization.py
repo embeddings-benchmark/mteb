@@ -10,7 +10,7 @@ from mteb.models.encoder_interface import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
-from ..evaluation.evaluators import SummarizationEvaluator
+from ..evaluation.evaluators import TextSummarizationEvaluator
 from ._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
@@ -59,7 +59,7 @@ class AbsTaskSummarization(AbsTask):
         "Given a news summary, retrieve other semantically similar summaries."
     )
     # SummEval has DeprecatedSummarizationEvaluator
-    evaluator = SummarizationEvaluator
+    evaluator = TextSummarizationEvaluator
 
     def _evaluate_subset(
         self,

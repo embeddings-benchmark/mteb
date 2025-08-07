@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
-class Any2AnyDenseRetrievalExactSearch:
+class Image2TextMultiChoiceSearch:
     def __init__(
         self,
         model: Encoder,
@@ -63,8 +63,8 @@ class Any2AnyDenseRetrievalExactSearch:
         self,
         corpus: Dataset,  # solve memoery issues
         queries: Dataset,  # solve memoery issues
+        qrels: Dataset,
         top_k: int,
-        score_function: str,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -120,6 +120,13 @@ class Any2AnyDenseRetrievalExactSearch:
             cos_scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1
 
+            for query_idx in range(len(query_embeddings)):
+                query_id = query_ids[query_idx]
+                # discount answers which aren't a multiple choice (where there is a qrel entry for both query and corpus id)
+                for c_idx, c_id in enumerate(chunk_ids):
+                    if c_id not in qrels[query_id]:
+                        cos_scores[query_idx, c_idx] = -1
+
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                 cos_scores,
                 min(top_k, cos_scores.size(1)),
@@ -172,34 +179,30 @@ class Any2AnyDenseRetrievalExactSearch:
         return previous_results
 
 
-# Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
-class Any2AnyRetrievalEvaluator(
-    Evaluator
-):  # TODO: @Samoed is this actually any2any? -> Seems like it should be ImageTextRetrievalEvaluator, also is this required?
+class Any2AnyMultiChoiceEvaluator(Evaluator):
     def __init__(
         self,
         retriever=None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        score_function: str = "cos_sim",
         *,
         encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         super().__init__(**kwargs)
 
-        self.retriever = Any2AnyDenseRetrievalExactSearch(
+        self.retriever = Image2TextMultiChoiceSearch(
             retriever, encode_kwargs=encode_kwargs, **kwargs
         )
         self.k_values = k_values
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
-        self.score_function = score_function
 
     def __call__(
         self,
         corpus: dict[str, dict[str, str | Image.Image]],
         queries: dict[str, dict[str, str | Image.Image]],
+        qrels: dict[str, dict[str, int]],
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -210,8 +213,8 @@ class Any2AnyRetrievalEvaluator(
         return self.retriever.search(
             corpus,
             queries,
+            qrels,
             self.top_k,
-            self.score_function,
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -282,7 +285,12 @@ class Any2AnyRetrievalEvaluator(
             top_docs = [
                 doc_id for doc_id, _ in sorted_results.get(query_id, [])
             ]  # Sorted list of doc IDs
-            relevant_docs = set(qrels.get(query_id, {}).keys())
+            # we need to discount qrels that have a ground truth score of 0
+            relevant_docs = {
+                key
+                for key in qrels.get(query_id, {}).keys()
+                if qrels[query_id][key] != 0
+            }
 
             for k in k_values:
                 top_k_docs = top_docs[:k]
@@ -313,7 +321,7 @@ class Any2AnyRetrievalEvaluator(
                 sum(cv_recall[f"CV_Recall@{k}"]) / len(scores), 5
             )
 
-        naucs = Any2AnyRetrievalEvaluator.evaluate_abstention(
+        naucs = Any2AnyMultiChoiceEvaluator.evaluate_abstention(
             results,
             {**all_ndcgs, **all_aps, **all_recalls, **all_precisions, **all_cv_recalls},
         )
@@ -346,7 +354,7 @@ class Any2AnyRetrievalEvaluator(
         ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
 
-        naucs = Any2AnyRetrievalEvaluator.evaluate_abstention(results, metric_scores)
+        naucs = Any2AnyMultiChoiceEvaluator.evaluate_abstention(results, metric_scores)
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs

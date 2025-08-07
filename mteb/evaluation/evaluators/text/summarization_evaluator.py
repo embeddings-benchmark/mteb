@@ -25,9 +25,7 @@ else:
 logger = logging.getLogger(__name__)
 
 
-class SummarizationEvaluator(
-    Evaluator
-):  # TODO: Should we rename this to SummarizationTextEvaluator?
+class TextSummarizationEvaluator(Evaluator):
     def __init__(
         self,
         human_summaries: list[list[str]],

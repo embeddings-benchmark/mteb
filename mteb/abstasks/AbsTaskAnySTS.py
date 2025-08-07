@@ -14,7 +14,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import AnySTSEvaluator
+from ..evaluation.evaluators import STSEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
@@ -79,7 +79,7 @@ class AbsTaskAnySTS(AbsTask):
         **kwargs: Any,
     ) -> ScoresDict:
         normalized_scores = list(map(self.normalize, data_split["score"]))
-        evaluator = AnySTSEvaluator(
+        evaluator = STSEvaluator(
             data_split,
             self.column_names,
             normalized_scores,

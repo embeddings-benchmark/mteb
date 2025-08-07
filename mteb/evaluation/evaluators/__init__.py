@@ -6,23 +6,23 @@ from .dense_retrieval_exact_search import DenseRetrievalExactSearch
 from .evaluator import Evaluator
 from .image import (
     Any2AnyMultiChoiceEvaluator,
-    Any2AnyRetrievalEvaluator,
     ImageTextPairClassificationEvaluator,
+    ImageTextRetrievalEvaluator,
 )
 from .retrieval_evaluator import RetrievalEvaluator
-from .sts_evaluator import AnySTSEvaluator
+from .sts_evaluator import STSEvaluator
 from .text.bitext_mining_evaluator import BitextMiningEvaluator
 from .text.pair_classification_evaluator import PairClassificationEvaluator
 from .text.summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
-    SummarizationEvaluator,
+    TextSummarizationEvaluator,
 )
 from .zeroshot_classification_evaluator import ZeroShotClassificationEvaluator
 
 __all__ = [
     "Evaluator",
-    "AnySTSEvaluator",
-    "SummarizationEvaluator",
+    "STSEvaluator",
+    "TextSummarizationEvaluator",
     "DeprecatedSummarizationEvaluator",
     "RetrievalEvaluator",
     "DenseRetrievalExactSearch",
@@ -30,7 +30,7 @@ __all__ = [
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",
     "Any2AnyMultiChoiceEvaluator",
-    "Any2AnyRetrievalEvaluator",
+    "ImageTextRetrievalEvaluator",
     "ImageTextPairClassificationEvaluator",
     "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",

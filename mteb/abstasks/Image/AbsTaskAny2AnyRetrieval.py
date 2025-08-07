@@ -15,7 +15,7 @@ from PIL import Image
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
-from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
+from ...evaluation.evaluators import ImageTextRetrievalEvaluator
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -303,7 +303,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         encode_kwargs: dict[str, Any],
         **kwargs,
     ):
-        retriever = Any2AnyRetrievalEvaluator(
+        retriever = ImageTextRetrievalEvaluator(
             retriever=model,
             encode_kwargs=encode_kwargs,
             **kwargs,
