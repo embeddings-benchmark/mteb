@@ -2068,3 +2068,86 @@ R2MED = Benchmark(
 }
 """,
 )
+
+
+VN_MTEB = Benchmark(
+    name="VN-MTEB MTEB(vie, v1)",
+    display_name="Vietnamese",
+    icon="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/vn.svg",
+    tasks=get_tasks(
+        languages=["vie"],
+        exclusive_language_filter=True,
+        tasks=[
+            # Retrieval
+            "ArguAna-VN",
+            "SciFact-VN",
+            "ClimateFEVER-VN",
+            "FEVER-VN",
+            "DBPedia-VN",
+            "NQ-VN",
+            "HotpotQA-VN",
+            "MSMARCO-VN",
+            "TRECCOVID-VN",
+            "FiQA2018-VN",
+            "NFCorpus-VN",
+            "SCIDOCS-VN",
+            "Touche2020-VN",
+            "Quora-VN",
+            "CQADupstackAndroid-VN",
+            "CQADupstackGis-VN",
+            "CQADupstackMathematica-VN",
+            "CQADupstackPhysics-VN",
+            "CQADupstackProgrammers-VN",
+            "CQADupstackStats-VN",
+            "CQADupstackTex-VN",
+            "CQADupstackUnix-VN",
+            "CQADupstackWebmasters-VN",
+            "CQADupstackWordpress-VN",
+            # Classification
+            "Banking77VNClassification",
+            "EmotionVNClassification",
+            "AmazonCounterfactualVNClassification",
+            "MTOPDomainVNClassification",
+            "TweetSentimentExtractionVNClassification",
+            "ToxicConversationsVNClassification",
+            "ImdbVNClassification",
+            "MTOPIntentVNClassification",
+            "MassiveScenarioVNClassification",
+            "MassiveIntentVNClassification",
+            "AmazonReviewsVNClassification",
+            "AmazonPolarityVNClassification",
+            # Pair Classification
+            "SprintDuplicateQuestions-VN",
+            "TwitterSemEval2015-VN",
+            "TwitterURLCorpus-VN",
+            # Clustering
+            "TwentyNewsgroupsClustering-VN",
+            "RedditClusteringP2P-VN",
+            "StackExchangeClusteringP2P-VN",
+            "StackExchangeClustering-VN",
+            "RedditClustering-VN",
+            # Reranking
+            "SciDocsRR-VN",
+            "AskUbuntuDupQuestions-VN",
+            "StackOverflowDupQuestions-VN",
+            # STS
+            "BIOSSES-VN",
+            "SICK-R-VN",
+            "STSBenchmark-VN",
+        ],
+    ),
+    description="A benchmark for text-embedding performance in Vietnamese.",
+    reference="https://arxiv.org/abs/2507.21500",
+    citation=r"""
+@misc{pham2025vnmtebvietnamesemassivetext,
+  archiveprefix = {arXiv},
+  author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
+  eprint = {2507.21500},
+  primaryclass = {cs.CL},
+  title = {VN-MTEB: Vietnamese Massive Text Embedding Benchmark},
+  url = {https://arxiv.org/abs/2507.21500},
+  year = {2025},
+}
+""",
+    contacts=["BaoLocPham"],
+)
