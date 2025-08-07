@@ -15,7 +15,6 @@ from mteb.create_dataloaders import (
 from mteb.types import (
     Array,
     CorpusDatasetType,
-    InstructionDatasetType,
     PromptType,
     QueryDatasetType,
     RetrievalOutputType,
@@ -65,7 +64,6 @@ class SearchEncoderWrapper:
         hf_subset: str,
         top_k: int,
         encode_kwargs: dict[str, Any],
-        instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
@@ -75,7 +73,6 @@ class SearchEncoderWrapper:
             task_metadata: Task metadata
             hf_split: split of the dataset
             hf_subset: subset of the dataset
-            instructions: Optional instructions to use for the search.
             top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
@@ -86,9 +83,6 @@ class SearchEncoderWrapper:
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
-
-        if instructions:
-            queries = self._combine_queries_with_instructions(queries, instructions)
 
         queries_dataloader = create_text_queries_dataloader(
             queries, batch_size=encode_kwargs.get("batch_size", 32)
@@ -275,21 +269,6 @@ class SearchEncoderWrapper:
 
         return result_heaps
 
-    def _combine_queries_with_instructions(
-        self,
-        queries_dataset: QueryDatasetType,
-        instruction_dataset: InstructionDatasetType,
-    ) -> Dataset:
-        instruction_to_query_idx = {
-            row["query-id"]: row["instruction"] for row in instruction_dataset
-        }
-
-        def add_instruction_to_query(row: dict[str, str]) -> dict[str, str]:
-            row["instruction"] = instruction_to_query_idx[row["id"]]
-            return row
-
-        return queries_dataset.map(add_instruction_to_query)
-
 
 class SearchCrossEncoderWrapper:
     task_corpus: CorpusDatasetType | None
@@ -318,7 +297,6 @@ class SearchCrossEncoderWrapper:
         hf_subset: str,
         top_k: int,
         encode_kwargs: dict[str, Any],
-        instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         if top_ranked is None:

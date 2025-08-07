@@ -64,6 +64,16 @@ def create_dataloader_for_retrieval_corpus(
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
+def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
+    row["query"] = row["text"]
+
+    if "instruction" in row and row["instruction"] is not None:
+        row["text"] = row["query"] + " " + row["instruction"]
+    else:
+        row["text"] = row["query"]
+    return row
+
+
 def create_dataloader_for_queries(
     queries: QueryDatasetType,
     **dataloader_kwargs,
@@ -77,17 +87,9 @@ def create_dataloader_for_queries(
     Returns:
         A dataloader with the queries.
     """
-
-    def process_queries(row: dict[str, str]) -> dict[str, str]:
-        row["query"] = row["text"]
-
-        if "instruction" in row:
-            row["text"] = row["query"] + " " + row["instruction"]
-        else:
-            row["text"] = row["query"]
-        return row
-
-    queries = queries.map(process_queries, desc="Processing queries for dataloading")
+    queries = queries.map(
+        combine_queries_with_instruction_text, desc="Processing queries for dataloading"
+    )
     return torch.utils.data.DataLoader(queries, **dataloader_kwargs)
 
 

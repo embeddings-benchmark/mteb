@@ -9,7 +9,6 @@ from mteb.types import (
     Array,
     BatchedInput,
     CorpusDatasetType,
-    InstructionDatasetType,
     PromptType,
     QueryDatasetType,
     RetrievalOutputType,
@@ -50,7 +49,6 @@ class SearchProtocol(Protocol):
         hf_subset: str,
         top_k: int,
         encode_kwargs: dict[str, Any],
-        instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
@@ -60,7 +58,6 @@ class SearchProtocol(Protocol):
             task_metadata: Task metadata
             hf_split: split of the dataset
             hf_subset: subset of the dataset
-            instructions: Optional instructions to use for the search.
             top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
