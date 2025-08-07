@@ -22,7 +22,8 @@ def instruction_template(
 
 
 QZhou_Embedding = ModelMeta(
-    loader = InstructSentenceTransformerWrapper(
+    loader = partial(
+        InstructSentenceTransformerWrapper,
         model_name="Kingsoft-LLM/QZhou-Embedding",
         revision="b43142d518d6e5251fd2d1e0a8741eef5c8b980a",
         instruction_template=instruction_template,
