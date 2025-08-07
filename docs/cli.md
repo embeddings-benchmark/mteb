@@ -1,13 +1,84 @@
 # CLI
 
-<!--
-We essentially just need to make this cli.py's docstring -- figure out a way to do this automatically
+This described the is the command line interface for `mteb`.
 
-We can then extend it to be more detailed going forward. Ideally adding some documentation on the different arguments
--->
+`mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
+
+- `mteb run`: Runs a model on a set of tasks
+- `mteb available_tasks`: Lists the available tasks within MTEB
+- `mteb available_benchmarks`: Lists the available benchmarks
+- `mteb create_meta`: Creates the metadata for a model card from a folder of results
+
+In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
+
+```
+mteb {command} --help
+```
+
+## Running Models on Tasks
+
+To run a model on a set of tasks, use the `mteb run` command. For example:
+
+```bash
+mteb run -m sentence-transformers/average_word_embeddings_komninos \
+         -t Banking77Classification EmotionClassification \
+         --output_folder mteb_output \
+          --verbosity 3
+```
+
+This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
+file: "{task_name}.json".
 
 
+## Listing Available Tasks
 
-## Using multiple GPUs
+To list the available tasks within MTEB, use the `mteb available_tasks` command. For example:
 
-Using multiple GPUs in parallel can be done by just having a [custom encode function](missing) that distributes the inputs to multiple GPUs like e.g. [here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60) or [here](https://github.com/ContextualAI/gritlm/blob/09d8630f0c95ac6a456354bcb6f964d7b9b6a609/gritlm/gritlm.py#L75).
+```bash
+mteb available_tasks # list all available tasks
+mteb available_tasks --task_types Clustering # list tasks of type Clustering
+```
+
+## Listing Available Benchmarks
+
+To list the available benchmarks within MTEB, use the `mteb available_benchmarks` command. For example:
+
+```bash
+mteb available_benchmarks # list all available benchmarks
+```
+
+
+## Creating Model Metadata
+
+Once a model is run you can create the metadata for a model card from a folder of results, use the `mteb create_meta` command. For example:
+
+```bash
+mteb create_meta --results_folder mteb_output/sentence-transformers__average_word_embeddings_komninos/{revision} \
+                 --output_path model_card.md
+```
+
+This will create a model card at `model_card.md` containing the metadata for the model on MTEB within the YAML frontmatter. This will make the model
+discoverable on the MTEB leaderboard.
+
+An example frontmatter for a model card is shown below:
+
+```
+---
+tags:
+- mteb
+model-index:
+- name: SGPT-5.8B-weightedmean-msmarco-specb-bitfit
+  results:
+  - task:
+      type: classification
+    dataset:
+      type: mteb/banking77
+      name: MTEB Banking77
+      config: default
+      split: test
+      revision: 44fa15921b4c889113cc5df03dd4901b49161ab7
+    metrics:
+    - type: accuracy
+      value: 84.49350649350649
+---
+```

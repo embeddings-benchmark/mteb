@@ -11,12 +11,12 @@ from mteb import TaskResult
 
 
 def generate_readme(results_folder: Path, from_existing: Path | None = None) -> str:
-    task_results = get_task_results(results_folder)
+    task_results = _get_task_results(results_folder)
     yaml_results = []
     for task_result in task_results:
-        yaml_results.extend(process_task_result(task_result))
+        yaml_results.extend(_process_task_result(task_result))
 
-    model_name = load_model_name(results_folder)
+    model_name = _load_model_name(results_folder)
     yaml_dict = {
         "tags": ["mteb"],
         "model-index": [
@@ -28,7 +28,7 @@ def generate_readme(results_folder: Path, from_existing: Path | None = None) -> 
     }
 
     if from_existing:
-        yaml_dict, readme_end = merge_yamls(yaml_dict, from_existing)
+        yaml_dict, readme_end = _merge_yamls(yaml_dict, from_existing)
     else:
         readme_end = ""
 
@@ -36,7 +36,7 @@ def generate_readme(results_folder: Path, from_existing: Path | None = None) -> 
     return f"---\n{yaml_str}---\n{readme_end}"
 
 
-def load_model_name(results_folder: Path) -> str:
+def _load_model_name(results_folder: Path) -> str:
     model_meta_path = results_folder / "model_meta.json"
     if model_meta_path.exists():
         with model_meta_path.open("r") as f:
@@ -44,7 +44,7 @@ def load_model_name(results_folder: Path) -> str:
     return "PLACEHOLDER"
 
 
-def process_task_result(task_result: TaskResult) -> list[dict[str, Any]]:
+def _process_task_result(task_result: TaskResult) -> list[dict[str, Any]]:
     task = mteb.get_task(task_result.task_name)
     yaml_results = []
 
@@ -78,7 +78,7 @@ def process_task_result(task_result: TaskResult) -> list[dict[str, Any]]:
     return yaml_results
 
 
-def get_task_results(results_folder: Path) -> list[TaskResult]:
+def _get_task_results(results_folder: Path) -> list[TaskResult]:
     json_files = [
         r
         for r in results_folder.glob("*.json")
@@ -86,11 +86,11 @@ def get_task_results(results_folder: Path) -> list[TaskResult]:
     ]
     task_results = [TaskResult.from_disk(path) for path in json_files]
     # We should ideally find better way in the future to aggregate scores for tasks like CQADupstack
-    task_results = potentially_add_cqadupstack_to_results(task_results)
+    task_results = _potentially_add_cqadupstack_to_results(task_results)
     return sorted(task_results, key=lambda x: x.task_name)
 
 
-def potentially_add_cqadupstack_to_results(
+def _potentially_add_cqadupstack_to_results(
     results: list[TaskResult],
 ) -> list[TaskResult]:
     task_list_cqa = {
@@ -138,7 +138,7 @@ def potentially_add_cqadupstack_to_results(
     return results
 
 
-def merge_yamls(
+def _merge_yamls(
     yaml_dict: dict[str, Any], existing_readme: Path
 ) -> tuple[dict[str, Any], str]:
     if not existing_readme.name.lower().endswith(".md"):
@@ -147,13 +147,13 @@ def merge_yamls(
     with open(existing_readme) as f:
         existing_file = f.read()
 
-    existing_yaml_dict, readme_end = extract_yaml_and_content(existing_file)
-    existing_yaml_dict = update_yaml_dict(existing_yaml_dict, yaml_dict)
+    existing_yaml_dict, readme_end = _extract_yaml_and_content(existing_file)
+    existing_yaml_dict = _update_yaml_dict(existing_yaml_dict, yaml_dict)
 
     return existing_yaml_dict, readme_end
 
 
-def extract_yaml_and_content(file_content: str) -> tuple[dict[str, Any], str]:
+def _extract_yaml_and_content(file_content: str) -> tuple[dict[str, Any], str]:
     yaml_start_sep = "---"
     yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
     if file_content.startswith(yaml_start_sep) and yaml_end_sep in file_content:
@@ -165,7 +165,7 @@ def extract_yaml_and_content(file_content: str) -> tuple[dict[str, Any], str]:
     return {}, file_content
 
 
-def update_yaml_dict(
+def _update_yaml_dict(
     existing_yaml_dict: dict[str, Any], new_yaml_dict: dict[str, Any]
 ) -> dict[str, Any]:
     if "tags" not in existing_yaml_dict:

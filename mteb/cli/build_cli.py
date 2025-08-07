@@ -1,87 +1,3 @@
-"""This is the command line interface for `mteb`.
-
-`mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
-
-- `mteb run`: Runs a model on a set of tasks
-- `mteb available_tasks`: Lists the available tasks within MTEB
-- `mteb available_benchmarks`: Lists the available benchmarks
-- `mteb create_meta`: Creates the metadata for a model card from a folder of results
-
-In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
-
-```
-mteb {command} --help
-```
-
-## Running Models on Tasks
-
-To run a model on a set of tasks, use the `mteb run` command. For example:
-
-```bash
-mteb run -m sentence-transformers/average_word_embeddings_komninos \
-         -t Banking77Classification EmotionClassification \
-         --output_folder mteb_output \
-          --verbosity 3
-```
-
-This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
-file: "{task_name}.json".
-
-
-## Listing Available Tasks
-
-To list the available tasks within MTEB, use the `mteb available_tasks` command. For example:
-
-```bash
-mteb available_tasks # list all available tasks
-mteb available_tasks --task_types Clustering # list tasks of type Clustering
-```
-
-## Listing Available Benchmarks
-
-To list the available benchmarks within MTEB, use the `mteb available_benchmarks` command. For example:
-
-```bash
-mteb available_benchmarks # list all available benchmarks
-```
-
-
-## Creating Model Metadata
-
-Once a model is run you can create the metadata for a model card from a folder of results, use the `mteb create_meta` command. For example:
-
-```bash
-mteb create_meta --results_folder mteb_output/sentence-transformers__average_word_embeddings_komninos/{revision} \
-                 --output_path model_card.md
-```
-
-This will create a model card at `model_card.md` containing the metadata for the model on MTEB within the YAML frontmatter. This will make the model
-discoverable on the MTEB leaderboard.
-
-An example frontmatter for a model card is shown below:
-
-```
----
-tags:
-- mteb
-model-index:
-- name: SGPT-5.8B-weightedmean-msmarco-specb-bitfit
-  results:
-  - task:
-      type: classification
-    dataset:
-      type: mteb/banking77
-      name: MTEB Banking77
-      config: default
-      split: test
-      revision: 44fa15921b4c889113cc5df03dd4901b49161ab7
-    metrics:
-    - type: accuracy
-      value: 84.49350649350649
----
-```
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -92,7 +8,7 @@ from pathlib import Path
 import torch
 
 import mteb
-from mteb.create_meta import generate_readme
+from mteb.cli.generate_readme import generate_readme
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -182,7 +98,7 @@ def available_tasks(args: argparse.Namespace) -> None:
     eval.mteb_tasks()
 
 
-def add_benchmark_selection_args(parser: argparse.ArgumentParser) -> None:
+def _add_benchmark_selection_args(parser: argparse.ArgumentParser) -> None:
     """Adds arguments to the parser for filtering benchmarks by name."""
     parser.add_argument(
         "-b",
@@ -194,7 +110,7 @@ def add_benchmark_selection_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
-def add_task_selection_args(parser: argparse.ArgumentParser) -> None:
+def _add_task_selection_args(parser: argparse.ArgumentParser) -> None:
     """Adds arguments to the parser for filtering tasks by type, category, language, and task name."""
     parser.add_argument(
         "--task_types",
@@ -228,25 +144,25 @@ def add_task_selection_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
-def add_available_tasks_parser(subparsers) -> None:
+def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser(
         "available_tasks", help="List the available tasks within MTEB"
     )
-    add_task_selection_args(parser)
+    _add_task_selection_args(parser)
 
     parser.set_defaults(func=available_tasks)
 
 
-def add_available_benchmarks_parser(subparsers) -> None:
+def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser(
         "available_benchmarks", help="List the available benchmarks within MTEB"
     )
-    add_benchmark_selection_args(parser)
+    _add_benchmark_selection_args(parser)
 
     parser.set_defaults(func=available_benchmarks)
 
 
-def add_run_parser(subparsers) -> None:
+def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser("run", help="Run a model on a set of tasks")
 
     parser.add_argument(
@@ -256,8 +172,8 @@ def add_run_parser(subparsers) -> None:
         help="Model to use. Will priotize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
     )
 
-    add_task_selection_args(parser)
-    add_benchmark_selection_args(parser)
+    _add_task_selection_args(parser)
+    _add_benchmark_selection_args(parser)
 
     parser.add_argument(
         "--device", type=int, default=None, help="Device to use for computation"
@@ -330,7 +246,7 @@ def create_meta(args: argparse.Namespace) -> None:
         f.write(frontmatter)
 
 
-def add_create_meta_parser(subparsers) -> None:
+def _add_create_meta_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "create_meta", help="Create model metadata from a folder of results"
     )
@@ -362,20 +278,27 @@ def add_create_meta_parser(subparsers) -> None:
     parser.set_defaults(func=create_meta)
 
 
-def main():
-    parser = argparse.ArgumentParser(description="The MTEB Command line interface.")
+def build_cli() -> argparse.ArgumentParser:
+    """Builds the argument parser for the MTEB CLI."""
+    parser = argparse.ArgumentParser(
+        description="MTEB Command Line Interface",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
 
     subparsers = parser.add_subparsers(
         title="subcommands", description="valid subcommands", help="additional help"
     )
-    add_run_parser(subparsers)
-    add_available_tasks_parser(subparsers)
-    add_available_benchmarks_parser(subparsers)
-    add_create_meta_parser(subparsers)
 
+    _add_run_parser(subparsers)
+    _add_available_tasks_parser(subparsers)
+    _add_available_benchmarks_parser(subparsers)
+    _add_create_meta_parser(subparsers)
+
+    return parser
+
+
+def main() -> None:
+    """Main entry point for the MTEB CLI."""
+    parser = build_cli()
     args = parser.parse_args()
     args.func(args)
-
-
-if __name__ == "__main__":
-    main()
