@@ -129,7 +129,6 @@ class ClapZeroShotWrapper:
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
-                max_length=30 * self.sampling_rate,  # 30 seconds max
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
