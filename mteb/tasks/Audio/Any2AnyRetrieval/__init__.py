@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .AudioCaps import *
+from .AudioSetStrong import *
 from .Clotho import *
 from .CMU_Arctic import *
 from .CommonVoice import *
