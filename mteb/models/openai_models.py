@@ -226,7 +226,7 @@ text_embedding_ada_002 = ModelMeta(
 )
 
 text_embedding_3_small_512 = ModelMeta(
-    name="openai/text-embedding-3-small-dim-512",
+    name="openai/text-embedding-3-small (embed_dim=512)",
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -253,7 +253,7 @@ text_embedding_3_small_512 = ModelMeta(
 )
 
 text_embedding_3_large_512 = ModelMeta(
-    name="openai/text-embedding-3-large-dim-512",
+    name="openai/text-embedding-3-large (embed_dim=512)",
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
