@@ -5,6 +5,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class EmotionVNClassification(AbsTaskClassification):
+    num_samples = 16
+
     metadata = TaskMetadata(
         name="EmotionVNClassification",
         description="""Emotion is a translated dataset of Vietnamese from English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.
@@ -42,10 +44,3 @@ class EmotionVNClassification(AbsTaskClassification):
 """,
         adapted_from=["EmotionClassification"],
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict

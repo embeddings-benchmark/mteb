@@ -5,6 +5,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class ToxicConversationsVNClassification(AbsTaskClassification):
+    num_samples = 16
+
     metadata = TaskMetadata(
         name="ToxicConversationsVNClassification",
         description="""A translated dataset from Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.
@@ -42,13 +44,6 @@ class ToxicConversationsVNClassification(AbsTaskClassification):
 """,
         adapted_from=["ToxicConversationsClassification"],
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

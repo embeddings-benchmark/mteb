@@ -624,7 +624,7 @@ def get_transform_statements(file_path: Path, class_name: str) -> list[ast.stmt]
     return []
 
 
-def load_dataset(file_path: Path, class_name: str) -> DatasetDict:
+def load_dataset(file_path: Path, class_name: str) -> DatasetDict:  # noqa: F811
     original = file_path.read_text()
     lines = original.splitlines(keepends=True)
     filtered: list[str] = []
