@@ -8,7 +8,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 
 | Name | Leaderboard name | # Tasks | Task Types | Domains | Languages |
 |------|------------------|---------|------------|---------|-----------|
-| [BEIR](https://arxiv.org/abs/2104.08663) | BEIR | 15 | Retrieval: 15 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Web, Written] | eng |
+| [BEIR](https://arxiv.org/abs/2104.08663) | BEIR | 15 | Retrieval: 15 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Web, Written] | eng,vie |
 | [BEIR-NL](https://arxiv.org/abs/2412.08329) | BEIR-NL | 15 | Retrieval: 15 | [Academic, Encyclopaedic, Medical, Non-fiction, Web, Written] | nld |
 | [BRIGHT](https://brightbenchmark.github.io/) | BRIGHT | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
 | [BRIGHT (long)](https://brightbenchmark.github.io/) | BRIGHT (long) | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
@@ -33,7 +33,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [MTEB(Scandinavian, v1)](https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/) | Scandinavian | 28 | BitextMining: 2, Classification: 13, Retrieval: 7, Clustering: 6 | [Blog, Encyclopaedic, Fiction, Government, Legal, News, Non-fiction, Reviews, Social, Spoken, Web, Written] | dan,fao,isl,nno,nob,swe |
 | [MTEB(cmn, v1)](https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB) | Chinese | 32 | Retrieval: 8, Reranking: 4, PairClassification: 2, Clustering: 4, STS: 7, Classification: 7 | [Academic, Entertainment, Financial, Government, Medical, Non-fiction, Written] | cmn |
 | [MTEB(deu, v1)](https://arxiv.org/html/2401.02709v1) | German | 19 | Classification: 6, Clustering: 4, PairClassification: 2, Reranking: 1, Retrieval: 4, STS: 2 | [Encyclopaedic, Legal, News, Non-fiction, Reviews, Spoken, Web, Written] | deu |
-| MTEB(eng, v1) | English Legacy | 56 | Classification: 12, Retrieval: 15, Clustering: 11, Reranking: 4, STS: 10, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng |
+| MTEB(eng, v1) | English Legacy | 56 | Classification: 12, Retrieval: 15, Clustering: 11, Reranking: 4, STS: 10, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng,vie |
 | MTEB(eng, v2) | English | 41 | Retrieval: 10, Clustering: 8, Reranking: 2, STS: 9, Classification: 8, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng |
 | [MTEB(fas, v1)](https://arxiv.org/abs/2502.11571) | Farsi | 60 | Classification: 18, Clustering: 5, PairClassification: 8, Reranking: 2, Retrieval: 21, STS: 3, BitextMining: 3 | [Academic, Blog, Encyclopaedic, Medical, News, Religious, Reviews, Social, Spoken, Web, Written] | fas |
 | [MTEB(fra, v1)](https://arxiv.org/abs/2405.20468) | French | 25 | Classification: 6, Clustering: 7, PairClassification: 1, Reranking: 2, Retrieval: 5, STS: 3, Summarization: 1 | [Academic, Encyclopaedic, Legal, News, Non-fiction, Reviews, Social, Spoken, Web, Written] | eng,fra |
