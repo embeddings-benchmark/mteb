@@ -808,36 +808,6 @@ bge_m3_unsupervised = ModelMeta(
     training_datasets=bge_m3_training_data,
 )
 
-# Note: BAAI/bge-m3-retromae is the pre-trained xlm-roberta-8k model used for further pre-training
-# It cannot be used for similarity calculation directly and needs fine-tuning
-# The goal of pre-training is to reconstruct text, not generate embeddings
-# For direct embedding use, prefer BAAI/bge-m3-unsupervised or BAAI/bge-m3
-# bge_m3_retromae = ModelMeta(
-#     loader=partial(  # type: ignore
-#         sentence_transformers_loader,
-#         model_name="BAAI/bge-m3-retromae",
-#         revision="95c4f81",
-#     ),
-#     name="BAAI/bge-m3-retromae",
-#     languages=bgem3_languages,
-#     open_weights=True,
-#     revision="95c4f81",
-#     release_date="2024-01-30",  # January 30, 2024 - BGE-M3 release date
-#     n_parameters=568_000_000,  # 568M parameters (xlm-roberta-large extended to 8192 tokens)
-#     memory_usage_mb=2167,
-#     embed_dim=1024,
-#     license="mit",
-#     max_tokens=8192,
-#     reference="https://huggingface.co/BAAI/bge-m3-retromae",
-#     similarity_fn_name="cosine",
-#     framework=["Sentence Transformers", "PyTorch"],
-#     use_instructions=False,
-#     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
-#     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
-#     training_datasets=bge_m3_training_data,
-#     # Note: This model may require special handling due to pre-training nature
-# )
-
 manu__bge_m3_custom_fr = ModelMeta(
     name="manu/bge-m3-custom-fr",
     revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
