@@ -13,7 +13,7 @@ import datasets
 import orjson
 import pandas as pd
 import typer
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, DatasetDict
 from huggingface_hub import HfApi
 from tqdm import tqdm
 

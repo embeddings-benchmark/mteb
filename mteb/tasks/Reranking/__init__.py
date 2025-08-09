@@ -17,4 +17,7 @@ from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
 from .multilingual.XGlueWPRReranking import *
 from .rus.RuBQReranking import *
+from .vie.AskUbuntuDupQuestionsVN import *
+from .vie.SciDocsRerankingVN import *
+from .vie.StackOverflowDupQuestionsVN import *
 from .zho.CMTEBReranking import *
