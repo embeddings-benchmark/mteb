@@ -93,6 +93,11 @@ class MSClapWrapper:
                             )
                             audio_array = resampler(audio_array)
 
+                        # Apply audio truncation (30 seconds max)
+                        max_length = 30 * self.sampling_rate  # 30 seconds
+                        if audio_array.shape[-1] > max_length:
+                            audio_array = audio_array[..., :max_length]
+
                         # Only squeeze here, don't call _convert_audio again
                         waveforms.append(audio_array.squeeze())
                     elif "path" in item:
@@ -107,7 +112,14 @@ class MSClapWrapper:
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze().float()  # Ensure float32
+        audio = audio.squeeze().float()  # Ensure float32
+
+        # Apply audio truncation (30 seconds max)
+        max_length = 30 * self.sampling_rate  # 30 seconds
+        if audio.shape[-1] > max_length:
+            audio = audio[..., :max_length]
+
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
@@ -115,6 +127,12 @@ class MSClapWrapper:
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
+
+        # Apply audio truncation (30 seconds max)
+        max_length = 30 * self.sampling_rate  # 30 seconds
+        if waveform.shape[-1] > max_length:
+            waveform = waveform[..., :max_length]
+
         return waveform.squeeze()
 
     def get_audio_embeddings(
@@ -124,13 +142,16 @@ class MSClapWrapper:
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         all_features = []
         processed_audio = self._process_audio(audio)
 
         for i in tqdm(
-            range(0, len(processed_audio), batch_size), desc="Processing audio batches"
+            range(0, len(processed_audio), batch_size),
+            desc="Processing audio batches",
+            disable=not show_progress_bar,
         ):
             batch = processed_audio[i : i + batch_size]
 
