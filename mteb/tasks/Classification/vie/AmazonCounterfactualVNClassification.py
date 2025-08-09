@@ -5,6 +5,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class AmazonCounterfactualVNClassification(AbsTaskClassification):
+    num_samples = 32
+
     metadata = TaskMetadata(
         name="AmazonCounterfactualVNClassification",
         dataset={
@@ -43,10 +45,3 @@ class AmazonCounterfactualVNClassification(AbsTaskClassification):
 """,
         adapted_from=["AmazonCounterfactualClassification"],
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict

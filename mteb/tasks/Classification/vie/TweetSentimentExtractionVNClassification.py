@@ -5,6 +5,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TweetSentimentExtractionVNClassification(AbsTaskClassification):
+    num_samples = 32
+
     metadata = TaskMetadata(
         name="TweetSentimentExtractionVNClassification",
         description="""A collection of translated tweets annotated for sentiment extraction.
@@ -42,10 +44,3 @@ class TweetSentimentExtractionVNClassification(AbsTaskClassification):
 """,
         adapted_from=["TweetSentimentExtractionClassification"],
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
