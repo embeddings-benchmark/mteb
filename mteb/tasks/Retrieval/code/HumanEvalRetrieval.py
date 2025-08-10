@@ -21,12 +21,14 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
+        date=("2021-01-01", "2021-12-31"),
         domains=["Programming"],
         task_subtypes=["Code retrieval"],
         license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        bibtex_citation="",
     )
 
     def load_data(self, **kwargs):
