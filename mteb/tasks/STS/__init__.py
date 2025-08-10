@@ -9,6 +9,9 @@ from .eng.STS14STS import *
 from .eng.STS15STS import *
 from .eng.STS16STS import *
 from .eng.STSBenchmarkSTS import *
+from .eng.human.STSBenchmarkHumanSubset import *
+from .eng.human.SICKRHumanSubset import *
+from .eng.human.STS12HumanSubset import *
 from .fao.FaroeseSTS import *
 from .fas.FaMTEBSTS import *
 from .fin.FinParaSTS import *
@@ -22,6 +25,7 @@ from .multilingual.SemRel24STS import *
 from .multilingual.STS17CrosslingualSTS import *
 from .multilingual.STS22CrosslingualSTS import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
+from .multilingual.human.STS22HumanSubset import *
 from .pol.PolishSTS import *
 from .por.Assin2STS import *
 from .por.SickBrSTS import *
