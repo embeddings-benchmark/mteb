@@ -12,6 +12,7 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/HumanEval",
         dataset={
             "path": "embedding-benchmark/HumanEval",
+            "revision": "ed1f48a",
             "trust_remote_code": True,
         },
         type="Retrieval",
