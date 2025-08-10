@@ -8,6 +8,7 @@ from .CommonVoice import *
 from .EmoVDB import *
 from .Fleurs import *
 from .HiFiTTS import *
+from .LibriTTS import *
 from .MACS import *
 from .multilingual.JamAlt import *
 from .MusicCaps import *
