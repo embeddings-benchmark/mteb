@@ -7,6 +7,9 @@ from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
 from .eng.WebLINXCandidatesReranking import *
+from .eng.human.Core17InstructionRerankingHumanSubset import *
+from .eng.human.News21InstructionRerankingHumanSubset import *
+from .eng.human.Robust04InstructionRerankingHumanSubset import *
 from .fra.AlloprofReranking import *
 from .fra.SyntecReranking import *
 from .jpn.JaCWIRReranking import *
@@ -16,6 +19,7 @@ from .multilingual.ESCIReranking import *
 from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
 from .multilingual.XGlueWPRReranking import *
+from .multilingual.human.WikipediaRerankingMultilingualHumanSubset import *
 from .rus.RuBQReranking import *
 from .vie.AskUbuntuDupQuestionsVN import *
 from .vie.SciDocsRerankingVN import *

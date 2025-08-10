@@ -57,6 +57,9 @@ from .eng.WikipediaSolidStateColloidalClassification import *
 from .eng.WikipediaTheoreticalAppliedClassification import *
 from .eng.YahooAnswersTopicsClassification import *
 from .eng.YelpReviewFullClassification import *
+from .eng.human.EmotionClassificationHumanSubset import *
+from .eng.human.TweetSentimentExtractionClassificationHumanSubset import *
+from .eng.human.ToxicConversationsClassificationHumanSubset import *
 from .est.estonian_valence import *
 from .fas.FaMTEBClassification import *
 from .fas.PersianFoodSentimentClassification import *
@@ -120,6 +123,7 @@ from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
 from .multilingual.TurkicClassification import *
 from .multilingual.TweetSentimentClassification import *
+from .multilingual.human.MultilingualSentimentClassificationHumanSubset import *
 from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *

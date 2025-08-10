@@ -23,6 +23,9 @@ from .eng.TwentyNewsgroupsClustering import *
 from .eng.WikiCitiesClustering import *
 from .eng.WikipediaChemistrySpecialtiesClustering import *
 from .eng.WikipediaChemistryTopicsClustering import *
+from .eng.human.WikiCitiesClusteringHumanSubset import *
+from .eng.human.ArxivClusteringP2PHumanSubset import *
+from .eng.human.RedditClusteringP2PHumanSubset import *
 from .fas.FaMTEBClustering import *
 from .fra.AlloProfClusteringP2P import *
 from .fra.AlloProfClusteringS2S import *
@@ -38,6 +41,7 @@ from .multilingual.MLSUMClusteringP2P import *
 from .multilingual.MLSUMClusteringS2S import *
 from .multilingual.SIB200ClusteringS2S import *
 from .multilingual.WikiClusteringP2P import *
+from .multilingual.human.SIB200ClusteringS2SHumanSubset import *
 from .nob.snl_clustering import *
 from .nob.SNLHierarchicalClustering import *
 from .nob.vg_clustering import *
