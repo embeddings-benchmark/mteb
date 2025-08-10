@@ -8,11 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class HumanEvalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HumanEvalRetrieval",
-        description="HumanEval dataset adapted for code retrieval evaluation.",
-        reference="https://arxiv.org/abs/2107.03374",
+        description="164 programming problems with a handwritten function signature, docstring, body, and several unit tests",
+        reference="https://huggingface.co/datasets/embedding-benchmark/HumanEval",
         dataset={
-            "path": "zeroshot/humaneval-embedding-benchmark",
-            "revision": "5e5d4171b86e0bb96b57159d991cbbbd73efcac0",
+            "path": "embedding-benchmark/HumanEval",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -21,19 +20,12 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2021-01-01", "2021-12-31"),
         domains=["Programming"],
         task_subtypes=["Code retrieval"],
         license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{chen2021evaluating,
-  title={Evaluating Large Language Models Trained on Code},
-  author={Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming and de Oliveira Pinto, Henrique Pon{\'e} and Kaplan, Jared and Edwards, Harri and Burda, Yura and Joseph, Nicholas and Brockman, Greg and others},
-  journal={arXiv preprint arXiv:2107.03374},
-  year={2021}
-}""",
     )
 
     def load_data(self, **kwargs):
