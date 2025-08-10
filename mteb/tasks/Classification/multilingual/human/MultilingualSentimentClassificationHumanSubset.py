@@ -67,31 +67,34 @@ Vylomova, Ekaterina},
 
     def load_data(self, **kwargs):
         """Load human test subset + full original training data for each language"""
-        # Load human evaluation subset (config-based)
+        # Load human evaluation subset (unified with lang column)
         human_dataset = load_dataset(
             self.metadata_dict["dataset"]["path"],
             revision=self.metadata_dict["dataset"]["revision"],
         )
         
-        # Load full original training data
+        # Load full original training data (unified with lang column)
         original_dataset = load_dataset("mteb/multilingual-sentiment-classification")
         
-        # Combine for each language config
+        # Both datasets have unified structure with lang column
+        # Split by language to create individual configs
         combined_dataset = {}
         
-        # Handle default config (all languages combined)
-        if "default" in human_dataset:
-            combined_dataset["default"] = DatasetDict({
-                "train": original_dataset["default"]["train"],
-                "test": human_dataset["default"]["test"]
-            })
+        # Filter training data by language
+        train_data = original_dataset["train"]
+        test_data = human_dataset["test"]
         
-        # Handle individual language configs
+        # Create individual language configs
         for lang in ["eng", "ara", "nor", "rus"]:
-            if lang in human_dataset:
+            # Filter train data for this language
+            train_lang_data = train_data.filter(lambda x: x["lang"] == lang)
+            # Filter test data for this language  
+            test_lang_data = test_data.filter(lambda x: x["lang"] == lang)
+            
+            if len(test_lang_data) > 0:  # Only create config if we have test data
                 combined_dataset[lang] = DatasetDict({
-                    "train": original_dataset[lang]["train"],
-                    "test": human_dataset[lang]["test"]
+                    "train": train_lang_data,
+                    "test": test_lang_data
                 })
         
         self.dataset = combined_dataset
