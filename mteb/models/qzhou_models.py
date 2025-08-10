@@ -51,7 +51,7 @@ qzhou_training_data = {
     "STS22.v2": ["train"],
     "STSBenchmark": ["train"],
     "ToxicConversationsClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"]
+    "TweetSentimentExtractionClassification": ["train"],
 }
 
 
