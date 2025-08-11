@@ -237,8 +237,8 @@ The PR will be reviewed by one of the organizers or contributors who might ask y
 
 Before you commit, here is a checklist you should complete before submitting:
 
-- [ ] I have outlined why this dataset is filling an existing gap in `mteb`
-- [ ] I have tested that the dataset runs with the `mteb` package.
+- [x] I have outlined why this dataset is filling an existing gap in `mteb`
+- [x] I have tested that the dataset runs with the `mteb` package.
 
 An easy way to test it is using:
 ```python
@@ -251,8 +251,8 @@ evaluation = mteb.MTEB(tasks=[task])
 evaluation.run(model)
 ```
 
-- [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
-  - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
-  - [ ] `intfloat/multilingual-e5-small`
-- [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
-- [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
+- [x] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
+  - [x] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
+  - [x] `intfloat/multilingual-e5-small`
+- [x] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
+- [x] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
