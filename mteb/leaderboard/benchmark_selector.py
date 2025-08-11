@@ -35,6 +35,7 @@ BENCHMARK_ENTRIES = [
                         "MIEB(lite)",
                         "MIEB(Img)",
                         "VisualDocumentRetrieval",
+                        "JinaVDR",
                     ]
                 ),
             ),
