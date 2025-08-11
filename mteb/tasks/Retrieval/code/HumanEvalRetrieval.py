@@ -13,7 +13,6 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "embedding-benchmark/HumanEval",
             "revision": "ed1f48a",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",
@@ -42,15 +41,21 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
         from datasets import load_dataset
 
         # Load the three configurations
-        corpus_ds = load_dataset(self.metadata_dict["dataset"]["path"], "corpus")[
-            "corpus"
-        ]
-        queries_ds = load_dataset(self.metadata_dict["dataset"]["path"], "queries")[
-            "queries"
-        ]
-        qrels_ds = load_dataset(self.metadata_dict["dataset"]["path"], "default")[
-            "test"
-        ]
+        corpus_ds = load_dataset(
+            self.metadata_dict["dataset"]["path"],
+            "corpus",
+            revision=self.metadata_dict["dataset"]["revision"],
+        )["corpus"]
+        queries_ds = load_dataset(
+            self.metadata_dict["dataset"]["path"],
+            "queries",
+            revision=self.metadata_dict["dataset"]["revision"],
+        )["queries"]
+        qrels_ds = load_dataset(
+            self.metadata_dict["dataset"]["path"],
+            "default",
+            revision=self.metadata_dict["dataset"]["revision"],
+        )["test"]
 
         # Process corpus
         for item in corpus_ds:
