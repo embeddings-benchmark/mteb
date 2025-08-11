@@ -42,19 +42,19 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
 
         # Load the three configurations
         corpus_ds = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             "corpus",
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )["corpus"]
         queries_ds = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             "queries",
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )["queries"]
         qrels_ds = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             "default",
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )["test"]
 
         # Process corpus
