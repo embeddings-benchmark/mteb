@@ -67,9 +67,9 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
 
         # Process qrels (relevant documents)
         for item in qrels_ds:
-            query_id = item["query_id"]
+            query_id = item["query-id"]
             if query_id not in self.relevant_docs:
                 self.relevant_docs[query_id] = {}
-            self.relevant_docs[query_id][item["corpus_id"]] = item["score"]
+            self.relevant_docs[query_id][item["corpus-id"]] = item["score"]
 
         self.data_loaded = True
