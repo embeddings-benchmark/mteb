@@ -3,9 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import gradio as gr
-from build.lib.mteb.benchmarks.benchmarks import MTEB_multilingual
 
 import mteb
+from build.lib.mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb import Benchmark
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
@@ -64,6 +64,7 @@ BENCHMARK_ENTRIES = [
                         "MTEB(pol, v1)",
                         "MTEB(rus, v1)",
                         "MTEB(fas, v1)",
+                        "VN-MTEB (vie, v1)",
                     ]
                 )
                 + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
