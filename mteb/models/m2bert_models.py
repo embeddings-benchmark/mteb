@@ -17,5 +17,5 @@ m2_32k = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/HazyResearch/m2",
     public_training_data="https://huggingface.co/datasets/allenai/c4",
-    training_datasets=None, # unknown
+    training_datasets={}, # C4
 )
