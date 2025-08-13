@@ -3,6 +3,7 @@ from __future__ import annotations
 from .CQADupStackNLRetrieval import CQADupstackNLRetrieval
 from .CQADupStackRetrieval import CQADupstackRetrieval
 from .CQADupStackRetrievalFa import CQADupstackRetrievalFa
+from .RTEBAggregatedTask import RTEBAggregatedTask
 from .STS17MultilingualVisualSTS import (
     STS17MultilingualVisualSTSEng,
     STS17MultilingualVisualSTSMultilingual,
@@ -22,4 +23,5 @@ __all__ = [
     "STS17MultilingualVisualSTSMultilingual",
     "STSBenchmarkMultilingualVisualSTSEng",
     "STSBenchmarkMultilingualVisualSTSMultilingual",
+    "RTEBAggregatedTask",
 ]
