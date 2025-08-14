@@ -51,14 +51,14 @@ samilpwc_expr = ModelMeta(
     loader=partial(
         instruct_loader,
         model_name_or_path="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
-        revision="a622f53760b13681a09bf94ef19579772a36d491",
+        revision="33358978be40f36491045f9c2a359d38c3f50047",
     ),
     name="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
     languages=[
         "kor-Hang",
     ],
     open_weights=True,
-    revision="a622f53760b13681a09bf94ef19579772a36d491",
+    revision="33358978be40f36491045f9c2a359d38c3f50047",
     release_date="2025-08-12",
     n_parameters=560_000_000,
     memory_usage_mb=2136,
