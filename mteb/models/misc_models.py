@@ -1788,3 +1788,49 @@ amazon_titan_text_embeddings_v2 = ModelMeta(
     training_datasets=None,
     superseded_by=None,
 )
+
+sup_simcse_vietnamese_phobert_base_ = ModelMeta(
+    name="VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
+    revision="608779b86741a8acd8c8d38132974ff04086b138",
+    release_date="2021-05-26",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=None,
+    use_instructions=False,
+    open_weights=True,
+    n_parameters=135_000_000,
+    memory_usage_mb=517,
+    max_tokens=256,
+    embed_dim=768,
+    license="apache-2.0",
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
+    similarity_fn_name="cosine",
+    training_datasets=None,
+)
+
+bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
+    name="bkai-foundation-models/vietnamese-bi-encoder",
+    revision="84f9d9ada0d1a3c37557398b9ae9fcedcdf40be0",
+    release_date="2023-09-09",
+    languages=[
+        "vie-Latn",
+    ],
+    loader=None,
+    use_instructions=False,
+    open_weights=True,
+    n_parameters=135_000_000,
+    memory_usage_mb=515,
+    max_tokens=256,
+    embed_dim=768,
+    license="apache-2.0",
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/bkai-foundation-models/vietnamese-bi-encoder",
+    similarity_fn_name="cosine",
+    training_datasets=None,
+)
