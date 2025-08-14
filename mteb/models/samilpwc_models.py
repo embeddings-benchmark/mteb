@@ -19,9 +19,10 @@ SAMILPWC_GENAI_TRAINING_DATA = {
 
 INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
+
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
-    ) -> str:
+) -> str:
     if not instruction or prompt_type == PromptType.document:
         return ""
     if isinstance(instruction, dict):
@@ -30,6 +31,7 @@ def instruction_template(
         else:
             instruction = instruction[prompt_type]
     return INSTRUCTION.format(instruction=instruction)
+
 
 def instruct_loader(model_name_or_path, **kwargs):
     model = InstructSentenceTransformerWrapper(
@@ -44,8 +46,13 @@ def instruct_loader(model_name_or_path, **kwargs):
         encoder.tokenizer.padding_side = "left"
     return model
 
+
 samilpwc_expr = ModelMeta(
-    loader=partial(instruct_loader, model_name_or_path="SamilPwC-AXNode-GenAI/PwC-Embedding_expr", revision="a622f53760b13681a09bf94ef19579772a36d491"),
+    loader=partial(
+        instruct_loader,
+        model_name_or_path="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
+        revision="a622f53760b13681a09bf94ef19579772a36d491",
+    ),
     name="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
     languages=[
         "kor-Hang",
