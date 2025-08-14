@@ -19,9 +19,6 @@ SAMILPWC_GENAI_TRAINING_DATA = {
 
 INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
-MODEL_NAME = "SamilPwC-AXNode-GenAI/PwC-Embedding_expr"
-MODEL_REVISION = "a622f53760b13681a09bf94ef19579772a36d491"
-
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
     ) -> str:
@@ -48,13 +45,13 @@ def instruct_loader(model_name_or_path, **kwargs):
     return model
 
 samilpwc_expr = ModelMeta(
-    loader=partial(instruct_loader, model_name_or_path=MODEL_NAME, revision=MODEL_REVISION),
-    name=MODEL_NAME,
+    loader=partial(instruct_loader, model_name_or_path="SamilPwC-AXNode-GenAI/PwC-Embedding_expr", revision="a622f53760b13681a09bf94ef19579772a36d491"),
+    name="SamilPwC-AXNode-GenAI/PwC-Embedding_expr",
     languages=[
         "kor-Hang",
     ],
     open_weights=True,
-    revision=MODEL_REVISION,
+    revision="a622f53760b13681a09bf94ef19579772a36d491",
     release_date="2025-08-12",
     n_parameters=560_000_000,
     memory_usage_mb=2136,
