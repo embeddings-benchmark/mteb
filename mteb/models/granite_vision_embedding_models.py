@@ -136,6 +136,7 @@ granite_vision_embedding = ModelMeta(
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
         else None,
+        revision ="cee615db64d89d1552a4ee39c50f25c0fc5c66ca"
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
     languages=["eng-Latn"],
@@ -143,16 +144,16 @@ granite_vision_embedding = ModelMeta(
     release_date="2025-06-11",
     modalities=["image", "text"],
     n_parameters=2_980_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=11351,
     max_tokens=128000,
     embed_dim=128,
     license="apache-2.0",
     open_weights=True,
-    public_training_code="",
-    public_training_data="",
+    public_training_code=None,
+    public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/ibm-granite/granite-vision-3.3-2b-embedding",
     similarity_fn_name="max_sim",
     use_instructions=True,
-    training_datasets={},
+    training_datasets=None,
 )
