@@ -22,7 +22,6 @@ logger = logging.getLogger(__name__)
 
 
 class GraniteVisionEmbeddingWrapper:
-
     def __init__(
         self,
         model_name: str,
@@ -34,16 +33,22 @@ class GraniteVisionEmbeddingWrapper:
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model_name = model_name
-        
+
         # Load model
         self.mdl = AutoModel.from_pretrained(
-            model_name, revision=revision, device_map=self.device,trust_remote_code=True, **kwargs
+            model_name,
+            revision=revision,
+            device_map=self.device,
+            trust_remote_code=True,
+            **kwargs,
         )
 
         self.mdl.eval()
 
         # Load processor
-        self.processor = AutoProcessor.from_pretrained(model_name, trust_remote_code=True, revision=revision)
+        self.processor = AutoProcessor.from_pretrained(
+            model_name, trust_remote_code=True, revision=revision
+        )
 
     def encode(self, sentences, **kwargs):
         return self.get_text_embeddings(texts=sentences, **kwargs)
@@ -126,8 +131,6 @@ class GraniteVisionEmbeddingWrapper:
         return self.processor.score_multi_vector(a, b)
 
 
-
-
 granite_vision_embedding = ModelMeta(
     loader=partial(
         GraniteVisionEmbeddingWrapper,
@@ -136,7 +139,7 @@ granite_vision_embedding = ModelMeta(
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
         else None,
-        revision ="cee615db64d89d1552a4ee39c50f25c0fc5c66ca"
+        revision="cee615db64d89d1552a4ee39c50f25c0fc5c66ca",
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
     languages=["eng-Latn"],
