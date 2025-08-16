@@ -158,5 +158,5 @@ granite_vision_embedding = ModelMeta(
     reference="https://huggingface.co/ibm-granite/granite-vision-3.3-2b-embedding",
     similarity_fn_name="max_sim",
     use_instructions=True,
-    training_datasets=None, # proprietary, not public
+    training_datasets=None,  # proprietary, not public
 )
