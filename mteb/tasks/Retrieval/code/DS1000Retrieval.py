@@ -27,12 +27,14 @@ class DS1000Retrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lai2022ds,
+        bibtex_citation=r"""
+@article{lai2022ds,
   author = {Lai, Yuhang and Li, Chengxi and Wang, Yiming and Zhang, Tianyi and Zhong, Ruiqi and Zettlemoyer, Luke and Yih, Wen-tau and Fried, Daniel and Wang, Sida and Yu, Tao},
   journal = {arXiv preprint arXiv:2211.11501},
   title = {DS-1000: A Natural and Reliable Benchmark for Data Science Code Generation},
-  year = {2022}
-}""",
+  year = {2022},
+}
+""",
     )
 
     def load_data(self, **kwargs):
