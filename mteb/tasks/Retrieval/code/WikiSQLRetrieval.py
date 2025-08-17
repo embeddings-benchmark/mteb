@@ -27,14 +27,16 @@ class WikiSQLRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{zhong2017seq2sql,
+        bibtex_citation=r"""
+@article{zhong2017seq2sql,
   archiveprefix = {arXiv},
   author = {Zhong, Victor and Xiong, Caiming and Socher, Richard},
   eprint = {1709.00103},
   primaryclass = {cs.CL},
   title = {Seq2SQL: Generating Structured Queries from Natural Language using Reinforcement Learning},
-  year = {2017}
-}""",
+  year = {2017},
+}
+""",
     )
 
     def load_data(self, **kwargs):
