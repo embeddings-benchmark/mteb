@@ -52,7 +52,7 @@ class MockNumpyEncoder(AbsMockEncoder):
         open_weights=True,
         public_training_code=None,
         public_training_data=None,
-        framework=None,
+        framework=["NumPy"],
         reference=None,
         similarity_fn_name=None,
         use_instructions=False,
