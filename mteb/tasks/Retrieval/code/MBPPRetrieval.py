@@ -27,12 +27,14 @@ class MBPPRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{austin2021program,
+        bibtex_citation=r"""
+@article{austin2021program,
   author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
   journal = {arXiv preprint arXiv:2108.07732},
   title = {Program Synthesis with Large Language Models},
-  year = {2021}
-}""",
+  year = {2021},
+}
+""",
     )
 
     def load_data(self, **kwargs):
