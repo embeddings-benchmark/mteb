@@ -54,6 +54,7 @@ from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
+from .eng.HC3FinanceRetrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *
