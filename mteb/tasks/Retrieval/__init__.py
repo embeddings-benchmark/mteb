@@ -33,6 +33,7 @@ from .eng.BillSumCA import *
 from .eng.BillSumUS import *
 from .eng.BrightRetrieval import *
 from .eng.BuiltBenchRetrieval import *
+from .eng.ChatDoctorRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
