@@ -6,7 +6,7 @@ import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import datasets
 import numpy as np
@@ -18,7 +18,6 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks._stratification import _iterative_train_test_split
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.cache import ResultCache
 from mteb.languages import LanguageScripts
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
@@ -28,6 +27,9 @@ from mteb.models.models_protocols import (
 )
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
+
+if TYPE_CHECKING:
+    from mteb.cache import ResultCache
 
 logger = logging.getLogger(__name__)
 
@@ -132,7 +134,7 @@ class AbsTask(ABC):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
-        cache: ResultCache | None,
+        cache: ResultCache | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.

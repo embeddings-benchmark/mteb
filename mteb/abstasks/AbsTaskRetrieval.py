@@ -9,8 +9,8 @@ from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
-from mteb import get_model_meta
 from mteb.cache import ResultCache
+from mteb.models.get_model_meta import get_model_meta
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import Encoder, MTEBModels
 from mteb.types import (
@@ -261,7 +261,7 @@ class AbsTaskRetrieval(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
-        cache: ResultCache | None,
+        cache: ResultCache | None = None,
         save_retrieval_results: bool = False,
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
@@ -344,19 +344,25 @@ class AbsTaskRetrieval(AbsTask):
         if self.save_retrieval_results:
             if hasattr(model, "mteb_model_meta"):
                 model_meta = model.mteb_model_meta
-                previous_results_path = self.previouse_results_path(
+                previous_results_path = self.previous_results_path(
                     model_meta, self.cache
                 )
                 previous_results = {}
                 if previous_results_path.exists():
-                    with open(previous_results_path) as f:
+                    with previous_results_path.open() as f:
                         previous_results = json.load(f)
 
                 if hf_subset not in previous_results:
                     previous_results[hf_subset] = {}
-                previous_results[hf_subset][hf_split] = results
 
-                with open(previous_results_path, "w") as f:
+                top_k_sorted = {}
+                for query_id, values in results.items():
+                    sorted_keys = sorted(values, key=values.get, reverse=True)
+                    top_k_sorted[query_id] = sorted_keys[: self.top_k]
+
+                previous_results[hf_subset][hf_split] = top_k_sorted
+
+                with previous_results_path.open("w") as f:
                     json.dump(previous_results, f)
             else:
                 logger.warning(
@@ -385,6 +391,13 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
+        previous_results_data = {}
+        if self.previous_results_model_meta:
+            previous_results_data = {
+                "top_ranked_creation": self.previous_results_model_meta.to_dict(),
+                "top_k": self.top_k,
+            }
+
         return make_score_dict(
             ndcg,
             _map,
@@ -394,7 +407,7 @@ class AbsTaskRetrieval(AbsTask):
             naucs,
             naucs_mrr,
             task_specific_scores,
-            self.previous_results_model_meta,
+            previous_results_data,
         )
 
     def task_specific_scores(
@@ -570,7 +583,7 @@ class AbsTaskRetrieval(AbsTask):
     def previous_results_name(self) -> str:
         return f"{self.metadata.name}_previous.json"
 
-    def previouse_results_path(
+    def previous_results_path(
         self,
         model_meta: ModelMeta,
         cache: ResultCache | None,
@@ -586,6 +599,7 @@ class AbsTaskRetrieval(AbsTask):
         model: MTEBModels | ModelMeta | str,
         cache: ResultCache | None = ResultCache(),
         remote: bool = False,
+        top_k: int = 10,
     ) -> None:
         """Converts a reranking task to re-ranking by loading results from model run
 
@@ -593,6 +607,7 @@ class AbsTaskRetrieval(AbsTask):
             model: Model which have previous results
             cache: Cache to use
             remote: If true, re-ranking task is re-ranked
+            top_k: top k
         """
         if isinstance(model, MTEBModels):
             if not hasattr(model, "mteb_model_meta"):
@@ -610,7 +625,7 @@ class AbsTaskRetrieval(AbsTask):
                 "Cannot convert re-ranking task to re-ranking, because cache is None."
             )
 
-        previous_results_path = self.previouse_results_path(
+        previous_results_path = self.previous_results_path(
             model_meta, cache, remote=remote
         )
         if not previous_results_path.exists():
@@ -629,7 +644,10 @@ class AbsTaskRetrieval(AbsTask):
                 top_ranked = previous_results[subset][split]
                 if not isinstance(top_ranked, dict):
                     raise ValueError("Previous top ranked results is not a dictionary.")
-                self.dataset[subset][split]["top_ranked"] = top_ranked
+                self.dataset[subset][split]["top_ranked"] = {
+                    q_id: c_ids[:top_k] for q_id, c_ids in top_ranked.items()
+                }
+        self.top_k = top_k
         self.previous_results_model_meta = model_meta
 
 

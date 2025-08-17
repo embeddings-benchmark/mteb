@@ -4,18 +4,18 @@ import json
 import logging
 from pathlib import Path
 
-import pytest
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import CrossEncoder
 
 import mteb
-from mteb import MTEB
+from mteb.abstasks import AbsTaskRetrieval
+from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
+from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.skip(reason="2 stage not implemented for now")
 def test_mteb_rerank(tmp_path: Path):
     # Test that reranking works
     # unfortunately, we need all the query ids to pretend to have this
@@ -321,37 +321,37 @@ def test_mteb_rerank(tmp_path: Path):
         "1389",
         "1395",
     ]
+    prev_model = MockNumpyEncoder()
     model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
+    task: AbsTaskRetrieval = mteb.get_task("SciFact")
     # create fake first stage results
-    tmp_file = tmp_path / "tmp.json"
-    with open(tmp_file, "w") as f:
+    cache = ResultCache(tmp_path)
+    prev_result_path = task.previous_results_path(prev_model.mteb_model_meta, cache)
+
+    with open(prev_result_path, "w") as f:
         f.write(
             json.dumps(
                 {
-                    i: {
-                        # just two random documents so we can see it works
-                        "4983": 0.1,
-                        "18670": 0.9,
-                        "19238": 0.01,
-                    }
+                    i: [
+                        "18670",
+                        "4983",
+                        "19238",
+                    ]
                     for i in scifact_keys
                 }
             )
         )
 
-    eval.run(
-        model,  # type: ignore
-        output_folder=tmp_path.as_posix(),
-        overwrite_results=True,
-        eval_splits=["test"],
-        previous_results=tmp_file,
-        save_predictions=True,
-        co2_tracker=False,
+    task.convert_to_reranking(prev_model.mteb_model_meta, cache)
+    results = mteb.evaluate(
+        model,
+        task,
+        save_retrieval_results=True,
     )
+    current_result_path = task.previous_results_path(model.mteb_model_meta, cache)
 
     # read in the results
-    with (tmp_path / "SciFact_default_predictions.json").open() as f:
+    with current_result_path.open() as f:
         results = json.load(f)
 
     results = sorted(
@@ -365,11 +365,10 @@ def test_mteb_rerank(tmp_path: Path):
     assert "18670" in results
 
 
-@pytest.mark.skip(reason="2 stage not implemented for now")
 def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
-    de = SentenceTransformer(de_name, revision=revision)
+    de = mteb.get_model(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
     ce.mteb_model_meta = ModelMeta(  # type: ignore
@@ -393,40 +392,21 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         framework=["Sentence Transformers", "PyTorch"],
     )
     task = MockRetrievalTask()
-    eval = MTEB(tasks=[task])
-    stage1_path = tmp_path / "stage1"
-    eval.run(
+    cache = ResultCache(tmp_path)
+    de_results = mteb.evaluate(
         de,
-        output_folder=stage1_path.as_posix(),
-        overwrite_results=True,
-        save_predictions=True,
-        eval_splits=["test"],
+        task,
+        save_retrieval_results=True,
+        cache=cache,
     )
-    stage2_path = tmp_path / "stage2"
-    eval.run(
-        ce,  # type: ignore
-        output_folder=stage2_path.as_posix(),
-        overwrite_results=True,
-        previous_results=(
-            stage1_path / f"{task.metadata.name}_default_predictions.json"
-        ),
-        save_predictions=False,
-        eval_splits=["test"],
+    task.convert_to_reranking(de, cache)
+    ce_results = mteb.evaluate(
+        ce,
+        task,
+        cache=cache,
     )
-
-    # read in stage 1 and stage two and check ndcg@1 is the same
-    with open(
-        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/{task.metadata.name}.json"
-    ) as f:
-        stage1 = json.load(f)
-
-    with (
-        stage2_path
-        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/{task.metadata.name}.json"
-    ).open() as f:
-        stage2 = json.load(f)
 
     assert (
-        stage1["scores"]["test"][0]["ndcg_at_1"]
-        == stage2["scores"]["test"][0]["ndcg_at_1"]
+        de_results[0].scores["test"][0]["ndcg_at_1"]
+        == ce_results[0].scores["test"][0]["ndcg_at_1"]
     )
