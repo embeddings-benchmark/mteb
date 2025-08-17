@@ -163,9 +163,11 @@ class AbsTaskRetrieval(AbsTask):
                     ][split]
                     if hasattr(self, "instructions"):
                         instructions = self.instructions[subset][split]
-                        self.dataset[subset][split]["queries"] = combine_queries_with_instructions_datasets(
-                            self.dataset[subset][split]["queries"],
-                            instructions,
+                        self.dataset[subset][split]["queries"] = (
+                            combine_queries_with_instructions_datasets(
+                                self.dataset[subset][split]["queries"],
+                                instructions,
+                            )
                         )
                     if hasattr(self, "top_ranked"):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[

@@ -10,6 +10,7 @@ from mteb.types import (
     CorpusDatasetType,
     QueryDatasetType,
     RelevantDocumentsType,
+    RetrievalEvaluationResult,
     RetrievalOutputType,
     TopRankedDocumentsType,
 )
@@ -86,17 +87,7 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: list[int],
         ignore_identical_ids: bool = False,
-    ) -> tuple[
-        # todo add NamedTuple
-        dict[str, dict[str, float]],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-    ]:
+    ) -> RetrievalEvaluationResult:
         if ignore_identical_ids:
             logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
@@ -110,9 +101,4 @@ class RetrievalEvaluator(Evaluator):
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
-
-        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
-            calculate_retrieval_scores(results, qrels, k_values)
-        )
-
-        return all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr
+        return calculate_retrieval_scores(results, qrels, k_values)

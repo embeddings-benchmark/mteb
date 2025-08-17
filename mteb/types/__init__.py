@@ -23,7 +23,7 @@ from ._metadata import (
     ModelName,
     Revision,
 )
-from ._result import HFSubset, Score, ScoresDict, SplitName
+from ._result import HFSubset, RetrievalEvaluationResult, Score, ScoresDict, SplitName
 from ._string_validators import StrDate, StrURL
 
 __all__ = [
@@ -52,4 +52,5 @@ __all__ = [
     "RelevantDocumentsType",
     "TopRankedDocumentsType",
     "RetrievalOutputType",
+    "RetrievalEvaluationResult",
 ]

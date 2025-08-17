@@ -30,7 +30,7 @@ import mteb
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder, MtebSupportedModelProtocols
+from mteb.models.models_protocols import Encoder, MTEBModels
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
@@ -169,7 +169,7 @@ class MTEB:
     @staticmethod
     def _run_eval(
         task: AbsTask,
-        model: MtebSupportedModelProtocols,
+        model: MTEBModels,
         split: str,
         subsets_to_run: list[str] | None = None,
         *,
@@ -253,7 +253,7 @@ class MTEB:
 
     def run(
         self,
-        model: MtebSupportedModelProtocols | CrossEncoder | SentenceTransformer,
+        model: MTEBModels | CrossEncoder | SentenceTransformer,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits: list[str] | None = None,
@@ -549,7 +549,7 @@ class MTEB:
         return evaluation_results
 
     @staticmethod
-    def create_model_meta(model: MtebSupportedModelProtocols) -> ModelMeta:
+    def create_model_meta(model: MTEBModels) -> ModelMeta:
         if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None:
             meta = model.mteb_model_meta  # type: ignore
         else:

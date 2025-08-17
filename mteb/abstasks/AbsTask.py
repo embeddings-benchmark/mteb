@@ -22,7 +22,7 @@ from mteb.languages import LanguageScripts
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
     Encoder,
-    MtebSupportedModelProtocols,
+    MTEBModels,
     SearchProtocol,
 )
 from mteb.types import HFSubset, ScoresDict
@@ -126,7 +126,7 @@ class AbsTask(ABC):
 
     def evaluate(
         self,
-        model: MtebSupportedModelProtocols,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
@@ -196,7 +196,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: MtebSupportedModelProtocols,
+        model: MTEBModels,
         data_split: Dataset,
         encode_kwargs: dict[str, Any],
         hf_split: str,

@@ -12,7 +12,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import MtebSupportedModelProtocols
+from mteb.models.models_protocols import MTEBModels
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     sentence_transformers_loader,
@@ -81,7 +81,7 @@ def get_model_metas(
 
 def get_model(
     model_name: str, revision: str | None = None, **kwargs: Any
-) -> MtebSupportedModelProtocols:
+) -> MTEBModels:
     """A function to fetch a model object by name.
 
     Args:

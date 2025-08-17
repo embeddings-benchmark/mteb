@@ -22,7 +22,7 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
     Encoder,
-    MtebSupportedModelProtocols,
+    MTEBModels,
 )
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
@@ -160,7 +160,7 @@ def _evaluate(
 
 
 def evaluate(
-    model: ModelMeta | MtebSupportedModelProtocols | SentenceTransformer | CrossEncoder,
+    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,

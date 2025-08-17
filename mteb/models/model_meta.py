@@ -16,7 +16,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.languages import check_language_code
-from mteb.models.models_protocols import Encoder, MtebSupportedModelProtocols
+from mteb.models.models_protocols import Encoder, MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 logger = logging.getLogger(__name__)
@@ -94,7 +94,7 @@ class ModelMeta(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     # loaders
-    loader: Callable[..., MtebSupportedModelProtocols] | None
+    loader: Callable[..., MTEBModels] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     name: str | None
     revision: str | None

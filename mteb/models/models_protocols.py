@@ -192,8 +192,8 @@ class CrossEncoderProtocol(Protocol):
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
         Args:
-            inputs1: First Dataloader of inputs to encode. For reranking will be queries.
-            inputs2: Second Dataloader of inputs to encode. For reranking will be documents.
+            inputs1: First Dataloader of inputs to encode. For reranking will be queries (for text only tasks `QueryDatasetType`).
+            inputs2: Second Dataloader of inputs to encode. For reranking will be documents (for text only tasks `RetrievalOutputType`).
             task_metadata: Metadata of the current task.
             hf_split: Split of current task, allows to know some additional information about current split.
                 E.g. Current language
@@ -207,4 +207,4 @@ class CrossEncoderProtocol(Protocol):
         ...
 
 
-MtebSupportedModelProtocols = Union[Encoder, CrossEncoderProtocol, SearchProtocol]
+MTEBModels = Union[Encoder, CrossEncoderProtocol, SearchProtocol]
