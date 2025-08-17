@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class BarExamQA(AbsTaskRetrieval):
+class BarExamQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         dataset={
             "path": "isaacus/mteb-barexam-qa",
