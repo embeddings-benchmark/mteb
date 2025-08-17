@@ -76,8 +76,8 @@ def test_load_data(
 
 @pytest.mark.test_datasets
 @pytest.mark.flaky(
-    reruns=3,
-    reruns_delay=10,
+    reruns=5,
+    reruns_delay=12,
     only_rerun=["AssertionError"],
     reason="May fail due to network issues",
 )
