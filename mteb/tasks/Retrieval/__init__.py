@@ -13,6 +13,7 @@ from .code.CodeTransOceanDLRetrieval import *
 from .code.COIRCodeSearchNetRetrieval import *
 from .code.CosQARetrieval import *
 from .code.FreshStackRetrieval import *
+from .code.HumanEvalRetrieval import *
 from .code.StackOverflowQARetrieval import *
 from .code.SyntheticText2SqlRetrieval import *
 from .dan.DanFeverRetrieval import *
@@ -30,8 +31,9 @@ from .eng.AILAStatutesRetrieval import *
 from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
-from .eng.BillSumCA import *
-from .eng.BillSumUS import *
+from .eng.BarExamQARetrieval import *
+from .eng.BillSumCARetrieval import *
+from .eng.BillSumUSRetrieval import *
 from .eng.BrightRetrieval import *
 from .eng.BuiltBenchRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
@@ -54,6 +56,7 @@ from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
+from .eng.GovReportRetrieval import *
 from .eng.HagridRetrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
