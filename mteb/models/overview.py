@@ -96,6 +96,7 @@ from mteb.models import (
     ua_sentence_models,
     uae_models,
     vdr_models,
+    vi_vn_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -195,6 +196,7 @@ model_modules = [
     colsmol_models,
     geogpt_models,
     mcinext_models,
+    vi_vn_models,
 ]
 MODEL_REGISTRY = {}
 

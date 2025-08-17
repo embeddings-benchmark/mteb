@@ -501,9 +501,9 @@ class JinaV4Wrapper(Wrapper):
             scores_list.append(scores_batch)
 
         scores = torch.cat(scores_list, dim=0)
-        assert scores.shape[0] == len(qs), (
-            f"Expected {len(qs)} scores, got {scores.shape[0]}"
-        )
+        assert scores.shape[0] == len(
+            qs
+        ), f"Expected {len(qs)} scores, got {scores.shape[0]}"
 
         scores = scores.to(torch.float32)
         return scores

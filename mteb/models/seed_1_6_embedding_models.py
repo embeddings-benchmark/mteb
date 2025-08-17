@@ -186,9 +186,7 @@ class Seed16EmbeddingWrapper(Wrapper):
     ):
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        ), f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
 
         if (
             prompt_type == PromptType("query") or prompt_type is None
@@ -217,9 +215,7 @@ class Seed16EmbeddingWrapper(Wrapper):
 
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        ), f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
 
         if (
             prompt_type == PromptType("query") or prompt_type is None
@@ -263,9 +259,7 @@ class Seed16EmbeddingWrapper(Wrapper):
 
         assert (
             self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        ), f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
 
         assert len(texts) == len(images)
         if isinstance(images, DataLoader):
