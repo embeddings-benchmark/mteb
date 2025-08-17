@@ -9,10 +9,10 @@ class FreshStackRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FreshStackRetrieval",
         description="A code retrieval task based on FreshStack dataset containing programming problems across multiple languages. Each query is a natural language description of a programming task (e.g., 'Write a function to reverse a string using recursion'), and the corpus contains code implementations in Python, JavaScript, and Go. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains function implementations with proper syntax and logic across different programming languages.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/FreshStack",
+        reference="https://huggingface.co/datasets/embedding-benchmark/FreshStack_mteb",
         dataset={
-            "path": "embedding-benchmark/FreshStack",
-            "revision": "d5c9e3c7e4b7c8a3b1f2d6e8f9a0b1c2d3e4f5a6",
+            "path": "embedding-benchmark/FreshStack_mteb",
+            "revision": "ef18e1ca304ddae27ca441c986c0a7294461a6b6",
         },
         type="Retrieval",
         category="s2s",
