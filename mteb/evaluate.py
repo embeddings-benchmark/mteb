@@ -14,13 +14,20 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
 from mteb.load_results.benchmark_results import ModelResult
 from mteb.load_results.task_results import TaskResult
-from mteb.models.encoder_interface import Encoder
 from mteb.models.get_model_meta import (
     _model_meta_from_cross_encoder,
     _model_meta_from_sentence_transformers,
 )
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.models_protocols import (
+    CrossEncoderProtocol,
+    Encoder,
+    MTEBModels,
+)
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+)
 from mteb.types import HFSubset, SplitName
 
 logger = logging.getLogger(__name__)
@@ -153,7 +160,7 @@ def _evaluate(
 
 
 def evaluate(
-    model: ModelMeta | Encoder | SentenceTransformer | CrossEncoder,
+    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,
@@ -256,9 +263,12 @@ def evaluate(
     meta = _get_model_meta(model) if not isinstance(model, ModelMeta) else model
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
-    if isinstance(model, (SentenceTransformer, CrossEncoder)):
-        model = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
-    model = cast(Encoder, model)
+    if isinstance(model, SentenceTransformer):
+        model = SentenceTransformerEncoderWrapper(model)
+        model = cast(Encoder, model)
+    elif isinstance(model, CrossEncoder):
+        model = CrossEncoderWrapper(model)
+        model = cast(CrossEncoderProtocol, model)
 
     existing_results = None
     if cache:

@@ -4,7 +4,6 @@ from .any_sts_evaluator import AnySTSEvaluator
 from .bitext_mining_evaluator import BitextMiningEvaluator
 from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator
-from .dense_retrieval_exact_search import DenseRetrievalExactSearch
 from .evaluator import Evaluator
 from .Image import (
     Any2AnyMultiChoiceEvaluator,
@@ -25,7 +24,6 @@ __all__ = [
     "SummarizationEvaluator",
     "DeprecatedSummarizationEvaluator",
     "RetrievalEvaluator",
-    "DenseRetrievalExactSearch",
     "ClusteringEvaluator",
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",

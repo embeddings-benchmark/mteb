@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerWrapper,
+    SentenceTransformerEncoderWrapper,
 )
 
 # Define task instructions with specific task names
@@ -17,7 +17,7 @@ task_instructions = {
 }
 
 searchmap_preview = ModelMeta(
-    loader=SentenceTransformerWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "model_prompts": task_instructions,
     },

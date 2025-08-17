@@ -10,10 +10,13 @@ from huggingface_hub.errors import RepositoryNotFoundError
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.models.encoder_interface import Encoder
 from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.models_protocols import MTEBModels
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    sentence_transformers_loader,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +79,9 @@ def get_model_metas(
     return res
 
 
-def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> Encoder:
+def get_model(
+    model_name: str, revision: str | None = None, **kwargs: Any
+) -> MTEBModels:
     """A function to fetch a model object by name.
 
     Args:
@@ -190,7 +195,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
 
 def _model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
     return ModelMeta(
-        loader=sentence_transformers_loader,
+        loader=CrossEncoderWrapper,
         name=model.model.name_or_path,
         revision=model.config._commit_hash,
         release_date=None,

@@ -10,7 +10,7 @@ import torch
 from packaging.version import Version
 from sklearn.metrics import auc
 
-from mteb.types import RelevantDocumentsType
+from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
 
 logger = logging.getLogger(__name__)
 
@@ -507,16 +507,7 @@ def calculate_retrieval_scores(
     results: dict[str, dict[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],
-) -> tuple[
-    dict[str, dict[str, float]],
-    dict[str, float],
-    dict[str, float],
-    dict[str, float],
-    dict[str, float],
-    dict[str, float],
-    dict[str, float],
-    dict[str, float],
-]:
+) -> RetrievalEvaluationResult:
     map_string = "map_cut." + ",".join([str(k) for k in k_values])
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
@@ -545,8 +536,16 @@ def calculate_retrieval_scores(
     naucs_mrr = evaluate_abstention(results, mrr_scores)
 
     avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
-
-    return scores, ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr
+    return RetrievalEvaluationResult(
+        all_scores=scores,
+        ndcg=ndcg,
+        map=_map,
+        recall=recall,
+        precision=precision,
+        naucs=naucs,
+        mrr=avg_mrr,
+        naucs_mrr=naucs_mrr,
+    )
 
 
 def evaluate_abstention(

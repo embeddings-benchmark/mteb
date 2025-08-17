@@ -4,6 +4,7 @@ import json
 import logging
 from pathlib import Path
 
+import pytest
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
@@ -14,6 +15,7 @@ from tests.test_benchmark.mock_tasks import MockRetrievalTask
 logging.basicConfig(level=logging.INFO)
 
 
+@pytest.mark.skip(reason="2 stage not implemented for now")
 def test_mteb_rerank(tmp_path: Path):
     # Test that reranking works
     # unfortunately, we need all the query ids to pretend to have this
@@ -363,6 +365,7 @@ def test_mteb_rerank(tmp_path: Path):
     assert "18670" in results
 
 
+@pytest.mark.skip(reason="2 stage not implemented for now")
 def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"

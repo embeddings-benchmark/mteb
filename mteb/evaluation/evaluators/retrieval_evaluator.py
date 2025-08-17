@@ -1,23 +1,20 @@
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.encoder_interface import Encoder
+from mteb.models.models_protocols import CrossEncoderProtocol, Encoder, SearchProtocol
+from mteb.models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from mteb.types import (
     CorpusDatasetType,
-    InstructionDatasetType,
     QueryDatasetType,
     RelevantDocumentsType,
+    RetrievalEvaluationResult,
+    RetrievalOutputType,
     TopRankedDocumentsType,
 )
 
-from .dense_retrieval_exact_search import (
-    DenseRetrievalExactSearch,
-    is_cross_encoder_compatible,
-)
 from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
@@ -35,7 +32,6 @@ class RetrievalEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         top_k: int,
-        instructions: InstructionDatasetType | None = None,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
         **kwargs,
@@ -43,7 +39,6 @@ class RetrievalEvaluator(Evaluator):
         super().__init__(**kwargs)
         self.corpus = corpus
         self.queries = queries
-        self.instructions = instructions
         self.top_ranked = top_ranked
 
         self.task_metadata = task_metadata
@@ -54,42 +49,36 @@ class RetrievalEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: SearchProtocol | Encoder | CrossEncoderProtocol,
         encode_kwargs: dict[str, Any],
-        previous_results: str | Path | None = None,
         **kwargs: Any,
-    ) -> dict[str, dict[str, float]]:
-        self.is_cross_encoder = is_cross_encoder_compatible(model)
-        if self.is_cross_encoder:
-            logger.info(
-                "The custom predict function of the model will be used if not a SentenceTransformer CrossEncoder"
-            )
-        self.retriever = DenseRetrievalExactSearch(
-            model, encode_kwargs=encode_kwargs, previous_results=previous_results
-        )
-
-        if self.is_cross_encoder:
-            score_function = self.retriever.search_cross_encoder
-        elif (
-            hasattr(model, "mteb_model_meta")
-            and model.mteb_model_meta is not None
-            and model.mteb_model_meta.name == "bm25s"
-        ):
-            score_function = self.retriever.model.search
+    ) -> RetrievalOutputType:
+        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
+            search_model = SearchEncoderWrapper(model)
+        elif isinstance(model, CrossEncoderProtocol):
+            search_model = SearchCrossEncoderWrapper(model)
+        elif isinstance(model, SearchProtocol):
+            search_model = model
         else:
-            score_function = self.retriever.search
+            raise TypeError(
+                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
+            )
 
-        return score_function(
-            self.corpus,
-            self.queries,
-            self.top_k,
-            instructions=self.instructions,
-            top_ranked=self.top_ranked,
-            request_qid=self.qid,
+        search_model.index(
+            corpus=self.corpus,
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
-            **kwargs,
+            encode_kwargs=encode_kwargs,
+        )
+        return search_model.search(
+            queries=self.queries,
+            top_k=self.top_k,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            encode_kwargs=encode_kwargs,
+            top_ranked=self.top_ranked,
         )
 
     def evaluate(
@@ -98,16 +87,7 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: list[int],
         ignore_identical_ids: bool = False,
-    ) -> tuple[
-        dict[str, dict[str, float]],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
-    ]:
+    ) -> RetrievalEvaluationResult:
         if ignore_identical_ids:
             logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
@@ -121,9 +101,4 @@ class RetrievalEvaluator(Evaluator):
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
-
-        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
-            calculate_retrieval_scores(results, qrels, k_values)
-        )
-
-        return all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr
+        return calculate_retrieval_scores(results, qrels, k_values)

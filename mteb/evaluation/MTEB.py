@@ -29,9 +29,12 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 import mteb
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.task_results import TaskResult
-from mteb.models.encoder_interface import Encoder
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.models_protocols import Encoder, MTEBModels
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+)
 
 if TYPE_CHECKING:
     from mteb.benchmarks import Benchmark
@@ -166,7 +169,7 @@ class MTEB:
     @staticmethod
     def _run_eval(
         task: AbsTask,
-        model: Encoder,
+        model: MTEBModels,
         split: str,
         subsets_to_run: list[str] | None = None,
         *,
@@ -250,7 +253,7 @@ class MTEB:
 
     def run(
         self,
-        model: SentenceTransformer | Encoder,
+        model: MTEBModels | CrossEncoder | SentenceTransformer,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits: list[str] | None = None,
@@ -303,8 +306,10 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
-        if isinstance(model, (SentenceTransformer, CrossEncoder)):
-            model = SentenceTransformerWrapper(model)
+        if isinstance(model, SentenceTransformer):
+            model = SentenceTransformerEncoderWrapper(model)
+        elif isinstance(model, CrossEncoder):
+            model = CrossEncoderWrapper(model)
 
         ## Disable co2_tracker for API models
         if "API" in meta.framework:
@@ -354,13 +359,6 @@ class MTEB:
                     save_path = output_path / f"{task.metadata.name}.json"
                     new_results.to_disk(save_path)
                 del self.tasks[0]
-                continue
-
-            if "bm25s" in meta.name and task.metadata.type != "Retrieval":
-                logger.warning(
-                    f"bm25s only supports Retrieval tasks, but the task type is {task.metadata.type}. Skipping task."
-                )
-                del self.tasks[0]  # empty memory
                 continue
 
             # NOTE: skip evaluation if the model does not support all of the task's modalities.
@@ -551,7 +549,7 @@ class MTEB:
         return evaluation_results
 
     @staticmethod
-    def create_model_meta(model: Encoder) -> ModelMeta:
+    def create_model_meta(model: MTEBModels) -> ModelMeta:
         if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None:
             meta = model.mteb_model_meta  # type: ignore
         else:

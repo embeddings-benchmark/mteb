@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from mteb.models.encoder_interface import Encoder, PromptType
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.models.models_protocols import Encoder, PromptType
 
 
 def instruction_template(
