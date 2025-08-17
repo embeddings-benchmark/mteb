@@ -12,7 +12,7 @@ class ChatDoctorRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/ChatDoctor_HealthCareMagic",
         dataset={
             "path": "embedding-benchmark/ChatDoctor_HealthCareMagic",
-            "revision": "main",
+            "revision": "50c2986fedffa33b38afd5c1752026f8e9e5ed1d",
         },
         type="Retrieval",
         category="s2p",
