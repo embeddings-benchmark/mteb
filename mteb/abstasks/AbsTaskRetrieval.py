@@ -9,7 +9,10 @@ from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
-from mteb.models.models_protocols import Encoder
+from mteb import get_model_meta
+from mteb.cache import ResultCache
+from mteb.models.model_meta import ModelMeta
+from mteb.models.models_protocols import Encoder, MTEBModels
 from mteb.types import (
     HFSubset,
     RelevantDocumentsType,
@@ -108,6 +111,9 @@ class AbsTaskRetrieval(AbsTask):
     cross_encoder_top_k: int = 100
     support_cross_encoder: bool = True
     support_search: bool = True
+    save_retrieval_results: bool = False
+    cache: ResultCache | None = None
+    previous_results_model_meta: ModelMeta | None = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -255,6 +261,8 @@ class AbsTaskRetrieval(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        cache: ResultCache | None,
+        save_retrieval_results: bool = False,
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -264,6 +272,8 @@ class AbsTaskRetrieval(AbsTask):
             split: Split to evaluate on
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
+            cache: Cache to use
+            save_retrieval_results: Whether to save the retrieval results
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -273,6 +283,8 @@ class AbsTaskRetrieval(AbsTask):
             self.load_data()
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2()
+        self.cache = cache
+        self.save_retrieval_results = save_retrieval_results
 
         return super().evaluate(
             model,
@@ -292,9 +304,6 @@ class AbsTaskRetrieval(AbsTask):
         # retrieval specific args
         save_predictions: bool = False,
         export_errors: bool = False,
-        save_qrels: bool = False,
-        output_folder: str = "results",
-        results: dict[str, dict[str, float]] | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -307,9 +316,6 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: Subset to evaluate on
             save_predictions: Whether to save predictions
             export_errors: Whether to export errors
-            save_qrels: Whether to save the qrels
-            output_folder: Folder to save the results
-            results: Results from retrieval from previous run
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -326,44 +332,36 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-        if not results:
-            start_time = time()
-            results = retriever(
-                model,
-                encode_kwargs=encode_kwargs,
-                **kwargs,
-            )
-            end_time = time()
-            logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+        start_time = time()
+        results = retriever(
+            model,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
+        )
+        end_time = time()
+        logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
-        if save_predictions or export_errors or save_qrels:
-            output_folder = Path(output_folder)
-            if not output_folder.exists():
-                output_folder.mkdir(parents=True)
+        if self.save_retrieval_results:
+            if hasattr(model, "mteb_model_meta"):
+                model_meta = model.mteb_model_meta
+                previous_results_path = self.previouse_results_path(
+                    model_meta, self.cache
+                )
+                previous_results = {}
+                if previous_results_path.exists():
+                    with open(previous_results_path) as f:
+                        previous_results = json.load(f)
 
-        if save_predictions:
-            if self.top_k is not None:
-                for qid in list(results.keys()):
-                    doc_ids = set(
-                        sorted(
-                            results[qid], key=lambda x: results[qid][x], reverse=True
-                        )[: self.top_k]
-                    )
-                    results[qid] = {
-                        k: v for k, v in results[qid].items() if k in doc_ids
-                    }
-            qrels_save_path = (
-                output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
-            )
+                if hf_subset not in previous_results:
+                    previous_results[hf_subset] = {}
+                previous_results[hf_subset][hf_split] = results
 
-            with open(qrels_save_path, "w") as f:
-                json.dump(results, f)
-
-        if save_qrels:
-            with open(
-                output_folder / f"{self.metadata.name}_{hf_subset}_qrels.json", "w"
-            ) as f:
-                json.dump(data_split["relevant_docs"], f)
+                with open(previous_results_path, "w") as f:
+                    json.dump(previous_results, f)
+            else:
+                logger.warning(
+                    "Cannot find previous results for this model, because model has no `mteb_model_meta`."
+                )
 
         (
             all_scores,
@@ -387,40 +385,17 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
-        scores = make_score_dict(
-            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_specific_scores
+        return make_score_dict(
+            ndcg,
+            _map,
+            recall,
+            precision,
+            mrr,
+            naucs,
+            naucs_mrr,
+            task_specific_scores,
+            self.previous_results_model_meta,
         )
-
-        if export_errors:
-            errors = {}
-
-            if not save_predictions:
-                for qid in results.keys():
-                    doc_scores = results[qid]
-                    sorted_docs = sorted(
-                        doc_scores.items(), key=lambda x: x[1], reverse=True
-                    )[:1]
-                    results[qid] = dict(sorted_docs)
-            for qid, retrieved_docs in results.items():
-                expected_docs = data_split["relevant_docs"][qid]
-                false_positives = [
-                    doc for doc in retrieved_docs if doc not in expected_docs
-                ]
-                false_negatives = [
-                    doc for doc in expected_docs if doc not in retrieved_docs
-                ]
-                if false_positives or false_negatives:
-                    errors[qid] = {
-                        "false_positives": false_positives,
-                        "false_negatives": false_negatives,
-                    }
-            errors_save_path = (
-                output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
-            )
-            with errors_save_path.open("w") as f:
-                json.dump(errors, f)
-
-        return scores
 
     def task_specific_scores(
         self,
@@ -590,6 +565,72 @@ class AbsTaskRetrieval(AbsTask):
                 f"{subset}-top_ranked" if subset != "default" else "top_ranked",
                 lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
             )
+
+    @property
+    def previous_results_name(self) -> str:
+        return f"{self.metadata.name}_previous.json"
+
+    def previouse_results_path(
+        self,
+        model_meta: ModelMeta,
+        cache: ResultCache | None,
+        remote: bool = False,
+    ) -> Path:
+        full_task_path = cache.get_task_result_path(
+            self.metadata.name, model_meta, remote=remote
+        )
+        return full_task_path.parent / self.previous_results_name
+
+    def convert_to_reranking(
+        self,
+        model: MTEBModels | ModelMeta | str,
+        cache: ResultCache | None = ResultCache(),
+        remote: bool = False,
+    ) -> None:
+        """Converts a reranking task to re-ranking by loading results from model run
+
+        Args:
+            model: Model which have previous results
+            cache: Cache to use
+            remote: If true, re-ranking task is re-ranked
+        """
+        if isinstance(model, MTEBModels):
+            if not hasattr(model, "mteb_model_meta"):
+                raise ValueError(
+                    "Cannot find previous results for this model, because model has no `mteb_model_meta`."
+                )
+            model_meta: ModelMeta = model.mteb_model_meta
+        elif isinstance(model, ModelMeta):
+            model_meta = model
+        else:
+            model_meta = get_model_meta(model)
+
+        if cache is None:
+            raise ValueError(
+                "Cannot convert re-ranking task to re-ranking, because cache is None."
+            )
+
+        previous_results_path = self.previouse_results_path(
+            model_meta, cache, remote=remote
+        )
+        if not previous_results_path.exists():
+            raise FileNotFoundError(
+                f"Can't find previous results for this task. File {previous_results_path} does not exist."
+            )
+
+        with previous_results_path.open("r") as previous_results_file:
+            previous_results = json.load(previous_results_file)
+
+        if not self.data_loaded:
+            self.load_data()
+
+        for subset in self.dataset:
+            for split in self.dataset[subset]:
+                top_ranked = previous_results[subset][split]
+                if not isinstance(top_ranked, dict):
+                    raise ValueError("Previous top ranked results is not a dictionary.")
+                self.dataset[subset][split]["top_ranked"] = top_ranked
+        self.previous_results_model_meta = model_meta
 
 
 def process_relevant_docs(

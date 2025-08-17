@@ -10,6 +10,7 @@ import torch
 from packaging.version import Version
 from sklearn.metrics import auc
 
+from mteb.models.model_meta import ModelMeta
 from mteb.types import RelevantDocumentsType, RetrievalEvaluationResult
 
 logger = logging.getLogger(__name__)
@@ -398,6 +399,7 @@ def make_score_dict(
     naucs: dict[str, float],
     naucs_mrr: dict[str, float],
     task_scores: dict[str, float],
+    previous_results_model_meta: ModelMeta | None = None,
 ) -> dict[str, float]:
     return {
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
@@ -414,6 +416,9 @@ def make_score_dict(
             for k, v in naucs_mrr.items()
         },
         **task_scores,
+        **(
+            previous_results_model_meta.to_dict() if previous_results_model_meta else {}
+        ),
     }
 
 

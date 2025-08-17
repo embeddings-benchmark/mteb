@@ -18,6 +18,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks._stratification import _iterative_train_test_split
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.cache import ResultCache
 from mteb.languages import LanguageScripts
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
@@ -131,6 +132,7 @@ class AbsTask(ABC):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        cache: ResultCache | None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
@@ -141,6 +143,7 @@ class AbsTask(ABC):
             split: Which datasplit to be used.
             subsets_to_run: List of HFSubsets to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
+            cache: Cache of the tasks.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:

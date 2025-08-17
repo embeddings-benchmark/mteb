@@ -17,4 +17,5 @@ __all__ = [
     "available_tasks",
     "build_cli",
     "build_cli",
+    "main",
 ]
