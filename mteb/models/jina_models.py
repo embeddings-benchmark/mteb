@@ -545,7 +545,6 @@ jina_embeddings_v4 = ModelMeta(
     loader=partial(  # type: ignore
         JinaV4Wrapper,
         model="jinaai/jina-embeddings-v4",
-        revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
