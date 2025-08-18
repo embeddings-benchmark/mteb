@@ -9,10 +9,10 @@ class WikiSQLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WikiSQLRetrieval",
         description="A code retrieval task based on WikiSQL dataset with natural language questions and corresponding SQL queries. Each query is a natural language question (e.g., 'What is the name of the team that has scored the most goals?'), and the corpus contains SQL query implementations. The task is to retrieve the correct SQL query that answers the natural language question. Queries are natural language questions while the corpus contains SQL SELECT statements with proper syntax and logic for querying database tables.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/WikiSQL",
+        reference="https://huggingface.co/datasets/embedding-benchmark/WikiSQL_mteb",
         dataset={
-            "path": "embedding-benchmark/WikiSQL",
-            "revision": "2aee0c8bf3e5e1d92af8e6998d7c6f31bda95e6f",
+            "path": "embedding-benchmark/WikiSQL_mteb",
+            "revision": "4e099ab42dffd49d72c1472f451371e53343e3d7",
         },
         type="Retrieval",
         category="s2s",
