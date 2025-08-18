@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Protocol, Union, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, Union, runtime_checkable
 
 from torch.utils.data import DataLoader
 
@@ -14,6 +14,9 @@ from mteb.types import (
     RetrievalOutputType,
     TopRankedDocumentsType,
 )
+
+if TYPE_CHECKING:
+    from mteb.models.model_meta import ModelMeta
 
 
 @runtime_checkable
@@ -66,6 +69,11 @@ class SearchProtocol(Protocol):
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
+        ...
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta:
+        """Metadata of the model"""
         ...
 
 
@@ -159,6 +167,11 @@ class Encoder(Protocol):
         """
         ...
 
+    @property
+    def mteb_model_meta(self) -> ModelMeta:
+        """Metadata of the model"""
+        ...
+
 
 @runtime_checkable
 class CrossEncoderProtocol(Protocol):
@@ -204,6 +217,11 @@ class CrossEncoderProtocol(Protocol):
         Returns:
             The predicted relevance scores for each inputs pair.
         """
+        ...
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta:
+        """Metadata of the model"""
         ...
 
 
