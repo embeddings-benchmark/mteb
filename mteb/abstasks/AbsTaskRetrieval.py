@@ -12,10 +12,16 @@ from datasets import Dataset, DatasetDict, concatenate_datasets
 from mteb.cache import ResultCache
 from mteb.models.get_model_meta import get_model_meta
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder, MTEBModels
+from mteb.models.models_protocols import (
+    CrossEncoderProtocol,
+    Encoder,
+    MTEBModels,
+    SearchProtocol,
+)
 from mteb.types import (
     HFSubset,
     RelevantDocumentsType,
+    RetrievalOutputType,
     ScoresDict,
 )
 from mteb.types.statistics import (
@@ -32,6 +38,7 @@ from ..create_dataloaders import (
 )
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
+from ..models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
@@ -332,9 +339,20 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
+        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
+            search_model = SearchEncoderWrapper(model)
+        elif isinstance(model, CrossEncoderProtocol):
+            search_model = SearchCrossEncoderWrapper(model)
+        elif isinstance(model, SearchProtocol):
+            search_model = model
+        else:
+            raise TypeError(
+                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
+            )
+
         start_time = time()
         results = retriever(
-            model,
+            search_model,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
@@ -342,28 +360,24 @@ class AbsTaskRetrieval(AbsTask):
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if self.save_retrieval_results:
-            if hasattr(model, "mteb_model_meta"):
-                model_meta = model.mteb_model_meta
-                previous_results_path = self.previous_results_path(
-                    model_meta, self.cache
-                )
-                previous_results = {}
-                if previous_results_path.exists():
-                    with previous_results_path.open() as f:
-                        previous_results = json.load(f)
-
-                if hf_subset not in previous_results:
-                    previous_results[hf_subset] = {}
-
-                top_k_sorted = {}
-                for query_id, values in results.items():
-                    sorted_keys = sorted(values, key=values.get, reverse=True)
-                    top_k_sorted[query_id] = sorted_keys[: self.top_k]
-
-                previous_results[hf_subset][hf_split] = top_k_sorted
-
-                with previous_results_path.open("w") as f:
-                    json.dump(previous_results, f)
+            if hasattr(search_model, "mteb_model_meta"):
+                model_meta = search_model.mteb_model_meta
+                self._save_results(results, model_meta, hf_subset, hf_split)
+            elif isinstance(search_model, SearchProtocol) and hasattr(
+                search_model, "model"
+            ):
+                if hasattr(search_model.model, "mteb_model_meta"):
+                    model_meta = search_model.model.mteb_model_meta
+                    self._save_results(results, model_meta, hf_subset, hf_split)
+                elif hasattr(search_model.model, "model") and hasattr(
+                    search_model.model.model, "mteb_model_meta"
+                ):
+                    model_meta = search_model.model.model.mteb_model_meta
+                    self._save_results(results, model_meta, hf_subset, hf_split)
+                else:
+                    logger.warning(
+                        "Cannot find previous results for this model, because model has no `mteb_model_meta`."
+                    )
             else:
                 logger.warning(
                     "Cannot find previous results for this model, because model has no `mteb_model_meta`."
@@ -409,6 +423,28 @@ class AbsTaskRetrieval(AbsTask):
             task_specific_scores,
             previous_results_data,
         )
+
+    def _save_results(
+        self,
+        results: RetrievalOutputType,
+        model_meta: ModelMeta,
+        hf_subset: str,
+        hf_split: str,
+    ) -> None:
+        previous_results_path = self.previous_results_path(model_meta, self.cache)
+        previous_results = {}
+        if previous_results_path.exists():
+            with previous_results_path.open() as f:
+                previous_results = json.load(f)
+
+        if hf_subset not in previous_results:
+            previous_results[hf_subset] = {}
+
+        previous_results[hf_subset][hf_split] = results
+
+        previous_results_path.parent.mkdir(parents=True, exist_ok=True)
+        with previous_results_path.open("w") as f:
+            json.dump(previous_results, f)
 
     def task_specific_scores(
         self,
@@ -581,7 +617,7 @@ class AbsTaskRetrieval(AbsTask):
 
     @property
     def previous_results_name(self) -> str:
-        return f"{self.metadata.name}_previous.json"
+        return f"{self.metadata.name}_results.json"
 
     def previous_results_path(
         self,
@@ -641,12 +677,16 @@ class AbsTaskRetrieval(AbsTask):
 
         for subset in self.dataset:
             for split in self.dataset[subset]:
-                top_ranked = previous_results[subset][split]
+                top_ranked: RetrievalOutputType = previous_results[subset][split]
                 if not isinstance(top_ranked, dict):
                     raise ValueError("Previous top ranked results is not a dictionary.")
-                self.dataset[subset][split]["top_ranked"] = {
-                    q_id: c_ids[:top_k] for q_id, c_ids in top_ranked.items()
-                }
+
+                top_k_sorted = defaultdict(list)
+                for query_id, values in top_ranked.items():
+                    sorted_keys = sorted(values, key=values.get, reverse=True)
+                    top_k_sorted[query_id] = sorted_keys[: self.top_k]
+
+                self.dataset[subset][split]["top_ranked"] = top_k_sorted
         self.top_k = top_k
         self.previous_results_model_meta = model_meta
 

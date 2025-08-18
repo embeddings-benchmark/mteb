@@ -4,8 +4,7 @@ import logging
 from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import CrossEncoderProtocol, Encoder, SearchProtocol
-from mteb.models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from mteb.models.models_protocols import SearchProtocol
 from mteb.types import (
     CorpusDatasetType,
     QueryDatasetType,
@@ -49,21 +48,10 @@ class RetrievalEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: SearchProtocol | Encoder | CrossEncoderProtocol,
+        search_model: SearchProtocol,
         encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> RetrievalOutputType:
-        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
-            search_model = SearchEncoderWrapper(model)
-        elif isinstance(model, CrossEncoderProtocol):
-            search_model = SearchCrossEncoderWrapper(model)
-        elif isinstance(model, SearchProtocol):
-            search_model = model
-        else:
-            raise TypeError(
-                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
-            )
-
         search_model.index(
             corpus=self.corpus,
             task_metadata=self.task_metadata,

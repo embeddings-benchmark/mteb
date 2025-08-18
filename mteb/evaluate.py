@@ -130,7 +130,7 @@ def _evaluate(
     task.check_if_dataset_is_superseded()
 
     data_loaded = task.data_loaded
-    if data_loaded:
+    if not data_loaded:
         task.load_data()
 
     evaluation_time = 0
@@ -274,9 +274,11 @@ def evaluate(
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
     if isinstance(model, SentenceTransformer):
+        model.mteb_model_meta = meta
         model = SentenceTransformerEncoderWrapper(model)
         model = cast(Encoder, model)
     elif isinstance(model, CrossEncoder):
+        model.mteb_model_meta = meta
         model = CrossEncoderWrapper(model)
         model = cast(CrossEncoderProtocol, model)
 
