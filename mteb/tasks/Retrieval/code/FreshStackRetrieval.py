@@ -12,7 +12,7 @@ class FreshStackRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/FreshStack_mteb",
         dataset={
             "path": "embedding-benchmark/FreshStack_mteb",
-            "revision": "ef18e1ca304ddae27ca441c986c0a7294461a6b6",
+            "revision": "7a20df1abe4dafc46f93f9a7965bf9c6968bdf04",
         },
         type="Retrieval",
         category="s2s",
