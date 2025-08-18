@@ -7,15 +7,13 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from transformers import AutoProcessor, AutoModel
+from transformers import AutoModel, AutoProcessor
 from transformers.utils.import_utils import is_flash_attn_2_available
-
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import (
     requires_image_dependencies,
-    requires_package,
 )
 
 logger = logging.getLogger(__name__)
