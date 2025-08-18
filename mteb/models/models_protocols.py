@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Protocol, Union, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, Union, runtime_checkable
 
 from torch.utils.data import DataLoader
 
@@ -14,7 +14,7 @@ from mteb.types import (
     RetrievalOutputType,
     TopRankedDocumentsType,
 )
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from mteb.models.model_meta import ModelMeta
 
@@ -73,9 +73,7 @@ class SearchProtocol(Protocol):
 
     @property
     def mteb_model_meta(self) -> ModelMeta:
-        """
-        Metadata of the model
-        """
+        """Metadata of the model"""
         ...
 
 
@@ -171,9 +169,7 @@ class Encoder(Protocol):
 
     @property
     def mteb_model_meta(self) -> ModelMeta:
-        """
-        Metadata of the model
-        """
+        """Metadata of the model"""
         ...
 
 
@@ -225,9 +221,7 @@ class CrossEncoderProtocol(Protocol):
 
     @property
     def mteb_model_meta(self) -> ModelMeta:
-        """
-        Metadata of the model
-        """
+        """Metadata of the model"""
         ...
 
 
