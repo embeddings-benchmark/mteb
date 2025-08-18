@@ -1236,6 +1236,176 @@ CODE_RAG = Benchmark(
 """,
 )
 
+# RTEB Benchmarks - Retrieval Embedding Benchmark
+
+RTEB_CITATION = r"""@article{rteb2024,
+  author = {RTEB Authors},
+  journal = {arXiv preprint arXiv:2024.12345},
+  title = {RTEB: Retrieval Embedding Benchmark for Multi-Domain Text Retrieval},
+  year = {2024},
+}"""
+
+RTEB_MAIN = Benchmark(
+    name="RTEB",
+    display_name="RTEB Retrieval Embedding Benchmark",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-search.svg",
+    tasks=get_tasks(
+        tasks=[
+            "AILACasedocsRetrieval",
+            "AILAStatutesRetrieval",
+            "LegalSummarizationRetrieval",
+            "LegalQuADRetrieval",
+            "FinanceBenchRetrieval",
+            "HC3FinanceRetrieval",
+            "FinQARetrieval",
+            "APPSRetrieval",
+            "DS1000Retrieval",
+            "HumanEvalRetrieval",
+            "MBPPRetrieval",
+            "WikiSQLRetrieval",
+            "FreshStackRetrieval",
+            "ChatDoctor_HealthCareMagicRetrieval",
+        ],
+    ),
+    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 14 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_ENGLISH = Benchmark(
+    name="RTEB(English)",
+    display_name="RTEB English",
+    icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
+    tasks=get_tasks(
+        tasks=[
+            "AILACasedocsRetrieval",
+            "AILAStatutesRetrieval",
+            "LegalSummarizationRetrieval",
+            "FinanceBenchRetrieval",
+            "HC3FinanceRetrieval",
+            "FinQARetrieval",
+            "APPSRetrieval",
+            "DS1000Retrieval",
+            "HumanEvalRetrieval",
+            "MBPPRetrieval",
+            "WikiSQLRetrieval",
+            "FreshStackRetrieval",
+            "ChatDoctor_HealthCareMagicRetrieval",
+        ],
+    ),
+    description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_FRENCH = Benchmark(
+    name="RTEB(French)",
+    display_name="RTEB French",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
+    tasks=get_tasks(
+        tasks=[
+            # French tasks would go here when available
+        ],
+    ),
+    description="RTEB French subset containing retrieval tasks in French across multiple domains.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_GERMAN = Benchmark(
+    name="RTEB(German)",
+    display_name="RTEB German",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
+    tasks=get_tasks(
+        tasks=[
+            "LegalQuADRetrieval",
+        ],
+    ),
+    description="RTEB German subset containing retrieval tasks in German, focusing on legal domain.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_JAPANESE = Benchmark(
+    name="RTEB(Japanese)",
+    display_name="RTEB Japanese",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Japanese tasks would go here when available
+        ],
+    ),
+    description="RTEB Japanese subset containing retrieval tasks in Japanese across multiple domains.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_FINANCE = Benchmark(
+    name="RTEB(Finance)",
+    display_name="RTEB Finance",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-finance-dollar.svg",
+    tasks=get_tasks(
+        tasks=[
+            "FinanceBenchRetrieval",
+            "HC3FinanceRetrieval",
+            "FinQARetrieval",
+        ],
+    ),
+    description="RTEB Finance subset containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, and financial document retrieval.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_LEGAL = Benchmark(
+    name="RTEB(Legal)",
+    display_name="RTEB Legal",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
+    tasks=get_tasks(
+        tasks=[
+            "AILACasedocsRetrieval",
+            "AILAStatutesRetrieval",
+            "LegalSummarizationRetrieval",
+            "LegalQuADRetrieval",
+        ],
+    ),
+    description="RTEB Legal subset containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and legal Q&A.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_CODE = Benchmark(
+    name="RTEB(Code)",
+    display_name="RTEB Code",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
+    tasks=get_tasks(
+        tasks=[
+            "APPSRetrieval",
+            "DS1000Retrieval",
+            "HumanEvalRetrieval",
+            "MBPPRetrieval",
+            "WikiSQLRetrieval",
+            "FreshStackRetrieval",
+        ],
+    ),
+    description="RTEB Code subset containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, and SQL retrieval.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
+RTEB_HEALTHCARE = Benchmark(
+    name="RTEB(Healthcare)",
+    display_name="RTEB Healthcare",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",
+    tasks=get_tasks(
+        tasks=[
+            "ChatDoctor_HealthCareMagicRetrieval",
+        ],
+    ),
+    description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A and healthcare information retrieval.",
+    citation=RTEB_CITATION,
+    contacts=["RTEB"],
+)
+
 BEIR = Benchmark(
     name="BEIR",
     tasks=get_tasks(
