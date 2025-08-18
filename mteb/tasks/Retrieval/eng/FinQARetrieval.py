@@ -27,12 +27,14 @@ class FinQARetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{chen2021finqa,
+        bibtex_citation=r"""
+@article{chen2021finqa,
   author = {Chen, Zhiyu and Chen, Wenhu and Smiley, Charese and Shah, Sameena and Borova, Iana and Langdon, Dylan and Moussa, Reema and Beane, Matt and Huang, Ting-Hao and Routledge, Bryan and Wang, William Yang},
   journal = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
   title = {FinQA: A Dataset of Numerical Reasoning over Financial Data},
-  year = {2021}
-}""",
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a financial numerical reasoning question, retrieve relevant financial data that helps answer the question"
         },
