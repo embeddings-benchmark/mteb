@@ -5,8 +5,8 @@ from dataclasses import dataclass
 import gradio as gr
 
 import mteb
-from build.lib.mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb import Benchmark
+from mteb.benchmarks.benchmarks import MTEB_multilingual
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
@@ -191,5 +191,4 @@ def _render_benchmark_item(
 if __name__ == "__main__":
     with gr.Blocks() as b:
         selector = make_selector(BENCHMARK_ENTRIES)
-
     b.launch()

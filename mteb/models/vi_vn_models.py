@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from functools import partial
+
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 greennode_embedding_large_vn_v1_training_data = {
     "GreenNodeTableMarkdownRetrieval": ["train"],
@@ -13,7 +15,10 @@ greennode_embedding_large_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="GreenNode/GreenNode-Embedding-Large-VN-V1",
+    ),
     open_weights=True,
     n_parameters=568_000_000,
     memory_usage_mb=2167,
@@ -37,7 +42,10 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
+    ),
     open_weights=True,
     n_parameters=568_000_000,
     memory_usage_mb=2167,
@@ -61,7 +69,9 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader, model_name="AITeamVN/Vietnamese_Embedding"
+    ),
     open_weights=True,
     n_parameters=568_000_000,
     memory_usage_mb=2166,
@@ -85,7 +95,9 @@ hiieu_halong_embedding = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader, model_name="hiieu/halong_embedding"
+    ),
     use_instructions=False,
     open_weights=True,
     n_parameters=278_000_000,
@@ -109,7 +121,10 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
+    ),
     use_instructions=False,
     open_weights=True,
     n_parameters=135_000_000,
@@ -132,7 +147,10 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="bkai-foundation-models/vietnamese-bi-encoder",
+    ),
     use_instructions=False,
     open_weights=True,
     n_parameters=135_000_000,
