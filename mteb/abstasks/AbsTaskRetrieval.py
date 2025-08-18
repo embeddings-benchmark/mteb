@@ -645,7 +645,8 @@ class AbsTaskRetrieval(AbsTask):
             remote: If true, re-ranking task is re-ranked
             top_k: top k
         """
-        if isinstance(model, MTEBModels):
+        # TODO python3.9 not support isinstance over union
+        if isinstance(model, Encoder) or isinstance(model, CrossEncoderProtocol) or isinstance(model, SearchProtocol):
             if not hasattr(model, "mteb_model_meta"):
                 raise ValueError(
                     "Cannot find previous results for this model, because model has no `mteb_model_meta`."
