@@ -292,7 +292,7 @@ def get_leaderboard_app() -> gr.Blocks:
         scores = gr.State(default_scores)
         models = gr.State(filtered_models)
         with gr.Row():
-            with gr.Column(scale=1):
+            with gr.Column():
                 description = gr.Markdown(  # noqa: F841
                     update_description,
                     inputs=[benchmark_select, lang_select, type_select, domain_select],
@@ -301,17 +301,6 @@ def get_leaderboard_app() -> gr.Blocks:
                     citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
                 with gr.Accordion("Share this benchmark:", open=False):
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
-            with gr.Column(scale=2):
-                with gr.Tab("Performance per Model Size"):
-                    plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
-                    gr.Markdown(
-                        "*We only display models that have been run on all tasks in the benchmark*"
-                    )
-                with gr.Tab("Performance per Task Type (Radar Chart)"):
-                    radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
-                    gr.Markdown(
-                        "*We only display models that have been run on all task types in the benchmark*"
-                    )
 
         with gr.Accordion("Customize this Benchmark", open=False):
             with gr.Column():
@@ -402,6 +391,18 @@ def get_leaderboard_app() -> gr.Blocks:
                 open=False,
             ):
                 gr.Markdown(FAQ)
+
+        with gr.Tab("Performance per Model Size"):
+            plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
+            gr.Markdown(
+                "*We only display models that have been run on all tasks in the benchmark*"
+            )
+        with gr.Tab("Performance per Task Type (Radar Chart)"):
+            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
+            gr.Markdown(
+                "*We only display models that have been run on all task types in the benchmark*"
+            )
+
         with gr.Tab("Performance per task"):
             per_task_table.render()
             download_per_task = gr.DownloadButton("Download Table")
