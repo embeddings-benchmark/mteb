@@ -363,21 +363,6 @@ class AbsTaskRetrieval(AbsTask):
             if hasattr(search_model, "mteb_model_meta"):
                 model_meta = search_model.mteb_model_meta
                 self._save_results(results, model_meta, hf_subset, hf_split)
-            elif isinstance(search_model, SearchProtocol) and hasattr(
-                search_model, "model"
-            ):
-                if hasattr(search_model.model, "mteb_model_meta"):
-                    model_meta = search_model.model.mteb_model_meta
-                    self._save_results(results, model_meta, hf_subset, hf_split)
-                elif hasattr(search_model.model, "model") and hasattr(
-                    search_model.model.model, "mteb_model_meta"
-                ):
-                    model_meta = search_model.model.model.mteb_model_meta
-                    self._save_results(results, model_meta, hf_subset, hf_split)
-                else:
-                    logger.warning(
-                        "Cannot find previous results for this model, because model has no `mteb_model_meta`."
-                    )
             else:
                 logger.warning(
                     "Cannot find previous results for this model, because model has no `mteb_model_meta`."
