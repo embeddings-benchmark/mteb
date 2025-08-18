@@ -33,6 +33,7 @@ class SearchEncoderWrapper:
     def __init__(self, model: Encoder):
         self.model = model
         self.task_corpus = None
+        self.mteb_model_meta = model.mteb_model_meta
 
     def index(
         self,
@@ -276,6 +277,7 @@ class SearchCrossEncoderWrapper:
     def __init__(self, model: CrossEncoderProtocol):
         self.model = model
         self.task_corpus = None
+        self.mteb_model_meta = model.mteb_model_meta
 
     def index(
         self,
