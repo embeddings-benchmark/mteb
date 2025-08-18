@@ -267,6 +267,7 @@ class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
         eval_langs=["eng-Latn"],
         domains=["Web"],
         license="not specified",
+        annotations_creators="derived",
         sample_creation="found",
         **COMMON_METADATA,
     )
@@ -486,7 +487,7 @@ class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
         eval_langs=["jpn-Jpan"],
         domains=["Web"],
         license="cc-by-4.0",
-        jannotations_creators="LM-generated",
+        annotations_creators="LM-generated",
         sample_creation="found",
         **COMMON_METADATA,
     )
