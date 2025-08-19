@@ -28,7 +28,6 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
 
-
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
@@ -54,8 +53,9 @@ def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
         }
     )
     base_url = request.request.base_url
+    md = "You can also share this benchmark using the following link:\n"
     url = f"{base_url}?{params}"
-    md = f"```\n{url}\n```"
+    md += f"```\n{url}\n```"
     return md
 
 
@@ -73,7 +73,8 @@ def download_table(table: pd.DataFrame) -> str:
 def update_citation(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
     if benchmark.citation is not None:
-        citation = f"```bibtex\n{benchmark.citation}\n```"
+        citation = "To cite this work, please use the following reference:\n"
+        citation += f"```bibtex\n{benchmark.citation}\n```"
     else:
         citation = ""
     return citation
@@ -292,92 +293,93 @@ def get_leaderboard_app() -> gr.Blocks:
         scores = gr.State(default_scores)
         models = gr.State(filtered_models)
         with gr.Row():
-            with gr.Column():
+            with gr.Column(scale=1):
                 description = gr.Markdown(  # noqa: F841
                     update_description,
                     inputs=[benchmark_select, lang_select, type_select, domain_select],
                 )
-                with gr.Accordion("Cite this benchmark:", open=False):
+
+            with gr.Column(scale=1):
+                with gr.Accordion("Cite and share this benchmark:", open=False):
                     citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
-                with gr.Accordion("Share this benchmark:", open=False):
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
 
-        with gr.Accordion("Customize this Benchmark", open=False):
-            with gr.Column():
-                with gr.Row():
-                    type_select.render()
-                with gr.Row():
-                    domain_select.render()
-                with gr.Row():
-                    modality_select.render()
-                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
-                    lang_select.render()
-                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
-                    task_select.render()
-
-        with gr.Accordion("Advanced Model Filters", open=False):
-            with gr.Group():
-                with gr.Row(elem_classes=""):
+                with gr.Accordion("Customize this Benchmark", open=False, ):
                     with gr.Column():
-                        compatibility = gr.CheckboxGroup(
-                            [
-                                (
-                                    "Should be sentence-transformers compatible",
-                                    "Sentence Transformers",
+                        with gr.Row():
+                            type_select.render()
+                        with gr.Row():
+                            domain_select.render()
+                        with gr.Row():
+                            modality_select.render()
+                        with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
+                            lang_select.render()
+                        with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
+                            task_select.render()
+
+                with gr.Accordion("Advanced Model Filters", open=False):
+                    with gr.Group():
+                        with gr.Row(elem_classes=""):
+                            with gr.Column():
+                                compatibility = gr.CheckboxGroup(
+                                    [
+                                        (
+                                            "Should be sentence-transformers compatible",
+                                            "Sentence Transformers",
+                                        )
+                                    ],
+                                    value=[],
+                                    label="Compatibility",
+                                    interactive=True,
                                 )
-                            ],
-                            value=[],
-                            label="Compatibility",
-                            interactive=True,
-                        )
-                        availability = gr.Radio(
-                            [
-                                ("Only Open", True),
-                                ("Only Proprietary", False),
-                                ("Both", None),
-                            ],
-                            value=None,
-                            label="Availability",
-                            interactive=True,
-                        )
-                        instructions = gr.Radio(
-                            [
-                                ("Only Instruction-tuned", True),
-                                ("Only non-instruction", False),
-                                ("Both", None),
-                            ],
-                            value=None,
-                            label="Instructions",
-                            interactive=True,
-                        )
-                    with gr.Column():
-                        zero_shot = gr.Radio(
-                            [
-                                (
-                                    "Only Zero-shot",
-                                    "only_zero_shot",
-                                ),
-                                ("Remove Unknown", "remove_unknown"),
-                                ("Allow All", "allow_all"),
-                            ],
-                            value="allow_all",
-                            label="Zero-shot",
-                            interactive=True,
-                        )
+                                availability = gr.Radio(
+                                    [
+                                        ("Only Open", True),
+                                        ("Only Proprietary", False),
+                                        ("Both", None),
+                                    ],
+                                    value=None,
+                                    label="Availability",
+                                    interactive=True,
+                                )
+                                instructions = gr.Radio(
+                                    [
+                                        ("Only Instruction-tuned", True),
+                                        ("Only non-instruction", False),
+                                        ("Both", None),
+                                    ],
+                                    value=None,
+                                    label="Instructions",
+                                    interactive=True,
+                                )
+                            with gr.Column():
+                                zero_shot = gr.Radio(
+                                    [
+                                        (
+                                            "Only Zero-shot",
+                                            "only_zero_shot",
+                                        ),
+                                        ("Remove Unknown", "remove_unknown"),
+                                        ("Allow All", "allow_all"),
+                                    ],
+                                    value="allow_all",
+                                    label="Zero-shot",
+                                    interactive=True,
+                                )
 
-                        max_model_size = gr.Radio(
-                            [
-                                ("<100M", 100),
-                                ("<500M", 500),
-                                ("<1B", 1000),
-                                ("<5B", 5000),
-                                ("<10B", 10000),
-                                (">10B", MAX_MODEL_SIZE),
-                            ],
-                            value=MAX_MODEL_SIZE,
-                            label="Model Parameters",
-                            interactive=True,
-                        )
+                                max_model_size = gr.Radio(
+                                    [
+                                        ("<100M", 100),
+                                        ("<500M", 500),
+                                        ("<1B", 1000),
+                                        ("<5B", 5000),
+                                        ("<10B", 10000),
+                                        (">10B", MAX_MODEL_SIZE),
+                                    ],
+                                    value=MAX_MODEL_SIZE,
+                                    label="Model Parameters",
+                                    interactive=True,
+                                )
 
         with gr.Tab("Summary"):
             summary_table.render()
@@ -387,8 +389,8 @@ def get_leaderboard_app() -> gr.Blocks:
             )
 
             with gr.Accordion(
-                "Frequently Asked Questions",
-                open=False,
+                    "Frequently Asked Questions",
+                    open=False,
             ):
                 gr.Markdown(FAQ)
 
@@ -400,7 +402,7 @@ def get_leaderboard_app() -> gr.Blocks:
             plot_tab.select(performance_size_plot, inputs=[summary_table], outputs=[plot])
 
         with gr.Tab("Performance per Task Type") as radar_plot_tab:
-            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])   # noqa: F841
+            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
             )
