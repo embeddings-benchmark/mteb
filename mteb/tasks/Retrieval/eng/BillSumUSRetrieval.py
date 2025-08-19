@@ -5,14 +5,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class BillSumCA(AbsTaskRetrieval):
+class BillSumUSRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         dataset={
-            "path": "isaacus/mteb-BillSumCA",
-            "revision": "5014f29d7fdde6f9073a75b72be53ed73eed60c6",
+            "path": "isaacus/mteb-BillSumUS",
+            "revision": "0c063eb9b2f3085bbbc48f8d51f21a179254187e",
         },
-        name="BillSumCA",
-        description="A benchmark for retrieving Californian bills based on their summaries.",
+        name="BillSumUS",
+        description="A benchmark for retrieving US federal bills based on their summaries.",
         reference="https://huggingface.co/datasets/FiscalNote/billsum",
         type="Retrieval",
         category="t2t",
