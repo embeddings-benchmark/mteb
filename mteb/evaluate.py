@@ -274,12 +274,12 @@ def evaluate(
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
     if isinstance(model, SentenceTransformer):
-        model.mteb_model_meta = meta
         model = SentenceTransformerEncoderWrapper(model)
+        model.mteb_model_meta = meta
         model = cast(Encoder, model)
     elif isinstance(model, CrossEncoder):
-        model.mteb_model_meta = meta
         model = CrossEncoderWrapper(model)
+        model.mteb_model_meta = meta
         model = cast(CrossEncoderProtocol, model)
 
     existing_results = None

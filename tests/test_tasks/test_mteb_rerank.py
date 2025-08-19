@@ -9,6 +9,7 @@ from sentence_transformers import CrossEncoder
 import mteb
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.cache import ResultCache
+from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 from mteb.models.model_meta import ModelMeta
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
@@ -19,6 +20,7 @@ logging.basicConfig(level=logging.INFO)
 def test_mteb_rerank(tmp_path: Path):
     prev_model = MockNumpyEncoder()
     model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    model_meta = _model_meta_from_cross_encoder(model)
     task: AbsTaskRetrieval = mteb.get_task("SciFact")
     task.load_data()
     # create fake first stage results
@@ -52,7 +54,7 @@ def test_mteb_rerank(tmp_path: Path):
         overwrite_strategy="always",
         cache=cache,
     )
-    current_result_path = task.previous_results_path(model.mteb_model_meta, cache)
+    current_result_path = task.previous_results_path(model_meta, cache)
 
     # read in the results
     with current_result_path.open() as f:
