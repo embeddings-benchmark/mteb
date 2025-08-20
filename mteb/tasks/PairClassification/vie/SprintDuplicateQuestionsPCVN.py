@@ -21,7 +21,7 @@ class SprintDuplicateQuestionsPCVN(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["validation", "test"],
         eval_langs=["vie-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2025-07-29", "2025-07-30"),
         license="cc-by-sa-4.0",
         annotations_creators="derived",
@@ -42,3 +42,7 @@ class SprintDuplicateQuestionsPCVN(AbsTaskPairClassification):
 """,
         adapted_from=["SprintDuplicateQuestions"],
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")
