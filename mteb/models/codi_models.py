@@ -73,7 +73,7 @@ training_data = {
 
 model_name_or_path = "Youtu-RAG/CoDi-Embedding-V1"
 
-CoDiEmb_MiniCPM = ModelMeta(
+CoDiEmb_Embedding_V1 = ModelMeta(
     name="Youtu-RAG/CoDi-Embedding-V1",
     languages=["zho-Hans"],
     revision="9ee4337715ce337f12b8d30f20e87e8528ccedd6",
