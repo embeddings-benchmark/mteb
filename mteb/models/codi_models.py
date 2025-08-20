@@ -10,14 +10,38 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 logger = logging.getLogger(__name__)
 
 codi_instruction = {
-    "CmedqaRetrieval": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": ""},
-    "CovidRetrieval": {"query": "Given a question on COVID-19, retrieve news articles that answer the question", "passage": ""},
-    "DuRetrieval": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": ""},
-    "EcomRetrieval": {"query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products", "passage": ""},
-    "MedicalRetrieval": {"query": "Given a medical question, retrieve user replies that best answer the question", "passage": ""},
-    "MMarcoRetrieval": {"query": "Given a web search query, retrieve relevant passages that answer the query", "passage": ""},
-    "T2Retrieval": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": ""},
-    "VideoRetrieval": {"query": "Given a video search query, retrieve the titles of relevant videos", "passage": ""},
+    "CmedqaRetrieval": {
+        "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "passage": "",
+    },
+    "CovidRetrieval": {
+        "query": "Given a question on COVID-19, retrieve news articles that answer the question",
+        "passage": "",
+    },
+    "DuRetrieval": {
+        "query": "Given a Chinese search query, retrieve web passages that answer the question",
+        "passage": "",
+    },
+    "EcomRetrieval": {
+        "query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
+        "passage": "",
+    },
+    "MedicalRetrieval": {
+        "query": "Given a medical question, retrieve user replies that best answer the question",
+        "passage": "",
+    },
+    "MMarcoRetrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "passage": "",
+    },
+    "T2Retrieval": {
+        "query": "Given a Chinese search query, retrieve web passages that answer the question",
+        "passage": "",
+    },
+    "VideoRetrieval": {
+        "query": "Given a video search query, retrieve the titles of relevant videos",
+        "passage": "",
+    },
     "AFQMC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "ATEC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "BQ": "Represent the user problem descriptions when handling bank credit business, retrieve semantically similar text",
@@ -25,10 +49,22 @@ codi_instruction = {
     "PAWSX": "Represent the Chinese Translations of English Encyclopedias, retrieve semantically similar text",
     "QBQTC": "Represent the web search query, retrieve semantically similar text",
     "STSB": "Represent the short general domain sentences, retrieve semantically similar text",
-    "T2Reranking": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": ""},
-    "MMarcoReranking": {"query": "Given a web search query, retrieve relevant passages that answer the query", "passage": ""},
-    "CMedQAv1-reranking": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": ""},
-    "CMedQAv2-reranking": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": ""},
+    "T2Reranking": {
+        "query": "Given a Chinese search query, retrieve web passages that answer the question",
+        "passage": "",
+    },
+    "MMarcoReranking": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "passage": "",
+    },
+    "CMedQAv1-reranking": {
+        "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "passage": "",
+    },
+    "CMedQAv2-reranking": {
+        "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "passage": "",
+    },
     "Ocnli": "Retrieve semantically similar text",
     "Cmnli": "Retrieve semantically similar text",
     "TNews": "Classify the fine-grained category of the given news title",
@@ -41,8 +77,8 @@ codi_instruction = {
     "CLSClusteringP2P": "Identify the main category of scholar papers based on the titles and abstracts",
     "ThuNewsClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
     "ThuNewsClusteringP2P": "Identify the topic or theme of the given news articles based on the titles and contents",
-
 }
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -55,6 +91,7 @@ def instruction_template(
         else:
             instruction = instruction[prompt_type]
     return f"<s>Instruction: {instruction} \nQuery: "
+
 
 training_data = {
     "T2Retrieval": ["train"],
