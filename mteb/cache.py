@@ -36,7 +36,6 @@ class ResultCache:
             self.cache_path = Path(cache_path)
         else:
             self.cache_path = self.default_cache_path
-        self.cache_path.mkdir(parents=True, exist_ok=True)
 
     @property
     def has_remote(self) -> bool:

@@ -9,8 +9,11 @@ from sentence_transformers import CrossEncoder
 import mteb
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.cache import ResultCache
-from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 from mteb.models.model_meta import ModelMeta
+from mteb.models.search_wrappers import (
+    RetrievalSaveResultsWrapper,
+)
+from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
@@ -18,20 +21,16 @@ logging.basicConfig(level=logging.INFO)
 
 
 def test_mteb_rerank(tmp_path: Path):
-    prev_model = MockNumpyEncoder()
-    model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    model_meta = _model_meta_from_cross_encoder(model)
+    model = CrossEncoderWrapper("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     task: AbsTaskRetrieval = mteb.get_task("SciFact")
     task.load_data()
-    # create fake first stage results
-    cache = ResultCache(tmp_path)
 
-    prev_result_path = task.previous_results_path(prev_model.mteb_model_meta, cache)
-    prev_result_path.parent.mkdir(parents=True, exist_ok=True)
+    prev_result_path = tmp_path / "prev_results.json"
     scifact_keys = task.dataset["default"]["test"]["queries"]["id"]
     with prev_result_path.open("w") as f:
         json.dump(
             {
+                "mteb_model_meta": MockNumpyEncoder.mteb_model_meta.to_dict(),
                 "default": {
                     "test": {
                         i: {
@@ -41,20 +40,19 @@ def test_mteb_rerank(tmp_path: Path):
                         }
                         for i in scifact_keys
                     }
-                }
+                },
             },
             f,
         )
 
-    task.convert_to_reranking(prev_model.mteb_model_meta, cache)
+    task = task.convert_to_reranking(prev_result_path)
+    current_result_path = tmp_path / "results.json"
+    model = RetrievalSaveResultsWrapper(model, current_result_path)
     mteb.evaluate(
         model,
         task,
-        save_retrieval_results=True,
         overwrite_strategy="always",
-        cache=cache,
     )
-    current_result_path = task.previous_results_path(model_meta, cache)
 
     # read in the results
     with current_result_path.open() as f:
@@ -76,7 +74,9 @@ def test_mteb_rerank(tmp_path: Path):
 def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
+    retrieve_results_path = tmp_path / "retrieve_results.json"
     de = mteb.get_model(de_name, revision=revision)
+    de = RetrievalSaveResultsWrapper(de, retrieve_results_path)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
     ce.mteb_model_meta = ModelMeta(  # type: ignore
@@ -104,11 +104,9 @@ def test_reranker_same_ndcg1(tmp_path: Path):
     de_results = mteb.evaluate(
         de,
         task,
-        save_retrieval_results=True,
-        cache=cache,
         overwrite_strategy="always",
     )
-    task.convert_to_reranking(de, cache)
+    task = task.convert_to_reranking(retrieve_results_path)
     ce_results = mteb.evaluate(
         ce,
         task,

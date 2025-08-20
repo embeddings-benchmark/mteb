@@ -8,14 +8,12 @@ from time import time
 from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
+from typing_extensions import Self
 
 from mteb.cache import ResultCache
-from mteb.models.get_model_meta import get_model_meta
-from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
     Encoder,
-    MTEBModels,
     SearchProtocol,
 )
 from mteb.types import (
@@ -118,9 +116,7 @@ class AbsTaskRetrieval(AbsTask):
     cross_encoder_top_k: int = 100
     support_cross_encoder: bool = True
     support_search: bool = True
-    save_retrieval_results: bool = False
-    cache: ResultCache | None = None
-    previous_results_model_meta: ModelMeta | None = None
+    previous_results_model_meta: dict[str, Any] | None = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -290,8 +286,6 @@ class AbsTaskRetrieval(AbsTask):
             self.load_data()
         # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2()
-        self.cache = cache
-        self.save_retrieval_results = save_retrieval_results
 
         return super().evaluate(
             model,
@@ -359,15 +353,6 @@ class AbsTaskRetrieval(AbsTask):
         end_time = time()
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
-        if self.save_retrieval_results:
-            if hasattr(search_model, "mteb_model_meta"):
-                model_meta = search_model.mteb_model_meta
-                self._save_results(results, model_meta, hf_subset, hf_split)
-            else:
-                logger.warning(
-                    "Cannot find previous results for this model, because model has no `mteb_model_meta`."
-                )
-
         (
             all_scores,
             ndcg,
@@ -390,12 +375,6 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
-        previous_results_data = {}
-        if self.previous_results_model_meta:
-            previous_results_data = {
-                "top_ranked_creation": self.previous_results_model_meta.to_dict(),
-                "top_k": self.top_k,
-            }
 
         return make_score_dict(
             ndcg,
@@ -406,30 +385,8 @@ class AbsTaskRetrieval(AbsTask):
             naucs,
             naucs_mrr,
             task_specific_scores,
-            previous_results_data,
+            self.previous_results_model_meta,
         )
-
-    def _save_results(
-        self,
-        results: RetrievalOutputType,
-        model_meta: ModelMeta,
-        hf_subset: str,
-        hf_split: str,
-    ) -> None:
-        previous_results_path = self.previous_results_path(model_meta, self.cache)
-        previous_results = {}
-        if previous_results_path.exists():
-            with previous_results_path.open() as f:
-                previous_results = json.load(f)
-
-        if hf_subset not in previous_results:
-            previous_results[hf_subset] = {}
-
-        previous_results[hf_subset][hf_split] = results
-
-        previous_results_path.parent.mkdir(parents=True, exist_ok=True)
-        with previous_results_path.open("w") as f:
-            json.dump(previous_results, f)
 
     def task_specific_scores(
         self,
@@ -600,70 +557,34 @@ class AbsTaskRetrieval(AbsTask):
                 lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
             )
 
-    @property
-    def previous_results_name(self) -> str:
-        return f"{self.metadata.name}_results.json"
-
-    def previous_results_path(
-        self,
-        model_meta: ModelMeta,
-        cache: ResultCache | None,
-        remote: bool = False,
-    ) -> Path:
-        full_task_path = cache.get_task_result_path(
-            self.metadata.name, model_meta, remote=remote
-        )
-        return full_task_path.parent / self.previous_results_name
-
     def convert_to_reranking(
         self,
-        model: MTEBModels | ModelMeta | str,
-        cache: ResultCache | None = ResultCache(),
-        remote: bool = False,
+        top_ranked_file: str | Path,
         top_k: int = 10,
-    ) -> None:
+    ) -> Self:
         """Converts a reranking task to re-ranking by loading results from model run
 
         Args:
-            model: Model which have previous results
-            cache: Cache to use
-            remote: If true, re-ranking task is re-ranked
-            top_k: top k
+            top_ranked_file: Path to file with the top ranked results
+            top_k: Number of results to load
+
+        Returns:
+            Re-ranking task
         """
-        # TODO python3.9 not support isinstance over union
-        if (
-            isinstance(model, Encoder)
-            or isinstance(model, CrossEncoderProtocol)
-            or isinstance(model, SearchProtocol)
-        ):
-            if not hasattr(model, "mteb_model_meta"):
-                raise ValueError(
-                    "Cannot find previous results for this model, because model has no `mteb_model_meta`."
-                )
-            model_meta: ModelMeta = model.mteb_model_meta
-        elif isinstance(model, ModelMeta):
-            model_meta = model
-        else:
-            model_meta = get_model_meta(model)
+        top_ranked_path = Path(top_ranked_file)
 
-        if cache is None:
-            raise ValueError(
-                "Cannot convert re-ranking task to re-ranking, because cache is None."
-            )
-
-        previous_results_path = self.previous_results_path(
-            model_meta, cache, remote=remote
-        )
-        if not previous_results_path.exists():
+        if not top_ranked_path.exists():
             raise FileNotFoundError(
-                f"Can't find previous results for this task. File {previous_results_path} does not exist."
+                f"Can't find previous results for this task. File {top_ranked_path} does not exist."
             )
 
-        with previous_results_path.open("r") as previous_results_file:
+        with top_ranked_path.open("r") as previous_results_file:
             previous_results = json.load(previous_results_file)
 
         if not self.data_loaded:
             self.load_data()
+
+        self.previous_results_model_meta = previous_results["mteb_model_meta"]
 
         for subset in self.dataset:
             for split in self.dataset[subset]:
@@ -678,7 +599,7 @@ class AbsTaskRetrieval(AbsTask):
 
                 self.dataset[subset][split]["top_ranked"] = top_k_sorted
         self.top_k = top_k
-        self.previous_results_model_meta = model_meta
+        return self
 
 
 def process_relevant_docs(

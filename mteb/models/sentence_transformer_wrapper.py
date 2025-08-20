@@ -45,6 +45,11 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         """
         if isinstance(model, str):
             self.model = SentenceTransformer(model, revision=revision, **kwargs)
+            from mteb.models.get_model_meta import (
+                _model_meta_from_sentence_transformers,
+            )
+
+            self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
         else:
             self.model = model
 
@@ -132,6 +137,9 @@ class CrossEncoderWrapper:
             self.model = model
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, **kwargs)
+            from mteb.models.get_model_meta import _model_meta_from_cross_encoder
+
+            self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
 
     def predict(
         self,

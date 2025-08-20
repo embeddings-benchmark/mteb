@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import heapq
+import json
 import logging
+from pathlib import Path
 from typing import Any
 
 import torch
@@ -21,7 +23,7 @@ from mteb.types import (
     TopRankedDocumentsType,
 )
 
-from .models_protocols import CrossEncoderProtocol, Encoder
+from .models_protocols import CrossEncoderProtocol, Encoder, SearchProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -342,5 +344,82 @@ class SearchCrossEncoderWrapper:
         results = {qid: {} for qid in queries["id"]}
         for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
             results[query_id][corpus_id] = float(score)
+
+        return results
+
+
+class RetrievalSaveResultsWrapper:
+    def __init__(
+        self,
+        model: SearchProtocol,
+        results_path: str | Path,
+    ) -> None:
+        if not isinstance(model, SearchProtocol):
+            if isinstance(model, Encoder):
+                model = SearchEncoderWrapper(model)
+            elif isinstance(model, CrossEncoderProtocol):
+                model = SearchCrossEncoderWrapper(model)
+            else:
+                raise TypeError(
+                    "Model should be an instance of SearchProtocol, Encoder or CrossEncoderProtocol."
+                )
+        self.model = model
+        self.mteb_model_meta = model.mteb_model_meta
+        self.results_path = Path(results_path)
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
+    ) -> None:
+        return self.model.index(
+            corpus=corpus,
+            task_metadata=task_metadata,
+            encode_kwargs=encode_kwargs,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+        )
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: dict[str, Any],
+        top_ranked: TopRankedDocumentsType | None = None,
+    ) -> RetrievalOutputType:
+        results = self.model.search(
+            queries=queries,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            top_k=top_k,
+            encode_kwargs=encode_kwargs,
+            top_ranked=top_ranked,
+        )
+        if not self.results_path.parent.exists():
+            self.results_path.parent.mkdir(parents=True, exist_ok=True)
+
+        previous_results = {
+            "mteb_model_meta": self.mteb_model_meta.to_dict(),
+        }
+        if self.results_path.exists():
+            with self.results_path.open() as f:
+                previous_results = json.load(f)
+
+        if hf_subset not in previous_results:
+            previous_results[hf_subset] = {}
+
+        previous_results[hf_subset][hf_split] = results
+
+        with self.results_path.open("w") as f:
+            json.dump(previous_results, f)
 
         return results

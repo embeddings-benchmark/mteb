@@ -90,8 +90,6 @@ def _evaluate(
     splits: dict[SplitName, list[HFSubset]],
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
-    cache: ResultCache | None,
-    save_retrieval_results: bool,
 ) -> TaskResult:
     """The core logic to run a model on a given task. See `run_task` for more details."""
     if co2_tracker is None or co2_tracker is True:
@@ -119,8 +117,6 @@ def _evaluate(
                 splits=splits,
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
-                cache=cache,
-                save_retrieval_results=save_retrieval_results,
             )
         result.kg_co2_emissions = tracker.final_emissions
         return result
@@ -142,8 +138,6 @@ def _evaluate(
             split,
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
-            cache=cache,
-            save_retrieval_results=save_retrieval_results,
         )
         tock = time()
 
@@ -174,7 +168,6 @@ def evaluate(
     encode_kwargs: dict[str, Any] | None = None,
     cache: ResultCache | None = ResultCache(),
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
-    save_retrieval_results: bool = False,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -195,7 +188,6 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        save_retrieval_results: Used only in retrieval. If true, results for retrieval will be saved in the cache directory and can be reused in 2 stage reranking.
 
     Returns:
         The results of the evaluation.
@@ -229,7 +221,6 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             cache=cache,
             overwrite_strategy=overwrite_strategy,
-            save_retrieval_results=save_retrieval_results,
         )
         result = task.combine_task_results(results.task_results)
         return ModelResult(
@@ -251,7 +242,6 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 cache=cache,
                 overwrite_strategy=overwrite_strategy,
-                save_retrieval_results=save_retrieval_results,
             )
             results.extend(_res.task_results)
         return ModelResult(
@@ -326,38 +316,45 @@ def evaluate(
         )
         model = model.load_model()
 
-    try:
-        result = _evaluate(
-            model=model,
-            splits=missing_eval,
-            task=task,
-            co2_tracker=co2_tracker,
-            encode_kwargs=encode_kwargs,
-            cache=cache,
-            save_retrieval_results=save_retrieval_results,
-        )
+    if raise_error is False:
+        try:
+            result = _evaluate(
+                model=model,
+                splits=missing_eval,
+                task=task,
+                co2_tracker=co2_tracker,
+                encode_kwargs=encode_kwargs,
+            )
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[result],
+            )
+        except Exception as e:
+            logger.error(
+                f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
+            )
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[],
+            )
+    result = _evaluate(
+        model=model,
+        splits=missing_eval,
+        task=task,
+        co2_tracker=False,
+        encode_kwargs=encode_kwargs,
+    )
 
-        if existing_results:
-            result = result.merge(existing_results)
+    if existing_results:
+        result = result.merge(existing_results)
 
-        if cache:
-            cache.save_to_cache(result, meta)
+    if cache:
+        cache.save_to_cache(result, meta)
 
-        return ModelResult(
-            model_name=model_name,
-            model_revision=model_revision,
-            task_results=[result],
-        )
-    except Exception as e:
-        logger.error(
-            f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
-        )
-
-        if raise_error:
-            raise e
-
-        return ModelResult(
-            model_name=model_name,
-            model_revision=model_revision,
-            task_results=[],
-        )
+    return ModelResult(
+        model_name=model_name,
+        model_revision=model_revision,
+        task_results=[result],
+    )
