@@ -12,7 +12,7 @@ class FinanceBenchRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/FinanceBench",
         dataset={
             "path": "embedding-benchmark/FinanceBench",
-            "revision": "43ca4a7579ad4fad3aba83b01d36b7d6e1c6e2bb",
+            "revision": "e68478442112cae36b70a216f52cc2777acf0a7e",
         },
         type="Retrieval",
         category="s2p",
