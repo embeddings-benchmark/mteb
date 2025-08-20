@@ -10,7 +10,6 @@ from typing import Any, Callable
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
 
-from mteb.cache import ResultCache
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
     Encoder,
@@ -264,8 +263,6 @@ class AbsTaskRetrieval(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
-        cache: ResultCache | None = None,
-        save_retrieval_results: bool = False,
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -275,8 +272,6 @@ class AbsTaskRetrieval(AbsTask):
             split: Split to evaluate on
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
-            cache: Cache to use
-            save_retrieval_results: Whether to save the retrieval results
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:

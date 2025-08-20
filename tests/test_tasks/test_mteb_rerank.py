@@ -11,7 +11,7 @@ from mteb.abstasks import AbsTaskRetrieval
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.search_wrappers import (
-    RetrievalSaveResultsWrapper,
+    SaveRetrievaPredictionsWrapper,
 )
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from tests.test_benchmark.mock_models import MockNumpyEncoder
@@ -47,7 +47,7 @@ def test_mteb_rerank(tmp_path: Path):
 
     task = task.convert_to_reranking(prev_result_path)
     current_result_path = tmp_path / "results.json"
-    model = RetrievalSaveResultsWrapper(model, current_result_path)
+    model = SaveRetrievaPredictionsWrapper(model, current_result_path)
     mteb.evaluate(
         model,
         task,
@@ -76,7 +76,7 @@ def test_reranker_same_ndcg1(tmp_path: Path):
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     retrieve_results_path = tmp_path / "retrieve_results.json"
     de = mteb.get_model(de_name, revision=revision)
-    de = RetrievalSaveResultsWrapper(de, retrieve_results_path)
+    de = SaveRetrievaPredictionsWrapper(de, retrieve_results_path)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
     ce.mteb_model_meta = ModelMeta(  # type: ignore

@@ -348,7 +348,7 @@ class SearchCrossEncoderWrapper:
         return results
 
 
-class RetrievalSaveResultsWrapper:
+class SaveRetrievaPredictionsWrapper:
     def __init__(
         self,
         model: SearchProtocol,
