@@ -12,7 +12,7 @@ class FinQARetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/FinQA",
         dataset={
             "path": "embedding-benchmark/FinQA",
-            "revision": "c84e7afc7c0f1e3c6e74bce2fd4a3b2c94a5e8d7",
+            "revision": "bdd1903ce03153129480bfc14b710e3d612c1efd",
         },
         type="Retrieval",
         category="s2p",
