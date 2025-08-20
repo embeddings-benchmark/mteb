@@ -470,6 +470,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [LitSearchRetrieval](https://github.com/princeton-nlp/LitSearch) (Ajith et al., 2024) | ['eng'] | Retrieval | s2p | [Academic, Non-fiction, Written] | None | None |
 | [LivedoorNewsClustering.v2](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Clustering | s2s | [News, Written] | None | None |
 | [MAUDLegalBenchClassification.v2](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
+| [MBPPRetrieval](https://huggingface.co/datasets/embedding-benchmark/MBPP) (Austin et al., 2021) | ['eng', 'python'] | Retrieval | s2s | [Programming] | {'test': 1948} | {'test': {'number_of_characters': 78520, 'num_samples': 1948, 'num_queries': 974, 'num_documents': 974, 'min_document_length': 37, 'average_document_length': 78.62, 'max_document_length': 249, 'unique_documents': 974, 'min_query_length': 2, 'average_query_length': 2.0, 'max_query_length': 2, 'unique_queries': 974, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 974}} |
 | [METI2IRetrieval](https://arxiv.org/abs/2202.01747) (Ypsilantis et al., 2021) | ['eng'] | Any2AnyRetrieval | i2i | [Encyclopaedic] | {'test': 348597} | {'test': {'number_of_characters': 0, 'num_samples': 348597, 'num_queries': 87942, 'num_documents': 260655, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 260655, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 87942, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.96, 'max_relevant_docs_per_query': 9, 'unique_relevant_docs': 172713}} |
 | [MIRACLReranking](https://project-miracl.github.io/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Reranking | s2s | [Encyclopaedic, Written] | None | None |
 | [MIRACLRetrieval](http://miracl.ai/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
@@ -1225,7 +1226,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cni | Asháninka | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cnl | Lalana Chinantec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cnt | Tepetotutla Chinantec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 38 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 42 |
+| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 39 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 43 |
 | cof | Colorado | Barbacoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | con | Cofán | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cop | Coptic | Afro-Asiatic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1288,7 +1289,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 129 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 522 |
+| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 130 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 523 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -2061,7 +2062,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 666 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 668 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
