@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from functools import partial
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.e5_models import ME5_TRAINING_DATA
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
-from mteb.encoder_interface import PromptType
 
 SAMILPWC_GENAI_TRAINING_DATA = {
     "KorSTS": ["train"],
