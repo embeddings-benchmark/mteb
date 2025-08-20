@@ -73,6 +73,7 @@ def test_get_task(
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
 @pytest.mark.parametrize("exclusive_modality_filter", [True, False])
 @pytest.mark.parametrize("exclude_aggregate", [True, False])
+@pytest.mark.parametrize("include_private", [True, False])
 def test_get_tasks(
     languages: list[str],
     script: list[str],
@@ -82,6 +83,7 @@ def test_get_tasks(
     modalities: list[MODALITIES] | None,
     exclusive_modality_filter: bool,
     exclude_aggregate: bool,
+    include_private: bool,
 ):
     tasks = mteb.get_tasks(
         languages=languages,
@@ -92,6 +94,7 @@ def test_get_tasks(
         modalities=modalities,
         exclusive_modality_filter=exclusive_modality_filter,
         exclude_aggregate=exclude_aggregate,
+        include_private=include_private,
     )
 
     for task in tasks:
@@ -116,6 +119,9 @@ def test_get_tasks(
         if exclude_aggregate:
             # Aggregate tasks should be excluded
             assert not task.is_aggregate
+        if not include_private:
+            # Private datasets should be excluded when include_private=False
+            assert task.metadata.is_public is not False  # None or True are both considered public
 
 
 def test_get_tasks_filtering():

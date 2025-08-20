@@ -217,6 +217,7 @@ class TaskMetadata(BaseModel):
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
+        is_public: Whether the dataset is publicly available. If None, assumes public. Set to False for closed/private datasets.
     """
 
     dataset: dict[str, Any]
@@ -244,6 +245,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
+    is_public: bool | None = None
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -347,7 +349,7 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name not in ["prompt", "adapted_from"]
+            if field_name not in ["prompt", "adapted_from", "is_public"]
         )
 
     @property
