@@ -12,7 +12,7 @@ class MBPPRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
         dataset={
             "path": "embedding-benchmark/MBPP",
-            "revision": "12a7c6b3b7e985be9b9f81e2f06306ffd17cc5a4",
+            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
         },
         type="Retrieval",
         category="s2s",
