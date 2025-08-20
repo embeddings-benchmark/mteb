@@ -12,7 +12,7 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/HC3Finance",
         dataset={
             "path": "embedding-benchmark/HC3Finance",
-            "revision": "f1b5c8d9e2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7",
+            "revision": "fda6fad068f2ed814d99f29dc95dbb28ac586943",
         },
         type="Retrieval",
         category="s2p",
