@@ -142,13 +142,15 @@ def filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
     return [t for t in tasks if not t.is_aggregate]
 
 
-def filter_tasks_by_privacy(tasks: list[AbsTask], include_private: bool) -> list[AbsTask]:
+def filter_tasks_by_privacy(
+    tasks: list[AbsTask], include_private: bool
+) -> list[AbsTask]:
     """Filter tasks based on their privacy status.
 
     Args:
         tasks: A list of tasks to filter.
         include_private: If True, include private datasets. If False, exclude private datasets.
-    
+
     Returns:
         Filtered list of tasks.
     """
@@ -383,7 +385,7 @@ def get_tasks(
         )
     if exclude_aggregate:
         _tasks = filter_aggregate_tasks(_tasks)
-    
+
     # Apply privacy filtering
     _tasks = filter_tasks_by_privacy(_tasks, include_private)
 

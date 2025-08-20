@@ -121,7 +121,9 @@ def test_get_tasks(
             assert not task.is_aggregate
         if not include_private:
             # Private datasets should be excluded when include_private=False
-            assert task.metadata.is_public is not False  # None or True are both considered public
+            assert (
+                task.metadata.is_public is not False
+            )  # None or True are both considered public
 
 
 def test_get_tasks_filtering():

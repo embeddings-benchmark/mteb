@@ -1192,7 +1192,7 @@ def test_private_dataset_metadata():
         is_public=False,
     )
     assert private_task.is_public is False
-    
+
     # Test public dataset (explicit)
     public_task = TaskMetadata(
         name="PublicTask",
@@ -1222,13 +1222,15 @@ def test_get_tasks_privacy_filtering():
     """Test that get_tasks correctly filters by privacy status"""
     # By default, should only return public datasets (include_private=False)
     public_tasks = get_tasks()
-    
+
     # Should include private datasets when explicitly requested
     all_tasks = get_tasks(include_private=True)
-    
+
     # All tasks should contain at least as many or more tasks than public tasks
     assert len(all_tasks) >= len(public_tasks)
-    
+
     # All returned tasks should be public when include_private=False
     for task in public_tasks:
-        assert task.metadata.is_public is not False  # None or True are both considered public
+        assert (
+            task.metadata.is_public is not False
+        )  # None or True are both considered public
