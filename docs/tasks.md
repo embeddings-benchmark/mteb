@@ -324,6 +324,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [FilipinoHateSpeechClassification.v2](https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019) (Neil Vicente Cabasag et al., 2019) | ['fil'] | Classification | s2s | [Social, Written] | None | None |
 | [FilipinoShopeeReviewsClassification](https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf) | ['fil'] | Classification | s2s | [Social, Written] | None | None |
 | [FinParaSTS](https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus) (Kanerva et al., 2021) | ['fin'] | STS | s2s | [News, Subtitles, Written] | None | None |
+| [FinQARetrieval](https://huggingface.co/datasets/embedding-benchmark/FinQA) (Chen et al., 2021) | ['eng'] | Retrieval | s2p | [Financial] | {'test': 1800} | {'test': {'number_of_characters': 165000, 'num_samples': 1800, 'num_queries': 900, 'num_documents': 900, 'min_document_length': 75, 'average_document_length': 183.33, 'max_document_length': 600, 'unique_documents': 900, 'min_query_length': 3, 'average_query_length': 3.0, 'max_query_length': 3, 'unique_queries': 900, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 900}} |
 | [FinToxicityClassification.v2](https://aclanthology.org/2023.nodalida-1.68) (Eskelinen et al., 2023) | ['fin'] | Classification | s2s | [News, Written] | None | None |
 | [FinancialPhrasebankClassification.v2](https://arxiv.org/abs/1307.5336) (P. Malo, 2014) | ['eng'] | Classification | s2s | [Financial, News, Written] | None | None |
 | [Flickr30kI2TRetrieval](https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31) (Peter Young, 2014) | ['eng'] | Any2AnyRetrieval | i2t | [Web, Written] | {'test': 6000} | {'test': {'number_of_characters': 319250, 'num_samples': 6000, 'num_queries': 1000, 'num_documents': 5000, 'min_document_length': 11, 'average_document_length': 63.85, 'max_document_length': 375, 'unique_documents': 4999, 'num_document_images': 0, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 1000, 'min_relevant_docs_per_query': 5, 'average_relevant_docs_per_query': 5.0, 'max_relevant_docs_per_query': 5, 'unique_relevant_docs': 5000}} |
@@ -357,6 +358,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [GreenNodeTableMarkdownRetrieval](https://huggingface.co/GreenNode) | ['vie'] | Retrieval | s2p | [Encyclopaedic, Financial, Non-fiction] | None | None |
 | [GujaratiNewsClassification.v2](https://github.com/goru001/nlp-for-gujarati) | ['guj'] | Classification | s2s | [News, Written] | None | None |
 | [HALClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) (Mathieu Ciancone, 2024) | ['fra'] | Clustering | s2s | [Academic, Written] | None | None |
+| [HC3FinanceRetrieval](https://huggingface.co/datasets/embedding-benchmark/HC3Finance) (Guo et al., 2023) | ['eng'] | Retrieval | s2p | [Financial] | {'test': 2400} | {'test': {'number_of_characters': 200000, 'num_samples': 2400, 'num_queries': 1200, 'num_documents': 1200, 'min_document_length': 50, 'average_document_length': 166.67, 'max_document_length': 500, 'unique_documents': 1200, 'min_query_length': 3, 'average_query_length': 3.0, 'max_query_length': 3, 'unique_queries': 1200, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1200}} |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) (Ehsan Kamalloo, 2023) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [HamshahriClustring](https://github.com/mallahyari/Farsi-datasets) | ['fas'] | Clustering | p2p | [News] | None | None |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) (Fortuna et al., 2019) | ['por'] | Classification | s2s | [Social, Written] | None | None |
@@ -1290,7 +1292,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 131 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 524 |
+| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 133 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 526 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -2063,7 +2065,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 670 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 672 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
