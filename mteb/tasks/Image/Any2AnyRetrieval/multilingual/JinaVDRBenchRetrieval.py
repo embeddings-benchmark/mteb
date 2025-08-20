@@ -39,7 +39,6 @@ def get_langs(langs: list[str]) -> dict[str, list[str]]:
 
 
 COMMON_METADATA = {
-    "description": "Please refer to the reference repo in order to get more information about the benchmark.",
     "type": "DocumentUnderstanding",
     "category": "t2i",
     "eval_splits": ["test"],
@@ -178,6 +177,7 @@ def load_data(self, **kwargs):
 class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMedicalPrescriptionsRetrieval",
+        description="Retrieve medical prescriptions based on templated queries.",
         reference="https://huggingface.co/datasets/jinaai/medical-prescriptions_beir",
         dataset={
             "path": "jinaai/medical-prescriptions_beir",
@@ -198,6 +198,7 @@ class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRStanfordSlideRetrieval",
+        description="Retrieve scientific and engineering slides based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/stanford_slide_beir",
         dataset={
             "path": "jinaai/stanford_slide_beir",
@@ -218,6 +219,7 @@ class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDonutVQAISynHMPRetrieval",
+        description="Retrieve medical records based on templated queries.",
         reference="https://huggingface.co/datasets/jinaai/donut_vqa_beir",
         dataset={
             "path": "jinaai/donut_vqa_beir",
@@ -238,6 +240,7 @@ class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTableVQARetrieval",
+        description="Retrieve scientific tables based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/table-vqa_beir",
         dataset={
             "path": "jinaai/table-vqa_beir",
@@ -258,6 +261,7 @@ class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRChartQARetrieval",
+        description="Retrieve charts based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/ChartQA_beir",
         dataset={
             "path": "jinaai/ChartQA_beir",
@@ -278,6 +282,7 @@ class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTQARetrieval",
+        description="Retrieve textbook pages (images and text) based on LLM generated queries from the text.",
         reference="https://huggingface.co/datasets/jinaai/tqa_beir",
         dataset={
             "path": "jinaai/tqa_beir",
@@ -298,6 +303,7 @@ class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDROpenAINewsRetrieval",
+        description="Retrieve news articles from the OpenAI news website based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/openai-news_beir",
         dataset={
             "path": "jinaai/openai-news_beir",
@@ -318,6 +324,7 @@ class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaDeNewsRetrieval",
+        description="Retrieve German news articles based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/europeana-de-news_beir",
         dataset={
             "path": "jinaai/europeana-de-news_beir",
@@ -338,6 +345,7 @@ class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaEsNewsRetrieval",
+        description="Retrieve Spanish news articles based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/europeana-es-news_beir",
         dataset={
             "path": "jinaai/europeana-es-news_beir",
@@ -358,6 +366,7 @@ class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaItScansRetrieval",
+        description="Retrieve Italian historical articles based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/europeana-it-scans_beir",
         dataset={
             "path": "jinaai/europeana-it-scans_beir",
@@ -378,6 +387,7 @@ class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaNlLegalRetrieval",
+        description="Retrieve Dutch historical legal documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/europeana-nl-legal_beir",
         dataset={
             "path": "jinaai/europeana-nl-legal_beir",
@@ -398,6 +408,7 @@ class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRHindiGovVQARetrieval",
+        description="Retrieve Hindi government documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/hindi-gov-vqa_beir",
         dataset={
             "path": "jinaai/hindi-gov-vqa_beir",
@@ -418,6 +429,7 @@ class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAutomobileCatelogRetrieval",
+        description="Retrieve automobile marketing documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/automobile_catalogue_jp_beir",
         dataset={
             "path": "jinaai/automobile_catalogue_jp_beir",
@@ -438,6 +450,7 @@ class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRBeveragesCatalogueRetrieval",
+        description="Retrieve beverages marketing documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/beverages_catalogue_ru_beir",
         dataset={
             "path": "jinaai/beverages_catalogue_ru_beir",
@@ -458,6 +471,7 @@ class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRRamensBenchmarkRetrieval",
+        description="Retrieve ramen restaurant marketing documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/ramen_benchmark_jp_beir",
         dataset={
             "path": "jinaai/ramen_benchmark_jp_beir",
@@ -478,6 +492,7 @@ class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRJDocQARetrieval",
+        description="Retrieve Japanese documents in various formats based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/jdocqa_beir",
         dataset={
             "path": "jinaai/jdocqa_beir",
@@ -498,6 +513,7 @@ class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRHungarianDocQARetrieval",
+        description="Retrieve Hungarian documents in various formats based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/hungarian_doc_qa_beir",
         dataset={
             "path": "jinaai/hungarian_doc_qa_beir",
@@ -518,6 +534,7 @@ class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArabicChartQARetrieval",
+        description="Retrieve Arabic charts based on queries.",
         reference="https://huggingface.co/datasets/jinaai/arabic_chartqa_ar_beir",
         dataset={
             "path": "jinaai/arabic_chartqa_ar_beir",
@@ -538,6 +555,7 @@ class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArabicInfographicsVQARetrieval",
+        description="Retrieve Arabic infographics based on queries.",
         reference="https://huggingface.co/datasets/jinaai/arabic_infographicsvqa_ar_beir",
         dataset={
             "path": "jinaai/arabic_infographicsvqa_ar_beir",
@@ -558,6 +576,7 @@ class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDROWIDChartsRetrieval",
+        description="Retrieve charts from the OWID dataset based on accompanied text snippets.",
         reference="https://huggingface.co/datasets/jinaai/owid_charts_en_beir",
         dataset={
             "path": "jinaai/owid_charts_en_beir",
@@ -578,6 +597,7 @@ class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMPMQARetrieval",
+        description="Retrieve product manuals based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/mpmqa_small_beir",
         dataset={
             "path": "jinaai/mpmqa_small_beir",
@@ -598,6 +618,7 @@ class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRJina2024YearlyBookRetrieval",
+        description="Retrieve pages from the 2024 Jina yearbook based on human annotated questions.",
         reference="https://huggingface.co/datasets/jinaai/jina_2024_yearly_book_beir",
         dataset={
             "path": "jinaai/jina_2024_yearly_book_beir",
@@ -618,6 +639,7 @@ class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsMapsRetrieval",
+        description="Retrieve maps from Wikimedia Commons based on their description.",
         reference="https://huggingface.co/datasets/jinaai/wikimedia-commons-maps_beir",
         dataset={
             "path": "jinaai/wikimedia-commons-maps_beir",
@@ -626,7 +648,7 @@ class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2024-10-01", "2025-04-01"),
         eval_langs=["eng-Latn"],
         domains=["Web"],
-        license="cc0-1.0",
+        license="multiple",
         annotations_creators="derived",
         sample_creation="found",
         **COMMON_METADATA,
@@ -638,6 +660,7 @@ class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRPlotQARetrieval",
+        description="Retrieve plots from the PlotQA dataset based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/plotqa_beir",
         dataset={
             "path": "jinaai/plotqa_beir",
@@ -658,6 +681,7 @@ class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMMTabRetrieval",
+        description="Retrieve tables from the MMTab dataset based on queries.",
         reference="https://huggingface.co/datasets/jinaai/MMTab_beir",
         dataset={
             "path": "jinaai/MMTab_beir",
@@ -678,6 +702,7 @@ class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRCharXivOCRRetrieval",
+        description="Retrieve charts from scientific papers based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/CharXiv-en_beir",
         dataset={
             "path": "jinaai/CharXiv-en_beir",
@@ -698,6 +723,7 @@ class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRStudentEnrollmentSyntheticRetrieval",
+        description="Retrieve student enrollment data based on templated queries.",
         reference="https://huggingface.co/datasets/jinaai/student-enrollment_beir",
         dataset={
             "path": "jinaai/student-enrollment_beir",
@@ -718,6 +744,7 @@ class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRGitHubReadmeRetrieval",
+        description="Retrieve GitHub readme files based their description.",
         reference="https://huggingface.co/datasets/jinaai/github-readme-retrieval-multilingual_beir",
         dataset={
             "path": "jinaai/github-readme-retrieval-multilingual_beir",
@@ -758,6 +785,7 @@ class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
 class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTweetStockSyntheticsRetrieval",
+        description="Retrieve rendered tables of stock prices based on templated queries.",
         reference="https://huggingface.co/datasets/jinaai/tweet-stock-synthetic-retrieval_beir",
         dataset={
             "path": "jinaai/tweet-stock-synthetic-retrieval_beir",
@@ -780,6 +808,7 @@ class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetri
 class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAirbnbSyntheticRetrieval",
+        description="Retrieve rendered tables from Airbnb listings based on templated queries.",
         reference="https://huggingface.co/datasets/jinaai/airbnb-synthetic-retrieval_beir",
         dataset={
             "path": "jinaai/airbnb-synthetic-retrieval_beir",
@@ -802,6 +831,7 @@ class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval)
 class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRShanghaiMasterPlanRetrieval",
+        description="Retrieve pages from the Shanghai Master Plan based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/shanghai_master_plan_beir",
         dataset={
             "path": "jinaai/shanghai_master_plan_beir",
@@ -824,6 +854,7 @@ class JinaVDRWikimediaCommonsDocumentsRetrieval(
 ):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsDocumentsRetrieval",
+        description="Retrieve historical documents from Wikimedia Commons based on their description.",
         reference="https://huggingface.co/datasets/jinaai/wikimedia-commons-documents-ml_beir",
         dataset={
             "path": "jinaai/wikimedia-commons-documents-ml_beir",
@@ -867,6 +898,7 @@ class JinaVDRWikimediaCommonsDocumentsRetrieval(
 class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaFrNewsRetrieval",
+        description="Retrieve French news articles from Europeana based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/europeana-fr-news_beir",
         dataset={
             "path": "jinaai/europeana-fr-news_beir",
@@ -887,6 +919,7 @@ class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAHealthcareIndustryRetrieval",
+        description="Retrieve healthcare industry documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/docqa_healthcare_industry_beir",
         dataset={
             "path": "jinaai/docqa_healthcare_industry_beir",
@@ -907,6 +940,7 @@ class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAAI",
+        description="Retrieve AI documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/docqa_artificial_intelligence_beir",
         dataset={
             "path": "jinaai/docqa_artificial_intelligence_beir",
@@ -927,6 +961,7 @@ class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
 class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRShiftProjectRetrieval",
+        description="Retrieve documents with graphs from the Shift Project based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/shiftproject_beir",
         dataset={
             "path": "jinaai/shiftproject_beir",
@@ -947,6 +982,7 @@ class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTatQARetrieval",
+        description="Retrieve financial reports based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/tatqa_beir",
         dataset={
             "path": "jinaai/tatqa_beir",
@@ -967,6 +1003,7 @@ class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRInfovqaRetrieval",
+        description="Retrieve infographics based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/infovqa_beir",
         dataset={
             "path": "jinaai/infovqa_beir",
@@ -987,6 +1024,7 @@ class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocVQARetrieval",
+        description="Retrieve industry documents based on human annotated queries.",
         reference="https://huggingface.co/datasets/jinaai/docvqa_beir",
         dataset={
             "path": "jinaai/docvqa_beir",
@@ -1007,6 +1045,7 @@ class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAGovReportRetrieval",
+        description="Retrieve government reports based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/docqa_gov_report_beir",
         dataset={
             "path": "jinaai/docqa_gov_report_beir",
@@ -1027,6 +1066,7 @@ class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTabFQuadRetrieval",
+        description="Retrieve tables from industry documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/tabfquad_beir",
         dataset={
             "path": "jinaai/tabfquad_beir",
@@ -1047,6 +1087,7 @@ class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAEnergyRetrieval",
+        description="Retrieve energy industry documents based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/docqa_energy_beir",
         dataset={
             "path": "jinaai/docqa_energy_beir",
@@ -1067,6 +1108,7 @@ class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
 class JinaVDRArxivQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArxivQARetrieval",
+        description="Retrieve figures from scientific papers from arXiv based on LLM generated queries.",
         reference="https://huggingface.co/datasets/jinaai/arxivqa_beir",
         dataset={
             "path": "jinaai/arxivqa_beir",
