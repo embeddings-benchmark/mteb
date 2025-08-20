@@ -56,6 +56,7 @@ from .eng.DBPediaRetrieval import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
+from .eng.FinanceBenchRetrieval import *
 from .eng.FinQARetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.GovReportRetrieval import *
