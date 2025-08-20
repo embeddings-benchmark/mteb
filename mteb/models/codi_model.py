@@ -54,7 +54,7 @@ def instruction_template(
             instruction = list(instruction.values())[0]
         else:
             instruction = instruction[prompt_type]
-    return f"Instruction: {instruction} \nQuery: "
+    return f"<s>Instruction: {instruction} \nQuery: "
 
 def youtu_loader(model_name_or_path, **kwargs):
     return InstructSentenceTransformerWrapper(
