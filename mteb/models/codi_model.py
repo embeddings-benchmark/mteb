@@ -48,7 +48,7 @@ def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
     if not instruction or prompt_type == PromptType.passage:
-        return ""
+        return "<s>"
     if isinstance(instruction, dict):
         if prompt_type is None:
             instruction = list(instruction.values())[0]
