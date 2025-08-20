@@ -10,14 +10,14 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 logger = logging.getLogger(__name__)
 
 codi_instruction = {
-    "CmedqaRetrieval": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": "<s>"},
-    "CovidRetrieval": {"query": "Given a question on COVID-19, retrieve news articles that answer the question", "passage": "<s>"},
-    "DuRetrieval": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": "<s>"},
-    "EcomRetrieval": {"query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products", "passage": "<s>"},
-    "MedicalRetrieval": {"query": "Given a medical question, retrieve user replies that best answer the question", "passage": "<s>"},
-    "MMarcoRetrieval": {"query": "Given a web search query, retrieve relevant passages that answer the query", "passage": "<s>"},
-    "T2Retrieval": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": "<s>"},
-    "VideoRetrieval": {"query": "Given a video search query, retrieve the titles of relevant videos", "passage": "<s>"},
+    "CmedqaRetrieval": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": ""},
+    "CovidRetrieval": {"query": "Given a question on COVID-19, retrieve news articles that answer the question", "passage": ""},
+    "DuRetrieval": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": ""},
+    "EcomRetrieval": {"query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products", "passage": ""},
+    "MedicalRetrieval": {"query": "Given a medical question, retrieve user replies that best answer the question", "passage": ""},
+    "MMarcoRetrieval": {"query": "Given a web search query, retrieve relevant passages that answer the query", "passage": ""},
+    "T2Retrieval": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": ""},
+    "VideoRetrieval": {"query": "Given a video search query, retrieve the titles of relevant videos", "passage": ""},
     "AFQMC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "ATEC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "BQ": "Represent the user problem descriptions when handling bank credit business, retrieve semantically similar text",
@@ -25,10 +25,10 @@ codi_instruction = {
     "PAWSX": "Represent the Chinese Translations of English Encyclopedias, retrieve semantically similar text",
     "QBQTC": "Represent the web search query, retrieve semantically similar text",
     "STSB": "Represent the short general domain sentences, retrieve semantically similar text",
-    "T2Reranking": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": "<s>"},
-    "MMarcoReranking": {"query": "Given a web search query, retrieve relevant passages that answer the query", "passage": "<s>"},
-    "CMedQAv1-reranking": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": "<s>"},
-    "CMedQAv2-reranking": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": "<s>"},
+    "T2Reranking": {"query": "Given a Chinese search query, retrieve web passages that answer the question", "passage": ""},
+    "MMarcoReranking": {"query": "Given a web search query, retrieve relevant passages that answer the query", "passage": ""},
+    "CMedQAv1-reranking": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": ""},
+    "CMedQAv2-reranking": {"query": "Given a Chinese community medical question, retrieve replies that best answer the question", "passage": ""},
     "Ocnli": "Retrieve semantically similar text",
     "Cmnli": "Retrieve semantically similar text",
     "TNews": "Classify the fine-grained category of the given news title",
@@ -56,17 +56,6 @@ def instruction_template(
             instruction = instruction[prompt_type]
     return f"<s>Instruction: {instruction} \nQuery: "
 
-def youtu_loader(model_name_or_path, **kwargs):
-    return InstructSentenceTransformerWrapper(
-        model_name_or_path,
-        revision=kwargs.pop("revision", None),
-        instruction_template=instruction_template,
-        apply_instruction_to_passages=False,
-        prompts_dict=codi_instruction,
-        trust_remote_code=True,
-        **kwargs,
-    )
-
 training_data = {
     "T2Retrieval": ["train"],
     "DuRetrieval": ["train"],
@@ -81,6 +70,8 @@ training_data = {
     "Cmnli": ["train"],
     "Ocnli": ["train"],
 }
+
+model_name_or_path = "Youtu-RAG/CoDi-Embedding-V1"
 
 CoDiEmb_MiniCPM = ModelMeta(
     name="Youtu-RAG/CoDi-Embedding-V1",
@@ -102,7 +93,7 @@ CoDiEmb_MiniCPM = ModelMeta(
     memory_usage_mb=None,
     embed_dim=2304,
     license="apache-2.0",
-    max_tokens=1024,
+    max_tokens=4096,
     reference="https://huggingface.co/CoDiEmb/CoDi-MiniCPM",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
