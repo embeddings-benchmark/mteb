@@ -349,6 +349,21 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
+        # clean relevant docs (to prevent issue #3030)
+        # TODO: Ensure that this does not influence the scores
+        # TODO: This probably shouldn't be here. Ideally in tests + load_data? (might be a v2 thing though)
+        _relevant_docs = {}
+        _queries = {}
+        for _rd, _q in zip(relevant_docs, queries):
+            no_relevant_docs = len(relevant_docs[_rd]) < 1
+            if no_relevant_docs:
+                continue
+            _relevant_docs[_rd] = relevant_docs[_rd]
+            _queries[_rd] = _q
+
+        queries = _queries
+        relevant_docs = _relevant_docs
+
         start_time = time()
         results = retriever(corpus, queries)
         end_time = time()
