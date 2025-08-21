@@ -12,6 +12,7 @@ from .code.CodeTransOceanContestRetrieval import *
 from .code.CodeTransOceanDLRetrieval import *
 from .code.COIRCodeSearchNetRetrieval import *
 from .code.CosQARetrieval import *
+from .code.DS1000Retrieval import *
 from .code.FreshStackRetrieval import *
 from .code.HumanEvalRetrieval import *
 from .code.MBPPRetrieval import *
