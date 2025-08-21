@@ -41,6 +41,7 @@ from mteb.models import (
     geogpt_models,
     gme_v_models,
     google_models,
+    granite_vision_embedding_models,
     gritlm_models,
     gte_models,
     hinvec_models,
@@ -84,6 +85,7 @@ from mteb.models import (
     richinfoai_models,
     ru_sentence_models,
     salesforce_models,
+    samilpwc_models,
     searchmap_models,
     seed_1_6_embedding_models,
     seed_models,
@@ -96,6 +98,7 @@ from mteb.models import (
     ua_sentence_models,
     uae_models,
     vdr_models,
+    vi_vn_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -128,6 +131,7 @@ model_modules = [
     e5_v,
     evaclip_models,
     google_models,
+    granite_vision_embedding_models,
     gritlm_models,
     gte_models,
     hinvec_models,
@@ -173,6 +177,7 @@ model_modules = [
     seed_models,
     seed_1_6_embedding_models,
     salesforce_models,
+    samilpwc_models,
     searchmap_models,
     sentence_transformers_models,
     shuu_model,
@@ -195,6 +200,7 @@ model_modules = [
     colsmol_models,
     geogpt_models,
     mcinext_models,
+    vi_vn_models,
 ]
 MODEL_REGISTRY = {}
 
