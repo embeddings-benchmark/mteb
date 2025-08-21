@@ -30,7 +30,7 @@ class ChatDoctorRetrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @misc{chatdoctor_healthcaremagic,
   title = {ChatDoctor HealthCareMagic: Medical Question-Answer Retrieval Dataset},
-  url = {https://huggingface.co/datasets/embedding-benchmark/ChatDoctor_HealthCareMagic},
+  url = {https://huggingface.co/lavita},
   year = {2023},
 }
 """,
