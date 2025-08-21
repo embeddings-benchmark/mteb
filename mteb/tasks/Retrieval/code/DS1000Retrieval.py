@@ -12,7 +12,7 @@ class DS1000Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/embedding-benchmark/DS1000",
         dataset={
             "path": "embedding-benchmark/DS1000",
-            "revision": "99a746bb4dd5678ca3ff82d8e18fb1a4ca0b3470",
+            "revision": "25cd4dc8172e799235d83c66439b6b7b8e6583ec",
         },
         type="Retrieval",
         category="s2s",
