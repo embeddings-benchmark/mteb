@@ -337,6 +337,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [FrenkEnClassification.v2](https://arxiv.org/abs/1906.02045) (Nikola Ljubešić, 2019) | ['eng'] | Classification | s2s | [Social, Written] | None | None |
 | [FrenkHrClassification.v2](https://arxiv.org/abs/1906.02045) (Nikola Ljubešić, 2019) | ['hrv'] | Classification | s2s | [Social, Written] | None | None |
 | [FrenkSlClassification.v2](https://arxiv.org/pdf/1906.02045) (Nikola Ljubešić, 2019) | ['slv'] | Classification | s2s | [Social, Written] | None | None |
+| [FreshStackRetrieval](https://huggingface.co/datasets/embedding-benchmark/FreshStack_mteb) (FreshStack Authors, 2023) | ['eng', 'go', 'javascript', 'python'] | Retrieval | s2s | [Programming] | {'test': 3000} | {'test': {'number_of_characters': 125000, 'num_samples': 3000, 'num_queries': 1500, 'num_documents': 1500, 'min_document_length': 30, 'average_document_length': 83.33, 'max_document_length': 300, 'unique_documents': 1500, 'min_query_length': 2, 'average_query_length': 2.0, 'max_query_length': 2, 'unique_queries': 1500, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1500}} |
 | [FunctionOfDecisionSectionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [GLDv2I2IRetrieval](https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html) (Weyand et al., 2020) | ['eng'] | Any2AnyRetrieval | i2i | [Encyclopaedic] | {'test': 762886} | {'test': {'number_of_characters': 0, 'num_samples': 762886, 'num_queries': 1129, 'num_documents': 761757, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 761757, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 1129, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 13.41, 'max_relevant_docs_per_query': 168, 'unique_relevant_docs': 3081}} |
 | [GLDv2I2TRetrieval](https://openaccess.thecvf.com/content_CVPR_2020/html/Weyand_Google_Landmarks_Dataset_v2_-_A_Large-Scale_Benchmark_for_Instance-Level_CVPR_2020_paper.html) (Weyand et al., 2020) | ['eng'] | Any2AnyRetrieval | i2t | [Encyclopaedic] | {'test': 2378} | {'test': {'number_of_characters': 14829, 'num_samples': 2378, 'num_queries': 1704, 'num_documents': 674, 'min_document_length': 4, 'average_document_length': 22.0, 'max_document_length': 70, 'unique_documents': 674, 'num_document_images': 0, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 1704, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.14, 'max_relevant_docs_per_query': 3, 'unique_relevant_docs': 674}} |
@@ -1230,7 +1231,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cni | Asháninka | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cnl | Lalana Chinantec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cnt | Tepetotutla Chinantec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 40 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 44 |
+| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 | 43 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 47 |
 | cof | Colorado | Barbacoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | con | Cofán | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cop | Coptic | Afro-Asiatic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1293,7 +1294,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 134 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 527 |
+| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 15 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 135 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 528 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -2066,7 +2067,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 673 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 41 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 677 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
