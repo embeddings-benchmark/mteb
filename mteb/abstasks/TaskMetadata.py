@@ -245,7 +245,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
-    is_public: bool | None = None
+    is_public: bool = True
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)

@@ -226,11 +226,11 @@ def test_given_dataset_config_then_it_is_valid():
         dialect=None,
         sample_creation=None,
         bibtex_citation="",
-        is_public=None,
+        is_public=False,
     )
     assert my_task.dataset["path"] == "test/dataset"
     assert my_task.dataset["revision"] == "1.0"
-    assert my_task.is_public is None  # Default value
+    assert not my_task.is_public  # Default value
 
 
 def test_given_missing_dataset_path_then_it_throws():
