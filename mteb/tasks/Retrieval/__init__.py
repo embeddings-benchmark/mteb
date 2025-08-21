@@ -57,9 +57,12 @@ from .eng.DBPediaRetrieval import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
+from .eng.FinanceBenchRetrieval import *
+from .eng.FinQARetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.GovReportRetrieval import *
 from .eng.HagridRetrieval import *
+from .eng.HC3FinanceRetrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *

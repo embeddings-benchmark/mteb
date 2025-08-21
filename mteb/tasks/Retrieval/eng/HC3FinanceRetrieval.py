@@ -5,36 +5,39 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class MBPPRetrieval(AbsTaskRetrieval):
+class HC3FinanceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MBPPRetrieval",
-        description="A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
+        name="HC3FinanceRetrieval",
+        description="A financial retrieval task based on HC3 Finance dataset containing human vs AI-generated financial text detection. Each query is a financial question or prompt (e.g., 'Explain the impact of interest rate changes on bond prices'), and the corpus contains both human-written and AI-generated financial responses. The task is to retrieve the most relevant and accurate financial content that addresses the query. Queries are financial questions while the corpus contains detailed financial explanations, analysis, and educational content covering various financial concepts and market dynamics.",
+        reference="https://huggingface.co/datasets/embedding-benchmark/HC3Finance",
         dataset={
-            "path": "embedding-benchmark/MBPP",
-            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
+            "path": "embedding-benchmark/HC3Finance",
+            "revision": "fda6fad068f2ed814d99f29dc95dbb28ac586943",
         },
         type="Retrieval",
-        category="s2s",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "python-Code"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2021-01-01", "2021-12-31"),
-        domains=["Programming"],
-        task_subtypes=["Code retrieval"],
-        license="cc-by-4.0",
+        date=("2023-01-01", "2023-12-31"),
+        domains=["Financial"],
+        task_subtypes=["Question answering"],
+        license="apache-2.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{austin2021program,
-  author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
-  journal = {arXiv preprint arXiv:2108.07732},
-  title = {Program Synthesis with Large Language Models},
-  year = {2021},
+@article{guo2023hc3,
+  author = {Guo, Biyang and Zhang, Xin and Wang, Zhiyuan and Jiang, Mingyuan and Nie, Jinran and Ding, Yuxuan and Yue, Jianwei and Wu, Yupeng},
+  journal = {arXiv preprint arXiv:2301.07597},
+  title = {How Close is ChatGPT to Human Experts? Comparison Corpus, Evaluation, and Detection},
+  year = {2023},
 }
 """,
+        prompt={
+            "query": "Given a financial question or prompt, retrieve relevant financial content that best addresses the query"
+        },
     )
 
     def load_data(self, **kwargs):
