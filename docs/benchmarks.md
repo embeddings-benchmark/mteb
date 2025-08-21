@@ -45,6 +45,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [R2MED](https://r2med.github.io/) | Reasoning-driven medical retrieval | 8 | Retrieval: 8 | [Medical] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
 | [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
+| [VN-MTEB (vie, v1)](https://arxiv.org/abs/2507.21500) | Vietnamese | 50 | Retrieval: 24, Classification: 12, PairClassification: 3, Clustering: 5, Reranking: 3, STS: 3 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | vie |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
 | [ViDoRe(v2)](https://arxiv.org/abs/2407.01449) | ViDoRe(v2) | 4 | DocumentUnderstanding: 4 | [Academic] | deu,eng,fra,spa |
 | [VisualDocumentRetrieval](https://arxiv.org/abs/2407.01449) | Visual Document Retrieval | 14 | DocumentUnderstanding: 14 | [Academic] | deu,eng,fra,spa |

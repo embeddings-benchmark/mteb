@@ -5,36 +5,39 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class MBPPRetrieval(AbsTaskRetrieval):
+class FinQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MBPPRetrieval",
-        description="A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
+        name="FinQARetrieval",
+        description="A financial retrieval task based on FinQA dataset containing numerical reasoning questions over financial documents. Each query is a financial question requiring numerical computation (e.g., 'What is the percentage change in operating expenses from 2019 to 2020?'), and the corpus contains financial document text with tables and numerical data. The task is to retrieve the correct financial information that enables answering the numerical question. Queries are numerical reasoning questions while the corpus contains financial text passages with embedded tables, figures, and quantitative financial data from earnings reports.",
+        reference="https://huggingface.co/datasets/embedding-benchmark/FinQA",
         dataset={
-            "path": "embedding-benchmark/MBPP",
-            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
+            "path": "embedding-benchmark/FinQA",
+            "revision": "bdd1903ce03153129480bfc14b710e3d612c1efd",
         },
         type="Retrieval",
-        category="s2s",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "python-Code"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2021-01-01", "2021-12-31"),
-        domains=["Programming"],
-        task_subtypes=["Code retrieval"],
-        license="cc-by-4.0",
+        domains=["Financial"],
+        task_subtypes=["Question answering"],
+        license="mit",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{austin2021program,
-  author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
-  journal = {arXiv preprint arXiv:2108.07732},
-  title = {Program Synthesis with Large Language Models},
+@article{chen2021finqa,
+  author = {Chen, Zhiyu and Chen, Wenhu and Smiley, Charese and Shah, Sameena and Borova, Iana and Langdon, Dylan and Moussa, Reema and Beane, Matt and Huang, Ting-Hao and Routledge, Bryan and Wang, William Yang},
+  journal = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  title = {FinQA: A Dataset of Numerical Reasoning over Financial Data},
   year = {2021},
 }
 """,
+        prompt={
+            "query": "Given a financial numerical reasoning question, retrieve relevant financial data that helps answer the question"
+        },
     )
 
     def load_data(self, **kwargs):
