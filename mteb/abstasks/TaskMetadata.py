@@ -217,7 +217,7 @@ class TaskMetadata(BaseModel):
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
-        is_public: Whether the dataset is publicly available. If None, assumes public. Set to False for closed/private datasets.
+        is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
     """
 
     dataset: dict[str, Any]
