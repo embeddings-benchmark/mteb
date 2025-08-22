@@ -341,9 +341,7 @@ class JinaV4Wrapper(Wrapper):
             return self.model.encode_text(
                 texts=texts,
                 batch_size=batch_size,
-                return_multivector=True
-                if task_type.startswith("DocumentUnderstanding")
-                else False,
+                return_multivector=self.vector_type == "multi_vector",
                 prompt_name=prompt_name_param,
                 task=base_task,
                 return_numpy=return_numpy,
@@ -389,7 +387,7 @@ class JinaV4Wrapper(Wrapper):
             images=all_images,
             batch_size=batch_size,
             max_pixels=max_pixels,
-            return_multivector=True,
+            return_multivector=self.vector_type == "multi_vector",
             task=base_task,
             return_numpy=return_numpy,
         )
