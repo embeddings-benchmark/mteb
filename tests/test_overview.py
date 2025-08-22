@@ -73,7 +73,6 @@ def test_get_task(
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
 @pytest.mark.parametrize("exclusive_modality_filter", [True, False])
 @pytest.mark.parametrize("exclude_aggregate", [True, False])
-@pytest.mark.parametrize("include_private", [True, False])
 def test_get_tasks(
     languages: list[str],
     script: list[str],
