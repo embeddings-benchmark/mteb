@@ -5,7 +5,7 @@ from functools import partial
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 mme5_model = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/mmE5-mllama-11b-instruct",
         revision="cbb328b9bf9ff5362c852c3166931903226d46f1",
@@ -27,5 +27,8 @@ mme5_model = ModelMeta(
     reference="https://huggingface.co/intfloat/mmE5-mllama-11b-instruct",
     similarity_fn_name="cosine",
     use_instructions=True,
-    training_datasets=None,
+    training_datasets={
+        # Synthetic
+    },
+    adapted_from="meta-llama/Llama-3.2-11B-Vision",
 )
