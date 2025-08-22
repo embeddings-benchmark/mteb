@@ -297,9 +297,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        # retrieval specific args
-        save_predictions: bool = False,
-        export_errors: bool = False,
+        results_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -310,8 +308,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             hf_split: Split to evaluate on
             hf_subset: Subset to evaluate on
-            save_predictions: Whether to save predictions
-            export_errors: Whether to export errors
+            results_folder: Folder with results prediction
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -347,6 +344,15 @@ class AbsTaskRetrieval(AbsTask):
         )
         end_time = time()
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+
+        if results_folder:
+            self.save_task_predictions(
+                results,
+                model,
+                results_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
 
         (
             all_scores,

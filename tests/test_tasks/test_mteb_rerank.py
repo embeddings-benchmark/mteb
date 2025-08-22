@@ -10,9 +10,6 @@ import mteb
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
-from mteb.models.search_wrappers import (
-    SaveRetrievaPredictionsWrapper,
-)
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
@@ -46,16 +43,15 @@ def test_mteb_rerank(tmp_path: Path):
         )
 
     task = task.convert_to_reranking(prev_result_path)
-    current_result_path = tmp_path / "results.json"
-    model = SaveRetrievaPredictionsWrapper(model, current_result_path)
     mteb.evaluate(
         model,
         task,
         overwrite_strategy="always",
+        results_folder=tmp_path,
     )
 
     # read in the results
-    with current_result_path.open() as f:
+    with (tmp_path / task.prediction_file_name).open() as f:
         results = json.load(f)
 
     results = results["default"]["test"]
@@ -74,9 +70,7 @@ def test_mteb_rerank(tmp_path: Path):
 def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
-    retrieve_results_path = tmp_path / "retrieve_results.json"
     de = mteb.get_model(de_name, revision=revision)
-    de = SaveRetrievaPredictionsWrapper(de, retrieve_results_path)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
     ce.mteb_model_meta = ModelMeta(  # type: ignore
@@ -101,12 +95,14 @@ def test_reranker_same_ndcg1(tmp_path: Path):
     )
     task = MockRetrievalTask()
     cache = ResultCache(tmp_path)
+    results_folder = tmp_path / "retrieve_results" / "de"
     de_results = mteb.evaluate(
         de,
         task,
         overwrite_strategy="always",
+        results_folder=results_folder,
     )
-    task = task.convert_to_reranking(retrieve_results_path)
+    task = task.convert_to_reranking(results_folder / task.prediction_file_name)
     ce_results = mteb.evaluate(
         ce,
         task,
