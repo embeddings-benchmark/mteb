@@ -254,12 +254,11 @@ def _filter_queries_without_positives(
 ) -> tuple[dict, dict]:
     _relevant_docs = {}
     _queries = {}
-    for _rd, _q in zip(relevant_docs, queries):
-        no_relevant_docs = len(relevant_docs[_rd]) < 1
-        if no_relevant_docs:
+    for idx in relevant_docs:
+        if len(relevant_docs[idx]) == 0:  # no relevant docs
             continue
-        _relevant_docs[_rd] = relevant_docs[_rd]
-        _queries[_rd] = _q
+        _relevant_docs[idx] = relevant_docs[idx]
+        _queries[idx] = queries[idx]
 
     return _relevant_docs, _queries
 
@@ -365,7 +364,7 @@ class AbsTaskRetrieval(AbsTask):
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
         # ensure queries format (see #3030)
-        queries, relevant_docs = _filter_queries_without_positives(
+        relevant_docs, queries = _filter_queries_without_positives(
             relevant_docs, queries
         )
 
