@@ -18,6 +18,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [CodeRAG](https://arxiv.org/abs/2406.14497) | CodeRAG | 4 | Reranking: 4 | [Programming] | python |
 | [Encodechka](https://github.com/avidale/encodechka) | Encodechka | 7 | STS: 2, Classification: 4, PairClassification: 1 | [Fiction, Government, News, Non-fiction, Social, Web, Written] | rus |
 | [FollowIR](https://arxiv.org/abs/2403.15246) | Instruction Following | 3 | InstructionRetrieval: 3 | [News, Written] | eng |
+| [JinaVDR](https://arxiv.org/abs/2506.18902) | Jina Visual Document Retrieval | 43 | DocumentUnderstanding: 43 | [Academic, Engineering, Government, Legal, Medical, News, Social, Web] | ara,ben,deu,eng,fra,hin,hun,ind,ita,jpn,kor,mya,nld,por,rus,spa,tha,urd,vie,zho |
 | [LongEmbed](https://arxiv.org/abs/2404.12096v2) | Long-context Retrieval | 6 | Retrieval: 6 | [Academic, Blog, Encyclopaedic, Fiction, Non-fiction, Spoken, Written] | eng |
 | [MIEB(Img)](https://arxiv.org/abs/2504.10471) | Image only | 49 | Any2AnyRetrieval: 15, ImageClassification: 22, ImageClustering: 5, VisualSTS(eng): 5, VisualSTS(multi): 2 | [Blog, Encyclopaedic, Medical, News, Non-fiction, Reviews, Scene, Social, Spoken, Web, Written] | ara,cmn,deu,eng,fra,ita,kor,nld,pol,por,rus,spa,tur |
 | [MIEB(Multilingual)](https://arxiv.org/abs/2504.10471) | Image-Text, Multilingual | 130 | ImageClassification: 22, ImageClustering: 5, ZeroShotClassification: 23, VisionCentricQA: 6, Compositionality: 7, VisualSTS(eng): 7, Any2AnyRetrieval: 45, DocumentUnderstanding: 10, Any2AnyMultilingualRetrieval: 3, VisualSTS(multi): 2 | [Academic, Blog, Constructed, Encyclopaedic, Medical, News, Non-fiction, Reviews, Scene, Social, Spoken, Web, Written] | ara,ben,bul,ces,cmn,dan,deu,ell,eng,est,fas,fil,fin,fra,heb,hin,hrv,hun,ind,ita,jpn,kor,mri,nld,nor,pol,por,quz,ron,rus,spa,swa,swe,tel,tha,tur,ukr,vie,zho |
@@ -45,6 +46,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [R2MED](https://r2med.github.io/) | Reasoning-driven medical retrieval | 8 | Retrieval: 8 | [Medical] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
 | [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
+| [VN-MTEB (vie, v1)](https://arxiv.org/abs/2507.21500) | Vietnamese | 50 | Retrieval: 24, Classification: 12, PairClassification: 3, Clustering: 5, Reranking: 3, STS: 3 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | vie |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
 | [ViDoRe(v2)](https://arxiv.org/abs/2407.01449) | ViDoRe(v2) | 4 | DocumentUnderstanding: 4 | [Academic] | deu,eng,fra,spa |
 | [VisualDocumentRetrieval](https://arxiv.org/abs/2407.01449) | Visual Document Retrieval | 14 | DocumentUnderstanding: 14 | [Academic] | deu,eng,fra,spa |
