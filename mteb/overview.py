@@ -142,26 +142,6 @@ def filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
     return [t for t in tasks if not t.is_aggregate]
 
 
-def filter_tasks_by_privacy(
-    tasks: list[AbsTask], include_private: bool
-) -> list[AbsTask]:
-    """Filter tasks based on their privacy status.
-
-    Args:
-        tasks: A list of tasks to filter.
-        include_private: If True, include private datasets. If False, exclude private datasets.
-
-    Returns:
-        Filtered list of tasks.
-    """
-    if include_private:
-        # Include all tasks (both public and private)
-        return tasks
-    else:
-        # Exclude private datasets (is_public=False), include public datasets (is_public=True or None)
-        return [t for t in tasks if t.metadata.is_public is not False]
-
-
 class MTEBTasks(tuple):
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
@@ -388,7 +368,7 @@ def get_tasks(
 
     # Apply privacy filtering
     if not include_private:
-      _tasks = [t for t in tasks if t.metadata.is_public]
+        _tasks = [t for t in tasks if t.metadata.is_public]
 
     return MTEBTasks(_tasks)
 
