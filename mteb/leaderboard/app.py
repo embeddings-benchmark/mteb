@@ -300,7 +300,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 )
 
             with gr.Column(scale=1):
-                with gr.Accordion("Cite and share this benchmark:", open=False):
+                with gr.Accordion("Cite and share this benchmark", open=False):
                     citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
 
