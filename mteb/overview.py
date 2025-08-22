@@ -367,7 +367,7 @@ def get_tasks(
         _tasks = filter_aggregate_tasks(_tasks)
 
     # Apply privacy filtering
-    if not include_private:
+    if tasks and not include_private:
         _tasks = [t for t in tasks if t.metadata.is_public]
 
     return MTEBTasks(_tasks)
