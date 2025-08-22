@@ -5,36 +5,38 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class MBPPRetrieval(AbsTaskRetrieval):
+class ChatDoctorRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MBPPRetrieval",
-        description="A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
+        name="ChatDoctorRetrieval",
+        description="A medical retrieval task based on ChatDoctor_HealthCareMagic dataset containing 112,000 real-world medical question-and-answer pairs. Each query is a medical question from patients (e.g., 'What are the symptoms of diabetes?'), and the corpus contains medical responses and healthcare information. The task is to retrieve the correct medical information that answers the patient's question. The dataset includes grammatical inconsistencies which help separate strong healthcare retrieval models from weak ones. Queries are patient medical questions while the corpus contains relevant medical responses, diagnoses, and treatment information from healthcare professionals.",
+        reference="https://huggingface.co/datasets/embedding-benchmark/ChatDoctor_HealthCareMagic",
         dataset={
-            "path": "embedding-benchmark/MBPP",
-            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
+            "path": "embedding-benchmark/ChatDoctor_HealthCareMagic",
+            "revision": "50c2986fedffa33b38afd5c1752026f8e9e5ed1d",
         },
         type="Retrieval",
-        category="s2s",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "python-Code"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2021-01-01", "2021-12-31"),
-        domains=["Programming"],
-        task_subtypes=["Code retrieval"],
-        license="cc-by-4.0",
+        date=("2023-01-01", "2023-12-31"),
+        domains=["Medical"],
+        task_subtypes=["Question answering"],
+        license="not specified",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{austin2021program,
-  author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
-  journal = {arXiv preprint arXiv:2108.07732},
-  title = {Program Synthesis with Large Language Models},
-  year = {2021},
+@misc{chatdoctor_healthcaremagic,
+  title = {ChatDoctor HealthCareMagic: Medical Question-Answer Retrieval Dataset},
+  url = {https://huggingface.co/datasets/lavita/ChatDoctor-HealthCareMagic-100k},
+  year = {2023},
 }
 """,
+        prompt={
+            "query": "Given a medical question from a patient, retrieve relevant healthcare information that best answers the question"
+        },
     )
 
     def load_data(self, **kwargs):
@@ -67,11 +69,11 @@ class MBPPRetrieval(AbsTaskRetrieval):
 
         # Process corpus
         for item in corpus_ds:
-            corpus[item["id"]] = {"title": "", "text": item["text"]}
+            corpus[item["_id"]] = {"title": "", "text": item["text"]}
 
         # Process queries
         for item in queries_ds:
-            queries[item["id"]] = item["text"]
+            queries[item["_id"]] = item["text"]
 
         # Process qrels (relevant documents)
         for item in qrels_ds:

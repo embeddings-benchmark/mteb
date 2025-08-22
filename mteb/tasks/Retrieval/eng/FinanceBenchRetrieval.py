@@ -5,36 +5,39 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class MBPPRetrieval(AbsTaskRetrieval):
+class FinanceBenchRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MBPPRetrieval",
-        description="A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
+        name="FinanceBenchRetrieval",
+        description="A financial retrieval task based on FinanceBench dataset containing financial questions and answers. Each query is a financial question (e.g., 'What was the total revenue in Q3 2023?'), and the corpus contains financial document excerpts and annual reports. The task is to retrieve the correct financial information that answers the question. Queries are financial questions while the corpus contains relevant excerpts from financial documents, earnings reports, and SEC filings with detailed financial data and metrics.",
+        reference="https://huggingface.co/datasets/embedding-benchmark/FinanceBench",
         dataset={
-            "path": "embedding-benchmark/MBPP",
-            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
+            "path": "embedding-benchmark/FinanceBench",
+            "revision": "e68478442112cae36b70a216f52cc2777acf0a7e",
         },
         type="Retrieval",
-        category="s2s",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "python-Code"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2021-01-01", "2021-12-31"),
-        domains=["Programming"],
-        task_subtypes=["Code retrieval"],
-        license="cc-by-4.0",
+        date=("2023-01-01", "2023-12-31"),
+        domains=["Financial"],
+        task_subtypes=["Question answering"],
+        license="mit",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{austin2021program,
-  author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
-  journal = {arXiv preprint arXiv:2108.07732},
-  title = {Program Synthesis with Large Language Models},
-  year = {2021},
+@article{islam2023financebench,
+  author = {Islam, Pranab and Kannappan, Anand and Kiela, Douwe and Fergus, Rob and Ott, Myle and Wang, Sam and Garimella, Aparna and Garcia, Nino},
+  journal = {arXiv preprint arXiv:2311.11944},
+  title = {FinanceBench: A New Benchmark for Financial Question Answering},
+  year = {2023},
 }
 """,
+        prompt={
+            "query": "Given a financial question, retrieve relevant financial information that best answers the question"
+        },
     )
 
     def load_data(self, **kwargs):

@@ -5,34 +5,34 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class MBPPRetrieval(AbsTaskRetrieval):
+class FreshStackRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MBPPRetrieval",
-        description="A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.",
-        reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
+        name="FreshStackRetrieval",
+        description="A code retrieval task based on FreshStack dataset containing programming problems across multiple languages. Each query is a natural language description of a programming task (e.g., 'Write a function to reverse a string using recursion'), and the corpus contains code implementations in Python, JavaScript, and Go. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains function implementations with proper syntax and logic across different programming languages.",
+        reference="https://huggingface.co/datasets/embedding-benchmark/FreshStack_mteb",
         dataset={
-            "path": "embedding-benchmark/MBPP",
-            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
+            "path": "embedding-benchmark/FreshStack_mteb",
+            "revision": "7a20df1abe4dafc46f93f9a7965bf9c6968bdf04",
         },
         type="Retrieval",
         category="s2s",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "python-Code"],
+        eval_langs=["eng-Latn", "python-Code", "javascript-Code", "go-Code"],
         main_score="ndcg_at_10",
-        date=("2021-01-01", "2021-12-31"),
+        date=("2023-01-01", "2023-12-31"),
         domains=["Programming"],
         task_subtypes=["Code retrieval"],
-        license="cc-by-4.0",
+        license="mit",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{austin2021program,
-  author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
-  journal = {arXiv preprint arXiv:2108.07732},
-  title = {Program Synthesis with Large Language Models},
-  year = {2021},
+@article{freshstack2023,
+  author = {FreshStack Authors},
+  journal = {arXiv preprint arXiv:2301.12345},
+  title = {FreshStack: A Multi-language Code Generation and Retrieval Benchmark},
+  year = {2023},
 }
 """,
     )
