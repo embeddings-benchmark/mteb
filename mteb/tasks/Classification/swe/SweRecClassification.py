@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SweRecClassification(AbsTaskClassification):
+    superseded_by = "SweRecClassification.v2"
     metadata = TaskMetadata(
         name="SweRecClassification",
         description="A Swedish dataset for sentiment classification on review",
@@ -26,19 +27,63 @@ class SweRecClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
-    title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
-    author = "Nielsen, Dan",
-    editor = {Alum{\"a}e, Tanel  and
-      Fishel, Mark},
-    booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-    month = may,
-    year = "2023",
-    address = "T{\'o}rshavn, Faroe Islands",
-    publisher = "University of Tartu Library",
-    url = "https://aclanthology.org/2023.nodalida-1.20",
-    pages = "185--201",
+        bibtex_citation=r"""
+@inproceedings{nielsen-2023-scandeval,
+  address = {T{\'o}rshavn, Faroe Islands},
+  author = {Nielsen, Dan},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
+  month = may,
+  pages = {185--201},
+  publisher = {University of Tartu Library},
+  title = {{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing},
+  url = {https://aclanthology.org/2023.nodalida-1.20},
+  year = {2023},
 }
 """,
         prompt="Classify Swedish reviews by sentiment",
+    )
+
+
+class SweRecClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SweRecClassification.v2",
+        description="""A Swedish dataset for sentiment classification on review
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://aclanthology.org/2023.nodalida-1.20/",
+        dataset={
+            "path": "mteb/swe_rec",
+            "revision": "2a18a4ccc6770319b7f717cda1800f7d5bd5cd1a",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["swe-Latn"],
+        main_score="accuracy",
+        date=("2023-01-01", "2023-12-31"),  # based on the publication date
+        domains=["Reviews", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{nielsen-2023-scandeval,
+  address = {T{\'o}rshavn, Faroe Islands},
+  author = {Nielsen, Dan},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
+  month = may,
+  pages = {185--201},
+  publisher = {University of Tartu Library},
+  title = {{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing},
+  url = {https://aclanthology.org/2023.nodalida-1.20},
+  year = {2023},
+}
+""",
+        prompt="Classify Swedish reviews by sentiment",
+        adapted_from=["SweRecClassification"],
     )

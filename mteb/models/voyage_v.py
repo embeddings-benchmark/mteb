@@ -1,21 +1,17 @@
 from __future__ import annotations
 
 import logging
-import os
 from functools import partial
 from typing import Any
 
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-api_key = os.getenv("VOYAGE_API_KEY")
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def downsample_image(
@@ -37,29 +33,28 @@ def downsample_image(
         logging.info(
             f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
         )
-        return image.resize(new_size, Image.LANCZOS)
+        return image.resize(new_size, Image.LANCZOS)  # type: ignore
     if width > height:
         if width > 10000:
             logging.error("Processing extremely wide images.")
-            return image.resize((10000, height), Image.LANCZOS)
+            return image.resize((10000, height), Image.LANCZOS)  # type: ignore
     else:
         if height > 10000:
             logging.error("Processing extremely high images.")
-            return image.resize((width, 10000), Image.LANCZOS)
+            return image.resize((width, 10000), Image.LANCZOS)  # type: ignore
     return image
 
 
 def voyage_v_loader(**kwargs):
-    try:
-        import voyageai
-    except ImportError:
-        raise ImportError("To use voyage models, please run `pip install -U voyageai`.")
-    try:
-        from tenacity import retry, stop_after_attempt, wait_exponential
-    except ImportError:
-        raise ImportError(
-            "please run `pip install tenacity` to use exponential backoff."
-        )
+    model_name = kwargs.get("model_name", "Voyage vision")
+    requires_package(
+        voyage_v_loader,
+        "voyageai and tenacity",
+        model_name,
+        "pip install 'mteb[voyage_v]'",
+    )
+    import voyageai
+    from tenacity import retry, stop_after_attempt, wait_exponential
 
     class VoyageMultiModalModelWrapper:
         def __init__(
@@ -67,8 +62,12 @@ def voyage_v_loader(**kwargs):
             model_name: str,
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+            from torchvision import transforms
+
             self.model_name = model_name
             self.vo = voyageai.Client()
+            self.tensor_to_image = transforms.Compose([transforms.PILToTensor()])
 
         @retry(
             stop=stop_after_attempt(6),  # Stop after 6 attempts
@@ -88,7 +87,7 @@ def voyage_v_loader(**kwargs):
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -120,7 +119,7 @@ def voyage_v_loader(**kwargs):
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -132,7 +131,8 @@ def voyage_v_loader(**kwargs):
                     if index == 0:
                         assert len(batch) == batch_size
                     batch_images = [
-                        [downsample_image(tensor_to_image(image))] for image in batch
+                        [downsample_image(self.tensor_to_image(image))]
+                        for image in batch
                     ]
                     embeddings = self._multimodal_embed(
                         batch_images, model=self.model_name, input_type=input_type
@@ -175,7 +175,7 @@ def voyage_v_loader(**kwargs):
                 raise ValueError("Either texts or images must be provided")
 
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -190,7 +190,8 @@ def voyage_v_loader(**kwargs):
                         if index == 0:
                             assert len(batch) == batch_size
                         batch_images = [
-                            downsample_image(tensor_to_image(image)) for image in batch
+                            downsample_image(self.tensor_to_image(image))
+                            for image in batch
                         ]
                         batch_texts = texts[
                             index * batch_size : (index + 1) * batch_size
@@ -259,5 +260,5 @@ voyage_v = ModelMeta(
     public_training_data=None,
     reference="https://huggingface.co/voyageai/voyage-multimodal-3",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={},  # No overlap with MTEB according to Voyage, could overlap with MIEB, didn't ask
 )

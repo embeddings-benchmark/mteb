@@ -34,13 +34,14 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{niklaus2022empirical,
-    title={An Empirical Study on Cross-X Transfer for Legal Judgment Prediction},
-    author={Joel Niklaus and Matthias Stürmer and Ilias Chalkidis},
-    year={2022},
-    eprint={2209.12325},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL}
+        bibtex_citation=r"""
+@misc{niklaus2022empirical,
+  archiveprefix = {arXiv},
+  author = {Joel Niklaus and Matthias Stürmer and Ilias Chalkidis},
+  eprint = {2209.12325},
+  primaryclass = {cs.CL},
+  title = {An Empirical Study on Cross-X Transfer for Legal Judgment Prediction},
+  year = {2022},
 }
 """,
     )

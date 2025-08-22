@@ -109,8 +109,7 @@ def borda_count(
     results = results.to_legacy_dict()
     n_candidates = sum(len(revs) for revs in results.values())
     candidate_scores = {
-        model: {revision: 0.0 for revision in revisions}
-        for model, revisions in results.items()
+        model: dict.fromkeys(revisions, 0.0) for model, revisions in results.items()
     }
 
     tasks = defaultdict(list)  # {task_name: [(model, revision, score), ...]}

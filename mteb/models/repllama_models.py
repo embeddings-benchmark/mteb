@@ -12,6 +12,7 @@ from transformers import AutoModel, AutoTokenizer
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +27,10 @@ class RepLLaMAWrapper(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
-        try:
-            from peft import PeftModel
-        except ImportError:
-            raise ImportError(
-                "To use the RepLLaMA based models `peft` is required. Please install it with `pip install 'mteb[peft]'`."
-            )
+        requires_package(
+            self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
+        )
+        from peft import PeftModel
 
         self.base_model = AutoModel.from_pretrained(
             base_model_name_or_path,
@@ -122,7 +121,7 @@ def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
 
 model_prompts = {
     PromptType.query.value: "query:  ",
-    PromptType.passage.value: "passage:  ",
+    PromptType.document.value: "passage:  ",
 }
 
 repllama_llama2_original = ModelMeta(
@@ -135,7 +134,7 @@ repllama_llama2_original = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
@@ -167,7 +166,7 @@ repllama_llama2_reproduced = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",

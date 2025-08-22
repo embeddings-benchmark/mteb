@@ -7,8 +7,8 @@ from typing import get_args
 import polars as pl
 
 import mteb
-from mteb.abstasks.TaskMetadata import PROGRAMMING_LANGS, TASK_TYPE
-from mteb.languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE
+from mteb.abstasks.TaskMetadata import TASK_TYPE
+from mteb.languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE, PROGRAMMING_LANGS
 
 
 def author_from_bibtex(bibtex: str | None) -> str:
@@ -79,7 +79,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
             if lang in PROGRAMMING_LANGS:
                 lang = "code"
             if table_dict.get(lang) is None:
-                table_dict[lang] = {k: 0 for k in sorted(get_args(TASK_TYPE))}
+                table_dict[lang] = dict.fromkeys(sorted(get_args(TASK_TYPE)), 0)
             table_dict[lang][task.metadata.type] += 1
 
     ## Wrangle for polars
@@ -106,13 +106,14 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
         df = df.sort(by="sum", descending=True)
 
     total = df.sum()
-
-    task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
-    horizontal_line_md = "---|---" * (len(sorted(get_args(TASK_TYPE))) + 1)
-    table = f"""
-| ISO Code | Language | Family | {task_names_md} | Sum |
-|{horizontal_line_md}|
-"""
+    task_names = sorted(get_args(TASK_TYPE))
+    headers = ["ISO Code", "Language", "Family"] + task_names + ["Sum"]
+    table_header = "| " + " | ".join(headers) + " |"
+    separator_line = "|"
+    for header in headers:
+        width = len(header) + 2
+        separator_line += "-" * width + "|"
+    table = table_header + "\n" + separator_line + "\n"
 
     for row in df.iter_rows():
         table += f"| {row[0]} "
@@ -138,7 +139,11 @@ def insert_tables(
     for table, tag in zip(tables, tags):
         start = f"<!-- {tag} START -->"
         end = f"<!-- {tag} END -->"
-        md = md.replace(md[md.index(start) + len(start) : md.index(end)], table)
+        # Ensure a newline after the start tag
+        md = md.replace(
+            md[md.index(start) + len(start) : md.index(end)],
+            f"\n{table}\n",
+        )
 
     Path(file_path).write_text(md, encoding="utf-8")
 

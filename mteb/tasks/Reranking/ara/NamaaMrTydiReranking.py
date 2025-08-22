@@ -27,13 +27,15 @@ class NamaaMrTydiReranking(AbsTaskReranking):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{muennighoff2022mteb,
+        bibtex_citation=r"""
+@article{muennighoff2022mteb,
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\\i}c and Reimers, Nils},
   doi = {10.48550/ARXIV.2210.07316},
-  url = {https://arxiv.org/abs/2210.07316},
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
-  title = {MTEB: Massive Text Embedding Benchmark},
+  journal = {arXiv preprint arXiv:2210.07316},
   publisher = {arXiv},
-  journal={arXiv preprint arXiv:2210.07316},  
-  year = {2022}
-}""",
+  title = {MTEB: Massive Text Embedding Benchmark},
+  url = {https://arxiv.org/abs/2210.07316},
+  year = {2022},
+}
+""",
     )

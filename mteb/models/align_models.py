@@ -139,7 +139,7 @@ align_base = ModelMeta(
         model_name="kakaobrain/align-base",
     ),
     name="kakaobrain/align-base",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",
     release_date="2023-02-24",
     modalities=["image", "text"],
@@ -156,6 +156,6 @@ align_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets={
-        # COYO-700M
+        #  COYO-700M
     },
 )

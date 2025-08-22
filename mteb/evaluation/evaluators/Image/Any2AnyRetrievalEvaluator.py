@@ -15,9 +15,9 @@ import torch
 from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder, PromptType
+from mteb.requires_package import requires_image_dependencies
 
 from ..Evaluator import Evaluator
 from ..utils import (
@@ -36,7 +36,12 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TRANSFORM = transforms.Compose([transforms.PILToTensor()])
+
+def get_default_transform():
+    requires_image_dependencies()
+    from torchvision import transforms
+
+    return transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -74,13 +79,14 @@ class Any2AnyDenseRetrievalExactSearch:
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 20000,
         previous_results: str | None = None,
-        transform=DEFAULT_TRANSFORM,
+        transform=None,
         **kwargs: Any,
     ):
         # Model is class that provides get_text_embeddings() and get_image_embeddings()
         self.model = model
         self.encode_kwargs = encode_kwargs
-        self.transform = transform
+        if transform is None:
+            self.transform = get_default_transform()
 
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 128
@@ -111,10 +117,18 @@ class Any2AnyDenseRetrievalExactSearch:
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        if score_function not in self.score_functions:
-            raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
+        if hasattr(self.model, "similarity"):
+            score_function = self.model.similarity
+            logger.info("Scoring Function: from model")
+        else:
+            if score_function not in self.score_functions:
+                raise ValueError(
+                    f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
+                )
+            logger.info(
+                f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
             )
+            score_function = self.score_functions[score_function]
 
         logger.info("Encoding Queries.")
         query_ids = list(queries["id"])
@@ -166,9 +180,6 @@ class Any2AnyDenseRetrievalExactSearch:
         corpus_modality = corpus[0]["modality"]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
-        logger.info(
-            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-        )
 
         result_heaps = {qid: [] for qid in query_ids}
         for chunk_start in range(0, len(corpus), self.corpus_chunk_size):
@@ -184,7 +195,7 @@ class Any2AnyDenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.get_text_embeddings(
                     texts=corpus_texts,
                     task_name=task_name,
-                    prompt_type=PromptType.passage,
+                    prompt_type=PromptType.document,
                     **self.encode_kwargs,
                 )
             else:
@@ -202,7 +213,7 @@ class Any2AnyDenseRetrievalExactSearch:
                     sub_corpus_embeddings = self.model.get_image_embeddings(
                         images=corpus_image_dataloader,
                         task_name=task_name,
-                        prompt_type=PromptType.passage,
+                        prompt_type=PromptType.document,
                         **self.encode_kwargs,
                     )
                 elif corpus_modality == "image,text":
@@ -211,15 +222,13 @@ class Any2AnyDenseRetrievalExactSearch:
                         texts=corpus_texts,
                         images=corpus_image_dataloader,
                         task_name=task_name,
-                        prompt_type=PromptType.passage,
+                        prompt_type=PromptType.document,
                         **self.encode_kwargs,
                     )
                 else:
                     raise ValueError(f"Unsupported modality: {corpus_modality}")
 
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
-            )
+            cos_scores = score_function(query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

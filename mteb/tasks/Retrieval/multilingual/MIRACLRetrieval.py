@@ -32,11 +32,16 @@ _LANGUAGES = {
 
 
 def _load_miracl_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
+    path: str,
+    langs: list,
+    splits: str,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+    trust_remote_code: bool = False,
 ):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = _EVAL_SPLIT
 
@@ -48,7 +53,7 @@ def _load_miracl_data(
             corpus_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
         corpus[lang][split] = {}
         for row in corpus_data["corpus"]:
@@ -64,7 +69,7 @@ def _load_miracl_data(
             queries_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
         queries[lang][split] = {}
         for row in queries_data["queries"]:
@@ -79,7 +84,7 @@ def _load_miracl_data(
             qrels_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
         relevant_docs[lang][split] = {}
         for row in qrels_data[split]:
@@ -105,6 +110,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "miracl/mmteb-miracl",
             "revision": "main",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -119,20 +125,22 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{10.1162/tacl_a_00595,
-    author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
-    title = "{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}",
-    journal = {Transactions of the Association for Computational Linguistics},
-    volume = {11},
-    pages = {1114-1131},
-    year = {2023},
-    month = {09},
-    abstract = "{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}",
-    issn = {2307-387X},
-    doi = {10.1162/tacl_a_00595},
-    url = {https://doi.org/10.1162/tacl\_a\_00595},
-    eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
-}""",
+        bibtex_citation=r"""
+@article{10.1162/tacl_a_00595,
+  abstract = {{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}},
+  author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
+  doi = {10.1162/tacl_a_00595},
+  eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
+  issn = {2307-387X},
+  journal = {Transactions of the Association for Computational Linguistics},
+  month = {09},
+  pages = {1114-1131},
+  title = {{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}},
+  url = {https://doi.org/10.1162/tacl\_a\_00595},
+  volume = {11},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
@@ -143,22 +151,28 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             langs=self.hf_subsets,
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
 
         self.data_loaded = True
 
 
 def _load_miracl_data_hard_negatives(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    path: str,
+    langs: list,
+    splits: str,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+    trust_remote_code: bool = False,
+) -> tuple:
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = _EVAL_SPLIT
 
@@ -190,7 +204,7 @@ def _load_miracl_data_hard_negatives(
                 corpus_identifier,
                 cache_dir=cache_dir,
                 revision=revision,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             corpus[lang][split] = {}
             for row in corpus_data["corpus"]:
@@ -206,7 +220,7 @@ def _load_miracl_data_hard_negatives(
                 queries_identifier,
                 cache_dir=cache_dir,
                 revision=revision,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             queries[lang][split] = {}
             for row in queries_data["queries"]:
@@ -221,7 +235,7 @@ def _load_miracl_data_hard_negatives(
                 qrels_identifier,
                 cache_dir=cache_dir,
                 revision=revision,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             relevant_docs[lang][split] = {}
             for row in qrels_data[split]:
@@ -238,7 +252,7 @@ def _load_miracl_data_hard_negatives(
                 "miracl/mmteb-miracl",
                 corpus_identifier,
                 cache_dir=cache_dir,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             corpus[lang][split] = {}
             for row in corpus_data["corpus"]:
@@ -253,7 +267,7 @@ def _load_miracl_data_hard_negatives(
                 "miracl/mmteb-miracl",
                 queries_identifier,
                 cache_dir=cache_dir,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             queries[lang][split] = {}
             for row in queries_data["queries"]:
@@ -267,7 +281,7 @@ def _load_miracl_data_hard_negatives(
                 "miracl/mmteb-miracl",
                 qrels_identifier,
                 cache_dir=cache_dir,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             relevant_docs[lang][split] = {}
             for row in qrels_data[split]:
@@ -293,6 +307,7 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "mteb/miracl-hard-negatives",
             "revision": "95c8db7d4a6e9c1d8a60601afd63d553ae20a2eb",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -307,20 +322,23 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{10.1162/tacl_a_00595,
-    author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
-    title = "{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}",
-    journal = {Transactions of the Association for Computational Linguistics},
-    volume = {11},
-    pages = {1114-1131},
-    year = {2023},
-    month = {09},
-    abstract = "{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}",
-    issn = {2307-387X},
-    doi = {10.1162/tacl_a_00595},
-    url = {https://doi.org/10.1162/tacl\_a\_00595},
-    eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
-}""",
+        bibtex_citation=r"""
+@article{10.1162/tacl_a_00595,
+  abstract = {{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}},
+  author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
+  doi = {10.1162/tacl_a_00595},
+  eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
+  issn = {2307-387X},
+  journal = {Transactions of the Association for Computational Linguistics},
+  month = {09},
+  pages = {1114-1131},
+  title = {{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}},
+  url = {https://doi.org/10.1162/tacl\_a\_00595},
+  volume = {11},
+  year = {2023},
+}
+""",
+        adapted_from=["MIRACLRetrieval"],
     )
 
     def load_data(self, **kwargs):
@@ -329,11 +347,12 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             _load_miracl_data_hard_negatives(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.hf_subsets,
                 splits=self.metadata_dict["eval_splits"],
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
+                trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
             )
         )
 

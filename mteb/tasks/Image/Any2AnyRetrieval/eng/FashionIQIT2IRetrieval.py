@@ -27,13 +27,15 @@ class FashionIQIT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{wu2021fashion,
-  title={Fashion iq: A new dataset towards retrieving images by natural language feedback},
-  author={Wu, Hui and Gao, Yupeng and Guo, Xiaoxiao and Al-Halah, Ziad and Rennie, Steven and Grauman, Kristen and Feris, Rogerio},
-  booktitle={Proceedings of the IEEE/CVF Conference on computer vision and pattern recognition},
-  pages={11307--11317},
-  year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{wu2021fashion,
+  author = {Wu, Hui and Gao, Yupeng and Guo, Xiaoxiao and Al-Halah, Ziad and Rennie, Steven and Grauman, Kristen and Feris, Rogerio},
+  booktitle = {Proceedings of the IEEE/CVF Conference on computer vision and pattern recognition},
+  pages = {11307--11317},
+  title = {Fashion iq: A new dataset towards retrieving images by natural language feedback},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Find a fashion image that aligns with the reference image and style note."
         },

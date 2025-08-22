@@ -24,9 +24,9 @@ def load_neuclir_data(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
-    queries = {lang: {split: None for split in eval_splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
 
     for lang in langs:
         lang_corpus = datasets.load_dataset(
@@ -80,12 +80,14 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lawrie2023overview,
-  title={Overview of the TREC 2022 NeuCLIR track},
-  author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  journal={arXiv preprint arXiv:2304.12367},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@article{lawrie2023overview,
+  author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
+  journal = {arXiv preprint arXiv:2304.12367},
+  title = {Overview of the TREC 2022 NeuCLIR track},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs):
@@ -110,9 +112,9 @@ def load_neuclir_data_hard_negatives(
     revision: str | None = None,
 ):
     split = "test"
-    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
-    queries = {lang: {split: None for split in eval_splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
 
     for lang in langs:
         corpus_identifier = f"corpus-{lang}"
@@ -193,12 +195,15 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lawrie2023overview,
-  title={Overview of the TREC 2022 NeuCLIR track},
-  author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  journal={arXiv preprint arXiv:2304.12367},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@article{lawrie2023overview,
+  author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
+  journal = {arXiv preprint arXiv:2304.12367},
+  title = {Overview of the TREC 2022 NeuCLIR track},
+  year = {2023},
+}
+""",
+        adapted_from=["NeuCLIR2022Retrieval"],
     )
 
     def load_data(self, **kwargs):

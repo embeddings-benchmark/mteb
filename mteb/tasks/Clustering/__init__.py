@@ -12,6 +12,7 @@ from .eng.BiorxivClusteringP2P import *
 from .eng.BiorxivClusteringS2S import *
 from .eng.BuiltBenchClusteringP2P import *
 from .eng.BuiltBenchClusteringS2S import *
+from .eng.ClusTrecCovid import *
 from .eng.MedrxivClusteringP2P import *
 from .eng.MedrxivClusteringS2S import *
 from .eng.RedditClustering import *
@@ -28,6 +29,8 @@ from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
 from .jpn.LivedoorNewsClustering import *
 from .jpn.MewsC16JaClustering import *
+from .kor.KlueMrcDomainClustering import *
+from .kor.KlueYnatMrcCategoryClustering import *
 from .multilingual.IndicReviewsClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *
@@ -47,4 +50,9 @@ from .rus.RuSciBenchOECDClusteringP2P import *
 from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *
+from .vie.RedditClusteringP2PVN import *
+from .vie.RedditClusteringVN import *
+from .vie.StackExchangeClusteringP2PVN import *
+from .vie.StackExchangeClusteringVN import *
+from .vie.TwentyNewsgroupsClusteringVN import *
 from .zho.CMTEBClustering import *

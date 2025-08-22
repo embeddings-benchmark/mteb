@@ -78,7 +78,7 @@ class VoyageWrapper(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "voyageai", "Voyage")
+        requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
         import voyageai
 
         self._client = voyageai.Client(max_retries=max_retries)
@@ -99,7 +99,8 @@ class VoyageWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-        input_type = prompt_name if prompt_name is not None else "document"
+        input_type = self.model_prompts.get(prompt_name, "document")
+
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -139,8 +140,33 @@ class VoyageWrapper(Wrapper):
 
 model_prompts = {
     PromptType.query.value: "query",
-    PromptType.passage.value: "document",
+    PromptType.document.value: "document",
 }
+
+voyage_3_5 = ModelMeta(
+    name="voyageai/voyage-3.5",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/embeddings",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
 
 voyage_large_2_instruct = ModelMeta(
     name="voyageai/voyage-large-2-instruct",
@@ -262,14 +288,14 @@ voyage_code_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,  # Not known
+    training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
 )
 
 
 voyage_large_2 = ModelMeta(
-    name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -405,6 +431,7 @@ voyage_3_exp = ModelMeta(
     max_tokens=32000,
     embed_dim=2048,
     open_weights=False,
+    # from their card https://huggingface.co/voyageai/voyage-3-m-exp#model-information
     n_parameters=int(6918 * 1e6),
     memory_usage_mb=None,
     license=None,

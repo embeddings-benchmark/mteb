@@ -8,9 +8,9 @@ class UCF101Classification(AbsTaskImageClassification):
     metadata = TaskMetadata(
         name="UCF101",
         description="""UCF101 is an action recognition data set of realistic
-action videos collected from YouTube, having 101 action categories. This 
-version of the dataset does not contain images but images saved frame by 
-frame. Train and test splits are generated based on the authors' first 
+action videos collected from YouTube, having 101 action categories. This
+version of the dataset does not contain images but images saved frame by
+frame. Train and test splits are generated based on the authors' first
 version train/test list.""",
         reference="https://huggingface.co/datasets/flwrlabs/ucf101",
         dataset={
@@ -33,15 +33,17 @@ version train/test list.""",
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{soomro2012ucf101dataset101human,
-      title={UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild}, 
-      author={Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
-      year={2012},
-      eprint={1212.0402},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/1212.0402}, 
-}""",
+        bibtex_citation=r"""
+@misc{soomro2012ucf101dataset101human,
+  archiveprefix = {arXiv},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
+  eprint = {1212.0402},
+  primaryclass = {cs.CV},
+  title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
+  url = {https://arxiv.org/abs/1212.0402},
+  year = {2012},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 697222},
             "avg_character_length": {"test": 0},

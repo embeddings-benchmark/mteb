@@ -6,18 +6,16 @@ from functools import partial
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
 def bm25_loader(**kwargs):
-    try:
-        import bm25s
-        import Stemmer
-    except ImportError:
-        raise ImportError(
-            "bm25s or PyStemmer is not installed. Please install it with `pip install mteb[bm25s]`."
-        )
+    model_name = kwargs.get("model_name", "BM25")
+    requires_package(bm25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
+    import bm25s
+    import Stemmer
 
     class BM25Search(DRESModel, Wrapper):
         """BM25 search"""
@@ -125,7 +123,7 @@ def bm25_loader(**kwargs):
 bm25_s = ModelMeta(
     loader=partial(bm25_loader, model_name="bm25s"),  # type: ignore
     name="bm25s",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="0_1_10",
     release_date="2024-07-10",  ## release of version 0.1.10

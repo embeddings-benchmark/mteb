@@ -6,6 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class DalajClassification(AbsTaskClassification):
+    superseded_by = "DalajClassification.v2"
     metadata = TaskMetadata(
         name="DalajClassification",
         dataset={
@@ -29,12 +30,14 @@ class DalajClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@misc{2105.06681,
-Author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
-Title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
-Year = {2021},
-Eprint = {arXiv:2105.06681},
-}""",
+        bibtex_citation=r"""
+@misc{2105.06681,
+  author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
+  eprint = {arXiv:2105.06681},
+  title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
+  year = {2021},
+}
+""",
         prompt="Classify texts based on linguistic acceptability in Swedish",
     )
 
@@ -65,3 +68,42 @@ Eprint = {arXiv:2105.06681},
             batched=True,
             remove_columns=columns_to_keep,
         )
+
+
+class DalajClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="DalajClassification.v2",
+        dataset={
+            "path": "mteb/dalaj",
+            "revision": "ecf6f2d83e8e85816ec3974896557a4aafce4f3e",
+            "name": "dalaj",
+        },
+        description="""A Swedish dataset for linguistic acceptability. Available as a part of Superlim.
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://spraakbanken.gu.se/en/resources/superlim",
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["swe-Latn"],
+        main_score="accuracy",
+        date=("2017-01-01", "2020-12-31"),
+        domains=["Non-fiction", "Written"],
+        task_subtypes=["Linguistic acceptability"],
+        license="cc-by-4.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=r"""
+@misc{2105.06681,
+  author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
+  eprint = {arXiv:2105.06681},
+  title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
+  year = {2021},
+}
+""",
+        prompt="Classify texts based on linguistic acceptability in Swedish",
+        adapted_from=["DalajClassification"],
+    )
+
+    samples_per_label = 16

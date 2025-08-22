@@ -11,6 +11,7 @@ from transformers import AutoModel
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 
 class JinaCLIPModelWrapper:
@@ -20,6 +21,8 @@ class JinaCLIPModelWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        requires_image_dependencies()
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(
@@ -63,12 +66,12 @@ class JinaCLIPModelWrapper:
         convert_to_tensor=True,
         **kwargs: Any,
     ):
+        import torchvision.transforms.functional as F
+
         all_image_embeddings = []
 
         if isinstance(images, DataLoader):
             with torch.no_grad():
-                import torchvision.transforms.functional as F
-
                 for batch in tqdm(images):
                     image_outputs = self.model.encode_image(
                         [F.to_pil_image(b.to("cpu")) for b in batch],
@@ -154,7 +157,7 @@ jina_clip_v1 = ModelMeta(
         model_name="jinaai/jina-clip-v1",
     ),
     name="jinaai/jina-clip-v1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
     release_date="2024-05-30",
     modalities=["image", "text"],

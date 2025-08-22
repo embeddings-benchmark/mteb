@@ -884,12 +884,14 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{akerman2023ebible,
-            title={The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},
-            author={Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
-            journal={arXiv preprint arXiv:2304.09919},
-            year={2023}
-        }""",
+        bibtex_citation=r"""
+@article{akerman2023ebible,
+  author = {Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
+  journal = {arXiv preprint arXiv:2304.09919},
+  title = {The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs: Any) -> None:

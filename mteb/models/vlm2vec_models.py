@@ -12,11 +12,15 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import (
+    requires_image_dependencies,
+    requires_package,
+    suggest_package,
+)
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
-EncodeTypes = Literal["query", "passage"]
+EncodeTypes = Literal["query", "document"]
 
 
 class VLM2VecWrapper:
@@ -28,13 +32,17 @@ class VLM2VecWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs,
     ):
-        try:
+        requires_image_dependencies()
+        if suggest_package(
+            self,
+            "flash_attn",
+            model_name,
+            "pip install flash-attn --no-build-isolation",
+        ):
             import flash_attn  # noqa
-            from peft import LoraConfig, PeftModel  # noqa
-        except ImportError:
-            logger.warning(
-                "VLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
-            )
+
+        requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
+        from peft import LoraConfig, PeftModel  # noqa
 
         self.pooling = "last"
         self.normalize = True
@@ -119,11 +127,11 @@ class VLM2VecWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        import torchvision.transforms.functional as F
+
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
         if isinstance(images, DataLoader):
-            import torchvision.transforms.functional as F
-
             with torch.no_grad():
                 for batch in tqdm(images):
                     input_ids, pixel_values, image_sizes = [], [], []
@@ -253,8 +261,8 @@ class VLM2VecWrapper:
 
     def get_fused_embeddings(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
+        texts: list[str] | None = None,
+        images: list[Image.Image] | DataLoader | None = None,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -262,6 +270,8 @@ class VLM2VecWrapper:
         fusion_mode="sum",
         **kwargs: Any,
     ):
+        import torchvision.transforms.functional as F
+
         if texts is None and images is None:
             raise ValueError("Either texts or images must be provided")
 
@@ -283,8 +293,6 @@ class VLM2VecWrapper:
         texts = iter(texts)
         all_fused_embeddings = []
         if isinstance(images, DataLoader):
-            import torchvision.transforms.functional as F
-
             with torch.no_grad():
                 for batch in images:
                     input_ids, pixel_values, image_sizes = [], [], []
@@ -372,7 +380,7 @@ vlm2vec_lora = ModelMeta(
         model_name="TIGER-Lab/VLM2Vec-LoRA",
     ),
     name="TIGER-Lab/VLM2Vec-LoRA",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="7403b6327958071c1e33c822c7453adadccc7298",
     release_date="2024-10-08",
     modalities=["image", "text"],
@@ -397,7 +405,7 @@ vlm2vec_full = ModelMeta(
         model_name="TIGER-Lab/VLM2Vec-Full",
     ),
     name="TIGER-Lab/VLM2Vec-Full",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="e9afa98002097ac2471827ba23ea1f2ddd229480",
     release_date="2024-10-08",
     modalities=["image", "text"],

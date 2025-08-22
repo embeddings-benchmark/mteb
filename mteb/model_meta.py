@@ -11,14 +11,16 @@ from huggingface_hub.errors import (
     NotASafetensorsRepoError,
     SafetensorsParsingError,
 )
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
-from .languages import ISO_LANGUAGE_SCRIPT
-from .modalities import MODALITIES
+from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
+from .languages import (
+    ISO_LANGUAGE_SCRIPT,
+    check_language_code,
+)
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -37,6 +39,7 @@ FRAMEWORKS = Literal[
     "NumPy",
     "PyLate",
     "ColBERT",
+    "ColPali",
 ]
 DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
@@ -64,7 +67,7 @@ class ModelMeta(BaseModel):
 
     Attributes:
         loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
-        name: The name of the model, ideally the name on huggingface.
+        name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
@@ -104,7 +107,7 @@ class ModelMeta(BaseModel):
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
-    license: str | None
+    license: LICENSES | STR_URL | None
     open_weights: bool | None
     public_training_code: str | None
     public_training_data: str | bool | None
@@ -123,6 +126,27 @@ class ModelMeta(BaseModel):
         loader = dict_repr.pop("loader", None)
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
+
+    @field_validator("languages")
+    @classmethod
+    def languages_are_valid(cls, languages: list[ISO_LANGUAGE_SCRIPT] | None) -> None:
+        if languages is None:
+            return None
+
+        for code in languages:
+            check_language_code(code)
+        return languages
+
+    @field_validator("name")
+    @classmethod
+    def check_name(cls, v: str | None) -> str | None:
+        if v is None or v == "bm25s":
+            return v
+        if "/" not in v:
+            raise ValueError(
+                "Model name must be in the format 'organization/model_name'"
+            )
+        return v
 
     def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
@@ -152,9 +176,14 @@ class ModelMeta(BaseModel):
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
         """
-        if self.training_datasets is None:
+        # If no tasks were specified, we're obviously zero-shot
+        if not tasks:
+            return True
+        training_datasets = self.get_training_datasets()
+        # If no tasks were specified, we're obviously zero-shot
+        if training_datasets is None:
             return None
-        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
@@ -165,13 +194,42 @@ class ModelMeta(BaseModel):
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
 
+    def get_training_datasets(self) -> dict[str, list[str]] | None:
+        """Returns all training datasets of the model including similar tasks."""
+        import mteb
+
+        if self.training_datasets is None:
+            return None
+
+        training_datasets = self.training_datasets.copy()
+        if self.adapted_from is not None:
+            try:
+                adapted_from_model = mteb.get_model_meta(
+                    self.adapted_from, fetch_from_hf=False
+                )
+                adapted_training_datasets = adapted_from_model.get_training_datasets()
+                if adapted_training_datasets is not None:
+                    training_datasets |= adapted_training_datasets
+            except ValueError as e:
+                logger.warning(f"Could not get source model: {e} in MTEB")
+
+        return_dataset = training_datasets.copy()
+        visited = set()
+
+        for dataset in training_datasets:
+            similar_tasks = collect_similar_tasks(dataset, visited)
+            return_dataset |= {task: [] for task in similar_tasks}
+
+        return return_dataset
+
     def zero_shot_percentage(
         self, tasks: Sequence[AbsTask] | Sequence[str]
     ) -> int | None:
         """Indicates how out-of-domain the selected tasks are for the given model."""
-        if (self.training_datasets is None) or (not tasks):
+        training_datasets = self.get_training_datasets()
+        if (training_datasets is None) or (not tasks):
             return None
-        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
@@ -218,3 +276,28 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+
+def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
+    """Recursively collect all similar tasks for a given dataset."""
+    from .overview import SIMILAR_TASKS
+
+    if dataset in visited:
+        return set()
+
+    visited.add(dataset)
+    similar = set()
+
+    # Check if dataset is a key in SIMILAR_TASKS
+    if dataset in SIMILAR_TASKS:
+        for similar_task in SIMILAR_TASKS[dataset]:
+            similar.add(similar_task)
+            similar.update(collect_similar_tasks(similar_task, visited))
+
+    # Check if dataset appears as a value in SIMILAR_TASKS
+    for parent, children in SIMILAR_TASKS.items():
+        if dataset in children:
+            similar.add(parent)
+            similar.update(collect_similar_tasks(parent, visited))
+
+    return similar

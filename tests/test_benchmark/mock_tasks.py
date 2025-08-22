@@ -22,9 +22,6 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
-    AbsTaskAny2TextMultipleChoice,
-)
 from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
@@ -34,8 +31,8 @@ from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -2281,45 +2278,6 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
-    metadata = TaskMetadata(
-        type="VisionCentric",
-        name="MockTextMultipleChoice",
-        main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                # TODO: Add descriptive stats
-            }
-        },
-        **general_args,  # type: ignore
-    )
-    metadata.modalities = ["text", "image"]
-    metadata.category = "it2i"
-
-    def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
-
-        self.dataset = DatasetDict(
-            {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "image": [images[i] for i in range(2)],
-                        "question": [
-                            "This is a positive sentence",
-                            "This is another positive sentence",
-                        ],
-                        "choices": [["3", "2", "1", "0"], ["3", "2", "1", "0"]],
-                        "answer": ["1", "0"],
-                    }
-                )
-            }
-        )
-
-
 class MockImageClassificationTask(AbsTaskImageClassification):
     metadata = TaskMetadata(
         type="ImageClassification",
@@ -2868,10 +2826,10 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
         return metadata_dict
 
 
-class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
+class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         type="ZeroShotClassification",
-        name="MockZeroshotClassification",
+        name="MockZeroShotClassification",
         main_score="accuracy",
         descriptive_stats={
             "test": {

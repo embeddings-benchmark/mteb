@@ -39,15 +39,18 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{li2022csl,
-            title={CSL: A Large-scale Chinese Scientific Literature Dataset}, 
-            author={Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
-            year={2022},
-            eprint={2209.05034},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }""",
+        bibtex_citation=r"""
+@misc{li2022csl,
+  archiveprefix = {arXiv},
+  author = {Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
+  eprint = {2209.05034},
+  primaryclass = {cs.CL},
+  title = {CSL: A Large-scale Chinese Scientific Literature Dataset},
+  year = {2022},
+}
+""",
         prompt="Identify the main category of scholar papers based on the titles",
+        adapted_from=["CLSClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -95,15 +98,18 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{li2022csl,
-            title={CSL: A Large-scale Chinese Scientific Literature Dataset}, 
-            author={Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
-            year={2022},
-            eprint={2209.05034},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }""",
+        bibtex_citation=r"""
+@misc{li2022csl,
+  archiveprefix = {arXiv},
+  author = {Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
+  eprint = {2209.05034},
+  primaryclass = {cs.CL},
+  title = {CSL: A Large-scale Chinese Scientific Literature Dataset},
+  year = {2022},
+}
+""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
+        adapted_from=["CLSClusteringP2P"],
     )
 
     def dataset_transform(self):
@@ -143,19 +149,18 @@ class CLSClusteringS2S(AbsTaskClustering):
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{li2022csl,
-  title={CSL: A large-scale Chinese scientific literature dataset},
-  author={Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
-  journal={arXiv preprint arXiv:2209.05034},
-  year={2022}
+  author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  journal = {arXiv preprint arXiv:2209.05034},
+  title = {CSL: A large-scale Chinese scientific literature dataset},
+  year = {2022},
 }
 """,
         prompt="Identify the main category of scholar papers based on the titles",
@@ -179,19 +184,20 @@ class CLSClusteringP2P(AbsTaskClustering):
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@article{li2022csl,
-  title={CSL: A large-scale Chinese scientific literature dataset},
-  author={Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
-  journal={arXiv preprint arXiv:2209.05034},
-  year={2022}
-}""",
+        bibtex_citation=r"""
+@article{li2022csl,
+  author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  journal = {arXiv preprint arXiv:2209.05034},
+  title = {CSL: A large-scale Chinese scientific literature dataset},
+  year = {2022},
+}
+""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
     )
 
@@ -221,15 +227,18 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@software{THUCTC,
+        bibtex_citation=r"""
+@software{THUCTC,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
-  title = {THUCTC: An Efficient Chinese Text Classifier},
-  year = {2016},
   note = {THU Chinese Text Classification Toolkit},
   publisher = {THU Natural Language Processing Lab},
-  url = {https://github.com/thunlp/THUCTC}
-}""",
+  title = {THUCTC: An Efficient Chinese Text Classifier},
+  url = {https://github.com/thunlp/THUCTC},
+  year = {2016},
+}
+""",
         prompt="Identify the topic or theme of the given news articles based on the titles",
+        adapted_from=["ThuNewsClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -277,15 +286,18 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@software{THUCTC,
+        bibtex_citation=r"""
+@software{THUCTC,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
-  title = {THUCTC: An Efficient Chinese Text Classifier},
-  year = {2016},
   note = {THU Chinese Text Classification Toolkit},
   publisher = {THU Natural Language Processing Lab},
-  url = {https://github.com/thunlp/THUCTC}
-}""",
+  title = {THUCTC: An Efficient Chinese Text Classifier},
+  url = {https://github.com/thunlp/THUCTC},
+  year = {2016},
+}
+""",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
+        adapted_from=["ThuNewsClusteringP2P"],
     )
 
     def dataset_transform(self):
@@ -325,26 +337,26 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{eisner2007proceedings,
-  title={Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  author={Eisner, Jason},
-  booktitle={Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  year={2007}
+  author = {Eisner, Jason},
+  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
+  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
+  year = {2007},
 }
+
 @inproceedings{li2006comparison,
-  title={A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
-  author={Li, Jingyang and Sun, Maosong and Zhang, Xian},
-  booktitle={proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
-  pages={545--552},
-  year={2006}
+  author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
+  booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
+  pages = {545--552},
+  title = {A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
+  year = {2006},
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles",
@@ -368,26 +380,26 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{eisner2007proceedings,
-  title={Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  author={Eisner, Jason},
-  booktitle={Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  year={2007}
+  author = {Eisner, Jason},
+  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
+  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
+  year = {2007},
 }
+
 @inproceedings{li2006comparison,
-  title={A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
-  author={Li, Jingyang and Sun, Maosong and Zhang, Xian},
-  booktitle={proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
-  pages={545--552},
-  year={2006}
+  author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
+  booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
+  pages = {545--552},
+  title = {A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
+  year = {2006},
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",

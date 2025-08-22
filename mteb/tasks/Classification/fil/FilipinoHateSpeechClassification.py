@@ -7,14 +7,14 @@ TEST_SAMPLES = 2048
 
 
 class FilipinoHateSpeechClassification(AbsTaskClassification):
+    superseded_by = "FilipinoHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification",
         description="Filipino Twitter dataset for sentiment classification.",
         reference="https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019",
         dataset={
-            "path": "legacy-datasets/hate_speech_filipino",
-            "revision": "1994e9bb7f3ec07518e3f0d9e870cb293e234686",
-            "trust_remote_code": True,
+            "path": "mteb/FilipinoHateSpeechClassification",
+            "revision": "087a17c0b7f9a78901c88aea00ad2892a319fdac",
         },
         type="Classification",
         category="s2s",
@@ -29,20 +29,53 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @article{Cabasag-2019-hate-speech,
-            title={Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
-            author={Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
-            journal={Philippine Computing Journal},
-            volume={XIV},
-            number={1},
-            month={August},
-            year={2019}
-        }
-        """,
+        bibtex_citation=r"""
+@article{Cabasag-2019-hate-speech,
+  author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
+  journal = {Philippine Computing Journal},
+  month = {August},
+  number = {1},
+  title = {Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
+  volume = {XIV},
+  year = {2019},
+}
+""",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["validation", "test"]
-        )
+
+class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="FilipinoHateSpeechClassification.v2",
+        description="""Filipino Twitter dataset for sentiment classification.
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019",
+        dataset={
+            "path": "mteb/filipino_hate_speech",
+            "revision": "fdb7536c08d2f10d8b8b618c3ff00b0be286d844",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        date=("2019-08-01", "2019-08-01"),
+        eval_splits=["validation", "test"],
+        eval_langs=["fil-Latn"],
+        main_score="accuracy",
+        domains=["Social", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@article{Cabasag-2019-hate-speech,
+  author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
+  journal = {Philippine Computing Journal},
+  month = {August},
+  number = {1},
+  title = {Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
+  volume = {XIV},
+  year = {2019},
+}
+""",
+        adapted_from=["FilipinoHateSpeechClassification"],
+    )

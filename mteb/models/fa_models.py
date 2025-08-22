@@ -141,9 +141,7 @@ tooka_sbert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        # This model is finetuned from PartAI/TookaBERT-Large
-    },
+    training_datasets=None,
 )
 
 fa_bert = ModelMeta(
@@ -167,4 +165,44 @@ fa_bert = ModelMeta(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
     },
+)
+
+tooka_sbert_v2_small = ModelMeta(
+    name="PartAI/Tooka-SBERT-V2-Small",
+    languages=["fas-Arab"],
+    open_weights=True,
+    revision="8bbed87e36669387f71437c061430ba56d1b496f",
+    release_date="2025-05-01",
+    n_parameters=122_905_344,
+    memory_usage_mb=496,
+    embed_dim=768,
+    license="not specified",
+    max_tokens=512,
+    reference="https://huggingface.co/PartAI/Tooka-SBERT-V2-Small",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+)
+
+tooka_sbert_v2_large = ModelMeta(
+    name="PartAI/Tooka-SBERT-V2-Large",
+    languages=["fas-Arab"],
+    open_weights=True,
+    revision="b59682efa961122cc0e4408296d5852870c82eae",
+    release_date="2025-05-01",
+    n_parameters=353_039_360,
+    memory_usage_mb=1347,
+    embed_dim=1024,
+    license="not specified",
+    max_tokens=512,
+    reference="https://huggingface.co/PartAI/Tooka-SBERT-V2-Large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
