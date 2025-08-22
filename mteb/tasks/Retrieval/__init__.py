@@ -12,9 +12,13 @@ from .code.CodeTransOceanContestRetrieval import *
 from .code.CodeTransOceanDLRetrieval import *
 from .code.COIRCodeSearchNetRetrieval import *
 from .code.CosQARetrieval import *
+from .code.DS1000Retrieval import *
+from .code.FreshStackRetrieval import *
 from .code.HumanEvalRetrieval import *
+from .code.MBPPRetrieval import *
 from .code.StackOverflowQARetrieval import *
 from .code.SyntheticText2SqlRetrieval import *
+from .code.WikiSQLRetrieval import *
 from .dan.DanFeverRetrieval import *
 from .dan.TV2Nordretrieval import *
 from .dan.TwitterHjerneRetrieval import *
@@ -35,6 +39,7 @@ from .eng.BillSumCARetrieval import *
 from .eng.BillSumUSRetrieval import *
 from .eng.BrightRetrieval import *
 from .eng.BuiltBenchRetrieval import *
+from .eng.ChatDoctorRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
@@ -54,9 +59,12 @@ from .eng.DBPediaRetrieval import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
+from .eng.FinanceBenchRetrieval import *
+from .eng.FinQARetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.GovReportRetrieval import *
 from .eng.HagridRetrieval import *
+from .eng.HC3FinanceRetrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *
