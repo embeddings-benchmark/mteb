@@ -304,7 +304,10 @@ def get_leaderboard_app() -> gr.Blocks:
                     citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
 
-                with gr.Accordion("Customize this Benchmark", open=False, ):
+                with gr.Accordion(
+                    "Customize this Benchmark",
+                    open=False,
+                ):
                     with gr.Column():
                         with gr.Row():
                             type_select.render()
@@ -389,8 +392,8 @@ def get_leaderboard_app() -> gr.Blocks:
             )
 
             with gr.Accordion(
-                    "Frequently Asked Questions",
-                    open=False,
+                "Frequently Asked Questions",
+                open=False,
             ):
                 gr.Markdown(FAQ)
 
@@ -399,14 +402,18 @@ def get_leaderboard_app() -> gr.Blocks:
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all tasks in the benchmark*"
             )
-            plot_tab.select(performance_size_plot, inputs=[summary_table], outputs=[plot])
+            plot_tab.select(
+                performance_size_plot, inputs=[summary_table], outputs=[plot]
+            )
 
         with gr.Tab("Performance per Task Type") as radar_plot_tab:
             radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
             )
-            radar_plot_tab.select(radar_chart, inputs=[summary_table], outputs=[radar_plot])
+            radar_plot_tab.select(
+                radar_chart, inputs=[summary_table], outputs=[radar_plot]
+            )
 
         with gr.Tab("Performance per task"):
             per_task_table.render()
