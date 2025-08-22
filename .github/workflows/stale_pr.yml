@@ -5,6 +5,10 @@ on:
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/stale@v9.1.0
         with:
