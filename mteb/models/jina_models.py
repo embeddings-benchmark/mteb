@@ -341,9 +341,7 @@ class JinaV4Wrapper(Wrapper):
             return self.model.encode_text(
                 texts=texts,
                 batch_size=batch_size,
-                return_multivector=True
-                if task_type.startswith("DocumentUnderstanding")
-                else False,
+                return_multivector=self.vector_type == "multi_vector",
                 prompt_name=prompt_name_param,
                 task=base_task,
                 return_numpy=return_numpy,
@@ -389,7 +387,7 @@ class JinaV4Wrapper(Wrapper):
             images=all_images,
             batch_size=batch_size,
             max_pixels=max_pixels,
-            return_multivector=True,
+            return_multivector=self.vector_type == "multi_vector",
             task=base_task,
             return_numpy=return_numpy,
         )
@@ -545,7 +543,7 @@ jina_embeddings_v4 = ModelMeta(
     loader=partial(  # type: ignore
         JinaV4Wrapper,
         model="jinaai/jina-embeddings-v4",
-        revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
+        revision="4a58ca57710c49f51896e4bc820e202fbf64904b",
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
@@ -557,7 +555,7 @@ jina_embeddings_v4 = ModelMeta(
     name="jinaai/jina-embeddings-v4",
     languages=XLMR_LANGUAGES,
     open_weights=True,
-    revision="26239889730c735ed7e9a4db9180c8935faf4ba0",
+    revision="4a58ca57710c49f51896e4bc820e202fbf64904b",
     release_date="2025-06-24",  # official release date
     modalities=["image", "text"],
     n_parameters=int(3.8 * 1e9),

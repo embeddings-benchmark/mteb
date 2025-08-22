@@ -93,6 +93,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "machine-translated and LM verified",
     "rendered",
     "multiple",
 ]
