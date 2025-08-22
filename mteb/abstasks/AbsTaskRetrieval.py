@@ -249,6 +249,21 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     unique_relevant_docs: int
 
 
+def _filter_queries_without_positives(
+    relevant_docs: dict, queries: dict
+) -> tuple[dict, dict]:
+    _relevant_docs = {}
+    _queries = {}
+    for _rd, _q in zip(relevant_docs, queries):
+        no_relevant_docs = len(relevant_docs[_rd]) < 1
+        if no_relevant_docs:
+            continue
+        _relevant_docs[_rd] = relevant_docs[_rd]
+        _queries[_rd] = _q
+
+    return _relevant_docs, _queries
+
+
 class AbsTaskRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
@@ -349,20 +364,10 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
-        # clean relevant docs (to prevent issue #3030)
-        # TODO: Ensure that this does not influence the scores
-        # TODO: This probably shouldn't be here. Ideally in tests + load_data? (might be a v2 thing though)
-        _relevant_docs = {}
-        _queries = {}
-        for _rd, _q in zip(relevant_docs, queries):
-            no_relevant_docs = len(relevant_docs[_rd]) < 1
-            if no_relevant_docs:
-                continue
-            _relevant_docs[_rd] = relevant_docs[_rd]
-            _queries[_rd] = _q
-
-        queries = _queries
-        relevant_docs = _relevant_docs
+        # ensure queries format (see #3030)
+        queries, relevant_docs = _filter_queries_without_positives(
+            relevant_docs, queries
+        )
 
         start_time = time()
         results = retriever(corpus, queries)
