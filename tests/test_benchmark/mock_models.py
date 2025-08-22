@@ -37,6 +37,28 @@ class AbsMockEncoder(AbsEncoder):
 
 
 class MockNumpyEncoder(AbsMockEncoder):
+    mteb_model_meta = ModelMeta(
+        loader=None,
+        name="mock/MockNumpyEncoder",
+        languages=["eng-Latn"],
+        revision="1",
+        release_date=None,
+        modalities=["text"],
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=["NumPy"],
+        reference=None,
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],

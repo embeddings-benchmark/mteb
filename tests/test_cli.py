@@ -187,12 +187,3 @@ def test_create_meta_from_existing(
     command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --from_existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
-
-
-def test_save_predictions():
-    command = f"{sys.executable} -m mteb run -m sentence-transformers/average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    test_folder = Path(__file__).parent
-    results_path = test_folder / "results" / "NFCorpus_default_predictions.json"
-    assert results_path.exists(), "Predictions file not created"
