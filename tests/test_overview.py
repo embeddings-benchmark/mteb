@@ -83,7 +83,6 @@ def test_get_tasks(
     modalities: list[MODALITIES] | None,
     exclusive_modality_filter: bool,
     exclude_aggregate: bool,
-    include_private: bool,
 ):
     tasks = mteb.get_tasks(
         languages=languages,
@@ -94,7 +93,6 @@ def test_get_tasks(
         modalities=modalities,
         exclusive_modality_filter=exclusive_modality_filter,
         exclude_aggregate=exclude_aggregate,
-        include_private=include_private,
     )
 
     for task in tasks:
@@ -119,11 +117,6 @@ def test_get_tasks(
         if exclude_aggregate:
             # Aggregate tasks should be excluded
             assert not task.is_aggregate
-        if not include_private:
-            # Private datasets should be excluded when include_private=False
-            assert (
-                task.metadata.is_public is not False
-            )  # None or True are both considered public
 
 
 def test_get_tasks_filtering():
@@ -177,3 +170,21 @@ def test_get_tasks_with_exclusive_modality_filter(modalities):
     )
     for task in text_tasks_exclusive:
         assert set(task.modalities) == set(modalities)
+
+
+def test_get_tasks_privacy_filtering():
+    """Test that get_tasks correctly filters by privacy status"""
+    # By default, should only return public datasets (include_private=False)
+    public_tasks = get_tasks()
+
+    # Should include private datasets when explicitly requested
+    all_tasks = get_tasks(include_private=True)
+
+    # All tasks should contain at least as many or more tasks than public tasks
+    assert len(all_tasks) >= len(public_tasks)
+
+    # All returned tasks should be public when include_private=False
+    for task in public_tasks:
+        assert (
+            task.metadata.is_public is not False
+        )  # None or True are both considered public
