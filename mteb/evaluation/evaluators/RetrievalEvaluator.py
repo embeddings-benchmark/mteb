@@ -529,7 +529,6 @@ class RetrievalEvaluator(Evaluator):
         recall_string = "recall." + ",".join([str(k) for k in k_values])
         precision_string = "P." + ",".join([str(k) for k in k_values])
 
-
         evaluator = pytrec_eval.RelevanceEvaluator(
             qrels, {map_string, ndcg_string, recall_string, precision_string}
         )
