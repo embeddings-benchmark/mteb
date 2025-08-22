@@ -408,7 +408,10 @@ class SaveRetrievaPredictionsWrapper:
             self.results_path.parent.mkdir(parents=True, exist_ok=True)
 
         previous_results = {
-            "mteb_model_meta": self.mteb_model_meta.to_dict(),
+            "mteb_model_meta": {
+                "model_name": self.mteb_model_meta.name,
+                "revision": self.mteb_model_meta.revision,
+            }
         }
         if self.results_path.exists():
             with self.results_path.open() as f:

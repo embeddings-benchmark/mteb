@@ -416,7 +416,11 @@ def make_score_dict(
             for k, v in naucs_mrr.items()
         },
         **task_scores,
-        **(previous_results_model_meta or {}),
+        **(
+            {"previous_results_model_meta": previous_results_model_meta}
+            if previous_results_model_meta
+            else {}
+        ),
     }
 
 
