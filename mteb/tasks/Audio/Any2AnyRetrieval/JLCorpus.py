@@ -14,7 +14,7 @@ class JLCorpusA2TRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://www.kaggle.com/tli725/jl-corpus",
         dataset={
             "path": "mteb/jl_corpus_a2t",
-            "revision": "dbdc3f20953e18820623cf1a19730f6b72b4ba99",
+            "revision": "c4a08f2e641b33697745837d6e814da8b17b533c",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -52,7 +52,7 @@ class JLCorpusT2ARetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://www.kaggle.com/tli725/jl-corpus",
         dataset={
             "path": "mteb/jl_corpus_t2a",
-            "revision": "56dfc6dbec78f1f5fe2c9c68a8c674bc1f3dd6c2",
+            "revision": "432380bbc1272245bcad607f536821cba8c13944",
         },
         type="Any2AnyRetrieval",
         category="t2a",
