@@ -32,3 +32,4 @@ from .vie.SprintDuplicateQuestionsPCVN import *
 from .vie.TwitterSemEval2015PCVN import *
 from .vie.TwitterURLCorpusPCVN import *
 from .zho.CMTEBPairClassification import *
+from .fra.gqnli import *
