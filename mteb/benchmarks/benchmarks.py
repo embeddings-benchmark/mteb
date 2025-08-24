@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING, Annotated
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.rteb_benchmark import RTEB_MAIN, RTEB_FINANCE, RTEB_LEGAL, RTEB_CODE, RTEB_HEALTHCARE, \
+    RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN
 from mteb.overview import MTEBTasks, get_task, get_tasks
 
 if TYPE_CHECKING:
