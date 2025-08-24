@@ -30,7 +30,7 @@ RTEB_MAIN = Benchmark(
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
-            "CUREv1Retrieval",
+            "CUREv1",
         ],
     ),
     description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 15 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts.",
@@ -57,8 +57,9 @@ RTEB_ENGLISH = Benchmark(
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
-            "CUREv1Retrieval",
+            "CUREv1",
         ],
+        languages=["eng"],
     ),
     description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains.",
     citation=RTEB_CITATION,
@@ -71,8 +72,9 @@ RTEB_FRENCH = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
     tasks=get_tasks(
         tasks=[
-            "CUREv1Retrieval",
+            "CUREv1",
         ],
+        languages=["fra"],
     ),
     description="RTEB French subset containing retrieval tasks in French across multiple domains.",
     citation=RTEB_CITATION,
@@ -166,7 +168,7 @@ RTEB_HEALTHCARE = Benchmark(
     tasks=get_tasks(
         tasks=[
             "ChatDoctorRetrieval",
-            "CUREv1Retrieval",
+            "CUREv1",
         ],
     ),
     description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, and cross-lingual medical retrieval.",
