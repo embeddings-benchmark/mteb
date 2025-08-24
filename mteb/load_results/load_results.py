@@ -57,7 +57,7 @@ def download_of_results(
         logger.info(
             f"No results repository found in {results_directory}, cloning it from {results_repo}"
         )
-        subprocess.run(["git", "clone", results_repo], cwd=cache_directory)
+        subprocess.run(["git", "clone", "-b", "feat-use-rteb-results", results_repo], cwd=cache_directory)
 
     return results_directory
 
@@ -84,7 +84,7 @@ def _model_name_and_revision(
 
 
 def load_results(
-    results_repo: str = "https://github.com/embeddings-benchmark/results",
+    results_repo: str = "https://github.com/embedding-benchmark/results",
     download_latest: bool = True,
     models: Sequence[ModelMeta] | Sequence[str] | None = None,
     tasks: Sequence[AbsTask] | Sequence[str] | None = None,
