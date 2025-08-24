@@ -104,6 +104,7 @@ from mteb.models import (
     voyage_models,
     voyage_v,
     xyz_models,
+    codi_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -201,6 +202,7 @@ model_modules = [
     geogpt_models,
     mcinext_models,
     vi_vn_models,
+    codi_models,
 ]
 MODEL_REGISTRY = {}
 

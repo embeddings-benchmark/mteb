@@ -341,9 +341,7 @@ class JinaV4Wrapper(Wrapper):
             return self.model.encode_text(
                 texts=texts,
                 batch_size=batch_size,
-                return_multivector=True
-                if task_type.startswith("DocumentUnderstanding")
-                else False,
+                return_multivector=self.vector_type == "multi_vector",
                 prompt_name=prompt_name_param,
                 task=base_task,
                 return_numpy=return_numpy,
@@ -389,7 +387,7 @@ class JinaV4Wrapper(Wrapper):
             images=all_images,
             batch_size=batch_size,
             max_pixels=max_pixels,
-            return_multivector=True,
+            return_multivector=self.vector_type == "multi_vector",
             task=base_task,
             return_numpy=return_numpy,
         )
@@ -635,7 +633,7 @@ jina_embeddings_v3 = ModelMeta(
 jina_embeddings_v2_base_en = ModelMeta(
     loader=partial(
         SentenceTransformerWrapper,
-        model_name="jinaai/jina-embeddings-v2-base-en",
+        model="jinaai/jina-embeddings-v2-base-en",
         revision="6e85f575bc273f1fd840a658067d0157933c83f0",
         trust_remote_code=True,
     ),
@@ -694,7 +692,7 @@ jina_embeddings_v2_base_en = ModelMeta(
 jina_embeddings_v2_small_en = ModelMeta(
     loader=partial(
         SentenceTransformerWrapper,
-        model_name="jinaai/jina-embeddings-v2-small-en",
+        model="jinaai/jina-embeddings-v2-small-en",
         revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
         trust_remote_code=True,
     ),
@@ -753,7 +751,7 @@ jina_embeddings_v2_small_en = ModelMeta(
 jina_embedding_b_en_v1 = ModelMeta(
     loader=partial(
         SentenceTransformerWrapper,
-        model_name="jinaai/jina-embedding-b-en-v1",
+        model="jinaai/jina-embedding-b-en-v1",
         revision="32aa658e5ceb90793454d22a57d8e3a14e699516",
     ),
     name="jinaai/jina-embedding-b-en-v1",
@@ -807,7 +805,7 @@ jina_embedding_b_en_v1 = ModelMeta(
 jina_embedding_s_en_v1 = ModelMeta(
     loader=partial(
         SentenceTransformerWrapper,
-        model_name="jinaai/jina-embedding-s-en-v1",
+        model="jinaai/jina-embedding-s-en-v1",
         revision="5ac6cd473e2324c6d5f9e558a6a9f65abb57143e",
     ),
     name="jinaai/jina-embedding-s-en-v1",
