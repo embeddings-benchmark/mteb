@@ -30,9 +30,10 @@ RTEB_MAIN = Benchmark(
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
+            "CUREv1Retrieval",
         ],
     ),
-    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 14 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts.",
+    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 15 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -56,6 +57,7 @@ RTEB_ENGLISH = Benchmark(
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
+            "CUREv1Retrieval",
         ],
     ),
     description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains.",
@@ -69,7 +71,7 @@ RTEB_FRENCH = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
     tasks=get_tasks(
         tasks=[
-            # French tasks would go here when available
+            "CUREv1Retrieval",
         ],
     ),
     description="RTEB French subset containing retrieval tasks in French across multiple domains.",
@@ -164,9 +166,10 @@ RTEB_HEALTHCARE = Benchmark(
     tasks=get_tasks(
         tasks=[
             "ChatDoctorRetrieval",
+            "CUREv1Retrieval",
         ],
     ),
-    description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A and healthcare information retrieval.",
+    description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, and cross-lingual medical retrieval.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
