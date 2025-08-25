@@ -288,6 +288,7 @@ def get_tasks(
     modalities: list[MODALITIES] | None = None,
     exclusive_modality_filter: bool = False,
     exclude_aggregate: bool = False,
+    include_private: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -311,6 +312,7 @@ def get_tasks(
             task's modalities and ALL task modalities are in filter modalities (exact match).
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
         exclude_aggregate: If True, exclude aggregate tasks. If False, both aggregate and non-aggregate tasks are returned.
+        include_private: If True, include private/closed datasets (is_public=False). If False (default), only include public datasets.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -363,6 +365,10 @@ def get_tasks(
         )
     if exclude_aggregate:
         _tasks = filter_aggregate_tasks(_tasks)
+
+    # Apply privacy filtering
+    if tasks and not include_private:
+        _tasks = [t for t in tasks if t.metadata.is_public]
 
     return MTEBTasks(_tasks)
 
