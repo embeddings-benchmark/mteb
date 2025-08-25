@@ -22,7 +22,7 @@ class SpokenSQuADT2ARetrieval(AbsTaskAny2AnyRetrieval):
         date=("2018-03-01", "2018-03-01"), 
         domains=["Academic", "Encyclopaedic", "Non-fiction"],
         task_subtypes=["Question Answering Retrieval", "Reading Comprehension"],
-        license="CC-BY-SA-4.0",  
+        license="cc-by-sa-4.0",  
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -36,4 +36,5 @@ class SpokenSQuADT2ARetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
     )
+
 
