@@ -11,7 +11,7 @@ class SpokenSQuADT2ARetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://github.com/chiuwy/Spoken-SQuAD",
         dataset={
             "path": "arteemg/spoken-squad-t2a",
-            "revision": "main",
+            "revision": "63c5c8e4cf762e52e18ecde8baf5733eab114ae9",
         },
         type="Any2AnyRetrieval",
         category="t2a",
