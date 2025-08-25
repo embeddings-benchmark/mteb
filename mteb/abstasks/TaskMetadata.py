@@ -94,7 +94,7 @@ TASK_SUBTYPE = Literal[
     "Environment Sound Retrieval",
     "Speech Retrieval",
     "Question Answering Retrieval",
-    "Reading Comprehension"
+    "Reading Comprehension",
 ]
 
 TASK_DOMAIN = Literal[

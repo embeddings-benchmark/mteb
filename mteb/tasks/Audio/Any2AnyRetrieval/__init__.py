@@ -13,5 +13,5 @@ from .MACS import *
 from .multilingual.JamAlt import *
 from .MusicCaps import *
 from .SoundDescs import *
-from .UrbanSound8kRetrieval import *
 from .SpokenSQuAD import *
+from .UrbanSound8kRetrieval import *
