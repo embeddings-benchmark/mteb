@@ -20,7 +20,7 @@ class ClothoA2TRetrieval(AbsTaskAny2AnyRetrieval):
         },
         type="Any2AnyRetrieval",
         category="a2t",
-        modalities=["audio"],
+        modalities=["audio", "text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_5",

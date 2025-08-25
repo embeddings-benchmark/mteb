@@ -98,44 +98,91 @@ class Wav2ClipZeroShotWrapper:
     def get_audio_embeddings(
         self,
         audio: AudioBatch,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 4,
         **kwargs: Any,
     ) -> np.ndarray:
         all_embeddings = []
 
         if isinstance(audio, DataLoader):
-            # Process each batch separately
+            # Process each DataLoader batch separately
             for batch in tqdm(audio, desc="Processing audio batches"):
-                batch_embeddings = []
-
-                # Process each item in the batch individually
                 wavs = self._handle_batch(batch)
-                for wav in wavs:
-                    # Process one audio at a time to avoid memory issues
+                batch_embeddings = self._process_audio_batch(wavs, batch_size)
+                all_embeddings.extend(batch_embeddings)
+
+            return np.vstack(all_embeddings)
+        else:
+            # Process single batch with internal batching
+            wavs = self._handle_batch(audio)
+            batch_embeddings = self._process_audio_batch(wavs, batch_size)
+            return np.vstack(batch_embeddings)
+
+    def _process_audio_batch(
+        self, wavs: list[torch.Tensor], batch_size: int
+    ) -> list[np.ndarray]:
+        """Process audio waveforms in batches for efficiency."""
+        import logging
+
+        logger = logging.getLogger(__name__)
+
+        all_embeddings = []
+
+        for i in tqdm(
+            range(0, len(wavs), batch_size),
+            desc="Processing audio batches",
+            disable=len(wavs) <= batch_size,
+        ):
+            batch_wavs = wavs[i : i + batch_size]
+
+            # Try batch processing first
+            try:
+                # Stack waveforms into a batch - pad to same length if needed
+                max_length = max(wav.shape[-1] for wav in batch_wavs)
+                padded_wavs = []
+                for wav in batch_wavs:
+                    if wav.shape[-1] < max_length:
+                        # Pad with zeros
+                        pad_length = max_length - wav.shape[-1]
+                        padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
+                    else:
+                        padded_wav = wav
+                    padded_wavs.append(padded_wav)
+
+                # Stack into batch tensor
+                batch_tensor = torch.stack(padded_wavs).cpu().numpy()
+
+                # Process entire batch at once
+                batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
+
+                # Normalize each embedding in the batch
+                norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)
+                normalized_embeds = batch_embeds / norms
+
+                # Add each embedding from the batch
+                for embed in normalized_embeds:
+                    all_embeddings.append(embed.reshape(1, -1))
+
+            except Exception as e:
+                logger.warning(
+                    f"⚠️  BATCH processing failed, falling back to individual processing: {e}"
+                )
+                # Fallback to individual processing if batch processing fails
+                for wav in batch_wavs:
                     wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
                     embed = self.embed_audio(wav_np, self.audio_model)
 
                     # Normalize
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
                     normalized_embed = embed / norm
-                    batch_embeddings.append(normalized_embed)
+                    all_embeddings.append(normalized_embed)
+                logger.info(
+                    f"🔄 Individual processing completed for {len(batch_wavs)} audio files"
+                )
 
-                all_embeddings.extend(batch_embeddings)
-
-            return np.vstack(all_embeddings)
-        else:
-            # Process single batch - still do it item by item
-            wavs = self._handle_batch(audio)
-            for wav in wavs:
-                # Process one audio at a time
-                wav_np = wav.unsqueeze(0).cpu().numpy()  # Add batch dimension
-                embed = self.wav2clip.embed_audio(wav_np, self.audio_model)
-
-                # Normalize
-                norm = np.linalg.norm(embed, axis=-1, keepdims=True)
-                normalized_embed = embed / norm
-                all_embeddings.append(normalized_embed)
-
-            return np.vstack(all_embeddings)
+        return all_embeddings
 
     def get_text_embeddings(
         self,
