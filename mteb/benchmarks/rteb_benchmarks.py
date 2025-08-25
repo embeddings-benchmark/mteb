@@ -112,7 +112,7 @@ RTEB_JAPANESE = Benchmark(
 RTEB_FINANCE = Benchmark(
     name="RTEB(fin, beta)",
     display_name="RTEB Finance",
-    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-finance-dollar.svg",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-price-tag.svg",
     tasks=get_tasks(
         tasks=[
             "FinanceBenchRetrieval",
