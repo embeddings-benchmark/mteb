@@ -7,6 +7,7 @@ from mteb.benchmarks.get_benchmark import (
     get_benchmark,
     get_benchmarks,
 )
+from mteb.benchmarks.rteb_benchmarks import *
 
 __all__ = [
     "BENCHMARK_REGISTRY",
