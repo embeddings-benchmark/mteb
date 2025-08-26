@@ -132,7 +132,7 @@ class AbsTask(ABC):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
-        results_folder: Path | None = None,
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
@@ -143,7 +143,7 @@ class AbsTask(ABC):
             split: Which datasplit to be used.
             subsets_to_run: List of HFSubsets to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
-            results_folder: Folder to save model predictions
+            prediction_folder: Folder to save model predictions
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:
@@ -191,7 +191,7 @@ class AbsTask(ABC):
                 hf_split=split,
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
-                results_folder=results_folder,
+                prediction_folder=prediction_folder,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -205,7 +205,7 @@ class AbsTask(ABC):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        results_folder: Path | None = None,
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -214,13 +214,13 @@ class AbsTask(ABC):
 
     def save_task_predictions(
         self,
-        results: dict[str, Any],
+        predictions: dict[str, Any],
         model: MTEBModels,
-        results_folder: Path,
+        prediction_folder: Path,
         hf_split: str,
         hf_subset: str,
     ) -> None:
-        predictions_path = self.predictions_path(results_folder)
+        predictions_path = self.predictions_path(prediction_folder)
         existing_results = {
             "mteb_model_meta": {
                 "model_name": model.mteb_model_meta.name,
@@ -234,14 +234,17 @@ class AbsTask(ABC):
         if hf_subset not in existing_results:
             existing_results[hf_subset] = {}
 
-        existing_results[hf_subset][hf_split] = results
+        existing_results[hf_subset][hf_split] = predictions
         with predictions_path.open("w") as predictions_file:
             json.dump(existing_results, predictions_file)
 
     def predictions_path(
         self,
-        output_folder: Path,
+        output_folder: Path | str,
     ) -> Path:
+        if isinstance(output_folder, str):
+            output_folder = Path(output_folder)
+
         if not output_folder.exists():
             output_folder.mkdir(parents=True, exist_ok=True)
         return output_folder / self.prediction_file_name

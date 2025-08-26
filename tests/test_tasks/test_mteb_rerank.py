@@ -47,7 +47,7 @@ def test_mteb_rerank(tmp_path: Path):
         model,
         task,
         overwrite_strategy="always",
-        results_folder=tmp_path,
+        prediction_folder=tmp_path,
     )
 
     # read in the results
@@ -100,7 +100,7 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         de,
         task,
         overwrite_strategy="always",
-        results_folder=results_folder,
+        prediction_folder=results_folder,
     )
     task = task.convert_to_reranking(results_folder / task.prediction_file_name)
     ce_results = mteb.evaluate(

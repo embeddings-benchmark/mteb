@@ -91,7 +91,7 @@ def _evaluate(
     splits: dict[SplitName, list[HFSubset]],
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
-    results_folder: Path | None,
+    prediction_folder: Path | None,
 ) -> TaskResult:
     """The core logic to run a model on a given task. See `run_task` for more details."""
     if co2_tracker is None or co2_tracker is True:
@@ -119,7 +119,7 @@ def _evaluate(
                 splits=splits,
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
-                results_folder=results_folder,
+                prediction_folder=prediction_folder,
             )
         result.kg_co2_emissions = tracker.final_emissions
         return result
@@ -141,7 +141,7 @@ def _evaluate(
             split,
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
-            results_folder=results_folder,
+            prediction_folder=prediction_folder,
         )
         tock = time()
 
@@ -172,7 +172,7 @@ def evaluate(
     encode_kwargs: dict[str, Any] | None = None,
     cache: ResultCache | None = ResultCache(),
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
-    results_folder: Path | str | None = None,
+    prediction_folder: Path | str | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -216,8 +216,8 @@ def evaluate(
         >>> cache.download_from_remote()
         >>> result = mteb.evaluate(model_meta, task, cache=cache)
     """
-    if isinstance(results_folder, str):
-        results_folder = Path(results_folder)
+    if isinstance(prediction_folder, str):
+        prediction_folder = Path(prediction_folder)
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
@@ -230,7 +230,7 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             cache=cache,
             overwrite_strategy=overwrite_strategy,
-            results_folder=results_folder,
+            prediction_folder=prediction_folder,
         )
         result = task.combine_task_results(results.task_results)
         return ModelResult(
@@ -252,7 +252,7 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 cache=cache,
                 overwrite_strategy=overwrite_strategy,
-                results_folder=results_folder,
+                prediction_folder=prediction_folder,
             )
             results.extend(_res.task_results)
         return ModelResult(
@@ -335,7 +335,7 @@ def evaluate(
                 task=task,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
-                results_folder=results_folder,
+                prediction_folder=prediction_folder,
             )
             return ModelResult(
                 model_name=model_name,
@@ -357,7 +357,7 @@ def evaluate(
         task=task,
         co2_tracker=False,
         encode_kwargs=encode_kwargs,
-        results_folder=results_folder,
+        prediction_folder=prediction_folder,
     )
 
     if existing_results:

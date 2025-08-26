@@ -263,6 +263,7 @@ class AbsTaskRetrieval(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -272,7 +273,9 @@ class AbsTaskRetrieval(AbsTask):
             split: Split to evaluate on
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
+            prediction_folder: Folder to save model predictions
             **kwargs: Additional keyword arguments passed to the evaluator
+
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
@@ -287,6 +290,7 @@ class AbsTaskRetrieval(AbsTask):
             split,
             subsets_to_run,
             encode_kwargs=encode_kwargs,
+            prediction_folder=prediction_folder,
             **kwargs,
         )
 
@@ -297,7 +301,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        results_folder: Path | None = None,
+        prediction_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -308,7 +312,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             hf_split: Split to evaluate on
             hf_subset: Subset to evaluate on
-            results_folder: Folder with results prediction
+            prediction_folder: Folder with results prediction
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -345,11 +349,11 @@ class AbsTaskRetrieval(AbsTask):
         end_time = time()
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
-        if results_folder:
+        if prediction_folder:
             self.save_task_predictions(
                 results,
                 model,
-                results_folder,
+                prediction_folder,
                 hf_subset=hf_subset,
                 hf_split=hf_split,
             )
