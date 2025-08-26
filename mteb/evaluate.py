@@ -193,7 +193,7 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        results_folder: Folder to save predictions for the task results
+        prediction_folder: Optional folder in which to save model predictions for the task.
 
     Returns:
         The results of the evaluation.
