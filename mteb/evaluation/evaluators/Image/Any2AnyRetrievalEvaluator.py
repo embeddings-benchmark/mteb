@@ -229,7 +229,7 @@ class Any2AnyDenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.get_audio_embeddings(
                     audio=corpus_audio_dataloader,
                     task_name=task_name,
-                    prompt_type=PromptType.passage,
+                    prompt_type=PromptType.document,
                     **self.encode_kwargs,
                 )
             elif "image" in corpus_modality:
