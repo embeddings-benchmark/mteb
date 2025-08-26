@@ -4,7 +4,7 @@ import difflib
 import logging
 import warnings
 
-import mteb.benchmarks as benchmark_module
+import mteb.benchmarks.benchmarks as benchmark_module
 from mteb.benchmarks.benchmarks import (
     C_MTEB,
     FA_MTEB,
