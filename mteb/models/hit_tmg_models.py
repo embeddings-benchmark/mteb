@@ -38,7 +38,10 @@ class KALMWrapper(InstructSentenceTransformerWrapper):
         task = get_task(task_name)
 
         # to passage prompts won't be applied to passages
-        if not self.apply_instruction_to_passages and prompt_type == PromptType.document:
+        if (
+            not self.apply_instruction_to_passages
+            and prompt_type == PromptType.document
+        ):
             instruction = None
             logger.info(
                 f"No instruction used, because prompt type = {PromptType.document}"
