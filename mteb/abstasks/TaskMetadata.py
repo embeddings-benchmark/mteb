@@ -93,6 +93,8 @@ TASK_SUBTYPE = Literal[
     "Emotional Speech Retrieval",
     "Environment Sound Retrieval",
     "Speech Retrieval",
+    "Spoken Caption→Image Retrieval",
+    "Image→Spoken Caption Retrieval"
 ]
 
 TASK_DOMAIN = Literal[
@@ -195,6 +197,7 @@ TASK_CATEGORY = Literal[
     "t2t",  # specifically for text-only tasks in mieb
     "i2i",  # image-to-image
     "i2t",  # image-to-text
+    "i2a",  # image-to-audio
     "t2i",  # text-to-image
     "it2t",  # image+text-to-text
     "it2i",  # image+text-to-image
@@ -210,6 +213,7 @@ TASK_CATEGORY = Literal[
     "t2at",  # text-to-audio+text
     "at2at",  # audio+text-to-audio+text
     "a2a",  # audio-to-audio
+    "a2i", # audio-to-image
 ]
 
 ANNOTATOR_TYPE = Literal[
