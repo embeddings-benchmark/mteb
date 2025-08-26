@@ -8,11 +8,17 @@ from time import time
 from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
+from typing_extensions import Self
 
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import (
+    CrossEncoderProtocol,
+    Encoder,
+    SearchProtocol,
+)
 from mteb.types import (
     HFSubset,
     RelevantDocumentsType,
+    RetrievalOutputType,
     ScoresDict,
 )
 from mteb.types.statistics import (
@@ -29,6 +35,7 @@ from ..create_dataloaders import (
 )
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
+from ..models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
@@ -108,6 +115,7 @@ class AbsTaskRetrieval(AbsTask):
     cross_encoder_top_k: int = 100
     support_cross_encoder: bool = True
     support_search: bool = True
+    previous_results_model_meta: dict[str, Any] | None = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -255,6 +263,7 @@ class AbsTaskRetrieval(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate the model on the retrieval task.
@@ -264,7 +273,9 @@ class AbsTaskRetrieval(AbsTask):
             split: Split to evaluate on
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
+            prediction_folder: Folder to save model predictions
             **kwargs: Additional keyword arguments passed to the evaluator
+
 
         Returns:
             Dictionary mapping subsets to their evaluation scores
@@ -279,6 +290,7 @@ class AbsTaskRetrieval(AbsTask):
             split,
             subsets_to_run,
             encode_kwargs=encode_kwargs,
+            prediction_folder=prediction_folder,
             **kwargs,
         )
 
@@ -289,12 +301,7 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        # retrieval specific args
-        save_predictions: bool = False,
-        export_errors: bool = False,
-        save_qrels: bool = False,
-        output_folder: str = "results",
-        results: dict[str, dict[str, float]] | None = None,
+        prediction_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
         """Evaluate a model on a specific subset of the data.
@@ -305,11 +312,7 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs: Keyword arguments passed to the encoder
             hf_split: Split to evaluate on
             hf_subset: Subset to evaluate on
-            save_predictions: Whether to save predictions
-            export_errors: Whether to export errors
-            save_qrels: Whether to save the qrels
-            output_folder: Folder to save the results
-            results: Results from retrieval from previous run
+            prediction_folder: Folder with results prediction
             **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
@@ -326,44 +329,34 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-        if not results:
-            start_time = time()
-            results = retriever(
+        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
+            search_model = SearchEncoderWrapper(model)
+        elif isinstance(model, CrossEncoderProtocol):
+            search_model = SearchCrossEncoderWrapper(model)
+        elif isinstance(model, SearchProtocol):
+            search_model = model
+        else:
+            raise TypeError(
+                f"RetrievalEvaluator expects a SearchInterface, Encoder, or CrossEncoder, got {type(model)}"
+            )
+
+        start_time = time()
+        results = retriever(
+            search_model,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
+        )
+        end_time = time()
+        logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+
+        if prediction_folder:
+            self.save_task_predictions(
+                results,
                 model,
-                encode_kwargs=encode_kwargs,
-                **kwargs,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
             )
-            end_time = time()
-            logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
-
-        if save_predictions or export_errors or save_qrels:
-            output_folder = Path(output_folder)
-            if not output_folder.exists():
-                output_folder.mkdir(parents=True)
-
-        if save_predictions:
-            if self.top_k is not None:
-                for qid in list(results.keys()):
-                    doc_ids = set(
-                        sorted(
-                            results[qid], key=lambda x: results[qid][x], reverse=True
-                        )[: self.top_k]
-                    )
-                    results[qid] = {
-                        k: v for k, v in results[qid].items() if k in doc_ids
-                    }
-            qrels_save_path = (
-                output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
-            )
-
-            with open(qrels_save_path, "w") as f:
-                json.dump(results, f)
-
-        if save_qrels:
-            with open(
-                output_folder / f"{self.metadata.name}_{hf_subset}_qrels.json", "w"
-            ) as f:
-                json.dump(data_split["relevant_docs"], f)
 
         (
             all_scores,
@@ -387,40 +380,18 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
-        scores = make_score_dict(
-            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_specific_scores
+
+        return make_score_dict(
+            ndcg,
+            _map,
+            recall,
+            precision,
+            mrr,
+            naucs,
+            naucs_mrr,
+            task_specific_scores,
+            self.previous_results_model_meta,
         )
-
-        if export_errors:
-            errors = {}
-
-            if not save_predictions:
-                for qid in results.keys():
-                    doc_scores = results[qid]
-                    sorted_docs = sorted(
-                        doc_scores.items(), key=lambda x: x[1], reverse=True
-                    )[:1]
-                    results[qid] = dict(sorted_docs)
-            for qid, retrieved_docs in results.items():
-                expected_docs = data_split["relevant_docs"][qid]
-                false_positives = [
-                    doc for doc in retrieved_docs if doc not in expected_docs
-                ]
-                false_negatives = [
-                    doc for doc in expected_docs if doc not in retrieved_docs
-                ]
-                if false_positives or false_negatives:
-                    errors[qid] = {
-                        "false_positives": false_positives,
-                        "false_negatives": false_negatives,
-                    }
-            errors_save_path = (
-                output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
-            )
-            with errors_save_path.open("w") as f:
-                json.dump(errors, f)
-
-        return scores
 
     def task_specific_scores(
         self,
@@ -590,6 +561,50 @@ class AbsTaskRetrieval(AbsTask):
                 f"{subset}-top_ranked" if subset != "default" else "top_ranked",
                 lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
             )
+
+    def convert_to_reranking(
+        self,
+        top_ranked_file: str | Path,
+        top_k: int = 10,
+    ) -> Self:
+        """Converts a reranking task to re-ranking by loading results from model run
+
+        Args:
+            top_ranked_file: Path to file with the top ranked results
+            top_k: Number of results to load
+
+        Returns:
+            Re-ranking task
+        """
+        top_ranked_path = Path(top_ranked_file)
+
+        if not top_ranked_path.exists():
+            raise FileNotFoundError(
+                f"Can't find previous results for this task. File {top_ranked_path} does not exist."
+            )
+
+        with top_ranked_path.open("r") as previous_results_file:
+            previous_results = json.load(previous_results_file)
+
+        if not self.data_loaded:
+            self.load_data()
+
+        self.previous_results_model_meta = previous_results["mteb_model_meta"]
+
+        for subset in self.dataset:
+            for split in self.dataset[subset]:
+                top_ranked: RetrievalOutputType = previous_results[subset][split]
+                if not isinstance(top_ranked, dict):
+                    raise ValueError("Previous top ranked results is not a dictionary.")
+
+                top_k_sorted = defaultdict(list)
+                for query_id, values in top_ranked.items():
+                    sorted_keys = sorted(values, key=values.get, reverse=True)
+                    top_k_sorted[query_id] = sorted_keys[: self.top_k]
+
+                self.dataset[subset][split]["top_ranked"] = top_k_sorted
+        self.top_k = top_k
+        return self
 
 
 def process_relevant_docs(

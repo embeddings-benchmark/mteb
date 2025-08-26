@@ -6,6 +6,7 @@ import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
+from pathlib import Path
 from typing import Any
 
 import datasets
@@ -131,6 +132,7 @@ class AbsTask(ABC):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
@@ -141,6 +143,7 @@ class AbsTask(ABC):
             split: Which datasplit to be used.
             subsets_to_run: List of HFSubsets to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
+            prediction_folder: Folder to save model predictions
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:
@@ -188,6 +191,7 @@ class AbsTask(ABC):
                 hf_split=split,
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -201,11 +205,53 @@ class AbsTask(ABC):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
             "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
+
+    def save_task_predictions(
+        self,
+        predictions: dict[str, Any],
+        model: MTEBModels,
+        prediction_folder: Path,
+        hf_split: str,
+        hf_subset: str,
+    ) -> None:
+        predictions_path = self.predictions_path(prediction_folder)
+        existing_results = {
+            "mteb_model_meta": {
+                "model_name": model.mteb_model_meta.name,
+                "revision": model.mteb_model_meta.revision,
+            }
+        }
+        if predictions_path.exists():
+            with predictions_path.open("r") as predictions_file:
+                existing_results = json.load(predictions_file)
+
+        if hf_subset not in existing_results:
+            existing_results[hf_subset] = {}
+
+        existing_results[hf_subset][hf_split] = predictions
+        with predictions_path.open("w") as predictions_file:
+            json.dump(existing_results, predictions_file)
+
+    def predictions_path(
+        self,
+        output_folder: Path | str,
+    ) -> Path:
+        if isinstance(output_folder, str):
+            output_folder = Path(output_folder)
+
+        if not output_folder.exists():
+            output_folder.mkdir(parents=True, exist_ok=True)
+        return output_folder / self.prediction_file_name
+
+    @property
+    def prediction_file_name(self) -> str:
+        return f"{self.metadata.name}_predictions.json"
 
     @staticmethod
     def stratified_subsampling(

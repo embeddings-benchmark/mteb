@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterable
 from copy import deepcopy
+from pathlib import Path
 from time import time
 from typing import Any, cast
 
@@ -90,6 +91,7 @@ def _evaluate(
     splits: dict[SplitName, list[HFSubset]],
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
+    prediction_folder: Path | None,
 ) -> TaskResult:
     """The core logic to run a model on a given task. See `run_task` for more details."""
     if co2_tracker is None or co2_tracker is True:
@@ -117,6 +119,7 @@ def _evaluate(
                 splits=splits,
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
+                prediction_folder=prediction_folder,
             )
         result.kg_co2_emissions = tracker.final_emissions
         return result
@@ -126,7 +129,7 @@ def _evaluate(
     task.check_if_dataset_is_superseded()
 
     data_loaded = task.data_loaded
-    if data_loaded:
+    if not data_loaded:
         task.load_data()
 
     evaluation_time = 0
@@ -138,6 +141,7 @@ def _evaluate(
             split,
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
+            prediction_folder=prediction_folder,
         )
         tock = time()
 
@@ -168,8 +172,9 @@ def evaluate(
     encode_kwargs: dict[str, Any] | None = None,
     cache: ResultCache | None = ResultCache(),
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
+    prediction_folder: Path | str | None = None,
 ) -> ModelResult:
-    """This function runs a model on a a given task and returns the results.
+    """This function runs a model on a given task and returns the results.
 
     Args:
         model: The model to use for encoding.
@@ -188,6 +193,7 @@ def evaluate(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
+        prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
 
     Returns:
         The results of the evaluation.
@@ -210,6 +216,9 @@ def evaluate(
         >>> cache.download_from_remote()
         >>> result = mteb.evaluate(model_meta, task, cache=cache)
     """
+    if isinstance(prediction_folder, str):
+        prediction_folder = Path(prediction_folder)
+
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         task = cast(AbsTaskAggregate, tasks)
@@ -221,6 +230,7 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             cache=cache,
             overwrite_strategy=overwrite_strategy,
+            prediction_folder=prediction_folder,
         )
         result = task.combine_task_results(results.task_results)
         return ModelResult(
@@ -242,6 +252,7 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 cache=cache,
                 overwrite_strategy=overwrite_strategy,
+                prediction_folder=prediction_folder,
             )
             results.extend(_res.task_results)
         return ModelResult(
@@ -265,9 +276,11 @@ def evaluate(
     model_revision = cast(str, meta.revision)
     if isinstance(model, SentenceTransformer):
         model = SentenceTransformerEncoderWrapper(model)
+        model.mteb_model_meta = meta
         model = cast(Encoder, model)
     elif isinstance(model, CrossEncoder):
         model = CrossEncoderWrapper(model)
+        model.mteb_model_meta = meta
         model = cast(CrossEncoderProtocol, model)
 
     existing_results = None
@@ -313,6 +326,7 @@ def evaluate(
             f"Loading model {model_name} with revision {model_revision} from ModelMeta."
         )
         model = model.load_model()
+
     if raise_error is False:
         try:
             result = _evaluate(
@@ -321,6 +335,7 @@ def evaluate(
                 task=task,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
             )
             return ModelResult(
                 model_name=model_name,
@@ -342,6 +357,7 @@ def evaluate(
         task=task,
         co2_tracker=False,
         encode_kwargs=encode_kwargs,
+        prediction_folder=prediction_folder,
     )
 
     if existing_results:

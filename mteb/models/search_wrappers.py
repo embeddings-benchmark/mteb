@@ -318,9 +318,9 @@ class SearchCrossEncoderWrapper:
                 continue
 
             query_idx = query_id_to_idx[query_id]
-            total_queries.append(queries[query_idx])
             for corpus_id in corpus_ids:
                 doc_pairs_ids.append((query_id, corpus_id))
+                total_queries.append(queries[query_idx])
                 total_docs.append(self.task_corpus[doc_id_to_idx[corpus_id]])
 
         queries_loader = create_text_queries_dataloader(

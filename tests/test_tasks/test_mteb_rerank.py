@@ -4,355 +4,57 @@ import json
 import logging
 from pathlib import Path
 
-import pytest
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import CrossEncoder
 
 import mteb
-from mteb import MTEB
+from mteb.abstasks import AbsTaskRetrieval
+from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.skip(reason="2 stage not implemented for now")
 def test_mteb_rerank(tmp_path: Path):
-    # Test that reranking works
-    # unfortunately, we need all the query ids to pretend to have this
-    scifact_keys = [
-        "1",
-        "3",
-        "5",
-        "13",
-        "36",
-        "42",
-        "48",
-        "49",
-        "50",
-        "51",
-        "53",
-        "54",
-        "56",
-        "57",
-        "70",
-        "72",
-        "75",
-        "94",
-        "99",
-        "100",
-        "113",
-        "115",
-        "118",
-        "124",
-        "127",
-        "128",
-        "129",
-        "130",
-        "132",
-        "133",
-        "137",
-        "141",
-        "142",
-        "143",
-        "146",
-        "148",
-        "163",
-        "171",
-        "179",
-        "180",
-        "183",
-        "185",
-        "198",
-        "208",
-        "212",
-        "213",
-        "216",
-        "217",
-        "218",
-        "219",
-        "230",
-        "232",
-        "233",
-        "236",
-        "237",
-        "238",
-        "239",
-        "248",
-        "249",
-        "261",
-        "268",
-        "269",
-        "274",
-        "275",
-        "279",
-        "294",
-        "295",
-        "298",
-        "300",
-        "303",
-        "312",
-        "314",
-        "324",
-        "327",
-        "338",
-        "343",
-        "350",
-        "354",
-        "362",
-        "380",
-        "384",
-        "385",
-        "386",
-        "388",
-        "399",
-        "410",
-        "411",
-        "415",
-        "421",
-        "431",
-        "436",
-        "437",
-        "439",
-        "440",
-        "443",
-        "452",
-        "475",
-        "478",
-        "491",
-        "501",
-        "502",
-        "507",
-        "508",
-        "513",
-        "514",
-        "516",
-        "517",
-        "521",
-        "525",
-        "527",
-        "528",
-        "532",
-        "533",
-        "535",
-        "536",
-        "539",
-        "540",
-        "544",
-        "549",
-        "551",
-        "552",
-        "554",
-        "560",
-        "569",
-        "575",
-        "577",
-        "578",
-        "587",
-        "589",
-        "593",
-        "597",
-        "598",
-        "613",
-        "619",
-        "623",
-        "628",
-        "636",
-        "637",
-        "641",
-        "644",
-        "649",
-        "659",
-        "660",
-        "674",
-        "684",
-        "690",
-        "691",
-        "692",
-        "693",
-        "700",
-        "702",
-        "715",
-        "716",
-        "718",
-        "721",
-        "723",
-        "727",
-        "728",
-        "729",
-        "742",
-        "743",
-        "744",
-        "756",
-        "759",
-        "768",
-        "770",
-        "775",
-        "781",
-        "783",
-        "784",
-        "785",
-        "793",
-        "800",
-        "805",
-        "808",
-        "811",
-        "814",
-        "820",
-        "821",
-        "823",
-        "830",
-        "831",
-        "832",
-        "834",
-        "837",
-        "839",
-        "845",
-        "847",
-        "852",
-        "859",
-        "870",
-        "873",
-        "879",
-        "880",
-        "882",
-        "887",
-        "903",
-        "904",
-        "907",
-        "911",
-        "913",
-        "914",
-        "921",
-        "922",
-        "936",
-        "956",
-        "957",
-        "960",
-        "967",
-        "971",
-        "975",
-        "982",
-        "985",
-        "993",
-        "1012",
-        "1014",
-        "1019",
-        "1020",
-        "1021",
-        "1024",
-        "1029",
-        "1041",
-        "1049",
-        "1062",
-        "1086",
-        "1088",
-        "1089",
-        "1099",
-        "1100",
-        "1104",
-        "1107",
-        "1110",
-        "1121",
-        "1130",
-        "1132",
-        "1137",
-        "1140",
-        "1144",
-        "1146",
-        "1150",
-        "1163",
-        "1175",
-        "1179",
-        "1180",
-        "1185",
-        "1187",
-        "1191",
-        "1194",
-        "1196",
-        "1197",
-        "1199",
-        "1200",
-        "1202",
-        "1204",
-        "1207",
-        "1213",
-        "1216",
-        "1221",
-        "1225",
-        "1226",
-        "1232",
-        "1241",
-        "1245",
-        "1259",
-        "1262",
-        "1266",
-        "1270",
-        "1271",
-        "1272",
-        "1273",
-        "1274",
-        "1278",
-        "1279",
-        "1280",
-        "1281",
-        "1282",
-        "1290",
-        "1292",
-        "1298",
-        "1303",
-        "1316",
-        "1319",
-        "1320",
-        "1332",
-        "1335",
-        "1336",
-        "1337",
-        "1339",
-        "1344",
-        "1352",
-        "1359",
-        "1362",
-        "1363",
-        "1368",
-        "1370",
-        "1379",
-        "1382",
-        "1385",
-        "1389",
-        "1395",
-    ]
-    model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
-    # create fake first stage results
-    tmp_file = tmp_path / "tmp.json"
-    with open(tmp_file, "w") as f:
-        f.write(
-            json.dumps(
-                {
-                    i: {
-                        # just two random documents so we can see it works
-                        "4983": 0.1,
-                        "18670": 0.9,
-                        "19238": 0.01,
+    model = CrossEncoderWrapper("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    task: AbsTaskRetrieval = mteb.get_task("SciFact")
+    task.load_data()
+
+    prev_result_path = tmp_path / "prev_results.json"
+    scifact_keys = task.dataset["default"]["test"]["queries"]["id"]
+    with prev_result_path.open("w") as f:
+        json.dump(
+            {
+                "mteb_model_meta": MockNumpyEncoder.mteb_model_meta.to_dict(),
+                "default": {
+                    "test": {
+                        i: {
+                            "4983": 0.1,
+                            "18670": 0.9,
+                            "19238": 0.01,
+                        }
+                        for i in scifact_keys
                     }
-                    for i in scifact_keys
-                }
-            )
+                },
+            },
+            f,
         )
 
-    eval.run(
-        model,  # type: ignore
-        output_folder=tmp_path.as_posix(),
-        overwrite_results=True,
-        eval_splits=["test"],
-        previous_results=tmp_file,
-        save_predictions=True,
-        co2_tracker=False,
+    task = task.convert_to_reranking(prev_result_path)
+    mteb.evaluate(
+        model,
+        task,
+        overwrite_strategy="always",
+        prediction_folder=tmp_path,
     )
 
     # read in the results
-    with (tmp_path / "SciFact_default_predictions.json").open() as f:
+    with (tmp_path / task.prediction_file_name).open() as f:
         results = json.load(f)
+
+    results = results["default"]["test"]
 
     results = sorted(
         results["1"].keys(),
@@ -365,11 +67,10 @@ def test_mteb_rerank(tmp_path: Path):
     assert "18670" in results
 
 
-@pytest.mark.skip(reason="2 stage not implemented for now")
 def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
-    de = SentenceTransformer(de_name, revision=revision)
+    de = mteb.get_model(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
     ce.mteb_model_meta = ModelMeta(  # type: ignore
@@ -393,40 +94,23 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         framework=["Sentence Transformers", "PyTorch"],
     )
     task = MockRetrievalTask()
-    eval = MTEB(tasks=[task])
-    stage1_path = tmp_path / "stage1"
-    eval.run(
+    cache = ResultCache(tmp_path)
+    results_folder = tmp_path / "retrieve_results" / "de"
+    de_results = mteb.evaluate(
         de,
-        output_folder=stage1_path.as_posix(),
-        overwrite_results=True,
-        save_predictions=True,
-        eval_splits=["test"],
+        task,
+        overwrite_strategy="always",
+        prediction_folder=results_folder,
     )
-    stage2_path = tmp_path / "stage2"
-    eval.run(
-        ce,  # type: ignore
-        output_folder=stage2_path.as_posix(),
-        overwrite_results=True,
-        previous_results=(
-            stage1_path / f"{task.metadata.name}_default_predictions.json"
-        ),
-        save_predictions=False,
-        eval_splits=["test"],
+    task = task.convert_to_reranking(results_folder / task.prediction_file_name)
+    ce_results = mteb.evaluate(
+        ce,
+        task,
+        cache=cache,
+        overwrite_strategy="always",
     )
-
-    # read in stage 1 and stage two and check ndcg@1 is the same
-    with open(
-        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/{task.metadata.name}.json"
-    ) as f:
-        stage1 = json.load(f)
-
-    with (
-        stage2_path
-        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/{task.metadata.name}.json"
-    ).open() as f:
-        stage2 = json.load(f)
 
     assert (
-        stage1["scores"]["test"][0]["ndcg_at_1"]
-        == stage2["scores"]["test"][0]["ndcg_at_1"]
+        de_results[0].scores["test"][0]["ndcg_at_1"]
+        == ce_results[0].scores["test"][0]["ndcg_at_1"]
     )
