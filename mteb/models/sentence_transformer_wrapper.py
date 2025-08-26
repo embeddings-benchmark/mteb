@@ -38,29 +38,33 @@ class SentenceTransformerWrapper(Wrapper):
         else:
             self.model = model
 
-        if (
-            model_prompts is None
-            and hasattr(self.model, "prompts")
-            and len(self.model.prompts) > 0
-        ):
-            try:
-                model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
-
-                if (
-                    len(self.model.prompts) == 2
-                    and self.model.prompts.get("query", "") == ""
-                    and self.model.prompts.get("document", "") == ""
-                ):
-                    model_prompts = None
-            except KeyError:
-                model_prompts = None
-                logger.warning(
-                    "Model prompts are not in the expected format. Ignoring them."
-                )
-        elif model_prompts is not None and hasattr(self.model, "prompts"):
-            logger.info(f"Model prompts will be overwritten with {model_prompts}")
+        if (built_in_prompts := getattr(self.model, "prompts", None)) and not model_prompts:
+            model_prompts = built_in_prompts
+        elif model_prompts and built_in_prompts:
+            logger.warning(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
-        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+
+        self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
+            model_prompts, raise_for_invalid_keys=False
+        )
+
+        if invalid_prompts:
+            logger.warning(
+                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            )
+
+        if (
+            self.model_prompts
+            and len(self.model_prompts) <= 2
+            and (
+                PromptType.query.value not in self.model_prompts
+                or PromptType.document.value not in self.model_prompts
+            )
+        ):
+            logger.warning(
+                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
+                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts.keys()}"
+            )
 
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict

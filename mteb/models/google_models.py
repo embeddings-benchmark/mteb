@@ -60,9 +60,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def _embed(
         self,
