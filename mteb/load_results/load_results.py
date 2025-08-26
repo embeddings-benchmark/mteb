@@ -48,7 +48,7 @@ def download_of_results(
             logger.info(
                 f"Results repository already exists in {results_directory}, updating it using git pull"
             )
-            subprocess.run(["git", "pull", "-b", "feat-use-rteb-results"], cwd=results_directory)
+            subprocess.run(["git", "pull"], cwd=results_directory)
         else:
             logger.info(
                 f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
