@@ -11,7 +11,7 @@ class SNLRetrieval(AbsTaskRetrieval):
         name="SNLRetrieval",
         dataset={
             "path": "adrlau/navjordj-SNL_summarization_copy",  # TODO: replace with mteb/SNLRetrieval after #2820 is resolved.
-            "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+            "revision": "22c474c88fb4678052f9099bb917ad8f9e155f9f",
         },
         description="Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.",
         reference="https://huggingface.co/datasets/mteb/SNLRetrieval",

@@ -249,6 +249,20 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     unique_relevant_docs: int
 
 
+def _filter_queries_without_positives(
+    relevant_docs: dict, queries: dict
+) -> tuple[dict, dict]:
+    _relevant_docs = {}
+    _queries = {}
+    for idx in relevant_docs:
+        if len(relevant_docs[idx]) == 0:  # no relevant docs
+            continue
+        _relevant_docs[idx] = relevant_docs[idx]
+        _queries[idx] = queries[idx]
+
+    return _relevant_docs, _queries
+
+
 class AbsTaskRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
@@ -349,6 +363,11 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
+        # ensure queries format (see #3030)
+        relevant_docs, queries = _filter_queries_without_positives(
+            relevant_docs, queries
+        )
+
         start_time = time()
         results = retriever(corpus, queries)
         end_time = time()

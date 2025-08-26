@@ -50,7 +50,7 @@ model-load-test:
 
 dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
-	pytest -n auto -m test_datasets
+	pytest -m test_datasets
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"

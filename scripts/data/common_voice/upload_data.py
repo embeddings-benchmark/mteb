@@ -7,7 +7,6 @@ import argparse
 import os
 import time
 from pathlib import Path
-from typing import List, Optional, Tuple
 
 from huggingface_hub import HfApi, list_repo_files, login
 from huggingface_hub.utils import RepositoryNotFoundError
@@ -66,8 +65,8 @@ def parse_args():
 
 
 def discover_files(
-    base_dir: str, languages: Optional[List[str]] = None
-) -> List[Tuple[str, str]]:
+    base_dir: str, languages: list[str] | None = None
+) -> list[tuple[str, str]]:
     """Discover all tar and tsv files in the base directory.
 
     Returns:
@@ -215,10 +214,7 @@ def main():
     # Calculate total size
     total_size = 0
     for local_path, _ in files_to_upload:
-        try:
-            total_size += os.path.getsize(local_path)
-        except:
-            pass
+        total_size += os.path.getsize(local_path)
 
     print(f"Total size to upload: {format_size(total_size)}")
 
