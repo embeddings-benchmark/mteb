@@ -106,18 +106,26 @@ class EncodecWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size)):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 # Process audio through EnCodec's processor
+                max_seconds = 30
+                max_samples = int(max_seconds * self.sampling_rate)
+                batch_np = [audio[:max_samples].cpu().numpy() for audio in batch]
+
                 inputs = self.processor(
-                    raw_audio=[audio.cpu().numpy() for audio in batch],
+                    raw_audio=batch_np,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
