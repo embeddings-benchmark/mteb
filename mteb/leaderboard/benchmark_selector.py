@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import gradio as gr
-from mteb.benchmarks.benchmarks import MTEB_multilingual
 
 import mteb
 from mteb import Benchmark
+from mteb.benchmarks.benchmarks import MTEB_multilingual
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
