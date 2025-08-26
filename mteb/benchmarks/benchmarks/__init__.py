@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.benchmarks.benchmarks import (
     MTEB_EN,
     MTEB_ENG_CLASSIC,
@@ -58,6 +59,7 @@ from mteb.benchmarks.benchmarks.rteb_benchmarks import (
 )
 
 __all__ = [
+    "Benchmark",
     "MTEB_EN",
     "MTEB_ENG_CLASSIC",
     "MTEB_MAIN_RU",
