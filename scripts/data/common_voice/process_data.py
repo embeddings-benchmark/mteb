@@ -532,7 +532,7 @@ def compute_stats_from_tsv(language_code, split_clips, corpus_dir):
     sentence_domain_dict = dict(sentence_domain_counts)
 
     # Ensure it's a regular dict and not a defaultdict by creating a new dict
-    sentence_domain_dict = {k: v for k, v in sentence_domain_dict.items()}
+    sentence_domain_dict = dict(sentence_domain_dict.items())
 
     # Ensure specific domain keys exist with a value of 0 if they don't exist in the data
     required_domain_keys = [
@@ -639,7 +639,7 @@ def parse_stats_dict(content):
         # If JSON parsing fails, try ast.literal_eval (handles single quotes)
         try:
             return ast.literal_eval(full_dict_str)
-        except:
+        except Exception:
             pass
 
         # If both fail, try to normalize quotes and parse as JSON
@@ -654,7 +654,7 @@ def parse_stats_dict(content):
         # Try parsing again
         try:
             return json.loads(normalized)
-        except:
+        except Exception:
             pass
 
         return None

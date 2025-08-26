@@ -110,7 +110,7 @@ XLMR_LANGUAGES = [
 
 model_prompts = {
     PromptType.query.value: "query: ",
-    PromptType.passage.value: "passage: ",
+    PromptType.document.value: "passage: ",
 }
 
 E5_TRAINING_DATA = {

@@ -142,7 +142,7 @@ class AudioRerankingEvaluator(Evaluator):
             model.get_audio_embeddings(
                 docs_dataloader,
                 task_name=self.task_name,
-                prompt_type=PromptType.passage,
+                prompt_type=PromptType.document,
                 **self.encode_kwargs,
             )
         )
@@ -230,7 +230,7 @@ class AudioRerankingEvaluator(Evaluator):
                 model.get_audio_embeddings(
                     docs_dataloader,
                     task_name=self.task_name,
-                    prompt_type=PromptType.passage,
+                    prompt_type=PromptType.document,
                     **self.encode_kwargs,
                 )
             )
