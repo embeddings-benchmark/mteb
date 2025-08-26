@@ -70,22 +70,22 @@ class Wrapper:
     def validate_task_to_prompt_name(
         task_to_prompt: dict[str, str] | None,
         raise_for_invalid_keys: Literal[True] = True,
-    ) -> dict[str, str] | None:
-        ...
+    ) -> dict[str, str] | None: ...
 
     @staticmethod
     @overload
     def validate_task_to_prompt_name(
         task_to_prompt: dict[str, str] | None,
         raise_for_invalid_keys: Literal[False] = False,
-    ) -> tuple[dict[str, str], Sequence[str]] | tuple[None, None]:
-        ...
+    ) -> tuple[dict[str, str], Sequence[str]] | tuple[None, None]: ...
 
     @staticmethod
     def validate_task_to_prompt_name(
         task_to_prompt: dict[str, str] | None,
         raise_for_invalid_keys: bool = True,
-    ) -> dict[str, str] | tuple[dict[str, str], Sequence[str]] | tuple[None, None] | None:
+    ) -> (
+        dict[str, str] | tuple[dict[str, str], Sequence[str]] | tuple[None, None] | None
+    ):
         """Validates that the keys in task_to_prompt_name map to a known task or prompt type.
 
         A key is valid if:
@@ -122,13 +122,14 @@ class Wrapper:
         task_types = get_args(TASK_TYPE)
         prompt_types = [e.value for e in PromptType]
         valid_keys_msg = f"Valid keys are task types [{task_types}], prompt types [{prompt_types}], and task names"
-        valid_prompt_type_endings = tuple([f"-{prompt_type}" for prompt_type in prompt_types])
+        valid_prompt_type_endings = tuple(
+            [f"-{prompt_type}" for prompt_type in prompt_types]
+        )
 
         invalid_keys: set[str] = set()
         invalid_task_messages: set[str] = set()
 
         for task_key in task_to_prompt:
-
             # task_key may be a compound key of the form "{task_name}-{prompt_type}". A task_name may contain a "-"
             # character (this occurs in ~12% of task names), so rsplit is used to separate a valid prompt_type postfix
             # from the unvalidated task_name.
@@ -151,7 +152,9 @@ class Wrapper:
         elif raise_for_invalid_keys:
             return task_to_prompt
         else:
-            return {k: v for k, v in task_to_prompt.items() if k not in invalid_keys}, tuple(invalid_task_messages)
+            return {
+                k: v for k, v in task_to_prompt.items() if k not in invalid_keys
+            }, tuple(invalid_task_messages)
 
     @staticmethod
     def get_instruction(

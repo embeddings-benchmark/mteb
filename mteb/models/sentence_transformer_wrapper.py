@@ -38,7 +38,9 @@ class SentenceTransformerWrapper(Wrapper):
         else:
             self.model = model
 
-        if (built_in_prompts := getattr(self.model, "prompts", None)) and not model_prompts:
+        if (
+            built_in_prompts := getattr(self.model, "prompts", None)
+        ) and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
             logger.warning(f"Model prompts will be overwritten with {model_prompts}")
@@ -49,6 +51,7 @@ class SentenceTransformerWrapper(Wrapper):
         )
 
         if invalid_prompts:
+            invalid_prompts = "\n".join(invalid_prompts)
             logger.warning(
                 f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
             )
@@ -63,7 +66,7 @@ class SentenceTransformerWrapper(Wrapper):
         ):
             logger.warning(
                 "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
-                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts.keys()}"
+                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             )
 
         if isinstance(self.model, CrossEncoder):
