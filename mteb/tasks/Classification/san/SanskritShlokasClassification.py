@@ -17,7 +17,7 @@ class SanskritShlokasClassification(AbsTaskClassification):
         category="s2s",
         modalities=["text"],
         date=("2019-01-01", "2020-01-01"),
-        eval_splits=["train", "validation"],
+        eval_splits=["validation"],
         eval_langs=["san-Deva"],
         main_score="accuracy",
         domains=["Religious", "Written"],

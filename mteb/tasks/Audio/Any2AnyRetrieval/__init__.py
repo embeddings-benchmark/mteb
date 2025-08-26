@@ -6,8 +6,8 @@ from .Clotho import *
 from .CMU_Arctic import *
 from .CommonVoice import *
 from .EmoVDB import *
-from .GigaSpeech import *
 from .Fleurs import *
+from .GigaSpeech import *
 from .HiFiTTS import *
 from .LibriTTS import *
 from .MACS import *

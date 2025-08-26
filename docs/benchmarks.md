@@ -8,7 +8,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 
 | Name | Leaderboard name | # Tasks | Task Types | Domains | Languages |
 |------|------------------|---------|------------|---------|-----------|
-| [BEIR](https://arxiv.org/abs/2104.08663) | BEIR | 15 | Retrieval: 15 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Web, Written] | eng |
+| [BEIR](https://arxiv.org/abs/2104.08663) | BEIR | 15 | Retrieval: 15 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Web, Written] | eng,vie |
 | [BEIR-NL](https://arxiv.org/abs/2412.08329) | BEIR-NL | 15 | Retrieval: 15 | [Academic, Encyclopaedic, Medical, Non-fiction, Web, Written] | nld |
 | [BRIGHT](https://brightbenchmark.github.io/) | BRIGHT | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
 | [BRIGHT (long)](https://brightbenchmark.github.io/) | BRIGHT (long) | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
@@ -18,6 +18,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [CodeRAG](https://arxiv.org/abs/2406.14497) | CodeRAG | 4 | Reranking: 4 | [Programming] | python |
 | [Encodechka](https://github.com/avidale/encodechka) | Encodechka | 7 | STS: 2, Classification: 4, PairClassification: 1 | [Fiction, Government, News, Non-fiction, Social, Web, Written] | rus |
 | [FollowIR](https://arxiv.org/abs/2403.15246) | Instruction Following | 3 | InstructionRetrieval: 3 | [News, Written] | eng |
+| [JinaVDR](https://arxiv.org/abs/2506.18902) | Jina Visual Document Retrieval | 43 | DocumentUnderstanding: 43 | [Academic, Engineering, Government, Legal, Medical, News, Social, Web] | ara,ben,deu,eng,fra,hin,hun,ind,ita,jpn,kor,mya,nld,por,rus,spa,tha,urd,vie,zho |
 | [LongEmbed](https://arxiv.org/abs/2404.12096v2) | Long-context Retrieval | 6 | Retrieval: 6 | [Academic, Blog, Encyclopaedic, Fiction, Non-fiction, Spoken, Written] | eng |
 | [MIEB(Img)](https://arxiv.org/abs/2504.10471) | Image only | 49 | Any2AnyRetrieval: 15, ImageClassification: 22, ImageClustering: 5, VisualSTS(eng): 5, VisualSTS(multi): 2 | [Blog, Encyclopaedic, Medical, News, Non-fiction, Reviews, Scene, Social, Spoken, Web, Written] | ara,cmn,deu,eng,fra,ita,kor,nld,pol,por,rus,spa,tur |
 | [MIEB(Multilingual)](https://arxiv.org/abs/2504.10471) | Image-Text, Multilingual | 130 | ImageClassification: 22, ImageClustering: 5, ZeroShotClassification: 23, VisionCentricQA: 6, Compositionality: 7, VisualSTS(eng): 7, Any2AnyRetrieval: 45, DocumentUnderstanding: 10, Any2AnyMultilingualRetrieval: 3, VisualSTS(multi): 2 | [Academic, Blog, Constructed, Encyclopaedic, Medical, News, Non-fiction, Reviews, Scene, Social, Spoken, Web, Written] | ara,ben,bul,ces,cmn,dan,deu,ell,eng,est,fas,fil,fin,fra,heb,hin,hrv,hun,ind,ita,jpn,kor,mri,nld,nor,pol,por,quz,ron,rus,spa,swa,swe,tel,tha,tur,ukr,vie,zho |
@@ -33,7 +34,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [MTEB(Scandinavian, v1)](https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/) | Scandinavian | 28 | BitextMining: 2, Classification: 13, Retrieval: 7, Clustering: 6 | [Blog, Encyclopaedic, Fiction, Government, Legal, News, Non-fiction, Reviews, Social, Spoken, Web, Written] | dan,fao,isl,nno,nob,swe |
 | [MTEB(cmn, v1)](https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB) | Chinese | 32 | Retrieval: 8, Reranking: 4, PairClassification: 2, Clustering: 4, STS: 7, Classification: 7 | [Academic, Entertainment, Financial, Government, Medical, Non-fiction, Written] | cmn |
 | [MTEB(deu, v1)](https://arxiv.org/html/2401.02709v1) | German | 19 | Classification: 6, Clustering: 4, PairClassification: 2, Reranking: 1, Retrieval: 4, STS: 2 | [Encyclopaedic, Legal, News, Non-fiction, Reviews, Spoken, Web, Written] | deu |
-| MTEB(eng, v1) | English Legacy | 56 | Classification: 12, Retrieval: 15, Clustering: 11, Reranking: 4, STS: 10, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng |
+| MTEB(eng, v1) | English Legacy | 56 | Classification: 12, Retrieval: 15, Clustering: 11, Reranking: 4, STS: 10, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng,vie |
 | MTEB(eng, v2) | English | 41 | Retrieval: 10, Clustering: 8, Reranking: 2, STS: 9, Classification: 8, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng |
 | [MTEB(fas, v1)](https://arxiv.org/abs/2502.11571) | Farsi | 60 | Classification: 18, Clustering: 5, PairClassification: 8, Reranking: 2, Retrieval: 21, STS: 3, BitextMining: 3 | [Academic, Blog, Encyclopaedic, Medical, News, Religious, Reviews, Social, Spoken, Web, Written] | fas |
 | [MTEB(fra, v1)](https://arxiv.org/abs/2405.20468) | French | 25 | Classification: 6, Clustering: 7, PairClassification: 1, Reranking: 2, Retrieval: 5, STS: 3, Summarization: 1 | [Academic, Encyclopaedic, Legal, News, Non-fiction, Reviews, Social, Spoken, Web, Written] | eng,fra |
@@ -44,6 +45,8 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [NanoBEIR](https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6) | NanoBEIR | 13 | Retrieval: 13 | [Academic, Encyclopaedic, Medical, News, Non-fiction, Social, Web, Written] | eng |
 | [R2MED](https://r2med.github.io/) | Reasoning-driven medical retrieval | 8 | Retrieval: 8 | [Medical] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
+| [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
+| [VN-MTEB (vie, v1)](https://arxiv.org/abs/2507.21500) | Vietnamese | 50 | Retrieval: 24, Classification: 12, PairClassification: 3, Clustering: 5, Reranking: 3, STS: 3 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | vie |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
 | [ViDoRe(v2)](https://arxiv.org/abs/2407.01449) | ViDoRe(v2) | 4 | DocumentUnderstanding: 4 | [Academic] | deu,eng,fra,spa |
 | [VisualDocumentRetrieval](https://arxiv.org/abs/2407.01449) | Visual Document Retrieval | 14 | DocumentUnderstanding: 14 | [Academic] | deu,eng,fra,spa |

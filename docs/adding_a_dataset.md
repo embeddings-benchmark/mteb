@@ -242,14 +242,13 @@ Before you commit, here is a checklist you should complete before submitting:
 
 An easy way to test it is using:
 ```python
-from mteb import MTEB
-from sentence_transformers import SentenceTransformer
+import mteb
+# sample model:
+model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-# Define the sentence-transformers model name
-model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-
-model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=[YourNewTask()])
+task = mteb.get_task("{name of your task}")
+evaluation = mteb.MTEB(tasks=[task])
+evaluation.run(model)
 ```
 
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.

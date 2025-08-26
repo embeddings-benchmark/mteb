@@ -29,4 +29,7 @@ from .ron.RonSTS import *
 from .rus.RUParaPhraserSTS import *
 from .rus.RuSTSBenchmarkSTS import *
 from .spa.STSES import *
+from .vie.BiossesSTSVN import *
+from .vie.SickrSTSVN import *
+from .vie.STSBenchmarkSTSVN import *
 from .zho.CMTEBSTS import *
