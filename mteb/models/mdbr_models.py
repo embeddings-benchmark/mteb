@@ -6,13 +6,13 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.arctic_models import arctic_v1_training_datasets
 from mteb.models.mxbai_models import mixedbread_training_data
 
-mdb_leaf_ir = ModelMeta(
+mdbr_leaf_ir = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
-        model_name="MongoDB/mdb-leaf-ir",
+        model_name="MongoDB/mdbr-leaf-ir",
         revision="2e46f5aac796e621d51f678c306a66ede4712ecb",
     ),
-    name="MongoDB/mdb-leaf-ir",
+    name="MongoDB/mdbr-leaf-ir",
     revision="2e46f5aac796e621d51f678c306a66ede4712ecb",
     release_date="2025-08-27",
     languages=["eng-Latn"],
@@ -23,7 +23,7 @@ mdb_leaf_ir = ModelMeta(
     max_tokens=512,
     embed_dim=768,
     license="apache-2.0",
-    reference="https://huggingface.co/MongoDB/mdb-leaf-ir",
+    reference="https://huggingface.co/MongoDB/mdbr-leaf-ir",
     similarity_fn_name="cosine",
     use_instructions=True,
     adapted_from="nreimers/MiniLM-L6-H384-uncased",
@@ -33,14 +33,14 @@ mdb_leaf_ir = ModelMeta(
     training_datasets=arctic_v1_training_datasets,
 )
 
-mdb_leaf_mt = ModelMeta(
+mdbr_leaf_mt = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
-        model_name="MongoDB/mdb-leaf-mt",
-        revision="1",
+        model_name="MongoDB/mdbr-leaf-mt",
+        revision="66c47ba6d753efc208d54412b5af6c744a39a4df",
     ),
-    name="MongoDB/mdb-leaf-mt",
-    revision="1",
+    name="MongoDB/mdbr-leaf-mt",
+    revision="66c47ba6d753efc208d54412b5af6c744a39a4df",
     release_date="2025-08-27",
     languages=["eng-Latn"],
     open_weights=True,
@@ -50,7 +50,7 @@ mdb_leaf_mt = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license="apache-2.0",
-    reference="https://huggingface.co/MongoDB/mdb-leaf-mt",
+    reference="https://huggingface.co/MongoDB/mdbr-leaf-mt",
     similarity_fn_name="cosine",
     use_instructions=True,
     adapted_from="nreimers/MiniLM-L6-H384-uncased",
