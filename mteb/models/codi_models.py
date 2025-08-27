@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
+from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)

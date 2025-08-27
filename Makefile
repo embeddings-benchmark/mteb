@@ -17,7 +17,7 @@ lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
 	ruff format . --check						    # running ruff formatting
-	ruff check **/*.py 						        # running ruff linting
+	ruff check .    						        # running ruff linting
 
 test:
 	@echo "--- 🧪 Running tests ---"
