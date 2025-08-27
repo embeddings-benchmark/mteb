@@ -39,7 +39,7 @@ def taichu_multimodal_rerank(query=None, candidate=None):
         "query": query,
         "candidate": candidate,
     }
-    
+
     try:
         response = requests.post(url=api_url, headers=headers, json=payload, timeout=10)
 
@@ -58,15 +58,13 @@ def taichu_multimodal_rerank(query=None, candidate=None):
     return None
 
 
-class TaiChuReranker():
-    name: str = "TaiChu"
-
+class TaiChuReranker:
     def __init__(
         self,
         model_name_or_path="ZiDongTaiChu/Taichu-mReranker-v1.0",
         max_tokens: int = 32000,
         **kwargs,
-    ):       
+    ):
         self._model_name = model_name_or_path
 
     def predict(self, text: str, image: List[Image.Image], **kwargs):
@@ -80,19 +78,9 @@ class TaiChuReranker():
         """
         image_base64_list = [pil_to_base64(image) for image in image]
 
-        query = [
-            {
-                "type": "text",
-                "text": text
-            }
-        ]
+        query = [{"type": "text", "text": text}]
         candidate = [
-            [
-                {
-                    "type": "image",
-                    "image": image_base64
-                }
-            ]
+            [{"type": "image", "image": image_base64}]
             for image_base64 in image_base64_list
         ]
         result_response = taichu_multimodal_rerank(query, candidate)
@@ -121,7 +109,7 @@ TRAINING_DATA = {
 Taichu_mReranker_v1_0 = ModelMeta(
     name="ZiDongTaiChu/Taichu-mReranker-v1.0",
     revision="1",
-    release_date="2025-08-18",
+    release_date="2025-08-26",
     languages=[
         "eng-Latn",
         "zho-Hans",
@@ -143,5 +131,5 @@ Taichu_mReranker_v1_0 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     is_cross_encoder=True,
-
+    modalities=["text", "image"],
 )
