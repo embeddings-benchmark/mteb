@@ -41,7 +41,7 @@ def taichu_multimodal_rerank(query=None, candidate=None):
     }
 
     try:
-        response = requests.post(url=api_url, headers=headers, json=payload, timeout=10)
+        response = requests.post(url=api_url, headers=headers, json=payload)
 
         response.raise_for_status()
         return response.json()
@@ -80,7 +80,7 @@ class TaiChuReranker:
 
         query = [{"type": "text", "text": text}]
         candidate = [
-            [{"type": "image", "image": image_base64}]
+            [{"type": "image", "image": f"data:image;base64,{image_base64}"}]
             for image_base64 in image_base64_list
         ]
         result_response = taichu_multimodal_rerank(query, candidate)
@@ -119,6 +119,8 @@ Taichu_mReranker_v1_0 = ModelMeta(
         model_name_or_path="ZiDongTaiChu/Taichu-mReranker-v1.0",
         max_tokens=32768,
     ),
+    similarity_fn_name=None,
+    use_instructions=None,
     max_tokens=32768,
     open_weights=False,
     n_parameters=None,
