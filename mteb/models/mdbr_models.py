@@ -8,6 +8,15 @@ from mteb.models.mxbai_models import mixedbread_training_data
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 
+LEAF_TRAINING_DATASETS = {
+    "AmazonQA": ["train"],
+    # FineWeb
+    # CC-News
+    # LoTTE
+    # PubMedQA
+    # TriviaQA
+}
+
 mdbr_leaf_ir = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -33,7 +42,10 @@ mdbr_leaf_ir = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=arctic_v1_training_datasets,
+    training_datasets={
+        **LEAF_TRAINING_DATASETS,
+        **arctic_v1_training_datasets
+    },
 )
 
 mdbr_leaf_mt = ModelMeta(
@@ -61,5 +73,8 @@ mdbr_leaf_mt = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=mixedbread_training_data,
+    training_datasets={
+        **LEAF_TRAINING_DATASETS,
+        **mixedbread_training_data
+    },
 )
