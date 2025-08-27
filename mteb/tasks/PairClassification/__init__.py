@@ -16,6 +16,7 @@ from .fas.FaMTEBPairClassification import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
+from .ita.DisCoTexPairClassification import *
 from .kor.KlueNLI import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsXPairClassification import *
@@ -27,4 +28,7 @@ from .pol.PolishPC import *
 from .por.Assin2RTE import *
 from .por.SickBrPC import *
 from .rus.TERRa import *
+from .vie.SprintDuplicateQuestionsPCVN import *
+from .vie.TwitterSemEval2015PCVN import *
+from .vie.TwitterURLCorpusPCVN import *
 from .zho.CMTEBPairClassification import *

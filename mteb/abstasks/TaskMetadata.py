@@ -92,6 +92,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "machine-translated and LM verified",
     "rendered",
     "multiple",
 ]
@@ -114,15 +115,16 @@ MIEB_TASK_TYPE = (
 _TASK_TYPE = (
     "BitextMining",
     "Classification",
-    "MultilabelClassification",
     "Clustering",
+    "InstructionRetrieval",
+    "MultilabelClassification",
     "PairClassification",
+    "Regression",
     "Reranking",
     "Retrieval",
+    "Speed",
     "STS",
     "Summarization",
-    "InstructionRetrieval",
-    "Speed",
 ) + MIEB_TASK_TYPE
 
 TASK_TYPE = Literal[_TASK_TYPE]

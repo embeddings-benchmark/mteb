@@ -16,6 +16,7 @@ from .ces.CzechSoMeSentimentClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
+from .dan.DdiscoCohesionClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .deu.GermanPoliticiansTwitterSentimentClassification import *
@@ -71,9 +72,12 @@ from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ind.IndonesianMongabayConservationClassification import *
+from .ita.DadoEvalCoarseClassification import *
 from .ita.ItaCaseholdClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
+from .ita.SardiStanceClassification import *
 from .jav.JavaneseIMDBClassification import *
+from .jpn.JapaneseSentimentClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
@@ -107,6 +111,8 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.NusaParagraphEmotionClassification import *
 from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
+from .multilingual.ru_nlu_intent_classification import *
+from .multilingual.RuSciBenchClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.ScandiSentClassification import *
 from .multilingual.SIB200Classification import *
@@ -130,7 +136,6 @@ from .rus.GeoreviewClassification import *
 from .rus.HeadlineClassification import *
 from .rus.InappropriatenessClassification import *
 from .rus.KinopoiskClassification import *
-from .rus.ru_nlu_intent_classification import *
 from .rus.ru_toixic_classification_okmlcup import *
 from .rus.RuReviewsClassification import *
 from .rus.RuSciBenchGRNTIClassification import *
@@ -158,6 +163,18 @@ from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .ukr.UkrFormalityClassification import *
 from .urd.UrduRomanSentimentClassification import *
+from .vie.AmazonCounterfactualVNClassification import *
+from .vie.AmazonPolarityVNClassification import *
+from .vie.AmazonReviewsVNClassification import *
+from .vie.Banking77VNClassification import *
+from .vie.EmotionVNClassification import *
+from .vie.ImdbVNClassification import *
+from .vie.MassiveIntentVNClassification import *
+from .vie.MassiveScenarioVNClassification import *
+from .vie.MTOPDomainVNClassification import *
+from .vie.MTOPIntentVNClassification import *
+from .vie.ToxicConversationsVNClassification import *
+from .vie.TweetSentimentExtractionVNClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
