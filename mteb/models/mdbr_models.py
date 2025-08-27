@@ -6,11 +6,14 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.arctic_models import arctic_v1_training_datasets
 from mteb.models.mxbai_models import mixedbread_training_data
 
+model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
+
 mdbr_leaf_ir = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="MongoDB/mdbr-leaf-ir",
         revision="2e46f5aac796e621d51f678c306a66ede4712ecb",
+        model_prompts=model_prompts,
     ),
     name="MongoDB/mdbr-leaf-ir",
     revision="2e46f5aac796e621d51f678c306a66ede4712ecb",
@@ -38,6 +41,7 @@ mdbr_leaf_mt = ModelMeta(
         sentence_transformers_loader,
         model_name="MongoDB/mdbr-leaf-mt",
         revision="66c47ba6d753efc208d54412b5af6c744a39a4df",
+        model_prompts=model_prompts,
     ),
     name="MongoDB/mdbr-leaf-mt",
     revision="66c47ba6d753efc208d54412b5af6c744a39a4df",
