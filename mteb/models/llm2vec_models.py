@@ -72,9 +72,7 @@ class LLM2VecWrapper(Wrapper):
 
             extra_kwargs["attn_implementation"] = "flash_attention_2"
 
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
         if device:
             kwargs["device_map"] = device

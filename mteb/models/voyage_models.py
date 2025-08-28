@@ -85,9 +85,7 @@ class VoyageWrapper(Wrapper):
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
         self._model_name = model_name
         self._max_tpm = max_tpm
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def encode(
         self,

@@ -855,7 +855,7 @@ mteb_multilingual_tasks = get_tasks(
     ],
 )
 
-MTEB_multilingual = Benchmark(
+MTEB_multilingual_v1 = Benchmark(
     name="MTEB(Multilingual, v1)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -869,7 +869,7 @@ MTEB_multilingual = Benchmark(
 )
 
 
-MTEB_multilingual = Benchmark(
+MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
