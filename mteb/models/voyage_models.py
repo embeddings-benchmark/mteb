@@ -125,15 +125,55 @@ class VoyageWrapper(Wrapper):
                 batch.append(sentences[index])
                 index += 1
 
+            # Get quantization type from model metadata
+            output_dtype = getattr(self, "mteb_model_meta", None)
+            if output_dtype is not None:
+                output_dtype = output_dtype.quantization
+            else:
+                output_dtype = "float"  # default fallback
+
             embeddings.extend(
                 self._embed_func(
                     texts=batch,
                     model=self._model_name,
                     input_type=input_type,
+                    output_dtype=output_dtype,
                 ).embeddings
             )
 
-        return np.array(embeddings)
+        embeddings_array = np.array(embeddings)
+
+        # Handle binary and ubinary unpacking, then convert to float32 for MTEB compatibility
+        # Get quantization type from model metadata
+        quantization_type = getattr(self, "mteb_model_meta", None)
+        if quantization_type is not None:
+            quantization_type = quantization_type.quantization
+        else:
+            quantization_type = "float"  # default fallback
+
+        if quantization_type in ["binary", "ubinary"]:
+            # Unpack bit-packed embeddings: each byte contains 8 embedding values
+            unpacked_embeddings = []
+            for embedding in embeddings_array:
+                # Convert bytes to bits and unpack
+                unpacked = []
+                for byte_val in embedding:
+                    # Extract 8 bits from each byte (LSB first)
+                    for bit_pos in range(8):
+                        bit_val = (byte_val >> bit_pos) & 1
+                        if quantization_type == "binary":
+                            # Convert 0/1 to -1/1 for binary (signed)
+                            unpacked.append(1.0 if bit_val else -1.0)
+                        else:  # ubinary
+                            # Keep 0/1 for ubinary (unsigned)
+                            unpacked.append(float(bit_val))
+                unpacked_embeddings.append(unpacked)
+            embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
+        elif quantization_type != "float":
+            # Convert int8/uint8 embeddings to float32
+            embeddings_array = embeddings_array.astype(np.float32)
+
+        return embeddings_array
 
 
 model_prompts = {
@@ -164,6 +204,87 @@ voyage_3_5 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+)
+
+voyage_3_5_int8 = ModelMeta(
+    name="voyageai/voyage-3.5-int8",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    quantization="int8",
+    adapted_from="voyageai/voyage-3.5",
+)
+
+voyage_3_5_binary = ModelMeta(
+    name="voyageai/voyage-3.5-binary",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,  # Same as original after unpacking from bits
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    quantization="binary",
+    adapted_from="voyageai/voyage-3.5",
+)
+
+voyage_3_5_ubinary = ModelMeta(
+    name="voyageai/voyage-3.5-ubinary",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,  # Same as original after unpacking from bits
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    quantization="ubinary",
+    adapted_from="voyageai/voyage-3.5",
 )
 
 voyage_large_2_instruct = ModelMeta(
