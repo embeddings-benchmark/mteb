@@ -10,9 +10,9 @@ model_prompts = {"query": "Represent this sentence for searching relevant passag
 
 LEAF_TRAINING_DATASETS = {
     "AmazonQA": ["train"],
+    "LoTTE": ["dev", "test"],
     # FineWeb
     # CC-News
-    # LoTTE
     # PubMedQA
     # TriviaQA
 }
