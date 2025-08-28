@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
+from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
@@ -131,7 +131,7 @@ CoDiEmb_Embedding_V1 = ModelMeta(
     embed_dim=2304,
     license="apache-2.0",
     max_tokens=4096,
-    reference="https://huggingface.co/CoDiEmb/CoDi-MiniCPM",
+    reference="https://huggingface.co/Youtu-RAG/CoDi-Embedding-V1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,

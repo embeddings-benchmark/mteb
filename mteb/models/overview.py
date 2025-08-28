@@ -25,6 +25,7 @@ from mteb.models import (
     cde_models,
     clip_models,
     codesage_models,
+    codi_models,
     cohere_models,
     cohere_v,
     colbert_models,
@@ -58,6 +59,7 @@ from mteb.models import (
     llm2clip_models,
     llm2vec_models,
     mcinext_models,
+    mdbr_models,
     misc_models,
     moco_models,
     model2vec_models,
@@ -104,7 +106,6 @@ from mteb.models import (
     voyage_models,
     voyage_v,
     xyz_models,
-    codi_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -148,6 +149,7 @@ model_modules = [
     listconranker,
     llm2clip_models,
     llm2vec_models,
+    mdbr_models,
     misc_models,
     model2vec_models,
     moka_models,
