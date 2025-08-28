@@ -1,0 +1,67 @@
+from __future__ import annotations
+
+import datasets
+
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+_CITATION = """@misc{weller2025limit,
+      title={On the Limitations of Embedding-Based Retrieval}}, 
+      author={Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
+      year={2025},
+      eprint={2502.18418},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2502.18418}, 
+}"""
+ 
+ 
+class LIMITRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="LIMITRetrieval",
+        description="A simple retrieval task designed to test all combinations of top-2 documents. This version includes all 50k docs.",
+        reference="https://huggingface.co/datasets/orionweller/LIMIT",
+        dataset={
+            "path": "orionweller/LIMIT",
+            "revision": "48142cc741b04d0b4af370ade7e8b42430382670",
+        },
+        type="Retrieval",
+        category="t2t",
+        eval_splits=["test"],
+        eval_langs=["en"],
+        main_score="recall_at_2",
+        modalities=["text"],
+        date=("2025-08-28", "2025-08-28"),
+        domains=["Fiction"],
+        task_subtypes=["Question answering"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        bibtex_citation=_CITATION,
+    )
+
+
+class LIMITSmallRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="LIMITSmallRetrieval",
+        description="A simple retrieval task designed to test all combinations of top-2 documents. This version only includes the 46 documents that are relevant to the 1000 queries.",
+        reference="https://huggingface.co/datasets/orionweller/LIMIT-small",
+        dataset={
+            "path": "orionweller/LIMIT-small",
+            "revision": "ff4a8f2476ae77476c1912f1f3cb5bb5f2d766d4",
+        },
+        type="Retrieval",
+        category="t2t",
+        eval_splits=["test"],
+        eval_langs=["en"],
+        main_score="recall_at_2",
+        modalities=["text"],
+        date=("2025-08-28", "2025-08-28"),
+        domains=["Fiction"],
+        task_subtypes=["Question answering"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        bibtex_citation=_CITATION,
+    )

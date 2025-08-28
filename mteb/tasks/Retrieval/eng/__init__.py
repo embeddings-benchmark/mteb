@@ -48,6 +48,7 @@ from .LEMBPasskeyRetrieval import LEMBPasskeyRetrieval
 from .LEMBQMSumRetrieval import LEMBQMSumRetrieval
 from .LEMBSummScreenFDRetrieval import LEMBSummScreenFDRetrieval
 from .LEMBWikimQARetrieval import LEMBWikimQARetrieval
+from .LIMITRetrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .LitSearchRetrieval import LitSearchRetrieval
 from .LoTTERetrieval import LoTTERetrieval
 from .MedicalQARetrieval import MedicalQARetrieval
@@ -152,6 +153,8 @@ __all__ = [
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
+    "LIMITRetrieval",
+    "LIMITSmallRetrieval",
     "LitSearchRetrieval",
     "LoTTERetrieval",
     "MLQuestionsRetrieval",

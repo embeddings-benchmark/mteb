@@ -109,7 +109,7 @@ class AbsTaskRetrieval(AbsTask):
 
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
-    k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000]
+    k_values: list[int] = [1, 2, 3, 5, 10, 20, 100, 1000]
     top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
     cross_encoder_top_k: int = 100
