@@ -44,6 +44,14 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     MTEB_code,
     MTEB_multilingual,
     RAR_b,
+    RTEB_MAIN,
+    RTEB_FINANCE,
+    RTEB_LEGAL,
+    RTEB_CODE,
+    RTEB_HEALTHCARE,
+    RTEB_ENGLISH,
+    RTEB_FRENCH,
+    RTEB_GERMAN,
 )
 
 __all__ = [
@@ -90,4 +98,12 @@ __all__ = [
     "R2MED",
     "VN_MTEB",
     "JINA_VDR",
+    "RTEB_MAIN",
+    "RTEB_FINANCE",
+    "RTEB_LEGAL",
+    "RTEB_CODE",
+    "RTEB_HEALTHCARE",
+    "RTEB_ENGLISH",
+    "RTEB_FRENCH",
+    "RTEB_GERMAN",
 ]

@@ -5,6 +5,7 @@ import logging
 import warnings
 
 import mteb.benchmarks.benchmarks as benchmark_module
+from mteb.benchmarks.benchmark import RTEBBenchmark
 from mteb.benchmarks.benchmarks import (
     C_MTEB,
     FA_MTEB,
@@ -32,7 +33,7 @@ logger = logging.getLogger(__name__)
 BENCHMARK_REGISTRY = {
     inst.name: inst
     for nam, inst in benchmark_module.__dict__.items()
-    if isinstance(inst, Benchmark)
+    if isinstance(inst, (Benchmark, RTEBBenchmark))
 }
 
 PREVIOUS_BENCHMARK_NAMES = {

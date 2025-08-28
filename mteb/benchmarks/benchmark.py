@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Annotated
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.load_results.load_results import load_results
+from mteb.models.overview import ModelMeta
 
 if TYPE_CHECKING:
     from mteb.abstasks.AbsTask import AbsTask
@@ -61,7 +62,7 @@ class Benchmark:
         return self.tasks[index]
 
     def load_results(
-        self, base_results: None | BenchmarkResults = None
+            self, base_results: None | BenchmarkResults = None
     ) -> BenchmarkResults:
         if not hasattr(self, "results_cache"):
             self.results_cache = {}
@@ -70,5 +71,26 @@ class Benchmark:
         if base_results is None:
             base_results = load_results()
         results = base_results.select_tasks(self.tasks)
+        self.results_cache[base_results] = results
+        return results
+
+
+@dataclass
+class RTEBBenchmark(Benchmark):
+    models: list[str] | list[ModelMeta] = None
+
+    def load_results(
+            self, base_results: None | BenchmarkResults = None
+    ) -> BenchmarkResults:
+        """Filter load_results to include model names"""
+        if not hasattr(self, "results_cache"):
+            self.results_cache = {}
+        if base_results in self.results_cache:
+            return self.results_cache[base_results]
+        if base_results is None:
+            base_results = load_results()
+        results = base_results.select_tasks(self.tasks)
+        if self.models:
+            results = results.select_models(self.models)
         self.results_cache[base_results] = results
         return results
