@@ -23,7 +23,7 @@ from mteb.leaderboard.benchmark_selector import (
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
-from mteb.leaderboard.table import create_tables
+from mteb.leaderboard.table import create_tables, create_rteb_tables
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
@@ -750,7 +750,10 @@ def get_leaderboard_app() -> gr.Blocks:
                     filtered_scores.append(entry)
             else:
                 filtered_scores = scores
-            summary, per_task = create_tables(filtered_scores)
+            if benchmark_name.startswith("RTEB"):
+                summary, per_task = create_rteb_tables(filtered_scores)
+            else:
+                summary, per_task = create_tables(filtered_scores)
             elapsed = time.time() - start_time
             logger.debug(f"update_tables callback: {elapsed}s")
             return summary, per_task
@@ -772,6 +775,14 @@ def get_leaderboard_app() -> gr.Blocks:
         )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
+
+        def update_zero_shot_radio_visible(benchmark_name: str):
+            if benchmark_name.startswith("RTEB"):
+                return gr.update(visible=False)
+            return gr.update(visible=True)
+
+        benchmark_select.change(update_zero_shot_radio_visible, inputs=[benchmark_select], outputs=[zero_shot])
+
 
     # Prerun on all benchmarks, so that results of callbacks get cached
     for benchmark in benchmarks:
