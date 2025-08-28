@@ -42,7 +42,8 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     VN_MTEB,
     CoIR,
     MTEB_code,
-    MTEB_multilingual,
+    MTEB_multilingual_v1,
+    MTEB_multilingual_v2,
     RAR_b,
 )
 
@@ -64,7 +65,8 @@ __all__ = [
     "MTEB_KOR",
     "MTEB_POL",
     "MTEB_code",
-    "MTEB_multilingual",
+    "MTEB_multilingual_v1",
+    "MTEB_multilingual_v2",
     "MTEB_JPN",
     "MTEB_INDIC",
     "MTEB_EU",

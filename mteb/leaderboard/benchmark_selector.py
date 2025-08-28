@@ -6,9 +6,9 @@ import gradio as gr
 
 import mteb
 from mteb import Benchmark
-from mteb.benchmarks.benchmarks import MTEB_multilingual
+from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 
-DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
+DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
 
 @dataclass
