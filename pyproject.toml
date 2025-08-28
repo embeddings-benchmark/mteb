@@ -53,16 +53,6 @@ mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
-dev = [
-"ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
-"pytest>=8.3.4",
-"pytest-xdist>=3.6.1",
-"pytest-coverage>=0.0",
-"pytest-rerunfailures>=15.0",
-"iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
-"pre-commit>=4.1.0",
-"bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
-]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 speedtask = [
     "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
@@ -98,8 +88,26 @@ xet = ["huggingface_hub>=0.32.0"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12"]
 
-[tool.coverage.report]
+[dependency-groups]
+lint = [
+    "ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
+    "pre-commit>=4.1.0",
+    "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
+]
+test = [
+    "pytest>=8.3.4",
+    "pytest-xdist>=3.6.1",
+    "pytest-coverage>=0.0",
+    "pytest-rerunfailures>=15.0",
+    "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+]
+dev = [
+    {include-group = "lint"},
+    {include-group = "test"},
+]
 
+
+[tool.coverage.report]
 omit = ["tests/*", "mteb/tasks/**/*", "scripts"]
 
 # Regexes for lines to exclude from consideration
