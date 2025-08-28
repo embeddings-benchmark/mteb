@@ -42,10 +42,7 @@ mdbr_leaf_ir = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **LEAF_TRAINING_DATASETS,
-        **arctic_v1_training_datasets
-    },
+    training_datasets={**LEAF_TRAINING_DATASETS, **arctic_v1_training_datasets},
 )
 
 mdbr_leaf_mt = ModelMeta(
@@ -73,8 +70,5 @@ mdbr_leaf_mt = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **LEAF_TRAINING_DATASETS,
-        **mixedbread_training_data
-    },
+    training_datasets={**LEAF_TRAINING_DATASETS, **mixedbread_training_data},
 )
