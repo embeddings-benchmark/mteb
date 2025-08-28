@@ -30,4 +30,5 @@ my_model = ModelMeta(
         revision="8e4ea66eb7eb6109b47b7d97d7556f154d9aec4a",
         trust_remote_code=True,
     ),
+    training_datasets={},
 )
