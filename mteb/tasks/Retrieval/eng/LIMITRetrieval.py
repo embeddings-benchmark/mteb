@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 _CITATION = """@misc{weller2025limit,
-      title={On the Limitations of Embedding-Based Retrieval}}, 
+      title={On the Limitations of Embedding-Based Retrieval}, 
       author={Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
       year={2025},
       eprint={2502.18418},
@@ -15,9 +12,10 @@ _CITATION = """@misc{weller2025limit,
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2502.18418}, 
 }"""
- 
- 
+
+
 class LIMITRetrieval(AbsTaskRetrieval):
+    k_values: list[int] = [1, 2, 3, 5, 10, 20, 100, 1000]
     metadata = TaskMetadata(
         name="LIMITRetrieval",
         description="A simple retrieval task designed to test all combinations of top-2 documents. This version includes all 50k docs.",
@@ -43,6 +41,7 @@ class LIMITRetrieval(AbsTaskRetrieval):
 
 
 class LIMITSmallRetrieval(AbsTaskRetrieval):
+    k_values: list[int] = [1, 2, 3, 5, 10, 20, 100, 1000]
     metadata = TaskMetadata(
         name="LIMITSmallRetrieval",
         description="A simple retrieval task designed to test all combinations of top-2 documents. This version only includes the 46 documents that are relevant to the 1000 queries.",
