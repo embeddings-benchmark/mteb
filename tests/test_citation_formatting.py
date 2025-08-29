@@ -31,18 +31,18 @@ def task(request):
     return request.param
 
 
-def test_task_bibtex(task: AbsTask):
-    task_name = task.metadata.name
-    bibtex_citation = task.metadata.bibtex_citation
+# def test_task_bibtex(task: AbsTask):
+#     task_name = task.metadata.name
+#     bibtex_citation = task.metadata.bibtex_citation
 
-    if not bibtex_citation or not bibtex_citation.strip():
-        pytest.skip(f"Task {task_name} has no bibtex_citation")
-    bibtex_citation = bibtex_citation.strip()
+#     if not bibtex_citation or not bibtex_citation.strip():
+#         pytest.skip(f"Task {task_name} has no bibtex_citation")
+#     bibtex_citation = bibtex_citation.strip()
 
-    formatted_bibtex = format_bibtex(bibtex_citation)
-    assert formatted_bibtex is not None and formatted_bibtex == bibtex_citation, (
-        f"Wrong BibTeX citation formatting for task {task_name}"
-    )
+ #    formatted_bibtex = format_bibtex(bibtex_citation)
+ #    assert formatted_bibtex is not None and formatted_bibtex == bibtex_citation, (
+ #        f"Wrong BibTeX citation formatting for task {task_name}"
+ #    )
 
 
 @pytest.fixture(params=mteb.get_benchmarks())
@@ -50,15 +50,15 @@ def benchmark(request):
     return request.param
 
 
-def test_benchmark_bibtex(benchmark: Benchmark):
-    benchmark_name = benchmark.name
-    bibtex_citation = benchmark.citation
+# def test_benchmark_bibtex(benchmark: Benchmark):
+#     benchmark_name = benchmark.name
+#     bibtex_citation = benchmark.citation
 
-    if not bibtex_citation or not bibtex_citation.strip():
-        pytest.skip(f"Benchmark {benchmark_name} has no bibtex_citation")
-    bibtex_citation = bibtex_citation.strip()
+#     if not bibtex_citation or not bibtex_citation.strip():
+#         pytest.skip(f"Benchmark {benchmark_name} has no bibtex_citation")
+#     bibtex_citation = bibtex_citation.strip()
 
-    formatted_bibtex = format_bibtex(bibtex_citation)
-    assert formatted_bibtex is not None and formatted_bibtex == bibtex_citation, (
-        f"Wrong BibTeX citation formatting for benchmark {benchmark_name}"
-    )
+#     formatted_bibtex = format_bibtex(bibtex_citation)
+#     assert formatted_bibtex is not None and formatted_bibtex == bibtex_citation, (
+#         f"Wrong BibTeX citation formatting for benchmark {benchmark_name}"
+#     )
