@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_CITATION = """@misc{weller2025theoreticallimit
+_CITATION = """@misc{weller2025theoreticallimit,
       title={On the Theoretical Limitations of Embedding-Based Retrieval}, 
       author={Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
       year={2025},
@@ -33,7 +33,7 @@ class LIMITRetrieval(AbsTaskRetrieval):
         date=("2025-08-28", "2025-08-28"),
         domains=["Fiction"],
         task_subtypes=["Question answering"],
-        license="cc-by-4.0",
+        license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
         bibtex_citation=_CITATION,
@@ -59,7 +59,7 @@ class LIMITSmallRetrieval(AbsTaskRetrieval):
         date=("2025-08-28", "2025-08-28"),
         domains=["Fiction"],
         task_subtypes=["Question answering"],
-        license="cc-by-4.0",
+        license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
         bibtex_citation=_CITATION,
