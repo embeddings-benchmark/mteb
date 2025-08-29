@@ -3,14 +3,14 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_CITATION = """@misc{weller2025limit,
-      title={On the Limitations of Embedding-Based Retrieval}, 
+_CITATION = """@misc{weller2025theoreticallimit
+      title={On the Theoretical Limitations of Embedding-Based Retrieval}, 
       author={Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
       year={2025},
-      eprint={2502.18418},
+      eprint={2508.21038},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2502.18418}, 
+      url={https://arxiv.org/abs/2508.21038}, 
 }"""
 
 
@@ -19,7 +19,7 @@ class LIMITRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LIMITRetrieval",
         description="A simple retrieval task designed to test all combinations of top-2 documents. This version includes all 50k docs.",
-        reference="https://huggingface.co/datasets/orionweller/LIMIT",
+        reference="https://github.com/google-deepmind/limit",
         dataset={
             "path": "orionweller/LIMIT",
             "revision": "48142cc741b04d0b4af370ade7e8b42430382670",
@@ -45,7 +45,7 @@ class LIMITSmallRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LIMITSmallRetrieval",
         description="A simple retrieval task designed to test all combinations of top-2 documents. This version only includes the 46 documents that are relevant to the 1000 queries.",
-        reference="https://huggingface.co/datasets/orionweller/LIMIT-small",
+        reference="https://github.com/google-deepmind/limit",
         dataset={
             "path": "orionweller/LIMIT-small",
             "revision": "ff4a8f2476ae77476c1912f1f3cb5bb5f2d766d4",
