@@ -21,12 +21,12 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -m "not (test_datasets or leaderboard_stability)"
+	pytest -n auto -m "not (test_datasets or leaderboard_stability)"
 
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
+	pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
