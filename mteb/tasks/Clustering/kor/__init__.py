@@ -1,3 +1,6 @@
-from .KlueYnatMrcCategoryClustering import KlueYnatMrcCategoryClustering
+from __future__ import annotations
+
 from .KlueMrcDomainClustering import KlueMrcDomainClustering
-__all__ = ['KlueMrcDomainClustering', 'KlueYnatMrcCategoryClustering']
+from .KlueYnatMrcCategoryClustering import KlueYnatMrcCategoryClustering
+
+__all__ = ["KlueMrcDomainClustering", "KlueYnatMrcCategoryClustering"]

@@ -102,7 +102,9 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLIExplicitIdentificationLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="ContractNLIExplicitIdentificationLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that all Confidential Information shall be expressly identified by the Disclosing Party.",
@@ -686,7 +688,9 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskAnyClassifi
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLISharingWithThirdPartiesLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="ContractNLISharingWithThirdPartiesLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
@@ -738,7 +742,9 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskAnyClass
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLISurvivalOfObligationsLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="ContractNLISurvivalOfObligationsLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that some obligations of Agreement may survive termination of Agreement.",
@@ -1580,7 +1586,9 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskAnyClassification
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskAnyClassification):
+class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="CUADIrrevocableOrPerpetualLicenseLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a license grant that is irrevocable or perpetual.",
@@ -2152,7 +2160,9 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskAnyClassificatio
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskAnyClassification):
+class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="CUADNoticePeriodToTerminateRenewalLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a notice period required to terminate renewal.",
@@ -2672,7 +2682,9 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskAnyClassification):
+class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause grants one party an “enterprise,” “all you can eat” or unlimited usage license.",
@@ -3388,7 +3400,9 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskAnyClassifica
         )
 
 
-class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskAnyClassification):
+class InternationalCitizenshipQuestionsLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="InternationalCitizenshipQuestionsLegalBenchClassification",
         description="Answer questions about citizenship law from across the world. Dataset was made using the GLOBALCIT citizenship law dataset, by constructing questions about citizenship law as Yes or No questions.",
@@ -5319,7 +5333,9 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115ThirdPartySharingCollectionLegalBenchClassification(
+    AbsTaskAnyClassification
+):
     metadata = TaskMetadata(
         name="OPP115ThirdPartySharingCollectionLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describe how user information may be shared with or collected by third parties.",

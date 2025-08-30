@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+
 class BengaliSentimentAnalysis(AbsTaskAnyClassification):
     superseded_by = "BengaliSentimentAnalysis.v2"
     metadata = TaskMetadata(

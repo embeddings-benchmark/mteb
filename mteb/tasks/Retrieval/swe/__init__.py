@@ -1,3 +1,6 @@
+from __future__ import annotations
+
 from .SwednRetrieval import SwednRetrieval
 from .SweFaqRetrieval import SweFaqRetrieval
-__all__ = ['SweFaqRetrieval', 'SwednRetrieval']
+
+__all__ = ["SweFaqRetrieval", "SwednRetrieval"]

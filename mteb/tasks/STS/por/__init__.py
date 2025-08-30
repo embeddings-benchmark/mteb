@@ -1,3 +1,6 @@
-from .SickBrSTS import SickBrSTS
+from __future__ import annotations
+
 from .Assin2STS import Assin2STS
-__all__ = ['Assin2STS', 'SickBrSTS']
+from .SickBrSTS import SickBrSTS
+
+__all__ = ["Assin2STS", "SickBrSTS"]

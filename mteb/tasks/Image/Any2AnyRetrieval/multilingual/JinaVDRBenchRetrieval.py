@@ -5,7 +5,6 @@ from collections import defaultdict
 from datasets import load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -741,7 +740,7 @@ class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRGitHubReadmeRetrieval( AbsTaskAny2AnyRetrieval):
+class JinaVDRGitHubReadmeRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRGitHubReadmeRetrieval",
         description="Retrieve GitHub readme files based their description.",
@@ -782,7 +781,7 @@ class JinaVDRGitHubReadmeRetrieval( AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTweetStockSyntheticsRetrieval( AbsTaskAny2AnyRetrieval):
+class JinaVDRTweetStockSyntheticsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTweetStockSyntheticsRetrieval",
         description="Retrieve rendered tables of stock prices based on templated queries.",
@@ -805,7 +804,7 @@ class JinaVDRTweetStockSyntheticsRetrieval( AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRAirbnbSyntheticRetrieval( AbsTaskAny2AnyRetrieval):
+class JinaVDRAirbnbSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAirbnbSyntheticRetrieval",
         description="Retrieve rendered tables from Airbnb listings based on templated queries.",
@@ -849,9 +848,7 @@ class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRWikimediaCommonsDocumentsRetrieval(
-     AbsTaskAny2AnyRetrieval
-):
+class JinaVDRWikimediaCommonsDocumentsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsDocumentsRetrieval",
         description="Retrieve historical documents from Wikimedia Commons based on their description.",

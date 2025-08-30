@@ -35,4 +35,5 @@ __all__ = [
     "AbsTaskImageMultilabelClassification",
     "AbsTaskImageTextPairClassification",
     "AbsTaskAnyZeroShotClassification",
+    "AbsTaskTextRegression",
 ]

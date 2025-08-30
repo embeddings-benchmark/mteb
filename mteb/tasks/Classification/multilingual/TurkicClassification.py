@@ -8,6 +8,7 @@ from datasets import DatasetDict
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+
 class TurkicClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TurkicClassification",

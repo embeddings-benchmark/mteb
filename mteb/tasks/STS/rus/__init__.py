@@ -1,3 +1,6 @@
-from .RuSTSBenchmarkSTS import RuSTSBenchmarkSTS
+from __future__ import annotations
+
 from .RUParaPhraserSTS import RUParaPhraserSTS
-__all__ = ['RUParaPhraserSTS', 'RuSTSBenchmarkSTS']
+from .RuSTSBenchmarkSTS import RuSTSBenchmarkSTS
+
+__all__ = ["RUParaPhraserSTS", "RuSTSBenchmarkSTS"]

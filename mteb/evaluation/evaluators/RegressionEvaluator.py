@@ -8,6 +8,7 @@ from scipy.stats import kendalltau
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb.encoder_interface import Encoder
+
 from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

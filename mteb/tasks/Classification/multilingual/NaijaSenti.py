@@ -7,6 +7,7 @@ import datasets
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+
 class NaijaSenti(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NaijaSenti",

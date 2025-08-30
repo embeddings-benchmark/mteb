@@ -84,9 +84,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             )
 
-        if isinstance(self.model, CrossEncoder):
-            self.predict = self._predict
-
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
 
@@ -122,22 +119,22 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
+        _inputs = [text for batch in inputs for text in batch["text"]]
+
         prompt = None
         prompt_name = None
         if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(
-                self.model_prompts, task_name, prompt_type
-            )
+            prompt_name = self.get_prompt_name(task_metadata.name, prompt_type)
             prompt = self.model_prompts.get(prompt_name, None)
         if prompt_name:
             logger.info(
-                f"Using {prompt_name=} for task={task_name} {prompt_type=} with {prompt=}"
+                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
             )
         else:
-            logger.info(f"No model prompts found for task={task_name} {prompt_type=}")
-        logger.info(f"Encoding {len(sentences)} sentences.")
-
-        _inputs = [text for batch in inputs for text in batch["text"]]
+            logger.info(
+                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+            )
+        logger.info(f"Encoding {len(_inputs)} sentences.")
 
         embeddings = self.model.encode(
             _inputs,

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 
 import pytest
 
@@ -26,7 +25,9 @@ logging.basicConfig(level=logging.INFO)
         ),
     ],
 )
-def test_reproducibility_workflow(task_name: str, model_name: str, model_revision: str):
+def test_reproducibility_workflow(
+    task_name: str, model_name: str, model_revision: str, tmp_path
+):
     """Test that a model and a task can be fetched and run in a reproducible fashion."""
     model_meta = mteb.get_model_meta(model_name, revision=model_revision)
     task = mteb.get_task(task_name)
@@ -121,7 +122,7 @@ def test_validate_task_to_prompt_name_fails_and_raises(
 def test_validate_task_to_prompt_name_filters_and_reports(
     task_prompt_dict: dict[str, str], expected_valid: int, expected_invalid: int
 ):
-    valid, invalid = Wrapper.validate_task_to_prompt_name(
+    valid, invalid = AbsMockEncoder.validate_task_to_prompt_name(
         task_prompt_dict, raise_for_invalid_keys=False
     )
     assert len(valid) == expected_valid

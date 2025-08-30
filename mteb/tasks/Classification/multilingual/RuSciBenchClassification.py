@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuSciBenchCoreRiscClassification( AbsTaskAnyClassification):
+class RuSciBenchCoreRiscClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchCoreRiscClassification",
         dataset={
@@ -53,7 +52,7 @@ class RuSciBenchCoreRiscClassification( AbsTaskAnyClassification):
     )
 
 
-class RuSciBenchPubTypeClassification( AbsTaskAnyClassification):
+class RuSciBenchPubTypeClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchPubTypeClassification",
         dataset={
@@ -100,7 +99,7 @@ class RuSciBenchPubTypeClassification( AbsTaskAnyClassification):
     )
 
 
-class RuSciBenchGRNTIClassificationV2( AbsTaskAnyClassification):
+class RuSciBenchGRNTIClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClassification.v2",
         dataset={
@@ -150,7 +149,7 @@ class RuSciBenchGRNTIClassificationV2( AbsTaskAnyClassification):
     )
 
 
-class RuSciBenchOECDClassificationV2( AbsTaskAnyClassification):
+class RuSciBenchOECDClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchOECDClassification.v2",
         dataset={

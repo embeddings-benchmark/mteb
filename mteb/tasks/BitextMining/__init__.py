@@ -1,7 +1,9 @@
-from .eng import *
-from .vie import *
+from __future__ import annotations
+
 from .dan import *
-from .srn import *
+from .eng import *
+from .fas import *
 from .kat import *
 from .multilingual import *
-from .fas import *
+from .srn import *
+from .vie import *

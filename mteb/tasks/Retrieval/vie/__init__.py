@@ -1,28 +1,59 @@
-from .CQADupstackUnixVNRetrieval import CQADupstackUnixVN
-from .CQADupstackTexVNRetrieval import CQADupstackTexVN
-from .NQVNRetrieval import NQVN
-from .CQADupstackMathematicaVNRetrieval import CQADupstackMathematicaVN
-from .HotpotQAVNRetrieval import HotpotQAVN
-from .DBPediaVNRetrieval import DBPediaVN
-from .GreenNodeTableMarkdownRetrieval import GreenNodeTableMarkdownRetrieval
-from .CQADupstackProgrammersVNRetrieval import CQADupstackProgrammersRetrieval
-from .SCIDOCSVNRetrieval import SCIDOCSVN
+from __future__ import annotations
+
+from .ArguAnaVNRetrieval import ArguAnaVN
 from .ClimateFEVERVNRetrieval import ClimateFEVERVN
 from .CQADupstackAndroidVNRetrieval import CQADupstackAndroidVN
-from .Touche2020VNRetrieval import Touche2020VN
-from .ZacLegalTextRetrieval import ZacLegalTextRetrieval
-from .CQADupstackWebmastersVNRetrieval import CQADupstackWebmastersVN
-from .SciFactVNRetrieval import SciFactVN
 from .CQADupstackGisVNRetrieval import CQADupstackGisVN
-from .VieQuADRetrieval import VieQuADRetrieval
-from .MSMARCOVNRetrieval import MSMARCOVN
-from .FEVERVNRetrieval import FEVERVN
-from .QuoraVNRetrieval import QuoraVN
-from .CQADupstackWordpressVNRetrieval import CQADupstackWordpressVN
-from .FiQA2018VNRetrieval import FiQA2018VN
-from .TRECCOVIDVNRetrieval import TRECCOVIDVN
-from .NFCorpusVNRetrieval import NFCorpusVN
-from .ArguAnaVNRetrieval import ArguAnaVN
+from .CQADupstackMathematicaVNRetrieval import CQADupstackMathematicaVN
 from .CQADupstackPhysicsVNRetrieval import CQADupstackPhysicsVN
+from .CQADupstackProgrammersVNRetrieval import CQADupstackProgrammersRetrieval
 from .CQADupstackStatsVNRetrieval import CQADupstackStatsVN
-__all__ = ['ArguAnaVN', 'CQADupstackAndroidVN', 'CQADupstackGisVN', 'CQADupstackMathematicaVN', 'CQADupstackPhysicsVN', 'CQADupstackProgrammersRetrieval', 'CQADupstackStatsVN', 'CQADupstackTexVN', 'CQADupstackUnixVN', 'CQADupstackWebmastersVN', 'CQADupstackWordpressVN', 'ClimateFEVERVN', 'DBPediaVN', 'FEVERVN', 'FiQA2018VN', 'GreenNodeTableMarkdownRetrieval', 'HotpotQAVN', 'MSMARCOVN', 'NFCorpusVN', 'NQVN', 'QuoraVN', 'SCIDOCSVN', 'SciFactVN', 'TRECCOVIDVN', 'Touche2020VN', 'VieQuADRetrieval', 'ZacLegalTextRetrieval']
+from .CQADupstackTexVNRetrieval import CQADupstackTexVN
+from .CQADupstackUnixVNRetrieval import CQADupstackUnixVN
+from .CQADupstackWebmastersVNRetrieval import CQADupstackWebmastersVN
+from .CQADupstackWordpressVNRetrieval import CQADupstackWordpressVN
+from .DBPediaVNRetrieval import DBPediaVN
+from .FEVERVNRetrieval import FEVERVN
+from .FiQA2018VNRetrieval import FiQA2018VN
+from .GreenNodeTableMarkdownRetrieval import GreenNodeTableMarkdownRetrieval
+from .HotpotQAVNRetrieval import HotpotQAVN
+from .MSMARCOVNRetrieval import MSMARCOVN
+from .NFCorpusVNRetrieval import NFCorpusVN
+from .NQVNRetrieval import NQVN
+from .QuoraVNRetrieval import QuoraVN
+from .SCIDOCSVNRetrieval import SCIDOCSVN
+from .SciFactVNRetrieval import SciFactVN
+from .Touche2020VNRetrieval import Touche2020VN
+from .TRECCOVIDVNRetrieval import TRECCOVIDVN
+from .VieQuADRetrieval import VieQuADRetrieval
+from .ZacLegalTextRetrieval import ZacLegalTextRetrieval
+
+__all__ = [
+    "ArguAnaVN",
+    "CQADupstackAndroidVN",
+    "CQADupstackGisVN",
+    "CQADupstackMathematicaVN",
+    "CQADupstackPhysicsVN",
+    "CQADupstackProgrammersRetrieval",
+    "CQADupstackStatsVN",
+    "CQADupstackTexVN",
+    "CQADupstackUnixVN",
+    "CQADupstackWebmastersVN",
+    "CQADupstackWordpressVN",
+    "ClimateFEVERVN",
+    "DBPediaVN",
+    "FEVERVN",
+    "FiQA2018VN",
+    "GreenNodeTableMarkdownRetrieval",
+    "HotpotQAVN",
+    "MSMARCOVN",
+    "NFCorpusVN",
+    "NQVN",
+    "QuoraVN",
+    "SCIDOCSVN",
+    "SciFactVN",
+    "TRECCOVIDVN",
+    "Touche2020VN",
+    "VieQuADRetrieval",
+    "ZacLegalTextRetrieval",
+]

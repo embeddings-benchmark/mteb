@@ -17,6 +17,7 @@ from mteb.models.models_protocols import (
 )
 from mteb.types import (
     HFSubset,
+    QueryDatasetType,
     RelevantDocumentsType,
     RetrievalOutputType,
     ScoresDict,
@@ -77,17 +78,19 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
 
 
 def _filter_queries_without_positives(
-    relevant_docs: dict, queries: dict
-) -> tuple[dict, dict]:
+    relevant_docs: RelevantDocumentsType, queries: QueryDatasetType
+) -> tuple[RelevantDocumentsType, QueryDatasetType]:
     _relevant_docs = {}
-    _queries = {}
     for idx in relevant_docs:
         if len(relevant_docs[idx]) == 0:  # no relevant docs
             continue
         _relevant_docs[idx] = relevant_docs[idx]
-        _queries[idx] = queries[idx]
 
-    return _relevant_docs, _queries
+    queries = queries.filter(
+        lambda x: x["id"] in _relevant_docs.keys(), desc="Filtering queries by qrels"
+    )
+
+    return _relevant_docs, queries
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -318,12 +321,6 @@ class AbsTaskRetrieval(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
-        # todo change to datasets
-        # ensure queries format (see #3030)
-        relevant_docs, queries = _filter_queries_without_positives(
-            relevant_docs, queries
-        )
-
         """Evaluate a model on a specific subset of the data.
 
         Args:
@@ -338,6 +335,12 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary of evaluation scores
         """
+        # ensure queries format (see #3030)
+        data_split["relevant_docs"], data_split["queries"] = (
+            _filter_queries_without_positives(
+                data_split["relevant_docs"], data_split["queries"]
+            )
+        )
         retriever = RetrievalEvaluator(
             corpus=data_split["corpus"],
             queries=data_split["queries"],

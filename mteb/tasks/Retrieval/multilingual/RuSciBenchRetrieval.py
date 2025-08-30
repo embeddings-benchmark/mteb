@@ -6,7 +6,6 @@ from typing import cast
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -132,7 +131,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class RuSciBenchCociteRetrieval( AbsTaskRetrieval):
+class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
     metadata = TaskMetadata(

@@ -1,3 +1,6 @@
-from .JSTS import JSTS
+from __future__ import annotations
+
 from .JSICK import JSICK
-__all__ = ['JSICK', 'JSTS']
+from .JSTS import JSTS
+
+__all__ = ["JSICK", "JSTS"]

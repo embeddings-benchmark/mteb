@@ -55,7 +55,6 @@ mteb = "mteb.cli:main"
 [project.optional-dependencies]
 image = ["torchvision>0.2.1"]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
-peft = ["peft>=0.11.0"]
 leaderboard = [
     "gradio==5.35.0; python_version > '3.9'", # 3.10 is required for gradio
     "plotly>=5.24.0,<6.0.0",

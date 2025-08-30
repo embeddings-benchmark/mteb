@@ -1,2 +1,8 @@
-from .RuSciBenchRegression import RuSciBenchCitedCountRegression, RuSciBenchYearPublRegression
-__all__ = ['RuSciBenchCitedCountRegression', 'RuSciBenchYearPublRegression']
+from __future__ import annotations
+
+from .RuSciBenchRegression import (
+    RuSciBenchCitedCountRegression,
+    RuSciBenchYearPublRegression,
+)
+
+__all__ = ["RuSciBenchCitedCountRegression", "RuSciBenchYearPublRegression"]

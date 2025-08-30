@@ -1,8 +1,19 @@
+from __future__ import annotations
+
+from .AROCocoOrder import AROCocoOrder
 from .AROFlickrOrder import AROFlickrOrder
 from .AROVisualAttribution import AROVisualAttribution
-from .AROCocoOrder import AROCocoOrder
-from .SugarCrepe import SugarCrepe
-from .ImageCoDe import ImageCoDe
-from .Winoground import Winoground
 from .AROVisualRelation import AROVisualRelation
-__all__ = ['AROCocoOrder', 'AROFlickrOrder', 'AROVisualAttribution', 'AROVisualRelation', 'ImageCoDe', 'SugarCrepe', 'Winoground']
+from .ImageCoDe import ImageCoDe
+from .SugarCrepe import SugarCrepe
+from .Winoground import Winoground
+
+__all__ = [
+    "AROCocoOrder",
+    "AROFlickrOrder",
+    "AROVisualAttribution",
+    "AROVisualRelation",
+    "ImageCoDe",
+    "SugarCrepe",
+    "Winoground",
+]

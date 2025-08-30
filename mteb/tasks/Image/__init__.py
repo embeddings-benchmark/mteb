@@ -1,8 +1,10 @@
-from .ImageMultilabelClassification import *
-from .ZeroShotClassification import *
-from .VisualSTS import *
-from .ImageClassification import *
-from .ImageTextPairClassification import *
-from .ImageClustering import *
-from .Any2AnyRetrieval import *
+from __future__ import annotations
+
 from .Any2AnyMultiChoice import *
+from .Any2AnyRetrieval import *
+from .ImageClassification import *
+from .ImageClustering import *
+from .ImageMultilabelClassification import *
+from .ImageTextPairClassification import *
+from .VisualSTS import *
+from .ZeroShotClassification import *

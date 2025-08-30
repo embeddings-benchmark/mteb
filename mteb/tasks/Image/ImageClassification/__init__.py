@@ -1,2 +1,49 @@
-from .eng import BirdsnapClassification, CIFAR100Classification, CIFAR10Classification, Caltech101Classification, Country211Classification, DTDClassification, EuroSATClassification, FER2013Classification, FGVCAircraftClassification, Food101Classification, GTSRBClassification, Imagenet1kClassification, MNISTClassification, OxfordFlowersClassification, OxfordPetsClassification, PatchCamelyonClassification, RESISC45Classification, STL10Classification, SUN397Classification, StanfordCarsClassification, UCF101Classification
-__all__ = ['BirdsnapClassification', 'CIFAR100Classification', 'CIFAR10Classification', 'Caltech101Classification', 'Country211Classification', 'DTDClassification', 'EuroSATClassification', 'FER2013Classification', 'FGVCAircraftClassification', 'Food101Classification', 'GTSRBClassification', 'Imagenet1kClassification', 'MNISTClassification', 'OxfordFlowersClassification', 'OxfordPetsClassification', 'PatchCamelyonClassification', 'RESISC45Classification', 'STL10Classification', 'SUN397Classification', 'StanfordCarsClassification', 'UCF101Classification']
+from __future__ import annotations
+
+from .eng import (
+    BirdsnapClassification,
+    Caltech101Classification,
+    CIFAR10Classification,
+    CIFAR100Classification,
+    Country211Classification,
+    DTDClassification,
+    EuroSATClassification,
+    FER2013Classification,
+    FGVCAircraftClassification,
+    Food101Classification,
+    GTSRBClassification,
+    Imagenet1kClassification,
+    MNISTClassification,
+    OxfordFlowersClassification,
+    OxfordPetsClassification,
+    PatchCamelyonClassification,
+    RESISC45Classification,
+    StanfordCarsClassification,
+    STL10Classification,
+    SUN397Classification,
+    UCF101Classification,
+)
+
+__all__ = [
+    "BirdsnapClassification",
+    "CIFAR100Classification",
+    "CIFAR10Classification",
+    "Caltech101Classification",
+    "Country211Classification",
+    "DTDClassification",
+    "EuroSATClassification",
+    "FER2013Classification",
+    "FGVCAircraftClassification",
+    "Food101Classification",
+    "GTSRBClassification",
+    "Imagenet1kClassification",
+    "MNISTClassification",
+    "OxfordFlowersClassification",
+    "OxfordPetsClassification",
+    "PatchCamelyonClassification",
+    "RESISC45Classification",
+    "STL10Classification",
+    "SUN397Classification",
+    "StanfordCarsClassification",
+    "UCF101Classification",
+]

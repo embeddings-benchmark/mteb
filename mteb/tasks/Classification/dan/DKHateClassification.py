@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+
 class DKHateClassification(AbsTaskAnyClassification):
     superseded_by = "DKHateClassification.v2"
     metadata = TaskMetadata(

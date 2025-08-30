@@ -1,9 +1,21 @@
-from .IFIRCdsRetrieval import IFIRCds
-from .IFIRPmRetrieval import IFIRPm
-from .InstructIR import InstructIR
+from __future__ import annotations
+
 from .IFIRAilaRetrieval import IFIRAila
+from .IFIRCdsRetrieval import IFIRCds
 from .IFIRFiQARetrieval import IFIRFiQA
-from .IFIRNFCorpusRetrieval import IFIRNFCorpus
-from .IFIRScifactRetrieval import IFIRScifact
 from .IFIRFireRetrieval import IFIRFire
-__all__ = ['IFIRAila', 'IFIRCds', 'IFIRFiQA', 'IFIRFire', 'IFIRNFCorpus', 'IFIRPm', 'IFIRScifact', 'InstructIR']
+from .IFIRNFCorpusRetrieval import IFIRNFCorpus
+from .IFIRPmRetrieval import IFIRPm
+from .IFIRScifactRetrieval import IFIRScifact
+from .InstructIR import InstructIR
+
+__all__ = [
+    "IFIRAila",
+    "IFIRCds",
+    "IFIRFiQA",
+    "IFIRFire",
+    "IFIRNFCorpus",
+    "IFIRPm",
+    "IFIRScifact",
+    "InstructIR",
+]

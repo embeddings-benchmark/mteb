@@ -1,4 +1,7 @@
-from .MMarcoReranking import VoyageMMarcoReranking
-from .JQaRAReranking import JQaRAReranking
+from __future__ import annotations
+
 from .JaCWIRReranking import JaCWIRReranking
-__all__ = ['JQaRAReranking', 'JaCWIRReranking', 'VoyageMMarcoReranking']
+from .JQaRAReranking import JQaRAReranking
+from .MMarcoReranking import VoyageMMarcoReranking
+
+__all__ = ["JQaRAReranking", "JaCWIRReranking", "VoyageMMarcoReranking"]

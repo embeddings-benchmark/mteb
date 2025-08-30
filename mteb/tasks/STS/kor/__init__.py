@@ -1,3 +1,6 @@
-from .KorSTS import KorSTS
+from __future__ import annotations
+
 from .KlueSTS import KlueSTS
-__all__ = ['KlueSTS', 'KorSTS']
+from .KorSTS import KorSTS
+
+__all__ = ["KlueSTS", "KorSTS"]

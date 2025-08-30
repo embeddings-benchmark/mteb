@@ -6,6 +6,7 @@ import datasets
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
 _LANGUAGES = {
     "asm_Beng": ["asm-Beng"],
     "brx_Deva": ["brx-Deva"],

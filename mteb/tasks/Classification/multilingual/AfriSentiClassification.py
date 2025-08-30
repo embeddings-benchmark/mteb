@@ -5,6 +5,7 @@ import datasets
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+
 def _transform(dataset, lang):
     dataset = dataset.rename_columns({"tweet": "text"})
     sample_size = min(2048, len(dataset["test"]))

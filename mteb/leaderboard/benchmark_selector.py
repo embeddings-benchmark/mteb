@@ -14,7 +14,8 @@ DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 @dataclass
 class MenuEntry:
     name: str | None
-    benchmarks: list[Benchmark]
+    benchmarks: list[Benchmark | MenuEntry]
+    description: str | None = None
     open: bool = False
     size: str = "sm"
 
@@ -128,12 +129,17 @@ def _create_button(
     return button
 
 
-def make_selector(
-    entries: list[MenuEntry],
-) -> tuple[gr.State, gr.Column]:
-    if not entries:
-        raise ValueError("No entries were specified, can't build selector.")
+def make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
+    """Creates a UI selector from menu entries with up to 3 levels of nesting.
+
+    Args:
+        entries: List of MenuEntry objects to build the selector from
+
+    Returns:
+        tuple: (state object, column widget)
+    """
     label_to_value = {}
+    button_counter = 0
 
     with gr.Column() as column:
         state = gr.State(DEFAULT_BENCHMARK_NAME)
