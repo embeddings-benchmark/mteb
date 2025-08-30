@@ -124,7 +124,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         prompt = None
         prompt_name = None
         if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata.name, prompt_type)
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
             prompt = self.model_prompts.get(prompt_name, None)
         if prompt_name:
             logger.info(
