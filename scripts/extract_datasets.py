@@ -62,8 +62,9 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
             f"{path}:{revision}" for path, revision in unique_datasets
         )
         os.environ["CUSTOM_DATASET_REVISIONS"] = custom_revisions
-        logging.info(f"Set CUSTOM_DATASET_REVISIONS={custom_revisions}")
+        logging.debug(f"Set CUSTOM_DATASET_REVISIONS={custom_revisions}")
 
+        print(f'export CUSTOM_DATASET_REVISIONS="{custom_revisions}"')
     return unique_datasets
 
 
@@ -123,4 +124,4 @@ if __name__ == "__main__":
     changed_files = get_changed_files(base_branch, startswith="mteb/tasks/")
     dataset_tuples = extract_datasets(changed_files)
 
-    logging.info(f"Found {len(dataset_tuples)} unique datasets:")
+    logging.debug(f"Found {len(dataset_tuples)} unique datasets:")
