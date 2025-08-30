@@ -25,6 +25,7 @@ from mteb.models import (
     cde_models,
     clip_models,
     codesage_models,
+    codi_models,
     cohere_models,
     cohere_v,
     colbert_models,
@@ -94,6 +95,7 @@ from mteb.models import (
     siglip_models,
     sonar_models,
     stella_models,
+    taichu_mReranker_models,
     text2vec_models,
     ua_sentence_models,
     uae_models,
@@ -104,7 +106,6 @@ from mteb.models import (
     voyage_models,
     voyage_v,
     xyz_models,
-    codi_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -188,6 +189,7 @@ model_modules = [
     voyage_v,
     stella_models,
     sonar_models,
+    taichu_mReranker_models,
     text2vec_models,
     uae_models,
     voyage_models,
