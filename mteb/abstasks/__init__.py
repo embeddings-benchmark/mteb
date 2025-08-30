@@ -11,6 +11,7 @@ from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from .AbsTaskPairClassification import AbsTaskPairClassification
 from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSummarization import AbsTaskSummarization
+from .AbsTaskTextRegression import AbsTaskTextRegression
 from .Image import (
     AbsTaskAny2AnyMultiChoice,
     AbsTaskAny2AnyRetrieval,

@@ -16,6 +16,7 @@ from .summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
     SummarizationEvaluator,
 )
+from .RegressionEvaluator import *
 from .zeroshot_classification_evaluator import ZeroShotClassificationEvaluator
 
 __all__ = [

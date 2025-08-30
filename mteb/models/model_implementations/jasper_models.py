@@ -44,7 +44,7 @@ class JasperModel(AbsEncoder):
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
-        if prompt_type == PromptType.passage:
+        if prompt_type == PromptType.document:
             instruction = None
         inputs = [text for batch in inputs for text in batch["text"]]
 

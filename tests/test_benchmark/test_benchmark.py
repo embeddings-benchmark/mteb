@@ -141,7 +141,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
         prompts = {}
 
         def encode(self, sentences: DataLoader, **kwargs):
-            assert kwargs["prompt_name"] is None
+            assert kwargs["prompt"] is None
             return super().encode(sentences, **kwargs)
 
     if isinstance(task_name, AbsTask):
@@ -341,7 +341,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     )
 
 
-@pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-passage"])
+@pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-document"])
 def test_prompt_name_split_correctly(task_name: str, tmp_path: Path):
     """Test that the task name is split correctly into task name and prompt type
     for tasks with multiple `-` in their names.
@@ -372,12 +372,12 @@ def test_model_query_passage_prompts_task_type(
     task_name = task.metadata.name if is_task_name else task.metadata.type
 
     def check_prompt(prompt_name, is_query):
-        prompt_type = "query" if is_query else "passage"
+        prompt_type = "query" if is_query else "document"
         assert prompt_name == f"{task_name}-{prompt_type}"
 
     prompt_list = {
         f"{task_name}-query": "query",
-        f"{task_name}-passage": "passage",
+        f"{task_name}-document": "document",
     }
 
     class MockEncoderWithPrompts:

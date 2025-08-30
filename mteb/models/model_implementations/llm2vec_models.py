@@ -73,8 +73,8 @@ class LLM2VecModel(AbsEncoder):
             import flash_attn  # noqa: F401
 
             extra_kwargs["attn_implementation"] = "flash_attention_2"
-        self.model_prompts = model_prompts
-        self.validate_task_to_prompt_name()
+
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
         if device:
             kwargs["device_map"] = device

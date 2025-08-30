@@ -88,8 +88,7 @@ class VoyageModel(AbsEncoder):
 
         self._model_name = model_name.split("/")[-1]
         self._max_tpm = max_tpm
-        self.model_prompts = model_prompts
-        self.validate_task_to_prompt_name()
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def encode(
         self,
@@ -144,8 +143,33 @@ class VoyageModel(AbsEncoder):
 
 model_prompts = {
     PromptType.query.value: "query",
-    PromptType.passage.value: "document",
+    PromptType.document.value: "document",
 }
+
+voyage_3_5 = ModelMeta(
+    name="voyageai/voyage-3.5",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/embeddings",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
 
 voyage_large_2_instruct = ModelMeta(
     name="voyageai/voyage-large-2-instruct",

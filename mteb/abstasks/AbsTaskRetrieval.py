@@ -76,6 +76,20 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     top_ranked_statistics: TopRankedStatistics | None
 
 
+def _filter_queries_without_positives(
+    relevant_docs: dict, queries: dict
+) -> tuple[dict, dict]:
+    _relevant_docs = {}
+    _queries = {}
+    for idx in relevant_docs:
+        if len(relevant_docs[idx]) == 0:  # no relevant docs
+            continue
+        _relevant_docs[idx] = relevant_docs[idx]
+        _queries[idx] = queries[idx]
+
+    return _relevant_docs, _queries
+
+
 class AbsTaskRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
@@ -304,6 +318,12 @@ class AbsTaskRetrieval(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
+        # todo change to datasets
+        # ensure queries format (see #3030)
+        relevant_docs, queries = _filter_queries_without_positives(
+            relevant_docs, queries
+        )
+
         """Evaluate a model on a specific subset of the data.
 
         Args:

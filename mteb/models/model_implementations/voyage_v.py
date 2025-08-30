@@ -85,7 +85,7 @@ def voyage_v_loader(model_name, **kwargs):
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -114,7 +114,7 @@ def voyage_v_loader(model_name, **kwargs):
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
@@ -147,7 +147,7 @@ def voyage_v_loader(model_name, **kwargs):
             **kwargs: Any,
         ) -> Array:
             if prompt_type is not None:
-                if prompt_type == PromptType.passage:
+                if prompt_type == PromptType.document:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
