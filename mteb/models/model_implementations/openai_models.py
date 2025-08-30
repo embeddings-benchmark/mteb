@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -54,13 +53,14 @@ class OpenAIModel(AbsEncoder):
         import tiktoken
 
         self._client = OpenAI() if client is None else client
+        self.model_name = model_name.split("/")[-1].split(' ')[0]
 
         if embed_dim is None:
-            if model_name not in self.default_embed_dims:
+            if self.model_name not in self.default_embed_dims:
                 raise ValueError(
-                    f"Model {model_name} does not have a default embed_dim. Please provide an embedding dimension."
+                    f"Model {self.model_name} does not have a default embed_dim. Please provide an embedding dimension."
                 )
-            self._embed_dim = self.default_embed_dims[model_name]
+            self._embed_dim = self.default_embed_dims[self.model_name]
         else:
             self._embed_dim = embed_dim
 
@@ -86,7 +86,7 @@ class OpenAIModel(AbsEncoder):
 
         from openai import NotGiven
 
-        if self._model_name == "text-embedding-ada-002" and self._embed_dim is not None:
+        if self.model_name == "text-embedding-ada-002" and self._embed_dim is not None:
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
@@ -121,7 +121,7 @@ class OpenAIModel(AbsEncoder):
             try:
                 response = self._client.embeddings.create(
                     input=sublist,
-                    model=self._model_name,
+                    model=self.model_name,
                     encoding_format="float",
                     dimensions=self._embed_dim or NotGiven(),
                 )
@@ -134,7 +134,7 @@ class OpenAIModel(AbsEncoder):
                 try:
                     response = self._client.embeddings.create(
                         input=sublist,
-                        model=self._model_name,
+                        model=self.model_name,
                         encoding_format="float",
                         dimensions=self._embed_dim or NotGiven(),
                     )
@@ -143,7 +143,7 @@ class OpenAIModel(AbsEncoder):
                     time.sleep(60)
                     response = self._client.embeddings.create(
                         input=sublist,
-                        model=self._model_name,
+                        model=self.model_name,
                         encoding_format="float",
                         dimensions=self._embed_dim or NotGiven(),
                     )
@@ -239,9 +239,8 @@ text_embedding_3_small_512 = ModelMeta(
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIModel,
-        model_name="text-embedding-3-small",
+    loader=OpenAIModel,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
         embed_dim=512,
@@ -266,9 +265,8 @@ text_embedding_3_large_512 = ModelMeta(
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(
-        OpenAIModel,
-        model_name="text-embedding-3-large",
+    loader=OpenAIModel,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
         embed_dim=512,

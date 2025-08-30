@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -755,11 +753,7 @@ bge_en_icl = ModelMeta(
 )
 
 bge_m3_unsupervised = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="BAAI/bge-m3-unsupervised",
-        revision="46f03bc86361cf88102b0b517b36c8259f2946b1",
-    ),
+    loader=sentence_transformers_loader,
     name="BAAI/bge-m3-unsupervised",
     languages=bgem3_languages,
     open_weights=True,
