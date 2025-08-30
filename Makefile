@@ -54,7 +54,7 @@ dataset-load-test:
 
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
-	python scripts/extract_datasets.py $(BASE_BRANCH)
+	python -m scripts.extract_datasets $(BASE_BRANCH)
 	pytest -m test_datasets
 
 leaderboard-build-test:

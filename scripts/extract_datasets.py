@@ -114,13 +114,14 @@ def parse_args():
 if __name__ == "__main__":
     """
     Can pass in base branch as an argument. Defaults to 'main'.
-    e.g. python extract_datasets.py mieb
+    e.g. python -m scripts.extract_datasets mieb
     """
 
     args = parse_args()
 
     base_branch = args.base_branch
     changed_files = get_changed_files(base_branch)
+    print(f"{changed_files=}")
     dataset_tuples = extract_datasets(changed_files)
 
     logging.info(f"Found {len(dataset_tuples)} unique datasets:")
