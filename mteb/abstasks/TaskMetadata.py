@@ -164,7 +164,7 @@ METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
 PromptDict = TypedDict(
-    "PromptDict", dict.fromkeys(PromptType, str), total=False
+    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
 )
 """A dictionary containing the prompt used for the task.
 
