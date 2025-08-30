@@ -1,46 +1,45 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.models.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 
 codi_instruction = {
     "CmedqaRetrieval": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "CovidRetrieval": {
         "query": "Given a question on COVID-19, retrieve news articles that answer the question",
-        "passage": "",
+        "document": "",
     },
     "DuRetrieval": {
         "query": "Given a Chinese search query, retrieve web passages that answer the question",
-        "passage": "",
+        "document": "",
     },
     "EcomRetrieval": {
         "query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
-        "passage": "",
+        "document": "",
     },
     "MedicalRetrieval": {
         "query": "Given a medical question, retrieve user replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "MMarcoRetrieval": {
         "query": "Given a web search query, retrieve relevant passages that answer the query",
-        "passage": "",
+        "document": "",
     },
     "T2Retrieval": {
         "query": "Given a Chinese search query, retrieve web passages that answer the question",
-        "passage": "",
+        "document": "",
     },
     "VideoRetrieval": {
         "query": "Given a video search query, retrieve the titles of relevant videos",
-        "passage": "",
+        "document": "",
     },
     "AFQMC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "ATEC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
@@ -51,19 +50,19 @@ codi_instruction = {
     "STSB": "Represent the short general domain sentences, retrieve semantically similar text",
     "T2Reranking": {
         "query": "Given a Chinese search query, retrieve web passages that answer the question",
-        "passage": "",
+        "document": "",
     },
     "MMarcoReranking": {
         "query": "Given a web search query, retrieve relevant passages that answer the query",
-        "passage": "",
+        "document": "",
     },
     "CMedQAv1-reranking": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "CMedQAv2-reranking": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "Ocnli": "Retrieve semantically similar text",
     "Cmnli": "Retrieve semantically similar text",
@@ -94,18 +93,18 @@ def instruction_template(
 
 
 training_data = {
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "T2Reranking": ["train"],
-    "MMarcoReranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "BQ": ["train"],
-    "LCQMC": ["train"],
-    "PAWSX": ["train"],
-    "STS-B": ["train"],
-    "AFQMC": ["train"],
-    "Cmnli": ["train"],
-    "Ocnli": ["train"],
+    "T2Retrieval",
+    "DuRetrieval",
+    "T2Reranking",
+    "MMarcoReranking",
+    "CMedQAv2-reranking",
+    "BQ",
+    "LCQMC",
+    "PAWSX",
+    "STS-B",
+    "AFQMC",
+    "Cmnli",
+    "Ocnli",
 }
 
 model_name_or_path = "Youtu-RAG/CoDi-Embedding-V1"
@@ -115,10 +114,8 @@ CoDiEmb_Embedding_V1 = ModelMeta(
     languages=["zho-Hans"],
     revision="9ee4337715ce337f12b8d30f20e87e8528ccedd6",
     release_date="2025-08-20",
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name_or_path,
-        revision="9ee4337715ce337f12b8d30f20e87e8528ccedd6",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=True,
         prompts_dict=codi_instruction,

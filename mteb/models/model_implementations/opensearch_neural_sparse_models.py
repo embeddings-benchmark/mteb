@@ -1,46 +1,48 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
-from functools import partial
+from typing import Any
 
 import sentence_transformers
 import torch
+from torch.utils.data import DataLoader
 
+from mteb.abstasks import TaskMetadata
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
+from mteb.types import Array, BatchedInput
 
 v2_training_data = {
-    "MSMARCO": ["train"],
+    "MSMARCO",
     # not in MTEB. see https://huggingface.co/datasets/sentence-transformers/embedding-training-data
-    # "eli5_question_answer": ["train"],
-    # "gooaq_pairs": ["train"],
-    # "searchQA_top5_snippets": ["train"],
-    # "squad_pairs": ["train"],
-    # "stackexchange_duplicate_questions_body_body": ["train"],
-    # "stackexchange_duplicate_questions_title_title": ["train"],
-    # "stackexchange_duplicate_questions_title-body_title-body": ["train"],
-    # "WikiAnswers": ["train"],
-    # "wikihow": ["train"],
-    # "yahoo_answers_question_answer": ["train"],
-    # "yahoo_answers_title_answer": ["train"],
-    # "yahoo_answers_title_question": ["train"],
+    # "eli5_question_answer",
+    # "gooaq_pairs",
+    # "searchQA_top5_snippets",
+    # "squad_pairs",
+    # "stackexchange_duplicate_questions_body_body",
+    # "stackexchange_duplicate_questions_title_title",
+    # "stackexchange_duplicate_questions_title-body_title-body",
+    # "WikiAnswers",
+    # "wikihow",
+    # "yahoo_answers_question_answer",
+    # "yahoo_answers_title_answer",
+    # "yahoo_answers_title_question",
 }
 
 
 v3_training_data = v2_training_data | {
-    "HotpotQA": ["train"],
-    "FEVER": ["train"],
-    "FIQA": ["train"],
-    "NFCORPUS": ["train"],
-    "SCIFACT": ["train"],
+    "HotpotQA",
+    "FEVER",
+    "FIQA",
+    "NFCORPUS",
+    "SCIFACT",
     # not in MTEB. see https://huggingface.co/datasets/sentence-transformers/embedding-training-data
-    # "NQ-train_pairs": ["train"],
-    # "quora_duplicates": ["train"],
+    # "NQ-train_pairs",
+    # "quora_duplicates",
 }
 
 
-class SparseEncoderWrapper(Wrapper):
+class SparseEncoderWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -107,8 +109,17 @@ class SparseEncoderWrapper(Wrapper):
         return torch.cat(sims, dim=0)
 
     def encode(
-        self, sentences: Sequence[str], prompt_type: PromptType | None = None, **kwargs
-    ):
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if prompt_type is not None and prompt_type == PromptType.query:
             return self.model.encode_query(
                 sentences,  # type: ignore[arg-type]
@@ -135,11 +146,9 @@ opensearch_neural_sparse_encoding_doc_v3_gte = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v3_training_data,
-    loader=partial(  # type: ignore[call-arg]
-        SparseEncoderWrapper,
-        model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte",
+    loader=SparseEncoderWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        revision="a8abaa916125ee512a7a8f4d706d07eb0128a8e6",
     ),
 )
 
@@ -162,11 +171,7 @@ opensearch_neural_sparse_encoding_doc_v3_distill = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v3_training_data,
-    loader=partial(  # type: ignore[call-arg]
-        SparseEncoderWrapper,
-        model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill",
-        revision="babf71f3c48695e2e53a978208e8aba48335e3c0",
-    ),
+    loader=SparseEncoderWrapper,
 )
 
 opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
@@ -187,11 +192,7 @@ opensearch_neural_sparse_encoding_doc_v2_distill = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v2_training_data,
-    loader=partial(  # type: ignore[call-arg]
-        SparseEncoderWrapper,
-        model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill",
-        revision="8921a26c78b8559d6604eb1f5c0b74c079bee38f",
-    ),
+    loader=SparseEncoderWrapper,
 )
 
 
@@ -213,11 +214,7 @@ opensearch_neural_sparse_encoding_doc_v2_mini = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets=v2_training_data,
-    loader=partial(  # type: ignore[call-arg]
-        SparseEncoderWrapper,
-        model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini",
-        revision="4af867a426867dfdd744097531046f4289a32fdd",
-    ),
+    loader=SparseEncoderWrapper,
 )
 
 opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
@@ -238,11 +235,7 @@ opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     public_training_data=True,
     use_instructions=True,
     training_datasets={
-        "MSMARCO": ["train"],
+        "MSMARCO",
     },
-    loader=partial(  # type: ignore[call-arg]
-        SparseEncoderWrapper,
-        model_name="opensearch-project/opensearch-neural-sparse-encoding-doc-v1",
-        revision="98cdcbd72867c547f72f2b7b7bed9cdf9f09922d",
-    ),
+    loader=SparseEncoderWrapper,
 )

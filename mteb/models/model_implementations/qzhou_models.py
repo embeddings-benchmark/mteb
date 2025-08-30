@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.bge_models import (
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.models.model_implementations.bge_models import (
     bge_chinese_training_data,
     bge_full_data,
     bge_m3_training_data,
 )
-from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.model_meta import ModelMeta
 
 
 def instruction_template(
@@ -27,26 +25,25 @@ def instruction_template(
 
 
 qzhou_training_data = {
-    "LCQMC": ["train"],
-    "PAWSX": ["train"],
-    "TNews": ["train"],
-    "Waimai": ["train"],
-    "ImdbClassification": ["train"],
-    "MassiveIntentClassification": ["train"],
-    "MassiveScenarioClassification": ["train"],
-    "MindSmallReranking": ["train"],
-    "STS12": ["train"],
-    "STS22.v2": ["train"],
-    "STSBenchmark": ["train"],
-    "ToxicConversationsClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
+    "LCQMC",
+    "PAWSX",
+    "TNews",
+    "Waimai",
+    "ImdbClassification",
+    "MassiveIntentClassification",
+    "MassiveScenarioClassification",
+    "MindSmallReranking",
+    "STS12",
+    "STS22.v2",
+    "STSBenchmark",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
+    "MLDR",
 }
 
 QZhou_Embedding = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="Kingsoft-LLM/QZhou-Embedding",
-        revision="87e18b08783729eb4b778d01d297e6ddcd7e2f18",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
     ),
@@ -66,15 +63,12 @@ QZhou_Embedding = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
-    training_datasets={
-        **bge_m3_training_data,
-        **bge_chinese_training_data,
-        **bge_full_data,
-        **E5_MISTRAL_TRAINING_DATA,
-        **qzhou_training_data,
-        # Not in MTEB:
-        # "Shitao/MLDR": ["train"],
-        # "FreedomIntelligence/Huatuo26M-Lite": ["train"],
-        # "infgrad/retrieval_data_llm": ["train"],
-    },
+    training_datasets=bge_m3_training_data
+    | bge_chinese_training_data
+    | bge_full_data
+    | E5_MISTRAL_TRAINING_DATA
+    | qzhou_training_data,
+    # Not in MTEB:
+    # "FreedomIntelligence/Huatuo26M-Lite",
+    # "infgrad/retrieval_data_llm",
 )

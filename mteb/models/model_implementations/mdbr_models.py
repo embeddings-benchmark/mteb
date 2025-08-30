@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
-from mteb.models.arctic_models import arctic_v1_training_datasets
-from mteb.models.mxbai_models import mixedbread_training_data
+from mteb.models.model_implementations.arctic_models import arctic_v1_training_datasets
+from mteb.models.model_implementations.mxbai_models import mixedbread_training_data
+from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 
 LEAF_TRAINING_DATASETS = {
-    "AmazonQA": ["train"],
-    "LoTTE": ["dev", "test"],
+    "AmazonQA",
+    "LoTTE",
     # FineWeb
     # CC-News
     # PubMedQA
@@ -18,10 +17,8 @@ LEAF_TRAINING_DATASETS = {
 }
 
 mdbr_leaf_ir = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="MongoDB/mdbr-leaf-ir",
-        revision="2e46f5aac796e621d51f678c306a66ede4712ecb",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="MongoDB/mdbr-leaf-ir",
@@ -42,14 +39,12 @@ mdbr_leaf_ir = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={**LEAF_TRAINING_DATASETS, **arctic_v1_training_datasets},
+    training_datasets=LEAF_TRAINING_DATASETS | arctic_v1_training_datasets,
 )
 
 mdbr_leaf_mt = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="MongoDB/mdbr-leaf-mt",
-        revision="66c47ba6d753efc208d54412b5af6c744a39a4df",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="MongoDB/mdbr-leaf-mt",
@@ -70,5 +65,5 @@ mdbr_leaf_mt = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={**LEAF_TRAINING_DATASETS, **mixedbread_training_data},
+    training_datasets=LEAF_TRAINING_DATASETS | mixedbread_training_data,
 )
