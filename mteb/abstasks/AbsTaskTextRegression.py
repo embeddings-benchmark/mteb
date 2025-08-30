@@ -1,22 +1,25 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any
 
 import datasets
 import numpy as np
 import pandas as pd
+from datasets import DatasetDict
 from sklearn.linear_model import LinearRegression
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.encoder_interface import Encoder
+from mteb.abstasks._statistics_calculation import calculate_score_statistics, calculate_text_statistics
 from mteb.evaluation.evaluators.RegressionEvaluator import (
     LinearRegressionEvaluator,
     SklearnRegressorModel,
 )
 from mteb.load_results.task_results import ScoresDict
+from mteb.models.models_protocols import MTEBModels
 from mteb.types import HFSubset
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -29,28 +32,17 @@ class RegressionDescriptiveStatistics(DescriptiveStatistics):
       number_of_characters: Total number of symbols in the dataset.
       num_texts_in_train: Number of texts in the train split
 
-      min_text_length: Minimum length of text
-      average_text_length: Average length of text
-      max_text_length: Maximum length of text
-      unique_text: Number of unique texts
+      text_statistics: Statistics of texts
 
-      min_value: Minimum of the target variable
-      average_value: Average of the target variable
-      max_value: Maximum of the target variable
+      values_statistics: Statistics of values
     """
 
     num_samples: int
     number_of_characters: int
     num_texts_in_train: int | None
 
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
-    unique_text: int
-
-    min_value: float
-    average_value: float
-    max_value: float
+    text_statistics: TextStatistics
+    values_statistics: ScoreStatistics
 
 
 class AbsTaskTextRegression(AbsTask):
@@ -73,18 +65,15 @@ class AbsTaskTextRegression(AbsTask):
     n_experiments: int = 10
     n_samples: int = 2048
 
-    def __init__(self, **kwargs: Any):
-        super().__init__(**kwargs)
-
     def _evaluate_subset(
         self,
-        model: Encoder,
-        dataset: datasets.DatasetDict,
-        hf_split: str,
-        *,
-        hf_subset: str | None = None,
+        model: MTEBModels,
+        dataset: DatasetDict,
         encode_kwargs: dict[str, Any],
-        **kwargs,
+        hf_split: str,
+        hf_subset: str,
+        prediction_folder: Path | None = None,
+        **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]
         eval_split = dataset[hf_split]
@@ -107,11 +96,11 @@ class AbsTaskTextRegression(AbsTask):
                 )["train"]
 
             evaluator = self.evaluator(
-                train_split_sampled[self.input_column_name],
-                train_split_sampled[self.label_column_name],
-                eval_split[self.input_column_name],
-                eval_split[self.label_column_name],
-                task_name=self.metadata.name,
+                train_split_sampled,
+                eval_split,
+                self.input_column_name,
+                self.label_column_name,
+                task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
                 regressor=self.regressor,
@@ -128,23 +117,21 @@ class AbsTaskTextRegression(AbsTask):
         avg_scores["scores_per_experiment"] = scores_list
         return avg_scores
 
-    def _add_main_score(self, scores):
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
-        if "random_state" in self.model.get_params():
-            self.model = self.model.set_params(random_state=self.seed)
+        if "random_state" in self.regressor.get_params():
+            self.regressor = self.regressor.set_params(random_state=self.seed)
 
         scores = {}
         hf_subsets = self.hf_subsets
@@ -259,13 +246,6 @@ class AbsTaskTextRegression(AbsTask):
             num_samples=len(texts),
             number_of_characters=total_text_length,
             num_texts_in_train=num_texts_in_train_val,
-            min_text_length=min(text_lengths) if text_lengths else 0,
-            average_text_length=(total_text_length / len(texts))
-            if len(texts) > 0
-            else 0,
-            max_text_length=max(text_lengths) if text_lengths else 0,
-            unique_text=len(set(texts)),
-            min_value=min(values) if values else 0.0,
-            average_value=(sum(values) / len(values)) if len(values) > 0 else 0.0,
-            max_value=max(values) if values else 0.0,
+            text_statistics=calculate_text_statistics(texts),
+            values_statistics=calculate_score_statistics(values),
         )

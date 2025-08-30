@@ -72,7 +72,7 @@ model = ModelMeta(
 
 If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
 ```python
-from mteb.encoder_interface import PromptType
+from mteb.types import PromptType
 import numpy as np
 
 class CustomModel():

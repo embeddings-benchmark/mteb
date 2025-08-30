@@ -11,7 +11,7 @@ from transformers import AutoModel, AutoProcessor
 from transformers.utils.import_utils import is_flash_attn_2_available
 
 from mteb.abstasks import TaskMetadata
-from mteb.encoder_interface import PromptType
+from mteb.types import PromptType
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import (
     requires_image_dependencies,

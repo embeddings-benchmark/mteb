@@ -7,7 +7,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from mteb.abstasks import TaskMetadata
-from mteb.encoder_interface import PromptType
+from mteb.types import PromptType
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput
