@@ -100,6 +100,7 @@ test = [
     "pytest-coverage>=0.0",
     "pytest-rerunfailures>=15.0,<16.0",
     "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+    "GitPython>=3.0.0",
 ]
 dev = [
     {include-group = "lint"},
