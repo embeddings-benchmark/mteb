@@ -4,18 +4,34 @@ from .JaCWIRRetrieval import JaCWIRRetrieval
 from .JaGovFaqsRetrieval import JaGovFaqsRetrieval
 from .JaqketRetrieval import JaqketRetrieval
 from .JaQuADRetrieval import JaQuADRetrieval
-from .NLPJournalAbsArticleRetrieval import NLPJournalAbsArticleRetrieval
-from .NLPJournalAbsIntroRetrieval import NLPJournalAbsIntroRetrieval
-from .NLPJournalTitleAbsRetrieval import NLPJournalTitleAbsRetrieval
-from .NLPJournalTitleIntroRetrieval import NLPJournalTitleIntroRetrieval
+from .NLPJournalAbsArticleRetrieval import (
+    NLPJournalAbsArticleRetrieval,
+    NLPJournalAbsArticleRetrievalV2,
+)
+from .NLPJournalAbsIntroRetrieval import (
+    NLPJournalAbsIntroRetrieval,
+    NLPJournalAbsIntroRetrievalV2,
+)
+from .NLPJournalTitleAbsRetrieval import (
+    NLPJournalTitleAbsRetrieval,
+    NLPJournalTitleAbsRetrievalV2,
+)
+from .NLPJournalTitleIntroRetrieval import (
+    NLPJournalTitleIntroRetrieval,
+    NLPJournalTitleIntroRetrievalV2,
+)
 
 __all__ = [
+    "JaCWIRRetrieval",
     "JaGovFaqsRetrieval",
     "JaQuADRetrieval",
     "JaqketRetrieval",
-    "NLPJournalAbsIntroRetrieval",
-    "NLPJournalTitleAbsRetrieval",
-    "JaCWIRRetrieval",
-    "NLPJournalTitleIntroRetrieval",
     "NLPJournalAbsArticleRetrieval",
+    "NLPJournalAbsArticleRetrievalV2",
+    "NLPJournalAbsIntroRetrieval",
+    "NLPJournalAbsIntroRetrievalV2",
+    "NLPJournalTitleAbsRetrieval",
+    "NLPJournalTitleAbsRetrievalV2",
+    "NLPJournalTitleIntroRetrieval",
+    "NLPJournalTitleIntroRetrievalV2",
 ]

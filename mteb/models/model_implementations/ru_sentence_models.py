@@ -38,23 +38,23 @@ GIGA_task_prompts = {
     "SensitiveTopicsClassification": "Классифицируй чувствительную тему по запросу \nзапрос: ",
     "RuBQRetrieval": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
-        "passage": "",
+        "document": "",
     },
     "RuBQReranking": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
-        "passage": "",
+        "document": "",
     },
     "RiaNewsRetrieval": {
         "query": "Given a news title, retrieve relevant news article\nquery: ",
-        "passage": "",
+        "document": "",
     },
     "MIRACLReranking": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
-        "passage": "",
+        "document": "",
     },
     "MIRACLRetrieval": {
         "query": "Given a question, retrieve Wikipedia passages that answer the question\nquery: ",
-        "passage": "",
+        "document": "",
     },
 }
 
@@ -161,7 +161,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
 user_base_ru = ModelMeta(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
-        model_prompts={"query": "query: ", "passage": "passage: "},
+        model_prompts={"query": "query: ", "document": "passage: "},
     ),
     name="deepvk/USER-base",
     languages=["rus-Cyrl"],
@@ -520,11 +520,11 @@ rosberta_prompts = {
     "PairClassification": "classification: ",
     "Reranking": "classification: ",
     f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    f"Reranking-{PromptType.document.value}": "search_document: ",
     "STS": "classification: ",
     "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
     # Override some prompts for ruMTEB tasks
     "HeadlineClassification": "clustering: ",
     "InappropriatenessClassification": "clustering: ",
@@ -594,11 +594,11 @@ frida_prompts = {
     "PairClassification": "paraphrase: ",
     "Reranking": "paraphrase: ",
     f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    f"Reranking-{PromptType.document.value}": "search_document: ",
     "STS": "paraphrase: ",
     "Summarization": "categorize: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
     # Override some prompts for ruMTEB tasks
     "CEDRClassification": "categorize_sentiment: ",
     "GeoreviewClassification": "categorize_sentiment: ",
@@ -806,11 +806,11 @@ user2_prompts = {
     "PairClassification": "classification: ",
     "Reranking": "classification: ",
     f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    f"Reranking-{PromptType.document.value}": "search_document: ",
     "STS": "classification: ",
     "Summarization": "clustering: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
 }
 user2_small = ModelMeta(
     loader=sentence_transformers_loader,

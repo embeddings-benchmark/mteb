@@ -14,4 +14,5 @@ from .multilingual import *
 from .pol import *
 from .por import *
 from .rus import *
+from .vie import *
 from .zho import *

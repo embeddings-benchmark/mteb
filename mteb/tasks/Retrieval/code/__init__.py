@@ -16,8 +16,13 @@ from .CodeTransOceanContestRetrieval import CodeTransOceanContestRetrieval
 from .CodeTransOceanDLRetrieval import CodeTransOceanDLRetrieval
 from .COIRCodeSearchNetRetrieval import COIRCodeSearchNetRetrieval
 from .CosQARetrieval import CosQARetrieval
+from .DS1000Retrieval import DS1000Retrieval
+from .FreshStackRetrieval import FreshStackRetrieval
+from .HumanEvalRetrieval import HumanEvalRetrieval
+from .MBPPRetrieval import MBPPRetrieval
 from .StackOverflowQARetrieval import StackOverflowQARetrieval
 from .SyntheticText2SqlRetrieval import SyntheticText2SQLRetrieval
+from .WikiSQLRetrieval import WikiSQLRetrieval
 
 __all__ = [
     "AppsRetrieval",
@@ -34,6 +39,11 @@ __all__ = [
     "CodeTransOceanContestRetrieval",
     "CodeTransOceanDLRetrieval",
     "CosQARetrieval",
+    "DS1000Retrieval",
+    "FreshStackRetrieval",
+    "HumanEvalRetrieval",
+    "MBPPRetrieval",
     "StackOverflowQARetrieval",
     "SyntheticText2SQLRetrieval",
+    "WikiSQLRetrieval",
 ]

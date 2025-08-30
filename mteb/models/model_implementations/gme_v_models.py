@@ -167,7 +167,7 @@ class GmeQwen2VL(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if prompt_type == PromptType.passage:
+        if prompt_type == PromptType.document:
             instruction = None
         elif instruction is None:
             instruction = self.get_instruction(task_metadata, prompt_type)

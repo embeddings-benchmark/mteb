@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from functools import partial
+
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -750,6 +752,31 @@ bge_en_icl = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data,
     adapted_from="intfloat/e5-mistral-7b-instruct",
+)
+
+bge_m3_unsupervised = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="BAAI/bge-m3-unsupervised",
+        revision="46f03bc86361cf88102b0b517b36c8259f2946b1",
+    ),
+    name="BAAI/bge-m3-unsupervised",
+    languages=bgem3_languages,
+    open_weights=True,
+    revision="46f03bc86361cf88102b0b517b36c8259f2946b1",
+    release_date="2024-01-30",  # January 30, 2024 - BGE-M3 release date
+    n_parameters=568_000_000,
+    memory_usage_mb=2167,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=8192,
+    reference="https://huggingface.co/BAAI/bge-m3-unsupervised",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code="https://github.com/FlagOpen/FlagEmbedding",
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    training_datasets=bge_m3_training_data,
 )
 
 manu__bge_m3_custom_fr = ModelMeta(

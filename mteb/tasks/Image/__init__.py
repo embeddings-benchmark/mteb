@@ -5,6 +5,6 @@ from .Any2AnyRetrieval import *
 from .ImageClassification import *
 from .ImageClustering import *
 from .ImageMultilabelClassification import *
-from .ImageTextPairClassification.eng import *
+from .ImageTextPairClassification import *
 from .VisualSTS import *
 from .ZeroShotClassification import *

@@ -78,7 +78,7 @@ colsmol_500m = ModelMeta(
     ),
     name="vidore/colSmol-500M",
     languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    revision="1aa9325cba7ed2b3b9b97ede4d55026322504902",
     release_date="2025-01-22",
     modalities=["image", "text"],
     n_parameters=500_000_000,

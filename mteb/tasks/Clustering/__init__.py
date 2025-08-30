@@ -13,4 +13,5 @@ from .rom import *
 from .rus import *
 from .spa import *
 from .swe import *
+from .vie import *
 from .zho import *

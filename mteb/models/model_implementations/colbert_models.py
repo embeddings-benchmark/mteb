@@ -39,20 +39,12 @@ class ColBERTModel(AbsEncoder):
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
-        if (
-            model_prompts is None
-            and hasattr(self.model, "prompts")
-            and len(self.model.prompts) > 0
-        ):
-            try:
-                self.model_prompts = model_prompts
-                self.validate_task_to_prompt_name()
-            except ValueError:
-                model_prompts = None
-        elif model_prompts is not None and hasattr(self.model, "prompts"):
-            logger.info(f"Model prompts will be overwritten with {model_prompts}")
-            self.model.prompts = model_prompts
-            self.validate_task_to_prompt_name()
+        built_in_prompts = getattr(self.model, "prompts", None)
+        if built_in_prompts and not model_prompts:
+            model_prompts = built_in_prompts
+        elif model_prompts and built_in_prompts:
+            logger.info(f"Model.prompts will be overwritten with {model_prompts}")
+            self.model.prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def encode(
         self,

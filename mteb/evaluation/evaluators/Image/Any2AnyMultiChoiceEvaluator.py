@@ -113,7 +113,7 @@ class Any2AnyMultiChoiceSearch:
                 task_metadata=task_metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
-                prompt_type=PromptType.passage,
+                prompt_type=PromptType.document,
                 **self.encode_kwargs,
             )
 

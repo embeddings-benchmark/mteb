@@ -48,6 +48,7 @@ __all__ = [
     "BiorxivClusteringS2SFast",
     "BuiltBenchClusteringP2P",
     "BuiltBenchClusteringS2S",
+    "ClusTrecCovid",
     "MedrxivClusteringP2P",
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",
@@ -65,5 +66,4 @@ __all__ = [
     "WikiCitiesClustering",
     "WikipediaChemistrySpecialtiesClustering",
     "WikipediaChemistryTopicsClustering",
-    "ClusTrecCovid",
 ]

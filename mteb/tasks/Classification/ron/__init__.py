@@ -1,7 +1,20 @@
 from __future__ import annotations
 
-from .Moroco import Moroco
-from .RomanianReviewsSentiment import RomanianReviewsSentiment
-from .RomanianSentimentClassification import RomanianSentimentClassification
+from .Moroco import Moroco, MorocoV2
+from .RomanianReviewsSentiment import (
+    RomanianReviewsSentiment,
+    RomanianReviewsSentimentV2,
+)
+from .RomanianSentimentClassification import (
+    RomanianSentimentClassification,
+    RomanianSentimentClassificationV2,
+)
 
-__all__ = ["Moroco", "RomanianReviewsSentiment", "RomanianSentimentClassification"]
+__all__ = [
+    "Moroco",
+    "MorocoV2",
+    "RomanianReviewsSentiment",
+    "RomanianReviewsSentimentV2",
+    "RomanianSentimentClassification",
+    "RomanianSentimentClassificationV2",
+]

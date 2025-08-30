@@ -1,6 +1,13 @@
 from __future__ import annotations
 
-from .WisesightSentimentClassification import WisesightSentimentClassification
+from .WisesightSentimentClassification import (
+    WisesightSentimentClassification,
+    WisesightSentimentClassificationV2,
+)
 from .WongnaiReviewsClassification import WongnaiReviewsClassification
 
-__all__ = ["WisesightSentimentClassification", "WongnaiReviewsClassification"]
+__all__ = [
+    "WisesightSentimentClassification",
+    "WisesightSentimentClassificationV2",
+    "WongnaiReviewsClassification",
+]

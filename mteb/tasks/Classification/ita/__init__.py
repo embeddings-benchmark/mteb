@@ -4,12 +4,14 @@ from .DadoEvalCoarseClassification import DadoEvalCoarseClassification
 from .ItaCaseholdClassification import ItaCaseholdClassification
 from .ItalianLinguistAcceptabilityClassification import (
     ItalianLinguisticAcceptabilityClassification,
+    ItalianLinguisticAcceptabilityClassificationV2,
 )
 from .SardiStanceClassification import SardiStanceClassification
 
 __all__ = [
+    "DadoEvalCoarseClassification",
     "ItaCaseholdClassification",
     "ItalianLinguisticAcceptabilityClassification",
-    "DadoEvalCoarseClassification",
+    "ItalianLinguisticAcceptabilityClassificationV2",
     "SardiStanceClassification",
 ]

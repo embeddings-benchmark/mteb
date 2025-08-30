@@ -54,9 +54,7 @@ class RepLLaMAModel(AbsEncoder):
         # set the max_length for the evals as they did, although the model can handle longer
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def create_batch_dict(self, tokenizer, input_texts):
         max_length = self.model.config.max_length
@@ -143,7 +141,7 @@ def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., Encoder]:
 
 model_prompts = {
     PromptType.query.value: "query:  ",
-    PromptType.passage.value: "passage:  ",
+    PromptType.document.value: "passage:  ",
 }
 
 REPLLAMA_CITATION = """

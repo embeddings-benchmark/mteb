@@ -5,6 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TamilNewsClassification(AbsTaskAnyClassification):
+    superseded_by = "TamilNewsClassification.v2"
     metadata = TaskMetadata(
         name="TamilNewsClassification",
         description="A Tamil dataset for 6-class classification of Tamil news articles",
@@ -40,4 +41,42 @@ class TamilNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_columns(
             {"NewsInTamil": "text", "Category": "label"}
         )
+        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
+
+
+class TamilNewsClassificationV2(AbsTaskAnyClassification):
+    metadata = TaskMetadata(
+        name="TamilNewsClassification.v2",
+        description="""A Tamil dataset for 6-class classification of Tamil news articles
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+        reference="https://github.com/vanangamudi/tamil-news-classification",
+        dataset={
+            "path": "mteb/tamil_news",
+            "revision": "b417dba1f5a3143f8325b6b6fb585ab4a57c03a0",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        date=("2014-01-01", "2018-01-01"),
+        eval_splits=["test"],
+        eval_langs=["tam-Taml"],
+        main_score="f1",
+        domains=["News", "Written"],
+        task_subtypes=["Topic classification"],
+        license="mit",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@article{kunchukuttan2020indicnlpcorpus,
+  author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
+  journal = {arXiv preprint arXiv:2005.00085},
+  title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
+  year = {2020},
+}
+""",
+        adapted_from=["TamilNewsClassification"],
+    )
+
+    def dataset_transform(self):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)

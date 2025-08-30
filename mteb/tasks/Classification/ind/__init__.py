@@ -1,11 +1,17 @@
 from __future__ import annotations
 
-from .IndonesianIdClickbaitClassification import IndonesianIdClickbaitClassification
+from .IndonesianIdClickbaitClassification import (
+    IndonesianIdClickbaitClassification,
+    IndonesianIdClickbaitClassificationV2,
+)
 from .IndonesianMongabayConservationClassification import (
     IndonesianMongabayConservationClassification,
+    IndonesianMongabayConservationClassificationV2,
 )
 
 __all__ = [
     "IndonesianIdClickbaitClassification",
+    "IndonesianIdClickbaitClassificationV2",
     "IndonesianMongabayConservationClassification",
+    "IndonesianMongabayConservationClassificationV2",
 ]

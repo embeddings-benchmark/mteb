@@ -1,6 +1,14 @@
 from __future__ import annotations
 
-from .NoRecClassification import NoRecClassification
-from .NorwegianParliamentClassification import NorwegianParliamentClassification
+from .NoRecClassification import NoRecClassification, NoRecClassificationV2
+from .NorwegianParliamentClassification import (
+    NorwegianParliamentClassification,
+    NorwegianParliamentClassificationV2,
+)
 
-__all__ = ["NoRecClassification", "NorwegianParliamentClassification"]
+__all__ = [
+    "NoRecClassification",
+    "NoRecClassificationV2",
+    "NorwegianParliamentClassification",
+    "NorwegianParliamentClassificationV2",
+]

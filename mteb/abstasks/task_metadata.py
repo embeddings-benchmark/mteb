@@ -108,6 +108,7 @@ SampleCreationMethod = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "machine-translated and LM verified",
     "rendered",
     "multiple",
 ]
@@ -133,6 +134,7 @@ _TASK_TYPE = (
     "MultilabelClassification",
     "Clustering",
     "PairClassification",
+    "Regression",
     "Reranking",
     "Retrieval",
     "STS",
@@ -172,11 +174,11 @@ class PromptDict(TypedDict, total=False):
 
     Args:
         query: The prompt used for the queries in the task.
-        passage: The prompt used for the passages in the task.
+        document: The prompt used for the documents in the task.
     """
 
     query: str
-    passage: str
+    document: str
 
 
 class MetadataDatasetDict(TypedDict, total=False):

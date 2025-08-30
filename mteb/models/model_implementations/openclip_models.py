@@ -16,7 +16,7 @@ from mteb.types import Array, BatchedInput, PromptType
 def openclip_loader(model_name, **kwargs):
     requires_package(
         openclip_loader,
-        "open_clip_torch",
+        "open_clip",
         model_name,
         "pip install 'mteb[open_clip_torch]'",
     )

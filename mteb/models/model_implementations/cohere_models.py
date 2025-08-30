@@ -137,8 +137,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
     ) -> None:
         self.model_name = model_name.lstrip("Cohere/Cohere-")
         self.sep = sep
-        self.model_prompts = model_prompts
-        self.validate_task_to_prompt_name()
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def _embed(
         self,
@@ -215,7 +214,7 @@ model_prompts = {
     "MultilabelClassification": "classification",
     "Clustering": "clustering",
     PromptType.query.value: "search_query",
-    PromptType.passage.value: "search_document",
+    PromptType.document.value: "search_document",
 }
 
 cohere_mult_3 = ModelMeta(

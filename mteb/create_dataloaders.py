@@ -273,7 +273,7 @@ def create_dataloader(
             **dataloader_kwargs,
         )
     if "text" in task_metadata.modalities and input_column is not None:
-        if prompt_type is PromptType.passage:
+        if prompt_type is PromptType.document:
             return create_dataloader_for_retrieval_corpus(
                 dataset,
                 **dataloader_kwargs,

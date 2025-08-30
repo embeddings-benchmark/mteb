@@ -26,7 +26,7 @@ cadet_embed = ModelMeta(
     loader_kwargs=dict(
         model_prompts={
             "query": "query: ",
-            "passage": "passage: ",
+            "document": "passage: ",
         },
     ),
     name="manveertamber/cadet-embed-base-v1",

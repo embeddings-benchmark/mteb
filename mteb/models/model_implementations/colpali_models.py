@@ -41,7 +41,10 @@ class ColPaliEngineWrapper(AbsEncoder):
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, device_map=self.device, **kwargs
+            model_name,
+            device_map=self.device,
+            adapter_kwargs={"revision": revision},
+            **kwargs,
         )
         self.mdl.eval()
 
@@ -119,7 +122,13 @@ class ColPaliEngineWrapper(AbsEncoder):
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
-                inputs = self.processor.process_queries(batch["text"])
+                batch = [
+                    self.processor.query_prefix
+                    + t
+                    + self.processor.query_augmentation_token * 10
+                    for t in batch["text"]
+                ]
+                inputs = self.processor.process_queries(batch)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 outs = self.encode_input(inputs)
                 all_embeds.extend(outs.cpu().to(torch.float32))
@@ -145,11 +154,11 @@ class ColPaliEngineWrapper(AbsEncoder):
         )
 
     def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
+        scores = self.similarity(text_embeddings, image_embeddings).T
+        return scores.softmax(dim=-1)
 
     def similarity(self, a, b):
-        return self.processor.score_multi_vector(a, b)
+        return self.processor.score(a, b, **self.processor_kwargs)
 
 
 class ColPaliWrapper(ColPaliEngineWrapper):
