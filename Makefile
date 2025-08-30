@@ -54,8 +54,7 @@ dataset-load-test:
 
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
-	python -m scripts.extract_datasets $(BASE_BRANCH)
-	pytest -m test_datasets
+	eval "$$(python -m scripts.extract_datasets $(BASE_BRANCH))" && pytest -m test_datasets
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"
