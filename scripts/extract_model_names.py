@@ -10,7 +10,7 @@ from git import Repo
 logging.basicConfig(level=logging.INFO)
 
 
-def get_changed_files(base_branch="main"):
+def get_changed_files(base_branch="main", startswith="mteb/models/") -> list[str]:
     repo_path = Path(__file__).parent.parent
     repo = Repo(repo_path)
     repo.remotes.origin.fetch(base_branch)
@@ -24,7 +24,7 @@ def get_changed_files(base_branch="main"):
     return [
         f
         for f in changed_files
-        if f.startswith("mteb/models/")
+        if f.startswith(startswith)
         and f.endswith(".py")
         and "overview" not in f
         and "init" not in f

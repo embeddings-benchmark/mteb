@@ -120,10 +120,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     base_branch = args.base_branch
-    changed_files = get_changed_files(base_branch)
-    print(f"{changed_files=}")
+    changed_files = get_changed_files(base_branch, startswith="mteb/tasks/")
     dataset_tuples = extract_datasets(changed_files)
 
     logging.info(f"Found {len(dataset_tuples)} unique datasets:")
-    for path, revision in dataset_tuples:
-        logging.info(f"  {path} @ {revision}")
