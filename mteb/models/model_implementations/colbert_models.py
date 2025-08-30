@@ -44,8 +44,7 @@ class ColBERTModel(AbsEncoder):
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
             logger.info(f"Model.prompts will be overwritten with {model_prompts}")
-            self.model.prompts = model_prompts
-            self.validate_task_to_prompt_name()
+            self.model.prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def encode(
         self,

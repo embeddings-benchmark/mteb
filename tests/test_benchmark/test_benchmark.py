@@ -346,9 +346,7 @@ def test_prompt_name_split_correctly(task_name: str, tmp_path: Path):
     """Test that the task name is split correctly into task name and prompt type
     for tasks with multiple `-` in their names.
     """
-    mock_encocder = AbsMockEncoder()
-    mock_encocder.prompts = {task_name: task_name}
-    mock_encocder.validate_task_to_prompt_name()
+    AbsMockEncoder.validate_task_to_prompt_name({task_name: task_name})
 
 
 @pytest.mark.parametrize(

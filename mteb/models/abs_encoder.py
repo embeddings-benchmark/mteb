@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Callable, cast, get_args
+from collections.abc import Sequence
+from typing import Any, Callable, Literal, cast, get_args, overload
 
 from torch.utils.data import DataLoader
 
@@ -53,7 +54,7 @@ class AbsEncoder(ABC):
 
         Args:
             task_metadata: The task name to use for building the encoding prompt
-            prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
+            prompt_type: The prompt type (e.g. "query" | "document") to use for building the encoding prompt
         """
         if self.model_prompts is None:
             return None
@@ -94,30 +95,96 @@ class AbsEncoder(ABC):
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         return self.model_prompts.get(prompt_name)  # type: ignore
 
-    def validate_task_to_prompt_name(self) -> None:
-        """Validate the task name and prompt type against the model prompts.
+    @staticmethod
+    @overload
+    def validate_task_to_prompt_name(
+        task_to_prompt: dict[str, str] | None,
+        raise_for_invalid_keys: Literal[True] = True,
+    ) -> dict[str, str] | None: ...
 
-        All keys in model_prompts should be valid task names, prompt types or the combination of both.
+    @staticmethod
+    @overload
+    def validate_task_to_prompt_name(
+        task_to_prompt: dict[str, str] | None,
+        raise_for_invalid_keys: Literal[False] = False,
+    ) -> tuple[dict[str, str], Sequence[str]] | tuple[None, None]: ...
+
+    @staticmethod
+    def validate_task_to_prompt_name(
+        task_to_prompt: dict[str, str] | None,
+        raise_for_invalid_keys: bool = True,
+    ) -> (
+        dict[str, str] | tuple[dict[str, str], Sequence[str]] | tuple[None, None] | None
+    ):
+        """Validates that the keys in task_to_prompt_name map to a known task or prompt type.
+
+        A key is valid if:
+
+        1.  It is a valid task name; or
+        2.  It is a valid task type; or
+        3.  It is a valid prompt type; or
+        4.  It is a compound key of the form "{task_name}-{prompt_type}" where task_name is a valid task type or task
+            name and prompt_type is a valid prompt type.
+
+        See the
+        [MTEB docs](https://github.com/embeddings-benchmark/mteb/blob/main/docs/usage/usage.md#running-sentencetransformer-model-with-prompts)
+        for a complete description of the order or precedence for these keys when running an evaluation.
+
+        Arguments:
+            task_to_prompt: The dictionary of prompts.
+            raise_for_invalid_keys: If True, raise an error when an invalid key is encountered, otherwise return the
+                list of error messages along with a filtered dictionary of prompts with valid keys. Defaults to True
+                for backward compatibility.
+
+        Returns:
+            *   None if `task_to_prompt` is None or empty;
+            *   Only a dictionary of validated prompts if `raise_for_invalid_keys` is `True`; or
+            *   A tuple continaing the filtered dictionary of valid prompts and the set of error messages for the
+                invalid prompts `raise_for_invalid` is `False`
+
+        Raises:
+            KeyError: If any invlaid keys are encountered and `raise_for_invalid_keys` is `True`, this function will
+            raise a single `KeyError` contianing the
         """
-        if self.model_prompts is None:
-            return
+        if not task_to_prompt:
+            return None if raise_for_invalid_keys else (None, None)
+
         task_types = get_args(TaskType)
         prompt_types = [e.value for e in PromptType]
-        for task_name in self.model_prompts:
-            if "-" in task_name and task_name.endswith(
-                (f"-{PromptType.query.value}", f"-{PromptType.document.value}")
-            ):
-                task_name, prompt_type = task_name.rsplit("-", 1)
-                if prompt_type not in prompt_types:
-                    msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
-                    logger.warning(msg)
-                    raise KeyError(msg)
+        valid_keys_msg = f"Valid keys are task types [{task_types}], prompt types [{prompt_types}], and task names"
+        valid_prompt_type_endings = tuple(
+            [f"-{prompt_type}" for prompt_type in prompt_types]
+        )
+
+        invalid_keys: set[str] = set()
+        invalid_task_messages: set[str] = set()
+
+        for task_key in task_to_prompt:
+            # task_key may be a compound key of the form "{task_name}-{prompt_type}". A task_name may contain a "-"
+            # character (this occurs in ~12% of task names), so rsplit is used to separate a valid prompt_type postfix
+            # from the unvalidated task_name.
+            if task_key.endswith(valid_prompt_type_endings):
+                task_name = task_key.rsplit("-", 1)[0]
+            else:
+                task_name = task_key
+
             if task_name not in task_types and task_name not in prompt_types:
-                task = mteb.get_task(task_name=task_name)
-                if not task:
-                    msg = f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
+                try:
+                    mteb.get_task(task_name=task_name)
+                except KeyError:
+                    msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
-                    raise KeyError(msg)
+                    invalid_task_messages.add(msg)
+                    invalid_keys.add(task_key)
+
+        if raise_for_invalid_keys and invalid_task_messages:
+            raise KeyError(invalid_task_messages)
+        elif raise_for_invalid_keys:
+            return task_to_prompt
+        else:
+            return {
+                k: v for k, v in task_to_prompt.items() if k not in invalid_keys
+            }, tuple(invalid_task_messages)
 
     def get_instruction(
         self,

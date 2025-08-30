@@ -74,14 +74,12 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
         "query": "prompt_name",
         "document": "prompt_name",
     }
-    base_encoder = AbsMockEncoder()
-    base_encoder.model_prompts = model_prompts
-    base_encoder.validate_task_to_prompt_name()
+    AbsMockEncoder.validate_task_to_prompt_name(model_prompts)
 
 
 @pytest.mark.parametrize("raise_for_invalid_keys", (True, False))
 def test_validate_task_to_prompt_name_for_none(raise_for_invalid_keys: bool):
-    result = Wrapper.validate_task_to_prompt_name(
+    result = AbsMockEncoder.validate_task_to_prompt_name(
         None, raise_for_invalid_keys=raise_for_invalid_keys
     )
     assert result is None if raise_for_invalid_keys else (None, None)
@@ -99,7 +97,7 @@ def test_validate_task_to_prompt_name_fails_and_raises(
     task_prompt_dict: dict[str, str],
 ):
     with pytest.raises(KeyError):
-        Wrapper.validate_task_to_prompt_name(task_prompt_dict)
+        AbsMockEncoder.validate_task_to_prompt_name(task_prompt_dict)
 
 
 @pytest.mark.parametrize(
