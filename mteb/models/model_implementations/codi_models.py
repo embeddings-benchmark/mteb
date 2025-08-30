@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import logging
 
-from mteb.types import PromptType
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 

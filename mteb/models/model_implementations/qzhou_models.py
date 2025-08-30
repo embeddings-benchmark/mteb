@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from mteb.types import PromptType
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.bge_models import (
     bge_chinese_training_data,
@@ -9,6 +8,7 @@ from mteb.models.model_implementations.bge_models import (
 )
 from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
+from mteb.types import PromptType
 
 
 def instruction_template(

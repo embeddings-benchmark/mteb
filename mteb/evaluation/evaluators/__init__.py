@@ -33,4 +33,5 @@ __all__ = [
     "ImageTextPairClassificationEvaluator",
     "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",
+    "LinearRegressionEvaluator",
 ]

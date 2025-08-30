@@ -19,8 +19,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import Encoder
 
 from ...create_dataloaders import create_image_dataloader
-from .evaluator import Evaluator
 from ...types import BatchedInput
+from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,9 @@ class ClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.classifier = classifier
 
-    def create_dataloaders(self, batch_size: int) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
+    def create_dataloaders(
+        self, batch_size: int
+    ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         if self.task_metadata.modalities == ["image"]:
             dataloader_train = create_image_dataloader(
                 self.train_dataset,

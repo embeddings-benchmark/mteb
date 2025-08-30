@@ -8,13 +8,14 @@ from datasets import Dataset
 from scipy.stats import kendalltau
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from torch.utils.data import DataLoader
-
-from mteb.models.models_protocols import Encoder
 from typing_extensions import Self
-from .evaluator import Evaluator
+
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.models_protocols import Encoder
+
 from ...create_dataloaders import create_image_dataloader
 from ...types import BatchedInput
+from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
@@ -88,13 +89,15 @@ class LinearRegressionEvaluator(Evaluator):
             "mae": mean_absolute_error(y_test, y_pred),
             "mse": mean_squared_error(y_test, y_pred),
             "r2": r2_score(y_test, y_pred),
-            "kendalltau": kendalltau(y_test, y_pred).statistic
+            "kendalltau": kendalltau(y_test, y_pred).statistic,
         }
         scores["rmse"] = np.sqrt(scores["mse"])
 
         return scores, test_cache
 
-    def create_dataloaders(self, batch_size: int) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
+    def create_dataloaders(
+        self, batch_size: int
+    ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         if self.task_metadata.modalities == ["image"]:
             dataloader_train = create_image_dataloader(
                 self.train_dataset,

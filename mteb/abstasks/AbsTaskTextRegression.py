@@ -10,8 +10,11 @@ import pandas as pd
 from datasets import DatasetDict
 from sklearn.linear_model import LinearRegression
 
+from mteb.abstasks._statistics_calculation import (
+    calculate_score_statistics,
+    calculate_text_statistics,
+)
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks._statistics_calculation import calculate_score_statistics, calculate_text_statistics
 from mteb.evaluation.evaluators.RegressionEvaluator import (
     LinearRegressionEvaluator,
     SklearnRegressorModel,
