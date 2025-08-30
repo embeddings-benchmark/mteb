@@ -1,7 +1,2 @@
-from __future__ import annotations
-
-from .DutchBookReviewSentimentClassification import (
-    DutchBookReviewSentimentClassification,
-)
-
-__all__ = ["DutchBookReviewSentimentClassification"]
+from .DutchBookReviewSentimentClassification import DutchBookReviewSentimentClassification, DutchBookReviewSentimentClassificationV2
+__all__ = ['DutchBookReviewSentimentClassification', 'DutchBookReviewSentimentClassificationV2']

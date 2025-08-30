@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RomanianReviewsSentiment(AbsTaskClassification):
+class RomanianReviewsSentiment(AbsTaskAnyClassification):
     superseded_by = "RomanianReviewsSentiment.v2"
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment",
@@ -16,7 +16,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2020-01-01", "2021-01-11"),
         eval_splits=["test"],
@@ -47,7 +47,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
         )
 
 
-class RomanianReviewsSentimentV2(AbsTaskClassification):
+class RomanianReviewsSentimentV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment.v2",
         description="""LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian
@@ -58,7 +58,7 @@ class RomanianReviewsSentimentV2(AbsTaskClassification):
             "revision": "6b320d55fcf5fc184a9e7cc828debb34f7949432",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2020-01-01", "2021-01-11"),
         eval_splits=["test"],

@@ -83,7 +83,7 @@ codi_instruction = {
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
-    if not instruction or prompt_type == PromptType.passage:
+    if not instruction or prompt_type == PromptType.document:
         return "<s>"
     if isinstance(instruction, dict):
         if prompt_type is None:

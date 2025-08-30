@@ -1,17 +1,5 @@
-from __future__ import annotations
-
-from .CSFDCZMovieReviewSentimentClassification import (
-    CSFDCZMovieReviewSentimentClassification,
-)
-from .CzechProductReviewSentimentClassification import (
-    CzechProductReviewSentimentClassification,
-)
-from .CzechSoMeSentimentClassification import CzechSoMeSentimentClassification
+from .CzechSoMeSentimentClassification import CzechSoMeSentimentClassification, CzechSoMeSentimentClassificationV2
+from .CzechProductReviewSentimentClassification import CzechProductReviewSentimentClassification, CzechProductReviewSentimentClassificationV2
 from .CzechSubjectivityClassification import CzechSubjectivityClassification
-
-__all__ = [
-    "CSFDCZMovieReviewSentimentClassification",
-    "CzechProductReviewSentimentClassification",
-    "CzechSoMeSentimentClassification",
-    "CzechSubjectivityClassification",
-]
+from .CSFDCZMovieReviewSentimentClassification import CSFDCZMovieReviewSentimentClassification, CSFDCZMovieReviewSentimentClassificationV2
+__all__ = ['CSFDCZMovieReviewSentimentClassification', 'CSFDCZMovieReviewSentimentClassificationV2', 'CzechProductReviewSentimentClassification', 'CzechProductReviewSentimentClassificationV2', 'CzechSoMeSentimentClassification', 'CzechSoMeSentimentClassificationV2', 'CzechSubjectivityClassification']

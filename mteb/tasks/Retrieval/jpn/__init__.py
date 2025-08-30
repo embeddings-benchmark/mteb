@@ -1,21 +1,9 @@
-from __future__ import annotations
-
+from .NLPJournalTitleAbsRetrieval import NLPJournalTitleAbsRetrieval, NLPJournalTitleAbsRetrievalV2
 from .JaCWIRRetrieval import JaCWIRRetrieval
+from .NLPJournalTitleIntroRetrieval import NLPJournalTitleIntroRetrieval, NLPJournalTitleIntroRetrievalV2
+from .NLPJournalAbsArticleRetrieval import NLPJournalAbsArticleRetrieval, NLPJournalAbsArticleRetrievalV2
 from .JaGovFaqsRetrieval import JaGovFaqsRetrieval
-from .JaqketRetrieval import JaqketRetrieval
 from .JaQuADRetrieval import JaQuADRetrieval
-from .NLPJournalAbsArticleRetrieval import NLPJournalAbsArticleRetrieval
-from .NLPJournalAbsIntroRetrieval import NLPJournalAbsIntroRetrieval
-from .NLPJournalTitleAbsRetrieval import NLPJournalTitleAbsRetrieval
-from .NLPJournalTitleIntroRetrieval import NLPJournalTitleIntroRetrieval
-
-__all__ = [
-    "JaGovFaqsRetrieval",
-    "JaQuADRetrieval",
-    "JaqketRetrieval",
-    "NLPJournalAbsIntroRetrieval",
-    "NLPJournalTitleAbsRetrieval",
-    "JaCWIRRetrieval",
-    "NLPJournalTitleIntroRetrieval",
-    "NLPJournalAbsArticleRetrieval",
-]
+from .JaqketRetrieval import JaqketRetrieval
+from .NLPJournalAbsIntroRetrieval import NLPJournalAbsIntroRetrieval, NLPJournalAbsIntroRetrievalV2
+__all__ = ['JaCWIRRetrieval', 'JaGovFaqsRetrieval', 'JaQuADRetrieval', 'JaqketRetrieval', 'NLPJournalAbsArticleRetrieval', 'NLPJournalAbsArticleRetrievalV2', 'NLPJournalAbsIntroRetrieval', 'NLPJournalAbsIntroRetrievalV2', 'NLPJournalTitleAbsRetrieval', 'NLPJournalTitleAbsRetrievalV2', 'NLPJournalTitleIntroRetrieval', 'NLPJournalTitleIntroRetrievalV2']

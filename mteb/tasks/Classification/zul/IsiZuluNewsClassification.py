@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class IsiZuluNewsClassification(AbsTaskAnyClassification):
     superseded_by = "IsiZuluNewsClassification.v2"
     metadata = TaskMetadata(
@@ -44,7 +43,7 @@ class IsiZuluNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_columns({"title": "text"})
 
 
-class IsiZuluNewsClassificationV2(AbsTaskClassification):
+class IsiZuluNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IsiZuluNewsClassification.v2",
         description="""isiZulu News Classification Dataset
@@ -55,7 +54,7 @@ class IsiZuluNewsClassificationV2(AbsTaskClassification):
             "revision": "45708aaaf9c6133227ea5db5cf26571facb9ccdb",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["zul-Latn"],

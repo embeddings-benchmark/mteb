@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ToxicConversationsVNClassification(AbsTaskClassification):
+class ToxicConversationsVNClassification(AbsTaskAnyClassification):
     num_samples = 16
 
     metadata = TaskMetadata(
@@ -20,7 +20,7 @@ class ToxicConversationsVNClassification(AbsTaskClassification):
             "revision": "2cc697991407cbbe34e7ef7bc9564449a4a99132",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",

@@ -5,8 +5,8 @@ from collections import defaultdict
 from datasets import load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
     "ar": ["ara-Arab"],
@@ -164,11 +164,11 @@ def load_data(self, **kwargs):
         return
 
     self.corpus, self.queries, self.relevant_docs = _load_data(
-        path=self.metadata_dict["dataset"]["path"],
-        splits=self.metadata_dict["eval_splits"],
-        langs=self.metadata_dict["eval_langs"],
+        path=self.metadata.dataset["path"],
+        splits=self.metadata.eval_splits,
+        langs=self.metadata.eval_langs,
         cache_dir=kwargs.get("cache_dir", None),
-        revision=self.metadata_dict["dataset"]["revision"],
+        revision=self.metadata.dataset["revision"],
     )
 
     self.data_loaded = True
@@ -741,7 +741,7 @@ class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class JinaVDRGitHubReadmeRetrieval( AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRGitHubReadmeRetrieval",
         description="Retrieve GitHub readme files based their description.",
@@ -782,7 +782,7 @@ class JinaVDRGitHubReadmeRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class JinaVDRTweetStockSyntheticsRetrieval( AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTweetStockSyntheticsRetrieval",
         description="Retrieve rendered tables of stock prices based on templated queries.",
@@ -805,7 +805,7 @@ class JinaVDRTweetStockSyntheticsRetrieval(MultilingualTask, AbsTaskAny2AnyRetri
     load_data = load_data
 
 
-class JinaVDRAirbnbSyntheticRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class JinaVDRAirbnbSyntheticRetrieval( AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAirbnbSyntheticRetrieval",
         description="Retrieve rendered tables from Airbnb listings based on templated queries.",
@@ -850,7 +850,7 @@ class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
 
 
 class JinaVDRWikimediaCommonsDocumentsRetrieval(
-    MultilingualTask, AbsTaskAny2AnyRetrieval
+     AbsTaskAny2AnyRetrieval
 ):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsDocumentsRetrieval",

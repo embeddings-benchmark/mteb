@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class JavaneseIMDBClassification(AbsTaskClassification):
+class JavaneseIMDBClassification(AbsTaskAnyClassification):
     superseded_by = "JavaneseIMDBClassification.v2"
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification",
@@ -16,7 +16,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2021-06-24", "2021-06-24"),
         eval_splits=["test"],
@@ -46,7 +46,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         )
 
 
-class JavaneseIMDBClassificationV2(AbsTaskClassification):
+class JavaneseIMDBClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification.v2",
         description="""Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.
@@ -57,7 +57,7 @@ class JavaneseIMDBClassificationV2(AbsTaskClassification):
             "revision": "47aadc77049fa4e7b9001c69a255555814d026d9",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2021-06-24", "2021-06-24"),
         eval_splits=["test"],

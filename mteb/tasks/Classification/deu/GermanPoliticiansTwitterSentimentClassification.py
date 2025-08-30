@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class GermanPoliticiansTwitterSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "GermanPoliticiansTwitterSentimentClassification.v2"
     metadata = TaskMetadata(
@@ -55,7 +54,7 @@ Zesch, Torsten},
         self.dataset = self.dataset.rename_column("majority_sentiment", "label")
 
 
-class GermanPoliticiansTwitterSentimentClassificationV2(AbsTaskClassification):
+class GermanPoliticiansTwitterSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GermanPoliticiansTwitterSentimentClassification.v2",
         description="""GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with their sentiment (3 classes).
@@ -66,7 +65,7 @@ class GermanPoliticiansTwitterSentimentClassificationV2(AbsTaskClassification):
             "revision": "aeb7e9cd08a0c77856ec5396bb82c32f309276d0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

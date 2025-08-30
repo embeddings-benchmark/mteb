@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KlueTC(AbsTaskClassification):
+class KlueTC(AbsTaskAnyClassification):
     superseded_by = "KLUE-TC.v2"
     metadata = TaskMetadata(
         name="KLUE-TC",
@@ -16,7 +16,7 @@ class KlueTC(AbsTaskClassification):
         description="Topic classification dataset of human-annotated news headlines. Part of the Korean Language Understanding Evaluation (KLUE).",
         reference="https://arxiv.org/abs/2105.09680",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],
@@ -56,7 +56,7 @@ class KlueTC(AbsTaskClassification):
         self.dataset = self.dataset.map(id2str)
 
 
-class KlueTCV2(AbsTaskClassification):
+class KlueTCV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KLUE-TC.v2",
         dataset={
@@ -68,7 +68,7 @@ class KlueTCV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://arxiv.org/abs/2105.09680",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FiQA2018VN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class FiQA2018VN(AbsTaskRetrieval):
             "revision": "6c3cdf6f102151dbbbbc1d2cf999b305eba44dae",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

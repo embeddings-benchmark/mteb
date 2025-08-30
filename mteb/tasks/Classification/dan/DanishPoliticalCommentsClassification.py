@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
     superseded_by = "DanishPoliticalCommentsClassification.v2"
     metadata = TaskMetadata(
@@ -52,7 +51,7 @@ class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset["train"].train_test_split(0.2, seed=self.seed)
 
 
-class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
+class DanishPoliticalCommentsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification.v2",
         dataset={
@@ -63,7 +62,7 @@ class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

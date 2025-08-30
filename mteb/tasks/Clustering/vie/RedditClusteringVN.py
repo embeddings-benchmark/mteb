@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditClusteringVN(AbsTaskClustering):
+class RedditClusteringVN(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="RedditClustering-VN",
         description="""A translated dataset from Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.
@@ -18,7 +18,7 @@ class RedditClusteringVN(AbsTaskClustering):
             "revision": "7f7d4097979633181b2df3f73905218f74c4665d",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="v_measure",

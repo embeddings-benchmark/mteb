@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmotionVNClassification(AbsTaskClassification):
+class EmotionVNClassification(AbsTaskAnyClassification):
     num_samples = 16
 
     metadata = TaskMetadata(
@@ -20,7 +20,7 @@ class EmotionVNClassification(AbsTaskClassification):
             "revision": "797a93c0dd755ebf5818fbf54d0e0a024df9216d",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         eval_splits=["validation", "test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",

@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class AngryTweetsClassification(AbsTaskAnyClassification):
     superseded_by = "AngryTweetsClassification.v2"
     metadata = TaskMetadata(
@@ -42,7 +41,7 @@ class AngryTweetsClassification(AbsTaskAnyClassification):
     samples_per_label = 16
 
 
-class AngryTweetsClassificationV2(AbsTaskClassification):
+class AngryTweetsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AngryTweetsClassification.v2",
         dataset={
@@ -53,7 +52,7 @@ class AngryTweetsClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

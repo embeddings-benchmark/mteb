@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class VieStudentFeedbackClassification(AbsTaskClassification):
+class VieStudentFeedbackClassification(AbsTaskAnyClassification):
     superseded_by = "VieStudentFeedbackClassification.v2"
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification",
@@ -18,7 +18,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
@@ -53,7 +53,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
         )
 
 
-class VieStudentFeedbackClassificationV2(AbsTaskClassification):
+class VieStudentFeedbackClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification.v2",
         description="""A Vietnamese dataset for classification of student feedback
@@ -64,7 +64,7 @@ class VieStudentFeedbackClassificationV2(AbsTaskClassification):
             "revision": "9f9451c4aaaa5bf528a90fd430afa128fa748e45",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["vie-Latn"],

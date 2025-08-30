@@ -1,6 +1,3 @@
-from __future__ import annotations
-
-from .SpanishNewsClassification import SpanishNewsClassification
-from .SpanishSentimentClassification import SpanishSentimentClassification
-
-__all__ = ["SpanishNewsClassification", "SpanishSentimentClassification"]
+from .SpanishSentimentClassification import SpanishSentimentClassification, SpanishSentimentClassificationV2
+from .SpanishNewsClassification import SpanishNewsClassification, SpanishNewsClassificationV2
+__all__ = ['SpanishNewsClassification', 'SpanishNewsClassificationV2', 'SpanishSentimentClassification', 'SpanishSentimentClassificationV2']

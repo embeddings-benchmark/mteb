@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 
 # type: ignore
-from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
+from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
-class HebrewSentimentAnalysis(AbsTaskClassification):
+class HebrewSentimentAnalysis(AbsTaskAnyClassification):
     superseded_by = "HebrewSentimentAnalysis.v2"
     metadata = TaskMetadata(
         name="HebrewSentimentAnalysis",
@@ -19,7 +19,7 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         description="HebrewSentiment is a data set consists of 12,804 user comments to posts on the official Facebook page of Israel’s president, Mr. Reuven Rivlin. In October 2015, we used the open software application Netvizz (Rieder, 2013) to scrape all the comments to all of the president’s posts in the period of June – August 2014, the first three months of Rivlin’s presidency.2 While the president’s posts aimed at reconciling tensions and called for tolerance and empathy, the sentiment expressed in the comments to the president’s posts was polarized between citizens who warmly thanked the president, and citizens that fiercely critiqued his policy.",
         reference="https://huggingface.co/datasets/hebrew_sentiment",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["heb-Hebr"],
@@ -52,7 +52,7 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         )
 
 
-class HebrewSentimentAnalysisV2(AbsTaskClassification):
+class HebrewSentimentAnalysisV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HebrewSentimentAnalysis.v2",
         dataset={
@@ -64,7 +64,7 @@ class HebrewSentimentAnalysisV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/hebrew_sentiment",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["heb-Hebr"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WRIMEClassification(AbsTaskClassification):
+class WRIMEClassification(AbsTaskAnyClassification):
     superseded_by = "WRIMEClassification.v2"
     metadata = TaskMetadata(
         name="WRIMEClassification",
@@ -17,7 +17,7 @@ class WRIMEClassification(AbsTaskClassification):
         description="A dataset of Japanese social network rated for sentiment",
         reference="https://aclanthology.org/2021.naacl-main.169/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
@@ -71,7 +71,7 @@ Zhou, Yichao},
         )
 
 
-class WRIMEClassificationV2(AbsTaskClassification):
+class WRIMEClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WRIMEClassification.v2",
         dataset={
@@ -83,7 +83,7 @@ class WRIMEClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2021.naacl-main.169/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

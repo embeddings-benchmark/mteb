@@ -1,325 +1,36 @@
-from __future__ import annotations
-
-from .AmazonPolarityClassification import AmazonPolarityClassification
-from .ArxivClassification import ArxivClassification
-from .Banking77Classification import Banking77Classification
-from .DBpediaClassification import DBpediaClassification
-from .EmotionClassification import EmotionClassification
-from .FinancialPhrasebankClassification import FinancialPhrasebankClassification
-from .FrenkEnClassification import FrenkEnClassification
-from .ImdbClassification import ImdbClassification
-from .LegalBenchClassification import (
-    CanadaTaxCourtOutcomesLegalBenchClassification,
-    ContractNLIConfidentialityOfAgreementLegalBenchClassification,
-    ContractNLIExplicitIdentificationLegalBenchClassification,
-    ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification,
-    ContractNLILimitedUseLegalBenchClassification,
-    ContractNLINoLicensingLegalBenchClassification,
-    ContractNLINoticeOnCompelledDisclosureLegalBenchClassification,
-    ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification,
-    ContractNLIPermissibleCopyLegalBenchClassification,
-    ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification,
-    ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification,
-    ContractNLIReturnOfConfidentialInformationLegalBenchClassification,
-    ContractNLISharingWithEmployeesLegalBenchClassification,
-    ContractNLISharingWithThirdPartiesLegalBenchClassification,
-    ContractNLISurvivalOfObligationsLegalBenchClassification,
-    CorporateLobbyingLegalBenchClassification,
-    CUADAffiliateLicenseLicenseeLegalBenchClassification,
-    CUADAffiliateLicenseLicensorLegalBenchClassification,
-    CUADAntiAssignmentLegalBenchClassification,
-    CUADAuditRightsLegalBenchClassification,
-    CUADCapOnLiabilityLegalBenchClassification,
-    CUADChangeOfControlLegalBenchClassification,
-    CUADCompetitiveRestrictionExceptionLegalBenchClassification,
-    CUADCovenantNotToSueLegalBenchClassification,
-    CUADEffectiveDateLegalBenchClassification,
-    CUADExclusivityLegalBenchClassification,
-    CUADExpirationDateLegalBenchClassification,
-    CUADGoverningLawLegalBenchClassification,
-    CUADInsuranceLegalBenchClassification,
-    CUADIPOwnershipAssignmentLegalBenchClassification,
-    CUADIrrevocableOrPerpetualLicenseLegalBenchClassification,
-    CUADJointIPOwnershipLegalBenchClassification,
-    CUADLicenseGrantLegalBenchClassification,
-    CUADLiquidatedDamagesLegalBenchClassification,
-    CUADMinimumCommitmentLegalBenchClassification,
-    CUADMostFavoredNationLegalBenchClassification,
-    CUADNonCompeteLegalBenchClassification,
-    CUADNonDisparagementLegalBenchClassification,
-    CUADNonTransferableLicenseLegalBenchClassification,
-    CUADNoSolicitOfCustomersLegalBenchClassification,
-    CUADNoSolicitOfEmployeesLegalBenchClassification,
-    CUADNoticePeriodToTerminateRenewalLegalBenchClassification,
-    CUADPostTerminationServicesLegalBenchClassification,
-    CUADPriceRestrictionsLegalBenchClassification,
-    CUADRenewalTermLegalBenchClassification,
-    CUADRevenueProfitSharingLegalBenchClassification,
-    CUADRofrRofoRofnLegalBenchClassification,
-    CUADSourceCodeEscrowLegalBenchClassification,
-    CUADTerminationForConvenienceLegalBenchClassification,
-    CUADThirdPartyBeneficiaryLegalBenchClassification,
-    CUADUncappedLiabilityLegalBenchClassification,
-    CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification,
-    CUADVolumeRestrictionLegalBenchClassification,
-    CUADWarrantyDurationLegalBenchClassification,
-    DefinitionClassificationLegalBenchClassification,
-    Diversity1LegalBenchClassification,
-    Diversity2LegalBenchClassification,
-    Diversity3LegalBenchClassification,
-    Diversity4LegalBenchClassification,
-    Diversity5LegalBenchClassification,
-    Diversity6LegalBenchClassification,
-    FunctionOfDecisionSectionLegalBenchClassification,
-    InsurancePolicyInterpretationLegalBenchClassification,
-    InternationalCitizenshipQuestionsLegalBenchClassification,
-    JCrewBlockerLegalBenchClassification,
-    LearnedHandsBenefitsLegalBenchClassification,
-    LearnedHandsBusinessLegalBenchClassification,
-    LearnedHandsConsumerLegalBenchClassification,
-    LearnedHandsCourtsLegalBenchClassification,
-    LearnedHandsCrimeLegalBenchClassification,
-    LearnedHandsDivorceLegalBenchClassification,
-    LearnedHandsDomesticViolenceLegalBenchClassification,
-    LearnedHandsEducationLegalBenchClassification,
-    LearnedHandsEmploymentLegalBenchClassification,
-    LearnedHandsEstatesLegalBenchClassification,
-    LearnedHandsFamilyLegalBenchClassification,
-    LearnedHandsHealthLegalBenchClassification,
-    LearnedHandsHousingLegalBenchClassification,
-    LearnedHandsImmigrationLegalBenchClassification,
-    LearnedHandsTortsLegalBenchClassification,
-    LearnedHandsTrafficLegalBenchClassification,
-    LegalReasoningCausalityLegalBenchClassification,
-    MAUDLegalBenchClassification,
-    NYSJudicialEthicsLegalBenchClassification,
-    OPP115DataRetentionLegalBenchClassification,
-    OPP115DataSecurityLegalBenchClassification,
-    OPP115DoNotTrackLegalBenchClassification,
-    OPP115FirstPartyCollectionUseLegalBenchClassification,
-    OPP115InternationalAndSpecificAudiencesLegalBenchClassification,
-    OPP115PolicyChangeLegalBenchClassification,
-    OPP115ThirdPartySharingCollectionLegalBenchClassification,
-    OPP115UserAccessEditAndDeletionLegalBenchClassification,
-    OPP115UserChoiceControlLegalBenchClassification,
-    OralArgumentQuestionPurposeLegalBenchClassification,
-    OverrulingLegalBenchClassification,
-    PersonalJurisdictionLegalBenchClassification,
-    PROALegalBenchClassification,
-    SCDBPAccountabilityLegalBenchClassification,
-    SCDBPAuditsLegalBenchClassification,
-    SCDBPCertificationLegalBenchClassification,
-    SCDBPTrainingLegalBenchClassification,
-    SCDBPVerificationLegalBenchClassification,
-    SCDDAccountabilityLegalBenchClassification,
-    SCDDAuditsLegalBenchClassification,
-    SCDDCertificationLegalBenchClassification,
-    SCDDTrainingLegalBenchClassification,
-    SCDDVerificationLegalBenchClassification,
-    TelemarketingSalesRuleLegalBenchClassification,
-    TextualismToolDictionariesLegalBenchClassification,
-    TextualismToolPlainLegalBenchClassification,
-    UCCVCommonLawLegalBenchClassification,
-    UnfairTOSLegalBenchClassification,
-)
-from .NewsClassification import NewsClassification
-from .PatentClassification import PatentClassification
-from .PoemSentimentClassification import PoemSentimentClassification
-from .SDSEyeProtectionClassification import SDSEyeProtectionClassification
-from .SDSGlovesClassification import SDSGlovesClassification
-from .ToxicChatClassification import ToxicChatClassification
-from .ToxicConversationsClassification import ToxicConversationsClassification
-from .TweetSentimentExtractionClassification import (
-    TweetSentimentExtractionClassification,
-)
-from .TweetTopicSingleClassification import TweetTopicSingleClassification
-from .WikipediaBiolumNeurochemClassification import (
-    WikipediaBiolumNeurochemClassification,
-)
-from .WikipediaBioMetChemClassification import WikipediaBioMetChemClassification
-from .WikipediaChemEngSpecialtiesClassification import (
-    WikipediaChemEngSpecialtiesClassification,
-)
-from .WikipediaChemFieldsClassification import WikipediaChemFieldsClassification
-from .WikipediaChemistryTopicsClassification import (
-    WikipediaChemistryTopicsClassification,
-)
-from .WikipediaCompChemSpectroscopyClassification import (
-    WikipediaCompChemSpectroscopyClassification,
-)
-from .WikipediaCryobiologySeparationClassification import (
-    WikipediaCryobiologySeparationClassification,
-)
-from .WikipediaCrystallographyAnalyticalClassification import (
-    WikipediaCrystallographyAnalyticalClassification,
-)
-from .WikipediaGreenhouseEnantiopureClassification import (
-    WikipediaGreenhouseEnantiopureClassification,
-)
-from .WikipediaIsotopesFissionClassification import (
-    WikipediaIsotopesFissionClassification,
-)
+from .YahooAnswersTopicsClassification import YahooAnswersTopicsClassification, YahooAnswersTopicsClassificationV2
+from .WikipediaGreenhouseEnantiopureClassification import WikipediaGreenhouseEnantiopureClassification
+from .ToxicChatClassification import ToxicChatClassification, ToxicChatClassificationV2
+from .WikipediaCompChemSpectroscopyClassification import WikipediaCompChemSpectroscopyClassification, WikipediaCompChemSpectroscopyClassificationV2
+from .AmazonPolarityClassification import AmazonPolarityClassification, AmazonPolarityClassificationV2
+from .EmotionClassification import EmotionClassification, EmotionClassificationV2
+from .PoemSentimentClassification import PoemSentimentClassification, PoemSentimentClassificationV2
+from .WikipediaSaltsSemiconductorsClassification import WikipediaSaltsSemiconductorsClassification
+from .SDSEyeProtectionClassification import SDSEyeProtectionClassification, SDSEyeProtectionClassificationV2
+from .FinancialPhrasebankClassification import FinancialPhrasebankClassification, FinancialPhrasebankClassificationV2
+from .PatentClassification import PatentClassification, PatentClassificationV2
+from .NewsClassification import NewsClassification, NewsClassificationV2
+from .WikipediaTheoreticalAppliedClassification import WikipediaTheoreticalAppliedClassification, WikipediaTheoreticalAppliedClassificationV2
+from .FrenkEnClassification import FrenkEnClassification, FrenkEnClassificationV2
+from .WikipediaBioMetChemClassification import WikipediaBioMetChemClassification, WikipediaBioMetChemClassificationV2
 from .WikipediaLuminescenceClassification import WikipediaLuminescenceClassification
-from .WikipediaOrganicInorganicClassification import (
-    WikipediaOrganicInorganicClassification,
-)
-from .WikipediaSaltsSemiconductorsClassification import (
-    WikipediaSaltsSemiconductorsClassification,
-)
-from .WikipediaSolidStateColloidalClassification import (
-    WikipediaSolidStateColloidalClassification,
-)
-from .WikipediaTheoreticalAppliedClassification import (
-    WikipediaTheoreticalAppliedClassification,
-)
-from .YahooAnswersTopicsClassification import YahooAnswersTopicsClassification
-from .YelpReviewFullClassification import YelpReviewFullClassification
-
-__all__ = [
-    "AmazonPolarityClassification",
-    "ArxivClassification",
-    "Banking77Classification",
-    "CUADAffiliateLicenseLicenseeLegalBenchClassification",
-    "CUADAffiliateLicenseLicensorLegalBenchClassification",
-    "CUADAntiAssignmentLegalBenchClassification",
-    "CUADAuditRightsLegalBenchClassification",
-    "CUADCapOnLiabilityLegalBenchClassification",
-    "CUADChangeOfControlLegalBenchClassification",
-    "CUADCompetitiveRestrictionExceptionLegalBenchClassification",
-    "CUADCovenantNotToSueLegalBenchClassification",
-    "CUADEffectiveDateLegalBenchClassification",
-    "CUADExclusivityLegalBenchClassification",
-    "CUADExpirationDateLegalBenchClassification",
-    "CUADGoverningLawLegalBenchClassification",
-    "CUADIPOwnershipAssignmentLegalBenchClassification",
-    "CUADInsuranceLegalBenchClassification",
-    "CUADIrrevocableOrPerpetualLicenseLegalBenchClassification",
-    "CUADJointIPOwnershipLegalBenchClassification",
-    "CUADLicenseGrantLegalBenchClassification",
-    "CUADLiquidatedDamagesLegalBenchClassification",
-    "CUADMinimumCommitmentLegalBenchClassification",
-    "CUADMostFavoredNationLegalBenchClassification",
-    "CUADNoSolicitOfCustomersLegalBenchClassification",
-    "CUADNoSolicitOfEmployeesLegalBenchClassification",
-    "CUADNonCompeteLegalBenchClassification",
-    "CUADNonDisparagementLegalBenchClassification",
-    "CUADNonTransferableLicenseLegalBenchClassification",
-    "CUADNoticePeriodToTerminateRenewalLegalBenchClassification",
-    "CUADPostTerminationServicesLegalBenchClassification",
-    "CUADPriceRestrictionsLegalBenchClassification",
-    "CUADRenewalTermLegalBenchClassification",
-    "CUADRevenueProfitSharingLegalBenchClassification",
-    "CUADRofrRofoRofnLegalBenchClassification",
-    "CUADSourceCodeEscrowLegalBenchClassification",
-    "CUADTerminationForConvenienceLegalBenchClassification",
-    "CUADThirdPartyBeneficiaryLegalBenchClassification",
-    "CUADUncappedLiabilityLegalBenchClassification",
-    "CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification",
-    "CUADVolumeRestrictionLegalBenchClassification",
-    "CUADWarrantyDurationLegalBenchClassification",
-    "CanadaTaxCourtOutcomesLegalBenchClassification",
-    "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
-    "ContractNLIExplicitIdentificationLegalBenchClassification",
-    "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
-    "ContractNLILimitedUseLegalBenchClassification",
-    "ContractNLINoLicensingLegalBenchClassification",
-    "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
-    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
-    "ContractNLIPermissibleCopyLegalBenchClassification",
-    "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
-    "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
-    "ContractNLIReturnOfConfidentialInformationLegalBenchClassification",
-    "ContractNLISharingWithEmployeesLegalBenchClassification",
-    "ContractNLISharingWithThirdPartiesLegalBenchClassification",
-    "ContractNLISurvivalOfObligationsLegalBenchClassification",
-    "CorporateLobbyingLegalBenchClassification",
-    "DBpediaClassification",
-    "DefinitionClassificationLegalBenchClassification",
-    "Diversity1LegalBenchClassification",
-    "Diversity2LegalBenchClassification",
-    "Diversity3LegalBenchClassification",
-    "Diversity4LegalBenchClassification",
-    "Diversity5LegalBenchClassification",
-    "Diversity6LegalBenchClassification",
-    "EmotionClassification",
-    "FinancialPhrasebankClassification",
-    "FrenkEnClassification",
-    "FunctionOfDecisionSectionLegalBenchClassification",
-    "ImdbClassification",
-    "InsurancePolicyInterpretationLegalBenchClassification",
-    "InternationalCitizenshipQuestionsLegalBenchClassification",
-    "JCrewBlockerLegalBenchClassification",
-    "LearnedHandsBenefitsLegalBenchClassification",
-    "LearnedHandsBusinessLegalBenchClassification",
-    "LearnedHandsConsumerLegalBenchClassification",
-    "LearnedHandsCourtsLegalBenchClassification",
-    "LearnedHandsCrimeLegalBenchClassification",
-    "LearnedHandsDivorceLegalBenchClassification",
-    "LearnedHandsDomesticViolenceLegalBenchClassification",
-    "LearnedHandsEducationLegalBenchClassification",
-    "LearnedHandsEmploymentLegalBenchClassification",
-    "LearnedHandsEstatesLegalBenchClassification",
-    "LearnedHandsFamilyLegalBenchClassification",
-    "LearnedHandsHealthLegalBenchClassification",
-    "LearnedHandsHousingLegalBenchClassification",
-    "LearnedHandsImmigrationLegalBenchClassification",
-    "LearnedHandsTortsLegalBenchClassification",
-    "LearnedHandsTrafficLegalBenchClassification",
-    "LegalReasoningCausalityLegalBenchClassification",
-    "MAUDLegalBenchClassification",
-    "NYSJudicialEthicsLegalBenchClassification",
-    "NewsClassification",
-    "OPP115DataRetentionLegalBenchClassification",
-    "OPP115DataSecurityLegalBenchClassification",
-    "OPP115DoNotTrackLegalBenchClassification",
-    "OPP115FirstPartyCollectionUseLegalBenchClassification",
-    "OPP115InternationalAndSpecificAudiencesLegalBenchClassification",
-    "OPP115PolicyChangeLegalBenchClassification",
-    "OPP115ThirdPartySharingCollectionLegalBenchClassification",
-    "OPP115UserAccessEditAndDeletionLegalBenchClassification",
-    "OPP115UserChoiceControlLegalBenchClassification",
-    "OralArgumentQuestionPurposeLegalBenchClassification",
-    "OverrulingLegalBenchClassification",
-    "PROALegalBenchClassification",
-    "PatentClassification",
-    "PersonalJurisdictionLegalBenchClassification",
-    "PoemSentimentClassification",
-    "SCDBPAccountabilityLegalBenchClassification",
-    "SCDBPAuditsLegalBenchClassification",
-    "SCDBPCertificationLegalBenchClassification",
-    "SCDBPTrainingLegalBenchClassification",
-    "SCDBPVerificationLegalBenchClassification",
-    "SCDDAccountabilityLegalBenchClassification",
-    "SCDDAuditsLegalBenchClassification",
-    "SCDDCertificationLegalBenchClassification",
-    "SCDDTrainingLegalBenchClassification",
-    "SCDDVerificationLegalBenchClassification",
-    "SDSEyeProtectionClassification",
-    "SDSGlovesClassification",
-    "TelemarketingSalesRuleLegalBenchClassification",
-    "TextualismToolDictionariesLegalBenchClassification",
-    "TextualismToolPlainLegalBenchClassification",
-    "ToxicChatClassification",
-    "ToxicConversationsClassification",
-    "TweetSentimentExtractionClassification",
-    "TweetTopicSingleClassification",
-    "UCCVCommonLawLegalBenchClassification",
-    "UnfairTOSLegalBenchClassification",
-    "WikipediaBioMetChemClassification",
-    "WikipediaBiolumNeurochemClassification",
-    "WikipediaChemEngSpecialtiesClassification",
-    "WikipediaChemFieldsClassification",
-    "WikipediaChemistryTopicsClassification",
-    "WikipediaCompChemSpectroscopyClassification",
-    "WikipediaCryobiologySeparationClassification",
-    "WikipediaCrystallographyAnalyticalClassification",
-    "WikipediaGreenhouseEnantiopureClassification",
-    "WikipediaIsotopesFissionClassification",
-    "WikipediaLuminescenceClassification",
-    "WikipediaOrganicInorganicClassification",
-    "WikipediaSaltsSemiconductorsClassification",
-    "WikipediaSolidStateColloidalClassification",
-    "WikipediaTheoreticalAppliedClassification",
-    "YahooAnswersTopicsClassification",
-    "YelpReviewFullClassification",
-]
+from .WikipediaIsotopesFissionClassification import WikipediaIsotopesFissionClassification
+from .TweetTopicSingleClassification import TweetTopicSingleClassification, TweetTopicSingleClassificationV2
+from .DBpediaClassification import DBpediaClassification, DBpediaClassificationV2
+from .SDSGlovesClassification import SDSGlovesClassification, SDSGlovesClassificationV2
+from .ImdbClassification import ImdbClassification, ImdbClassificationV2
+from .WikipediaChemEngSpecialtiesClassification import WikipediaChemEngSpecialtiesClassification
+from .WikipediaCrystallographyAnalyticalClassification import WikipediaCrystallographyAnalyticalClassification, WikipediaCrystallographyAnalyticalClassificationV2
+from .WikipediaBiolumNeurochemClassification import WikipediaBiolumNeurochemClassification
+from .WikipediaSolidStateColloidalClassification import WikipediaSolidStateColloidalClassification
+from .WikipediaCryobiologySeparationClassification import WikipediaCryobiologySeparationClassification
+from .LegalBenchClassification import CUADAffiliateLicenseLicenseeLegalBenchClassification, CUADAffiliateLicenseLicensorLegalBenchClassification, CUADAntiAssignmentLegalBenchClassification, CUADAuditRightsLegalBenchClassification, CUADCapOnLiabilityLegalBenchClassification, CUADChangeOfControlLegalBenchClassification, CUADCompetitiveRestrictionExceptionLegalBenchClassification, CUADCovenantNotToSueLegalBenchClassification, CUADEffectiveDateLegalBenchClassification, CUADExclusivityLegalBenchClassification, CUADExpirationDateLegalBenchClassification, CUADGoverningLawLegalBenchClassification, CUADIPOwnershipAssignmentLegalBenchClassification, CUADInsuranceLegalBenchClassification, CUADIrrevocableOrPerpetualLicenseLegalBenchClassification, CUADJointIPOwnershipLegalBenchClassification, CUADLicenseGrantLegalBenchClassification, CUADLiquidatedDamagesLegalBenchClassification, CUADMinimumCommitmentLegalBenchClassification, CUADMostFavoredNationLegalBenchClassification, CUADNoSolicitOfCustomersLegalBenchClassification, CUADNoSolicitOfEmployeesLegalBenchClassification, CUADNonCompeteLegalBenchClassification, CUADNonDisparagementLegalBenchClassification, CUADNonTransferableLicenseLegalBenchClassification, CUADNoticePeriodToTerminateRenewalLegalBenchClassification, CUADPostTerminationServicesLegalBenchClassification, CUADPriceRestrictionsLegalBenchClassification, CUADRenewalTermLegalBenchClassification, CUADRevenueProfitSharingLegalBenchClassification, CUADRofrRofoRofnLegalBenchClassification, CUADSourceCodeEscrowLegalBenchClassification, CUADTerminationForConvenienceLegalBenchClassification, CUADThirdPartyBeneficiaryLegalBenchClassification, CUADUncappedLiabilityLegalBenchClassification, CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification, CUADVolumeRestrictionLegalBenchClassification, CUADWarrantyDurationLegalBenchClassification, CanadaTaxCourtOutcomesLegalBenchClassification, ContractNLIConfidentialityOfAgreementLegalBenchClassification, ContractNLIExplicitIdentificationLegalBenchClassification, ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification, ContractNLILimitedUseLegalBenchClassification, ContractNLINoLicensingLegalBenchClassification, ContractNLINoticeOnCompelledDisclosureLegalBenchClassification, ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification, ContractNLIPermissibleCopyLegalBenchClassification, ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification, ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification, ContractNLIReturnOfConfidentialInformationLegalBenchClassification, ContractNLISharingWithEmployeesLegalBenchClassification, ContractNLISharingWithThirdPartiesLegalBenchClassification, ContractNLISurvivalOfObligationsLegalBenchClassification, CorporateLobbyingLegalBenchClassification, DefinitionClassificationLegalBenchClassification, Diversity1LegalBenchClassification, Diversity2LegalBenchClassification, Diversity3LegalBenchClassification, Diversity4LegalBenchClassification, Diversity5LegalBenchClassification, Diversity6LegalBenchClassification, FunctionOfDecisionSectionLegalBenchClassification, InsurancePolicyInterpretationLegalBenchClassification, InternationalCitizenshipQuestionsLegalBenchClassification, JCrewBlockerLegalBenchClassification, JCrewBlockerLegalBenchClassificationV2, LearnedHandsBenefitsLegalBenchClassification, LearnedHandsBusinessLegalBenchClassification, LearnedHandsConsumerLegalBenchClassification, LearnedHandsCourtsLegalBenchClassification, LearnedHandsCrimeLegalBenchClassification, LearnedHandsDivorceLegalBenchClassification, LearnedHandsDomesticViolenceLegalBenchClassification, LearnedHandsEducationLegalBenchClassification, LearnedHandsEmploymentLegalBenchClassification, LearnedHandsEstatesLegalBenchClassification, LearnedHandsFamilyLegalBenchClassification, LearnedHandsHealthLegalBenchClassification, LearnedHandsHousingLegalBenchClassification, LearnedHandsImmigrationLegalBenchClassification, LearnedHandsTortsLegalBenchClassification, LearnedHandsTrafficLegalBenchClassification, LegalReasoningCausalityLegalBenchClassification, LegalReasoningCausalityLegalBenchClassificationV2, MAUDLegalBenchClassification, MAUDLegalBenchClassificationV2, NYSJudicialEthicsLegalBenchClassification, OPP115DataRetentionLegalBenchClassification, OPP115DataSecurityLegalBenchClassification, OPP115DataSecurityLegalBenchClassificationV2, OPP115DoNotTrackLegalBenchClassification, OPP115DoNotTrackLegalBenchClassificationV2, OPP115FirstPartyCollectionUseLegalBenchClassification, OPP115InternationalAndSpecificAudiencesLegalBenchClassification, OPP115PolicyChangeLegalBenchClassification, OPP115ThirdPartySharingCollectionLegalBenchClassification, OPP115UserAccessEditAndDeletionLegalBenchClassification, OPP115UserChoiceControlLegalBenchClassification, OPP115UserChoiceControlLegalBenchClassificationV2, OralArgumentQuestionPurposeLegalBenchClassification, OralArgumentQuestionPurposeLegalBenchClassificationV2, OverrulingLegalBenchClassification, OverrulingLegalBenchClassificationV2, PROALegalBenchClassification, PersonalJurisdictionLegalBenchClassification, SCDBPAccountabilityLegalBenchClassification, SCDBPAuditsLegalBenchClassification, SCDBPCertificationLegalBenchClassification, SCDBPTrainingLegalBenchClassification, SCDBPVerificationLegalBenchClassification, SCDDAccountabilityLegalBenchClassification, SCDDAuditsLegalBenchClassification, SCDDCertificationLegalBenchClassification, SCDDTrainingLegalBenchClassification, SCDDVerificationLegalBenchClassification, TelemarketingSalesRuleLegalBenchClassification, TextualismToolDictionariesLegalBenchClassification, TextualismToolPlainLegalBenchClassification, UCCVCommonLawLegalBenchClassification, UnfairTOSLegalBenchClassification
+from .WikipediaChemistryTopicsClassification import WikipediaChemistryTopicsClassification
+from .Banking77Classification import Banking77Classification, Banking77ClassificationV2
+from .TweetSentimentExtractionClassification import TweetSentimentExtractionClassification, TweetSentimentExtractionClassificationV2
+from .WikipediaChemFieldsClassification import WikipediaChemFieldsClassification, WikipediaChemFieldsClassificationV2
+from .ToxicConversationsClassification import ToxicConversationsClassification, ToxicConversationsClassificationV2
+from .YelpReviewFullClassification import YelpReviewFullClassification, YelpReviewFullClassificationV2
+from .WikipediaOrganicInorganicClassification import WikipediaOrganicInorganicClassification
+from .ArxivClassification import ArxivClassification, ArxivClassificationV2
+__all__ = ['AmazonPolarityClassification', 'AmazonPolarityClassificationV2', 'ArxivClassification', 'ArxivClassificationV2', 'Banking77Classification', 'Banking77ClassificationV2', 'CUADAffiliateLicenseLicenseeLegalBenchClassification', 'CUADAffiliateLicenseLicensorLegalBenchClassification', 'CUADAntiAssignmentLegalBenchClassification', 'CUADAuditRightsLegalBenchClassification', 'CUADCapOnLiabilityLegalBenchClassification', 'CUADChangeOfControlLegalBenchClassification', 'CUADCompetitiveRestrictionExceptionLegalBenchClassification', 'CUADCovenantNotToSueLegalBenchClassification', 'CUADEffectiveDateLegalBenchClassification', 'CUADExclusivityLegalBenchClassification', 'CUADExpirationDateLegalBenchClassification', 'CUADGoverningLawLegalBenchClassification', 'CUADIPOwnershipAssignmentLegalBenchClassification', 'CUADInsuranceLegalBenchClassification', 'CUADIrrevocableOrPerpetualLicenseLegalBenchClassification', 'CUADJointIPOwnershipLegalBenchClassification', 'CUADLicenseGrantLegalBenchClassification', 'CUADLiquidatedDamagesLegalBenchClassification', 'CUADMinimumCommitmentLegalBenchClassification', 'CUADMostFavoredNationLegalBenchClassification', 'CUADNoSolicitOfCustomersLegalBenchClassification', 'CUADNoSolicitOfEmployeesLegalBenchClassification', 'CUADNonCompeteLegalBenchClassification', 'CUADNonDisparagementLegalBenchClassification', 'CUADNonTransferableLicenseLegalBenchClassification', 'CUADNoticePeriodToTerminateRenewalLegalBenchClassification', 'CUADPostTerminationServicesLegalBenchClassification', 'CUADPriceRestrictionsLegalBenchClassification', 'CUADRenewalTermLegalBenchClassification', 'CUADRevenueProfitSharingLegalBenchClassification', 'CUADRofrRofoRofnLegalBenchClassification', 'CUADSourceCodeEscrowLegalBenchClassification', 'CUADTerminationForConvenienceLegalBenchClassification', 'CUADThirdPartyBeneficiaryLegalBenchClassification', 'CUADUncappedLiabilityLegalBenchClassification', 'CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification', 'CUADVolumeRestrictionLegalBenchClassification', 'CUADWarrantyDurationLegalBenchClassification', 'CanadaTaxCourtOutcomesLegalBenchClassification', 'ContractNLIConfidentialityOfAgreementLegalBenchClassification', 'ContractNLIExplicitIdentificationLegalBenchClassification', 'ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification', 'ContractNLILimitedUseLegalBenchClassification', 'ContractNLINoLicensingLegalBenchClassification', 'ContractNLINoticeOnCompelledDisclosureLegalBenchClassification', 'ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification', 'ContractNLIPermissibleCopyLegalBenchClassification', 'ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification', 'ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification', 'ContractNLIReturnOfConfidentialInformationLegalBenchClassification', 'ContractNLISharingWithEmployeesLegalBenchClassification', 'ContractNLISharingWithThirdPartiesLegalBenchClassification', 'ContractNLISurvivalOfObligationsLegalBenchClassification', 'CorporateLobbyingLegalBenchClassification', 'DBpediaClassification', 'DBpediaClassificationV2', 'DefinitionClassificationLegalBenchClassification', 'Diversity1LegalBenchClassification', 'Diversity2LegalBenchClassification', 'Diversity3LegalBenchClassification', 'Diversity4LegalBenchClassification', 'Diversity5LegalBenchClassification', 'Diversity6LegalBenchClassification', 'EmotionClassification', 'EmotionClassificationV2', 'FinancialPhrasebankClassification', 'FinancialPhrasebankClassificationV2', 'FrenkEnClassification', 'FrenkEnClassificationV2', 'FunctionOfDecisionSectionLegalBenchClassification', 'ImdbClassification', 'ImdbClassificationV2', 'InsurancePolicyInterpretationLegalBenchClassification', 'InternationalCitizenshipQuestionsLegalBenchClassification', 'JCrewBlockerLegalBenchClassification', 'JCrewBlockerLegalBenchClassificationV2', 'LearnedHandsBenefitsLegalBenchClassification', 'LearnedHandsBusinessLegalBenchClassification', 'LearnedHandsConsumerLegalBenchClassification', 'LearnedHandsCourtsLegalBenchClassification', 'LearnedHandsCrimeLegalBenchClassification', 'LearnedHandsDivorceLegalBenchClassification', 'LearnedHandsDomesticViolenceLegalBenchClassification', 'LearnedHandsEducationLegalBenchClassification', 'LearnedHandsEmploymentLegalBenchClassification', 'LearnedHandsEstatesLegalBenchClassification', 'LearnedHandsFamilyLegalBenchClassification', 'LearnedHandsHealthLegalBenchClassification', 'LearnedHandsHousingLegalBenchClassification', 'LearnedHandsImmigrationLegalBenchClassification', 'LearnedHandsTortsLegalBenchClassification', 'LearnedHandsTrafficLegalBenchClassification', 'LegalReasoningCausalityLegalBenchClassification', 'LegalReasoningCausalityLegalBenchClassificationV2', 'MAUDLegalBenchClassification', 'MAUDLegalBenchClassificationV2', 'NYSJudicialEthicsLegalBenchClassification', 'NewsClassification', 'NewsClassificationV2', 'OPP115DataRetentionLegalBenchClassification', 'OPP115DataSecurityLegalBenchClassification', 'OPP115DataSecurityLegalBenchClassificationV2', 'OPP115DoNotTrackLegalBenchClassification', 'OPP115DoNotTrackLegalBenchClassificationV2', 'OPP115FirstPartyCollectionUseLegalBenchClassification', 'OPP115InternationalAndSpecificAudiencesLegalBenchClassification', 'OPP115PolicyChangeLegalBenchClassification', 'OPP115ThirdPartySharingCollectionLegalBenchClassification', 'OPP115UserAccessEditAndDeletionLegalBenchClassification', 'OPP115UserChoiceControlLegalBenchClassification', 'OPP115UserChoiceControlLegalBenchClassificationV2', 'OralArgumentQuestionPurposeLegalBenchClassification', 'OralArgumentQuestionPurposeLegalBenchClassificationV2', 'OverrulingLegalBenchClassification', 'OverrulingLegalBenchClassificationV2', 'PROALegalBenchClassification', 'PatentClassification', 'PatentClassificationV2', 'PersonalJurisdictionLegalBenchClassification', 'PoemSentimentClassification', 'PoemSentimentClassificationV2', 'SCDBPAccountabilityLegalBenchClassification', 'SCDBPAuditsLegalBenchClassification', 'SCDBPCertificationLegalBenchClassification', 'SCDBPTrainingLegalBenchClassification', 'SCDBPVerificationLegalBenchClassification', 'SCDDAccountabilityLegalBenchClassification', 'SCDDAuditsLegalBenchClassification', 'SCDDCertificationLegalBenchClassification', 'SCDDTrainingLegalBenchClassification', 'SCDDVerificationLegalBenchClassification', 'SDSEyeProtectionClassification', 'SDSEyeProtectionClassificationV2', 'SDSGlovesClassification', 'SDSGlovesClassificationV2', 'TelemarketingSalesRuleLegalBenchClassification', 'TextualismToolDictionariesLegalBenchClassification', 'TextualismToolPlainLegalBenchClassification', 'ToxicChatClassification', 'ToxicChatClassificationV2', 'ToxicConversationsClassification', 'ToxicConversationsClassificationV2', 'TweetSentimentExtractionClassification', 'TweetSentimentExtractionClassificationV2', 'TweetTopicSingleClassification', 'TweetTopicSingleClassificationV2', 'UCCVCommonLawLegalBenchClassification', 'UnfairTOSLegalBenchClassification', 'WikipediaBioMetChemClassification', 'WikipediaBioMetChemClassificationV2', 'WikipediaBiolumNeurochemClassification', 'WikipediaChemEngSpecialtiesClassification', 'WikipediaChemFieldsClassification', 'WikipediaChemFieldsClassificationV2', 'WikipediaChemistryTopicsClassification', 'WikipediaCompChemSpectroscopyClassification', 'WikipediaCompChemSpectroscopyClassificationV2', 'WikipediaCryobiologySeparationClassification', 'WikipediaCrystallographyAnalyticalClassification', 'WikipediaCrystallographyAnalyticalClassificationV2', 'WikipediaGreenhouseEnantiopureClassification', 'WikipediaIsotopesFissionClassification', 'WikipediaLuminescenceClassification', 'WikipediaOrganicInorganicClassification', 'WikipediaSaltsSemiconductorsClassification', 'WikipediaSolidStateColloidalClassification', 'WikipediaTheoreticalAppliedClassification', 'WikipediaTheoreticalAppliedClassificationV2', 'YahooAnswersTopicsClassification', 'YahooAnswersTopicsClassificationV2', 'YelpReviewFullClassification', 'YelpReviewFullClassificationV2']

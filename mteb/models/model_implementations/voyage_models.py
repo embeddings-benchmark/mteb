@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from functools import wraps
+from functools import partial, wraps
 from typing import Any, Literal
 
 import numpy as np
@@ -152,7 +152,7 @@ voyage_3_5 = ModelMeta(
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
     loader=partial(
-        VoyageWrapper,
+        VoyageModel,
         model_name="voyage-3.5",
         model_prompts=model_prompts,
     ),

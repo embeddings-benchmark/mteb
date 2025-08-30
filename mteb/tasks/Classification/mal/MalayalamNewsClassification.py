@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MalayalamNewsClassification(AbsTaskClassification):
+class MalayalamNewsClassification(AbsTaskAnyClassification):
     superseded_by = "MalayalamNewsClassification.v2"
     metadata = TaskMetadata(
         name="MalayalamNewsClassification",
@@ -15,7 +15,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
             "revision": "666f63bba2387456d8f846ea4d0565181bd47b81",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -41,7 +41,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_columns({"headings": "text"})
 
 
-class MalayalamNewsClassificationV2(AbsTaskClassification):
+class MalayalamNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MalayalamNewsClassification.v2",
         description="""A Malayalam dataset for 3-class classification of Malayalam news articles
@@ -52,7 +52,7 @@ class MalayalamNewsClassificationV2(AbsTaskClassification):
             "revision": "2bb37780ab4a68cb0b28a902059463563b2dbab9",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

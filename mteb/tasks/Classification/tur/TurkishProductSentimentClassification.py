@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TurkishProductSentimentClassification(AbsTaskClassification):
+class TurkishProductSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "TurkishProductSentimentClassification.v2"
     metadata = TaskMetadata(
         name="TurkishProductSentimentClassification",
@@ -15,7 +15,7 @@ class TurkishProductSentimentClassification(AbsTaskClassification):
             "revision": "ad861e463abda351ff65ca5ac0cc5985afe9eb99",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
@@ -39,7 +39,7 @@ class TurkishProductSentimentClassification(AbsTaskClassification):
     )
 
 
-class TurkishProductSentimentClassificationV2(AbsTaskClassification):
+class TurkishProductSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TurkishProductSentimentClassification.v2",
         description="""Turkish Product Review Dataset
@@ -50,7 +50,7 @@ class TurkishProductSentimentClassificationV2(AbsTaskClassification):
             "revision": "c846c08821e2ca649929a5562953c0466cd44736",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],

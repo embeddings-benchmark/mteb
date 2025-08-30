@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLITS = ["test"]
 
 
-class ToxicChatClassification(AbsTaskClassification):
+class ToxicChatClassification(AbsTaskAnyClassification):
     superseded_by = "ToxicChatClassification.v2"
     metadata = TaskMetadata(
         name="ToxicChatClassification",
@@ -26,7 +26,7 @@ class ToxicChatClassification(AbsTaskClassification):
             "revision": "3e0319203c7162b9c9f8015b594441f979c199bc",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["eng-Latn"],
@@ -67,7 +67,7 @@ class ToxicChatClassification(AbsTaskClassification):
         self.dataset = self.dataset.remove_columns(remove_cols)
 
 
-class ToxicChatClassificationV2(AbsTaskClassification):
+class ToxicChatClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification.v2",
         description="""This dataset contains toxicity annotations on 10K user
@@ -87,7 +87,7 @@ class ToxicChatClassificationV2(AbsTaskClassification):
             "revision": "800fec53e44419d13668be291aca50a071ab5849",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["eng-Latn"],

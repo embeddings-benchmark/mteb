@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
+class SlovakMovieReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "SlovakMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification",
@@ -15,7 +15,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "0c47583c9d339b3b6f89e4db76088af5f1ec8d39",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["svk-Latn"],
@@ -45,7 +45,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         )
 
 
-class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
+class SlovakMovieReviewSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification.v2",
         description="""User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)
@@ -56,7 +56,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
             "revision": "29a7405aabcfd4860a51ae6f65a5650d63108f26",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["svk-Latn"],

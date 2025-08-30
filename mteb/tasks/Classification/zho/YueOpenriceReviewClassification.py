@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YueOpenriceReviewClassification(AbsTaskClassification):
+class YueOpenriceReviewClassification(AbsTaskAnyClassification):
     superseded_by = "YueOpenriceReviewClassification.v2"
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification",
@@ -15,7 +15,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
             "revision": "1300d045cf983bac23faadf3aa12a619624769da",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["yue-Hant"],
@@ -47,7 +47,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
         )
 
 
-class YueOpenriceReviewClassificationV2(AbsTaskClassification):
+class YueOpenriceReviewClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification.v2",
         description="""A Cantonese dataset for review classification
@@ -58,7 +58,7 @@ class YueOpenriceReviewClassificationV2(AbsTaskClassification):
             "revision": "702b7ebe3b3ac712f1c31e87ab7171b1f1ca6b6b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["yue-Hant"],

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AskUbuntuDupQuestionsVN(AbsTaskReranking):
@@ -18,7 +18,7 @@ class AskUbuntuDupQuestionsVN(AbsTaskReranking):
             "revision": "5cfaa5c07252d30c37302bfc056f0d85884971a1",
         },
         type="Reranking",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="map",

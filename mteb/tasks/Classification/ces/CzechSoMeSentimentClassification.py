@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class CzechSoMeSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "CzechSoMeSentimentClassification.v2"
     metadata = TaskMetadata(
@@ -54,7 +53,7 @@ Montoyo, Andres},
         )
 
 
-class CzechSoMeSentimentClassificationV2(AbsTaskClassification):
+class CzechSoMeSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification.v2",
         description="""User comments on Facebook
@@ -65,7 +64,7 @@ class CzechSoMeSentimentClassificationV2(AbsTaskClassification):
             "revision": "a12152e40ff9857bf3c83694528f40ec5c02aafc",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ces-Latn"],

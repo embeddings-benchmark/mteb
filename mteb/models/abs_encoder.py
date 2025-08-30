@@ -105,7 +105,7 @@ class AbsEncoder(ABC):
         prompt_types = [e.value for e in PromptType]
         for task_name in self.model_prompts:
             if "-" in task_name and task_name.endswith(
-                (f"-{PromptType.query.value}", f"-{PromptType.passage.value}")
+                (f"-{PromptType.query.value}", f"-{PromptType.document.value}")
             ):
                 task_name, prompt_type = task_name.rsplit("-", 1)
                 if prompt_type not in prompt_types:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DBPediaVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class DBPediaVN(AbsTaskRetrieval):
             "revision": "c3e20179fbcee16217ef9461a14a54b7faca9b63",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

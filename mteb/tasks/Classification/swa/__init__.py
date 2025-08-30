@@ -1,5 +1,2 @@
-from __future__ import annotations
-
-from .SwahiliNewsClassification import SwahiliNewsClassification
-
-__all__ = ["SwahiliNewsClassification"]
+from .SwahiliNewsClassification import SwahiliNewsClassification, SwahiliNewsClassificationV2
+__all__ = ['SwahiliNewsClassification', 'SwahiliNewsClassificationV2']

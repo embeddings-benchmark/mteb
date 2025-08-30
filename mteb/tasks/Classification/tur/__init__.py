@@ -1,9 +1,3 @@
-from __future__ import annotations
-
-from .TurkishMovieSentimentClassification import TurkishMovieSentimentClassification
-from .TurkishProductSentimentClassification import TurkishProductSentimentClassification
-
-__all__ = [
-    "TurkishMovieSentimentClassification",
-    "TurkishProductSentimentClassification",
-]
+from .TurkishProductSentimentClassification import TurkishProductSentimentClassification, TurkishProductSentimentClassificationV2
+from .TurkishMovieSentimentClassification import TurkishMovieSentimentClassification, TurkishMovieSentimentClassificationV2
+__all__ = ['TurkishMovieSentimentClassification', 'TurkishMovieSentimentClassificationV2', 'TurkishProductSentimentClassification', 'TurkishProductSentimentClassificationV2']

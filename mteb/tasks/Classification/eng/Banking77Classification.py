@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Banking77Classification(AbsTaskClassification):
+class Banking77Classification(AbsTaskAnyClassification):
     superseded_by = "Banking77Classification.v2"
     metadata = TaskMetadata(
         name="Banking77Classification",
@@ -15,7 +15,7 @@ class Banking77Classification(AbsTaskClassification):
             "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -60,7 +60,7 @@ Shah, Rushin},
     )
 
 
-class Banking77ClassificationV2(AbsTaskClassification):
+class Banking77ClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Banking77Classification.v2",
         description="""Dataset composed of online banking queries annotated with their corresponding intents.
@@ -71,7 +71,7 @@ class Banking77ClassificationV2(AbsTaskClassification):
             "revision": "18072d2685ea682290f7b8924d94c62acc19c0b2",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

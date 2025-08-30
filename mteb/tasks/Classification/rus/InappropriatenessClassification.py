@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class InappropriatenessClassification(AbsTaskClassification):
+class InappropriatenessClassification(AbsTaskAnyClassification):
     superseded_by = "InappropriatenessClassification.v2"
     metadata = TaskMetadata(
         name="InappropriatenessClassification",
@@ -15,7 +15,7 @@ class InappropriatenessClassification(AbsTaskClassification):
         description="Inappropriateness identification in the form of binary classification",
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -66,7 +66,7 @@ Robnik-{\v{S}}ikonja, Marko},
         )
 
 
-class InappropriatenessClassificationV2(AbsTaskClassification):
+class InappropriatenessClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassification.v2",
         dataset={
@@ -77,7 +77,7 @@ class InappropriatenessClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -129,7 +129,7 @@ Robnik-{\v{S}}ikonja, Marko},
         )
 
 
-class InappropriatenessClassificationv2(AbsTaskClassification):
+class InappropriatenessClassificationv2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassificationv2",
         dataset={

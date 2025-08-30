@@ -108,6 +108,7 @@ SampleCreationMethod = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    'machine-translated and LM verified',
     "rendered",
     "multiple",
 ]
@@ -133,6 +134,7 @@ _TASK_TYPE = (
     "MultilabelClassification",
     "Clustering",
     "PairClassification",
+    "Regression",
     "Reranking",
     "Retrieval",
     "STS",

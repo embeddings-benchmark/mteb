@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
 
 
-class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
+class CSFDSKMovieReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "CSFDSKMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification",
@@ -17,7 +17,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "23a20c659d868740ef9c54854de631fe19cd5c17",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2002-05-21", "2020-03-05"),
         eval_splits=["test"],
@@ -53,7 +53,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
         )
 
 
-class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
+class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification.v2",
         description="""The dataset contains 30k user reviews from csfd.cz in Slovak.
@@ -64,7 +64,7 @@ class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
             "revision": "257ee340c1399ab5e038a3aea38877f67940774d",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2002-05-21", "2020-03-05"),
         eval_splits=["test"],

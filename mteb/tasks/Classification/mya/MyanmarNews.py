@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MyanmarNews(AbsTaskClassification):
+class MyanmarNews(AbsTaskAnyClassification):
     superseded_by = "MyanmarNews.v2"
     metadata = TaskMetadata(
         name="MyanmarNews",
@@ -15,7 +15,7 @@ class MyanmarNews(AbsTaskClassification):
         description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["mya-Mymr"],
@@ -40,7 +40,7 @@ class MyanmarNews(AbsTaskClassification):
     )
 
 
-class MyanmarNewsV2(AbsTaskClassification):
+class MyanmarNewsV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MyanmarNews.v2",
         dataset={
@@ -51,7 +51,7 @@ class MyanmarNewsV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["mya-Mymr"],

@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class CSFDCZMovieReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "CSFDCZMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
@@ -52,7 +51,7 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskAnyClassification):
         )
 
 
-class CSFDCZMovieReviewSentimentClassificationV2(AbsTaskClassification):
+class CSFDCZMovieReviewSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CSFDCZMovieReviewSentimentClassification.v2",
         description="""The dataset contains 30k user reviews from csfd.cz in Czech.
@@ -63,7 +62,7 @@ class CSFDCZMovieReviewSentimentClassificationV2(AbsTaskClassification):
             "revision": "bda232f79c949fd881572f7e1b9ad59fd04a6c7c",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2002-06-28", "2020-03-13"),
         eval_splits=["test"],

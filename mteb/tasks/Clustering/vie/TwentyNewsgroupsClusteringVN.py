@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TwentyNewsgroupsClusteringVN(AbsTaskClustering):
+class TwentyNewsgroupsClusteringVN(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering-VN",
         description="""A translated dataset from Clustering of the 20 Newsgroups dataset (subject only).
@@ -18,7 +18,7 @@ class TwentyNewsgroupsClusteringVN(AbsTaskClustering):
             "revision": "770e1b9029cd85c79410bc6df1528a43fc2b9ad1",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="v_measure",

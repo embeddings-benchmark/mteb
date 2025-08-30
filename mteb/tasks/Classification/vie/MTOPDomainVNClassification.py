@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MTOPDomainVNClassification(AbsTaskClassification):
+class MTOPDomainVNClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MTOPDomainVNClassification",
         dataset={
@@ -17,7 +17,7 @@ class MTOPDomainVNClassification(AbsTaskClassification):
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
-        category="s2s",
+        category="t2c",
         type="Classification",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],

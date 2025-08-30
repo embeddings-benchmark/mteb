@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuToxicOKMLCUPClassification(AbsTaskClassification):
+class RuToxicOKMLCUPClassification(AbsTaskAnyClassification):
     superseded_by = "RuToxicOKMLCUPClassification.v2"
     metadata = TaskMetadata(
         name="RuToxicOKMLCUPClassification",
@@ -34,7 +34,7 @@ class RuToxicOKMLCUPClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("toxic", "label")
 
 
-class RuToxicOKMLCUPClassificationV2(AbsTaskClassification):
+class RuToxicOKMLCUPClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuToxicOKMLCUPClassification.v2",
         dataset={

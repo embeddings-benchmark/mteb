@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmotionClassification(AbsTaskClassification):
+class EmotionClassification(AbsTaskAnyClassification):
     superseded_by = "EmotionClassification.v2"
     metadata = TaskMetadata(
         name="EmotionClassification",
@@ -15,7 +15,7 @@ class EmotionClassification(AbsTaskClassification):
             "revision": "4f58c6b202a23cf9a4da393831edf4f9183cad37",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -59,7 +59,7 @@ Tsujii, Jun{'}ichi},
     samples_per_label = 16
 
 
-class EmotionClassificationV2(AbsTaskClassification):
+class EmotionClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="EmotionClassification.v2",
         description="""Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.
@@ -70,7 +70,7 @@ class EmotionClassificationV2(AbsTaskClassification):
             "revision": "13535ec7ed83ac3920c40db3c3fd4133af55cc06",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

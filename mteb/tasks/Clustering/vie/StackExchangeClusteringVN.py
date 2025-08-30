@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StackExchangeClusteringVN(AbsTaskClustering):
+class StackExchangeClusteringVN(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="StackExchangeClustering-VN",
         description="""A translated dataset from Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.
@@ -18,7 +18,7 @@ class StackExchangeClusteringVN(AbsTaskClustering):
             "revision": "cf01db048f2bf705741675b51613dc48e0bb122b",
         },
         type="Clustering",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="v_measure",

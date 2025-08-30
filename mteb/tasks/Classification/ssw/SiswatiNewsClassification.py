@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SiswatiNewsClassification(AbsTaskClassification):
+class SiswatiNewsClassification(AbsTaskAnyClassification):
     superseded_by = "SiswatiNewsClassification.v2"
     metadata = TaskMetadata(
         name="SiswatiNewsClassification",
@@ -15,7 +15,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
             "revision": "f5502326c4e48adc99b18b1582f68b8fb5e7ec30",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ssw-Latn"],
@@ -44,7 +44,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_columns({"title": "text"})
 
 
-class SiswatiNewsClassificationV2(AbsTaskClassification):
+class SiswatiNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SiswatiNewsClassification.v2",
         description="""Siswati News Classification Dataset
@@ -55,7 +55,7 @@ class SiswatiNewsClassificationV2(AbsTaskClassification):
             "revision": "e316774d8bbaa9b43858d093ea0f1eb38c6a9b4c",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ssw-Latn"],

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CQADupstackGisVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class CQADupstackGisVN(AbsTaskRetrieval):
             "revision": "755156d548a8288efdb29b80bad302750ab33977",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

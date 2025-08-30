@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SlovakHateSpeechClassification(AbsTaskClassification):
+class SlovakHateSpeechClassification(AbsTaskAnyClassification):
     superseded_by = "SlovakHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="SlovakHateSpeechClassification",
@@ -15,7 +15,7 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
             "revision": "f9301b9937128c9c0b636fa6da203aeb046479f4",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2024-05-25", "2024-06-06"),
         eval_splits=["test"],
@@ -31,7 +31,7 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
     )
 
 
-class SlovakHateSpeechClassificationV2(AbsTaskClassification):
+class SlovakHateSpeechClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SlovakHateSpeechClassification.v2",
         description="""The dataset contains posts from a social network with human annotations for hateful or offensive language in Slovak.
@@ -42,7 +42,7 @@ class SlovakHateSpeechClassificationV2(AbsTaskClassification):
             "revision": "691fe861df0ffa25066cbf6da8e64ebd296af6ab",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2024-05-25", "2024-06-06"),
         eval_splits=["test"],

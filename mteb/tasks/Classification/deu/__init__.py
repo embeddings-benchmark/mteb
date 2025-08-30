@@ -1,8 +1,3 @@
-from __future__ import annotations
-
-from .GermanPoliticiansTwitterSentimentClassification import (
-    GermanPoliticiansTwitterSentimentClassification,
-)
-from .TenKGnadClassification import TenKGnadClassification
-
-__all__ = ["GermanPoliticiansTwitterSentimentClassification", "TenKGnadClassification"]
+from .GermanPoliticiansTwitterSentimentClassification import GermanPoliticiansTwitterSentimentClassification, GermanPoliticiansTwitterSentimentClassificationV2
+from .TenKGnadClassification import TenKGnadClassification, TenKGnadClassificationV2
+__all__ = ['GermanPoliticiansTwitterSentimentClassification', 'GermanPoliticiansTwitterSentimentClassificationV2', 'TenKGnadClassification', 'TenKGnadClassificationV2']

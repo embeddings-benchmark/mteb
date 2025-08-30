@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Touche2020VN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class Touche2020VN(AbsTaskRetrieval):
             "revision": "cd4389b182aec622c8121ee8db988359197159c1",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

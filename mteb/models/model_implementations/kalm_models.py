@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 from typing import Any
 
 import torch
@@ -160,115 +161,37 @@ kalm_training_data = {
 }
 
 
-kalm_v2_training_data = {
-    # from technical report
-    # not in MTEB:
-    # ExpertQA
-    # MEDI2BGE
-    # OpenOrca
-    # PAQ
-    # PubMedQA
-    # SearchQA
-    # arxiv_qa
-    # rag-dataset-12000
-    # CC-News
-    # SQuAD 2.0
-    # TriviaQA
-    # WebGPT Comparisons
-    # MultiNLI
-    # NLLB
-    # WikiAnswers
-    # SimCSE NLI
-    # SNLI
-    # Aya Dataset
-    # eli5
-    # ----
-    # in MTEB:
-    "CodeFeedbackMT": ["train"],
-    "CodeFeedbackST": ["train"],
-    "ArxivClusteringP2P": ["train"],
-    "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringP2P.v2": ["train"],
-    "TRECCOVID": ["train"],
-    "DBPedia": ["train"],
-    "ESCIReranking": ["train"],
-    "FEVER": ["train"],
-    "FiQA2018": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "NanoFEVERRetrieval": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "FiQA2018-NL": ["train"],  # translation not trained on
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
-    "MultiLongDocRetrieval": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "mMARCO-NL": ["train"],  # translation not trained on
-    "MSMARCOv2": ["train"],
-    "NFCorpus": ["train"],
-    "SciFact": ["train"],
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
-    "NQ-NL": ["train"],  # translation not trained on
-    "YahooAnswersTopicsClassification": ["train"],
-    "ContractNLIConfidentialityOfAgreementLegalBenchClassification": ["train"],
-    "ContractNLIExplicitIdentificationLegalBenchClassification": ["train"],
-    "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification": [
-        "train"
-    ],
-    "ContractNLILimitedUseLegalBenchClassification": ["train"],
-    "ContractNLINoLicensingLegalBenchClassification": ["train"],
-    "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification": ["train"],
-    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification": [
-        "train"
-    ],
-    "ContractNLIPermissibleCopyLegalBenchClassification": ["train"],
-    "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification": [
-        "train"
-    ],
-    "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification": ["train"],
-    "ContractNLIReturnOfConfidentialInformationLegalBenchClassification": ["train"],
-    "ContractNLISharingWithEmployeesLegalBenchClassification": ["train"],
-    "ContractNLISharingWithThirdPartiesLegalBenchClassification": ["train"],
-    "ContractNLISurvivalOfObligationsLegalBenchClassification": ["train"],
-    "QuoraRetrieval": ["train"],
-    "NanoQuoraRetrieval": ["train"],
-    "BiorxivClusteringP2P.v2": ["train"],
-    "BiorxivClusteringS2S.v2": ["train"],
-    "MedrxivClusteringP2P.v2": ["train"],
-    "MedrxivClusteringS2S.v2": ["train"],
-    "Banking77Classification": ["train"],
-    "AmazonPolarityClassification": ["train"],
-    "ImdbClassification": ["train"],
-    "EmotionClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
-    "ToxicConversationsClassification": ["train"],
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "PawsXPairClassification": ["train"],
-    "AmazonReviewsClassification": ["train"],
-    "AmazonCounterfactualClassification": ["train"],
-    "MultilingualSentiment": ["train"],
-    "MassiveIntentClassification": ["train"],
-    "MassiveScenarioClassification": ["train"],
-    "MTOPDomainClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "Reddit-Clustering": ["train"],
-    "Reddit-Clustering-P2P": ["train"],
-    "Stackexchange-Clustering": ["train"],
-    "Stackexchange-Clustering-P2P": ["train"],
-    "TwentyNewsgroups-Clustering": ["train"],
-    "ATEC": ["train"],
-    "BQ": ["train"],
-    "CQADupstack": ["train"],
-}
+kalm_v2_training_data = {"CodeFeedbackMT", "CodeFeedbackST", "ArxivClusteringP2P", "ArxivClusteringS2S",
+                         "ArxivClusteringP2P.v2", "TRECCOVID", "DBPedia", "ESCIReranking", "FEVER", "FiQA2018",
+                         "FEVERHardNegatives", "NanoFEVERRetrieval", "FEVER-NL", "FiQA2018-NL", "HotpotQA-PL",
+                         "HotpotQA-NL", "HotpotQAHardNegatives", "MultiLongDocRetrieval", "MSMARCO",
+                         "MSMARCOHardNegatives", "NanoMSMARCORetrieval", "MSMARCO-PL", "mMARCO-NL", "MSMARCOv2",
+                         "NFCorpus", "SciFact", "NQ", "NQHardNegatives", "NanoNQRetrieval", "NQ-PL", "NQ-NL",
+                         "YahooAnswersTopicsClassification",
+                         "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
+                         "ContractNLIExplicitIdentificationLegalBenchClassification",
+                         "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
+                         "ContractNLILimitedUseLegalBenchClassification",
+                         "ContractNLINoLicensingLegalBenchClassification",
+                         "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
+                         "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
+                         "ContractNLIPermissibleCopyLegalBenchClassification",
+                         "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
+                         "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
+                         "ContractNLIReturnOfConfidentialInformationLegalBenchClassification",
+                         "ContractNLISharingWithEmployeesLegalBenchClassification",
+                         "ContractNLISharingWithThirdPartiesLegalBenchClassification",
+                         "ContractNLISurvivalOfObligationsLegalBenchClassification", "QuoraRetrieval",
+                         "NanoQuoraRetrieval", "BiorxivClusteringP2P.v2", "BiorxivClusteringS2S.v2",
+                         "MedrxivClusteringP2P.v2", "MedrxivClusteringS2S.v2", "Banking77Classification",
+                         "AmazonPolarityClassification", "ImdbClassification", "EmotionClassification",
+                         "TweetSentimentExtractionClassification", "ToxicConversationsClassification",
+                         "MIRACLRetrieval", "MIRACLRetrievalHardNegatives", "MIRACLReranking", "MrTidyRetrieval",
+                         "PawsXPairClassification", "AmazonReviewsClassification", "AmazonCounterfactualClassification",
+                         "MultilingualSentiment", "MassiveIntentClassification", "MassiveScenarioClassification",
+                         "MTOPDomainClassification", "MTOPIntentClassification", "Reddit-Clustering",
+                         "Reddit-Clustering-P2P", "Stackexchange-Clustering", "Stackexchange-Clustering-P2P",
+                         "TwentyNewsgroups-Clustering", "ATEC", "BQ", "CQADupstack"}
 
 
 KaLM_task_prompts = {
@@ -759,8 +682,8 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
-    loader=partial(  # type: ignore
-        InstructSentenceTransformerWrapper,
+    loader=partial(
+        InstructSentenceTransformerModel,
         model_name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
         revision="d2a21c232dc712ae8230af56d1027cf21b7864bf",
         instruction_template=KaLM_INSTRUCTION,

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YahooAnswersTopicsClassification(AbsTaskClassification):
+class YahooAnswersTopicsClassification(AbsTaskAnyClassification):
     superseded_by = "YahooAnswersTopicsClassification.v2"
     metadata = TaskMetadata(
         name="YahooAnswersTopicsClassification",
@@ -16,7 +16,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -59,7 +59,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         )
 
 
-class YahooAnswersTopicsClassificationV2(AbsTaskClassification):
+class YahooAnswersTopicsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="YahooAnswersTopicsClassification.v2",
         description="""Dataset composed of questions and answers from Yahoo Answers, categorized into topics.
@@ -70,7 +70,7 @@ class YahooAnswersTopicsClassificationV2(AbsTaskClassification):
             "revision": "c4d89f9633025d50954ab98a4c2c2feb188f6279",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SinhalaNewsClassification(AbsTaskClassification):
+class SinhalaNewsClassification(AbsTaskAnyClassification):
     superseded_by = "SinhalaNewsClassification.v2"
     metadata = TaskMetadata(
         name="SinhalaNewsClassification",
@@ -15,7 +15,7 @@ class SinhalaNewsClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["sin-Sinh"],
@@ -53,7 +53,7 @@ class SinhalaNewsClassification(AbsTaskClassification):
         )
 
 
-class SinhalaNewsClassificationV2(AbsTaskClassification):
+class SinhalaNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsClassification.v2",
         description="""This file contains news texts (sentences) belonging to 5 different news categories (political, business, technology, sports and Entertainment). The original dataset was released by Nisansa de Silva (Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language, 2015).
@@ -64,7 +64,7 @@ class SinhalaNewsClassificationV2(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["sin-Sinh"],

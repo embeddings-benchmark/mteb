@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class TenKGnadClassification(AbsTaskAnyClassification):
     superseded_by = "TenKGnadClassification.v2"
     metadata = TaskMetadata(
@@ -42,7 +41,7 @@ class TenKGnadClassification(AbsTaskAnyClassification):
     )
 
 
-class TenKGnadClassificationV2(AbsTaskClassification):
+class TenKGnadClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TenKGnadClassification.v2",
         description="""10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).
@@ -53,7 +52,7 @@ class TenKGnadClassificationV2(AbsTaskClassification):
             "revision": "fc6825fe0d813e7fc92f05fe63ac4bb3ee191c4d",
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

@@ -9,13 +9,14 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RegressionEvaluator import (
     LinearRegressionEvaluator,
     SklearnRegressorModel,
 )
 from mteb.load_results.task_results import ScoresDict
+from mteb.types import HFSubset
+from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ class RegressionDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskTextRegression(AbsTask):
     """Abstract class for regression tasks
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
         text: str
         value: float
@@ -74,8 +75,6 @@ class AbsTaskTextRegression(AbsTask):
 
     def __init__(self, **kwargs: Any):
         super().__init__(**kwargs)
-        self.n_experiments = self.metadata_dict.get("n_experiments", self.n_experiments)
-        self.n_samples = self.metadata_dict.get("n_samples", self.n_samples)
 
     def _evaluate_subset(
         self,

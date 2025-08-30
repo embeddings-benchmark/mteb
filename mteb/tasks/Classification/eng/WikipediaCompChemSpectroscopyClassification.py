@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaCompChemSpectroscopyClassification(AbsTaskClassification):
+class WikipediaCompChemSpectroscopyClassification(AbsTaskAnyClassification):
     superseded_by = "WikipediaCompChemSpectroscopyClassification.v2"
     metadata = TaskMetadata(
         name="WikipediaCompChemSpectroscopyClassification",
@@ -15,7 +15,7 @@ class WikipediaCompChemSpectroscopyClassification(AbsTaskClassification):
             "revision": "474d706a22b0451b5846d623aa4b4234ba5b0513",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -38,7 +38,7 @@ class WikipediaCompChemSpectroscopyClassification(AbsTaskClassification):
     )
 
 
-class WikipediaCompChemSpectroscopyClassificationV2(AbsTaskClassification):
+class WikipediaCompChemSpectroscopyClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaCompChemSpectroscopyClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.
@@ -49,7 +49,7 @@ class WikipediaCompChemSpectroscopyClassificationV2(AbsTaskClassification):
             "revision": "a1ef45291dc5304482c42b9c053a5f7801e1006b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

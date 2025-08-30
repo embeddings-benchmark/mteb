@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SciDocsRerankingVN(AbsTaskReranking):
@@ -18,7 +18,7 @@ class SciDocsRerankingVN(AbsTaskReranking):
             "revision": "c9ab36ae6c75f754df6f1e043c09b5e0b5547cac",
         },
         type="Reranking",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="map",

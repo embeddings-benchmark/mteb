@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class HotelReviewSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "HotelReviewSentimentClassification.v2"
     metadata = TaskMetadata(

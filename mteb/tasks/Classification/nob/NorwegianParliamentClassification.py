@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NorwegianParliamentClassification(AbsTaskClassification):
+class NorwegianParliamentClassification(AbsTaskAnyClassification):
     superseded_by = "NorwegianParliamentClassification.v2"
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification",
@@ -16,7 +16,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test", "validation"],
         eval_langs=["nob-Latn"],
@@ -52,7 +52,7 @@ Brygfjeld, Svein Arne},
     )
 
 
-class NorwegianParliamentClassificationV2(AbsTaskClassification):
+class NorwegianParliamentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification.v2",
         description="""Norwegian parliament speeches annotated for sentiment
@@ -63,7 +63,7 @@ class NorwegianParliamentClassificationV2(AbsTaskClassification):
             "revision": "7f2012a878e67486ac871cb450d6ef0dc2ebed7f",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test", "validation"],
         eval_langs=["nob-Latn"],

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -15,7 +15,7 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
             "revision": "fda6fad068f2ed814d99f29dc95dbb28ac586943",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

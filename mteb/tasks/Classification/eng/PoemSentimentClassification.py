@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class PoemSentimentClassification(AbsTaskClassification):
+class PoemSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "PoemSentimentClassification.v2"
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
@@ -16,7 +16,7 @@ class PoemSentimentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
@@ -44,7 +44,7 @@ class PoemSentimentClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("verse_text", "text")
 
 
-class PoemSentimentClassificationV2(AbsTaskClassification):
+class PoemSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification.v2",
         description="""Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
@@ -55,7 +55,7 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
             "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],

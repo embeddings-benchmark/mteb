@@ -1,25 +1,8 @@
-from __future__ import annotations
-
-from .MIRACLVisionRetrieval import MIRACLVisionRetrieval
 from .VdrMultilingualRetrieval import VDRMultilingualRetrieval
-from .Vidore2BenchRetrieval import (
-    Vidore2BioMedicalLecturesRetrieval,
-    Vidore2EconomicsReportsRetrieval,
-    Vidore2ESGReportsHLRetrieval,
-    Vidore2ESGReportsRetrieval,
-)
-from .WITT2IRetrieval import WITT2IRetrieval
 from .XFlickr30kCoT2IRetrieval import XFlickr30kCoT2IRetrieval
+from .Vidore2BenchRetrieval import Vidore2BioMedicalLecturesRetrieval, Vidore2ESGReportsHLRetrieval, Vidore2ESGReportsRetrieval, Vidore2EconomicsReportsRetrieval
+from .MIRACLVisionRetrieval import MIRACLVisionRetrieval
 from .XM3600T2IRetrieval import XM3600T2IRetrieval
-
-__all__ = [
-    "Vidore2BioMedicalLecturesRetrieval",
-    "Vidore2ESGReportsHLRetrieval",
-    "Vidore2ESGReportsRetrieval",
-    "Vidore2EconomicsReportsRetrieval",
-    "WITT2IRetrieval",
-    "XFlickr30kCoT2IRetrieval",
-    "XM3600T2IRetrieval",
-    "VDRMultilingualRetrieval",
-    "MIRACLVisionRetrieval",
-]
+from .WITT2IRetrieval import WITT2IRetrieval
+from .JinaVDRBenchRetrieval import JinaVDRAirbnbSyntheticRetrieval, JinaVDRArabicChartQARetrieval, JinaVDRArabicInfographicsVQARetrieval, JinaVDRArxivQARetrieval, JinaVDRAutomobileCatelogRetrieval, JinaVDRBeveragesCatalogueRetrieval, JinaVDRCharXivOCRRetrieval, JinaVDRChartQARetrieval, JinaVDRDocQAAI, JinaVDRDocQAEnergyRetrieval, JinaVDRDocQAGovReportRetrieval, JinaVDRDocQAHealthcareIndustryRetrieval, JinaVDRDocVQARetrieval, JinaVDRDonutVQAISynHMPRetrieval, JinaVDREuropeanaDeNewsRetrieval, JinaVDREuropeanaEsNewsRetrieval, JinaVDREuropeanaFrNewsRetrieval, JinaVDREuropeanaItScansRetrieval, JinaVDREuropeanaNlLegalRetrieval, JinaVDRGitHubReadmeRetrieval, JinaVDRHindiGovVQARetrieval, JinaVDRHungarianDocQARetrieval, JinaVDRInfovqaRetrieval, JinaVDRJDocQARetrieval, JinaVDRJina2024YearlyBookRetrieval, JinaVDRMMTabRetrieval, JinaVDRMPMQARetrieval, JinaVDRMedicalPrescriptionsRetrieval, JinaVDROWIDChartsRetrieval, JinaVDROpenAINewsRetrieval, JinaVDRPlotQARetrieval, JinaVDRRamensBenchmarkRetrieval, JinaVDRShanghaiMasterPlanRetrieval, JinaVDRShiftProjectRetrieval, JinaVDRStanfordSlideRetrieval, JinaVDRStudentEnrollmentSyntheticRetrieval, JinaVDRTQARetrieval, JinaVDRTabFQuadRetrieval, JinaVDRTableVQARetrieval, JinaVDRTatQARetrieval, JinaVDRTweetStockSyntheticsRetrieval, JinaVDRWikimediaCommonsDocumentsRetrieval, JinaVDRWikimediaCommonsMapsRetrieval
+__all__ = ['JinaVDRAirbnbSyntheticRetrieval', 'JinaVDRArabicChartQARetrieval', 'JinaVDRArabicInfographicsVQARetrieval', 'JinaVDRArxivQARetrieval', 'JinaVDRAutomobileCatelogRetrieval', 'JinaVDRBeveragesCatalogueRetrieval', 'JinaVDRCharXivOCRRetrieval', 'JinaVDRChartQARetrieval', 'JinaVDRDocQAAI', 'JinaVDRDocQAEnergyRetrieval', 'JinaVDRDocQAGovReportRetrieval', 'JinaVDRDocQAHealthcareIndustryRetrieval', 'JinaVDRDocVQARetrieval', 'JinaVDRDonutVQAISynHMPRetrieval', 'JinaVDREuropeanaDeNewsRetrieval', 'JinaVDREuropeanaEsNewsRetrieval', 'JinaVDREuropeanaFrNewsRetrieval', 'JinaVDREuropeanaItScansRetrieval', 'JinaVDREuropeanaNlLegalRetrieval', 'JinaVDRGitHubReadmeRetrieval', 'JinaVDRHindiGovVQARetrieval', 'JinaVDRHungarianDocQARetrieval', 'JinaVDRInfovqaRetrieval', 'JinaVDRJDocQARetrieval', 'JinaVDRJina2024YearlyBookRetrieval', 'JinaVDRMMTabRetrieval', 'JinaVDRMPMQARetrieval', 'JinaVDRMedicalPrescriptionsRetrieval', 'JinaVDROWIDChartsRetrieval', 'JinaVDROpenAINewsRetrieval', 'JinaVDRPlotQARetrieval', 'JinaVDRRamensBenchmarkRetrieval', 'JinaVDRShanghaiMasterPlanRetrieval', 'JinaVDRShiftProjectRetrieval', 'JinaVDRStanfordSlideRetrieval', 'JinaVDRStudentEnrollmentSyntheticRetrieval', 'JinaVDRTQARetrieval', 'JinaVDRTabFQuadRetrieval', 'JinaVDRTableVQARetrieval', 'JinaVDRTatQARetrieval', 'JinaVDRTweetStockSyntheticsRetrieval', 'JinaVDRWikimediaCommonsDocumentsRetrieval', 'JinaVDRWikimediaCommonsMapsRetrieval', 'MIRACLVisionRetrieval', 'VDRMultilingualRetrieval', 'Vidore2BioMedicalLecturesRetrieval', 'Vidore2ESGReportsHLRetrieval', 'Vidore2ESGReportsRetrieval', 'Vidore2EconomicsReportsRetrieval', 'WITT2IRetrieval', 'XFlickr30kCoT2IRetrieval', 'XM3600T2IRetrieval']

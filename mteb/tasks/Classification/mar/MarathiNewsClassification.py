@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MarathiNewsClassification(AbsTaskClassification):
+class MarathiNewsClassification(AbsTaskAnyClassification):
     superseded_by = "MarathiNewsClassification.v2"
     metadata = TaskMetadata(
         name="MarathiNewsClassification",
@@ -15,7 +15,7 @@ class MarathiNewsClassification(AbsTaskClassification):
             "revision": "7640cf8132cca1f99995ac71512a670e3c965cf1",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -42,7 +42,7 @@ class MarathiNewsClassification(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class MarathiNewsClassificationV2(AbsTaskClassification):
+class MarathiNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MarathiNewsClassification.v2",
         description="""A Marathi dataset for 3-class classification of Marathi news articles
@@ -53,7 +53,7 @@ class MarathiNewsClassificationV2(AbsTaskClassification):
             "revision": "97932a2f3b75d7bd9fae0d212975c1a1568935eb",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

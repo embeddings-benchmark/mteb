@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StackExchangeClusteringP2PVN(AbsTaskClustering):
+class StackExchangeClusteringP2PVN(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P-VN",
         description="""A translated Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.
@@ -18,7 +18,7 @@ class StackExchangeClusteringP2PVN(AbsTaskClustering):
             "revision": "8f154ee524a466850028531d21e1a62d958b8156",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="v_measure",

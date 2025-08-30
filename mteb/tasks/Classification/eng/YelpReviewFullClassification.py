@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YelpReviewFullClassification(AbsTaskClassification):
+class YelpReviewFullClassification(AbsTaskAnyClassification):
     superseded_by = "YelpReviewFullClassification.v2"
     metadata = TaskMetadata(
         name="YelpReviewFullClassification",
@@ -15,7 +15,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
             "revision": "c1f9ee939b7d05667af864ee1cb066393154bf85",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -50,7 +50,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
         )
 
 
-class YelpReviewFullClassificationV2(AbsTaskClassification):
+class YelpReviewFullClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="YelpReviewFullClassification.v2",
         description="""Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5.
@@ -61,7 +61,7 @@ class YelpReviewFullClassificationV2(AbsTaskClassification):
             "revision": "49d71141934ae2e58733acd90908140e8ecaaee0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

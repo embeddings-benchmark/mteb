@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DBpediaClassification(AbsTaskClassification):
+class DBpediaClassification(AbsTaskAnyClassification):
     superseded_by = "DBpediaClassification.v2"
     metadata = TaskMetadata(
         name="DBpediaClassification",
@@ -15,7 +15,7 @@ class DBpediaClassification(AbsTaskClassification):
             "revision": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -49,7 +49,7 @@ class DBpediaClassification(AbsTaskClassification):
         )
 
 
-class DBpediaClassificationV2(AbsTaskClassification):
+class DBpediaClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DBpediaClassification.v2",
         description="""DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.
@@ -60,7 +60,7 @@ class DBpediaClassificationV2(AbsTaskClassification):
             "revision": "e45aab5cbb44baba43d8a0640d809d2aa0a0a770",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

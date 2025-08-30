@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmazonCounterfactualVNClassification(AbsTaskClassification):
+class AmazonCounterfactualVNClassification(AbsTaskAnyClassification):
     num_samples = 32
 
     metadata = TaskMetadata(
@@ -20,7 +20,7 @@ class AmazonCounterfactualVNClassification(AbsTaskClassification):
         - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
         """,
         reference="https://arxiv.org/abs/2104.06893",
-        category="s2s",
+        category="t2c",
         type="Classification",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],

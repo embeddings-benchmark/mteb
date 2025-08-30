@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OdiaNewsClassification(AbsTaskClassification):
+class OdiaNewsClassification(AbsTaskAnyClassification):
     superseded_by = "OdiaNewsClassification.v2"
     metadata = TaskMetadata(
         name="OdiaNewsClassification",
@@ -15,7 +15,7 @@ class OdiaNewsClassification(AbsTaskClassification):
             "revision": "ffb8a34c9637fb20256e8c7be02504d16af4bd6b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -42,7 +42,7 @@ class OdiaNewsClassification(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class OdiaNewsClassificationV2(AbsTaskClassification):
+class OdiaNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OdiaNewsClassification.v2",
         description="""A Odia dataset for 3-class classification of Odia news articles
@@ -53,7 +53,7 @@ class OdiaNewsClassificationV2(AbsTaskClassification):
             "revision": "a594be3144fdf15c1a7efcb0aa7484cbb9a8dba3",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

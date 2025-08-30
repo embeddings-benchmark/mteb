@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TamilNewsClassification(AbsTaskClassification):
+class TamilNewsClassification(AbsTaskAnyClassification):
     superseded_by = "TamilNewsClassification.v2"
     metadata = TaskMetadata(
         name="TamilNewsClassification",
@@ -15,7 +15,7 @@ class TamilNewsClassification(AbsTaskClassification):
             "revision": "bb34dd6690cf17aa731d75d45388c5801b8c4e4b",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -44,7 +44,7 @@ class TamilNewsClassification(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class TamilNewsClassificationV2(AbsTaskClassification):
+class TamilNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TamilNewsClassification.v2",
         description="""A Tamil dataset for 6-class classification of Tamil news articles
@@ -55,7 +55,7 @@ class TamilNewsClassificationV2(AbsTaskClassification):
             "revision": "b417dba1f5a3143f8325b6b6fb585ab4a57c03a0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

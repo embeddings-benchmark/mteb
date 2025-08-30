@@ -6,8 +6,8 @@ from typing import cast
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "ru": ["rus-Cyrl"],
@@ -69,7 +69,7 @@ def load_ruscibench_data(
     return corpus, queries, relevant_docs
 
 
-class RuSciBenchCiteRetrieval(AbsTaskRetrieval, MultilingualTask):
+class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
@@ -85,7 +85,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval, MultilingualTask):
         and 75,000 irrelevant papers. The task is available for both Russian and English scientific texts.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Retrieval",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -122,17 +122,17 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval, MultilingualTask):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_ruscibench_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class RuSciBenchCociteRetrieval(MultilingualTask, AbsTaskRetrieval):
+class RuSciBenchCociteRetrieval( AbsTaskRetrieval):
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
@@ -150,7 +150,7 @@ class RuSciBenchCociteRetrieval(MultilingualTask, AbsTaskRetrieval):
         and English scientific texts.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Retrieval",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -187,11 +187,11 @@ class RuSciBenchCociteRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_ruscibench_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

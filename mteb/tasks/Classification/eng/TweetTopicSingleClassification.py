@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetTopicSingleClassification(AbsTaskClassification):
+class TweetTopicSingleClassification(AbsTaskAnyClassification):
     superseded_by = "TweetTopicSingleClassification.v2"
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification",
@@ -21,7 +21,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/2209.09824",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test_2021"],
         eval_langs=["eng-Latn"],
@@ -55,7 +55,7 @@ Barbieri, Francesco},
         self.dataset["train"] = self.dataset["train_2021"]
 
 
-class TweetTopicSingleClassificationV2(AbsTaskClassification):
+class TweetTopicSingleClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification.v2",
         description="""Topic classification dataset on Twitter with 6 labels. Each instance of
@@ -71,7 +71,7 @@ class TweetTopicSingleClassificationV2(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/2209.09824",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test_2021"],
         eval_langs=["eng-Latn"],

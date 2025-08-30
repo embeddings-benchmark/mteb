@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-
 _LANGUAGES = {
     "en": ["eng-Latn"],
     "de": ["deu-Latn"],

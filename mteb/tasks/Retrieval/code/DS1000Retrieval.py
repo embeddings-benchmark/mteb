@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -15,7 +15,7 @@ class DS1000Retrieval(AbsTaskRetrieval):
             "revision": "25cd4dc8172e799235d83c66439b6b7b8e6583ec",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "python-Code"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ToxicConversationsClassification(AbsTaskClassification):
+class ToxicConversationsClassification(AbsTaskAnyClassification):
     superseded_by = "ToxicConversationsClassification.v2"
     metadata = TaskMetadata(
         name="ToxicConversationsClassification",
@@ -15,7 +15,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
             "revision": "edfaf9da55d3dd50d43143d90c1ac476895ae6de",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -50,7 +50,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
         )
 
 
-class ToxicConversationsClassificationV2(AbsTaskClassification):
+class ToxicConversationsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ToxicConversationsClassification.v2",
         description="""Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.
@@ -61,7 +61,7 @@ class ToxicConversationsClassificationV2(AbsTaskClassification):
             "revision": "7ae55309fbe51a11e13c24887ceed200153514e9",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

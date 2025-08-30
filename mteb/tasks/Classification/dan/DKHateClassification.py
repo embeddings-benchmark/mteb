@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class DKHateClassification(AbsTaskAnyClassification):
     superseded_by = "DKHateClassification.v2"
     metadata = TaskMetadata(
@@ -72,7 +71,7 @@ Piperidis, Stelios},
         )
 
 
-class DKHateClassificationV2(AbsTaskClassification):
+class DKHateClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DKHateClassification.v2",
         dataset={
@@ -83,7 +82,7 @@ class DKHateClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2020.lrec-1.430/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

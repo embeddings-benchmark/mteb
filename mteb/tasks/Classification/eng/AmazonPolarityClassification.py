@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmazonPolarityClassification(AbsTaskClassification):
+class AmazonPolarityClassification(AbsTaskAnyClassification):
     superseded_by = "AmazonPolarityClassification.v2"
     metadata = TaskMetadata(
         name="AmazonPolarityClassification",
@@ -15,7 +15,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "revision": "e2d317d38cd51312af73b3d32a06d1a08b442046",
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -43,7 +43,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
     )
 
 
-class AmazonPolarityClassificationV2(AbsTaskClassification):
+class AmazonPolarityClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AmazonPolarityClassification.v2",
         description="""Amazon Polarity Classification Dataset.
@@ -54,7 +54,7 @@ class AmazonPolarityClassificationV2(AbsTaskClassification):
             "revision": "ec149c1fe36043668a50804214d4597804001f6f",
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

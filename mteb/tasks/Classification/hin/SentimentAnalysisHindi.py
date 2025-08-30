@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SentimentAnalysisHindi(AbsTaskClassification):
+class SentimentAnalysisHindi(AbsTaskAnyClassification):
     superseded_by = "SentimentAnalysisHindi.v2"
     metadata = TaskMetadata(
         name="SentimentAnalysisHindi",
@@ -15,7 +15,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
             "revision": "1beac1b941da76a9c51e3e5b39d230fde9a80983",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["hin-Deva"],
@@ -45,7 +45,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
         )
 
 
-class SentimentAnalysisHindiV2(AbsTaskClassification):
+class SentimentAnalysisHindiV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SentimentAnalysisHindi.v2",
         description="""Hindi Sentiment Analysis Dataset
@@ -56,7 +56,7 @@ class SentimentAnalysisHindiV2(AbsTaskClassification):
             "revision": "27fc099ce1c5a7295b9231e53a37648cdef6cb79",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["hin-Deva"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuReviewsClassification(AbsTaskClassification):
+class RuReviewsClassification(AbsTaskAnyClassification):
     superseded_by = "RuReviewsClassification.v2"
     metadata = TaskMetadata(
         name="RuReviewsClassification",
@@ -15,7 +15,7 @@ class RuReviewsClassification(AbsTaskClassification):
         description="Product review classification (3-point scale) based on RuRevies dataset",
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -50,7 +50,7 @@ class RuReviewsClassification(AbsTaskClassification):
         )
 
 
-class RuReviewsClassificationV2(AbsTaskClassification):
+class RuReviewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuReviewsClassification.v2",
         dataset={
@@ -61,7 +61,7 @@ class RuReviewsClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

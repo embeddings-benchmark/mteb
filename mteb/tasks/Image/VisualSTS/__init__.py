@@ -1,4 +1,3 @@
-from __future__ import annotations
-
-from .eng import *
-from .multilingual import *
+from .eng import STS12VisualSTS, STS13VisualSTS, STS14VisualSTS, STS15VisualSTS, STS16VisualSTS
+from .multilingual import STS17MultilingualVisualSTS, STSBenchmarkMultilingualVisualSTS
+__all__ = ['STS12VisualSTS', 'STS13VisualSTS', 'STS14VisualSTS', 'STS15VisualSTS', 'STS16VisualSTS', 'STS17MultilingualVisualSTS', 'STSBenchmarkMultilingualVisualSTS']

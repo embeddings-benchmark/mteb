@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TurkishMovieSentimentClassification(AbsTaskClassification):
+class TurkishMovieSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "TurkishMovieSentimentClassification.v2"
     metadata = TaskMetadata(
         name="TurkishMovieSentimentClassification",
@@ -15,7 +15,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
             "revision": "409a4415cce5f6bcfca6d5f3ca3c408211ca00b3",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
@@ -44,7 +44,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         )
 
 
-class TurkishMovieSentimentClassificationV2(AbsTaskClassification):
+class TurkishMovieSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TurkishMovieSentimentClassification.v2",
         description="""Turkish Movie Review Dataset
@@ -55,7 +55,7 @@ class TurkishMovieSentimentClassificationV2(AbsTaskClassification):
             "revision": "8ef5ce93ff2504de7fc46776317b78bdd8db47f2",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],

@@ -1,3 +1,2 @@
-from __future__ import annotations
-
-from .eng import *
+from .eng import BirdsnapClassification, CIFAR100Classification, CIFAR10Classification, Caltech101Classification, Country211Classification, DTDClassification, EuroSATClassification, FER2013Classification, FGVCAircraftClassification, Food101Classification, GTSRBClassification, Imagenet1kClassification, MNISTClassification, OxfordFlowersClassification, OxfordPetsClassification, PatchCamelyonClassification, RESISC45Classification, STL10Classification, SUN397Classification, StanfordCarsClassification, UCF101Classification
+__all__ = ['BirdsnapClassification', 'CIFAR100Classification', 'CIFAR10Classification', 'Caltech101Classification', 'Country211Classification', 'DTDClassification', 'EuroSATClassification', 'FER2013Classification', 'FGVCAircraftClassification', 'Food101Classification', 'GTSRBClassification', 'Imagenet1kClassification', 'MNISTClassification', 'OxfordFlowersClassification', 'OxfordPetsClassification', 'PatchCamelyonClassification', 'RESISC45Classification', 'STL10Classification', 'SUN397Classification', 'StanfordCarsClassification', 'UCF101Classification']

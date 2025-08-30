@@ -1,6 +1,3 @@
-from __future__ import annotations
-
-from .HindiDiscourseClassification import HindiDiscourseClassification
-from .SentimentAnalysisHindi import SentimentAnalysisHindi
-
-__all__ = ["HindiDiscourseClassification", "SentimentAnalysisHindi"]
+from .SentimentAnalysisHindi import SentimentAnalysisHindi, SentimentAnalysisHindiV2
+from .HindiDiscourseClassification import HindiDiscourseClassification, HindiDiscourseClassificationV2
+__all__ = ['HindiDiscourseClassification', 'HindiDiscourseClassificationV2', 'SentimentAnalysisHindi', 'SentimentAnalysisHindiV2']

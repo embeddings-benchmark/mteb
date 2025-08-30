@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class FilipinoHateSpeechClassification(AbsTaskClassification):
+class FilipinoHateSpeechClassification(AbsTaskAnyClassification):
     superseded_by = "FilipinoHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification",
@@ -17,7 +17,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
             "revision": "087a17c0b7f9a78901c88aea00ad2892a319fdac",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2019-08-01", "2019-08-01"),
         eval_splits=["validation", "test"],
@@ -43,7 +43,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
     )
 
 
-class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
+class FilipinoHateSpeechClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification.v2",
         description="""Filipino Twitter dataset for sentiment classification.
@@ -54,7 +54,7 @@ class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
             "revision": "fdb7536c08d2f10d8b8b618c3ff00b0be286d844",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2019-08-01", "2019-08-01"),
         eval_splits=["validation", "test"],

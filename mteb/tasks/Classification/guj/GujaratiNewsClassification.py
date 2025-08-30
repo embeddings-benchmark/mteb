@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GujaratiNewsClassification(AbsTaskClassification):
+class GujaratiNewsClassification(AbsTaskAnyClassification):
     superseded_by = "GujaratiNewsClassification.v2"
     metadata = TaskMetadata(
         name="GujaratiNewsClassification",
@@ -15,7 +15,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
             "revision": "1a5f2fa2914bfeff4fcdc6fff4194fa8ec8fa19e",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -34,7 +34,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("headline", "text")
 
 
-class GujaratiNewsClassificationV2(AbsTaskClassification):
+class GujaratiNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GujaratiNewsClassification.v2",
         description="""A Gujarati dataset for 3-class classification of Gujarati news articles
@@ -45,7 +45,7 @@ class GujaratiNewsClassificationV2(AbsTaskClassification):
             "revision": "a815d60b34dc8ee11910743d380b7d14a4e227cb",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

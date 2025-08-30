@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SDSGlovesClassification(AbsTaskClassification):
+class SDSGlovesClassification(AbsTaskAnyClassification):
     superseded_by = "SDSGlovesClassification.v2"
     metadata = TaskMetadata(
         name="SDSGlovesClassification",
@@ -15,7 +15,7 @@ class SDSGlovesClassification(AbsTaskClassification):
             "revision": "c723236c5ec417d79512e6104aca9d2cd88168f6",
         },
         type="Classification",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -46,7 +46,7 @@ class SDSGlovesClassification(AbsTaskClassification):
     )
 
 
-class SDSGlovesClassificationV2(AbsTaskClassification):
+class SDSGlovesClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SDSGlovesClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.
@@ -57,7 +57,7 @@ class SDSGlovesClassificationV2(AbsTaskClassification):
             "revision": "09b09ee755ada02c68ad835971e22b1959d79448",
         },
         type="Classification",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

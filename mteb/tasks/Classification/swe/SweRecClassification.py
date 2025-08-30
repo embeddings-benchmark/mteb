@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SweRecClassification(AbsTaskClassification):
+class SweRecClassification(AbsTaskAnyClassification):
     superseded_by = "SweRecClassification.v2"
     metadata = TaskMetadata(
         name="SweRecClassification",
@@ -15,7 +15,7 @@ class SweRecClassification(AbsTaskClassification):
             "revision": "b07c6ce548f6a7ac8d546e1bbe197a0086409190",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],
@@ -46,7 +46,7 @@ Fishel, Mark},
     )
 
 
-class SweRecClassificationV2(AbsTaskClassification):
+class SweRecClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SweRecClassification.v2",
         description="""A Swedish dataset for sentiment classification on review
@@ -57,7 +57,7 @@ class SweRecClassificationV2(AbsTaskClassification):
             "revision": "2a18a4ccc6770319b7f717cda1800f7d5bd5cd1a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],

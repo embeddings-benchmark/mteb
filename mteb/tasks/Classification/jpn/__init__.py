@@ -1,5 +1,3 @@
-from __future__ import annotations
-
-from .WRIMEClassification import WRIMEClassification
-
-__all__ = ["WRIMEClassification"]
+from .JapaneseSentimentClassification import JapaneseSentimentClassification
+from .WRIMEClassification import WRIMEClassification, WRIMEClassificationV2
+__all__ = ['JapaneseSentimentClassification', 'WRIMEClassification', 'WRIMEClassificationV2']

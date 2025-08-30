@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NewsClassification(AbsTaskClassification):
+class NewsClassification(AbsTaskAnyClassification):
     superseded_by = "NewsClassification.v2"
     metadata = TaskMetadata(
         name="NewsClassification",
@@ -15,7 +15,7 @@ class NewsClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/1509.01626",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -46,7 +46,7 @@ class NewsClassification(AbsTaskClassification):
     )
 
 
-class NewsClassificationV2(AbsTaskClassification):
+class NewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NewsClassification.v2",
         description="""Large News Classification Dataset
@@ -57,7 +57,7 @@ class NewsClassificationV2(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/1509.01626",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

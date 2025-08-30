@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
+class TeluguAndhraJyotiNewsClassification(AbsTaskAnyClassification):
     superseded_by = "TeluguAndhraJyotiNewsClassification.v2"
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification",
@@ -15,7 +15,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
             "revision": "3821aa93aa461c9263071e0897234e8d775ad616",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -35,7 +35,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
+class TeluguAndhraJyotiNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification.v2",
         description="""A Telugu dataset for 5-class classification of Telugu news articles
@@ -46,7 +46,7 @@ class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
             "revision": "032752fb5f3a8c5b0814061c6502e0e8d58ec77c",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

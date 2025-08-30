@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from functools import partial
+
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -180,7 +182,7 @@ granite_125m_english = ModelMeta(
 
 
 granite_english_r2 = ModelMeta(
-    loader=partial(  # type: ignore
+    loader=partial(
         sentence_transformers_loader,
         model_name="ibm-granite/granite-embedding-english-r2",
         revision="6e7b8ce0e76270394ac4669ba4bbd7133b60b7f9",

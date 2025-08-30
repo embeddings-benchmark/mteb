@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NoRecClassification(AbsTaskClassification):
+class NoRecClassification(AbsTaskAnyClassification):
     superseded_by = "NoRecClassification.v2"
     metadata = TaskMetadata(
         name="NoRecClassification",
@@ -16,7 +16,7 @@ class NoRecClassification(AbsTaskClassification):
             "revision": "5b740b7c42c73d586420812a35745fc37118862f",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
@@ -63,7 +63,7 @@ Tokunaga, Takenobu},
     )
 
 
-class NoRecClassificationV2(AbsTaskClassification):
+class NoRecClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NoRecClassification.v2",
         description="""A Norwegian dataset for sentiment classification on review
@@ -75,7 +75,7 @@ class NoRecClassificationV2(AbsTaskClassification):
             "revision": "10aae1fb3fe2c19888bd4ea11695bbf19aa8bed3",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

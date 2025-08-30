@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -15,7 +15,7 @@ class WikiSQLRetrieval(AbsTaskRetrieval):
             "revision": "4e099ab42dffd49d72c1472f451371e53343e3d7",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "sql-Code"],

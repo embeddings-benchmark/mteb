@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskTextRegression import AbsTaskTextRegression
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskTextRegression):
+class RuSciBenchCitedCountRegression( AbsTaskTextRegression):
     metadata = TaskMetadata(
         name="RuSciBenchCitedCountRegression",
         description="""Predicts the number of times a scientific article has been cited by other papers.
@@ -17,7 +17,7 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskTextRegression):
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
         },
         type="Regression",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -51,7 +51,7 @@ class RuSciBenchCitedCountRegression(MultilingualTask, AbsTaskTextRegression):
     )
 
 
-class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskTextRegression):
+class RuSciBenchYearPublRegression( AbsTaskTextRegression):
     metadata = TaskMetadata(
         name="RuSciBenchYearPublRegression",
         description="""Predicts the publication year of a scientific article. The prediction is based on the
@@ -63,7 +63,7 @@ class RuSciBenchYearPublRegression(MultilingualTask, AbsTaskTextRegression):
             "revision": "fbc0599a0b5f00b3c7d87ab4d13490f04fb77f8e",
         },
         type="Regression",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={

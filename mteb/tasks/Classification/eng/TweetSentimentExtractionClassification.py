@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetSentimentExtractionClassification(AbsTaskClassification):
+class TweetSentimentExtractionClassification(AbsTaskAnyClassification):
     superseded_by = "TweetSentimentExtractionClassification.v2"
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification",
@@ -15,7 +15,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
             "revision": "d604517c81ca91fe16a244d1248fc021f9ecee7a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -45,7 +45,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class TweetSentimentExtractionClassificationV2(AbsTaskClassification):
+class TweetSentimentExtractionClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification.v2",
         description="""
@@ -56,7 +56,7 @@ class TweetSentimentExtractionClassificationV2(AbsTaskClassification):
             "revision": "7261898ee3b9a739595e8dbf41df6b2332f429bb",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

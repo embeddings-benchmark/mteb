@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpanishSentimentClassification(AbsTaskClassification):
+class SpanishSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "SpanishSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SpanishSentimentClassification",
@@ -15,7 +15,7 @@ class SpanishSentimentClassification(AbsTaskClassification):
             "revision": "2a6e340e4b59b7c0a78c03a0b79ac27e1b4a2662",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2022-08-16", "2022-08-16"),
         eval_splits=["validation", "test"],
@@ -55,7 +55,7 @@ Vylomova, Ekaterina},
     )
 
 
-class SpanishSentimentClassificationV2(AbsTaskClassification):
+class SpanishSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SpanishSentimentClassification.v2",
         description="""A Spanish dataset for sentiment classification.
@@ -66,7 +66,7 @@ class SpanishSentimentClassificationV2(AbsTaskClassification):
             "revision": "307dea211013736d7d146dad9d2f6330e44d29b8",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2022-08-16", "2022-08-16"),
         eval_splits=["validation", "test"],

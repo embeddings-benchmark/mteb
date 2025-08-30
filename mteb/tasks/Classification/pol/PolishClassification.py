@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CbdClassification(AbsTaskClassification):
+class CbdClassification(AbsTaskAnyClassification):
     superseded_by = "CBD.v2"
     metadata = TaskMetadata(
         name="CBD",
@@ -15,7 +15,7 @@ class CbdClassification(AbsTaskClassification):
             "revision": "36ddb419bcffe6a5374c3891957912892916f28d",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -41,7 +41,7 @@ class CbdClassification(AbsTaskClassification):
     )
 
 
-class CbdClassificationV2(AbsTaskClassification):
+class CbdClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CBD.v2",
         description="""Polish Tweets annotated for cyberbullying detection.
@@ -52,7 +52,7 @@ class CbdClassificationV2(AbsTaskClassification):
             "revision": "d962699e284a173179a05052b49d0a9001a25bc0",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -79,7 +79,7 @@ class CbdClassificationV2(AbsTaskClassification):
     )
 
 
-class PolEmo2InClassification(AbsTaskClassification):
+class PolEmo2InClassification(AbsTaskAnyClassification):
     superseded_by = "PolEmo2.0-IN.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
@@ -91,7 +91,7 @@ class PolEmo2InClassification(AbsTaskClassification):
             "revision": "d90724373c70959f17d2331ad51fb60c71176b03",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -123,7 +123,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2InClassificationV2(AbsTaskClassification):
+class PolEmo2InClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -134,7 +134,7 @@ class PolEmo2InClassificationV2(AbsTaskClassification):
             "revision": "15f86f0432cd7c91437cf7c673993527e2f53fd8",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -167,7 +167,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2OutClassification(AbsTaskClassification):
+class PolEmo2OutClassification(AbsTaskAnyClassification):
     superseded_by = "PolEmo2.0-OUT.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
@@ -180,7 +180,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
             "revision": "6a21ab8716e255ab1867265f8b396105e8aa63d4",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -196,7 +196,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
     )
 
 
-class PolEmo2OutClassificationV2(AbsTaskClassification):
+class PolEmo2OutClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -208,7 +208,7 @@ class PolEmo2OutClassificationV2(AbsTaskClassification):
             "revision": "f7f3752b56dcbc4c84077274dfa687efa38476fb",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -225,7 +225,7 @@ class PolEmo2OutClassificationV2(AbsTaskClassification):
     )
 
 
-class AllegroReviewsClassification(AbsTaskClassification):
+class AllegroReviewsClassification(AbsTaskAnyClassification):
     superseded_by = "AllegroReviews.v2"
     metadata = TaskMetadata(
         name="AllegroReviews",
@@ -236,7 +236,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
             "revision": "b89853e6de927b0e3bfa8ecc0e56fe4e02ceafc6",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -276,7 +276,7 @@ Tetreault, Joel},
     )
 
 
-class AllegroReviewsClassificationV2(AbsTaskClassification):
+class AllegroReviewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AllegroReviews.v2",
         description="""A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.
@@ -287,7 +287,7 @@ class AllegroReviewsClassificationV2(AbsTaskClassification):
             "revision": "5233456d195235bf93f45b8ef54d72f72957dbf1",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -328,7 +328,7 @@ Tetreault, Joel},
     )
 
 
-class PacClassification(AbsTaskClassification):
+class PacClassification(AbsTaskAnyClassification):
     superseded_by = "PAC.v2"
     metadata = TaskMetadata(
         name="PAC",
@@ -340,7 +340,7 @@ class PacClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -366,7 +366,7 @@ class PacClassification(AbsTaskClassification):
     )
 
 
-class PacClassificationV2(AbsTaskClassification):
+class PacClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PAC.v2",
         description="""Polish Paraphrase Corpus
@@ -377,7 +377,7 @@ class PacClassificationV2(AbsTaskClassification):
             "revision": "53c98e6a9173c550f1b60f0da9152e67e9618897",
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

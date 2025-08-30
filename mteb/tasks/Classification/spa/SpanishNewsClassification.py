@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpanishNewsClassification(AbsTaskClassification):
+class SpanishNewsClassification(AbsTaskAnyClassification):
     superseded_by = "SpanishNewsClassification.v2"
     metadata = TaskMetadata(
         name="SpanishNewsClassification",
@@ -15,7 +15,7 @@ class SpanishNewsClassification(AbsTaskClassification):
             "revision": "0086c197b914690a9dace258a19398890a05299a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2023-05-01", "2024-05-01"),
         eval_splits=["train"],
@@ -38,7 +38,7 @@ class SpanishNewsClassification(AbsTaskClassification):
         )
 
 
-class SpanishNewsClassificationV2(AbsTaskClassification):
+class SpanishNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SpanishNewsClassification.v2",
         description="""A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories.
@@ -49,7 +49,7 @@ class SpanishNewsClassificationV2(AbsTaskClassification):
             "revision": "345aa68ec44052d28828c6f88e7a2aafaf74be5a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2023-05-01", "2024-05-01"),
         eval_splits=["test"],

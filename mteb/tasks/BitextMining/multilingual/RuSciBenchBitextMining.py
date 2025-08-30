@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuSciBenchBitextMining(AbsTaskBitextMining, MultilingualTask):
+class RuSciBenchBitextMining(AbsTaskBitextMining):
     fast_loading = True
     metadata = TaskMetadata(
         name="RuSciBenchBitextMining",
@@ -20,7 +20,7 @@ class RuSciBenchBitextMining(AbsTaskBitextMining, MultilingualTask):
         to match an article's Russian title and abstract to its English counterpart, or vice versa.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="BitextMining",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={

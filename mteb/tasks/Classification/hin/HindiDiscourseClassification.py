@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HindiDiscourseClassification(AbsTaskClassification):
+class HindiDiscourseClassification(AbsTaskAnyClassification):
     superseded_by = "HindiDiscourseClassification.v2"
     metadata = TaskMetadata(
         name="HindiDiscourseClassification",
@@ -16,7 +16,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         description="A Hindi Discourse dataset in Hindi with values for coherence.",
         reference="https://aclanthology.org/2020.lrec-1.149/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["hin-Deva"],
@@ -63,7 +63,7 @@ Stent, Amanda},
         )
 
 
-class HindiDiscourseClassificationV2(AbsTaskClassification):
+class HindiDiscourseClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HindiDiscourseClassification.v2",
         dataset={
@@ -74,7 +74,7 @@ class HindiDiscourseClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2020.lrec-1.149/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["hin-Deva"],

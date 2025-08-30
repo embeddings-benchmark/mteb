@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CQADupstackUnixVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class CQADupstackUnixVN(AbsTaskRetrieval):
             "revision": "f8b884697871cb38901139f2435c273135f83a3f",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CQADupstackWordpressVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class CQADupstackWordpressVN(AbsTaskRetrieval):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

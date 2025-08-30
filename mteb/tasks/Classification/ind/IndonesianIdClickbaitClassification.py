@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IndonesianIdClickbaitClassification(AbsTaskClassification):
+class IndonesianIdClickbaitClassification(AbsTaskAnyClassification):
     superseded_by = "IndonesianIdClickbaitClassification.v2"
     metadata = TaskMetadata(
         name="IndonesianIdClickbaitClassification",
@@ -15,7 +15,7 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
         description="The CLICK-ID dataset is a collection of Indonesian news headlines that was collected from 12 local online news publishers.",
         reference="http://www.sciencedirect.com/science/article/pii/S2352340920311252",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ind-Latn"],
@@ -53,7 +53,7 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
         )
 
 
-class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
+class IndonesianIdClickbaitClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndonesianIdClickbaitClassification.v2",
         dataset={
@@ -64,7 +64,7 @@ class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="http://www.sciencedirect.com/science/article/pii/S2352340920311252",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ind-Latn"],

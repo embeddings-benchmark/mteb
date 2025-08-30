@@ -1,11 +1,11 @@
 # SuperLIM tasks
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DalajClassification(AbsTaskClassification):
+class DalajClassification(AbsTaskAnyClassification):
     superseded_by = "DalajClassification.v2"
     metadata = TaskMetadata(
         name="DalajClassification",
@@ -18,7 +18,7 @@ class DalajClassification(AbsTaskClassification):
         description="A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],
@@ -70,7 +70,7 @@ class DalajClassification(AbsTaskClassification):
         )
 
 
-class DalajClassificationV2(AbsTaskClassification):
+class DalajClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DalajClassification.v2",
         dataset={
@@ -82,7 +82,7 @@ class DalajClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],

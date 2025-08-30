@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SDSEyeProtectionClassification(AbsTaskClassification):
+class SDSEyeProtectionClassification(AbsTaskAnyClassification):
     superseded_by = "SDSEyeProtectionClassification.v2"
     metadata = TaskMetadata(
         name="SDSEyeProtectionClassification",
@@ -15,7 +15,7 @@ class SDSEyeProtectionClassification(AbsTaskClassification):
             "revision": "35cbe5ee544dd26e343238a333de4568e6f77819",
         },
         type="Classification",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -46,7 +46,7 @@ class SDSEyeProtectionClassification(AbsTaskClassification):
     )
 
 
-class SDSEyeProtectionClassificationV2(AbsTaskClassification):
+class SDSEyeProtectionClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SDSEyeProtectionClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.
@@ -57,7 +57,7 @@ class SDSEyeProtectionClassificationV2(AbsTaskClassification):
             "revision": "ead011d2286d5395fea054d2282ca0478ceb7cfb",
         },
         type="Classification",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class PatentClassification(AbsTaskClassification):
+class PatentClassification(AbsTaskAnyClassification):
     superseded_by = "PatentClassification.v2"
     metadata = TaskMetadata(
         name="PatentClassification",
@@ -15,7 +15,7 @@ class PatentClassification(AbsTaskClassification):
         },
         reference="https://aclanthology.org/P19-1212.pdf",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -50,7 +50,7 @@ M{\`a}rquez, Llu{\'\i}s},
     )
 
 
-class PatentClassificationV2(AbsTaskClassification):
+class PatentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PatentClassification.v2",
         description="""Classification Dataset of Patents and Abstract
@@ -61,7 +61,7 @@ class PatentClassificationV2(AbsTaskClassification):
         },
         reference="https://aclanthology.org/P19-1212.pdf",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

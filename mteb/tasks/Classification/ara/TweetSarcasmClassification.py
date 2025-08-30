@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class TweetSarcasmClassification(AbsTaskAnyClassification):
     superseded_by = "TweetSarcasmClassification.v2"
     metadata = TaskMetadata(

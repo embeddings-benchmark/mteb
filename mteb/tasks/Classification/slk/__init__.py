@@ -1,8 +1,3 @@
-from __future__ import annotations
-
-from .CSFDSKMovieReviewSentimentClassification import (
-    CSFDSKMovieReviewSentimentClassification,
-)
-from .SlovakHateSpeechClassification import SlovakHateSpeechClassification
-
-__all__ = ["CSFDSKMovieReviewSentimentClassification", "SlovakHateSpeechClassification"]
+from .SlovakHateSpeechClassification import SlovakHateSpeechClassification, SlovakHateSpeechClassificationV2
+from .CSFDSKMovieReviewSentimentClassification import CSFDSKMovieReviewSentimentClassification, CSFDSKMovieReviewSentimentClassificationV2
+__all__ = ['CSFDSKMovieReviewSentimentClassification', 'CSFDSKMovieReviewSentimentClassificationV2', 'SlovakHateSpeechClassification', 'SlovakHateSpeechClassificationV2']

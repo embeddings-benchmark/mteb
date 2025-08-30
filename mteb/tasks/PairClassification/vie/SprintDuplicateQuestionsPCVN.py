@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SprintDuplicateQuestionsPCVN(AbsTaskPairClassification):
@@ -18,7 +18,7 @@ class SprintDuplicateQuestionsPCVN(AbsTaskPairClassification):
             "revision": "2552beae0e4fe7fe05d088814f78a4c309ad2219",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2c",
         eval_splits=["validation", "test"],
         eval_langs=["vie-Latn"],
         main_score="max_ap",

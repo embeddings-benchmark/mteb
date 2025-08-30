@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 
 # type: ignore
-from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
+from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
-class Moroco(AbsTaskClassification):
+class Moroco(AbsTaskAnyClassification):
     superseded_by = "Moroco.v2"
     metadata = TaskMetadata(
         name="Moroco",
@@ -18,7 +18,7 @@ class Moroco(AbsTaskClassification):
         description="The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldavian and Romanian samples of text collected from the news domain. The samples belong to one of the following six topics: (0) culture, (1) finance, (2) politics, (3) science, (4) sports, (5) tech",
         reference="https://huggingface.co/datasets/moroco",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],
@@ -53,7 +53,7 @@ class Moroco(AbsTaskClassification):
         )
 
 
-class MorocoV2(AbsTaskClassification):
+class MorocoV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Moroco.v2",
         dataset={
@@ -64,7 +64,7 @@ class MorocoV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/moroco",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],

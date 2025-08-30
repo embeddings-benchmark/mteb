@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EstonianValenceClassification(AbsTaskClassification):
+class EstonianValenceClassification(AbsTaskAnyClassification):
     superseded_by = "EstonianValenceClassification.v2"
     metadata = TaskMetadata(
         name="EstonianValenceClassification",
@@ -15,7 +15,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         description="Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers.",
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["est-Latn"],
@@ -56,7 +56,7 @@ class EstonianValenceClassification(AbsTaskClassification):
     samples_per_label = 16
 
 
-class EstonianValenceClassificationV2(AbsTaskClassification):
+class EstonianValenceClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="EstonianValenceClassification.v2",
         dataset={
@@ -67,7 +67,7 @@ class EstonianValenceClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["est-Latn"],

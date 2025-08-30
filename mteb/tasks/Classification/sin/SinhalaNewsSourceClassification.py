@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SinhalaNewsSourceClassification(AbsTaskClassification):
+class SinhalaNewsSourceClassification(AbsTaskAnyClassification):
     superseded_by = "SinhalaNewsSourceClassification.v2"
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification",
@@ -15,7 +15,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["sin-Sinh"],
@@ -44,7 +44,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         )
 
 
-class SinhalaNewsSourceClassificationV2(AbsTaskClassification):
+class SinhalaNewsSourceClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification.v2",
         description="""This dataset contains Sinhala news headlines extracted from 9 news sources (websites) (Sri Lanka Army, Dinamina, GossipLanka, Hiru, ITN, Lankapuwath, NewsLK, Newsfirst, World Socialist Web Site-Sinhala).
@@ -55,7 +55,7 @@ class SinhalaNewsSourceClassificationV2(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["sin-Sinh"],

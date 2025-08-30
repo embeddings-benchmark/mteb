@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KorSarcasmClassification(AbsTaskClassification):
+class KorSarcasmClassification(AbsTaskAnyClassification):
     superseded_by = "KorSarcasmClassification.v2"
     metadata = TaskMetadata(
         name="KorSarcasmClassification",
@@ -23,7 +23,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         },
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
@@ -54,7 +54,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         )
 
 
-class KorSarcasmClassificationV2(AbsTaskClassification):
+class KorSarcasmClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KorSarcasmClassification.v2",
         description="""
@@ -73,7 +73,7 @@ class KorSarcasmClassificationV2(AbsTaskClassification):
         },
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

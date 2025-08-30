@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WisesightSentimentClassification(AbsTaskClassification):
+class WisesightSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "WisesightSentimentClassification.v2"
     metadata = TaskMetadata(
         name="WisesightSentimentClassification",
@@ -15,7 +15,7 @@ class WisesightSentimentClassification(AbsTaskClassification):
             "revision": "727ea9bd253f9eedf16aebec6ac3f07791fb3db2",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],
@@ -45,7 +45,7 @@ Polpanumas, Charin},
     )
 
 
-class WisesightSentimentClassificationV2(AbsTaskClassification):
+class WisesightSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WisesightSentimentClassification.v2",
         description="""Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)
@@ -56,7 +56,7 @@ class WisesightSentimentClassificationV2(AbsTaskClassification):
             "revision": "aa2a5976a75df7f667215ac14353b3f5d07ba598",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],

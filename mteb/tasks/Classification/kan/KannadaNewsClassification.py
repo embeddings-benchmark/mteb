@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KannadaNewsClassification(AbsTaskClassification):
+class KannadaNewsClassification(AbsTaskAnyClassification):
     superseded_by = "KannadaNewsClassification.v2"
     metadata = TaskMetadata(
         name="KannadaNewsClassification",
@@ -15,7 +15,7 @@ class KannadaNewsClassification(AbsTaskClassification):
         },
         reference="https://github.com/goru001/nlp-for-kannada",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kan-Knda"],
@@ -44,7 +44,7 @@ class KannadaNewsClassification(AbsTaskClassification):
         )
 
 
-class KannadaNewsClassificationV2(AbsTaskClassification):
+class KannadaNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KannadaNewsClassification.v2",
         description="""The Kannada news dataset contains only the headlines of news article in three categories: Entertainment, Tech, and Sports. The data set contains around 6300 news article headlines which are collected from Kannada news websites. The data set has been cleaned and contains train and test set using which can be used to benchmark topic classification models in Kannada.
@@ -55,7 +55,7 @@ class KannadaNewsClassificationV2(AbsTaskClassification):
         },
         reference="https://github.com/goru001/nlp-for-kannada",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kan-Knda"],

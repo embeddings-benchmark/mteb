@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MassiveIntentVNClassification(AbsTaskClassification):
+class MassiveIntentVNClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MassiveIntentVNClassification",
         dataset={
@@ -17,7 +17,7 @@ class MassiveIntentVNClassification(AbsTaskClassification):
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
-        category="s2s",
+        category="t2c",
         type="Classification",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],

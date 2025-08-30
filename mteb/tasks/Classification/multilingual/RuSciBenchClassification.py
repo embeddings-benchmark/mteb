@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuSciBenchCoreRiscClassification(MultilingualTask, AbsTaskClassification):
+class RuSciBenchCoreRiscClassification( AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchCoreRiscClassification",
         dataset={
@@ -19,7 +19,7 @@ class RuSciBenchCoreRiscClassification(MultilingualTask, AbsTaskClassification):
         versions of the paper's title and abstract.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -53,7 +53,7 @@ class RuSciBenchCoreRiscClassification(MultilingualTask, AbsTaskClassification):
     )
 
 
-class RuSciBenchPubTypeClassification(MultilingualTask, AbsTaskClassification):
+class RuSciBenchPubTypeClassification( AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchPubTypeClassification",
         dataset={
@@ -66,7 +66,7 @@ class RuSciBenchPubTypeClassification(MultilingualTask, AbsTaskClassification):
         This task is available for both Russian and English versions of the paper's title and abstract.""",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -100,7 +100,7 @@ class RuSciBenchPubTypeClassification(MultilingualTask, AbsTaskClassification):
     )
 
 
-class RuSciBenchGRNTIClassificationV2(MultilingualTask, AbsTaskClassification):
+class RuSciBenchGRNTIClassificationV2( AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClassification.v2",
         dataset={
@@ -116,7 +116,7 @@ class RuSciBenchGRNTIClassificationV2(MultilingualTask, AbsTaskClassification):
         """,
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -150,7 +150,7 @@ class RuSciBenchGRNTIClassificationV2(MultilingualTask, AbsTaskClassification):
     )
 
 
-class RuSciBenchOECDClassificationV2(MultilingualTask, AbsTaskClassification):
+class RuSciBenchOECDClassificationV2( AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchOECDClassification.v2",
         dataset={
@@ -166,7 +166,7 @@ class RuSciBenchOECDClassificationV2(MultilingualTask, AbsTaskClassification):
         """,
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={

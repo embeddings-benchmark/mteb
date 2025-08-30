@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaBioMetChemClassification(AbsTaskClassification):
+class WikipediaBioMetChemClassification(AbsTaskAnyClassification):
     superseded_by = "WikipediaBioMetChemClassification.v2"
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification",
@@ -15,7 +15,7 @@ class WikipediaBioMetChemClassification(AbsTaskClassification):
             "revision": "6ac491e5de9070c6dd434b31e76d3d379123dcff",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -38,7 +38,7 @@ class WikipediaBioMetChemClassification(AbsTaskClassification):
     )
 
 
-class WikipediaBioMetChemClassificationV2(AbsTaskClassification):
+class WikipediaBioMetChemClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.
@@ -49,7 +49,7 @@ class WikipediaBioMetChemClassificationV2(AbsTaskClassification):
             "revision": "5341bdf799e94949b5c2684bb54bfe462c528179",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

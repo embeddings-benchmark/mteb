@@ -1,19 +1,8 @@
-from __future__ import annotations
-
-from .AskUbuntuDupQuestions import AskUbuntuDupQuestions
 from .BuiltBenchReranking import BuiltBenchReranking
-from .MindSmallReranking import MindSmallReranking
-from .NevIR import NevIR
-from .SciDocsReranking import SciDocsReranking
-from .StackOverflowDupQuestions import StackOverflowDupQuestions
 from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
-
-__all__ = [
-    "AskUbuntuDupQuestions",
-    "BuiltBenchReranking",
-    "MindSmallReranking",
-    "NevIR",
-    "SciDocsReranking",
-    "StackOverflowDupQuestions",
-    "WebLINXCandidatesReranking",
-]
+from .SciDocsReranking import SciDocsReranking
+from .AskUbuntuDupQuestions import AskUbuntuDupQuestions
+from .NevIR import NevIR
+from .MindSmallReranking import MindSmallReranking
+from .StackOverflowDupQuestions import StackOverflowDupQuestions
+__all__ = ['AskUbuntuDupQuestions', 'BuiltBenchReranking', 'MindSmallReranking', 'NevIR', 'SciDocsReranking', 'StackOverflowDupQuestions', 'WebLINXCandidatesReranking']

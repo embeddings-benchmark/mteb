@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ClimateFEVERVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class ClimateFEVERVN(AbsTaskRetrieval):
             "revision": "42328bf787e17b1ad1a88be4f5e87ea9fb668511",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

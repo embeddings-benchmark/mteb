@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FrenchBookReviews(AbsTaskClassification):
+class FrenchBookReviews(AbsTaskAnyClassification):
     superseded_by = "FrenchBookReviews.v2"
     metadata = TaskMetadata(
         name="FrenchBookReviews",
@@ -15,7 +15,7 @@ class FrenchBookReviews(AbsTaskClassification):
         description="It is a French book reviews dataset containing a huge number of reader reviews on French books. Each review is pared with a rating that ranges from 0.5 to 5 (with 0.5 increment).",
         reference="https://huggingface.co/datasets/Abirate/french_book_reviews",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["fra-Latn"],
@@ -38,7 +38,7 @@ class FrenchBookReviews(AbsTaskClassification):
         )
 
 
-class FrenchBookReviewsV2(AbsTaskClassification):
+class FrenchBookReviewsV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FrenchBookReviews.v2",
         dataset={
@@ -49,7 +49,7 @@ class FrenchBookReviewsV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://huggingface.co/datasets/Abirate/french_book_reviews",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],

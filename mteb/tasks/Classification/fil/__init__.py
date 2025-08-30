@@ -1,6 +1,3 @@
-from __future__ import annotations
-
-from .FilipinoHateSpeechClassification import FilipinoHateSpeechClassification
 from .FilipinoShopeeReviewsClassification import FilipinoShopeeReviewsClassification
-
-__all__ = ["FilipinoHateSpeechClassification", "FilipinoShopeeReviewsClassification"]
+from .FilipinoHateSpeechClassification import FilipinoHateSpeechClassification, FilipinoHateSpeechClassificationV2
+__all__ = ['FilipinoHateSpeechClassification', 'FilipinoHateSpeechClassificationV2', 'FilipinoShopeeReviewsClassification']

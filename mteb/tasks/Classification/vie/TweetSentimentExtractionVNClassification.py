@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetSentimentExtractionVNClassification(AbsTaskClassification):
+class TweetSentimentExtractionVNClassification(AbsTaskAnyClassification):
     num_samples = 32
 
     metadata = TaskMetadata(
@@ -20,7 +20,7 @@ class TweetSentimentExtractionVNClassification(AbsTaskClassification):
             "revision": "f453803eff1e91579eb235dc1d7c38d39b3f1340",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",

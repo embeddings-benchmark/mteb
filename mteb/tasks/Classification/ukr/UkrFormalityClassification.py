@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UkrFormalityClassification(AbsTaskClassification):
+class UkrFormalityClassification(AbsTaskAnyClassification):
     superseded_by = "UkrFormalityClassification.v2"
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
@@ -21,7 +21,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train", "test"],
         eval_langs=["ukr-Cyrl"],
@@ -55,7 +55,7 @@ Tetreault, Joel},
         )
 
 
-class UkrFormalityClassificationV2(AbsTaskClassification):
+class UkrFormalityClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification.v2",
         description="""
@@ -72,7 +72,7 @@ class UkrFormalityClassificationV2(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ukr-Cyrl"],

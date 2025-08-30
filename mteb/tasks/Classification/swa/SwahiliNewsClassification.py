@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SwahiliNewsClassification(AbsTaskClassification):
+class SwahiliNewsClassification(AbsTaskAnyClassification):
     superseded_by = "SwahiliNewsClassification.v2"
     metadata = TaskMetadata(
         name="SwahiliNewsClassification",
@@ -15,7 +15,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
             "revision": "24fcf066e6b96f9e0d743e8b79184e0c599f73c3",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["swa-Latn"],
@@ -48,7 +48,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         )
 
 
-class SwahiliNewsClassificationV2(AbsTaskClassification):
+class SwahiliNewsClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SwahiliNewsClassification.v2",
         description="""Dataset for Swahili News Classification, categorized with 6 domains (Local News (Kitaifa), International News (Kimataifa), Finance News (Uchumi), Health News (Afya), Sports News (Michezo), and Entertainment News (Burudani)). Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets
@@ -59,7 +59,7 @@ class SwahiliNewsClassificationV2(AbsTaskClassification):
             "revision": "d929055f41849d5bc3533c07d978fcfbc89d6a4e",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swa-Latn"],

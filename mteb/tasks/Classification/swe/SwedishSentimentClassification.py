@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SwedishSentimentClassification(AbsTaskClassification):
+class SwedishSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "SwedishSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SwedishSentimentClassification",
@@ -15,7 +15,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
             "revision": "39e35f55d58338ebd602f8d83b52cfe027f5146a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["swe-Latn"],
@@ -31,7 +31,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
     )
 
 
-class SwedishSentimentClassificationV2(AbsTaskClassification):
+class SwedishSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SwedishSentimentClassification.v2",
         description="""Dataset of Swedish reviews scarped from various public available websites
@@ -42,7 +42,7 @@ class SwedishSentimentClassificationV2(AbsTaskClassification):
             "revision": "f521560ac618eea57c85392c574c16b6c08c9487",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["swe-Latn"],

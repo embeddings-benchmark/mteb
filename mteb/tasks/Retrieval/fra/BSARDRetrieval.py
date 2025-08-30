@@ -99,7 +99,7 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
             "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
@@ -134,12 +134,12 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
         corpus_raw = datasets.load_dataset(
             name="corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="questions",
             split=self.metadata.eval_splits[0],
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         split = self.metadata.eval_splits[0]

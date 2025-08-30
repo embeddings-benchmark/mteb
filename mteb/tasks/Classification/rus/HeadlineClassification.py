@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HeadlineClassification(AbsTaskClassification):
+class HeadlineClassification(AbsTaskAnyClassification):
     superseded_by = "HeadlineClassification.v2"
     metadata = TaskMetadata(
         name="HeadlineClassification",
@@ -15,7 +15,7 @@ class HeadlineClassification(AbsTaskClassification):
         description="Headline rubric classification based on the paraphraser plus dataset.",
         reference="https://aclanthology.org/2020.ngt-1.6/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -62,7 +62,7 @@ Oda, Yusuke},
         )
 
 
-class HeadlineClassificationV2(AbsTaskClassification):
+class HeadlineClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HeadlineClassification.v2",
         dataset={
@@ -73,7 +73,7 @@ class HeadlineClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2020.ngt-1.6/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

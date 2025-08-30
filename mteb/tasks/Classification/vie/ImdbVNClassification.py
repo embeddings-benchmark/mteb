@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ImdbVNClassification(AbsTaskClassification):
+class ImdbVNClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ImdbVNClassification",
         description="""A translated dataset of large movie reviews annotated for sentiment classification.
@@ -18,7 +18,7 @@ class ImdbVNClassification(AbsTaskClassification):
         },
         reference="http://www.aclweb.org/anthology/P11-1015",
         type="Classification",
-        category="p2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",

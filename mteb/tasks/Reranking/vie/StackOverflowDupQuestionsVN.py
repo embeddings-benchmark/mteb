@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class StackOverflowDupQuestionsVN(AbsTaskReranking):
@@ -18,7 +18,7 @@ class StackOverflowDupQuestionsVN(AbsTaskReranking):
             "revision": "3ceb17db245f52beaf27a3720aa71e1cc5f06faf",
         },
         type="Reranking",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="map",

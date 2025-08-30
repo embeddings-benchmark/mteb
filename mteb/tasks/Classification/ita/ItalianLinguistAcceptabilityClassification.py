@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
+class ItalianLinguisticAcceptabilityClassification(AbsTaskAnyClassification):
     superseded_by = "Itacola.v2"
     metadata = TaskMetadata(
         name="Itacola",
@@ -16,7 +16,7 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         description="An Italian Corpus of Linguistic Acceptability taken from linguistic literature with a binary annotation made by the original authors themselves.",
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
@@ -55,7 +55,7 @@ Tonelli, Sara},
         )
 
 
-class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskClassification):
+class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Itacola.v2",
         dataset={
@@ -66,7 +66,7 @@ class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],

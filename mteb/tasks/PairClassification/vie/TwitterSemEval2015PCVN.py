@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TwitterSemEval2015PCVN(AbsTaskPairClassification):
@@ -17,7 +17,7 @@ class TwitterSemEval2015PCVN(AbsTaskPairClassification):
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://alt.qcri.org/semeval2015/task1/",
-        category="s2s",
+        category="t2c",
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],

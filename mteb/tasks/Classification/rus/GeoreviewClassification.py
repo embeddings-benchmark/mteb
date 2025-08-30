@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GeoreviewClassification(AbsTaskClassification):
+class GeoreviewClassification(AbsTaskAnyClassification):
     superseded_by = "GeoreviewClassification.v2"
     metadata = TaskMetadata(
         name="GeoreviewClassification",
@@ -16,7 +16,7 @@ class GeoreviewClassification(AbsTaskClassification):
         description="Review classification (5-point scale) based on Yandex Georeview dataset",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -38,7 +38,7 @@ class GeoreviewClassification(AbsTaskClassification):
         )
 
 
-class GeoreviewClassificationV2(AbsTaskClassification):
+class GeoreviewClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GeoreviewClassification.v2",
         dataset={
@@ -49,7 +49,7 @@ class GeoreviewClassificationV2(AbsTaskClassification):
         This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

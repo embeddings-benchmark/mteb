@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 from typing import Any
 
 import numpy as np
@@ -239,7 +240,7 @@ text_embedding_3_small_512 = ModelMeta(
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
     loader=partial(  # type: ignore
-        OpenAIWrapper,
+        OpenAIModel,
         model_name="text-embedding-3-small",
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -265,8 +266,8 @@ text_embedding_3_large_512 = ModelMeta(
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
+    loader=partial(
+        OpenAIModel,
         model_name="text-embedding-3-large",
         tokenizer_name="cl100k_base",
         max_tokens=8191,

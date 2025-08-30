@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ArxivClassification(AbsTaskClassification):
+class ArxivClassification(AbsTaskAnyClassification):
     superseded_by = "ArxivClassification.v2"
     metadata = TaskMetadata(
         name="ArxivClassification",
@@ -15,7 +15,7 @@ class ArxivClassification(AbsTaskClassification):
         },
         reference="https://ieeexplore.ieee.org/document/8675939",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -42,7 +42,7 @@ class ArxivClassification(AbsTaskClassification):
     )
 
 
-class ArxivClassificationV2(AbsTaskClassification):
+class ArxivClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ArxivClassification.v2",
         description="""Classification Dataset of Arxiv Papers
@@ -53,7 +53,7 @@ class ArxivClassificationV2(AbsTaskClassification):
         },
         reference="https://ieeexplore.ieee.org/document/8675939",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

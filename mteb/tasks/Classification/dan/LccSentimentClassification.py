@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
-
 class LccSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="LccSentimentClassification",

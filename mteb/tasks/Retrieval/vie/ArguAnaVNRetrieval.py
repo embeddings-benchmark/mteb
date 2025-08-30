@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ArguAnaVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class ArguAnaVN(AbsTaskRetrieval):
             "revision": "2a5133a05d7430e6f353497b1624a6e73148105b",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

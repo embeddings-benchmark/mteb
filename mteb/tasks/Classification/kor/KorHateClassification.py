@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KorHateClassification(AbsTaskClassification):
+class KorHateClassification(AbsTaskAnyClassification):
     superseded_by = "KorHateClassification.v2"
     metadata = TaskMetadata(
         name="KorHateClassification",
@@ -23,7 +23,7 @@ class KorHateClassification(AbsTaskClassification):
         },
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
@@ -60,7 +60,7 @@ class KorHateClassification(AbsTaskClassification):
         )
 
 
-class KorHateClassificationV2(AbsTaskClassification):
+class KorHateClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KorHateClassification.v2",
         description="""The dataset was created to provide the first human-labeled Korean corpus for
@@ -78,7 +78,7 @@ class KorHateClassificationV2(AbsTaskClassification):
         },
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

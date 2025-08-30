@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditClusteringP2PVN(AbsTaskClustering):
+class RedditClusteringP2PVN(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="RedditClusteringP2P-VN",
         description="""A translated dataset from Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.
@@ -18,7 +18,7 @@ class RedditClusteringP2PVN(AbsTaskClustering):
             "revision": "841856dcb82496f1f2f59356e4798ce15baeb200",
         },
         type="Clustering",
-        category="p2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="v_measure",

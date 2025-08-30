@@ -1,20 +1,8 @@
-from __future__ import annotations
-
-from .IndicXnliPairClassification import IndicXnliPairClassification
-from .OpusparcusPC import OpusparcusPC
-from .PawsXPairClassification import PawsXPairClassification
-from .PubChemWikiPairClassification import PubChemWikiPairClassification
-from .RTE3 import RTE3
 from .XNLI import XNLI, XNLIV2
+from .IndicXnliPairClassification import IndicXnliPairClassification
+from .RTE3 import RTE3
+from .PubChemWikiPairClassification import PubChemWikiPairClassification
 from .XStance import XStance
-
-__all__ = [
-    "IndicXnliPairClassification",
-    "OpusparcusPC",
-    "PawsXPairClassification",
-    "PubChemWikiPairClassification",
-    "RTE3",
-    "XNLI",
-    "XNLIV2",
-    "XStance",
-]
+from .PawsXPairClassification import PawsXPairClassification
+from .OpusparcusPC import OpusparcusPC
+__all__ = ['IndicXnliPairClassification', 'OpusparcusPC', 'PawsXPairClassification', 'PubChemWikiPairClassification', 'RTE3', 'XNLI', 'XNLIV2', 'XStance']

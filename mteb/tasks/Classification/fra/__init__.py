@@ -1,6 +1,3 @@
-from __future__ import annotations
-
-from .FrenchBookReviews import FrenchBookReviews
-from .MovieReviewSentimentClassification import MovieReviewSentimentClassification
-
-__all__ = ["FrenchBookReviews", "MovieReviewSentimentClassification"]
+from .MovieReviewSentimentClassification import MovieReviewSentimentClassification, MovieReviewSentimentClassificationV2
+from .FrenchBookReviews import FrenchBookReviews, FrenchBookReviewsV2
+__all__ = ['FrenchBookReviews', 'FrenchBookReviewsV2', 'MovieReviewSentimentClassification', 'MovieReviewSentimentClassificationV2']

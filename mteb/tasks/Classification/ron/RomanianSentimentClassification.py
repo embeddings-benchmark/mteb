@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class RomanianSentimentClassification(AbsTaskClassification):
+class RomanianSentimentClassification(AbsTaskAnyClassification):
     superseded_by = "RomanianSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
@@ -18,7 +18,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2020-09-18", "2020-09-18"),
         eval_splits=["test"],
@@ -47,7 +47,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
         )
 
 
-class RomanianSentimentClassificationV2(AbsTaskClassification):
+class RomanianSentimentClassificationV2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification.v2",
         description="""An Romanian dataset for sentiment classification.
@@ -58,7 +58,7 @@ class RomanianSentimentClassificationV2(AbsTaskClassification):
             "revision": "bf545b83db13cf73ed402749b21a7777e0afdc6a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2020-09-18", "2020-09-18"),
         eval_splits=["test"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmazonPolarityVNClassification(AbsTaskClassification):
+class AmazonPolarityVNClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AmazonPolarityVNClassification",
         description="""A collection of translated Amazon customer reviews annotated for polarity classification.
@@ -19,7 +19,7 @@ class AmazonPolarityVNClassification(AbsTaskClassification):
             "revision": "4e9a0d6e6bd97ab32f23c50c043d751eed2a5f8a",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",

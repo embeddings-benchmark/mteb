@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CQADupstackPhysicsVN(AbsTaskRetrieval):
@@ -18,7 +18,7 @@ class CQADupstackPhysicsVN(AbsTaskRetrieval):
             "revision": "8b6b68b59933cc72985f674f76c80a678c27d6be",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2c",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

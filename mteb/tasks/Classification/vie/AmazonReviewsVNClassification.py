@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmazonReviewsVNClassification(AbsTaskClassification):
+class AmazonReviewsVNClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AmazonReviewsVNClassification",
         dataset={
@@ -17,7 +17,7 @@ class AmazonReviewsVNClassification(AbsTaskClassification):
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://arxiv.org/abs/2010.02573",
-        category="s2s",
+        category="t2c",
         type="Classification",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
