@@ -11,7 +11,14 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = ["JQaRAReranking", "JaCWIRReranking", "XGlueWPRReranking"]
+OLD_FORMAT_RERANKING_TASKS = [
+    "JQaRAReranking",
+    "JaCWIRReranking",
+    "XGlueWPRReranking",
+    "AskUbuntuDupQuestions-VN",
+    "SciDocsRR-VN",
+    "StackOverflowDupQuestions-VN",
+]
 
 
 class AbsTaskReranking(AbsTaskRetrieval):
@@ -77,11 +84,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
             f"Transforming old format to standard format for {self.metadata.name}"
         )
 
-        corpus = defaultdict(lambda: defaultdict(dict))
-        queries = defaultdict(lambda: defaultdict(dict))
-        relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
-        top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-
         given_dataset = copy(given_dataset)
         self.dataset = defaultdict(lambda: defaultdict(dict))
 
@@ -103,6 +105,11 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 )  # type: ignore
 
             for split in cur_dataset:
+                corpus = []
+                queries = []
+                relevant_docs = defaultdict(dict)
+                top_ranked = defaultdict(list)
+
                 # Create an enumerated dataset to pass indices
                 enumerated_dataset = Dataset.from_dict(
                     {
@@ -133,24 +140,26 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 # Populate the data structures
                 for item in processed_dataset:
                     query_id = item["query_id"]
-                    queries[hf_subset][split][query_id] = item["query"]
+                    queries.append({"id": query_id, "text": item["query"]})
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
                         item["doc_ids"], item["doc_texts"], item["relevance_scores"]
                     ):
-                        corpus[hf_subset][split][doc_id] = {
-                            "text": doc_text,
-                            "_id": doc_id,
-                        }
-                        top_ranked[hf_subset][split][query_id].append(doc_id)
-                        relevant_docs[hf_subset][split][query_id][doc_id] = relevance
+                        corpus.append(
+                            {
+                                "title": "",
+                                "text": doc_text,
+                                "id": doc_id,
+                            }
+                        )
+                        top_ranked[query_id].append(doc_id)
+                        relevant_docs[query_id][doc_id] = relevance
 
                 self.dataset[hf_subset][split] = {
-                    "corpus": corpus[hf_subset][split],
-                    "queries": queries[hf_subset][split],
-                    "relevant_docs": relevant_docs[hf_subset][split],
-                    "instructions": None,
-                    "top_ranked": top_ranked[hf_subset][split],
+                    "corpus": Dataset.from_list(corpus),
+                    "queries": Dataset.from_list(queries),
+                    "relevant_docs": relevant_docs,
+                    "top_ranked": top_ranked,
                 }
         self.data_loaded = True
