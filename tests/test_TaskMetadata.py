@@ -467,6 +467,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "WinoGrande",
         "AlloprofRetrieval",
         "BSARDRetrieval",
+        "BSARDRetrieval.v2",
         "JaGovFaqsRetrieval",
         "JaQuADRetrieval",
         "NLPJournalAbsIntroRetrieval",

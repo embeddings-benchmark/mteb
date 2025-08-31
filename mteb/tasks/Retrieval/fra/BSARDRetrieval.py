@@ -97,6 +97,7 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
         dataset={
             "path": "maastrichtlawtech/bsard",
             "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="t2c",
