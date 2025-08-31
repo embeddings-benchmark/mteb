@@ -465,6 +465,7 @@ class SynPerTextToneClassification(AbsTaskClassification):
 
 
 class SynPerTextToneClassificationV2(AbsTaskClassification):
+    superseded_by = "SynPerTextToneClassification.v3"
     metadata = TaskMetadata(
         name="SynPerTextToneClassification.v2",
         description="""Persian Text Tone
@@ -473,6 +474,34 @@ class SynPerTextToneClassificationV2(AbsTaskClassification):
         dataset={
             "path": "mteb/syn_per_text_tone",
             "revision": "0ed7459db7e905714dc02cbe25b4eac55e91021e",
+        },
+        type="Classification",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=[],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        dialect=[],
+        sample_creation="LM-generated and verified",
+        bibtex_citation=""" """,
+        adapted_from=["SynPerTextToneClassification"],
+    )
+    samples_per_label = 32
+
+
+class SynPerTextToneClassificationV3(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SynPerTextToneClassification.v3",
+        description="""Persian Text Tone""",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "MCINext/synthetic-persian-text-tone-classification-v3",
+            "revision": "ff6d88107a89abeb10aa28751b31d78831d7d503",
         },
         type="Classification",
         category="s2p",
@@ -813,3 +842,131 @@ class DigikalamagClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("content", "text")
+
+
+class FaIntentClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="FaIntentClassification",
+        description="",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "MCINext/FaIntent",
+            "revision": "fc380690afbee9dba4dc618ef852285fa26f1d51",
+            "trust_remote_code": True,
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("words", "text")
+        self.dataset = self.dataset.rename_column("intent_label", "label")
+
+
+class StyleClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="StyleClassification",
+        description="",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "MCINext/style-classification",
+            "revision": "41a0848f718a28b9a6333b2be47b6dc93d5c1803",
+            "trust_remote_code": True,
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        mapping = {"formal": 1, "informal": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {"label": mapping[example["label"]]}
+        )
+
+
+class PerShopDomainClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="PerShopDomainClassification",
+        description="",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "MCINext/pershop-classification",
+            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
+            "trust_remote_code": True,
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("domain", "label")
+
+
+class PerShopIntentClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="PerShopIntentClassification",
+        description="",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "MCINext/pershop-classification",
+            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
+            "trust_remote_code": True,
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("Intents & Actions", "label")
