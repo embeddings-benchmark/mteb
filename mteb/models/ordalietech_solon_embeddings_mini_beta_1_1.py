@@ -5,7 +5,7 @@ from functools import partial
 from mteb.loaders.sentence_transformers import sentence_transformers_loader
 from mteb.model_meta import ModelMeta
 
-my_model = ModelMeta(
+solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
     languages=["fra-Latn"],
     open_weights=True,
