@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+from sklearn.linear_model import LogisticRegression
 
-from mteb.evaluation.evaluators import logRegClassificationEvaluator
+from mteb.evaluation import ClassificationEvaluator
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockClassificationTask
 
@@ -17,7 +18,7 @@ def is_binary_classification(y_train: list[int], y_test: list[int]) -> bool:
 # Fixtures
 @pytest.fixture
 def model():
-    return MockNumpyEncoder(seed=42)
+    return MockNumpyEncoder()
 
 
 @pytest.fixture
@@ -32,14 +33,20 @@ def test_output_structure(model, mock_task):
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    evaluator = logRegClassificationEvaluator(
-        train_data["text"],
-        np.array(train_data["label"]),
-        test_data["text"],
-        np.array(test_data["label"]),
-        task_name="test_classification",
+    evaluator = ClassificationEvaluator(
+        train_data,
+        test_data,
+        mock_task.input_column_name,
+        mock_task.label_column_name,
+        mock_task.metadata,
+        hf_split="test",
+        hf_subset="default",
+        classifier=LogisticRegression(
+            n_jobs=-1,
+            max_iter=100,
+        )
     )
-    scores, test_cache = evaluator(model)
+    scores, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
 
     # Check basic structure
     assert isinstance(scores, dict)
@@ -64,14 +71,20 @@ def test_expected_scores(model, mock_task):
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    evaluator = logRegClassificationEvaluator(
-        train_data["text"],
-        np.array(train_data["label"]),
-        test_data["text"],
-        np.array(test_data["label"]),
-        task_name="test_classification",
+    evaluator = ClassificationEvaluator(
+        train_data,
+        test_data,
+        mock_task.input_column_name,
+        mock_task.label_column_name,
+        mock_task.metadata,
+        hf_split="test",
+        hf_subset="default",
+        classifier=LogisticRegression(
+            n_jobs=-1,
+            max_iter=100,
+        )
     )
-    scores, _ = evaluator(model)
+    scores, _ = evaluator(model, encode_kwargs={"batch_size": 32})
 
     # Check that we get reasonable scores (MockClassificationTask has deterministic data)
     assert 0.0 <= scores["accuracy"] <= 1.0
@@ -100,28 +113,40 @@ def test_cache_usage_binary():
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    model = MockNumpyEncoder(seed=42)
+    model = MockNumpyEncoder()
 
     # First evaluation to generate cache
-    evaluator_initial = logRegClassificationEvaluator(
-        train_data["text"],
-        np.array(train_data["label"]),
-        test_data["text"],
-        np.array(test_data["label"]),
-        task_name="test_binary_cache",
+    evaluator_initial = ClassificationEvaluator(
+        train_data,
+        test_data,
+        mock_task.input_column_name,
+        mock_task.label_column_name,
+        mock_task.metadata,
+        hf_split="test",
+        hf_subset="default",
+        classifier=LogisticRegression(
+            n_jobs=-1,
+            max_iter=100,
+        )
     )
-    _, test_cache_initial = evaluator_initial(model)
+    _, test_cache_initial = evaluator_initial(model, encode_kwargs={"batch_size": 32})
 
     # Second evaluation using cache
-    evaluator_with_cache = logRegClassificationEvaluator(
-        train_data["text"],
-        np.array(train_data["label"]),
-        test_data["text"],
-        np.array(test_data["label"]),
-        task_name="test_binary_cache_usage",
+    evaluator_with_cache = ClassificationEvaluator(
+        train_data,
+        test_data,
+        mock_task.input_column_name,
+        mock_task.label_column_name,
+        mock_task.metadata,
+        hf_split="test",
+        hf_subset="default",
+        classifier=LogisticRegression(
+            n_jobs=-1,
+            max_iter=100,
+        )
     )
     scores_with_cache, test_cache_after_cache_usage = evaluator_with_cache(
-        model, test_cache=test_cache_initial
+        model, encode_kwargs={"batch_size": 32}, test_cache=test_cache_initial
     )
 
     # Verify cache is preserved

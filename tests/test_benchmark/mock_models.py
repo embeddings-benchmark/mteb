@@ -20,8 +20,11 @@ from mteb.types import Array, BatchedInput, PromptType
 
 
 class AbsMockEncoder(AbsEncoder):
-    def __init__(self):
-        pass
+    def __init__(self, seed: int | None = None):
+        if seed is not None:
+            self.rng = np.random.default_rng(seed)
+        else:
+            self.rng = np.random.default_rng()
 
     def encode(
         self,
