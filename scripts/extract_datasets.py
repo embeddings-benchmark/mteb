@@ -117,6 +117,7 @@ if __name__ == "__main__":
     Can pass in base branch as an argument. Defaults to 'main'.
     e.g. python -m scripts.extract_datasets mieb
     """
+    logging.basicConfig(level=logging.INFO)
 
     args = parse_args()
 
@@ -124,4 +125,4 @@ if __name__ == "__main__":
     changed_files = get_changed_files(base_branch, startswith="mteb/tasks/")
     dataset_tuples = extract_datasets(changed_files)
 
-    logging.debug(f"Found {len(dataset_tuples)} unique datasets:")
+    logging.debug(f"Found {len(dataset_tuples)} unique datasets.")
