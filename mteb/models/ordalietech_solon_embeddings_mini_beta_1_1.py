@@ -7,6 +7,9 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
     languages=["fra-Latn"],
+    n_parameters=210,
+    public_training_code=None,
+    memory_usage_mb=808.0, 
     open_weights=True,
     revision="8e4ea66eb7eb6109b47b7d97d7556f154d9aec4a",
     release_date="2025-01-01",
