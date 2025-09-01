@@ -27,9 +27,7 @@ def test_private_tasks_fail_unless_accepted():
         )
 
 
-pytest.mark.parametrize("task_name", ACCEPTED_PRIVATE_TASKS)
-
-
+@pytest.mark.parametrize("task_name", ACCEPTED_PRIVATE_TASKS)
 def test_accepted_private_task_exist(task_name: str):
     """Test that all tasks in ACCEPTED_PRIVATE_TASKS actually exist and are private."""
     task = get_task(task_name)
