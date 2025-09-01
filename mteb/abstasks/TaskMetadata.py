@@ -163,25 +163,21 @@ METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
-class PromptDict(TypedDict, total=False):
-    """A dictionary containing the prompt used for the task.
+PromptDict = TypedDict(
+    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
+)
+"""A dictionary containing the prompt used for the task.
 
-    Args:
-        query: The prompt used for the queries in the task.
-        passage: The prompt used for the passages in the task.
-    """
-
-    query: str
-    passage: str
+Args:
+    query: The prompt used for the queries in the task.
+    document: The prompt used for the passages in the task.
+"""
 
 
 class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics."""
 
     pass
-
-
-METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
 logger = logging.getLogger(__name__)
@@ -275,7 +271,7 @@ class TaskMetadata(BaseModel):
             for key in prompt:
                 if key not in [e.value for e in PromptType]:
                     raise ValueError(
-                        "The prompt dictionary should only contain the keys 'query' and 'passage'."
+                        "The prompt dictionary should only contain the keys 'query' and 'document'."
                     )
         return prompt
 
