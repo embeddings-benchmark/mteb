@@ -599,6 +599,7 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Re-ranking task
         """
+        top_ranked_path = self._predictions_path(top_ranked_path)
         top_ranked_path = Path(top_ranked_file)
 
         if not top_ranked_path.exists():

@@ -364,38 +364,68 @@ In prompts the key can be:
 5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
 
 
+
+### Saving retrieval task predictions
+
+To save the predictions from a retrieval task simply set the `prediction_folder`:
+Python:
+```python
+import mteb
+
+# using a small model and small dataset
+encoder = mteb.get_model("minishlab/potion-base-2M")
+task = mteb.get_task("NanoArguAnaRetrieval")
+
+prediction_folder = "model_predictions"
+
+res = mteb.evaluate(
+    encoder,
+    task,
+    prediction_folder=prediction_folder,
+)
+```
+
+The file will now be saved to `"{prediction_folder}/{task_name}_predictions.json"` and contain the rankings for each query along with the model name and revision of the model that produced the result.
+
+<!-- TODO: Missing the following - will add it back in once I convert the CLI to mteb.evaluate -->
+<!-- 
+For the CLI you can set the  `--save_predictions` flag:
+```bash
+mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
+``` -->
+
+
 ### Running Cross Encoders on Reranking
 
-To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage.
+To use a cross encoder for reranking, you can directly use a `CrossEncoder` from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage.
 
 ```python
-from mteb import MTEB
+from sentence_transformers import CrossEncoder
+
 import mteb
-from sentence_transformers import CrossEncoder, SentenceTransformer
 
+encoder = mteb.get_model("minishlab/potion-base-2M")
+task = mteb.get_task("NanoArguAnaRetrieval")
+
+prediction_folder = "model_predictions"
+
+# stage 1: retreival
+res = mteb.evaluate(
+    encoder,
+    task,
+    prediction_folder=prediction_folder,
+)
+
+# convert task to retrieval
+task = task.convert_to_reranking(prediction_folder, top_k=100)
+
+# stage 2: reranking
 cross_encoder = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-dual_encoder = SentenceTransformer("all-MiniLM-L6-v2")
+cross_enc_results = mteb.evaluate(cross_encoder, task)
 
-tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
-
-subset = "default" # subset name used in the NFCorpus dataset
-eval_splits = ["test"]
-
-evaluation = MTEB(tasks=tasks)
-evaluation.run(
-    dual_encoder,
-    eval_splits=eval_splits,
-    save_predictions=True,
-    output_folder="results/stage1",
-)
-evaluation.run(
-    cross_encoder,
-    eval_splits=eval_splits,
-    top_k=5,
-    save_predictions=True,
-    output_folder="results/stage2",
-    previous_results=f"results/stage1/NFCorpus_{subset}_predictions.json",
-)
+task.metadata.main_score # NCDG@10
+res[0].get_score()  # 0.286
+cross_enc_results[0].get_score() # 0.338
 ```
 
 
@@ -423,34 +453,6 @@ evaluation.run(
 ```
 This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
 
-
-### Saving retrieval task predictions
-
-To save the predictions from a retrieval task, add the `--save_predictions` flag in the CLI or set `save_predictions=True` in the run method. The filename will be in the "{task_name}_{subset}_predictions.json" format.
-
-Python:
-```python
-from mteb import MTEB
-import mteb
-from sentence_transformers import SentenceTransformer
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
-
-evaluation = MTEB(tasks=tasks)
-evaluation.run(
-    model,
-    eval_splits=["test"],
-    save_predictions=True,
-    output_folder="results",
-)
-```
-
-CLI:
-```bash
-mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
-```
 
 ### Caching Embeddings To Re-Use Them
 
