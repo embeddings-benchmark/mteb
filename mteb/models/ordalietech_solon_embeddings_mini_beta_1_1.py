@@ -34,4 +34,3 @@ solon_embeddings_1_1 = ModelMeta(
 )
 
 
-MODELS: list[ModelMeta] = [solon_embeddings_1_1]
