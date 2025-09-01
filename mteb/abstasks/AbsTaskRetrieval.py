@@ -593,7 +593,7 @@ class AbsTaskRetrieval(AbsTask):
         """Converts a reranking task to re-ranking by loading predictions from previous model run where the `prediction_folder` was specified.
 
         Args:
-            top_ranked_path: Path to file with the top ranked predictions. 
+            top_ranked_path: Path to file with the top ranked predictions.
             top_k: Number of results to load.
 
         Returns:
