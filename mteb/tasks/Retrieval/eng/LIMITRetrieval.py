@@ -4,13 +4,13 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _CITATION = """@misc{weller2025theoreticallimit,
-      title={On the Theoretical Limitations of Embedding-Based Retrieval}, 
+      title={On the Theoretical Limitations of Embedding-Based Retrieval},
       author={Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
       year={2025},
       eprint={2508.21038},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2508.21038}, 
+      url={https://arxiv.org/abs/2508.21038},
 }"""
 
 
