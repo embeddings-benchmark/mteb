@@ -27,23 +27,10 @@ def test_private_tasks_fail_unless_accepted():
         )
 
 
-def test_accepted_private_tasks_exist():
+pytest.mark.parametrize("task_name", ACCEPTED_PRIVATE_TASKS)
+def test_accepted_private_task_exist(task_name: str):
     """Test that all tasks in ACCEPTED_PRIVATE_TASKS actually exist and are private."""
-    if not ACCEPTED_PRIVATE_TASKS:
-        pytest.skip("No accepted private tasks configured")
-
-    # Get all tasks including private ones
-    all_tasks = get_tasks(exclude_private=False)
-    task_names = {task.metadata.name for task in all_tasks}
-
-    for accepted_task in ACCEPTED_PRIVATE_TASKS:
-        # Check that the task exists
-        assert accepted_task in task_names, (
-            f"Accepted private task '{accepted_task}' does not exist in the task registry"
-        )
-
-        # Check that it's actually private
-        task = next(t for t in all_tasks if t.metadata.name == accepted_task)
-        assert task.metadata.is_public is False, (
+    task = get_task(task_name)
+    assert task.metadata.is_public == (
             f"Task '{accepted_task}' is in ACCEPTED_PRIVATE_TASKS but is not private (is_public={task.metadata.is_public})"
         )
