@@ -11,9 +11,9 @@ solon_embeddings_1_1 = ModelMeta(
     open_weights=True,
     revision="8e4ea66eb7eb6109b47b7d97d7556f154d9aec4a",
     release_date="2025-01-01",
-    embed_dim=768,  # ajuste si besoin
+    embed_dim=768,
     license="apache-2.0",
-    max_tokens=8192,  # ajuste si besoin
+    max_tokens=8192,
     reference="https://huggingface.co/OrdalieTech/Solon-embeddings-mini-beta-1.1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
@@ -30,5 +30,8 @@ solon_embeddings_1_1 = ModelMeta(
         revision="8e4ea66eb7eb6109b47b7d97d7556f154d9aec4a",
         trust_remote_code=True,
     ),
-    training_datasets={},
+    training_datasets={},  # No mteb dataset
 )
+
+
+MODELS: list[ModelMeta] = [solon_embeddings_1_1]
