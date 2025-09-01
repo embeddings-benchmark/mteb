@@ -431,25 +431,19 @@ cross_enc_results[0].get_score() # 0.338
 
 ### Using Late Interaction Models
 
-This section outlines how to use late interaction models for retrieval.
+This section outlines how to use late interaction models for retrieval using a ColBert model:
 
 ```python
-from mteb import MTEB
 import mteb
-
+from mteb.models.search_wrappers import SearchEncoderWrapper
 
 colbert = mteb.get_model("colbert-ir/colbertv2.0")
-tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+task = mteb.get_task("NanoArguAnaRetrieval")
 
-eval_splits = ["test"]
+mdl = SearchEncoderWrapper(colbert)
+mdl.corpus_chunk_size = 500
 
-evaluation = MTEB(tasks=tasks)
-
-evaluation.run(
-    colbert,
-    eval_splits=eval_splits,
-    corpus_chunk_size=500,
-)
+results = mteb.evaluate(mdl, task)
 ```
 This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
 
