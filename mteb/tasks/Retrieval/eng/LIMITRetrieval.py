@@ -28,7 +28,7 @@ class LIMITRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs={"test": ["eng-Latn"]},
         main_score="recall_at_2",
         modalities=["text"],
         date=("2025-08-28", "2025-08-28"),
@@ -37,6 +37,7 @@ class LIMITRetrieval(AbsTaskRetrieval):
         license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
+        sample_creation="created",
         bibtex_citation=_CITATION,
     )
 
@@ -54,7 +55,7 @@ class LIMITSmallRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs={"test": ["eng-Latn"]},
         main_score="recall_at_2",
         modalities=["text"],
         date=("2025-08-28", "2025-08-28"),
@@ -63,5 +64,6 @@ class LIMITSmallRetrieval(AbsTaskRetrieval):
         license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
+        sample_creation="created",
         bibtex_citation=_CITATION,
     )
