@@ -12,35 +12,35 @@ logger = logging.getLogger(__name__)
 codi_instruction = {
     "CmedqaRetrieval": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "CovidRetrieval": {
         "query": "Given a question on COVID-19, retrieve news articles that answer the question",
-        "passage": "",
+        "document": "",
     },
     "DuRetrieval": {
         "query": "Given a Chinese search query, retrieve web passages that answer the question",
-        "passage": "",
+        "document": "",
     },
     "EcomRetrieval": {
         "query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
-        "passage": "",
+        "document": "",
     },
     "MedicalRetrieval": {
         "query": "Given a medical question, retrieve user replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "MMarcoRetrieval": {
         "query": "Given a web search query, retrieve relevant passages that answer the query",
-        "passage": "",
+        "document": "",
     },
     "T2Retrieval": {
         "query": "Given a Chinese search query, retrieve web passages that answer the question",
-        "passage": "",
+        "document": "",
     },
     "VideoRetrieval": {
         "query": "Given a video search query, retrieve the titles of relevant videos",
-        "passage": "",
+        "document": "",
     },
     "AFQMC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "ATEC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
@@ -51,19 +51,19 @@ codi_instruction = {
     "STSB": "Represent the short general domain sentences, retrieve semantically similar text",
     "T2Reranking": {
         "query": "Given a Chinese search query, retrieve web passages that answer the question",
-        "passage": "",
+        "document": "",
     },
     "MMarcoReranking": {
         "query": "Given a web search query, retrieve relevant passages that answer the query",
-        "passage": "",
+        "document": "",
     },
     "CMedQAv1-reranking": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "CMedQAv2-reranking": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
-        "passage": "",
+        "document": "",
     },
     "Ocnli": "Retrieve semantically similar text",
     "Cmnli": "Retrieve semantically similar text",
@@ -83,7 +83,7 @@ codi_instruction = {
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
-    if not instruction or prompt_type == PromptType.document:
+    if not instruction or prompt_type == PromptType.passage:
         return "<s>"
     if isinstance(instruction, dict):
         if prompt_type is None:
