@@ -21,6 +21,7 @@ from ..languages import (
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
+    "Accent identification",
     "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -54,10 +55,52 @@ TASK_SUBTYPE = Literal[
     "Duplicate Detection",
     "Rendered semantic textual similarity",
     "Intent classification",
+    "Environment Sound Classification",
+    "Gunshot Audio Classification",
+    "Keyword Spotting",
+    "Instrument Source Classification",
+    "Music Genre Classification",
+    "Music Instrument Recognition",
+    "Spoken Language Identification",
+    "Stroke Classification of Musical Instrument",
+    "Tonic Classification of Musical Instrument",
+    "Speaker Count Identification",
+    "Species Classification",
+    "Spoken Digit Classification",
+    "Gender Clustering",
+    "Vocal Sound Classification",
+    "Music Clustering",
+    "Accent Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
+    "Rendered semantic textual similarity",
+    "Sentiment Analysis",
+    "Intent Classification",
+    "Vehicle Clustering",
+    "Environment Sound Clustering",
+    "Environment Sound Reranking",
+    "Emotion Reranking",
+    "Music Genre Reranking",
+    "Rendered semantic textual similarity",
+    "Gender Classification",
+    "Age Classification",
+    "Rendered semantic textual similarity",
+    "Intent classification",
+    "Song Lyrics Retrieval",
+    "Natural Sound Retrieval",
+    "Music Caption Retrieval",
+    "Speech Transcription Retrieval",
+    "Emotional Speech Retrieval",
+    "Environment Sound Retrieval",
+    "Speech Retrieval",
+    "Question Answering Retrieval",
+    "Reading Comprehension",
 ]
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
+    "Bioacoustics",
     "Blog",
     "Constructed",
     "Encyclopaedic",
@@ -80,6 +123,8 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
+    "Music",
+    "Speech",
     "Entertainment",
 ]
 
@@ -112,20 +157,35 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
+MAEB_TASK_TYPE = (
+    "AudioClustering",
+    "AudioMultilabelClassification",
+    "AudioReranking",
+    "AudioZeroshotClassification",
+    "AudioClassification",
+    "AudioCrossFoldClassification",
+    "AudioPairClassification",
+    "Any2AnyRetrieval",
+)
+
 _TASK_TYPE = (
-    "BitextMining",
-    "Classification",
-    "Clustering",
-    "InstructionRetrieval",
-    "MultilabelClassification",
-    "PairClassification",
-    "Regression",
-    "Reranking",
-    "Retrieval",
-    "Speed",
-    "STS",
-    "Summarization",
-) + MIEB_TASK_TYPE
+    (
+        "BitextMining",
+        "Classification",
+        "Clustering",
+        "InstructionRetrieval",
+        "MultilabelClassification",
+        "PairClassification",
+        "Regression",
+        "Reranking",
+        "Retrieval",
+        "Speed",
+        "STS",
+        "Summarization",
+    )
+    + MIEB_TASK_TYPE
+    + MAEB_TASK_TYPE
+)
 
 TASK_TYPE = Literal[_TASK_TYPE]
 
@@ -143,6 +203,15 @@ TASK_CATEGORY = Literal[
     "i2it",  # image-to-image+text
     "t2it",  # text-to-image+text
     "it2it",  # image+text-to-image+text
+    "a2a",  # audio to audio
+    "a2t",  # audio to text
+    "t2a",  # text to audio
+    "at2t",  # audio+text-to-text
+    "at2a",  # audio+text-to-audio
+    "a2at",  # audio-to-audio+text
+    "t2at",  # text-to-audio+text
+    "at2at",  # audio+text-to-audio+text
+    "a2a",  # audio-to-audio
 ]
 
 ANNOTATOR_TYPE = Literal[
@@ -151,6 +220,9 @@ ANNOTATOR_TYPE = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
+    "automatic",  # any postprocessing using (Audio/Image/Video) models
+    "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
 
 SPLIT_NAME = str

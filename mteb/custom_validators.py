@@ -6,10 +6,7 @@ from typing import Annotated
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from typing_extensions import Literal
 
-MODALITIES = Literal[
-    "text",
-    "image",
-]
+MODALITIES = Literal["text", "image", "audio"]
 
 http_url_adapter = TypeAdapter(AnyUrl)
 STR_URL = Annotated[

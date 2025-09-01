@@ -19,6 +19,7 @@ from torch.utils.data import DataLoader
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.requires_package import requires_image_dependencies
 
+from ..Audio.ZeroshotClassificationEvaluator import AudioDataset
 from ..Evaluator import Evaluator
 from ..utils import (
     confidence_scores,
@@ -144,7 +145,25 @@ class Any2AnyDenseRetrievalExactSearch:
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
-        else:
+        elif q_modality == "audio":
+            queries_dataset = AudioDataset(
+                queries,
+                audio_column_name="audio",
+            )
+            query_audio_dataloader = DataLoader(
+                queries_dataset,
+                batch_size=self.encode_kwargs["batch_size"],
+                shuffle=False,
+                collate_fn=custom_collate_fn,
+                num_workers=min(math.floor(os.cpu_count() / 2), 16),
+            )
+            query_embeddings = self.model.get_audio_embeddings(
+                audio=query_audio_dataloader,
+                task_name=task_name,
+                prompt_type=PromptType.query,
+                **self.encode_kwargs,
+            )
+        elif "image" in q_modality:
             queries_dataset = ImageDataset(
                 queries, image_column_name="image", transform=self.transform
             )
@@ -171,8 +190,8 @@ class Any2AnyDenseRetrievalExactSearch:
                     prompt_type=PromptType.query,
                     **self.encode_kwargs,
                 )
-            else:
-                raise ValueError(f"Unsupported modality: {q_modality}")
+        else:
+            raise ValueError(f"Unsupported query modality: {q_modality}")
 
         logger.info("Preparing Corpus...")
         corpus_ids = list(corpus["id"])
@@ -198,7 +217,22 @@ class Any2AnyDenseRetrievalExactSearch:
                     prompt_type=PromptType.document,
                     **self.encode_kwargs,
                 )
-            else:
+            elif corpus_modality == "audio":
+                corpus_dataset = AudioDataset(chunk, audio_column_name="audio")
+                corpus_audio_dataloader = DataLoader(
+                    corpus_dataset,
+                    batch_size=self.encode_kwargs["batch_size"],
+                    shuffle=False,
+                    collate_fn=custom_collate_fn,
+                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
+                )
+                sub_corpus_embeddings = self.model.get_audio_embeddings(
+                    audio=corpus_audio_dataloader,
+                    task_name=task_name,
+                    prompt_type=PromptType.document,
+                    **self.encode_kwargs,
+                )
+            elif "image" in corpus_modality:
                 corpus_dataset = ImageDataset(
                     chunk, image_column_name="image", transform=self.transform
                 )
@@ -225,8 +259,8 @@ class Any2AnyDenseRetrievalExactSearch:
                         prompt_type=PromptType.document,
                         **self.encode_kwargs,
                     )
-                else:
-                    raise ValueError(f"Unsupported modality: {corpus_modality}")
+            else:
+                raise ValueError(f"Unsupported modality: {corpus_modality}")
 
             cos_scores = score_function(query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1

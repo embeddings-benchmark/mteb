@@ -328,6 +328,7 @@ def apply_styling(
             show_copy_button=True,
             show_search="filter",
         ),
+        gr.DataFrame(per_task_style, interactive=False, pinned_columns=1),
     )
 
 
