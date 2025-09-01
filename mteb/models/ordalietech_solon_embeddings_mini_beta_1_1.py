@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.loaders.sentence_transformers import sentence_transformers_loader
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
@@ -32,5 +31,3 @@ solon_embeddings_1_1 = ModelMeta(
     ),
     training_datasets={},  # No mteb dataset
 )
-
-
