@@ -169,3 +169,21 @@ def test_get_tasks_with_exclusive_modality_filter(modalities):
     )
     for task in text_tasks_exclusive:
         assert set(task.modalities) == set(modalities)
+
+
+def test_get_tasks_privacy_filtering():
+    """Test that get_tasks correctly filters by privacy status"""
+    # By default, should only return public datasets (exclude_private=True)
+    public_tasks = get_tasks()
+
+    # Should include private datasets when explicitly requested
+    all_tasks = get_tasks(exclude_private=False)
+
+    # All tasks should contain at least as many or more tasks than public tasks
+    assert len(all_tasks) >= len(public_tasks)
+
+    # All returned tasks should be public when exclude_private=True
+    for task in public_tasks:
+        assert (
+            task.metadata.is_public is not False
+        )  # None or True are both considered public
