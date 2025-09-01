@@ -122,7 +122,7 @@ class ModelMeta(BaseModel):
     superseded_by: str | None = None
     is_cross_encoder: bool | None = None
     modalities: list[MODALITIES] = ["text"]
-    quantization: QUANTIZATION_TYPES = "float"
+    quantization: QUANTIZATION_TYPES = "float32"
 
     def to_dict(self):
         dict_repr = self.model_dump()
