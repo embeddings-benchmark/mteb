@@ -18,7 +18,7 @@ Array = Union[np.ndarray, torch.Tensor]
 # --- Input types ---
 class PromptType(str, Enum):
     query = "query"
-    passage = "passage"
+    document = "document"
 
 
 class ConversationTurn(TypedDict):

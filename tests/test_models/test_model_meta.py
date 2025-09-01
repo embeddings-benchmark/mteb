@@ -41,14 +41,17 @@ def test_model_similar_tasks(training_datasets):
         adapted_from=None,
         superseded_by=None,
     )
-    expected = [
-        "NanoTouche2020Retrieval",
-        "Touche2020",
-        "Touche2020-Fa",
-        "Touche2020-NL",
-        "Touche2020-PL",
-        "Touche2020Retrieval.v3",
-    ]
+    expected = sorted(
+        [
+            "NanoTouche2020Retrieval",
+            "Touche2020",
+            "Touche2020-Fa",
+            "Touche2020-NL",
+            "Touche2020-VN",
+            "Touche2020-PL",
+            "Touche2020Retrieval.v3",
+        ]
+    )
     assert sorted(dummy_model_meta.get_training_datasets()) == expected
 
 

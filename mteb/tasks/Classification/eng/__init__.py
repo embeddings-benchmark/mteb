@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-from .AmazonPolarityClassification import AmazonPolarityClassification
-from .ArxivClassification import ArxivClassification
-from .Banking77Classification import Banking77Classification
-from .DBpediaClassification import DBpediaClassification
-from .EmotionClassification import EmotionClassification
-from .FinancialPhrasebankClassification import FinancialPhrasebankClassification
-from .FrenkEnClassification import FrenkEnClassification
-from .ImdbClassification import ImdbClassification
+from .AmazonPolarityClassification import (
+    AmazonPolarityClassification,
+    AmazonPolarityClassificationV2,
+)
+from .ArxivClassification import ArxivClassification, ArxivClassificationV2
+from .Banking77Classification import Banking77Classification, Banking77ClassificationV2
+from .DBpediaClassification import DBpediaClassification, DBpediaClassificationV2
+from .EmotionClassification import EmotionClassification, EmotionClassificationV2
+from .FinancialPhrasebankClassification import (
+    FinancialPhrasebankClassification,
+    FinancialPhrasebankClassificationV2,
+)
+from .FrenkEnClassification import FrenkEnClassification, FrenkEnClassificationV2
+from .ImdbClassification import ImdbClassification, ImdbClassificationV2
 from .LegalBenchClassification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
     ContractNLIConfidentialityOfAgreementLegalBenchClassification,
@@ -74,6 +80,7 @@ from .LegalBenchClassification import (
     InsurancePolicyInterpretationLegalBenchClassification,
     InternationalCitizenshipQuestionsLegalBenchClassification,
     JCrewBlockerLegalBenchClassification,
+    JCrewBlockerLegalBenchClassificationV2,
     LearnedHandsBenefitsLegalBenchClassification,
     LearnedHandsBusinessLegalBenchClassification,
     LearnedHandsConsumerLegalBenchClassification,
@@ -91,19 +98,26 @@ from .LegalBenchClassification import (
     LearnedHandsTortsLegalBenchClassification,
     LearnedHandsTrafficLegalBenchClassification,
     LegalReasoningCausalityLegalBenchClassification,
+    LegalReasoningCausalityLegalBenchClassificationV2,
     MAUDLegalBenchClassification,
+    MAUDLegalBenchClassificationV2,
     NYSJudicialEthicsLegalBenchClassification,
     OPP115DataRetentionLegalBenchClassification,
     OPP115DataSecurityLegalBenchClassification,
+    OPP115DataSecurityLegalBenchClassificationV2,
     OPP115DoNotTrackLegalBenchClassification,
+    OPP115DoNotTrackLegalBenchClassificationV2,
     OPP115FirstPartyCollectionUseLegalBenchClassification,
     OPP115InternationalAndSpecificAudiencesLegalBenchClassification,
     OPP115PolicyChangeLegalBenchClassification,
     OPP115ThirdPartySharingCollectionLegalBenchClassification,
     OPP115UserAccessEditAndDeletionLegalBenchClassification,
     OPP115UserChoiceControlLegalBenchClassification,
+    OPP115UserChoiceControlLegalBenchClassificationV2,
     OralArgumentQuestionPurposeLegalBenchClassification,
+    OralArgumentQuestionPurposeLegalBenchClassificationV2,
     OverrulingLegalBenchClassification,
+    OverrulingLegalBenchClassificationV2,
     PersonalJurisdictionLegalBenchClassification,
     PROALegalBenchClassification,
     SCDBPAccountabilityLegalBenchClassification,
@@ -122,36 +136,57 @@ from .LegalBenchClassification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
-from .NewsClassification import NewsClassification
-from .PatentClassification import PatentClassification
-from .PoemSentimentClassification import PoemSentimentClassification
-from .SDSEyeProtectionClassification import SDSEyeProtectionClassification
-from .SDSGlovesClassification import SDSGlovesClassification
-from .ToxicChatClassification import ToxicChatClassification
-from .ToxicConversationsClassification import ToxicConversationsClassification
+from .NewsClassification import NewsClassification, NewsClassificationV2
+from .PatentClassification import PatentClassification, PatentClassificationV2
+from .PoemSentimentClassification import (
+    PoemSentimentClassification,
+    PoemSentimentClassificationV2,
+)
+from .SDSEyeProtectionClassification import (
+    SDSEyeProtectionClassification,
+    SDSEyeProtectionClassificationV2,
+)
+from .SDSGlovesClassification import SDSGlovesClassification, SDSGlovesClassificationV2
+from .ToxicChatClassification import ToxicChatClassification, ToxicChatClassificationV2
+from .ToxicConversationsClassification import (
+    ToxicConversationsClassification,
+    ToxicConversationsClassificationV2,
+)
 from .TweetSentimentExtractionClassification import (
     TweetSentimentExtractionClassification,
+    TweetSentimentExtractionClassificationV2,
 )
-from .TweetTopicSingleClassification import TweetTopicSingleClassification
+from .TweetTopicSingleClassification import (
+    TweetTopicSingleClassification,
+    TweetTopicSingleClassificationV2,
+)
 from .WikipediaBiolumNeurochemClassification import (
     WikipediaBiolumNeurochemClassification,
 )
-from .WikipediaBioMetChemClassification import WikipediaBioMetChemClassification
+from .WikipediaBioMetChemClassification import (
+    WikipediaBioMetChemClassification,
+    WikipediaBioMetChemClassificationV2,
+)
 from .WikipediaChemEngSpecialtiesClassification import (
     WikipediaChemEngSpecialtiesClassification,
 )
-from .WikipediaChemFieldsClassification import WikipediaChemFieldsClassification
+from .WikipediaChemFieldsClassification import (
+    WikipediaChemFieldsClassification,
+    WikipediaChemFieldsClassificationV2,
+)
 from .WikipediaChemistryTopicsClassification import (
     WikipediaChemistryTopicsClassification,
 )
 from .WikipediaCompChemSpectroscopyClassification import (
     WikipediaCompChemSpectroscopyClassification,
+    WikipediaCompChemSpectroscopyClassificationV2,
 )
 from .WikipediaCryobiologySeparationClassification import (
     WikipediaCryobiologySeparationClassification,
 )
 from .WikipediaCrystallographyAnalyticalClassification import (
     WikipediaCrystallographyAnalyticalClassification,
+    WikipediaCrystallographyAnalyticalClassificationV2,
 )
 from .WikipediaGreenhouseEnantiopureClassification import (
     WikipediaGreenhouseEnantiopureClassification,
@@ -171,14 +206,24 @@ from .WikipediaSolidStateColloidalClassification import (
 )
 from .WikipediaTheoreticalAppliedClassification import (
     WikipediaTheoreticalAppliedClassification,
+    WikipediaTheoreticalAppliedClassificationV2,
 )
-from .YahooAnswersTopicsClassification import YahooAnswersTopicsClassification
-from .YelpReviewFullClassification import YelpReviewFullClassification
+from .YahooAnswersTopicsClassification import (
+    YahooAnswersTopicsClassification,
+    YahooAnswersTopicsClassificationV2,
+)
+from .YelpReviewFullClassification import (
+    YelpReviewFullClassification,
+    YelpReviewFullClassificationV2,
+)
 
 __all__ = [
     "AmazonPolarityClassification",
+    "AmazonPolarityClassificationV2",
     "ArxivClassification",
+    "ArxivClassificationV2",
     "Banking77Classification",
+    "Banking77ClassificationV2",
     "CUADAffiliateLicenseLicenseeLegalBenchClassification",
     "CUADAffiliateLicenseLicensorLegalBenchClassification",
     "CUADAntiAssignmentLegalBenchClassification",
@@ -234,6 +279,7 @@ __all__ = [
     "ContractNLISurvivalOfObligationsLegalBenchClassification",
     "CorporateLobbyingLegalBenchClassification",
     "DBpediaClassification",
+    "DBpediaClassificationV2",
     "DefinitionClassificationLegalBenchClassification",
     "Diversity1LegalBenchClassification",
     "Diversity2LegalBenchClassification",
@@ -242,13 +288,18 @@ __all__ = [
     "Diversity5LegalBenchClassification",
     "Diversity6LegalBenchClassification",
     "EmotionClassification",
+    "EmotionClassificationV2",
     "FinancialPhrasebankClassification",
+    "FinancialPhrasebankClassificationV2",
     "FrenkEnClassification",
+    "FrenkEnClassificationV2",
     "FunctionOfDecisionSectionLegalBenchClassification",
     "ImdbClassification",
+    "ImdbClassificationV2",
     "InsurancePolicyInterpretationLegalBenchClassification",
     "InternationalCitizenshipQuestionsLegalBenchClassification",
     "JCrewBlockerLegalBenchClassification",
+    "JCrewBlockerLegalBenchClassificationV2",
     "LearnedHandsBenefitsLegalBenchClassification",
     "LearnedHandsBusinessLegalBenchClassification",
     "LearnedHandsConsumerLegalBenchClassification",
@@ -266,24 +317,34 @@ __all__ = [
     "LearnedHandsTortsLegalBenchClassification",
     "LearnedHandsTrafficLegalBenchClassification",
     "LegalReasoningCausalityLegalBenchClassification",
+    "LegalReasoningCausalityLegalBenchClassificationV2",
     "MAUDLegalBenchClassification",
+    "MAUDLegalBenchClassificationV2",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
+    "NewsClassificationV2",
     "OPP115DataRetentionLegalBenchClassification",
     "OPP115DataSecurityLegalBenchClassification",
+    "OPP115DataSecurityLegalBenchClassificationV2",
     "OPP115DoNotTrackLegalBenchClassification",
+    "OPP115DoNotTrackLegalBenchClassificationV2",
     "OPP115FirstPartyCollectionUseLegalBenchClassification",
     "OPP115InternationalAndSpecificAudiencesLegalBenchClassification",
     "OPP115PolicyChangeLegalBenchClassification",
     "OPP115ThirdPartySharingCollectionLegalBenchClassification",
     "OPP115UserAccessEditAndDeletionLegalBenchClassification",
     "OPP115UserChoiceControlLegalBenchClassification",
+    "OPP115UserChoiceControlLegalBenchClassificationV2",
     "OralArgumentQuestionPurposeLegalBenchClassification",
+    "OralArgumentQuestionPurposeLegalBenchClassificationV2",
     "OverrulingLegalBenchClassification",
+    "OverrulingLegalBenchClassificationV2",
     "PROALegalBenchClassification",
     "PatentClassification",
+    "PatentClassificationV2",
     "PersonalJurisdictionLegalBenchClassification",
     "PoemSentimentClassification",
+    "PoemSentimentClassificationV2",
     "SCDBPAccountabilityLegalBenchClassification",
     "SCDBPAuditsLegalBenchClassification",
     "SCDBPCertificationLegalBenchClassification",
@@ -295,24 +356,34 @@ __all__ = [
     "SCDDTrainingLegalBenchClassification",
     "SCDDVerificationLegalBenchClassification",
     "SDSEyeProtectionClassification",
+    "SDSEyeProtectionClassificationV2",
     "SDSGlovesClassification",
+    "SDSGlovesClassificationV2",
     "TelemarketingSalesRuleLegalBenchClassification",
     "TextualismToolDictionariesLegalBenchClassification",
     "TextualismToolPlainLegalBenchClassification",
     "ToxicChatClassification",
+    "ToxicChatClassificationV2",
     "ToxicConversationsClassification",
+    "ToxicConversationsClassificationV2",
     "TweetSentimentExtractionClassification",
+    "TweetSentimentExtractionClassificationV2",
     "TweetTopicSingleClassification",
+    "TweetTopicSingleClassificationV2",
     "UCCVCommonLawLegalBenchClassification",
     "UnfairTOSLegalBenchClassification",
     "WikipediaBioMetChemClassification",
+    "WikipediaBioMetChemClassificationV2",
     "WikipediaBiolumNeurochemClassification",
     "WikipediaChemEngSpecialtiesClassification",
     "WikipediaChemFieldsClassification",
+    "WikipediaChemFieldsClassificationV2",
     "WikipediaChemistryTopicsClassification",
     "WikipediaCompChemSpectroscopyClassification",
+    "WikipediaCompChemSpectroscopyClassificationV2",
     "WikipediaCryobiologySeparationClassification",
     "WikipediaCrystallographyAnalyticalClassification",
+    "WikipediaCrystallographyAnalyticalClassificationV2",
     "WikipediaGreenhouseEnantiopureClassification",
     "WikipediaIsotopesFissionClassification",
     "WikipediaLuminescenceClassification",
@@ -320,6 +391,9 @@ __all__ = [
     "WikipediaSaltsSemiconductorsClassification",
     "WikipediaSolidStateColloidalClassification",
     "WikipediaTheoreticalAppliedClassification",
+    "WikipediaTheoreticalAppliedClassificationV2",
     "YahooAnswersTopicsClassification",
+    "YahooAnswersTopicsClassificationV2",
     "YelpReviewFullClassification",
+    "YelpReviewFullClassificationV2",
 ]

@@ -2,11 +2,16 @@ from __future__ import annotations
 
 from .FaMTEBClassification import (
     DeepSentiPers,
+    DeepSentiPersV2,
     DigikalamagClassification,
     NLPTwitterAnalysisClassification,
+    NLPTwitterAnalysisClassificationV2,
     PersianTextEmotion,
+    PersianTextEmotionV2,
     SentimentDKSF,
+    SentimentDKSFV2,
     SIDClassification,
+    SIDClassificationV2,
     SynPerChatbotConvSAAnger,
     SynPerChatbotConvSAFear,
     SynPerChatbotConvSAFriendship,
@@ -24,17 +29,23 @@ from .FaMTEBClassification import (
     SynPerChatbotToneChatbotClassification,
     SynPerChatbotToneUserClassification,
     SynPerTextToneClassification,
+    SynPerTextToneClassificationV2,
 )
 from .PersianFoodSentimentClassification import PersianFoodSentimentClassification
 
 __all__ = [
     "DeepSentiPers",
+    "DeepSentiPersV2",
     "DigikalamagClassification",
     "NLPTwitterAnalysisClassification",
+    "NLPTwitterAnalysisClassificationV2",
     "PersianFoodSentimentClassification",
     "PersianTextEmotion",
+    "PersianTextEmotionV2",
     "SIDClassification",
+    "SIDClassificationV2",
     "SentimentDKSF",
+    "SentimentDKSFV2",
     "SynPerChatbotConvSAAnger",
     "SynPerChatbotConvSAFear",
     "SynPerChatbotConvSAFriendship",
@@ -52,4 +63,5 @@ __all__ = [
     "SynPerChatbotToneChatbotClassification",
     "SynPerChatbotToneUserClassification",
     "SynPerTextToneClassification",
+    "SynPerTextToneClassificationV2",
 ]

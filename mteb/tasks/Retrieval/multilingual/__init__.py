@@ -24,6 +24,7 @@ from .NeuCLIR2023Retrieval import (
     NeuCLIR2023RetrievalHardNegatives,
 )
 from .PublicHealthQARetrieval import PublicHealthQARetrieval
+from .RuSciBenchRetrieval import RuSciBenchCiteRetrieval, RuSciBenchCociteRetrieval
 from .StatcanDialogueDatasetRetrieval import StatcanDialogueDatasetRetrieval
 from .WebFAQRetrieval import WebFAQRetrieval
 from .WikipediaRetrievalMultilingual import WikipediaRetrievalMultilingual
@@ -39,6 +40,7 @@ __all__ = [
     "IndicQARetrieval",
     "MIRACLRetrieval",
     "MIRACLRetrievalHardNegatives",
+    "MKQARetrieval",
     "MLQARetrieval",
     "MintakaRetrieval",
     "MrTidyRetrieval",
@@ -48,11 +50,12 @@ __all__ = [
     "NeuCLIR2023Retrieval",
     "NeuCLIR2023RetrievalHardNegatives",
     "PublicHealthQARetrieval",
+    "RuSciBenchCiteRetrieval",
+    "RuSciBenchCociteRetrieval",
     "StatcanDialogueDatasetRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
     "XMarket",
     "XPQARetrieval",
-    "MKQARetrieval",
     "XQuADRetrieval",
 ]

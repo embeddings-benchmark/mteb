@@ -241,13 +241,11 @@ Before you commit, here is a checklist you should complete before submitting:
 
 An easy way to test it is using:
 ```python
-from mteb import MTEB
-from sentence_transformers import SentenceTransformer
+import mteb
+# sample model:
+model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+task = mteb.get_task("{name of your task}")
 
-# Define the sentence-transformers model name
-model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-
-model = SentenceTransformer(model_name)
 results = mteb.evaluate(model, tasks=[YourNewTask()])
 ```
 

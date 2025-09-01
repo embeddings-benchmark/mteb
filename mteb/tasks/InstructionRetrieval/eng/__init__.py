@@ -10,7 +10,6 @@ from .IFIRScifactRetrieval import IFIRScifact
 from .InstructIR import InstructIR
 
 __all__ = [
-    "InstructIR",
     "IFIRAila",
     "IFIRCds",
     "IFIRFiQA",
@@ -18,4 +17,5 @@ __all__ = [
     "IFIRNFCorpus",
     "IFIRPm",
     "IFIRScifact",
+    "InstructIR",
 ]

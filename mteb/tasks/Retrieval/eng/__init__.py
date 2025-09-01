@@ -5,6 +5,9 @@ from .AILAStatutesRetrieval import AILAStatutes
 from .AlphaNLIRetrieval import AlphaNLI
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
+from .BarExamQARetrieval import BarExamQARetrieval
+from .BillSumCARetrieval import BillSumCARetrieval
+from .BillSumUSRetrieval import BillSumUSRetrieval
 from .BIRCOArguAnaReranking import BIRCOArguAnaReranking
 from .BIRCOClinicalTrialReranking import BIRCOClinicalTrialReranking
 from .BIRCODorisMaeReranking import BIRCODorisMaeReranking
@@ -12,6 +15,7 @@ from .BIRCORelicReranking import BIRCORelicReranking
 from .BIRCOWhatsThatBookReranking import BIRCOWhatsThatBookReranking
 from .BrightRetrieval import BrightLongRetrieval, BrightRetrieval
 from .BuiltBenchRetrieval import BuiltBenchRetrieval
+from .ChatDoctorRetrieval import ChatDoctorRetrieval
 from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
 from .ChemNQRetrieval import ChemNQRetrieval
 from .ClimateFEVERRetrieval import (
@@ -35,8 +39,12 @@ from .DBPediaRetrieval import DBPedia, DBPediaHardNegatives
 from .FaithDialRetrieval import FaithDialRetrieval
 from .FeedbackQARetrieval import FeedbackQARetrieval
 from .FEVERRetrieval import FEVER, FEVERHardNegatives
+from .FinanceBenchRetrieval import FinanceBenchRetrieval
+from .FinQARetrieval import FinQARetrieval
 from .FiQA2018Retrieval import FiQA2018
+from .GovReportRetrieval import GovReportRetrieval
 from .HagridRetrieval import HagridRetrieval
+from .HC3FinanceRetrieval import HC3FinanceRetrieval
 from .HellaSwagRetrieval import HellaSwag
 from .HotpotQARetrieval import HotpotQA, HotpotQAHardNegatives
 from .LegalBenchConsumerContractsQARetrieval import LegalBenchConsumerContractsQA
@@ -113,6 +121,9 @@ __all__ = [
     "BIRCODorisMaeReranking",
     "BIRCORelicReranking",
     "BIRCOWhatsThatBookReranking",
+    "BarExamQARetrieval",
+    "BillSumCARetrieval",
+    "BillSumUSRetrieval",
     "BrightLongRetrieval",
     "BrightRetrieval",
     "BuiltBenchRetrieval",
@@ -128,6 +139,7 @@ __all__ = [
     "CQADupstackUnixRetrieval",
     "CQADupstackWebmastersRetrieval",
     "CQADupstackWordpressRetrieval",
+    "ChatDoctorRetrieval",
     "ChemHotpotQARetrieval",
     "ChemNQRetrieval",
     "ClimateFEVER",
@@ -140,6 +152,10 @@ __all__ = [
     "FaithDialRetrieval",
     "FeedbackQARetrieval",
     "FiQA2018",
+    "FinQARetrieval",
+    "FinanceBenchRetrieval",
+    "GovReportRetrieval",
+    "HC3FinanceRetrieval",
     "HagridRetrieval",
     "HellaSwag",
     "HotpotQA",
@@ -183,6 +199,14 @@ __all__ = [
     "Quail",
     "QuoraRetrieval",
     "QuoraRetrievalHardNegatives",
+    "R2MEDBioinformaticsRetrieval",
+    "R2MEDBiologyRetrieval",
+    "R2MEDIIYiClinicalRetrieval",
+    "R2MEDMedQADiagRetrieval",
+    "R2MEDMedXpertQAExamRetrieval",
+    "R2MEDMedicalSciencesRetrieval",
+    "R2MEDPMCClinicalRetrieval",
+    "R2MEDPMCTreatmentRetrieval",
     "RARbCode",
     "RARbMath",
     "SCIDOCS",
@@ -202,12 +226,4 @@ __all__ = [
     "Touche2020",
     "Touche2020v3Retrieval",
     "WinoGrande",
-    "R2MEDBiologyRetrieval",
-    "R2MEDBioinformaticsRetrieval",
-    "R2MEDMedicalSciencesRetrieval",
-    "R2MEDMedXpertQAExamRetrieval",
-    "R2MEDMedQADiagRetrieval",
-    "R2MEDPMCTreatmentRetrieval",
-    "R2MEDPMCClinicalRetrieval",
-    "R2MEDIIYiClinicalRetrieval",
 ]

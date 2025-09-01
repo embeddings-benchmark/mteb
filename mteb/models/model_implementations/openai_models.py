@@ -53,13 +53,14 @@ class OpenAIModel(AbsEncoder):
         import tiktoken
 
         self._client = OpenAI() if client is None else client
+        self.model_name = model_name.split("/")[-1].split(" ")[0]
 
         if embed_dim is None:
-            if model_name not in self.default_embed_dims:
+            if self.model_name not in self.default_embed_dims:
                 raise ValueError(
-                    f"Model {model_name} does not have a default embed_dim. Please provide an embedding dimension."
+                    f"Model {self.model_name} does not have a default embed_dim. Please provide an embedding dimension."
                 )
-            self._embed_dim = self.default_embed_dims[model_name]
+            self._embed_dim = self.default_embed_dims[self.model_name]
         else:
             self._embed_dim = embed_dim
 
@@ -85,7 +86,7 @@ class OpenAIModel(AbsEncoder):
 
         from openai import NotGiven
 
-        if self._model_name == "text-embedding-ada-002" and self._embed_dim is not None:
+        if self.model_name == "text-embedding-ada-002" and self._embed_dim is not None:
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
@@ -120,7 +121,7 @@ class OpenAIModel(AbsEncoder):
             try:
                 response = self._client.embeddings.create(
                     input=sublist,
-                    model=self._model_name,
+                    model=self.model_name,
                     encoding_format="float",
                     dimensions=self._embed_dim or NotGiven(),
                 )
@@ -133,7 +134,7 @@ class OpenAIModel(AbsEncoder):
                 try:
                     response = self._client.embeddings.create(
                         input=sublist,
-                        model=self._model_name,
+                        model=self.model_name,
                         encoding_format="float",
                         dimensions=self._embed_dim or NotGiven(),
                     )
@@ -142,7 +143,7 @@ class OpenAIModel(AbsEncoder):
                     time.sleep(60)
                     response = self._client.embeddings.create(
                         input=sublist,
-                        model=self._model_name,
+                        model=self.model_name,
                         encoding_format="float",
                         dimensions=self._embed_dim or NotGiven(),
                     )
@@ -222,6 +223,58 @@ text_embedding_ada_002 = ModelMeta(
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,
+    framework=["API"],
+    use_instructions=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
+    license=None,
+    similarity_fn_name=None,
+)
+
+text_embedding_3_small_512 = ModelMeta(
+    name="openai/text-embedding-3-small (embed_dim=512)",
+    revision="3",
+    release_date="2024-01-25",
+    languages=None,  # supported languages not specified
+    loader=OpenAIModel,
+    loader_kwargs=dict(
+        tokenizer_name="cl100k_base",
+        max_tokens=8191,
+        embed_dim=512,
+    ),
+    max_tokens=8191,
+    embed_dim=512,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
+)
+
+text_embedding_3_large_512 = ModelMeta(
+    name="openai/text-embedding-3-large (embed_dim=512)",
+    revision="3",
+    release_date="2024-01-25",
+    languages=None,  # supported languages not specified
+    loader=OpenAIModel,
+    loader_kwargs=dict(
+        tokenizer_name="cl100k_base",
+        max_tokens=8191,
+        embed_dim=512,
+    ),
+    max_tokens=8191,
+    embed_dim=512,
+    open_weights=False,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
     framework=["API"],
     use_instructions=False,
     n_parameters=None,

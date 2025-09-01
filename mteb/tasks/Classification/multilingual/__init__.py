@@ -23,6 +23,13 @@ from .NordicLangClassification import NordicLangClassification
 from .NusaParagraphEmotionClassification import NusaParagraphEmotionClassification
 from .NusaParagraphTopicClassification import NusaParagraphTopicClassification
 from .NusaXSenti import NusaXSentiClassification
+from .ru_nlu_intent_classification import RuNLUIntentClassification
+from .RuSciBenchClassification import (
+    RuSciBenchCoreRiscClassification,
+    RuSciBenchGRNTIClassificationV2,
+    RuSciBenchOECDClassificationV2,
+    RuSciBenchPubTypeClassification,
+)
 from .ScalaClassification import ScalaClassification
 from .ScandiSentClassification import ScandiSentClassification
 from .SIB200Classification import SIB200Classification
@@ -55,11 +62,16 @@ __all__ = [
     "NusaParagraphEmotionClassification",
     "NusaParagraphTopicClassification",
     "NusaXSentiClassification",
+    "RuNLUIntentClassification",
+    "RuSciBenchCoreRiscClassification",
+    "RuSciBenchGRNTIClassificationV2",
+    "RuSciBenchOECDClassificationV2",
+    "RuSciBenchPubTypeClassification",
     "SIB200Classification",
     "ScalaClassification",
+    "ScandiSentClassification",
     "SouthAfricanLangClassification",
     "SwissJudgementClassification",
-    "ScandiSentClassification",
     "TurkicClassification",
     "TweetSentimentClassification",
 ]

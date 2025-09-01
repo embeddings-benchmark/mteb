@@ -1,6 +1,17 @@
 from __future__ import annotations
 
-from .SpanishNewsClassification import SpanishNewsClassification
-from .SpanishSentimentClassification import SpanishSentimentClassification
+from .SpanishNewsClassification import (
+    SpanishNewsClassification,
+    SpanishNewsClassificationV2,
+)
+from .SpanishSentimentClassification import (
+    SpanishSentimentClassification,
+    SpanishSentimentClassificationV2,
+)
 
-__all__ = ["SpanishNewsClassification", "SpanishSentimentClassification"]
+__all__ = [
+    "SpanishNewsClassification",
+    "SpanishNewsClassificationV2",
+    "SpanishSentimentClassification",
+    "SpanishSentimentClassificationV2",
+]

@@ -54,10 +54,10 @@ model_names = [
 
 
 cache = ResultCache()
-cache.download_from_remote() # download results from the remote repository. Might take a while the first time. 
+cache.download_from_remote() # download results from the remote repository. Might take a while the first time.
 
 results = cache.load_results(
-    models=model_names, 
+    models=model_names,
     tasks=tasks
     include_remote=True, # default
 )
@@ -69,7 +69,7 @@ The result object is a convenient object in `mteb` for working with dataframes a
 
 ![](images/visualizations/result_objects.png)
 
-The object contain a lot of convenience functions for inspecting and examining the results: 
+The object contain a lot of convenience functions for inspecting and examining the results:
 ```py
 print(results.model_names)
 # ['GritLM/GritLM-7B', 'intfloat/multilingual-e5-large']
@@ -141,7 +141,7 @@ One might want to add some more metadata to the table. This is luckily quite eas
 ```py
 import pandas as pd
 
-task_df = tasks.to_dataframe(properties=["name", "type", "domains"]) 
+task_df = tasks.to_dataframe(properties=["name", "type", "domains"])
 task_df = task_df.rename(columns={"name": "task_name"})
 
 df_with_meta = pd.merge(task_df, df)
@@ -154,5 +154,3 @@ print(df_with_meta.head(5))
 # 3            ArguAna  Retrieval        [Medical, Written]          0.631710
 # 4       TempReasonL1  Retrieval  [Encyclopaedic, Written]          0.071640
 ```
-
-
