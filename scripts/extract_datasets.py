@@ -114,7 +114,7 @@ def parse_args():
 
 if __name__ == "__main__":
     """
-    Extract datasets from changed task files compared to a base branch.
+    Extract datasets from changed task files compared to a base branch.i
 
     Can pass in base branch as an argument. Defaults to 'main'.
     e.g. python -m scripts.extract_datasets mieb
