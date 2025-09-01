@@ -587,20 +587,19 @@ class AbsTaskRetrieval(AbsTask):
 
     def convert_to_reranking(
         self,
-        top_ranked_file: str | Path,
+        top_ranked_path: str | Path,
         top_k: int = 10,
     ) -> Self:
-        """Converts a reranking task to re-ranking by loading results from model run
+        """Converts a reranking task to re-ranking by loading predictions from previous model run where the `prediction_folder` was specified.
 
         Args:
-            top_ranked_file: Path to file with the top ranked results
-            top_k: Number of results to load
+            top_ranked_path: Path to file with the top ranked predictions. 
+            top_k: Number of results to load.
 
         Returns:
-            Re-ranking task
+            The current task reformulated as a reranking task
         """
         top_ranked_path = self._predictions_path(top_ranked_path)
-        top_ranked_path = Path(top_ranked_file)
 
         if not top_ranked_path.exists():
             raise FileNotFoundError(
