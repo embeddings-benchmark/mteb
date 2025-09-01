@@ -24,7 +24,13 @@ logging.basicConfig(level=logging.INFO)
 )
 def test_benchmark_sentence_transformer(task: str | AbsTask, model_name: str):
     """Test that a task can be fetched and run"""
-    if isinstance(model_name, str):
-        model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_name)
+    # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the
+    # SentenceTransformerWrapper would set the model's prompts to None because
+    # the mock tasks are not in the MTEB task registry. The linked PR changes
+    # this behavior and keeps the prompts as configured by the model, so this
+    # test now sets the prompts to None explicitly to preserve the legacy
+    # behavior and focus the test on the tasks instead of the prompts.
+    model.prompts = None
     eval = MTEB(tasks=[task])
     eval.run(model, output_folder="tests/results", overwrite_results=True)
