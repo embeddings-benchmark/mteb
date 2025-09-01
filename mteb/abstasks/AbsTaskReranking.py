@@ -8,6 +8,7 @@ import datasets
 from datasets import Dataset
 
 from .AbsTaskRetrieval import AbsTaskRetrieval
+from .retrieval_dataset_loaders import RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -156,10 +157,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
                         top_ranked[query_id].append(doc_id)
                         relevant_docs[query_id][doc_id] = relevance
 
-                self.dataset[hf_subset][split] = {
-                    "corpus": Dataset.from_list(corpus),
-                    "queries": Dataset.from_list(queries),
-                    "relevant_docs": relevant_docs,
-                    "top_ranked": top_ranked,
-                }
+                self.dataset[hf_subset][split] = RetrievalSplitData(
+                    corpus=Dataset.from_list(corpus),
+                    queries=Dataset.from_list(queries),
+                    relevant_docs=relevant_docs,
+                    top_ranked=top_ranked,
+                )
         self.data_loaded = True
