@@ -521,7 +521,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "IndicXnliPairClassification",
     ]
 
-    assert 136 == len(exceptions), (
+    assert 137 == len(exceptions), (
         "The number of exceptions has changed. Please do not add new datasets to this list."
     )
 
