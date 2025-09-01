@@ -42,7 +42,7 @@ FRAMEWORKS = Literal[
     "ColPali",
 ]
 DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
-QUANTIZATION_TYPES = Literal["float", "int8", "uint8", "binary", "ubinary"]
+QUANTIZATION_TYPES = Literal["float32", "bf16", "int8", "uint8", "binary", "ubinary"]
 
 
 def sentence_transformers_loader(
