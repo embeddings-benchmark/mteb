@@ -261,7 +261,7 @@ voyage_3_5_binary = ModelMeta(
 )
 
 voyage_3_5_ubinary = ModelMeta(
-    name="voyageai/voyage-3.5-ubinary",
+    name="voyageai/voyage-3.5 (quantization=ubinary)",
     revision="1",
     release_date="2025-01-21",
     languages=None,  # supported languages not specified
