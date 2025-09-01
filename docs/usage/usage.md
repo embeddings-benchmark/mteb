@@ -145,7 +145,7 @@ This entails implementing an `encode` function taking as input a list of sentenc
 
 ```python
 import mteb
-from mteb.encoder_interface import PromptType
+from mteb.types import PromptType
 import numpy as np
 
 

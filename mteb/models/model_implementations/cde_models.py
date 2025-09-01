@@ -190,7 +190,7 @@ cde_model_prompts = {
     "STS": "classification: ",
     "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
 }
 
 cde_small_v1 = ModelMeta(

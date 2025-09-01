@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies (incl. leaderboard extra)
         run: |
-          pip install ".[dev,leaderboard]"
+          pip install ".[leaderboard]" --group dev
 
       - name: Run leaderboard build test
         run: |

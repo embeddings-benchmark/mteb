@@ -4,4 +4,4 @@ from .JaCWIRReranking import JaCWIRReranking
 from .JQaRAReranking import JQaRAReranking
 from .MMarcoReranking import VoyageMMarcoReranking
 
-__all__ = ["VoyageMMarcoReranking", "JaCWIRReranking", "JQaRAReranking"]
+__all__ = ["JQaRAReranking", "JaCWIRReranking", "VoyageMMarcoReranking"]

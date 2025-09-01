@@ -41,8 +41,7 @@ class BedrockModel(AbsEncoder):
         self._provider = provider.lower()
 
         if self._provider == "cohere":
-            self.model_prompts = model_prompts
-            self.validate_task_to_prompt_name()
+            self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
             self._max_batch_size = 96
             self._max_sequence_length = max_tokens * 4
         else:

@@ -11,6 +11,7 @@ from .Image import (
     ImageTextPairClassificationEvaluator,
 )
 from .pair_classification_evaluator import PairClassificationEvaluator
+from .RegressionEvaluator import LinearRegressionEvaluator
 from .retrieval_evaluator import RetrievalEvaluator
 from .summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
@@ -32,4 +33,5 @@ __all__ = [
     "ImageTextPairClassificationEvaluator",
     "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",
+    "LinearRegressionEvaluator",
 ]

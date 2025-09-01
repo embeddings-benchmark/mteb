@@ -12,13 +12,20 @@ from mteb.overview import get_tasks
 _HISTORIC_DATASETS = [
     "PolEmo2.0-IN",
     "PolEmo2.0-OUT",
+    "PolEmo2.0-OUT.v2",
     "PAC",
+    "PAC.v2",
     "TNews",
+    "TNews.v2",
     "IFlyTek",
+    "IFlyTek.v2",
     "MultilingualSentiment",
+    "MultilingualSentiment.v2",
     "JDReview",
+    "JDReview.v2",
     "OnlineShopping",
     "Waimai",
+    "Waimai.v2",
     "BlurbsClusteringP2P",
     "BlurbsClusteringS2S",
     "TenKGnadClusteringP2P",
@@ -460,6 +467,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "WinoGrande",
         "AlloprofRetrieval",
         "BSARDRetrieval",
+        "BSARDRetrieval.v2",
         "JaGovFaqsRetrieval",
         "JaQuADRetrieval",
         "NLPJournalAbsIntroRetrieval",
@@ -513,7 +521,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "IndicXnliPairClassification",
     ]
 
-    assert 136 == len(exceptions), (
+    assert 137 == len(exceptions), (
         "The number of exceptions has changed. Please do not add new datasets to this list."
     )
 

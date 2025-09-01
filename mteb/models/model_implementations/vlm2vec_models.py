@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Literal
+from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
@@ -19,8 +19,6 @@ from mteb.requires_package import (
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
-
-EncodeTypes = Literal["query", "passage"]
 
 
 class VLM2VecWrapper(AbsEncoder):
