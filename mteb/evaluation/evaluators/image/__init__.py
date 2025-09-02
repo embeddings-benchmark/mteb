@@ -5,7 +5,7 @@ from .any2any_retrieval_evaluator import Any2AnyRetrievalEvaluator
 from .imagetext_pairclassification_evaluator import ImageTextPairClassificationEvaluator
 
 __all__ = [
-    "any2any_multichoice_evaluator",
-    "any2any_retrieval_evaluator",
-    "imagetext_pairclassification_evaluator",
+    "Any2AnyMultiChoiceEvaluator",
+    "Any2AnyRetrievalEvaluator",
+    "ImageTextPairClassificationEvaluator",
 ]
