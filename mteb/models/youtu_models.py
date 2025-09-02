@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import logging
-from functools import partial
-import os
 import json
+import logging
+import os
 import time
-import types
+from functools import partial
+from typing import Any
+
 import numpy as np
-import torch
 import tqdm
 
 from mteb.encoder_interface import PromptType
@@ -19,14 +19,38 @@ logger = logging.getLogger(__name__)
 
 
 youtu_instruction = {
-    "CmedqaRetrieval": "Given a Chinese community medical question, retrieve replies that best answer the question",
-    "CovidRetrieval": "Given a question on COVID-19, retrieve news articles that answer the question",
-    "DuRetrieval": "Given a Chinese search query, retrieve web passages that answer the question",
-    "EcomRetrieval": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
-    "MedicalRetrieval": "Given a medical question, retrieve user replies that best answer the question",
-    "MMarcoRetrieval": "Given a web search query, retrieve relevant passages that answer the query",
-    "T2Retrieval": "Given a Chinese search query, retrieve web passages that answer the question",
-    "VideoRetrieval": "Given a video search query, retrieve the titles of relevant videos",
+    "CmedqaRetrieval": {
+        "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "document": "",
+    },
+    "CovidRetrieval": {
+        "query": "Given a question on COVID-19, retrieve news articles that answer the question",
+        "document": "",
+    },
+    "DuRetrieval": {
+        "query": "Given a Chinese search query, retrieve web passages that answer the question",
+        "document": "",
+    },
+    "EcomRetrieval": {
+        "query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
+        "document": "",
+    },
+    "MedicalRetrieval": {
+        "query": "Given a medical question, retrieve user replies that best answer the question",
+        "document": "",
+    },
+    "MMarcoRetrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "",
+    },
+    "T2Retrieval": {
+        "query": "Given a Chinese search query, retrieve web passages that answer the question",
+        "document": "",
+    },
+    "VideoRetrieval": {
+        "query": "Given a video search query, retrieve the titles of relevant videos",
+        "document": "",
+    },
     "AFQMC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "ATEC": "Represent the text in conversations between users and financial customer service, retrieve semantically similar text",
     "BQ": "Represent the user problem descriptions when handling bank credit business, retrieve semantically similar text",
@@ -34,10 +58,22 @@ youtu_instruction = {
     "PAWSX": "Represent the Chinese Translations of English Encyclopedias, retrieve semantically similar text",
     "QBQTC": "Represent the web search query, retrieve semantically similar text",
     "STSB": "Represent the short general domain sentences, retrieve semantically similar text",
-    "T2Reranking": "Given a Chinese search query, retrieve web passages that answer the question",
-    "MMarcoReranking": "Given a web search query, retrieve relevant passages that answer the query",
-    "CMedQAv1-reranking": "Given a Chinese community medical question, retrieve replies that best answer the question",
-    "CMedQAv2-reranking": "Given a Chinese community medical question, retrieve replies that best answer the question",
+    "T2Reranking": {
+        "query": "Given a Chinese search query, retrieve web passages that answer the question",
+        "document": "",
+    },
+    "MMarcoReranking": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "",
+    },
+    "CMedQAv1-reranking": {
+        "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "document": "",
+    },
+    "CMedQAv2-reranking": {
+        "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "document": "",
+    },
     "Ocnli": "Retrieve semantically similar text",
     "Cmnli": "Retrieve semantically similar text",
     "TNews": "Classify the fine-grained category of the given news title",
@@ -87,9 +123,6 @@ class YoutuEmbeddingWrapper(Wrapper):
         from tencentcloud.common import credential
         from tencentcloud.common.profile.client_profile import ClientProfile
         from tencentcloud.common.profile.http_profile import HttpProfile
-        from tencentcloud.common.exception.tencent_cloud_sdk_exception import (
-            TencentCloudSDKException,
-        )
         from tencentcloud.lkeap.v20240522 import lkeap_client, models
 
         secret_id = os.getenv("TENCENTCLOUD_SECRET_ID")
@@ -113,10 +146,16 @@ class YoutuEmbeddingWrapper(Wrapper):
     def _encode(
         self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
     ):
-        instruction = ""
+        default_instruction = (
+            "Given a search query, retrieve web passages that answer the question"
+        )
         if prompt_type == PromptType("query") or prompt_type is None:
-            instruction = youtu_instruction.get(task_name, "")
+            instruction = youtu_instruction.get(task_name, default_instruction)
+            if isinstance(instruction, dict):
+                instruction = instruction[prompt_type]
             instruction = f"Instruction: {instruction} \nQuery: "
+        elif prompt_type == PromptType("passage"):
+            instruction = ""
 
         params = {
             "Model": self.model_name,
