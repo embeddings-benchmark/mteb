@@ -42,7 +42,7 @@ FRAMEWORKS = Literal[
     "ColPali",
 ]
 DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
-QUANTIZATION_TYPES = Literal["float32", "bf16", "int8", "uint8", "binary", "ubinary"]
+OUTPUT_DATA_TYPES = Literal["float32", "bf16", "int8", "uint8", "binary"]
 
 
 def sentence_transformers_loader(
@@ -95,7 +95,6 @@ class ModelMeta(BaseModel):
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
         is_cross_encoder: Whether the model can act as a cross-encoder or not.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
-        quantization: The quantization type used by the model. Default is "float".
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -122,7 +121,6 @@ class ModelMeta(BaseModel):
     superseded_by: str | None = None
     is_cross_encoder: bool | None = None
     modalities: list[MODALITIES] = ["text"]
-    quantization: QUANTIZATION_TYPES = "float32"
 
     def to_dict(self):
         dict_repr = self.model_dump()
