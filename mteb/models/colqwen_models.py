@@ -69,6 +69,7 @@ colqwen2 = ModelMeta(
     loader=partial(
         ColQwen2Wrapper,
         model_name="vidore/colqwen2-v1.0",
+        revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -98,6 +99,7 @@ colqwen2_5 = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="vidore/colqwen2.5-v0.2",
+        revision="6f6fcdfd1a114dfe365f529701b33d66b9349014",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -105,7 +107,7 @@ colqwen2_5 = ModelMeta(
     ),
     name="vidore/colqwen2.5-v0.2",
     languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    revision="6f6fcdfd1a114dfe365f529701b33d66b9349014",
     release_date="2025-01-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
@@ -118,35 +120,6 @@ colqwen2_5 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colqwen2.5-v0.2",
-    similarity_fn_name="max_sim",
-    use_instructions=True,
-    training_datasets=COLPALI_TRAINING_DATA,
-)
-
-colnomic_7b = ModelMeta(
-    loader=partial(
-        ColQwen2_5Wrapper,
-        model_name="nomic-ai/colnomic-embed-multimodal-7b",
-        torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
-    ),
-    name="nomic-ai/colnomic-embed-multimodal-7b",
-    languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
-    release_date="2025-03-31",
-    modalities=["image", "text"],
-    n_parameters=7_000_000_000,
-    memory_usage_mb=14400,
-    max_tokens=128000,
-    embed_dim=128,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code="https://github.com/nomic-ai/colpali",
-    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
-    framework=["ColPali"],
-    reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b",
     similarity_fn_name="max_sim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
@@ -165,6 +138,7 @@ colnomic_3b = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="nomic-ai/colnomic-embed-multimodal-3b",
+        revision="86627b4a9b0cade577851a70afa469084f9863a4",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -172,7 +146,7 @@ colnomic_3b = ModelMeta(
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
     languages=COLNOMIC_LANGUAGES,
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    revision="86627b4a9b0cade577851a70afa469084f9863a4",
     release_date="2025-03-31",
     modalities=["image", "text"],
     n_parameters=3_000_000_000,
@@ -194,6 +168,7 @@ colnomic_7b = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="nomic-ai/colnomic-embed-multimodal-7b",
+        revision="09dbc9502b66605d5be56d2226019b49c9fd3293",
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()

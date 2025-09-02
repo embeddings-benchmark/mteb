@@ -1,12 +1,12 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev,image]"
+	pip install -e ".[image]" --group dev
 	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,image]"
+	pip install ".[image]" --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -17,7 +17,7 @@ lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	# Required for CI to work, otherwise it will just pass
 	ruff format . --check						    # running ruff formatting
-	ruff check **/*.py 						        # running ruff linting
+	ruff check .    						        # running ruff linting
 
 test:
 	@echo "--- 🧪 Running tests ---"
@@ -43,14 +43,14 @@ build-docs:
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	pip install ".[dev, pylate,gritlm,xformers,model2vec]"
+	pip install ".[pylate,gritlm,xformers,model2vec]" --group dev
 	python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 
 
 dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
-	pytest -n auto -m test_datasets
+	pytest -m test_datasets
 
 leaderboard-build-test:
 	@echo "--- 🚀 Running leaderboard build test ---"

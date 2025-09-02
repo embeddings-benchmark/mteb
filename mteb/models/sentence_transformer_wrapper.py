@@ -39,21 +39,35 @@ class SentenceTransformerWrapper(Wrapper):
             self.model = model
 
         if (
-            model_prompts is None
-            and hasattr(self.model, "prompts")
-            and len(self.model.prompts) > 0
-        ):
-            try:
-                model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
-            except KeyError:
-                model_prompts = None
-                logger.warning(
-                    "Model prompts are not in the expected format. Ignoring them."
-                )
-        elif model_prompts is not None and hasattr(self.model, "prompts"):
-            logger.info(f"Model prompts will be overwritten with {model_prompts}")
+            built_in_prompts := getattr(self.model, "prompts", None)
+        ) and not model_prompts:
+            model_prompts = built_in_prompts
+        elif model_prompts and built_in_prompts:
+            logger.warning(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
-        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+
+        self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
+            model_prompts, raise_for_invalid_keys=False
+        )
+
+        if invalid_prompts:
+            invalid_prompts = "\n".join(invalid_prompts)
+            logger.warning(
+                f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
+            )
+
+        if (
+            self.model_prompts
+            and len(self.model_prompts) <= 2
+            and (
+                PromptType.query.value not in self.model_prompts
+                or PromptType.document.value not in self.model_prompts
+            )
+        ):
+            logger.warning(
+                "SentenceTransformers that use prompts most often need to be configured with at least 'query' and"
+                f" 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
+            )
 
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
@@ -89,24 +103,24 @@ class SentenceTransformerWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
+        prompt = None
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(
                 self.model_prompts, task_name, prompt_type
             )
+            prompt = self.model_prompts.get(prompt_name, None)
         if prompt_name:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using {prompt_name=} for task={task_name} {prompt_type=} with {prompt=}"
             )
         else:
-            logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
-            )
+            logger.info(f"No model prompts found for task={task_name} {prompt_type=}")
         logger.info(f"Encoding {len(sentences)} sentences.")
 
         embeddings = self.model.encode(
             sentences,
-            prompt_name=prompt_name,
+            prompt=prompt,
             **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):

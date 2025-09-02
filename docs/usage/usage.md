@@ -346,7 +346,7 @@ evaluation = mteb.MTEB(tasks=tasks)
 ```
 
 In prompts the key can be:
-1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks
+1. Prompt types (`document`, `query`) - they will be used in reranking and retrieval tasks
 2. Task type - these prompts will be used in all tasks of the given type
    1. `BitextMining`
    2. `Classification`

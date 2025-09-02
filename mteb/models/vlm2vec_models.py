@@ -20,7 +20,7 @@ from mteb.requires_package import (
 
 logger = logging.getLogger(__name__)
 
-EncodeTypes = Literal["query", "passage"]
+EncodeTypes = Literal["query", "document"]
 
 
 class VLM2VecWrapper:

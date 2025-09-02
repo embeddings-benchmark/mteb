@@ -64,7 +64,7 @@ model = ModelMeta(
         revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
         model_prompts={
            "query": "query: ",
-           "passage": "passage: ",
+           "document": "passage: ",
         },
     ),
 )
