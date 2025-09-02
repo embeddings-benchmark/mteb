@@ -206,7 +206,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     )
     parser.add_argument(
         "--overwrite_strategy",
-        action="str",
+        action=str,
         default="only-missing",
         help=(
             "Strategy for when to overwrite. Can be 'always', 'never', 'only-missing'. 'only-missing' will only rerun the missing splits of a task."
@@ -215,7 +215,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     )
     parser.add_argument(
         "--prediction_folder",
-        action="str",
+        action=str,
         default="predictions",
         help="Folder to save the model predictions in. Currently only works for retrieval.",
     )
