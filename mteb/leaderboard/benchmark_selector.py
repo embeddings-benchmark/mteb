@@ -79,7 +79,7 @@ BENCHMARK_ENTRIES = [
                         "BEIR-NL",
                         "NanoBEIR",
                         "BRIGHT",
-                        "BRIGHT (long)",
+                        "BRIGHT(long)",
                         "BuiltBench(eng)",
                         "CoIR",
                         "FollowIR",

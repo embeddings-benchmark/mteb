@@ -15,7 +15,7 @@ def _display_benchmarks(benchmarks: Sequence[Benchmark]) -> None:
 
     mteb_b, remaining_b = [], []
     for b in sorted_mteb_benchmarks:
-        if "MTEB" in b.name:
+        if "MTEB" in b.name or "MIEB" in b.name:
             mteb_b.append(b)
         else:
             remaining_b.append(b)
