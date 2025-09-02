@@ -373,7 +373,7 @@ Python:
 import mteb
 
 # using a small model and small dataset
-encoder = mteb.get_model("minishlab/potion-base-2M")
+encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
 task = mteb.get_task("NanoArguAnaRetrieval")
 
 prediction_folder = "model_predictions"
@@ -404,7 +404,7 @@ from sentence_transformers import CrossEncoder
 
 import mteb
 
-encoder = mteb.get_model("minishlab/potion-base-2M")
+encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
 task = mteb.get_task("NanoArguAnaRetrieval")
 
 prediction_folder = "model_predictions"
@@ -455,7 +455,7 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 ```python
 # define your task(s) and model above as normal
 task = mteb.get_task("LccSentimentClassification")
-model = mteb.get_model("minishlab/M2V_base_glove_subword")
+model = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
 
 # wrap the model with the cache wrapper
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
