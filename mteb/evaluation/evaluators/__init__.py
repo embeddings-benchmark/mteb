@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from .any_sts_evaluator import AnySTSEvaluator
-from .text.bitext_mining_evaluator import BitextMiningEvaluator
 from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .evaluator import Evaluator
@@ -10,9 +9,10 @@ from .image import (
     Any2AnyRetrievalEvaluator,
     ImageTextPairClassificationEvaluator,
 )
-from .text.pair_classification_evaluator import PairClassificationEvaluator
-from .image.regression_evaluator import LinearRegressionEvaluator
+from .regression_evaluator import LinearRegressionEvaluator
 from .retrieval_evaluator import RetrievalEvaluator
+from .text.bitext_mining_evaluator import BitextMiningEvaluator
+from .text.pair_classification_evaluator import PairClassificationEvaluator
 from .text.summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
     SummarizationEvaluator,
