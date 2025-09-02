@@ -5,7 +5,7 @@ from .bitext_mining_evaluator import BitextMiningEvaluator
 from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .evaluator import Evaluator
-from ._Image import (
+from .image import (
     Any2AnyMultiChoiceEvaluator,
     Any2AnyRetrievalEvaluator,
     ImageTextPairClassificationEvaluator,
