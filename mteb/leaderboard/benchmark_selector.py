@@ -7,6 +7,8 @@ import gradio as gr
 import mteb
 from mteb import Benchmark
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
+from mteb.benchmarks.benchmarks.rteb_benchmarks import RTEB_MAIN, RTEB_FINANCE, RTEB_LEGAL, RTEB_CODE, RTEB_HEALTHCARE, \
+    RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
@@ -25,72 +27,162 @@ BENCHMARK_ENTRIES = [
         description="",
         open=False,
         benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
-        + [
-            MenuEntry(
-                "Image",
-                mteb.get_benchmarks(
-                    [
-                        "MIEB(Multilingual)",
-                        "MIEB(eng)",
-                        "MIEB(lite)",
-                        "MIEB(Img)",
-                        "VisualDocumentRetrieval",
-                        "JinaVDR",
-                    ]
-                ),
-            ),
-            MenuEntry(
-                "Domain-Specific",
-                mteb.get_benchmarks(
-                    [
-                        "MTEB(Code, v1)",
-                        "MTEB(Law, v1)",
-                        "MTEB(Medical, v1)",
-                        "ChemTEB",
-                    ]
-                ),
-            ),
-            MenuEntry(
-                "Language-specific",
-                mteb.get_benchmarks(
-                    [
-                        "MTEB(Europe, v1)",
-                        "MTEB(Indic, v1)",
-                        "MTEB(Scandinavian, v1)",
-                        "MTEB(cmn, v1)",
-                        "MTEB(deu, v1)",
-                        "MTEB(fra, v1)",
-                        "MTEB(jpn, v1)",
-                        "MTEB(kor, v1)",
-                        "MTEB(pol, v1)",
-                        "MTEB(rus, v1)",
-                        "MTEB(fas, v1)",
-                        "VN-MTEB (vie, v1)",
-                    ]
-                )
-                + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
-            ),
-            MenuEntry(
-                "Miscellaneous",  # All of these are retrieval benchmarks
-                mteb.get_benchmarks(
-                    [
-                        "BEIR",
-                        "BEIR-NL",
-                        "NanoBEIR",
-                        "BRIGHT",
-                        "BRIGHT (long)",
-                        "BuiltBench(eng)",
-                        "CoIR",
-                        "FollowIR",
-                        "LongEmbed",
-                        "MINERSBitextMining",
-                        "RAR-b",
-                    ]
-                ),
-            ),
-        ],
+                   + [
+                       MenuEntry(
+                           "Image",
+                           mteb.get_benchmarks(
+                               [
+                                   "MIEB(Multilingual)",
+                                   "MIEB(eng)",
+                                   "MIEB(lite)",
+                                   "MIEB(Img)",
+                                   "VisualDocumentRetrieval",
+                                   "JinaVDR",
+                               ]
+                           ),
+                       ),
+                       MenuEntry(
+                           "Domain-Specific",
+                           mteb.get_benchmarks(
+                               [
+                                   "MTEB(Code, v1)",
+                                   "MTEB(Law, v1)",
+                                   "MTEB(Medical, v1)",
+                                   "ChemTEB",
+                               ]
+                           ),
+                       ),
+                       MenuEntry(
+                           "Language-specific",
+                           mteb.get_benchmarks(
+                               [
+                                   "MTEB(Europe, v1)",
+                                   "MTEB(Indic, v1)",
+                                   "MTEB(Scandinavian, v1)",
+                                   "MTEB(cmn, v1)",
+                                   "MTEB(deu, v1)",
+                                   "MTEB(fra, v1)",
+                                   "MTEB(jpn, v1)",
+                                   "MTEB(kor, v1)",
+                                   "MTEB(pol, v1)",
+                                   "MTEB(rus, v1)",
+                                   "MTEB(fas, v1)",
+                                   "VN-MTEB (vie, v1)",
+                               ]
+                           )
+                           + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
+                       ),
+                       MenuEntry(
+                           "Miscellaneous",  # All of these are retrieval benchmarks
+                           mteb.get_benchmarks(
+                               [
+                                   "BEIR",
+                                   "BEIR-NL",
+                                   "NanoBEIR",
+                                   "BRIGHT",
+                                   "BRIGHT (long)",
+                                   "BuiltBench(eng)",
+                                   "CoIR",
+                                   "FollowIR",
+                                   "LongEmbed",
+                                   "MINERSBitextMining",
+                                   "RAR-b",
+                               ]
+                           ),
+                       ),
+                   ],
     ),
 ]
+
+RTEB_BENCHMARK_ENTRIES = [
+    MenuEntry(
+        name="Select Benchmark",
+        description="",
+        open=False,
+        benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
+                   + [
+                       MenuEntry(
+                           "Image",
+                           mteb.get_benchmarks(
+                               [
+                                   "MIEB(Multilingual)",
+                                   "MIEB(eng)",
+                                   "MIEB(lite)",
+                                   "MIEB(Img)",
+                                   "VisualDocumentRetrieval",
+                                   "JinaVDR",
+                               ]
+                           ),
+                       ),
+                       MenuEntry(
+                           "Domain-Specific",
+                           mteb.get_benchmarks(
+                               [
+                                   "MTEB(Code, v1)",
+                                   "MTEB(Law, v1)",
+                                   "MTEB(Medical, v1)",
+                                   "ChemTEB",
+                               ]
+                           ),
+                       ),
+                       MenuEntry(
+                           "Language-specific",
+                           mteb.get_benchmarks(
+                               [
+                                   "MTEB(Europe, v1)",
+                                   "MTEB(Indic, v1)",
+                                   "MTEB(Scandinavian, v1)",
+                                   "MTEB(cmn, v1)",
+                                   "MTEB(deu, v1)",
+                                   "MTEB(fra, v1)",
+                                   "MTEB(jpn, v1)",
+                                   "MTEB(kor, v1)",
+                                   "MTEB(pol, v1)",
+                                   "MTEB(rus, v1)",
+                                   "MTEB(fas, v1)",
+                                   "VN-MTEB (vie, v1)",
+                               ]
+                           )
+                           + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
+                       ),
+                       MenuEntry(
+                           "Miscellaneous",  # All of these are retrieval benchmarks
+                           mteb.get_benchmarks(
+                               [
+                                   "BEIR",
+                                   "BEIR-NL",
+                                   "NanoBEIR",
+                                   "BRIGHT",
+                                   "BRIGHT (long)",
+                                   "BuiltBench(eng)",
+                                   "CoIR",
+                                   "FollowIR",
+                                   "LongEmbed",
+                                   "MINERSBitextMining",
+                                   "RAR-b",
+                               ]
+                           ),
+                       ),
+                   ],
+    ),
+    MenuEntry(
+        name="RTEB (Retrieval)",
+        description=None,
+        open=False,
+        benchmarks=[
+            RTEB_MAIN,
+            MenuEntry(
+                "Domain-Specific", description=None,
+                open=False, benchmarks=[RTEB_FINANCE, RTEB_LEGAL, RTEB_CODE, RTEB_HEALTHCARE]
+            ),
+            MenuEntry(
+                "Language-specific", description=None,
+                open=False, benchmarks=[RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN]
+            ),
+        ]
+    )
+]
+
 
 
 def _create_button(
