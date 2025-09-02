@@ -64,7 +64,7 @@ def get_benchmark(
     benchmark_name: str,
 ) -> Benchmark:
     """Get a benchmark by name.
-    
+
     Args:
         benchmark_name: The name of the benchmark to retrieve.
     """

@@ -413,7 +413,7 @@ class AbsTask(ABC):
 
     def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTask:
         """Filter the evaluation splits of the task.
-        
+
         Args:
             eval_splits: A list of evaluation splits to keep. If None, all splits are kept.
 
@@ -470,7 +470,7 @@ class AbsTask(ABC):
                 specified will be kept.
 
         Returns:
-            The filtered task        
+            The filtered task
         """
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
