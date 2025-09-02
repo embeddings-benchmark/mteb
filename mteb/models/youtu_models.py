@@ -70,6 +70,7 @@ training_data = {
     "Ocnli": ["train"],
 }
 
+
 class YoutuEmbeddingWrapper(Wrapper):
     def __init__(
         self,
