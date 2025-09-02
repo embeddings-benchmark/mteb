@@ -81,18 +81,23 @@ class YoutuEmbeddingWrapper(Wrapper):
             self,
             "tencentcloud.common",
             "tencentcloud.lkeap",
+            "pip install mteb[youtu]",
         )
 
         from tencentcloud.common import credential
         from tencentcloud.common.profile.client_profile import ClientProfile
         from tencentcloud.common.profile.http_profile import HttpProfile
-        from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
+        from tencentcloud.common.exception.tencent_cloud_sdk_exception import (
+            TencentCloudSDKException,
+        )
         from tencentcloud.lkeap.v20240522 import lkeap_client, models
 
         secret_id = os.getenv("TENCENTCLOUD_SECRET_ID")
         secret_key = os.getenv("TENCENTCLOUD_SECRET_KEY")
         if not secret_id or not secret_key:
-            raise ValueError("TENCENTCLOUD_SECRET_ID and TENCENTCLOUD_SECRET_KEY environment variables must be set")
+            raise ValueError(
+                "TENCENTCLOUD_SECRET_ID and TENCENTCLOUD_SECRET_KEY environment variables must be set"
+            )
         cred = credential.Credential(secret_id, secret_key)
 
         httpProfile = HttpProfile()
@@ -116,15 +121,15 @@ class YoutuEmbeddingWrapper(Wrapper):
         params = {
             "Model": self.model_name,
             "Inputs": inputs,
-            "Instruction": instruction
+            "Instruction": instruction,
         }
-        
+
         req = self.models.GetEmbeddingRequest()
         req.from_json_string(json.dumps(params))
 
         resp = self.client.GetEmbedding(req)
         resp = json.loads(resp.to_json_string())
-        outputs =[item["Embedding"] for item in resp["Data"]]
+        outputs = [item["Embedding"] for item in resp["Data"]]
 
         return outputs
 
@@ -136,7 +141,7 @@ class YoutuEmbeddingWrapper(Wrapper):
         retries: int = 5,
         **kwargs: Any,
     ) -> np.ndarray:
-        max_batch_size = min(4, kwargs.get("batch_size", 4))
+        max_batch_size = kwargs.get("batch_size", 32)
         sublists = [
             sentences[i : i + max_batch_size]
             for i in range(0, len(sentences), max_batch_size)
@@ -178,10 +183,7 @@ Youtu_Embedding_V1 = ModelMeta(
     languages=["zho-Hans"],
     revision="1",
     release_date="2025-09-02",
-    loader=partial(
-        YoutuEmbeddingWrapper,
-        model_name="youtu-embedding-v1"
-    ),
+    loader=partial(YoutuEmbeddingWrapper, model_name="youtu-embedding-v1"),
     open_weights=False,
     n_parameters=None,
     memory_usage_mb=None,
