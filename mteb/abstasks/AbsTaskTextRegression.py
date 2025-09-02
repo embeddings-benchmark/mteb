@@ -15,7 +15,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.evaluation.evaluators.RegressionEvaluator import (
+from mteb.evaluation.evaluators.regression_evaluator import (
     LinearRegressionEvaluator,
     SklearnRegressorModel,
 )
