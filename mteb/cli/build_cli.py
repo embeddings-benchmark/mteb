@@ -34,7 +34,7 @@ def run(args: argparse.Namespace) -> None:
         or args.categories
     ):
         logger.warning(
-            "`benchmarks` is specified but so is one or more of `tasks`, `eval_splits`, `langauges`, `task_types` and `categories`. These will be ignored."
+            "`benchmarks` is specified but so is one or more of `tasks`, `eval_splits`, `languages`, `task_types` and `categories`. These will be ignored."
         )
 
     logger.info("Running with parameters: %s", args)
