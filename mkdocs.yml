@@ -9,6 +9,7 @@ theme:
   logo: images/logos/mteb_logo/mteb_logo_transparent.png
   features:
     - navigation.tracking
+    - navigation.instant
     - navigation.tabs
     - navigation.sections
     - toc.integrate
@@ -35,12 +36,11 @@ markdown_extensions:
       alternate_style: true
   - toc:
       permalink: true
+  - toc:
+      toc_depth: 3
   - footnotes
   - attr_list
   - md_in_html
-  - pymdownx.emoji:
-      emoji_index: "material.extensions.emoji.twemoji"  # !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: "material.extensions.emoji.to_svg"  # !!python/name:material.extensions.emoji.to_svg
   - tables
   - pymdownx.details
 

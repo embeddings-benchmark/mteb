@@ -20,8 +20,7 @@ Each task also contains extensive metadata. We annotate this using the following
 
 :::mteb.TaskMetadata
     options:
-      members: true
-
+        show_docstring_type_parameters: false
 
 
 ## The Task Object
