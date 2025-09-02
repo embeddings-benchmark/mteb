@@ -58,10 +58,10 @@ results = mteb.evaluate(model, tasks=tasks)
 
 ```bash
 mteb available_tasks # list _all_ available tasks
+mteb available_tasks --languages eng --task_types Retrieval # Available tasks for English Retrieval
 
 mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
-    -t Banking77Classification  \
-    --verbosity 3
+    -t Banking77Classification
 
 # if nothing is specified default to saving the results in the results/{model_name} folder
 ```
