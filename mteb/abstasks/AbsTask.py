@@ -220,7 +220,7 @@ class AbsTask(ABC):
         hf_split: str,
         hf_subset: str,
     ) -> None:
-        predictions_path = self.predictions_path(prediction_folder)
+        predictions_path = self._predictions_path(prediction_folder)
         existing_results = {
             "mteb_model_meta": {
                 "model_name": model.mteb_model_meta.name,
@@ -238,7 +238,7 @@ class AbsTask(ABC):
         with predictions_path.open("w") as predictions_file:
             json.dump(existing_results, predictions_file)
 
-    def predictions_path(
+    def _predictions_path(
         self,
         output_folder: Path | str,
     ) -> Path:
