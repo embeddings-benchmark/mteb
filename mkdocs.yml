@@ -36,7 +36,6 @@ markdown_extensions:
       alternate_style: true
   - toc:
       permalink: true
-  - toc:
       toc_depth: 3
   - footnotes
   - attr_list
