@@ -13,9 +13,9 @@ from typing_extensions import Self
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.models_protocols import Encoder
 
-from ...create_dataloaders import create_image_dataloader
-from ...types import BatchedInput
-from .evaluator import Evaluator
+from ....create_dataloaders import create_image_dataloader
+from ....types import BatchedInput
+from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
