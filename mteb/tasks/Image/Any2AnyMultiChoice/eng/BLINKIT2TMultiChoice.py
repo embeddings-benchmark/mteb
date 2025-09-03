@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BLINKIT2TMultiChoice(AbsTaskReranking):
+class BLINKIT2TMultiChoice(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        # TODO is this reranking?
         name="BLINKIT2TMultiChoice",
         description="Retrieve the correct text answer based on images and specific retrieval instructions.",
         reference="https://arxiv.org/abs/2404.12390",

@@ -221,10 +221,11 @@ def evaluate_p_mrr_change(
             naucs,
             avg_mrr,
             naucs_mrr,
+            cv_recall,
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
         scores_dict = make_score_dict(
-            ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr, {}
+            ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr, cv_recall, {}
         )
         for key, value in scores_dict.items():
             followir_scores[name][key] = value
@@ -398,6 +399,7 @@ def make_score_dict(
     mrr: dict[str, float],
     naucs: dict[str, float],
     naucs_mrr: dict[str, float],
+    cv_recall: dict[str, float],
     task_scores: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
 ) -> dict[str, float]:
@@ -405,6 +407,7 @@ def make_score_dict(
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
         **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
         **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
+        "accuracy": recall["Recall@1"],
         **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
         **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         **{
@@ -415,6 +418,7 @@ def make_score_dict(
             k.replace("@", "_at_").replace("_P", "_precision").lower(): v
             for k, v in naucs_mrr.items()
         },
+        **{f"cv_recall_at_{k.split('@')[1]}": v for k, v in cv_recall.items()},
         **task_scores,
         **(
             {"previous_results_model_meta": previous_results_model_meta}
@@ -501,11 +505,11 @@ def max_over_subqueries(
         new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
-    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
+    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall = (
         calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
     score_dict = make_score_dict(
-        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, {}
+        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, cv_recall, {}
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
@@ -541,6 +545,7 @@ def calculate_retrieval_scores(
         results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
+    cv_recall = calculate_cv_recall(results, qrels, k_values)
 
     avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
     return RetrievalEvaluationResult(
@@ -552,6 +557,7 @@ def calculate_retrieval_scores(
         naucs=naucs,
         mrr=avg_mrr,
         naucs_mrr=naucs_mrr,
+        cv_recall=cv_recall,
     )
 
 
@@ -574,3 +580,30 @@ def evaluate_abstention(
             naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
 
     return naucs
+
+
+def calculate_cv_recall(
+    results: dict[str, dict[str, float]],
+    qrels: RelevantDocumentsType,
+    k_values: list[int],
+) -> dict[str, float]:
+    all_cv_recalls = defaultdict(list)
+
+    for query_id in results.keys():
+        top_docs = sorted(
+            results[query_id], key=lambda x: x[1], reverse=True
+        )  # Sorted list of doc IDs
+        relevant_docs = set(qrels[query_id].keys())
+
+        for k in k_values:
+            top_k_docs = top_docs[:k]
+
+            if relevant_docs.intersection(top_k_docs):
+                all_cv_recalls[k].append(1.0)
+            else:
+                all_cv_recalls[k].append(0.0)
+
+    return {
+        f"CV_Recall@{k}": round(sum(all_cv_recalls[k]) / len(results), 5)
+        for k in k_values
+    }

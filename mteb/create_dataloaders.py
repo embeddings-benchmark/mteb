@@ -43,8 +43,8 @@ def corpus_to_dict(
         "text": (row["title"] + " " + row["text"]).strip()
         if "title" in row
         else row["text"].strip(),
-        "title": row.get("title", None),
-        "body": row.get("text", None),
+        "title": row.get("title", ""),  # dataloader don't like `None`
+        "body": row.get("text", ""),
     }
 
 
@@ -60,8 +60,8 @@ def create_dataloader_for_retrieval_corpus(
     Returns:
         A dataloader with the corpus.
     """
-    dataset = dataset.map(corpus_to_dict)
-    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
+    new_ds = dataset.map(corpus_to_dict, desc="Converting corpus dict")
+    return torch.utils.data.DataLoader(new_ds, **dataloader_kwargs)
 
 
 def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
@@ -74,7 +74,7 @@ def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]
     return row
 
 
-def create_dataloader_for_queries(
+def create_text_dataloader_for_queries(
     queries: QueryDatasetType,
     **dataloader_kwargs,
 ) -> DataLoader[QueryInput]:
@@ -160,7 +160,9 @@ def create_dataloader_for_queries_conversation(
         A dataloader with the queries.
     """
     return DataLoader(
-        queries.map(convert_conv_history_to_query),
+        queries.map(
+            convert_conv_history_to_query, desc="Converting conversations to queries"
+        ),
         **dataloader_kwargs,
     )
 
@@ -208,6 +210,7 @@ def prepare_image_dataset(
     return dataset.map(
         convert_images_to_rgb,
         fn_kwargs={"image_col_name": "image", "transform": transform},
+        desc="Converting images to RGB",
     )
 
 
@@ -250,7 +253,7 @@ def create_text_queries_dataloader(
     **dataloader_kwargs: dict[str, Any],
 ) -> DataLoader[BatchedInput]:
     if not isinstance(dataset["text"][0], list):
-        return create_dataloader_for_queries(
+        return create_text_dataloader_for_queries(
             dataset,
             **dataloader_kwargs,
         )
@@ -260,34 +263,68 @@ def create_text_queries_dataloader(
     )
 
 
+def create_queries_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    **dataloader_kwargs: dict[str, Any],
+) -> DataLoader[BatchedInput]:
+    queries_type, _ = task_metadata.category.split("2")
+    if queries_type == "t":  # text only
+        return create_text_dataloader_for_queries(dataset, **dataloader_kwargs)
+    if "i" in queries_type:  # contains image
+        return create_image_dataloader(
+            dataset, image_column_name=input_column, **dataloader_kwargs
+        )
+
+
+def create_document_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    **dataloader_kwargs: dict[str, Any],
+) -> DataLoader[BatchedInput]:
+    _, document_type = task_metadata.category.split("2")
+    if document_type == "t":  # text only
+        return create_dataloader_for_retrieval_corpus(dataset, **dataloader_kwargs)
+    if "i" in document_type:  # contains image
+        return create_image_dataloader(
+            dataset, image_column_name=input_column, **dataloader_kwargs
+        )
+
+
 def create_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
     input_column: str | None = None,
     **dataloader_kwargs: dict[str, Any],
-) -> DataLoader:
+) -> DataLoader[BatchedInput]:
+    if prompt_type == PromptType.query:
+        return create_queries_dataloader(
+            dataset,
+            task_metadata,
+            input_column,
+            **dataloader_kwargs,
+        )
+    if prompt_type == PromptType.document:
+        return create_document_dataloader(
+            dataset,
+            task_metadata,
+            input_column,
+            **dataloader_kwargs,
+        )
+
     if "image" in task_metadata.modalities:
         return create_image_dataloader(
             (dataset.select_columns(input_column).rename_column(input_column, "image")),
             **dataloader_kwargs,
         )
     if "text" in task_metadata.modalities and input_column is not None:
-        if prompt_type is PromptType.document:
-            return create_dataloader_for_retrieval_corpus(
-                dataset,
-                **dataloader_kwargs,
-            )
-        if prompt_type is PromptType.query:
-            return create_text_queries_dataloader(
-                dataset,
-                **dataloader_kwargs,
-            )
-        if input_column is not None:
-            return create_dataloader_from_texts(
-                dataset[input_column],
-                **dataloader_kwargs,
-            )
+        return create_dataloader_from_texts(
+            dataset[input_column],
+            **dataloader_kwargs,
+        )
     return DataLoader(
         dataset,
         **dataloader_kwargs,

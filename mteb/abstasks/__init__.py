@@ -16,6 +16,7 @@ from .Image import (
     AbsTaskImageMultilabelClassification,
     AbsTaskImageTextPairClassification,
 )
+from .task_metadata import TaskMetadata
 
 __all__ = [
     "AbsTask",
@@ -32,4 +33,5 @@ __all__ = [
     "AbsTaskImageTextPairClassification",
     "AbsTaskAnyZeroShotClassification",
     "AbsTaskTextRegression",
+    "TaskMetadata",
 ]

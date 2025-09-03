@@ -62,9 +62,7 @@ class RetrievalDatasetLoader:
         self.trust_remote_code = trust_remote_code
         self.split = split
         self.config = config if config != "default" else None
-        self.dataset_configs = get_dataset_config_names(
-            self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
-        )
+        self.dataset_configs = get_dataset_config_names(self.hf_repo, self.revision)
 
     def load(self) -> RetrievalSplitData:
         top_ranked = None
@@ -119,9 +117,10 @@ class RetrievalDatasetLoader:
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
         corpus_ds = self.load_dataset_split(config)
-        corpus_ds = corpus_ds.cast_column("_id", Value("string")).rename_column(
-            "_id", "id"
-        )
+        if "_id" in corpus_ds.column_names:
+            corpus_ds = corpus_ds.cast_column("_id", Value("string")).rename_column(
+                "_id", "id"
+            )
         logger.info("Loaded %d %s Documents.", len(corpus_ds), self.split.upper())
         logger.info("Doc Example: %s", corpus_ds[0])
         return corpus_ds
@@ -130,12 +129,15 @@ class RetrievalDatasetLoader:
         logger.info("Loading Queries...")
 
         config = f"{self.config}-queries" if self.config is not None else "queries"
+        if "query" in self.dataset_configs:
+            config = "query"
         queries_ds = self.load_dataset_split(config)
-        queries_ds = (
-            queries_ds.cast_column("_id", Value("string"))
-            .rename_column("_id", "id")
-            .select_columns(["id", "text"])
-        )
+        if "_id" in queries_ds.column_names:
+            queries_ds = queries_ds.cast_column("_id", Value("string")).rename_column(
+                "_id", "id"
+            )
+
+        queries_ds = queries_ds.select_columns(["id", "text"])
         logger.info("Loaded %d %s queries.", len(queries_ds), self.split.upper())
         logger.info("Query Example: %s", queries_ds[0])
 
