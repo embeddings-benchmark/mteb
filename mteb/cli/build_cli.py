@@ -10,6 +10,7 @@ import mteb
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_readme import generate_readme
+from mteb.evaluate import OverwriteStrategy
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -105,7 +106,7 @@ def _add_benchmark_selection_args(parser: argparse.ArgumentParser) -> None:
 def _add_task_selection_args(parser: argparse.ArgumentParser) -> None:
     """Adds arguments to the parser for filtering tasks by type, category, language, and task name."""
     parser.add_argument(
-        "--task_types",
+        "--task-types",
         nargs="+",
         type=str,
         default=None,
@@ -171,7 +172,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "--device", type=int, default=None, help="Device to use for computation"
     )
     parser.add_argument(
-        "--output_folder",
+        "--output-folder",
         type=str,
         default="results",
         help="Output directory for results. Will default to `results` if not set.",
@@ -180,42 +181,42 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
     parser.add_argument(
-        "--disable_co2_tracker",
+        "--disable-co2-tracker",
         action="store_true",
         default=False,
         help="Disable CO₂ tracker, enabled by default",
     )
     parser.add_argument(
-        "--eval_splits",
+        "--eval-splits",
         nargs="+",
         type=str,
         default=None,
         help="Evaluation splits to use (train, dev, test..). If None, all splits will be used",
     )
     parser.add_argument(
-        "--model_revision",
+        "--model-revision",
         type=str,
         default=None,
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
     )
     parser.add_argument(
-        "--batch_size",
+        "--batch-size",
         type=int,
         default=None,
         help="Batch size of the encode. Will be passed to the MTEB as mteb.evaluate(model, task, encode_kwargs = {'batch_size': value}).",
     )
     parser.add_argument(
-        "--overwrite_strategy",
+        "--overwrite-strategy",
         type=str,
         default="only-missing",
-        choices=["always", "never", "only-missing"],
+        choices=[val.value for val in OverwriteStrategy],
         help=(
             "Strategy for when to overwrite. Can be 'always', 'never', 'only-missing'. 'only-missing' will only rerun the missing splits of a task."
             + " It will not rerun the splits if the dataset revision or mteb version has changed. "
         ),
     )
     parser.add_argument(
-        "--prediction_folder",
+        "--prediction-folder",
         type=str,
         default=None,
         help="Folder to save the model predictions in. Currently only works for retrieval.",
@@ -244,16 +245,16 @@ def create_meta(args: argparse.Namespace) -> None:
 
 def _add_create_meta_parser(subparsers) -> None:
     parser = subparsers.add_parser(
-        "create_meta", help="Create model metadata from a folder of results"
+        "create-meta", help="Create model metadata from a folder of results"
     )
 
     parser.add_argument(
-        "--results_folder",
+        "--results-folder",
         type=str,
         help="Folder containing the results of a model run",
     )
     parser.add_argument(
-        "--output_path",
+        "--output-path",
         type=str,
         default="model_card.md",
         help="Output path for the model metadata",
@@ -265,7 +266,7 @@ def _add_create_meta_parser(subparsers) -> None:
         help="Overwrite the output file if it already exists",
     )
     parser.add_argument(
-        "--from_existing",
+        "--from-existing",
         type=str,
         required=False,
         help="Merge results with existing README.md",
