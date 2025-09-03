@@ -154,7 +154,7 @@ class YoutuEmbeddingWrapper(Wrapper):
             if isinstance(instruction, dict):
                 instruction = instruction[prompt_type]
             instruction = f"Instruction: {instruction} \nQuery: "
-        elif prompt_type == PromptType("passage"):
+        elif prompt_type == PromptType.document:
             instruction = ""
 
         params = {
