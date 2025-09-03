@@ -12,7 +12,6 @@ theme:
     - navigation.instant
     - navigation.tabs
     - navigation.sections
-    - toc.integrate
     - navigation.top
     - search.suggest
     - search.highlight
@@ -61,7 +60,7 @@ nav:
   #     - Adding a Task: adding_a_dataset.md
   #     - Development Setup: CONTRIBUTING.md
   - API:
-      - Overview: api_overview.md
+      - Overview: api/index.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
