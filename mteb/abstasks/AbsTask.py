@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import datasets
 import numpy as np
@@ -76,22 +76,22 @@ class AbsTask(ABC):
         dataset: The dataset represented as a dictionary on the form {"hf subset": {"split": Dataset}} where "split" is the dataset split (e.g. "test")
             and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
             datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
+        seed: The random seed used for reproducibility.
+        hf_subsets: The list of Huggingface subsets to use.
+        data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
         abstask_prompt: The potential prompt of the abstask
         superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
-        fast_loading: (Not recommended to use) Denotes if the task should be loaded using the fast loading method.
+        fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
             This was used only for historical reasons and will be removed in the future.
-        data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
-        seed: The random seed used for reproducibility.
-        hf_subsets: The list of Huggingface subsets to use.
     """
 
     metadata: TaskMetadata
     abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
     superseded_by: str | None = None
-    dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
+    dataset: dict[HFSubset, DatasetDict] | None = None
     data_loaded: bool = False
     hf_subsets: list[HFSubset]
     fast_loading: bool = False
@@ -111,7 +111,7 @@ class AbsTask(ABC):
         self.hf_subsets = self.metadata.hf_subsets
 
     def check_if_dataset_is_superseded(self):
-        """Check if the dataset is superseded by a newer version"""
+        """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
             logger.warning(
                 f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
@@ -135,13 +135,12 @@ class AbsTask(ABC):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
-        """Evaluates a Sentence Embedding Model on the task.
+        """Evaluates an MTEB compatible model on the task.
 
         Args:
-            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
-                sentence embeddings
-            split: Which datasplit to be used.
-            subsets_to_run: List of HFSubsets to evaluate. If None, all subsets are evaluated.
+            model: MTEB compatible model. Implements a encode(sentences) method, that encodes sentences and returns an array of embeddings
+            split: Which split (e.g. *"test"*) to be used.
+            subsets_to_run: List of huggingface subsets (HFSubsets) to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
@@ -166,7 +165,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        self.dataset: dict[HFSubset, DatasetDict]
+        self.dataset = cast(dict[HFSubset, DatasetDict], self.dataset)
 
         scores = {}
         if self.hf_subsets is None:
@@ -322,10 +321,11 @@ class AbsTask(ABC):
         self.dataset_transform()
         self.data_loaded = True
 
-    def fast_load(self, **kwargs):
-        """Load all subsets at once, then group by language with Polars. Using fast loading has two requirements:
+    def fast_load(self, **kwargs: Any) -> None:
+        """**Deprecated**. Load all subsets at once, then group by language. Using fast loading has two requirements:
+
         - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair
-        - The datasets must have a 'default' config that loads all the subsets of the dataset (see https://huggingface.co/docs/datasets/en/repository_structure#configurations)
+        - The datasets must have a 'default' config that loads all the subsets of the dataset (see more [here](https://huggingface.co/docs/datasets/en/repository_structure#configurations))
         """
         self.dataset = {}
         merged_dataset = datasets.load_dataset(
@@ -345,7 +345,7 @@ class AbsTask(ABC):
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
-        """Calculates descriptive statistics from the dataset by calling `_calculate_metrics_from_split`."""
+        """Calculates descriptive statistics from the dataset."""
         from mteb.abstasks import AbsTaskAnyClassification
 
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
@@ -397,7 +397,7 @@ class AbsTask(ABC):
 
     @property
     def languages(self) -> list[str]:
-        """Returns the languages of the task"""
+        """Returns the languages of the task."""
         if self.hf_subsets:
             eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
@@ -412,7 +412,14 @@ class AbsTask(ABC):
         return self.metadata.languages
 
     def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTask:
-        """Filter the evaluation splits of the task."""
+        """Filter the evaluation splits of the task.
+
+        Args:
+            eval_splits: A list of evaluation splits to keep. If None, all splits are kept.
+
+        Returns:
+            The filtered task
+        """
         self._eval_splits = eval_splits
         return self
 
@@ -422,10 +429,13 @@ class AbsTask(ABC):
         """Filter the modalities of the task.
 
         Args:
-        modalities: A list of modalities to filter by. If None, the task is returned unchanged.
-        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
-            task's modalities and ALL task modalities are in filter modalities (exact match).
-            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
+            modalities: A list of modalities to filter by. If None, the task is returned unchanged.
+            exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
+                task's modalities and ALL task modalities are in filter modalities (exact match).
+                If False, keep tasks if _any_ of the task's modalities match the filter modalities.
+
+        Returns:
+            The filtered task
         """
         if modalities is None:
             return self
@@ -458,6 +468,9 @@ class AbsTask(ABC):
             exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
                 exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
                 specified will be kept.
+
+        Returns:
+            The filtered task
         """
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
@@ -537,7 +550,7 @@ class AbsTask(ABC):
             repo_name: The name of the repository to push the dataset to.
             reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
-        Example:
+        Examples:
             >>> import mteb
             >>> task = mteb.get_task("Caltech101")
             >>> repo_name = f"myorg/{task.metadata.name}"
@@ -557,10 +570,8 @@ class AbsTask(ABC):
         self.metadata.push_dataset_card_to_hub(repo_name)
 
     @property
-    def is_aggregate(
-        self,
-    ) -> bool:  # Overrided by subclasses (AbsTaskAggregate) that are aggregate
-        """Whether the task is aggregate. Subclasses that are aggregate should override this with `True`."""
+    def is_aggregate(self) -> bool:
+        """Whether the task is an aggregate of multiple tasks."""
         return False
 
     @property
@@ -571,14 +582,13 @@ class AbsTask(ABC):
 
     @property
     def modalities(self) -> list[str]:
-        """Returns the modalities of the task"""
+        """Returns the modalities of the task."""
         return self.metadata.modalities
 
     def __repr__(self) -> str:
-        """Format the representation of the task such that it appears as:
+        # Format the representation of the task such that it appears as:
+        # TaskObjectName(name='{name}', languages={lang1, lang2, ...})
 
-        TaskObjectName(name='{name}', languages={lang1, lang2, ...})
-        """
         langs = self.languages
         if len(langs) > 3:
             langs = langs[:3]

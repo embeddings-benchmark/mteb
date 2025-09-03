@@ -87,7 +87,7 @@ def check_is_valid_script(script: str) -> None:
 def check_is_valid_language(lang: str) -> None:
     if lang not in ISO_TO_LANGUAGE:
         raise ValueError(
-            f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.langauges import ISO_TO_LANGUAGE`."
+            f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.languages import ISO_TO_LANGUAGE`."
         )
 
 

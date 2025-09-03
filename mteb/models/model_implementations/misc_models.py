@@ -987,7 +987,7 @@ udever_dataset = {  # discussed here: https://github.com/embeddings-benchmark/mt
     # MultiNLI
 }
 
-udever_langauges = [
+udever_languages = [
     "aka-Latn",
     "ara-Arab",
     "asm-Beng",
@@ -1039,7 +1039,7 @@ izhx__udever_bloom_1b1 = ModelMeta(
     name="izhx/udever-bloom-1b1",
     revision="7bf1ee29878cb040b2708a691aa4b61f27eaa252",
     release_date="2023-10-24",
-    languages=udever_langauges,
+    languages=udever_languages,
     loader=sentence_transformers_loader,
     n_parameters=None,
     memory_usage_mb=None,
@@ -1061,7 +1061,7 @@ izhx__udever_bloom_3b = ModelMeta(
     name="izhx/udever-bloom-3b",
     revision="4edd8affe80ca89ba0f6b6ba4103fc7f25fc57b2",
     release_date="2023-10-24",
-    languages=udever_langauges,
+    languages=udever_languages,
     loader=sentence_transformers_loader,
     n_parameters=None,
     memory_usage_mb=None,
@@ -1083,7 +1083,7 @@ izhx__udever_bloom_560m = ModelMeta(
     name="izhx/udever-bloom-560m",
     revision="b2a723e355946ec5a5c5fbed3459766627ded2bb",
     release_date="2023-10-24",
-    languages=udever_langauges,
+    languages=udever_languages,
     loader=sentence_transformers_loader,
     n_parameters=None,
     memory_usage_mb=None,
@@ -1105,7 +1105,7 @@ izhx__udever_bloom_7b1 = ModelMeta(
     name="izhx/udever-bloom-7b1",
     revision="18e8d3e6dbd94868584877f2e72a105a17df22ef",
     release_date="2023-10-24",
-    languages=udever_langauges,
+    languages=udever_languages,
     loader=sentence_transformers_loader,
     n_parameters=None,
     memory_usage_mb=None,

@@ -198,7 +198,7 @@ def evaluate(
     Returns:
         The results of the evaluation.
 
-    Example:
+    Examples:
         >>> import mteb
         >>> model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
         >>> task = mteb.get_task("STS12")

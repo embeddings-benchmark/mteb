@@ -378,6 +378,7 @@ task = mteb.get_task("NanoArguAnaRetrieval")
 
 prediction_folder = "model_predictions"
 
+
 res = mteb.evaluate(
     encoder,
     task,
@@ -387,12 +388,10 @@ res = mteb.evaluate(
 
 The file will now be saved to `"{prediction_folder}/{task_name}_predictions.json"` and contain the rankings for each query along with the model name and revision of the model that produced the result.
 
-<!-- TODO: Missing the following - will add it back in once I convert the CLI to mteb.evaluate -->
-<!-- 
-For the CLI you can set the  `--save_predictions` flag:
+For the CLI you can set the  `--prediction-folder` flag:
 ```bash
-mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
-``` -->
+mteb run -t NanoArguAnaRetrieval -m sentence-transformers/static-similarity-mrl-multilingual-v1 --prediction-folder predictions 
+```
 
 
 ### Running Cross Encoders on Reranking

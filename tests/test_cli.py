@@ -14,7 +14,7 @@ from mteb.cli import create_meta, run
 
 
 def test_available_tasks():
-    command = f"{sys.executable} -m mteb available_tasks"
+    command = f"{sys.executable} -m mteb available-tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert "Banking77Classification" in result.stdout, (
@@ -23,7 +23,7 @@ def test_available_tasks():
 
 
 def test_available_benchmarks():
-    command = f"{sys.executable} -m mteb available_benchmarks"
+    command = f"{sys.executable} -m mteb available-benchmarks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert "MTEB(eng, v1)" in result.stdout, (
@@ -32,11 +32,6 @@ def test_available_benchmarks():
 
 
 run_task_fixures = [
-    # (
-    #     "sentence-transformers/average_word_embeddings_komninos",
-    #     "BornholmBitextMining",
-    #     "21eec43590414cb8e3a6f654857abed0483ae36e",
-    # ),
     (
         "intfloat/multilingual-e5-small",
         "BornholmBitextMining",
@@ -57,22 +52,23 @@ def test_run_task(
         tasks=[task_name],
         model_revision=model_revision,
         output_folder=tmp_path.as_posix(),
-        verbosity=3,
         device=None,
         categories=None,
         task_types=None,
         languages=None,
         batch_size=None,
+        verbosity=3,
         disable_co2_tracker=None,
-        overwrite=True,
+        overwrite_strategy="always",
         eval_splits=None,
+        prediction_folder=None,
         benchmarks=None,
     )
 
     run(args)
 
     model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
-    results_path = tmp_path / model_name_as_path / model_revision
+    results_path = tmp_path / "results" / model_name_as_path / model_revision
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [f.name for f in list(results_path.glob("*.json"))], (
         "model_meta.json not found in output folder"
@@ -121,7 +117,7 @@ def test_create_meta():
         )
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --overwrite"
+    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -184,6 +180,6 @@ def test_create_meta_from_existing(
         )
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --from_existing {existing_readme.as_posix()} --overwrite"
+    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
