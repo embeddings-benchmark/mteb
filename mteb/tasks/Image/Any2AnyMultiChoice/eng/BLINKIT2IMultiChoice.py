@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from mteb.abstasks.AbsTaskReranking import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
+class BLINKIT2IMultiChoice(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2IMultiChoice",
         description="Retrieve images based on images and specific retrieval instructions.",
@@ -12,7 +12,6 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         dataset={
             "path": "JamieSJS/blink-it2i-multi",
             "revision": "a9f994925551c14503d00d86f1307bac6e2ead6a",
-            "trust_remote_code": True,
         },
         type="VisionCentricQA",
         category="it2i",

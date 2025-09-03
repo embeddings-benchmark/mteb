@@ -19,8 +19,6 @@ from mteb.abstasks.AbsTaskMultilabelClassification import (
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval, RetrievalSplitData
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
     AbsTaskImageMultilabelClassification,
 )
@@ -2508,7 +2506,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
+class MockMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "number_of_characters": 60,
@@ -2592,7 +2590,7 @@ class MockMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
+class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -2680,7 +2678,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class MockAny2AnyRetrievalI2TTask(AbsTaskAny2AnyRetrieval):
+class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "number_of_characters": 60,
@@ -2750,7 +2748,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
+class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "number_of_characters": 60,

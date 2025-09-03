@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import Dataset, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -87,7 +87,7 @@ def transform_choices(example):
     return example
 
 
-class CVBenchCount(AbsTaskAny2AnyMultiChoice):
+class CVBenchCount(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchCount",
         description="count the number of objects in the image.",
@@ -130,7 +130,7 @@ class CVBenchCount(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
+class CVBenchRelation(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchRelation",
         description="decide the relation of the objects in the image.",
@@ -173,7 +173,7 @@ class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
+class CVBenchDepth(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchDepth",
         description="judge the depth of the objects in the image with similarity matching.",
@@ -216,7 +216,7 @@ class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
+class CVBenchDistance(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchDistance",
         description="judge the distance of the objects in the image with similarity matching.",

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class CIRRIT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CIRRIT2IRetrieval",
         description="Retrieve images based on texts and images.",
@@ -12,7 +12,6 @@ class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "MRBench/mbeir_cirr_task7",
             "revision": "503301cd99348035b9675883a543aa1ded0cf07c",
-            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="it2i",
