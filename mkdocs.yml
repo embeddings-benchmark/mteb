@@ -42,7 +42,7 @@ markdown_extensions:
   - tables
   - pymdownx.details
 
-copyright: Copyright &copy; 2024 The Embedding Benchmark Team
+copyright: This text is freely available under a Creative Commons Attribution 4.0 license
 
 nav:
   - Home:
