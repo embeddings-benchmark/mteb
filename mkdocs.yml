@@ -53,7 +53,8 @@ nav:
       - whats_new.md
       - Usage:
         - Usage: usage/usage.md
-        - Command Line Interface: cli.md
+        - Loading results: usage/loading_results.md
+        - Command Line Interface: usage/cli.md
   # - Overview: # <-- TODO: find a better word
   #     - Benchmarks: benchmarks.md
   #     - Tasks: tasks.md
