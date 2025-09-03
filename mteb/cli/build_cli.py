@@ -208,6 +208,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "--overwrite_strategy",
         type=str,
         default="only-missing",
+        choices=["always", "never", "only-missing"],
         help=(
             "Strategy for when to overwrite. Can be 'always', 'never', 'only-missing'. 'only-missing' will only rerun the missing splits of a task."
             + " It will not rerun the splits if the dataset revision or mteb version has changed. "
