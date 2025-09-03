@@ -203,19 +203,31 @@ class AbsTaskRetrieval(AbsTask):
             for split in self.queries:
                 queries = self.queries[split]
                 corpus = self.corpus[split]
-                self.dataset[subset][split]["queries"] = Dataset.from_list(
-                    [{"id": k, "text": v} for k, v in queries.items()]
-                )
-                self.dataset[subset][split]["corpus"] = Dataset.from_list(
-                    [
-                        {
-                            "id": k,
-                            "text": v["text"],
-                            "title": v.get("title", ""),
-                        }
-                        for k, v in corpus.items()
-                    ]
-                )
+                if isinstance(queries, dict):
+                    self.dataset[subset][split]["queries"] = Dataset.from_list(
+                        [{"id": k, "text": v} for k, v in queries.items()]
+                    )
+                elif isinstance(queries, Dataset):
+                    self.dataset[subset][split]["queries"] = queries
+                else:
+                    raise ValueError(f"Can't convert queries of type {type(queries)}")
+
+                if isinstance(corpus, dict):
+                    self.dataset[subset][split]["corpus"] = Dataset.from_list(
+                        [
+                            {
+                                "id": k,
+                                "text": v["text"],
+                                "title": v.get("title", ""),
+                            }
+                            for k, v in corpus.items()
+                        ]
+                    )
+                elif isinstance(corpus, Dataset):
+                    self.dataset[subset][split]["corpus"] = corpus
+                else:
+                    raise ValueError(f"Can't convert corpus of type {type(corpus)}")
+
                 self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
