@@ -296,7 +296,7 @@ def get_leaderboard_app() -> gr.Blocks:
             width="18%",
         ):
             if show_rteb:
-                benchmark_select, column = make_selector(RTEB_BENCHMARK_ENTRIES)
+                benchmark_select, column = make_selector(BENCHMARK_ENTRIES + RTEB_BENCHMARK_ENTRIES)
             else:
                 benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
         gr.Markdown(
