@@ -51,8 +51,10 @@ nav:
   - Get Started:
       - Overview: index.md
       - whats_new.md
+      - Installation: installation.md
       - Usage:
         - Usage: usage/usage.md
+        - Evaluating models: usage/evaluating_models.md
         - Loading results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
   # - Overview: # <-- TODO: find a better word

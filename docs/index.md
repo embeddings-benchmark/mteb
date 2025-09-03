@@ -24,6 +24,8 @@ Installation is as simple as:
     uv add mteb
     ```
 
+To see more check out the [installation guide](./installation.md).
+
 ## Quickstart
 
 
