@@ -26,7 +26,7 @@ class ResultCache:
         >>> from mteb.cache import ResultCache
         >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
-        >>> result = cache.load_from_cache("task_name", "model_name", "model_revision")
+        >>> result = cache.load_results("task_name", "model_name")
     """
 
     cache_path: Path
