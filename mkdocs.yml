@@ -53,10 +53,13 @@ nav:
       - whats_new.md
       - Installation: installation.md
       - Usage:
-        - Usage: usage/usage.md
-        - Evaluating models: usage/evaluating_models.md
-        - Loading results: usage/loading_results.md
+        - Get Started: usage/get_started.md
+        - Defining the Model: usage/defining_the_model.md
+        - Selecting Tasks: usage/selecting_tasks.md
+        - Running the Evaluation: usage/running_the_evaluation.md
+        - Loading Results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
+        - Running the Leaderboard: usage/leaderboard.md
   # - Overview: # <-- TODO: find a better word
   #     - Benchmarks: benchmarks.md
   #     - Tasks: tasks.md
