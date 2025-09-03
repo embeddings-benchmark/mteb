@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from collections.abc import Sequence
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -36,10 +35,6 @@ def _display_benchmarks(benchmarks: Sequence[Benchmark]) -> None:
 
 def _display_tasks(task_list: Sequence[AbsTask], name: str | None = None) -> None:
     from rich.console import Console
-
-    # disable logging for other ranks
-    if int(os.getenv("RANK", 0)) != 0:
-        return
 
     console = Console()
     if name:
