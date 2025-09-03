@@ -46,9 +46,10 @@ markdown_extensions:
 copyright: Copyright &copy; 2024 The Embedding Benchmark Team
 
 nav:
-  # - Home:
-  #     - Overview: index.md
-      # - Getting Started: getting_started.md # TODO: Move usage documentation to docs (Keeping a minimal example in readme.md)
+  - Home:
+      - Overview: index.md
+      - New in v2.0: whats_new.md
+      - Usage: usage/usage.md
       # - Command Line Interface: cli.md # TODO: Add CLI documentation
   # - Overview: # <-- TODO: find a better word
   #     - Benchmarks: benchmarks.md
@@ -60,7 +61,7 @@ nav:
   #     - Adding a Task: adding_a_dataset.md
   #     - Development Setup: CONTRIBUTING.md
   - API:
-      - Overview: index.md
+      - Overview: api_overview.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
