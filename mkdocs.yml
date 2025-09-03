@@ -38,6 +38,8 @@ markdown_extensions:
   - toc:
       permalink: true
       toc_depth: 3
+  - pymdownx.highlight:
+      use_pygments: true
   - footnotes
   - attr_list
   - md_in_html
@@ -46,11 +48,12 @@ markdown_extensions:
 copyright: This text is freely available under a Creative Commons Attribution 4.0 license
 
 nav:
-  - Home:
+  - Get Started:
       - Overview: index.md
-      - New in v2.0: whats_new.md
-      - Usage: usage/usage.md
-      # - Command Line Interface: cli.md # TODO: Add CLI documentation
+      - whats_new.md
+      - Usage:
+        - Usage: usage/usage.md
+        - Command Line Interface: cli.md
   # - Overview: # <-- TODO: find a better word
   #     - Benchmarks: benchmarks.md
   #     - Tasks: tasks.md
