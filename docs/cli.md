@@ -5,13 +5,13 @@ This described the is the command line interface for `mteb`.
 `mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
 
 - [`mteb run`](#running-models-on-tasks): Runs a model on a set of tasks
-- `mteb available_tasks`: Lists the available tasks within MTEB
-- `mteb available_benchmarks`: Lists the available benchmarks
-- `mteb create_meta`: Creates the metadata for a model card from a folder of results
+- [`mteb available_tasks`](#listing-available-tasks): Lists the available tasks within MTEB
+- [`mteb available_benchmarks`](#listing-available-benchmarks): Lists the available benchmarks
+- [`mteb create_meta`](#creating-model-metadata): Creates the metadata for a model card from a folder of results
 
 In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
 
-```
+```bash
 mteb {command} --help
 ```
 
@@ -35,12 +35,16 @@ To list the available tasks within MTEB, use the `mteb available-tasks` command.
 
 ```bash
 mteb available-tasks # list _all_ available tasks
+```
+
+You can also use the multiple arguments for filtering:
+```
 mteb available-tasks --task-types Retrieval --languages eng # list all English (eng) retrieval tasks
 ```
 
 ## Listing Available Benchmarks
 
-To list the available benchmarks within MTEB, use the `mteb available-benchmarks` command. For example:
+To list the available benchmarks within MTEB:
 
 ```bash
 mteb available-benchmarks # list all available benchmarks
@@ -61,7 +65,7 @@ discoverable on the MTEB leaderboard.
 
 An example frontmatter for a model card is shown below:
 
-```
+```yaml
 ---
 tags:
 - mteb
