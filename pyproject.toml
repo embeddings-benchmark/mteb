@@ -87,6 +87,7 @@ open_clip_torch = ["open_clip_torch==2.31.0"]
 xet = ["huggingface_hub>=0.32.0"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12"]
+youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 
 [dependency-groups]
 lint = [
