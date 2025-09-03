@@ -9,6 +9,7 @@ from .EmoVDB import *
 from .Fleurs import *
 from .GigaSpeech import *
 from .HiFiTTS import *
+from .JLCorpus import *
 from .LibriTTS import *
 from .MACS import *
 from .multilingual.JamAlt import *
