@@ -21,7 +21,7 @@ Installation is as simple as:
 
 === "uv"
     ```bash
-    pip install mteb
+    uv add mteb
     ```
 
 # Quickstart
