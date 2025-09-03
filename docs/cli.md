@@ -32,29 +32,29 @@ file: "{task_name}.json".
 
 ## Listing Available Tasks
 
-To list the available tasks within MTEB, use the `mteb available_tasks` command. For example:
+To list the available tasks within MTEB, use the `mteb available-tasks` command. For example:
 
 ```bash
-mteb available_tasks # list all available tasks
-mteb available_tasks --task_types Clustering # list tasks of type Clustering
+mteb available-tasks # list all available tasks
+mteb available-tasks --task-types Clustering # list tasks of type Clustering
 ```
 
 ## Listing Available Benchmarks
 
-To list the available benchmarks within MTEB, use the `mteb available_benchmarks` command. For example:
+To list the available benchmarks within MTEB, use the `mteb available-benchmarks` command. For example:
 
 ```bash
-mteb available_benchmarks # list all available benchmarks
+mteb available-benchmarks # list all available benchmarks
 ```
 
 
 ## Creating Model Metadata
 
-Once a model is run you can create the metadata for a model card from a folder of results, use the `mteb create_meta` command. For example:
+Once a model is run you can create the metadata for a model card from a folder of results, use the `mteb create-meta` command. For example:
 
 ```bash
-mteb create_meta --results_folder mteb_output/sentence-transformers__average_word_embeddings_komninos/{revision} \
-                 --output_path model_card.md
+mteb create-meta --results-folder mteb_output/sentence-transformers__average_word_embeddings_komninos/{revision} \
+                 --output-path model_card.md
 ```
 
 This will create a model card at `model_card.md` containing the metadata for the model on MTEB within the YAML frontmatter. This will make the model

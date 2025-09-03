@@ -212,7 +212,7 @@ class TaskMetadata(BaseModel):
         category: The category of the task. E.g. includes "t2t" (text to text), "t2i" (text to image).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
-        eval_langs: The languages of the dataset used for evaluation. Langauges follows a ETF BCP 47 standard consisting of "{language}-{script}"
+        eval_langs: The languages of the dataset used for evaluation. Languages follows a ETF BCP 47 standard consisting of "{language}-{script}"
             tag (e.g. "eng-Latn"). Where language is specified as a list of ISO 639-3 language codes (e.g. "eng") followed by ISO 15924 script codes
             (e.g. "Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a the
             huggingface dataset contain different languages).
@@ -260,23 +260,23 @@ class TaskMetadata(BaseModel):
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
 
-    def validate_metadata(self) -> None:
-        self.dataset_path_is_specified(self.dataset)
-        self.dataset_revision_is_specified(self.dataset)
-        self.eval_langs_are_valid(self.eval_langs)
+    def _validate_metadata(self) -> None:
+        self._dataset_path_is_specified(self.dataset)
+        self._dataset_revision_is_specified(self.dataset)
+        self._eval_langs_are_valid(self.eval_langs)
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(
         cls, dataset: dict[str, Any]
     ) -> dict[str, Any]:
-        cls.dataset_path_is_specified(dataset)
+        cls._dataset_path_is_specified(dataset)
         return dataset
 
     @field_validator("dataset")
     def _check_dataset_revision_is_specified(
         cls, dataset: dict[str, Any]
     ) -> dict[str, Any]:
-        cls.dataset_revision_is_specified(dataset)
+        cls._dataset_revision_is_specified(dataset)
         return dataset
 
     @field_validator("prompt")
@@ -292,7 +292,7 @@ class TaskMetadata(BaseModel):
         return prompt
 
     @staticmethod
-    def dataset_path_is_specified(dataset: dict[str, Any]) -> None:
+    def _dataset_path_is_specified(dataset: dict[str, Any]) -> None:
         """This method checks that the dataset path is specified."""
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
@@ -301,7 +301,7 @@ class TaskMetadata(BaseModel):
             )
 
     @staticmethod
-    def dataset_revision_is_specified(dataset: dict[str, Any]) -> None:
+    def _dataset_revision_is_specified(dataset: dict[str, Any]) -> None:
         if "revision" not in dataset:
             raise ValueError(
                 "You must explicitly specify a revision for the dataset (either a SHA or None)."
@@ -312,7 +312,7 @@ class TaskMetadata(BaseModel):
                 dataset["path"],
             )
 
-    def eval_langs_are_valid(self, eval_langs: Languages) -> None:
+    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -437,9 +437,10 @@ class TaskMetadata(BaseModel):
 
     @property
     def revision(self) -> str:
+        """Return the dataset revision."""
         return self.dataset["revision"]
 
-    def create_dataset_card_data(
+    def _create_dataset_card_data(
         self,
         existing_dataset_card_data: DatasetCardData | None = None,
     ) -> tuple[DatasetCardData, dict[str, str]]:

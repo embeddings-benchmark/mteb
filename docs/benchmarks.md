@@ -11,7 +11,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [BEIR](https://arxiv.org/abs/2104.08663) | BEIR | 15 | Retrieval: 15 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Web, Written] | eng,vie |
 | [BEIR-NL](https://arxiv.org/abs/2412.08329) | BEIR-NL | 15 | Retrieval: 15 | [Academic, Encyclopaedic, Medical, Non-fiction, Web, Written] | nld |
 | [BRIGHT](https://brightbenchmark.github.io/) | BRIGHT | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
-| [BRIGHT (long)](https://brightbenchmark.github.io/) | BRIGHT (long) | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
+| [BRIGHT(long)](https://brightbenchmark.github.io/) | BRIGHT(long) | 1 | Retrieval: 1 | [Non-fiction, Written] | eng |
 | [BuiltBench(eng)](https://arxiv.org/abs/2411.12056) | BuiltBench(eng) | 4 | Clustering: 2, Retrieval: 1, Reranking: 1 | [Engineering, Written] | eng |
 | [ChemTEB](https://arxiv.org/abs/2412.00532) | Chemical | 27 | BitextMining: 1, Classification: 17, Clustering: 2, PairClassification: 5, Retrieval: 2 | [Chemistry] | ces,deu,eng,fra,hin,jpn,kor,msa,nld,por,spa,tur,zho |
 | [CoIR](https://github.com/CoIR-team/coir) | Code Information Retrieval | 10 | Retrieval: 10 | [Programming, Written] | c++,eng,go,java,javascript,php,python,ruby,sql |
