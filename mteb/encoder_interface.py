@@ -17,7 +17,7 @@ AudioBatch = Union[Iterable[AudioData], DataLoader, Iterable[tuple[AudioData, st
 
 class PromptType(str, Enum):
     query = "query"
-    passage = "passage"
+    document = "document"
 
 
 @runtime_checkable

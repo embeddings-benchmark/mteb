@@ -62,6 +62,7 @@ def test_model_similar_tasks(training_datasets):
         "Touche2020",
         "Touche2020-Fa",
         "Touche2020-NL",
+        "Touche2020-VN",
         "Touche2020Retrieval.v3",
     ]
     assert sorted(dummy_model_meta.get_training_datasets().keys()) == expected

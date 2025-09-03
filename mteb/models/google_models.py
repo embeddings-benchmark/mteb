@@ -39,7 +39,7 @@ MODEL_PROMPTS = {
     "Clustering": "CLUSTERING",
     "STS": "SEMANTIC_SIMILARITY",
     PromptType.query.value: "RETRIEVAL_QUERY",
-    PromptType.passage.value: "RETRIEVAL_DOCUMENT",
+    PromptType.document.value: "RETRIEVAL_DOCUMENT",
 }
 
 GECKO_TRAINING_DATA = {
@@ -60,9 +60,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def _embed(
         self,
@@ -231,7 +229,7 @@ google_gemini_embedding_001 = ModelMeta(
     max_tokens=2048,
     embed_dim=3072,
     license=None,
-    reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
+    reference="https://ai.google.dev/gemini-api/docs/embeddings",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,

@@ -17,7 +17,7 @@ def openclip_loader(**kwargs):
     model_name = kwargs.get("model_name", "CLIP-ViT")
     requires_package(
         openclip_loader,
-        "open_clip_torch",
+        "open_clip",
         model_name,
         "pip install 'mteb[open_clip_torch]'",
     )

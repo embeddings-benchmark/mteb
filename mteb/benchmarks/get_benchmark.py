@@ -24,7 +24,7 @@ from mteb.benchmarks.benchmarks import (
     SEB,
     Benchmark,
     MTEB_code,
-    MTEB_multilingual,
+    MTEB_multilingual_v2,
 )
 
 logger = logging.getLogger(__name__)
@@ -48,7 +48,7 @@ PREVIOUS_BENCHMARK_NAMES = {
     "MTEB(kor)": MTEB_KOR.name,
     "MTEB(pol)": MTEB_POL.name,
     "MTEB(code)": MTEB_code.name,
-    "MTEB(Multilingual)": MTEB_multilingual.name,
+    "MTEB(Multilingual)": MTEB_multilingual_v2.name,
     "MTEB(jpn)": MTEB_JPN.name,
     "MTEB(Indic)": MTEB_INDIC.name,
     "MTEB(Europe)": MTEB_EU.name,
