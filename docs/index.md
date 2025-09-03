@@ -1,7 +1,7 @@
 # MTEB Documentation
 
 !!! info
-    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](./whats_new.md#new-in-v20-) and see [how to upgrade](./whats_new.md#upgrading-from-v1) your existing code.
+    We recently released `mteb` version 2.0.0, to see what is new check of [what is new](./whats_new.md#new-in-v20) and see [how to upgrade](./whats_new.md#upgrading-from-v1) your existing code.
 
 Welcome documentation of MTEB. `mteb` a package for benchmark and evaluating the quality of embeddings.
 
@@ -10,7 +10,7 @@ MTEB is the go-to documentation for evaluating embeddings models across a variet
 This package was initially introduced as a package for evaluating text embeddings predominantly for English[@mteb_2023], but have since been extended for broad languages coverage[@mmteb_2025] and to support multiple modalities[@mieb_2025].
 
 
-# Installation 
+## Installation 
 
 Installation is as simple as:
 
@@ -24,7 +24,7 @@ Installation is as simple as:
     uv add mteb
     ```
 
-# Quickstart
+## Quickstart
 
 
 === "Using Script"
@@ -34,7 +34,6 @@ Installation is as simple as:
     ```python
     import mteb
     from sentence_transformers import SentenceTransformer
-
 
     # Select model
     model_name = "average_word_embeddings_komninos"
@@ -55,14 +54,15 @@ Installation is as simple as:
     ```bash
     mteb run \ 
         -m sentence-transformers/all-MiniLM-L6-v2 \
-        -t Banking77Classification
+        -t Banking77Classification \
+        --output-folder results
     ```
 
-    if nothing is specified default to saving the results in the `results/{model_name}` folder. 
+    To read more about what you can do with the command line interface check out its [documentation](./cli.md)
 
 ---
 
-# Citing
+## Citing
 
 
 MTEB was introduced in the paper "MTEB: Massive Text Embedding Benchmark"[@mteb_2023], and heavily expanded in "MMTEB: Massive Multilingual Text Embedding Benchmark"[@mmteb_2025]. When using `mteb`, we recommend that you cite both articles.
@@ -92,7 +92,7 @@ MTEB was introduced in the paper "MTEB: Massive Text Embedding Benchmark"[@mteb_
 
 If you use any of the specific benchmarks, we also recommend that you cite the paper, which you can obtain using:
 
-```py
+```python
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
 benchmark.citation # get citation for a specific benchmark
 
