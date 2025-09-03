@@ -16,7 +16,7 @@ length, valid frameworks, license, and degree of openness.
 
 ## Metadata
 
-:::mteb.models.ModelMeta
+:::mteb.models.model_meta.ModelMeta
 
 ## The Encoder Interface
 

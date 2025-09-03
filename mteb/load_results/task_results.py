@@ -124,7 +124,7 @@ class TaskResult(BaseModel):
         evaluation_time: The time taken to evaluate the model.
         kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
 
-    Example:
+    Examples:
         >>> scores = {
         ...     "evaluation_time": 100,
         ...     "train": {

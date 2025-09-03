@@ -24,7 +24,7 @@ class Benchmark:
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
 
-    Example:
+    Examples:
         >>> Benchmark(
         ...     name="MTEB(custom)",
         ...     tasks=mteb.get_tasks(

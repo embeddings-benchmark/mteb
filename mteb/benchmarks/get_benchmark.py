@@ -63,6 +63,11 @@ PREVIOUS_BENCHMARK_NAMES = {
 def get_benchmark(
     benchmark_name: str,
 ) -> Benchmark:
+    """Get a benchmark by name.
+
+    Args:
+        benchmark_name: The name of the benchmark to retrieve.
+    """
     if benchmark_name in PREVIOUS_BENCHMARK_NAMES:
         warnings.warn(
             f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead.",
@@ -84,6 +89,12 @@ def get_benchmark(
 def get_benchmarks(
     names: list[str] | None = None, display_on_leaderboard: bool | None = None
 ) -> list[Benchmark]:
+    """Get a list of benchmarks by name.
+
+    Args:
+        names: A list of benchmark names to retrieve. If None, all benchmarks are returned.
+        display_on_leaderboard: If specified, filters benchmarks by whether they are displayed on the leaderboard.
+    """
     if names is None:
         names = list(BENCHMARK_REGISTRY.keys())
     benchmarks = [get_benchmark(name) for name in names]

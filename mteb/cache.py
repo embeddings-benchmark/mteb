@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 class ResultCache:
     """Class to handle the local cache of MTEB results.
 
-    Example:
+    Examples:
         >>> from mteb.cache import ResultCache
         >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
@@ -265,7 +265,7 @@ class ResultCache:
         Returns:
             A list of paths in the cache directory.
 
-        Example:
+        Examples:
             >>> from mteb.cache import ResultCache
             >>> cache = ResultCache()
             >>>
@@ -429,7 +429,7 @@ class ResultCache:
         Returns:
             A BenchmarkResults object containing the results for the specified models and tasks.
 
-        Example:
+        Examples:
             >>> from mteb.cache import ResultCache
             >>> cache = ResultCache()
             >>>
