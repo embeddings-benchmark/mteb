@@ -1,0 +1,2851 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../task/">
+      
+      
+      
+      <link rel="icon" href="../../images/logos/mteb_logo/mteb_logo_transparent.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Model - Massive Text Embedding Benchmark</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#models" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Massive Text Embedding Benchmark" class="md-header__button md-logo" aria-label="Massive Text Embedding Benchmark" data-md-component="logo">
+      
+  <img src="../../images/logos/mteb_logo/mteb_logo_transparent.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Massive Text Embedding Benchmark
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/embeddings-benchmark/mteb" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../api_overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Leaderboard
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Massive Text Embedding Benchmark" class="md-nav__button md-logo" aria-label="Massive Text Embedding Benchmark" data-md-component="logo">
+      
+  <img src="../../images/logos/mteb_logo/mteb_logo_transparent.png" alt="logo">
+
+    </a>
+    Massive Text Embedding Benchmark
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/embeddings-benchmark/mteb" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../whats_new/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    New in v2.0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Usage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Benchmark
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../task/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Task
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Model
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Model
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metadata
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mteb.models.model_meta.ModelMeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModelMeta
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-encoder-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Encoder Interface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Encoder Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mteb.Encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Encoder
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Leaderboard
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/embeddings-benchmark/mteb/blob/main/docs/api/model.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/embeddings-benchmark/mteb/raw/main/docs/api/model.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h1>
+<!-- TODO: Encoder or model? Encoder is consistent with the code, but might be less used WDYT? We also use ModelMeta ... -->
+
+<p>A model in <code>mteb</code> covers two concepts: metadata and implementation.
+- Metadata contains information about the model such as maximum input
+length, valid frameworks, license, and degree of openness.
+- Implementation is a reproducible workflow, which allows others to run the same model again, using the same prompts, hyperparameters, aggregation strategies, etc.</p>
+<figure>
+    <img alt="" src="../../images/visualizations/modelmeta_explainer.png" width="80%" />
+    <figcaption>An overview of the model and its metadata within <code>mteb</code></figcaption>
+</figure>
+<h2 id="metadata">Metadata<a class="headerlink" href="#metadata" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mteb.models.model_meta.ModelMeta" class="doc doc-heading">
+            <code>mteb.models.model_meta.ModelMeta</code>
+
+
+<a href="#mteb.models.model_meta.ModelMeta" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>The model metadata object.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.loader">loader</span></code></td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span>[..., <span title="mteb.models.models_protocols.MTEBModels">MTEBModels</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the function that loads the model. If None it will assume that the model is not implemented. Cross-encoders like models would implement <em>only</em> <code>SearchInterface</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.loader_kwargs">loader_kwargs</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The keyword arguments to pass to the loader function.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.name">name</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.n_parameters">n_parameters</span></code></td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
+if the loader returns a SentenceTransformer model from which it can be derived.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.memory_usage_mb">memory_usage_mb</span></code></td>
+            <td>
+                  <code><span title="float">float</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the <code>calculate_memory_usage_mb</code> method.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.max_tokens">max_tokens</span></code></td>
+            <td>
+                  <code><span title="float">float</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
+models).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.embed_dim">embed_dim</span></code></td>
+            <td>
+                  <code><span title="int">int</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.revision">revision</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.release_date">release_date</span></code></td>
+            <td>
+                  <code><span title="mteb.types.StrDate">StrDate</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The date the model's revision was released.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.license">license</span></code></td>
+            <td>
+                  <code><span title="mteb.types.Licenses">Licenses</span> | <span title="mteb.types.StrURL">StrURL</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The license under which the model is released. Required if open_weights is True.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.open_weights">open_weights</span></code></td>
+            <td>
+                  <code><span title="bool">bool</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the model is open source or proprietary.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.public_training_code">public_training_code</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A link to the publicly available training code. If None, it is assumed that the training code is not publicly available.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.public_training_data">public_training_data</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | <span title="bool">bool</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A link to the publicly available training data. If None, it is assumed that the training data is not publicly available.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.similarity_fn_name">similarity_fn_name</span></code></td>
+            <td>
+                  <code><span title="mteb.models.model_meta.ScoringFunction">ScoringFunction</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The distance metric used by the model.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.framework">framework</span></code></td>
+            <td>
+                  <code><span title="list">list</span>[<span title="mteb.models.model_meta.FRAMEWORKS">FRAMEWORKS</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The framework the model is implemented in, can be a list of frameworks e.g. <code>["Sentence Transformers", "PyTorch"]</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.reference">reference</span></code></td>
+            <td>
+                  <code><span title="mteb.types.StrURL">StrURL</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A URL to the model's page on huggingface or another source.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.languages">languages</span></code></td>
+            <td>
+                  <code><span title="list">list</span>[<span title="mteb.types.ISOLanguageScript">ISOLanguageScript</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The languages the model is intended to be specified as a 3-letter language code followed by a script code e.g., "eng-Latn" for English
+in the Latin script.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.use_instructions">use_instructions</span></code></td>
+            <td>
+                  <code><span title="bool">bool</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
+input, such as "query: {document}" or "passage: {document}".</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.citation">citation</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The citation for the model. This is a bibtex string.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.training_datasets">training_datasets</span></code></td>
+            <td>
+                  <code><span title="set">set</span>[<span title="str">str</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A dictionary of datasets that the model was trained on. Names should be names as their appear in <code>mteb</code> for example
+{"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
+a benchmark as well as mark dataset contaminations.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.adapted_from">adapted_from</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.superseded_by">superseded_by</span></code></td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.is_cross_encoder">is_cross_encoder</span></code></td>
+            <td>
+                  <code><span title="bool">bool</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether the model can act as a cross-encoder or not.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="mteb.models.model_meta.ModelMeta.modalities">modalities</span></code></td>
+            <td>
+                  <code><span title="list">list</span>[<span title="mteb.types.Modalities">Modalities</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A list of strings representing the modalities the model supports. Default is ["text"].</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>mteb/models/model_meta.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ModelMeta</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The model metadata object.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        loader: the function that loads the model. If None it will assume that the model is not implemented. Cross-encoders like models would implement *only* `SearchInterface`.</span>
+<span class="sd">        loader_kwargs: The keyword arguments to pass to the loader function.</span>
+<span class="sd">        name: The name of the model, ideally the name on huggingface. It should be in the format &quot;organization/model_name&quot;.</span>
+<span class="sd">        n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or</span>
+<span class="sd">            if the loader returns a SentenceTransformer model from which it can be derived.</span>
+<span class="sd">        memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.</span>
+<span class="sd">        max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary</span>
+<span class="sd">            models).</span>
+<span class="sd">        embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.</span>
+<span class="sd">        revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.</span>
+<span class="sd">        release_date: The date the model&#39;s revision was released.</span>
+<span class="sd">        license: The license under which the model is released. Required if open_weights is True.</span>
+<span class="sd">        open_weights: Whether the model is open source or proprietary.</span>
+<span class="sd">        public_training_code: A link to the publicly available training code. If None, it is assumed that the training code is not publicly available.</span>
+<span class="sd">        public_training_data: A link to the publicly available training data. If None, it is assumed that the training data is not publicly available.</span>
+<span class="sd">        similarity_fn_name: The distance metric used by the model.</span>
+<span class="sd">        framework: The framework the model is implemented in, can be a list of frameworks e.g. `[&quot;Sentence Transformers&quot;, &quot;PyTorch&quot;]`.</span>
+<span class="sd">        reference: A URL to the model&#39;s page on huggingface or another source.</span>
+<span class="sd">        languages: The languages the model is intended to be specified as a 3-letter language code followed by a script code e.g., &quot;eng-Latn&quot; for English</span>
+<span class="sd">            in the Latin script.</span>
+<span class="sd">        use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for</span>
+<span class="sd">            input, such as &quot;query: {document}&quot; or &quot;passage: {document}&quot;.</span>
+<span class="sd">        citation: The citation for the model. This is a bibtex string.</span>
+<span class="sd">        training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example</span>
+<span class="sd">            {&quot;ArguAna&quot;} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to</span>
+<span class="sd">            a benchmark as well as mark dataset contaminations.</span>
+<span class="sd">        adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.</span>
+<span class="sd">        superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.</span>
+<span class="sd">        is_cross_encoder: Whether the model can act as a cross-encoder or not.</span>
+<span class="sd">        modalities: A list of strings representing the modalities the model supports. Default is [&quot;text&quot;].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">)</span>
+
+    <span class="c1"># loaders</span>
+    <span class="n">loader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">MTEBModels</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">loader_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">release_date</span><span class="p">:</span> <span class="n">StrDate</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">languages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ISOLanguageScript</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">n_parameters</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">memory_usage_mb</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">embed_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">license</span><span class="p">:</span> <span class="n">Licenses</span> <span class="o">|</span> <span class="n">StrURL</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">open_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">public_training_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">public_training_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">framework</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FRAMEWORKS</span><span class="p">]</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="n">StrURL</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">similarity_fn_name</span><span class="p">:</span> <span class="n">ScoringFunction</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">use_instructions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">training_datasets</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">adapted_from</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">superseded_by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">modalities</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Modalities</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+    <span class="n">is_cross_encoder</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">citation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;similarity_fn_name&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_similarity_fn_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the similarity function name to the corresponding enum value.</span>
+<span class="sd">        sentence_transformers uses Literal[&#39;cosine&#39;, &#39;dot&#39;, &#39;euclidean&#39;, &#39;manhattan&#39;] for</span>
+<span class="sd">        pylate uses Literal[&#39;MaxSim&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ScoringFunction</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;cosine&quot;</span><span class="p">:</span> <span class="n">ScoringFunction</span><span class="o">.</span><span class="n">COSINE</span><span class="p">,</span>
+            <span class="s2">&quot;dot&quot;</span><span class="p">:</span> <span class="n">ScoringFunction</span><span class="o">.</span><span class="n">DOT_PRODUCT</span><span class="p">,</span>
+            <span class="s2">&quot;MaxSim&quot;</span><span class="p">:</span> <span class="n">ScoringFunction</span><span class="o">.</span><span class="n">MAX_SIM</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mapping</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid similarity function name: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dict_repr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">dict_repr</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;loader&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">dict_repr</span><span class="p">[</span><span class="s2">&quot;training_datasets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">dict_repr</span><span class="p">[</span><span class="s2">&quot;training_datasets&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_repr</span><span class="p">[</span><span class="s2">&quot;training_datasets&quot;</span><span class="p">],</span> <span class="nb">set</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">dict_repr</span><span class="p">[</span><span class="s2">&quot;training_datasets&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">dict_repr</span><span class="p">[</span><span class="s2">&quot;loader&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_loader_name</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dict_repr</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;languages&quot;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">languages_are_valid</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">languages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ISOLanguageScript</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ISOLanguageScript</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">languages</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">languages</span><span class="p">:</span>
+            <span class="n">check_language_code</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">languages</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;bm25s&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v</span>
+        <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Model name must be in the format &#39;organization/model_name&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Encoder</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;No model implementation is available for this model.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;name is not set for ModelMeta. Cannot load model.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Allow overwrites</span>
+        <span class="n">_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loader_kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">model</span><span class="p">:</span> <span class="n">Encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">revision</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">revision</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">mteb_model_meta</span> <span class="o">=</span> <span class="bp">self</span>  <span class="c1"># type: ignore</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">model_name_as_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Model name is not set&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;__&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_zero_shot_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates whether the given model can be considered</span>
+<span class="sd">        zero-shot or not on the given tasks.</span>
+<span class="sd">        Returns None if no training data is specified on the model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If no tasks were specified, we&#39;re obviously zero-shot</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">training_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
+        <span class="c1"># If no tasks were specified, we&#39;re obviously zero-shot</span>
+        <span class="k">if</span> <span class="n">training_datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">],</span> <span class="n">tasks</span><span class="p">)</span>
+            <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+                <span class="n">benchmark_datasets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">intersection</span> <span class="o">=</span> <span class="n">training_datasets</span> <span class="o">&amp;</span> <span class="n">benchmark_datasets</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_training_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all training datasets of the model including similar tasks.&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">mteb</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">training_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_datasets</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapted_from</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">adapted_from_model</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_model_meta</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">adapted_from</span><span class="p">,</span> <span class="n">fetch_from_hf</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="n">adapted_training_datasets</span> <span class="o">=</span> <span class="n">adapted_from_model</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">adapted_training_datasets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">training_datasets</span> <span class="o">|=</span> <span class="n">adapted_training_datasets</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get source model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> in MTEB&quot;</span><span class="p">)</span>
+
+        <span class="n">return_dataset</span> <span class="o">=</span> <span class="n">training_datasets</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">training_datasets</span><span class="p">:</span>
+            <span class="n">similar_tasks</span> <span class="o">=</span> <span class="n">collect_similar_tasks</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+            <span class="n">return_dataset</span> <span class="o">|=</span> <span class="n">similar_tasks</span>
+
+        <span class="k">return</span> <span class="n">return_dataset</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">zero_shot_percentage</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">tasks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicates how out-of-domain the selected tasks are for the given model.&quot;&quot;&quot;</span>
+        <span class="n">training_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">training_datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">tasks</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">],</span> <span class="n">tasks</span><span class="p">)</span>
+            <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="p">{</span><span class="n">task</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">}</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="n">training_datasets</span> <span class="o">&amp;</span> <span class="n">benchmark_datasets</span>
+        <span class="n">perc_overlap</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">benchmark_datasets</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">100</span> <span class="o">-</span> <span class="n">perc_overlap</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_memory_usage_mb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculates the memory usage (in FP32) of the model in MB.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;API&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">framework</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">MB</span> <span class="o">=</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">safetensors_metadata</span> <span class="o">=</span> <span class="n">get_safetensors_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">safetensors_metadata</span><span class="o">.</span><span class="n">parameter_count</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">dtype_size_map</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;F64&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># 64-bit float</span>
+                    <span class="s2">&quot;F32&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># 32-bit float (FP32)</span>
+                    <span class="s2">&quot;F16&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># 16-bit float (FP16)</span>
+                    <span class="s2">&quot;BF16&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># BFloat16</span>
+                    <span class="s2">&quot;I64&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># 64-bit integer</span>
+                    <span class="s2">&quot;I32&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># 32-bit integer</span>
+                    <span class="s2">&quot;I16&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># 16-bit integer</span>
+                    <span class="s2">&quot;I8&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># 8-bit integer</span>
+                    <span class="s2">&quot;U8&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Unsigned 8-bit integer</span>
+                    <span class="s2">&quot;BOOL&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Boolean (assuming 1 byte per value)</span>
+                <span class="p">}</span>
+                <span class="n">total_memory_bytes</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                    <span class="n">parameters</span> <span class="o">*</span> <span class="n">dtype_size_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">safetensors_metadata</span><span class="o">.</span><span class="n">parameter_count</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">total_memory_bytes</span> <span class="o">/</span> <span class="n">MB</span><span class="p">)</span>  <span class="c1"># Convert to MB</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">NotASafetensorsRepoError</span><span class="p">,</span> <span class="n">SafetensorsParsingError</span><span class="p">,</span> <span class="n">GatedRepoError</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># Model memory in bytes. For FP32 each parameter is 4 bytes.</span>
+        <span class="n">model_memory_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span> <span class="o">*</span> <span class="mi">4</span>
+
+        <span class="c1"># Convert to MB</span>
+        <span class="n">model_memory_mb</span> <span class="o">=</span> <span class="n">model_memory_bytes</span> <span class="o">/</span> <span class="n">MB</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">model_memory_mb</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.models.model_meta.ModelMeta.calculate_memory_usage_mb" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">calculate_memory_usage_mb</span><span class="p">()</span></code>
+
+<a href="#mteb.models.model_meta.ModelMeta.calculate_memory_usage_mb" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calculates the memory usage (in FP32) of the model in MB.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/model_meta.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">calculate_memory_usage_mb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates the memory usage (in FP32) of the model in MB.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;API&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">framework</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">MB</span> <span class="o">=</span> <span class="mi">1024</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">safetensors_metadata</span> <span class="o">=</span> <span class="n">get_safetensors_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">safetensors_metadata</span><span class="o">.</span><span class="n">parameter_count</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">dtype_size_map</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;F64&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># 64-bit float</span>
+                <span class="s2">&quot;F32&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># 32-bit float (FP32)</span>
+                <span class="s2">&quot;F16&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># 16-bit float (FP16)</span>
+                <span class="s2">&quot;BF16&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># BFloat16</span>
+                <span class="s2">&quot;I64&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>  <span class="c1"># 64-bit integer</span>
+                <span class="s2">&quot;I32&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># 32-bit integer</span>
+                <span class="s2">&quot;I16&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># 16-bit integer</span>
+                <span class="s2">&quot;I8&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># 8-bit integer</span>
+                <span class="s2">&quot;U8&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Unsigned 8-bit integer</span>
+                <span class="s2">&quot;BOOL&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># Boolean (assuming 1 byte per value)</span>
+            <span class="p">}</span>
+            <span class="n">total_memory_bytes</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="n">parameters</span> <span class="o">*</span> <span class="n">dtype_size_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">parameters</span> <span class="ow">in</span> <span class="n">safetensors_metadata</span><span class="o">.</span><span class="n">parameter_count</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">total_memory_bytes</span> <span class="o">/</span> <span class="n">MB</span><span class="p">)</span>  <span class="c1"># Convert to MB</span>
+
+    <span class="k">except</span> <span class="p">(</span><span class="n">NotASafetensorsRepoError</span><span class="p">,</span> <span class="n">SafetensorsParsingError</span><span class="p">,</span> <span class="n">GatedRepoError</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># Model memory in bytes. For FP32 each parameter is 4 bytes.</span>
+    <span class="n">model_memory_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_parameters</span> <span class="o">*</span> <span class="mi">4</span>
+
+    <span class="c1"># Convert to MB</span>
+    <span class="n">model_memory_mb</span> <span class="o">=</span> <span class="n">model_memory_bytes</span> <span class="o">/</span> <span class="n">MB</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">model_memory_mb</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.models.model_meta.ModelMeta.get_training_datasets" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_training_datasets</span><span class="p">()</span></code>
+
+<a href="#mteb.models.model_meta.ModelMeta.get_training_datasets" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Returns all training datasets of the model including similar tasks.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/model_meta.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_training_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns all training datasets of the model including similar tasks.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">mteb</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">training_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_datasets</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adapted_from</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">adapted_from_model</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_model_meta</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">adapted_from</span><span class="p">,</span> <span class="n">fetch_from_hf</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="n">adapted_training_datasets</span> <span class="o">=</span> <span class="n">adapted_from_model</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">adapted_training_datasets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">training_datasets</span> <span class="o">|=</span> <span class="n">adapted_training_datasets</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get source model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> in MTEB&quot;</span><span class="p">)</span>
+
+    <span class="n">return_dataset</span> <span class="o">=</span> <span class="n">training_datasets</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">training_datasets</span><span class="p">:</span>
+        <span class="n">similar_tasks</span> <span class="o">=</span> <span class="n">collect_similar_tasks</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+        <span class="n">return_dataset</span> <span class="o">|=</span> <span class="n">similar_tasks</span>
+
+    <span class="k">return</span> <span class="n">return_dataset</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.models.model_meta.ModelMeta.is_zero_shot_on" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">is_zero_shot_on</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span></code>
+
+<a href="#mteb.models.model_meta.ModelMeta.is_zero_shot_on" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Indicates whether the given model can be considered
+zero-shot or not on the given tasks.
+Returns None if no training data is specified on the model.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/model_meta.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_zero_shot_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tasks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Indicates whether the given model can be considered</span>
+<span class="sd">    zero-shot or not on the given tasks.</span>
+<span class="sd">    Returns None if no training data is specified on the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># If no tasks were specified, we&#39;re obviously zero-shot</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">training_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
+    <span class="c1"># If no tasks were specified, we&#39;re obviously zero-shot</span>
+    <span class="k">if</span> <span class="n">training_datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">],</span> <span class="n">tasks</span><span class="p">)</span>
+        <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+            <span class="n">benchmark_datasets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">intersection</span> <span class="o">=</span> <span class="n">training_datasets</span> <span class="o">&amp;</span> <span class="n">benchmark_datasets</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.models.model_meta.ModelMeta.validate_similarity_fn_name" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">validate_similarity_fn_name</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#mteb.models.model_meta.ModelMeta.validate_similarity_fn_name" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Converts the similarity function name to the corresponding enum value.
+sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for
+pylate uses Literal['MaxSim']</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/model_meta.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;similarity_fn_name&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+<span class="nd">@classmethod</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_similarity_fn_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts the similarity function name to the corresponding enum value.</span>
+<span class="sd">    sentence_transformers uses Literal[&#39;cosine&#39;, &#39;dot&#39;, &#39;euclidean&#39;, &#39;manhattan&#39;] for</span>
+<span class="sd">    pylate uses Literal[&#39;MaxSim&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ScoringFunction</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cosine&quot;</span><span class="p">:</span> <span class="n">ScoringFunction</span><span class="o">.</span><span class="n">COSINE</span><span class="p">,</span>
+        <span class="s2">&quot;dot&quot;</span><span class="p">:</span> <span class="n">ScoringFunction</span><span class="o">.</span><span class="n">DOT_PRODUCT</span><span class="p">,</span>
+        <span class="s2">&quot;MaxSim&quot;</span><span class="p">:</span> <span class="n">ScoringFunction</span><span class="o">.</span><span class="n">MAX_SIM</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mapping</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid similarity function name: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.models.model_meta.ModelMeta.zero_shot_percentage" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">zero_shot_percentage</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span></code>
+
+<a href="#mteb.models.model_meta.ModelMeta.zero_shot_percentage" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Indicates how out-of-domain the selected tasks are for the given model.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/model_meta.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">zero_shot_percentage</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">tasks</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">]</span> <span class="o">|</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Indicates how out-of-domain the selected tasks are for the given model.&quot;&quot;&quot;</span>
+    <span class="n">training_datasets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">training_datasets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">tasks</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Sequence</span><span class="p">[</span><span class="n">AbsTask</span><span class="p">],</span> <span class="n">tasks</span><span class="p">)</span>
+        <span class="n">benchmark_datasets</span> <span class="o">=</span> <span class="p">{</span><span class="n">task</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">}</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="n">training_datasets</span> <span class="o">&amp;</span> <span class="n">benchmark_datasets</span>
+    <span class="n">perc_overlap</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">overlap</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">benchmark_datasets</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">100</span> <span class="o">-</span> <span class="n">perc_overlap</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="the-encoder-interface">The Encoder Interface<a class="headerlink" href="#the-encoder-interface" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="mteb.Encoder" class="doc doc-heading">
+            <code>mteb.Encoder</code>
+
+
+<a href="#mteb.Encoder" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="typing.Protocol">Protocol</span></code></p>
+
+
+        <p>The interface for an encoder in MTEB.</p>
+<p>Besides the required functions specified below, the encoder can additionally specify the following signatures seen below.
+In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.</p>
+
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>mteb/models/models_protocols.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Encoder</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The interface for an encoder in MTEB.</span>
+
+<span class="sd">    Besides the required functions specified below, the encoder can additionally specify the following signatures seen below.</span>
+<span class="sd">    In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The initialization function for the encoder. Used when calling it from the mteb run CLI.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_name: Name of the model</span>
+<span class="sd">            revision: revision of the model</span>
+<span class="sd">            kwargs: Any additional kwargs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">[</span><span class="n">BatchedInput</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">task_metadata</span><span class="p">:</span> <span class="n">TaskMetadata</span><span class="p">,</span>
+        <span class="n">hf_split</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">hf_subset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">prompt_type</span><span class="p">:</span> <span class="n">PromptType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Encodes the given sentences using the encoder.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inputs: Batch of inputs to encode.</span>
+<span class="sd">            task_metadata: The metadata of the task. Sentence-transformers uses this to</span>
+<span class="sd">                determine which prompt to use from a specified dictionary.</span>
+<span class="sd">                The order of priorities for prompt selection are:</span>
+<span class="sd">                    1. Composed prompt of task name + prompt type (query or passage)</span>
+<span class="sd">                    2. Specific task prompt</span>
+<span class="sd">                    3. Composed prompt of task type + prompt type (query or passage)</span>
+<span class="sd">                    4. Specific task type prompt</span>
+<span class="sd">                    5. Specific prompt type (query or passage)</span>
+<span class="sd">            hf_split: Split of current task, allows to know some additional information about current split.</span>
+<span class="sd">                E.g. Current language</span>
+<span class="sd">            hf_subset: Subset of current task. Similar to `hf_split` to get more information</span>
+<span class="sd">            prompt_type: The name type of prompt. (query or passage)</span>
+<span class="sd">            **kwargs: Additional arguments to pass to the encoder.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">similarity</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">embeddings1</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">embeddings2</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings</span>
+<span class="sd">        from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity</span>
+<span class="sd">        between each pair of embeddings.</span>
+
+<span class="sd">        read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            embeddings1: [num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+<span class="sd">            embeddings2: [num_embeddings_2, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A [num_embeddings_1, num_embeddings_2]-shaped torch tensor with similarity scores.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">similarity_pairwise</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">embeddings1</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">embeddings2</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of</span>
+<span class="sd">        embeddings.</span>
+
+<span class="sd">        read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity_pairwise</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            embeddings1: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+<span class="sd">            embeddings2: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A [num_embeddings]-shaped torch tensor with pairwise similarity scores.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mteb_model_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelMeta</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Metadata of the model&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="mteb.Encoder.mteb_model_meta" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">mteb_model_meta</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#mteb.Encoder.mteb_model_meta" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Metadata of the model</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.Encoder.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">revision</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#mteb.Encoder.__init__" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The initialization function for the encoder. Used when calling it from the mteb run CLI.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>model_name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the model</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>revision</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>revision of the model</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>kwargs</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Any additional kwargs</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/models_protocols.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span>
+<span class="normal">95</span>
+<span class="normal">96</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The initialization function for the encoder. Used when calling it from the mteb run CLI.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_name: Name of the model</span>
+<span class="sd">        revision: revision of the model</span>
+<span class="sd">        kwargs: Any additional kwargs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.Encoder.encode" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">encode</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">task_metadata</span><span class="p">,</span> <span class="n">hf_split</span><span class="p">,</span> <span class="n">hf_subset</span><span class="p">,</span> <span class="n">prompt_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+<a href="#mteb.Encoder.encode" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Encodes the given sentences using the encoder.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>inputs</code>
+            </td>
+            <td>
+                  <code><span title="torch.utils.data.DataLoader">DataLoader</span>[<span title="mteb.types.BatchedInput">BatchedInput</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Batch of inputs to encode.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>task_metadata</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="&lt;code&gt;mteb.TaskMetadata&lt;/code&gt; (&lt;code&gt;mteb.abstasks.task_metadata.TaskMetadata&lt;/code&gt;)" href="../task/#mteb.TaskMetadata">TaskMetadata</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The metadata of the task. Sentence-transformers uses this to
+determine which prompt to use from a specified dictionary.
+The order of priorities for prompt selection are:
+    1. Composed prompt of task name + prompt type (query or passage)
+    2. Specific task prompt
+    3. Composed prompt of task type + prompt type (query or passage)
+    4. Specific task type prompt
+    5. Specific prompt type (query or passage)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>hf_split</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Split of current task, allows to know some additional information about current split.
+E.g. Current language</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>hf_subset</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Subset of current task. Similar to <code>hf_split</code> to get more information</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>prompt_type</code>
+            </td>
+            <td>
+                  <code><span title="mteb.types.PromptType">PromptType</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name type of prompt. (query or passage)</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>**kwargs</code>
+            </td>
+            <td>
+                  <code><span title="typing.Any">Any</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional arguments to pass to the encoder.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/models_protocols.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">[</span><span class="n">BatchedInput</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">task_metadata</span><span class="p">:</span> <span class="n">TaskMetadata</span><span class="p">,</span>
+    <span class="n">hf_split</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">hf_subset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">prompt_type</span><span class="p">:</span> <span class="n">PromptType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encodes the given sentences using the encoder.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inputs: Batch of inputs to encode.</span>
+<span class="sd">        task_metadata: The metadata of the task. Sentence-transformers uses this to</span>
+<span class="sd">            determine which prompt to use from a specified dictionary.</span>
+<span class="sd">            The order of priorities for prompt selection are:</span>
+<span class="sd">                1. Composed prompt of task name + prompt type (query or passage)</span>
+<span class="sd">                2. Specific task prompt</span>
+<span class="sd">                3. Composed prompt of task type + prompt type (query or passage)</span>
+<span class="sd">                4. Specific task type prompt</span>
+<span class="sd">                5. Specific prompt type (query or passage)</span>
+<span class="sd">        hf_split: Split of current task, allows to know some additional information about current split.</span>
+<span class="sd">            E.g. Current language</span>
+<span class="sd">        hf_subset: Subset of current task. Similar to `hf_split` to get more information</span>
+<span class="sd">        prompt_type: The name type of prompt. (query or passage)</span>
+<span class="sd">        **kwargs: Additional arguments to pass to the encoder.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.Encoder.similarity" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">similarity</span><span class="p">(</span><span class="n">embeddings1</span><span class="p">,</span> <span class="n">embeddings2</span><span class="p">)</span></code>
+
+<a href="#mteb.Encoder.similarity" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings
+from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
+between each pair of embeddings.</p>
+<p>read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>embeddings1</code>
+            </td>
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>[num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>embeddings2</code>
+            </td>
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>[num_embeddings_2, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A [num_embeddings_1, num_embeddings_2]-shaped torch tensor with similarity scores.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/models_protocols.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">similarity</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">embeddings1</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">embeddings2</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings</span>
+<span class="sd">    from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity</span>
+<span class="sd">    between each pair of embeddings.</span>
+
+<span class="sd">    read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        embeddings1: [num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+<span class="sd">        embeddings2: [num_embeddings_2, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A [num_embeddings_1, num_embeddings_2]-shaped torch tensor with similarity scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="mteb.Encoder.similarity_pairwise" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">similarity_pairwise</span><span class="p">(</span><span class="n">embeddings1</span><span class="p">,</span> <span class="n">embeddings2</span><span class="p">)</span></code>
+
+<a href="#mteb.Encoder.similarity_pairwise" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of
+embeddings.</p>
+<p>read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity_pairwise</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>embeddings1</code>
+            </td>
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>[num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>embeddings2</code>
+            </td>
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>[num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="mteb.types.Array">Array</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A [num_embeddings]-shaped torch tensor with pairwise similarity scores.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="quote">
+              <summary>Source code in <code>mteb/models/models_protocols.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">similarity_pairwise</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">embeddings1</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">embeddings2</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of</span>
+<span class="sd">    embeddings.</span>
+
+<span class="sd">    read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity_pairwise</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        embeddings1: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+<span class="sd">        embeddings2: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A [num_embeddings]-shaped torch tensor with pairwise similarity scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../task/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Task">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Task
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 The Embedding Benchmark Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/embeddings-benchmark/mteb" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.instant", "navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy", "content.action.edit", "content.action.view", "content.code.annotate", "content.tooltips", "navigation.footer", "navigation.indexes", "toc.follow"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
