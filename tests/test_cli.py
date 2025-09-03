@@ -14,7 +14,7 @@ from mteb.cli import create_meta, run
 
 
 def test_available_tasks():
-    command = f"{sys.executable} -m mteb available_tasks"
+    command = f"{sys.executable} -m mteb available-tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert "Banking77Classification" in result.stdout, (
@@ -23,7 +23,7 @@ def test_available_tasks():
 
 
 def test_available_benchmarks():
-    command = f"{sys.executable} -m mteb available_benchmarks"
+    command = f"{sys.executable} -m mteb available-benchmarks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert "MTEB(eng, v1)" in result.stdout, (
@@ -117,7 +117,7 @@ def test_create_meta():
         )
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --overwrite-strategy always"
+    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -180,6 +180,6 @@ def test_create_meta_from_existing(
         )
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --from_existing {existing_readme.as_posix()} --overwrite"
+    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
