@@ -117,7 +117,7 @@ def test_create_meta():
         )
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --overwrite"
+    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --overwrite-strategy always"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
