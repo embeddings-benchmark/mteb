@@ -4,7 +4,7 @@ from .any_sts_evaluator import AnySTSEvaluator
 from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .evaluator import Evaluator
-from .Image.imagetext_pairclassification_evaluator import (
+from .image.imagetext_pairclassification_evaluator import (
     ImageTextPairClassificationEvaluator,
 )
 from .regression_evaluator import LinearRegressionEvaluator
