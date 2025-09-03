@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 from collections.abc import Sequence
 from pathlib import Path
-from warnings import deprecated
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
@@ -12,6 +12,11 @@ from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
 from mteb.types import ModelName, Revision
+
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 logger = logging.getLogger(__name__)
 

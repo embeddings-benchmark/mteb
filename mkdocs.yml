@@ -30,6 +30,8 @@ theme:
     accent: light blue
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
@@ -40,7 +42,6 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - tables
-  - pymdownx.details
 
 copyright: This text is freely available under a Creative Commons Attribution 4.0 license
 
