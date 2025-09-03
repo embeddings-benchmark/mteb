@@ -72,3 +72,17 @@ class Benchmark:
         results = base_results.select_tasks(self.tasks)
         self.results_cache[base_results] = results
         return results
+
+    @staticmethod
+    def create_summary_table(scores_long: list[dict], search_query: str | None = None):
+        """create_summary_table"""
+        # Avoid circular references
+        from mteb.leaderboard.table import create_summary_table
+        return create_summary_table(scores_long, search_query)
+
+    @staticmethod
+    def create_per_task_table(scores_long: list[dict], search_query: str | None = None):
+        """create_per_task_table"""
+        # Avoid circular references
+        from mteb.leaderboard.table import create_per_task_table
+        return create_per_task_table(scores_long, search_query)

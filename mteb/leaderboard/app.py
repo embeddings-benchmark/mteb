@@ -23,7 +23,6 @@ from mteb.leaderboard.benchmark_selector import (
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
-from mteb.leaderboard.table import create_tables
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
@@ -218,10 +217,10 @@ def get_leaderboard_app() -> gr.Blocks:
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
     )
+    default_filtered_scores = [entry for entry in default_scores if entry["model_name"] in filtered_models]
+    summary_table = default_benchmark.create_summary_table(default_filtered_scores)
+    per_task_table = default_benchmark.create_per_task_table(default_filtered_scores)
 
-    summary_table, per_task_table = create_tables(
-        [entry for entry in default_scores if entry["model_name"] in filtered_models]
-    )
     lang_select = gr.Dropdown(
         LANGUAGE,
         value=sorted(default_results.languages),
@@ -763,7 +762,8 @@ def get_leaderboard_app() -> gr.Blocks:
                     filtered_scores.append(entry)
             else:
                 filtered_scores = scores
-            summary, per_task = create_tables(filtered_scores)
+            summary = default_benchmark.create_summary_table(filtered_scores)
+            per_task = default_benchmark.create_per_task_table(filtered_scores)
             elapsed = time.time() - start_time
             logger.debug(f"update_tables callback: {elapsed}s")
             return summary, per_task
