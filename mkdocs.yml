@@ -5,8 +5,8 @@ watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
   name: material
-  favicon: images/logos/mteb_logo/mteb_logo_transparent.png # TODO: probably not very good logo
-  logo: images/logos/mteb_logo/mteb_logo_transparent.png
+  favicon: images/logos/mteb_logo/dots-icon.png 
+  logo: images/logos/mteb_logo/dots-icon.png 
   features:
     - navigation.tracking
     - navigation.instant
