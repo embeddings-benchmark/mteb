@@ -237,3 +237,23 @@ google_gemini_embedding_001 = ModelMeta(
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
 )
+
+embedding_gemma_300m = ModelMeta(
+    name="google/embeddinggemma-300m",
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    open_weights=True,
+    revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
+    release_date="2025-09-04",
+    n_parameters=307_581_696,
+    embed_dim=768,
+    max_tokens=2048,
+    license="gemma",
+    reference="https://ai.google.dev/gemma/docs/embeddinggemma/model_card",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+    similarity_fn_name="cosine",
+    memory_usage_mb=578,
+)

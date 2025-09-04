@@ -47,6 +47,7 @@ LICENSES = (  # this list can be extended as needed
         "msr-la-nc",
         "multiple",
         "openrail",
+        "gemma",
     ]
 )
 
