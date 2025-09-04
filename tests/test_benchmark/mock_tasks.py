@@ -2554,7 +2554,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 0,
+            "number_of_characters": 60,
             "documents_text_statistics": None,
             "documents_image_statistics": {
                 "min_image_width": 100,
@@ -2565,7 +2565,13 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 2,
             },
-            "queries_text_statistics": None,
+            "queries_text_statistics": {
+                "total_text_length": 60,
+                "min_text_length": 27,
+                "average_text_length": 30.0,
+                "max_text_length": 33,
+                "unique_texts": 2,
+            },
             "queries_image_statistics": {
                 "min_image_width": 100,
                 "average_image_width": 100.0,
@@ -2641,7 +2647,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
-            "number_of_characters": 0,
+            "number_of_characters": 120,
             "documents_text_statistics": None,
             "documents_image_statistics": {
                 "min_image_width": 100,
@@ -2652,7 +2658,13 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "max_image_height": 100,
                 "unique_images": 4,
             },
-            "queries_text_statistics": None,
+            "queries_text_statistics": {
+                "total_text_length": 120,
+                "min_text_length": 27,
+                "average_text_length": 30.0,
+                "max_text_length": 33,
+                "unique_texts": 2,
+            },
             "queries_image_statistics": {
                 "min_image_width": 100,
                 "average_image_width": 100.0,
@@ -2678,7 +2690,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 4,
-                    "number_of_characters": 0,
+                    "number_of_characters": 60,
                     "documents_text_statistics": None,
                     "documents_image_statistics": {
                         "min_image_width": 100,
@@ -2689,7 +2701,13 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
-                    "queries_text_statistics": None,
+                    "queries_text_statistics": {
+                        "total_text_length": 60,
+                        "min_text_length": 27,
+                        "average_text_length": 30.0,
+                        "max_text_length": 33,
+                        "unique_texts": 2,
+                    },
                     "queries_image_statistics": {
                         "min_image_width": 100,
                         "average_image_width": 100.0,
@@ -2715,7 +2733,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 },
                 "fra": {
                     "num_samples": 4,
-                    "number_of_characters": 0,
+                    "number_of_characters": 60,
                     "documents_text_statistics": None,
                     "documents_image_statistics": {
                         "min_image_width": 100,
@@ -2726,7 +2744,13 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "max_image_height": 100,
                         "unique_images": 2,
                     },
-                    "queries_text_statistics": None,
+                    "queries_text_statistics": {
+                        "total_text_length": 60,
+                        "min_text_length": 27,
+                        "average_text_length": 30.0,
+                        "max_text_length": 33,
+                        "unique_texts": 2,
+                    },
                     "queries_image_statistics": {
                         "min_image_width": 100,
                         "average_image_width": 100.0,

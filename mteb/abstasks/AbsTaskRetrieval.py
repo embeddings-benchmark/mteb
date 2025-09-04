@@ -513,7 +513,7 @@ class AbsTaskRetrieval(AbsTask):
         if "i" in corpus_modalities:
             documents_image_statistics = calculate_image_statistics(corpus["image"])
 
-        if queries_modalities == "t":
+        if "t" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
                 queries_ = queries_.map(combine_queries_with_instruction_text)
@@ -523,7 +523,8 @@ class AbsTaskRetrieval(AbsTask):
             queries_text_statistics = calculate_text_statistics(queries_["text"])
 
             number_of_characters += queries_text_statistics["total_text_length"]
-        else:
+
+        if "i" in queries_modalities:
             queries_image_statistics = calculate_image_statistics(queries["image"])
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
