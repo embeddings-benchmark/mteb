@@ -20,6 +20,7 @@ class MuQMuLanWrapper:
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         requires_package(self, "muq", "pip install 'mteb[muq]'")
@@ -28,6 +29,7 @@ class MuQMuLanWrapper:
         self.model_name = model_name
         self.device = device
         self.target_sampling_rate = 24000
+        self.max_audio_length_s = max_audio_length_s
 
         # Load the model
         self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
@@ -93,9 +95,9 @@ class MuQMuLanWrapper:
         audio = audio.squeeze().float()  # Ensure float32
 
         # Apply audio truncation (30 seconds max)
-        max_length = 30 * self.target_sampling_rate  # 30 seconds
-        if audio.shape[-1] > max_length:
-            audio = audio[..., :max_length]
+        max_length_samples = int(self.max_audio_length_s * self.target_sampling_rate)
+        if audio.shape[-1] > max_length_samples:
+            audio = audio[..., :max_length_samples]
 
         return audio
 

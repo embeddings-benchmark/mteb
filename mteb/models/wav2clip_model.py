@@ -200,7 +200,9 @@ class Wav2ClipZeroShotWrapper:
         texts: list[str],
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs = self.clip_processor(text=texts, return_tensors="pt", padding=True, truncation=True)
+        inputs = self.clip_processor(
+            text=texts, return_tensors="pt", padding=True, truncation=True
+        )
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         with torch.no_grad():

@@ -100,7 +100,9 @@ class MSClapWrapper:
                             audio_array = resampler(audio_array)
 
                         # Apply audio truncation
-                        max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+                        max_length_samples = int(
+                            self.max_audio_length_s * self.sampling_rate
+                        )
                         if audio_array.shape[-1] > max_length_samples:
                             audio_array = audio_array[..., :max_length_samples]
 
@@ -131,7 +133,6 @@ class MSClapWrapper:
 
         return audio.squeeze()  # final shape [num_samples]
 
-
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
         waveform = waveform.float()
@@ -149,7 +150,6 @@ class MSClapWrapper:
             waveform = waveform[..., :max_length_samples]
 
         return waveform.squeeze()  # [num_samples]
-
 
     def get_audio_embeddings(
         self,
@@ -215,10 +215,15 @@ class MSClapWrapper:
         texts: list[str],
         **kwargs: Any,
     ) -> np.ndarray:
-
-        inputs = self.tokenizer(texts, return_tensors="pt", padding="max_length", truncation=True, max_length=self.text_length)
+        inputs = self.tokenizer(
+            texts,
+            return_tensors="pt",
+            padding="max_length",
+            truncation=True,
+            max_length=self.text_length,
+        )
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        
+
         with torch.no_grad():
             text_features = self.model.clap.caption_encoder(inputs)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
