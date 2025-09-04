@@ -40,10 +40,13 @@ class MSClapWrapper:
 
         if "2022" in self.model_name:
             self.version = "2022"
+            self.text_length = 100
         elif "2023" in self.model_name:
             self.version = "2023"
+            self.text_length = 77
         else:
             self.version = "2023"
+            self.text_length = 77
 
         self.use_cuda = device == "cuda"
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
@@ -213,7 +216,7 @@ class MSClapWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
 
-        inputs = self.tokenizer(texts, return_tensors="pt", padding=True, truncation=True)
+        inputs = self.tokenizer(texts, return_tensors="pt", padding="max_length", truncation=True, max_length=self.text_length)
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
         with torch.no_grad():
