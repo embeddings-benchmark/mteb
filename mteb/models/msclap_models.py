@@ -217,7 +217,7 @@ class MSClapWrapper:
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
         with torch.no_grad():
-            text_features = self.model.clap.caption_encoder(inputs["input_ids"])
+            text_features = self.model.clap.caption_encoder(inputs)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
         return text_features.cpu().numpy()
 
