@@ -588,11 +588,15 @@ def calculate_cv_recall(
     k_values: list[int],
 ) -> dict[str, float]:
     all_cv_recalls = defaultdict(list)
+    sorted_results: dict[str, list[tuple[str, float]]] = {
+        qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
+        for qid, rels in results.items()
+    }
 
     for query_id in results.keys():
-        top_docs = sorted(
-            results[query_id], key=lambda x: x[1], reverse=True
-        )  # Sorted list of doc IDs
+        top_docs = [
+            doc_id for doc_id, _ in sorted_results[query_id]
+        ]  # Sorted list of doc IDs
         relevant_docs = set(qrels[query_id].keys())
 
         for k in k_values:
