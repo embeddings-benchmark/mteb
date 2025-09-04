@@ -8,6 +8,7 @@ from typing import Any
 import numpy as np
 import torch
 import torchaudio
+from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -23,6 +24,7 @@ class MSClapWrapper:
         self,
         model_name: str = "microsoft/msclap-2023",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         requires_package(
@@ -35,6 +37,7 @@ class MSClapWrapper:
         self.model_name = model_name
         self.device = device
         self.sampling_rate = 48000
+        self.max_audio_length_s = max_audio_length_s
 
         if "2022" in self.model_name:
             self.version = "2022"
@@ -93,10 +96,10 @@ class MSClapWrapper:
                             )
                             audio_array = resampler(audio_array)
 
-                        # Apply audio truncation (30 seconds max)
-                        max_length = 30 * self.sampling_rate  # 30 seconds
-                        if audio_array.shape[-1] > max_length:
-                            audio_array = audio_array[..., :max_length]
+                        # Apply audio truncation
+                        max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+                        if audio_array.shape[-1] > max_length_samples:
+                            audio_array = audio_array[..., :max_length_samples]
 
                         # Only squeeze here, don't call _convert_audio again
                         waveforms.append(audio_array.squeeze())
@@ -114,10 +117,10 @@ class MSClapWrapper:
             audio = torch.from_numpy(audio)
         audio = audio.squeeze().float()  # Ensure float32
 
-        # Apply audio truncation (30 seconds max)
-        max_length = 30 * self.sampling_rate  # 30 seconds
-        if audio.shape[-1] > max_length:
-            audio = audio[..., :max_length]
+        # Apply audio truncation
+        max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        if audio.shape[-1] > max_length_samples:
+            audio = audio[..., :max_length_samples]
 
         return audio
 
@@ -128,10 +131,10 @@ class MSClapWrapper:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
 
-        # Apply audio truncation (30 seconds max)
-        max_length = 30 * self.sampling_rate  # 30 seconds
-        if waveform.shape[-1] > max_length:
-            waveform = waveform[..., :max_length]
+        # Apply audio truncation
+        max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        if waveform.shape[-1] > max_length_samples:
+            waveform = waveform[..., :max_length_samples]
 
         return waveform.squeeze()
 
@@ -200,18 +203,8 @@ class MSClapWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
         with torch.no_grad():
-            preprocessed_texts = self.model.preprocess_text(texts)
-            if isinstance(preprocessed_texts, dict):
-                preprocessed_texts = {
-                    k: v.to(self.device) for k, v in preprocessed_texts.items()
-                }
-            else:
-                preprocessed_texts = preprocessed_texts.to(self.device)
-
-            text_features = self.model.clap.caption_encoder(preprocessed_texts)
-            # Normalize embeddings
+            text_features = self.model.get_text_embeddings(texts)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-
         return text_features.cpu().numpy()
 
     def encode(
