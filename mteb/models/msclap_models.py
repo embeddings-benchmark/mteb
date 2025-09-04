@@ -8,7 +8,6 @@ from typing import Any
 import numpy as np
 import torch
 import torchaudio
-from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -115,28 +114,38 @@ class MSClapWrapper:
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        audio = audio.squeeze().float()  # Ensure float32
+        audio = audio.float()
+
+        # If stereo or multi-channel, downmix to mono
+        if audio.ndim > 1:
+            audio = torch.mean(audio, dim=0)
 
         # Apply audio truncation
         max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
         if audio.shape[-1] > max_length_samples:
             audio = audio[..., :max_length_samples]
 
-        return audio
+        return audio.squeeze()  # final shape [num_samples]
+
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
-        waveform = waveform.float()  # Ensure float32
+        waveform = waveform.float()
+
+        # Downmix to mono
+        if waveform.shape[0] > 1:
+            waveform = waveform.mean(dim=0, keepdim=True)
+
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
 
-        # Apply audio truncation
         max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
         if waveform.shape[-1] > max_length_samples:
             waveform = waveform[..., :max_length_samples]
 
-        return waveform.squeeze()
+        return waveform.squeeze()  # [num_samples]
+
 
     def get_audio_embeddings(
         self,
