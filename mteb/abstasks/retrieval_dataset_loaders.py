@@ -137,7 +137,6 @@ class RetrievalDatasetLoader:
                 "_id", "id"
             )
 
-        queries_ds = queries_ds.select_columns(["id", "text"])
         logger.info("Loaded %d %s queries.", len(queries_ds), self.split.upper())
         logger.info("Query Example: %s", queries_ds[0])
 
