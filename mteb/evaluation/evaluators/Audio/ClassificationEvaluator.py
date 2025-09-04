@@ -141,9 +141,11 @@ class AudiologRegClassificationEvaluator(Evaluator):
         test_cache = X_test
 
         logger.info("Fitting logistic regression classifier...")
-        if X_train.dtype == np.dtype('float16') or X_train.dtype == np.dtype('bfloat16'):
+        if X_train.dtype == np.dtype("float16") or X_train.dtype == np.dtype(
+            "bfloat16"
+        ):
             X_train = X_train.astype(np.float32)
-        if X_test.dtype == np.dtype('float16') or X_test.dtype == np.dtype('bfloat16'):
+        if X_test.dtype == np.dtype("float16") or X_test.dtype == np.dtype("bfloat16"):
             X_test = X_test.astype(np.float32)
         clf.fit(X_train, self.y_train)
         logger.info("Evaluating...")
