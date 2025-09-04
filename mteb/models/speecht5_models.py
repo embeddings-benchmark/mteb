@@ -25,10 +25,12 @@ class SpeechT5Wrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_s = max_audio_length_s
 
         self.asr_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_asr")
         self.tts_processor = SpeechT5Processor.from_pretrained("microsoft/speecht5_tts")
@@ -102,14 +104,14 @@ class SpeechT5Wrapper(Wrapper):
             waveform = resampler(waveform)
         return waveform.squeeze()
 
-    def _pad_audio_batch(self, batch):
-        batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
-        max_length = max(audio.shape[0] for audio in batch)
-        padded_batch = [
-            torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
-            for audio in batch
-        ]
-        return torch.stack(padded_batch)
+    # def _pad_audio_batch(self, batch):
+    #     batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
+    #     max_length = max(audio.shape[0] for audio in batch)
+    #     padded_batch = [
+    #         torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
+    #         for audio in batch
+    #     ]
+    #     return torch.stack(padded_batch)
 
     def get_audio_embeddings(
         self,
@@ -119,27 +121,35 @@ class SpeechT5Wrapper(Wrapper):
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
         hidden_layer: float = 1.0,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size)):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
-                batch_tensor = self._pad_audio_batch(batch)
+                # batch_tensor = self._pad_audio_batch(batch) # Removed call to _pad_audio_batch
+                # SpeechT5Processor expects a list of numpy arrays for audio input
+                batch_arrays = [tensor.cpu().numpy() for tensor in batch]
 
-                if batch_tensor.ndim == 1:
-                    batch_tensor = batch_tensor.unsqueeze(0)
-                elif batch_tensor.ndim > 2:
-                    batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
+                if batch_arrays[0].ndim == 0:
+                    batch_arrays = [x.reshape(-1) for x in batch_arrays]
+                elif batch_arrays[0].ndim > 1:
+                    batch_arrays = [x.reshape(x.size(0), -1) for x in batch_arrays]
 
                 inputs = self.asr_processor(
-                    audio=batch_tensor.cpu().numpy(),
+                    audio=batch_arrays,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
+                    truncation=True,
+                    max_length=int(self.max_audio_length_s * self.sampling_rate),
                     return_attention_mask=True,
                 ).to(self.device)
 

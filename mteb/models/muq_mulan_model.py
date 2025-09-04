@@ -20,6 +20,7 @@ class MuQMuLanWrapper:
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         requires_package(self, "muq", "pip install 'mteb[muq]'")
@@ -28,6 +29,7 @@ class MuQMuLanWrapper:
         self.model_name = model_name
         self.device = device
         self.target_sampling_rate = 24000
+        self.max_audio_length_s = max_audio_length_s
 
         # Load the model
         self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
@@ -90,7 +92,14 @@ class MuQMuLanWrapper:
         """Convert audio data to torch tensor."""
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze().float()  # Ensure float32
+        audio = audio.squeeze().float()  # Ensure float32
+
+        # Apply audio truncation (30 seconds max)
+        max_length_samples = int(self.max_audio_length_s * self.target_sampling_rate)
+        if audio.shape[-1] > max_length_samples:
+            audio = audio[..., :max_length_samples]
+
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         """Load audio file and resample to target sampling rate."""
@@ -109,6 +118,7 @@ class MuQMuLanWrapper:
         self,
         audio: AudioBatch,
         *,
+        show_progress_bar: bool = True,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
@@ -116,10 +126,13 @@ class MuQMuLanWrapper:
     ) -> np.ndarray:
         """Get audio embeddings using MuQ-MuLan."""
         all_features = []
+
         processed_audio = self._process_audio(audio)
 
         for i in tqdm(
-            range(0, len(processed_audio), batch_size), desc="Processing audio batches"
+            range(0, len(processed_audio), batch_size),
+            desc="Processing audio batches",
+            disable=not show_progress_bar,
         ):
             batch = processed_audio[i : i + batch_size]
             batch_features = self._process_audio_batch(batch)
