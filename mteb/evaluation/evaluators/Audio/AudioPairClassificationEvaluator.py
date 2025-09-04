@@ -11,10 +11,14 @@ from sklearn.metrics.pairwise import (
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
+import math
+import os
+import torch
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
-
-from ..Evaluator import Evaluator
+from mteb.evaluation.evaluators.dataset_utils import AudioDataset, CustomAudioCollate
+from mteb.evaluation.evaluators.Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
@@ -83,27 +87,54 @@ class AudioPairClassificationEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        audios = set()
+        audios_np = set()
         for audio in self.audio1 + self.audio2:
-            audios.add(tuple(audio))
-        audios = list(audios)
+            audios_np.add(tuple(audio))
+        audios_np = list(audios_np)
 
         total_audios = len(self.audio1) + len(self.audio2)
-        n_duplicates = total_audios - len(audios)
+        n_duplicates = total_audios - len(audios_np)
         if n_duplicates:
             logger.warning(
                 f"Found {n_duplicates}/{total_audios} duplicates in the input data. Only encoding unique sentences."
             )
-        audios = [np.array(audio) for audio in audios]
-        embeddings = model.get_audio_embeddings(
-            audios,
-            task_name=self.task_name,
-            **encode_kwargs,
+        # audios = [np.array(audio) for audio in audios]
+        # Create AudioDataset
+        model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
+        model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
+        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+
+        audio_dataset = AudioDataset(
+            hf_dataset=audios_np, # Assuming audios_np is list of numpy arrays or similar
+            target_sampling_rate=model_sampling_rate,
+            mono=True # Most audio models expect mono input
         )
 
+        audio_dataloader = DataLoader(
+            audio_dataset,
+            batch_size=encode_kwargs["batch_size"],
+            shuffle=False,
+            collate_fn=CustomAudioCollate(
+                max_length_samples=max_length_samples_for_collate,
+                pad_value=0.0
+            ),
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
+        )
+
+        embeddings_list = []
+        for batch_data in audio_dataloader:
+            batch_waveforms = batch_data["waveforms"].to(model.device)
+            batch_embeddings = model.get_audio_embeddings(
+                batch_waveforms,
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
+            embeddings_list.append(batch_embeddings)
+        embeddings = torch.cat(embeddings_list, dim=0).cpu().numpy()
+
         emb_dict = {
-            tuple(audio.tolist()): embedding
-            for audio, embedding in zip(audios, embeddings)
+            tuple(audio.tolist() if isinstance(audio, np.ndarray) else audio):
+            embedding for audio, embedding in zip(audios_np, embeddings)
         }
         embeddings1 = [emb_dict[tuple(audio)] for audio in self.audio1]
         embeddings2 = [emb_dict[tuple(audio)] for audio in self.audio2]

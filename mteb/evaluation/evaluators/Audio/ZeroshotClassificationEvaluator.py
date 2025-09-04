@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
-from ..dataset_utils import AudioDataset, custom_collate_fn
+from ..dataset_utils import AudioDataset, CustomAudioCollate
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -27,23 +27,22 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         task_name: str | None = None,
         transform=None,
         batch_size: int = 32,
+        model_sampling_rate: int | None = None, # Added to get sampling rate earlier
+        model_max_audio_length_s: float | None = None, # Added to get max length earlier
         **kwargs,
     ):
-        """Initialize zero-shot audio classification evaluator.
-
-        Args:
-            dataset: HuggingFace dataset containing audio data
-            audio_column_name: Name of column containing audio data
-            label_column_name: Name of column containing label indices
-            candidate_labels: List of text descriptions for possible classes
-            task_name: Optional name of the task
-            transform: Optional audio transforms
-            batch_size: Batch size for processing
-            **kwargs: Additional keyword arguments
-        """
+        """Initialize zero-shot audio classification evaluator."""
         super().__init__(**kwargs)
+        
+        self.model_sampling_rate = model_sampling_rate if model_sampling_rate is not None else 16000
+        self.model_max_audio_length_s = model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+
         self.dataset = AudioDataset(
-            dataset, audio_column_name=audio_column_name, transform=transform
+            hf_dataset=dataset, 
+            audio_column_name=audio_column_name, 
+            target_sampling_rate=self.model_sampling_rate,
+            mono=True,
+            transform=transform # Keep any additional transforms
         )
         self.labels = dataset[label_column_name]
         self.candidate_labels = candidate_labels
@@ -59,14 +58,33 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         text_embeddings = model.get_text_embeddings(self.candidate_labels)
 
         logger.info("Processing audio data...")
+
+        # Get model-specific parameters for collate_fn - now from self
+        # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
+        # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
+        max_length_samples_for_collate = int(self.model_max_audio_length_s * self.model_sampling_rate)
+
         dataloader = DataLoader(
             self.dataset,
             batch_size=encode_kwargs.get("batch_size", self.batch_size),
-            collate_fn=custom_collate_fn,
+            collate_fn=CustomAudioCollate(
+                max_length_samples=max_length_samples_for_collate,
+                pad_value=0.0
+            ),
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
-        audio_embeddings = model.get_audio_embeddings(dataloader)
+        # audio_embeddings = model.get_audio_embeddings(dataloader)
+        audio_embeddings_list = []
+        for batch_data in dataloader:
+            batch_waveforms = batch_data["waveforms"].to(model.device)
+            batch_embeddings = model.get_audio_embeddings(
+                batch_waveforms,
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
+            audio_embeddings_list.append(batch_embeddings)
+        audio_embeddings = torch.cat(audio_embeddings_list, dim=0).cpu().numpy()
 
         # Calculate similarity scores
         similarity = (

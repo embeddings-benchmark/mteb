@@ -12,15 +12,15 @@ from sklearn.metrics import average_precision_score
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import AudioEncoder, PromptType
-from mteb.evaluation.evaluators.dataset_utils import AudioDataset
+from mteb.evaluation.evaluators.dataset_utils import AudioDataset, CustomAudioCollate
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 from mteb.evaluation.evaluators.utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
 
 
-def custom_collate_fn(batch):
-    return batch
+# def custom_collate_fn(batch):
+#     return batch
 
 
 class AudioRerankingEvaluator(Evaluator):
@@ -101,23 +101,52 @@ class AudioRerankingEvaluator(Evaluator):
         """
         logger.info("Encoding queries...")
         all_query_audios = [sample[self.query_column_name] for sample in self.samples]
-        query_dataset = AudioDataset(all_query_audios, transform=self.transform)
+        query_dataset = AudioDataset(
+            hf_dataset=all_query_audios,
+            target_sampling_rate=model_sampling_rate,
+            mono=True,
+            transform=self.transform # Keep any additional transforms
+        )
+
+        # Get model-specific parameters for collate_fn
+        # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
+        # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
+        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+
         query_dataloader = DataLoader(
             query_dataset,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 4),
+            collate_fn=CustomAudioCollate(
+                max_length_samples=max_length_samples_for_collate,
+                pad_value=0.0
+            ),
+            num_workers=min(math.floor(os.cpu_count() / 4), 4),
         )
 
-        all_query_embs = np.asarray(
-            model.get_audio_embeddings(
-                query_dataloader,
+        # all_query_embs = np.asarray(
+        #     model.get_audio_embeddings(
+        #         query_dataloader,
+        #         task_name=self.task_name,
+        #         prompt_type=PromptType.query,
+        #         **self.encode_kwargs,
+        #     )
+        # )
+
+        # New way to get audio embeddings, iterating over the dataloader and unpacking
+        all_query_embs_list = []
+        for batch_data in query_dataloader:
+            batch_waveforms = batch_data["waveforms"].to(model.device)
+            # Assuming model.get_audio_embeddings can take a batch of waveforms directly
+            # If it expects a DataLoader, this part will need adjustment.
+            batch_embeddings = model.get_audio_embeddings(
+                batch_waveforms,
                 task_name=self.task_name,
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
-        )
+            all_query_embs_list.append(batch_embeddings)
+        all_query_embs = np.asarray(torch.cat(all_query_embs_list, dim=0).cpu().numpy())
 
         all_mrr_scores = []
         all_ap_scores = []
@@ -129,23 +158,44 @@ class AudioRerankingEvaluator(Evaluator):
             all_docs.extend(sample[self.positive_column_name])
             all_docs.extend(sample[self.negative_column_name])
 
-        docs_dataset = AudioDataset(all_docs, transform=self.transform)
+        docs_dataset = AudioDataset(
+            hf_dataset=all_docs,
+            target_sampling_rate=model_sampling_rate,
+            mono=True,
+            transform=self.transform # Keep any additional transforms
+        )
         docs_dataloader = DataLoader(
             docs_dataset,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 4),
+            collate_fn=CustomAudioCollate(
+                max_length_samples=max_length_samples_for_collate,
+                pad_value=0.0
+            ),
+            num_workers=min(math.floor(os.cpu_count() / 4), 4),
         )
 
-        all_docs_embs = np.asarray(
-            model.get_audio_embeddings(
-                docs_dataloader,
+        # all_docs_embs = np.asarray(
+        #     model.get_audio_embeddings(
+        #         docs_dataloader,
+        #         task_name=self.task_name,
+        #         prompt_type=PromptType.document,
+        #         **self.encode_kwargs,
+        #     )
+        # )
+
+        # New way to get audio embeddings, iterating over the dataloader and unpacking
+        all_docs_embs_list = []
+        for batch_data in docs_dataloader:
+            batch_waveforms = batch_data["waveforms"].to(model.device)
+            batch_embeddings = model.get_audio_embeddings(
+                batch_waveforms,
                 task_name=self.task_name,
                 prompt_type=PromptType.document,
                 **self.encode_kwargs,
             )
-        )
+            all_docs_embs_list.append(batch_embeddings)
+        all_docs_embs = np.asarray(torch.cat(all_docs_embs_list, dim=0).cpu().numpy())
 
         # Compute scores
         logger.info("Evaluating...")
@@ -186,6 +236,11 @@ class AudioRerankingEvaluator(Evaluator):
         all_ap_scores = []
         all_conf_scores = []
 
+        # Get model-specific parameters for collate_fn
+        model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
+        model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
+        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+
         for instance in tqdm.tqdm(self.samples, desc="Evaluating samples"):
             query_audio = instance[self.query_column_name]
             positive_audios = list(instance[self.positive_column_name])
@@ -198,42 +253,80 @@ class AudioRerankingEvaluator(Evaluator):
             is_relevant = [True] * len(positive_audios) + [False] * len(negative_audios)
 
             # Prepare audio for encoding
-            query_dataset = AudioDataset([query_audio], transform=self.transform)
+            query_dataset = AudioDataset(
+                hf_dataset=[query_audio],
+                target_sampling_rate=model_sampling_rate,
+                mono=True,
+                transform=self.transform
+            )
             query_dataloader = DataLoader(
                 query_dataset,
                 batch_size=1,
                 shuffle=False,
-                collate_fn=custom_collate_fn,
+                collate_fn=CustomAudioCollate(
+                    max_length_samples=max_length_samples_for_collate,
+                    pad_value=0.0
+                ),
                 num_workers=1,
             )
 
-            docs_dataset = AudioDataset(docs_audios, transform=self.transform)
+            docs_dataset = AudioDataset(
+                hf_dataset=docs_audios,
+                target_sampling_rate=model_sampling_rate,
+                mono=True,
+                transform=self.transform
+            )
             docs_dataloader = DataLoader(
                 docs_dataset,
                 batch_size=self.encode_kwargs["batch_size"],
                 shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=min(math.floor(os.cpu_count() / 2), 4),
+                collate_fn=CustomAudioCollate(
+                    max_length_samples=max_length_samples_for_collate,
+                    pad_value=0.0
+                ),
+                num_workers=min(math.floor(os.cpu_count() / 4), 4),
             )
 
             # Encode query and documents
-            query_emb = np.asarray(
-                model.get_audio_embeddings(
-                    query_dataloader,
+            # query_emb = np.asarray(
+            #     model.get_audio_embeddings(
+            #         query_dataloader,
+            #         task_name=self.task_name,
+            #         prompt_type=PromptType.query,
+            #         **self.encode_kwargs,
+            #     )
+            # )
+            query_embs_list = []
+            for batch_data in query_dataloader:
+                batch_waveforms = batch_data["waveforms"].to(model.device)
+                batch_embeddings = model.get_audio_embeddings(
+                    batch_waveforms,
                     task_name=self.task_name,
                     prompt_type=PromptType.query,
                     **self.encode_kwargs,
                 )
-            )
+                query_embs_list.append(batch_embeddings)
+            query_emb = np.asarray(torch.cat(query_embs_list, dim=0).cpu().numpy())
 
-            docs_emb = np.asarray(
-                model.get_audio_embeddings(
-                    docs_dataloader,
+            # docs_emb = np.asarray(
+            #     model.get_audio_embeddings(
+            #         docs_dataloader,
+            #         task_name=self.task_name,
+            #         prompt_type=PromptType.document,
+            #         **self.encode_kwargs,
+            #     )
+            # )
+            docs_embs_list = []
+            for batch_data in docs_dataloader:
+                batch_waveforms = batch_data["waveforms"].to(model.device)
+                batch_embeddings = model.get_audio_embeddings(
+                    batch_waveforms,
                     task_name=self.task_name,
                     prompt_type=PromptType.document,
                     **self.encode_kwargs,
                 )
-            )
+                docs_embs_list.append(batch_embeddings)
+            docs_emb = np.asarray(torch.cat(docs_embs_list, dim=0).cpu().numpy())
 
             # Calculate similarity scores
             sim_scores = cos_sim(query_emb, docs_emb)
