@@ -106,6 +106,13 @@ def _evaluate(
         else:
             co2_tracker = True
 
+    if "batch_size" not in encode_kwargs:
+        encode_kwargs["batch_size"] = 32
+        logger.info(
+            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
+        )
+
+
     if co2_tracker:
         with EmissionsTracker(
             save_to_file=False,
@@ -264,12 +271,6 @@ def evaluate(
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
     if encode_kwargs is None:
         encode_kwargs = {}
-
-    if "batch_size" not in encode_kwargs:
-        encode_kwargs["batch_size"] = 32
-        logger.info(
-            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
-        )
 
     meta = _get_model_meta(model) if not isinstance(model, ModelMeta) else model
     model_name = cast(str, meta.name)
