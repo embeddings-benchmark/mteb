@@ -1,19 +1,19 @@
 from __future__ import annotations
 
 import logging
+import math
+import os
 from collections import defaultdict
 from typing import Any
 
 import numpy as np
+import torch
 from sklearn.metrics import average_precision_score
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
-import math
-import os
-import torch
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
@@ -100,14 +100,20 @@ class AudioPairClassificationEvaluator(Evaluator):
             )
         # audios = [np.array(audio) for audio in audios]
         # Create AudioDataset
-        model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
-        model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+        model_sampling_rate = getattr(
+            model, "sampling_rate", 16000
+        )  # Default if not explicitly set
+        model_max_audio_length_s = getattr(
+            model, "max_audio_length_s", 30.0
+        )  # Default if not explicitly set
+        max_length_samples_for_collate = int(
+            model_max_audio_length_s * model_sampling_rate
+        )
 
         audio_dataset = AudioDataset(
-            hf_dataset=audios_np, # Assuming audios_np is list of numpy arrays or similar
+            hf_dataset=audios_np,  # Assuming audios_np is list of numpy arrays or similar
             target_sampling_rate=model_sampling_rate,
-            mono=True # Most audio models expect mono input
+            mono=True,  # Most audio models expect mono input
         )
 
         audio_dataloader = DataLoader(
@@ -115,8 +121,7 @@ class AudioPairClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
@@ -133,8 +138,8 @@ class AudioPairClassificationEvaluator(Evaluator):
         embeddings = torch.cat(embeddings_list, dim=0).cpu().numpy()
 
         emb_dict = {
-            tuple(audio.tolist() if isinstance(audio, np.ndarray) else audio):
-            embedding for audio, embedding in zip(audios_np, embeddings)
+            tuple(audio.tolist() if isinstance(audio, np.ndarray) else audio): embedding
+            for audio, embedding in zip(audios_np, embeddings)
         }
         embeddings1 = [emb_dict[tuple(audio)] for audio in self.audio1]
         embeddings2 = [emb_dict[tuple(audio)] for audio in self.audio2]

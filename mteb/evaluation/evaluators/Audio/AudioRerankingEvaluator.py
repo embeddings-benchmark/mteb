@@ -105,21 +105,22 @@ class AudioRerankingEvaluator(Evaluator):
             hf_dataset=all_query_audios,
             target_sampling_rate=model_sampling_rate,
             mono=True,
-            transform=self.transform # Keep any additional transforms
+            transform=self.transform,  # Keep any additional transforms
         )
 
         # Get model-specific parameters for collate_fn
         # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
         # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+        max_length_samples_for_collate = int(
+            model_max_audio_length_s * model_sampling_rate
+        )
 
         query_dataloader = DataLoader(
             query_dataset,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 4), 4),
         )
@@ -162,15 +163,14 @@ class AudioRerankingEvaluator(Evaluator):
             hf_dataset=all_docs,
             target_sampling_rate=model_sampling_rate,
             mono=True,
-            transform=self.transform # Keep any additional transforms
+            transform=self.transform,  # Keep any additional transforms
         )
         docs_dataloader = DataLoader(
             docs_dataset,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 4), 4),
         )
@@ -237,9 +237,15 @@ class AudioRerankingEvaluator(Evaluator):
         all_conf_scores = []
 
         # Get model-specific parameters for collate_fn
-        model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
-        model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+        model_sampling_rate = getattr(
+            model, "sampling_rate", 16000
+        )  # Default if not explicitly set
+        model_max_audio_length_s = getattr(
+            model, "max_audio_length_s", 30.0
+        )  # Default if not explicitly set
+        max_length_samples_for_collate = int(
+            model_max_audio_length_s * model_sampling_rate
+        )
 
         for instance in tqdm.tqdm(self.samples, desc="Evaluating samples"):
             query_audio = instance[self.query_column_name]
@@ -257,15 +263,14 @@ class AudioRerankingEvaluator(Evaluator):
                 hf_dataset=[query_audio],
                 target_sampling_rate=model_sampling_rate,
                 mono=True,
-                transform=self.transform
+                transform=self.transform,
             )
             query_dataloader = DataLoader(
                 query_dataset,
                 batch_size=1,
                 shuffle=False,
                 collate_fn=CustomAudioCollate(
-                    max_length_samples=max_length_samples_for_collate,
-                    pad_value=0.0
+                    max_length_samples=max_length_samples_for_collate, pad_value=0.0
                 ),
                 num_workers=1,
             )
@@ -274,15 +279,14 @@ class AudioRerankingEvaluator(Evaluator):
                 hf_dataset=docs_audios,
                 target_sampling_rate=model_sampling_rate,
                 mono=True,
-                transform=self.transform
+                transform=self.transform,
             )
             docs_dataloader = DataLoader(
                 docs_dataset,
                 batch_size=self.encode_kwargs["batch_size"],
                 shuffle=False,
                 collate_fn=CustomAudioCollate(
-                    max_length_samples=max_length_samples_for_collate,
-                    pad_value=0.0
+                    max_length_samples=max_length_samples_for_collate, pad_value=0.0
                 ),
                 num_workers=min(math.floor(os.cpu_count() / 4), 4),
             )

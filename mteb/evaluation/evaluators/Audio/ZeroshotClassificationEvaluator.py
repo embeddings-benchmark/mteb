@@ -27,22 +27,27 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         task_name: str | None = None,
         transform=None,
         batch_size: int = 32,
-        model_sampling_rate: int | None = None, # Added to get sampling rate earlier
-        model_max_audio_length_s: float | None = None, # Added to get max length earlier
+        model_sampling_rate: int | None = None,  # Added to get sampling rate earlier
+        model_max_audio_length_s: float
+        | None = None,  # Added to get max length earlier
         **kwargs,
     ):
         """Initialize zero-shot audio classification evaluator."""
         super().__init__(**kwargs)
-        
-        self.model_sampling_rate = model_sampling_rate if model_sampling_rate is not None else 16000
-        self.model_max_audio_length_s = model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+
+        self.model_sampling_rate = (
+            model_sampling_rate if model_sampling_rate is not None else 16000
+        )
+        self.model_max_audio_length_s = (
+            model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+        )
 
         self.dataset = AudioDataset(
-            hf_dataset=dataset, 
-            audio_column_name=audio_column_name, 
+            hf_dataset=dataset,
+            audio_column_name=audio_column_name,
             target_sampling_rate=self.model_sampling_rate,
             mono=True,
-            transform=transform # Keep any additional transforms
+            transform=transform,  # Keep any additional transforms
         )
         self.labels = dataset[label_column_name]
         self.candidate_labels = candidate_labels
@@ -62,14 +67,15 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         # Get model-specific parameters for collate_fn - now from self
         # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
         # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(self.model_max_audio_length_s * self.model_sampling_rate)
+        max_length_samples_for_collate = int(
+            self.model_max_audio_length_s * self.model_sampling_rate
+        )
 
         dataloader = DataLoader(
             self.dataset,
             batch_size=encode_kwargs.get("batch_size", self.batch_size),
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )

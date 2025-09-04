@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 import logging
+import math
+import os
 from typing import Any
 
 import sklearn
 import sklearn.cluster
+import torch
 from datasets import Audio
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
-import math
-import os
-import torch
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
@@ -28,8 +28,9 @@ class AudioClusteringEvaluator(Evaluator):
         task_name: str | None = None,
         clustering_batch_size: int = 500,
         limit: int | None = None,
-        model_sampling_rate: int | None = None, # Added to get sampling rate earlier
-        model_max_audio_length_s: float | None = None, # Added to get max length earlier
+        model_sampling_rate: int | None = None,  # Added to get sampling rate earlier
+        model_max_audio_length_s: float
+        | None = None,  # Added to get max length earlier
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -41,8 +42,12 @@ class AudioClusteringEvaluator(Evaluator):
         self.clustering_batch_size = clustering_batch_size
         self.task_name = task_name
 
-        self.model_sampling_rate = model_sampling_rate if model_sampling_rate is not None else 16000
-        self.model_max_audio_length_s = model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+        self.model_sampling_rate = (
+            model_sampling_rate if model_sampling_rate is not None else 16000
+        )
+        self.model_max_audio_length_s = (
+            model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+        )
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         if "batch_size" not in encode_kwargs:
@@ -51,7 +56,9 @@ class AudioClusteringEvaluator(Evaluator):
         # Get model-specific parameters for collate_fn - now from self
         # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
         # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(self.model_max_audio_length_s * self.model_sampling_rate)
+        max_length_samples_for_collate = int(
+            self.model_max_audio_length_s * self.model_sampling_rate
+        )
 
         audio_dataset = AudioDataset(
             hf_dataset=self.audio,
@@ -63,8 +70,7 @@ class AudioClusteringEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )

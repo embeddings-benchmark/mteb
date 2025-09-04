@@ -36,8 +36,9 @@ class AudiologRegClassificationEvaluator(Evaluator):
         max_iter: int = 100,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
-        model_sampling_rate: int | None = None, # Added to get sampling rate earlier
-        model_max_audio_length_s: float | None = None, # Added to get max length earlier
+        model_sampling_rate: int | None = None,  # Added to get sampling rate earlier
+        model_max_audio_length_s: float
+        | None = None,  # Added to get max length earlier
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -49,8 +50,12 @@ class AudiologRegClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.model_sampling_rate = model_sampling_rate if model_sampling_rate is not None else 16000
-        self.model_max_audio_length_s = model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+        self.model_sampling_rate = (
+            model_sampling_rate if model_sampling_rate is not None else 16000
+        )
+        self.model_max_audio_length_s = (
+            model_max_audio_length_s if model_max_audio_length_s is not None else 30.0
+        )
 
         self.dataset_train = AudioDataset(
             hf_dataset=dataset_train,
@@ -83,15 +88,16 @@ class AudiologRegClassificationEvaluator(Evaluator):
         # Get model-specific parameters for collate_fn - now from self
         # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
         # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(self.model_max_audio_length_s * self.model_sampling_rate)
+        max_length_samples_for_collate = int(
+            self.model_max_audio_length_s * self.model_sampling_rate
+        )
 
         dataloader_train = DataLoader(
             self.dataset_train,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
@@ -114,8 +120,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=CustomAudioCollate(
-                max_length_samples=max_length_samples_for_collate,
-                pad_value=0.0
+                max_length_samples=max_length_samples_for_collate, pad_value=0.0
             ),
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
