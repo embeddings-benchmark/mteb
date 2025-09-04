@@ -114,7 +114,7 @@ class WhisperAudioWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                batch_arrays = [tensor.numpy() for tensor in batch]
+                batch_arrays = [tensor.cpu().numpy() for tensor in batch]
 
                 inputs = self.processor(
                     batch_arrays,

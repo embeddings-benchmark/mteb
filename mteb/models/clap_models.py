@@ -118,7 +118,7 @@ class ClapZeroShotWrapper:
             range(0, len(processed_audio), batch_size), desc="Processing audio batches"
         ):
             batch = processed_audio[i : i + batch_size]
-            batch_arrays = [tensor.numpy() for tensor in batch]
+            batch_arrays = [tensor.cpu().numpy() for tensor in batch]
 
             inputs = self.processor(
                 audios=batch_arrays,

@@ -106,7 +106,7 @@ class ASTWrapper(Wrapper):
                 batch_inputs = []
                 for audio_tensor in batch:
                     audio_np = (
-                        audio_tensor.numpy()
+                        audio_tensor.cpu().numpy()
                         if isinstance(audio_tensor, torch.Tensor)
                         else audio_tensor
                     )

@@ -169,7 +169,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 batch = processed_audio[i : i + batch_size]
 
                 inputs = self.feature_extractor(
-                    [b.numpy() if isinstance(b, torch.Tensor) else b for b in batch],
+                    [b.cpu().numpy() if isinstance(b, torch.Tensor) else b for b in batch],
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
