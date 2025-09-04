@@ -274,7 +274,7 @@ def create_queries_dataloader(
         return create_text_dataloader_for_queries(dataset, **dataloader_kwargs)
     if "i" in queries_type:  # contains image
         return create_image_dataloader(
-            dataset, image_column_name=input_column, **dataloader_kwargs
+            dataset, image_column_name="image", **dataloader_kwargs
         )
 
 
@@ -289,7 +289,7 @@ def create_document_dataloader(
         return create_dataloader_for_retrieval_corpus(dataset, **dataloader_kwargs)
     if "i" in document_type:  # contains image
         return create_image_dataloader(
-            dataset, image_column_name=input_column, **dataloader_kwargs
+            dataset, image_column_name="image", **dataloader_kwargs
         )
 
 
