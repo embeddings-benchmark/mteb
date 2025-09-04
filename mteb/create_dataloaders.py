@@ -271,11 +271,12 @@ def create_queries_dataloader(
 ) -> DataLoader[BatchedInput]:
     queries_type, _ = task_metadata.category.split("2")
     if queries_type == "t":  # text only
-        return create_text_dataloader_for_queries(dataset, **dataloader_kwargs)
+        return create_text_queries_dataloader(dataset, **dataloader_kwargs)
     if "i" in queries_type:  # contains image
         return create_image_dataloader(
             dataset, image_column_name="image", **dataloader_kwargs
         )
+    raise ValueError(f"Can't handle queries type {queries_type}")
 
 
 def create_document_dataloader(
@@ -291,6 +292,7 @@ def create_document_dataloader(
         return create_image_dataloader(
             dataset, image_column_name="image", **dataloader_kwargs
         )
+    raise ValueError(f"Can't handle queries type {document_type}")
 
 
 def create_dataloader(

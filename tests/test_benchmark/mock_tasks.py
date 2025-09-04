@@ -2629,8 +2629,8 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "q1": {"d1": 0, "d2": 1},
             },
             top_ranked={
-                "q1": ["d1", "d2"],
-                "q2": ["d2", "d1"],
+                "q0": ["d1", "d2"],
+                "q1": ["d2", "d1"],
             },
         )
 
@@ -2794,15 +2794,17 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "q1": {"d1": 0, "d2": 1},
             },
             top_ranked={
-                "q1": ["d1", "d2"],
-                "q2": ["d2", "d1"],
+                "q0": ["d1", "d2"],
+                "q1": ["d2", "d1"],
             },
         )
         self.dataset = {
             "eng": {
                 "test": split_data,
             },
-            "fra": {"test": split_data},
+            "fra": {
+                "test": split_data,
+            },
         }
 
         self.data_loaded = True
