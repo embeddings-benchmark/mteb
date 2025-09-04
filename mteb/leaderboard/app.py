@@ -21,8 +21,8 @@ from mteb.custom_validators import MODALITIES
 from mteb.leaderboard.benchmark_selector import (
     BENCHMARK_ENTRIES,
     DEFAULT_BENCHMARK_NAME,
-    make_selector,
     RTEB_BENCHMARK_ENTRIES,
+    make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
@@ -199,13 +199,13 @@ def get_startup_arguments():
     parser.add_argument(
         "--show_rteb",
         action="store_true",
-        help="If set, display RTEB results; otherwise show default results."
+        help="If set, display RTEB results; otherwise show default results.",
     )
 
     return parser.parse_args()
 
-def get_leaderboard_app() -> gr.Blocks:
 
+def get_leaderboard_app() -> gr.Blocks:
     args = get_startup_arguments()
     show_rteb = args.show_rteb
 
@@ -296,7 +296,9 @@ def get_leaderboard_app() -> gr.Blocks:
             width="18%",
         ):
             if show_rteb:
-                benchmark_select, column = make_selector(BENCHMARK_ENTRIES + RTEB_BENCHMARK_ENTRIES)
+                benchmark_select, column = make_selector(
+                    BENCHMARK_ENTRIES + RTEB_BENCHMARK_ENTRIES
+                )
             else:
                 benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
         gr.Markdown(

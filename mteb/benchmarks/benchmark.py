@@ -72,5 +72,3 @@ class Benchmark:
         results = base_results.select_tasks(self.tasks)
         self.results_cache[base_results] = results
         return results
-
-

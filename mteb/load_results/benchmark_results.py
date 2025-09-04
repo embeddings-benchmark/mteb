@@ -730,7 +730,7 @@ class BenchmarkResults(BaseModel):
     @classmethod
     def from_validated(cls, **data) -> BenchmarkResults:
         model_results = []
-        for model_res in data["model_results"]:
+        for model_res in data["model_results"][:1]:
             model_results.append(ModelResult.from_validated(**model_res))
         return cls.model_construct(model_results=model_results)
 

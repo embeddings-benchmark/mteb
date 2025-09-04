@@ -36,7 +36,6 @@ RTEB_MAIN = Benchmark(
     description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 15 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_ENGLISH = Benchmark(
@@ -65,7 +64,6 @@ RTEB_ENGLISH = Benchmark(
     description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_FRENCH = Benchmark(
@@ -81,7 +79,6 @@ RTEB_FRENCH = Benchmark(
     description="RTEB French subset containing retrieval tasks in French across multiple domains.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_GERMAN = Benchmark(
@@ -96,7 +93,6 @@ RTEB_GERMAN = Benchmark(
     description="RTEB German subset containing retrieval tasks in German, focusing on legal domain.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_JAPANESE = Benchmark(
@@ -111,7 +107,6 @@ RTEB_JAPANESE = Benchmark(
     description="RTEB Japanese subset containing retrieval tasks in Japanese across multiple domains.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_FINANCE = Benchmark(
@@ -128,7 +123,6 @@ RTEB_FINANCE = Benchmark(
     description="RTEB Finance subset containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, and financial document retrieval.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_LEGAL = Benchmark(
@@ -146,7 +140,6 @@ RTEB_LEGAL = Benchmark(
     description="RTEB Legal subset containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and legal Q&A.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_CODE = Benchmark(
@@ -166,7 +159,6 @@ RTEB_CODE = Benchmark(
     description="RTEB Code subset containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, and SQL retrieval.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
 
 RTEB_HEALTHCARE = Benchmark(
@@ -182,5 +174,4 @@ RTEB_HEALTHCARE = Benchmark(
     description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, and cross-lingual medical retrieval.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
-
 )
