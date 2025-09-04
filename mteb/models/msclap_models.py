@@ -48,6 +48,7 @@ class MSClapWrapper:
         self.use_cuda = device == "cuda"
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
+        self.tokenizer = self.model.tokenizer
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -211,8 +212,12 @@ class MSClapWrapper:
         texts: list[str],
         **kwargs: Any,
     ) -> np.ndarray:
+
+        inputs = self.tokenizer(texts, return_tensors="pt", padding=True, truncation=True, max_length=self.model.max_txt_len)
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        
         with torch.no_grad():
-            text_features = self.model.get_text_embeddings(texts)
+            text_features = self.model.clap.caption_encoder(**inputs)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
         return text_features.cpu().numpy()
 
