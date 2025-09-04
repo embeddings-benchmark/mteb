@@ -213,7 +213,7 @@ class MSClapWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
 
-        inputs = self.tokenizer(texts, return_tensors="pt", padding=True, truncation=True, max_length=self.model.max_txt_len)
+        inputs = self.tokenizer(texts, return_tensors="pt", padding=True, truncation=True)
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         
         with torch.no_grad():
