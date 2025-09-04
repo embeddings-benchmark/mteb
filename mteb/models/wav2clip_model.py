@@ -20,6 +20,7 @@ class Wav2ClipZeroShotWrapper:
     def __init__(
         self,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         requires_package(self, "wav2clip", "pip install 'mteb[wav2clip]'")
@@ -30,6 +31,7 @@ class Wav2ClipZeroShotWrapper:
         self.device = device
         self.audio_model = get_model().to(device)
         self.sampling_rate = 16_000
+        self.max_audio_length_s = max_audio_length_s
 
         # text side (CLIP)
         self.clip = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(device)
@@ -65,9 +67,9 @@ class Wav2ClipZeroShotWrapper:
                     tensor = resampler(tensor)
 
                 # Apply audio truncation (30 seconds max)
-                max_length = 30 * self.sampling_rate  # 30 seconds
-                if tensor.shape[-1] > max_length:
-                    tensor = tensor[..., :max_length]
+                max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+                if tensor.shape[-1] > max_length_samples:
+                    tensor = tensor[..., :max_length_samples]
 
                 waveforms.append(tensor)
 
@@ -198,7 +200,7 @@ class Wav2ClipZeroShotWrapper:
         texts: list[str],
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs = self.clip_processor(text=texts, return_tensors="pt", padding=True)
+        inputs = self.clip_processor(text=texts, return_tensors="pt", padding=True, truncation=True)
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
         with torch.no_grad():
