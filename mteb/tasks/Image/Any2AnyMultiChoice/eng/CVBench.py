@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks import AbsTaskRetrieval
@@ -16,6 +18,7 @@ def _load_data(
     corpus = {}
     queries = {}
     relevant_docs = {}
+    top_ranked = defaultdict(lambda: defaultdict(list))
 
     dataset = load_dataset(
         path,
@@ -78,7 +81,12 @@ def _load_data(
         for corpus_id, doc in zip(corpus_ids, docs):
             corpus_records.append({"id": corpus_id, "text": doc, "modality": "text"})
         corpus[split] = Dataset.from_list(corpus_records)
-    return corpus, queries, relevant_docs
+
+        for query_id, relevant in relevant_docs[split].items():
+            for corpus_id, score in relevant.items():
+                top_ranked[split][query_id].append(corpus_id)
+
+    return corpus, queries, relevant_docs, top_ranked
 
 
 def transform_choices(example):
@@ -120,7 +128,7 @@ class CVBenchCount(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
@@ -163,7 +171,7 @@ class CVBenchRelation(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
@@ -206,7 +214,7 @@ class CVBenchDepth(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
@@ -249,7 +257,7 @@ class CVBenchDistance(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
