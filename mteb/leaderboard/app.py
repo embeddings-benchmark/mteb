@@ -217,7 +217,9 @@ def get_leaderboard_app() -> gr.Blocks:
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
     )
-    default_filtered_scores = [entry for entry in default_scores if entry["model_name"] in filtered_models]
+    default_filtered_scores = [
+        entry for entry in default_scores if entry["model_name"] in filtered_models
+    ]
     summary_table = default_benchmark.create_summary_table(default_filtered_scores)
     per_task_table = default_benchmark.create_per_task_table(default_filtered_scores)
 

@@ -332,7 +332,7 @@ def apply_styling(
 
 
 def create_tables(
-        scores_long: list[dict], search_query: str | None = None
+    scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
     result = scores_to_tables(scores_long, search_query)
     # dataframe with No Results is returned, so no need to apply styling
@@ -346,7 +346,9 @@ def create_tables(
     return summary_table, per_task_table
 
 
-def _prepare_data(scores_long: list[dict], search_query: str | None = None) -> tuple[pd.DataFrame, list[str]] | None:
+def _prepare_data(
+    scores_long: list[dict], search_query: str | None = None
+) -> tuple[pd.DataFrame, list[str]] | None:
     """Prepare raw dataframe and filter invalid models.
 
     Returns:
@@ -373,14 +375,21 @@ def _prepare_data(scores_long: list[dict], search_query: str | None = None) -> t
     return per_task, models_to_remove
 
 
-def apply_summary_styling(joint_table: pd.DataFrame, score_columns: list[str], column_types: list[str]) -> gr.DataFrame:
+def apply_summary_styling(
+    joint_table: pd.DataFrame, score_columns: list[str], column_types: list[str]
+) -> gr.DataFrame:
     """Apply styling for summary (joint) table."""
     excluded_columns = [
-        "Rank (Borda)", "Model",
-        "Number of Parameters", "Embedding Dimensions",
-        "Max Tokens", "Memory Usage (MB)",
+        "Rank (Borda)",
+        "Model",
+        "Number of Parameters",
+        "Embedding Dimensions",
+        "Max Tokens",
+        "Memory Usage (MB)",
     ]
-    gradient_columns = [col for col in joint_table.columns if col not in excluded_columns]
+    gradient_columns = [
+        col for col in joint_table.columns if col not in excluded_columns
+    ]
     light_green_cmap = create_light_green_cmap()
 
     numeric_data = joint_table.copy()
@@ -454,11 +463,15 @@ def apply_per_task_styling(per_task: pd.DataFrame) -> gr.DataFrame:
     )
 
 
-def create_summary_table(scores_long: list[dict], search_query: str | None = None) -> gr.DataFrame:
+def create_summary_table(
+    scores_long: list[dict], search_query: str | None = None
+) -> gr.DataFrame:
     """create_summary_table"""
     prepared = _prepare_data(scores_long, search_query)
     if prepared is None:
-        no_results_frame = pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
         return gr.DataFrame(no_results_frame)
 
     per_task, models_to_remove = prepared
@@ -517,7 +530,7 @@ def create_summary_table(scores_long: list[dict], search_query: str | None = Non
     )
     # Adding markdown link to model names
     name_w_link = (
-            "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
+        "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
     )
     joint_table["model_name"] = joint_table["model_name"].mask(
         joint_table["model_link"].notna(), name_w_link
@@ -540,11 +553,15 @@ def create_summary_table(scores_long: list[dict], search_query: str | None = Non
     return apply_summary_styling(joint_table, score_columns, column_types)
 
 
-def create_per_task_table(scores_long: list[dict], search_query: str | None = None) -> gr.DataFrame:
+def create_per_task_table(
+    scores_long: list[dict], search_query: str | None = None
+) -> gr.DataFrame:
     """create_per_task_table"""
     prepared = _prepare_data(scores_long, search_query)
     if prepared is None:
-        no_results_frame = pd.DataFrame({"No results": ["You can try relaxing your criteria"]})
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
         return gr.DataFrame(no_results_frame)
 
     per_task, _ = prepared

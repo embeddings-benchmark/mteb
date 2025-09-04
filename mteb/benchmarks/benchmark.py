@@ -78,6 +78,7 @@ class Benchmark:
         """create_summary_table"""
         # Avoid circular references
         from mteb.leaderboard.table import create_summary_table
+
         return create_summary_table(scores_long, search_query)
 
     @staticmethod
@@ -85,4 +86,5 @@ class Benchmark:
         """create_per_task_table"""
         # Avoid circular references
         from mteb.leaderboard.table import create_per_task_table
+
         return create_per_task_table(scores_long, search_query)
