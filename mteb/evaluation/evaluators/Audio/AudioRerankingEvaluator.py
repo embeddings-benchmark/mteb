@@ -101,18 +101,17 @@ class AudioRerankingEvaluator(Evaluator):
         """
         logger.info("Encoding queries...")
         all_query_audios = [sample[self.query_column_name] for sample in self.samples]
+        
+        # Get model-specific parameters for collate_fn
+        model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
+        model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
+        max_length_samples_for_collate = int(model_max_audio_length_s * model_sampling_rate)
+        
         query_dataset = AudioDataset(
             hf_dataset=all_query_audios,
             target_sampling_rate=model_sampling_rate,
             mono=True,
             transform=self.transform,  # Keep any additional transforms
-        )
-
-        # Get model-specific parameters for collate_fn
-        # model_sampling_rate = getattr(model, "sampling_rate", 16000)  # Default if not explicitly set
-        # model_max_audio_length_s = getattr(model, "max_audio_length_s", 30.0) # Default if not explicitly set
-        max_length_samples_for_collate = int(
-            model_max_audio_length_s * model_sampling_rate
         )
 
         query_dataloader = DataLoader(

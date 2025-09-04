@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import io
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
 import torch
@@ -105,21 +105,18 @@ class CustomAudioCollate:
     Args:
         max_length_samples: if provided, pad/truncate to this length.
             If None -> pad to longest sample in the batch.
-        mono: if True, collapses channels to mono by averaging.
         pad_value: value to use for padding (0.0 recommended).
     """
 
     def __init__(
         self,
-        max_length_samples: Optional[int] = None,
-        mono: bool = True,
+        max_length_samples: int | None = None,
         pad_value: float = 0.0,
     ):
         self.max_length_samples = max_length_samples
-        self.mono = mono
         self.pad_value = pad_value
 
-    def __call__(self, batch: List[torch.Tensor]):
+    def __call__(self, batch: list[torch.Tensor]):
         # batch: list of tensors (C, T), where C should now be 1 due to AudioDataset handling mono conversion
         waveforms_processed_for_pad_sequence = []
         lengths = []
