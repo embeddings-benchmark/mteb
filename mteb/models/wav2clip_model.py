@@ -161,9 +161,9 @@ class Wav2ClipZeroShotWrapper:
                 norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)
                 normalized_embeds = batch_embeds / norms
 
-                # Add each embedding from the batch
+                # For batch processing
                 for embed in normalized_embeds:
-                    all_embeddings.append(embed.reshape(1, -1))
+                    all_embeddings.append(torch.from_numpy(embed).unsqueeze(0))
 
             except Exception as e:
                 logger.warning(
@@ -177,7 +177,7 @@ class Wav2ClipZeroShotWrapper:
                     # Normalize
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
                     normalized_embed = embed / norm
-                    all_embeddings.append(normalized_embed)
+                    all_embeddings.append(torch.from_numpy(normalized_embed))
                 logger.info(
                     f"🔄 Individual processing completed for {len(batch_wavs)} audio files"
                 )
