@@ -139,6 +139,7 @@ class AbsTaskRetrieval(AbsTask):
     support_cross_encoder: bool = True
     support_search: bool = True
     previous_results_model_meta: dict[str, Any] | None = None
+    skip_first_result: bool = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -414,6 +415,7 @@ class AbsTaskRetrieval(AbsTask):
             results,
             self.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
+            skip_first_result=self.skip_first_result,
         )
         task_specific_scores = self.task_specific_scores(
             all_scores,

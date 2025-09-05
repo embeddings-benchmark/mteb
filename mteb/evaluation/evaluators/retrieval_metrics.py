@@ -518,6 +518,7 @@ def calculate_retrieval_scores(
     results: dict[str, dict[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],
+    skip_first_result: bool = False,
 ) -> RetrievalEvaluationResult:
     map_string = "map_cut." + ",".join([str(k) for k in k_values])
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
@@ -545,7 +546,7 @@ def calculate_retrieval_scores(
         results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
-    cv_recall = calculate_cv_recall(results, qrels, k_values)
+    cv_recall = calculate_cv_recall(results, qrels, k_values, skip_first_result)
 
     avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
     return RetrievalEvaluationResult(
@@ -586,6 +587,7 @@ def calculate_cv_recall(
     results: dict[str, dict[str, float]],
     qrels: RelevantDocumentsType,
     k_values: list[int],
+    skip_first_result: bool = False,
 ) -> dict[str, float]:
     all_cv_recalls = defaultdict(list)
     sorted_results: dict[str, list[tuple[str, float]]] = {
@@ -593,11 +595,18 @@ def calculate_cv_recall(
         for qid, rels in results.items()
     }
 
+    if skip_first_result:
+        for qid, rels in sorted_results.items():
+            sorted_results[qid].pop(0)
+
     for query_id in results.keys():
         top_docs = [
             doc_id for doc_id, _ in sorted_results[query_id]
         ]  # Sorted list of doc IDs
-        relevant_docs = set(qrels[query_id].keys())
+
+        relevant_docs = {
+            key for key in qrels.get(query_id, {}).keys() if qrels[query_id][key] != 0
+        }
 
         for k in k_values:
             top_k_docs = top_docs[:k]

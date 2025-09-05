@@ -75,6 +75,7 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: list[int],
         ignore_identical_ids: bool = False,
+        skip_first_result: bool = False,
     ) -> RetrievalEvaluationResult:
         if ignore_identical_ids:
             logger.debug(
@@ -89,4 +90,4 @@ class RetrievalEvaluator(Evaluator):
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
-        return calculate_retrieval_scores(results, qrels, k_values)
+        return calculate_retrieval_scores(results, qrels, k_values, skip_first_result)
