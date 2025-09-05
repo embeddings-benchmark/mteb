@@ -1,15 +1,24 @@
 from __future__ import annotations
 
+import json
 import logging
+import os
+import time
 from functools import partial
+from typing import Any
+
+import numpy as np
+import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
-codi_instruction = {
+
+youtu_instruction = {
     "CmedqaRetrieval": {
         "query": "Given a Chinese community medical question, retrieve replies that best answer the question",
         "document": "",
@@ -80,24 +89,13 @@ codi_instruction = {
 }
 
 
-def instruction_template(
-    instruction: str, prompt_type: PromptType | None = None
-) -> str:
-    if not instruction or prompt_type == PromptType.passage:
-        return "<s>"
-    if isinstance(instruction, dict):
-        if prompt_type is None:
-            instruction = list(instruction.values())[0]
-        else:
-            instruction = instruction[prompt_type]
-    return f"<s>Instruction: {instruction} \nQuery: "
-
-
 training_data = {
     "T2Retrieval": ["train"],
     "DuRetrieval": ["train"],
     "T2Reranking": ["train"],
     "MMarcoReranking": ["train"],
+    "CmedqaRetrieval": ["train"],
+    "CMedQAv1-reranking": ["train"],
     "CMedQAv2-reranking": ["train"],
     "BQ": ["train"],
     "LCQMC": ["train"],
@@ -108,32 +106,132 @@ training_data = {
     "Ocnli": ["train"],
 }
 
-model_name_or_path = "Youtu-RAG/CoDi-Embedding-V1"
 
-CoDiEmb_Embedding_V1 = ModelMeta(
-    name="Youtu-RAG/CoDi-Embedding-V1",
+class YoutuEmbeddingWrapper(Wrapper):
+    def __init__(
+        self,
+        model_name: str,
+        **kwargs,
+    ) -> None:
+        requires_package(
+            self,
+            "tencentcloud.common",
+            "tencentcloud.lkeap",
+            "pip install mteb[youtu]",
+        )
+
+        from tencentcloud.common import credential
+        from tencentcloud.common.profile.client_profile import ClientProfile
+        from tencentcloud.common.profile.http_profile import HttpProfile
+        from tencentcloud.lkeap.v20240522 import lkeap_client, models
+
+        secret_id = os.getenv("TENCENTCLOUD_SECRET_ID")
+        secret_key = os.getenv("TENCENTCLOUD_SECRET_KEY")
+        if not secret_id or not secret_key:
+            raise ValueError(
+                "TENCENTCLOUD_SECRET_ID and TENCENTCLOUD_SECRET_KEY environment variables must be set"
+            )
+        cred = credential.Credential(secret_id, secret_key)
+
+        httpProfile = HttpProfile()
+        httpProfile.endpoint = "lkeap.test.tencentcloudapi.com"
+
+        clientProfile = ClientProfile()
+        clientProfile.httpProfile = httpProfile
+
+        self.client = lkeap_client.LkeapClient(cred, "ap-guangzhou", clientProfile)
+        self.models = models
+        self.model_name = model_name
+
+    def _encode(
+        self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
+    ):
+        default_instruction = (
+            "Given a search query, retrieve web passages that answer the question"
+        )
+        if prompt_type == PromptType("query") or prompt_type is None:
+            instruction = youtu_instruction.get(task_name, default_instruction)
+            if isinstance(instruction, dict):
+                instruction = instruction[prompt_type]
+            instruction = f"Instruction: {instruction} \nQuery: "
+        elif prompt_type == PromptType.document:
+            instruction = ""
+
+        params = {
+            "Model": self.model_name,
+            "Inputs": inputs,
+            "Instruction": instruction,
+        }
+
+        req = self.models.GetEmbeddingRequest()
+        req.from_json_string(json.dumps(params))
+
+        resp = self.client.GetEmbedding(req)
+        resp = json.loads(resp.to_json_string())
+        outputs = [item["Embedding"] for item in resp["Data"]]
+
+        return outputs
+
+    def encode(
+        self,
+        sentences: list[str],
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        retries: int = 5,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        max_batch_size = kwargs.get("batch_size", 32)
+        sublists = [
+            sentences[i : i + max_batch_size]
+            for i in range(0, len(sentences), max_batch_size)
+        ]
+
+        show_progress_bar = (
+            False
+            if "show_progress_bar" not in kwargs
+            else kwargs.pop("show_progress_bar")
+        )
+
+        all_embeddings = []
+
+        for i, sublist in enumerate(
+            tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar)
+        ):
+            embedding = self._encode(sublist, task_name, prompt_type)
+            all_embeddings.extend(embedding)
+            while retries > 0:
+                try:
+                    embedding = self._encode(sublist, task_name, prompt_type)
+                    all_embeddings.extend(embedding)
+                    break
+                except Exception as e:
+                    # Sleep due to too many requests
+                    time.sleep(1)
+                    logger.warning(
+                        f"Retrying... {retries} retries left. Error: {str(e)}"
+                    )
+                    retries -= 1
+                    if retries == 0:
+                        raise e
+
+        return np.array(all_embeddings)
+
+
+Youtu_Embedding_V1 = ModelMeta(
+    name="Youtu-RAG/Youtu-Embedding-V1",
     languages=["zho-Hans"],
-    revision="9ee4337715ce337f12b8d30f20e87e8528ccedd6",
-    release_date="2025-08-20",
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name_or_path,
-        revision="9ee4337715ce337f12b8d30f20e87e8528ccedd6",
-        instruction_template=instruction_template,
-        apply_instruction_to_passages=True,
-        prompts_dict=codi_instruction,
-        trust_remote_code=True,
-        max_seq_length=4096,
-    ),
-    open_weights=True,
-    n_parameters=2724880896,
+    revision="1",
+    release_date="2025-09-02",
+    loader=partial(YoutuEmbeddingWrapper, model_name="youtu-embedding-v1"),
+    open_weights=False,
+    n_parameters=None,
     memory_usage_mb=None,
     embed_dim=2304,
-    license="apache-2.0",
+    license=None,
     max_tokens=4096,
-    reference="https://huggingface.co/Youtu-RAG/CoDi-Embedding-V1",
+    reference="https://youtu-embedding-v1.github.io/",
     similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
+    framework=["API"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
