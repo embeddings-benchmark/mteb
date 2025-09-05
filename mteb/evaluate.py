@@ -112,7 +112,6 @@ def _evaluate(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
         )
 
-
     if co2_tracker:
         with EmissionsTracker(
             save_to_file=False,
