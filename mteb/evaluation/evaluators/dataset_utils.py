@@ -52,7 +52,7 @@ class AudioDataset(torch.utils.data.Dataset):
 
         if isinstance(audio, dict) and "array" in audio:
             # HuggingFace audio format: {'array': np.ndarray, 'sampling_rate': int}
-            waveform = torch.from_numpy(audio["array"]).float()
+            waveform = torch.as_tensor(audio["array"], dtype=torch.float32)
             sample_rate = audio.get("sampling_rate", self.target_sampling_rate or 16000)
             if waveform.dim() == 1:
                 waveform = waveform.unsqueeze(0)  # (T,) -> (1, T)
