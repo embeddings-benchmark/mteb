@@ -115,9 +115,10 @@ class AudioRerankingEvaluator(Evaluator):
 
         query_dataset = AudioDataset(
             hf_dataset=all_query_audios,
+            audio_column_name=None,  # This tells AudioDataset to treat items as direct audio objects
             target_sampling_rate=model_sampling_rate,
             mono=True,
-            transform=self.transform,  # Keep any additional transforms
+            transform=self.transform,
         )
 
         query_dataloader = DataLoader(
@@ -166,9 +167,10 @@ class AudioRerankingEvaluator(Evaluator):
 
         docs_dataset = AudioDataset(
             hf_dataset=all_docs,
+            audio_column_name=None,  # Same here
             target_sampling_rate=model_sampling_rate,
             mono=True,
-            transform=self.transform,  # Keep any additional transforms
+            transform=self.transform,
         )
         docs_dataloader = DataLoader(
             docs_dataset,

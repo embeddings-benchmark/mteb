@@ -35,14 +35,26 @@ class AudioDataset(torch.utils.data.Dataset):
 
     def __len__(self):
         return len(self.dataset)
-    
+
     def __getitem__(self, idx):
-        if isinstance(self.dataset[idx], dict):
-            audio = self.dataset[idx][self.audio_column_name]
+        item = self.dataset[idx]
+
+        # Handle different data structures
+        if self.audio_column_name is None:
+            # Treat item directly as audio data
+            audio = item
+        elif isinstance(item, dict) and self.audio_column_name in item:
+            # Extract from dictionary
+            audio = item[self.audio_column_name]
         else:
-            # Dataset is already a list of audio objects
-            audio = self.dataset[idx]
-        
+            # Fallback to direct access
+            audio = item
+        if isinstance(audio, dict) and "array" in audio:
+            # HuggingFace audio format: {'array': np.ndarray, 'sampling_rate': int}
+            waveform = torch.from_numpy(audio["array"]).float()
+            sample_rate = audio.get("sampling_rate", self.target_sampling_rate or 16000)
+            if waveform.dim() == 1:
+                waveform = waveform.unsqueeze(0)  # (T,) -> (1, T)
         if isinstance(audio, bytes):
             waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
         elif isinstance(audio, str):
@@ -54,7 +66,7 @@ class AudioDataset(torch.utils.data.Dataset):
                 waveform = waveform.unsqueeze(0)  # (time,) -> (1, time)
             elif waveform.dim() == 2 and waveform.shape[0] > waveform.shape[1]:
                 waveform = waveform.T  # Assume (time, channels) -> (channels, time)
-            
+
             # For numpy arrays, we need to assume a sample rate if not provided
             sample_rate = self.target_sampling_rate or 16000
         elif isinstance(audio, torch.Tensor):
@@ -64,26 +76,27 @@ class AudioDataset(torch.utils.data.Dataset):
                 waveform = waveform.unsqueeze(0)  # (time,) -> (1, time)
             elif waveform.dim() == 2 and waveform.shape[0] > waveform.shape[1]:
                 waveform = waveform.T  # Assume (time, channels) -> (channels, time)
-            
+
             # For tensors, we need to assume a sample rate if not provided
             sample_rate = self.target_sampling_rate or 16000
         else:
             raise ValueError(f"Unsupported audio type: {type(audio)}")
-        
+
         # Handle resampling if needed
         if self.target_sampling_rate and sample_rate != self.target_sampling_rate:
             resampler = get_audio_transform(sample_rate, self.target_sampling_rate)
             if resampler:
                 waveform = resampler(waveform)
-        
+
         # Convert to mono if requested
         if self.mono and waveform.shape[0] > 1:
             waveform = torch.mean(waveform, dim=0, keepdim=True)
-        
+
         if self.transform is not None:
             waveform = self.transform(waveform)
-        
+
         return waveform
+
 
 class CustomAudioCollate:
     """Pad (and optionally truncate) a batch of waveforms to a consistent length.
