@@ -34,7 +34,6 @@ _SHARED_METADATA = dict(
     annotations_creators="derived",
     sample_creation="created",
     bibtex_citation=BIBTEX,
-    judged_docs_only_flag=True,
 )
 
 # text-field dictionaries
@@ -52,13 +51,6 @@ _CORPUS_FIELDS = {
         "description_en",
     ],
 }
-
-# Text representations used in the paper
-_IN_PAPER = {
-    ("TitleAbstract", "TitleAbstractClaims"),
-    ("TitleAbstractClaims", "TitleAbstractClaims"),
-}
-
 
 # MIX-IN with shared logic + metric implementation
 class _DAPFAMMixin:
