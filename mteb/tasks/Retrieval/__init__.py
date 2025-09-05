@@ -57,7 +57,6 @@ from .eng.CQADupstackWebmastersRetrieval import *
 from .eng.CQADupstackWordpressRetrieval import *
 from .eng.DAPFAMPatentRetrieval import *
 from .eng.DBPediaRetrieval import *
-from .eng.DAPFAMPatentRetrieval import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *

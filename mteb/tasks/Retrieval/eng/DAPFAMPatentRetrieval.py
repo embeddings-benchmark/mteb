@@ -1,28 +1,25 @@
 from __future__ import annotations
 
-import math
-
-import numpy as np
 from datasets import load_dataset
-from sentence_transformers.quantization import quantize_embeddings
-from sklearn.metrics import average_precision_score
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ....abstasks.TaskMetadata import TaskMetadata
 
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
-BIBTEX = r"""@misc{ayaou2025dapfam,
-  title        = {DAPFAM: A Domain-Aware Patent Retrieval Dataset Aggregated at the Family Level},
-  author       = {Ayaou, Iliass and Cavallucci, Denis and Chibane, Hicham},
-  year         = {2025},
-  eprint       = {2506.22141},
-  archivePrefix= {arXiv},
-  primaryClass = {cs.CL}
+BIBTEX = r"""
+@misc{ayaou2025dapfamdomainawarefamilyleveldataset,
+      title = {DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval}, 
+      author = {Iliass Ayaou and Denis Cavallucci and Hicham Chibane},
+      year = {2025},
+      eprint = {2506.22141},
+      archivePrefix = {arXiv},
+      primaryClass = {cs.CL},
+      url = {https://arxiv.org/abs/2506.22141}, 
 }"""
 
 _SHARED_METADATA = dict(
-    dataset={"path": HF_REPO, "revision": "main"},
+    dataset={"path": HF_REPO, "revision": "3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544"},
     reference=REFERENCE,
     type="Retrieval",
     category="p2p",
@@ -36,7 +33,7 @@ _SHARED_METADATA = dict(
     annotations_creators="derived",
     sample_creation="created",
     bibtex_citation=BIBTEX,
-    judged_docs_only_flag=True, 
+    judged_docs_only_flag=True,
 )
 
 # text-field dictionaries
@@ -71,9 +68,24 @@ class _DAPFAMMixin:
     in_paper: bool = False
 
     def load_data(self, **_) -> tuple[dict, dict, dict]:
-        ds_c = load_dataset(HF_REPO, "corpus", split="train")
-        ds_q = load_dataset(HF_REPO, "queries", split="train")
-        ds_r = load_dataset(HF_REPO, "relations", split="train")
+        ds_c = load_dataset(
+            HF_REPO,
+            "corpus",
+            split="train",
+            revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544",
+        )
+        ds_q = load_dataset(
+            HF_REPO,
+            "queries",
+            split="train",
+            revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544",
+        )
+        ds_r = load_dataset(
+            HF_REPO,
+            "relations",
+            split="train",
+            revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544",
+        )
 
         self.corpus = {
             "test": {
@@ -96,33 +108,41 @@ class _DAPFAMMixin:
         for r in ds_r:
             qid = r["query_id"]
             pid = r["relevant_id"]
-            raw.setdefault(qid, {})[pid] = (float(r["relevance_score"]), r["domain_rel"])
+            raw.setdefault(qid, {})[pid] = (
+                float(r["relevance_score"]),
+                r["domain_rel"],
+            )
         self._qrels_raw = {"test": raw}
 
-       
         qrels_int: dict[str, dict[str, int]] = {}
         for qid, pairs in raw.items():
             if self.domain_filter is None:
                 pos = {pid: 1 for pid, (s, dom) in pairs.items() if s > 0.0}
             else:
-                pos = {pid: 1 for pid, (s, dom) in pairs.items() if s > 0.0 and dom == self.domain_filter}
-            if pos:                        
+                pos = {
+                    pid: 1
+                    for pid, (s, dom) in pairs.items()
+                    if s > 0.0 and dom == self.domain_filter
+                }
+            if pos:
                 qrels_int[qid] = pos
 
         self.relevant_docs = {"test": qrels_int}
         self.data_loaded = True
         return self.corpus, self.queries, self.relevant_docs
 
+
 # ───────────────────────────────────────────────────
 # DAPFAM Patent Family Retrieval Tasks
 
+
 class DAPFAMAllTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstract']
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMAllTitlAbsToTitlAbsRetrieval',
+        name="DAPFAMAllTitlAbsToTitlAbsRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title and Abstract. "
@@ -135,13 +155,14 @@ class DAPFAMAllTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMAllTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaims']
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name='DAPFAMAllTitlAbsToTitlAbsClmRetrieval',
+        name="DAPFAMAllTitlAbsToTitlAbsClmRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title, Abstract, and Claims. "
@@ -154,13 +175,14 @@ class DAPFAMAllTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMAllTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaimsDescription']
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMAllTitlAbsToFullTextRetrieval',
+        name="DAPFAMAllTitlAbsToFullTextRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title, Abstract, Claims, and Description. "
@@ -173,13 +195,14 @@ class DAPFAMAllTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMAllTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstract']
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMAllTitlAbsClmToTitlAbsRetrieval',
+        name="DAPFAMAllTitlAbsClmToTitlAbsRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title and Abstract. "
@@ -192,13 +215,14 @@ class DAPFAMAllTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaims']
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name='DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval',
+        name="DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title, Abstract, and Claims. "
@@ -211,13 +235,14 @@ class DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMAllTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
     domain_filter = None
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaimsDescription']
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMAllTitlAbsClmToFullTextRetrieval',
+        name="DAPFAMAllTitlAbsClmToFullTextRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title, Abstract, Claims, and Description. "
@@ -230,13 +255,14 @@ class DAPFAMAllTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMInTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'IN'
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstract']
+    domain_filter = "IN"
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMInTitlAbsToTitlAbsRetrieval',
+        name="DAPFAMInTitlAbsToTitlAbsRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title and Abstract. "
@@ -249,13 +275,14 @@ class DAPFAMInTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMInTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'IN'
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaims']
+    domain_filter = "IN"
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name='DAPFAMInTitlAbsToTitlAbsClmRetrieval',
+        name="DAPFAMInTitlAbsToTitlAbsClmRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title, Abstract, and Claims. "
@@ -268,13 +295,14 @@ class DAPFAMInTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMInTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'IN'
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaimsDescription']
+    domain_filter = "IN"
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMInTitlAbsToFullTextRetrieval',
+        name="DAPFAMInTitlAbsToFullTextRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title, Abstract, Claims, and Description. "
@@ -287,13 +315,14 @@ class DAPFAMInTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMInTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'IN'
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstract']
+    domain_filter = "IN"
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMInTitlAbsClmToTitlAbsRetrieval',
+        name="DAPFAMInTitlAbsClmToTitlAbsRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title and Abstract. "
@@ -306,13 +335,14 @@ class DAPFAMInTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMInTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'IN'
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaims']
+    domain_filter = "IN"
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name='DAPFAMInTitlAbsClmToTitlAbsClmRetrieval',
+        name="DAPFAMInTitlAbsClmToTitlAbsClmRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title, Abstract, and Claims. "
@@ -325,13 +355,14 @@ class DAPFAMInTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMInTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'IN'
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaimsDescription']
+    domain_filter = "IN"
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMInTitlAbsClmToFullTextRetrieval',
+        name="DAPFAMInTitlAbsClmToFullTextRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title, Abstract, Claims, and Description. "
@@ -344,13 +375,14 @@ class DAPFAMInTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMOutTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'OUT'
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstract']
+    domain_filter = "OUT"
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMOutTitlAbsToTitlAbsRetrieval',
+        name="DAPFAMOutTitlAbsToTitlAbsRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title and Abstract. "
@@ -363,13 +395,14 @@ class DAPFAMOutTitlAbsToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMOutTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'OUT'
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaims']
+    domain_filter = "OUT"
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name='DAPFAMOutTitlAbsToTitlAbsClmRetrieval',
+        name="DAPFAMOutTitlAbsToTitlAbsClmRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title, Abstract, and Claims. "
@@ -382,13 +415,14 @@ class DAPFAMOutTitlAbsToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMOutTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'OUT'
-    query_fields = _QUERY_FIELDS['TitleAbstract']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaimsDescription']
+    domain_filter = "OUT"
+    query_fields = _QUERY_FIELDS["TitleAbstract"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMOutTitlAbsToFullTextRetrieval',
+        name="DAPFAMOutTitlAbsToFullTextRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title and Abstract, "
             "and target patent families are represented by Title, Abstract, Claims, and Description. "
@@ -401,13 +435,14 @@ class DAPFAMOutTitlAbsToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMOutTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'OUT'
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstract']
+    domain_filter = "OUT"
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstract"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMOutTitlAbsClmToTitlAbsRetrieval',
+        name="DAPFAMOutTitlAbsClmToTitlAbsRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title and Abstract. "
@@ -420,13 +455,14 @@ class DAPFAMOutTitlAbsClmToTitlAbsRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'OUT'
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaims']
+    domain_filter = "OUT"
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaims"]
     in_paper = True
     metadata = TaskMetadata(
-        name='DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval',
+        name="DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title, Abstract, and Claims. "
@@ -439,13 +475,14 @@ class DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
         **_SHARED_METADATA,
     )
 
+
 class DAPFAMOutTitlAbsClmToFullTextRetrieval(_DAPFAMMixin, AbsTaskRetrieval):
-    domain_filter = 'OUT'
-    query_fields = _QUERY_FIELDS['TitleAbstractClaims']
-    corpus_fields = _CORPUS_FIELDS['TitleAbstractClaimsDescription']
+    domain_filter = "OUT"
+    query_fields = _QUERY_FIELDS["TitleAbstractClaims"]
+    corpus_fields = _CORPUS_FIELDS["TitleAbstractClaimsDescription"]
     in_paper = False
     metadata = TaskMetadata(
-        name='DAPFAMOutTitlAbsClmToFullTextRetrieval',
+        name="DAPFAMOutTitlAbsClmToFullTextRetrieval",
         description=(
             "In this patent family retrieval task, query patent families are represented by Title, Abstract, and Claims, "
             "and target patent families are represented by Title, Abstract, Claims, and Description. "
