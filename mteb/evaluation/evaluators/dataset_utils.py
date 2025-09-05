@@ -49,13 +49,14 @@ class AudioDataset(torch.utils.data.Dataset):
         else:
             # Fallback to direct access
             audio = item
+
         if isinstance(audio, dict) and "array" in audio:
             # HuggingFace audio format: {'array': np.ndarray, 'sampling_rate': int}
             waveform = torch.from_numpy(audio["array"]).float()
             sample_rate = audio.get("sampling_rate", self.target_sampling_rate or 16000)
             if waveform.dim() == 1:
                 waveform = waveform.unsqueeze(0)  # (T,) -> (1, T)
-        if isinstance(audio, bytes):
+        elif isinstance(audio, bytes):
             waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
         elif isinstance(audio, str):
             waveform, sample_rate = torchaudio.load(audio)
@@ -66,7 +67,6 @@ class AudioDataset(torch.utils.data.Dataset):
                 waveform = waveform.unsqueeze(0)  # (time,) -> (1, time)
             elif waveform.dim() == 2 and waveform.shape[0] > waveform.shape[1]:
                 waveform = waveform.T  # Assume (time, channels) -> (channels, time)
-
             # For numpy arrays, we need to assume a sample rate if not provided
             sample_rate = self.target_sampling_rate or 16000
         elif isinstance(audio, torch.Tensor):
