@@ -9,14 +9,15 @@ HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
 BIBTEX = r"""
 @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
-      title = {DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval}, 
+      title = {DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval},
       author = {Iliass Ayaou and Denis Cavallucci and Hicham Chibane},
       year = {2025},
       eprint = {2506.22141},
       archivePrefix = {arXiv},
       primaryClass = {cs.CL},
-      url = {https://arxiv.org/abs/2506.22141}, 
-}"""
+      url = {https://arxiv.org/abs/2506.22141},
+}
+"""
 
 _SHARED_METADATA = dict(
     dataset={"path": HF_REPO, "revision": "3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544"},
@@ -52,7 +53,7 @@ _CORPUS_FIELDS = {
     ],
 }
 
-# paper variants used in Table 4
+# Text representations used in the paper
 _IN_PAPER = {
     ("TitleAbstract", "TitleAbstractClaims"),
     ("TitleAbstractClaims", "TitleAbstractClaims"),
