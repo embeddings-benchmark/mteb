@@ -107,18 +107,16 @@ class Wav2ClipZeroShotWrapper:
         all_embeddings = []
 
         if isinstance(audio, DataLoader):
-            # Process each DataLoader batch separately
             for batch in tqdm(audio, desc="Processing audio batches"):
                 wavs = self._handle_batch(batch)
                 batch_embeddings = self._process_audio_batch(wavs, batch_size)
                 all_embeddings.extend(batch_embeddings)
 
-            return np.vstack(all_embeddings)
+            return np.concatenate(all_embeddings, axis=0)
         else:
-            # Process single batch with internal batching
             wavs = self._handle_batch(audio)
             batch_embeddings = self._process_audio_batch(wavs, batch_size)
-            return np.vstack(batch_embeddings)
+            return np.concatenate(batch_embeddings, axis=0)
 
     def _process_audio_batch(
         self, wavs: list[torch.Tensor], batch_size: int
@@ -161,7 +159,7 @@ class Wav2ClipZeroShotWrapper:
                 norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)
                 normalized_embeds = batch_embeds / norms
 
-                # Add each embedding from the batch
+                # For batch processing
                 for embed in normalized_embeds:
                     all_embeddings.append(embed.reshape(1, -1))
 

@@ -120,7 +120,7 @@ class SpeechT5Wrapper(Wrapper):
         batch_size: int = 4,
         hidden_layer: float = 1.0,
         **kwargs: Any,
-    ) -> torch.Tensor:
+    ) -> np.ndarray:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
@@ -153,9 +153,9 @@ class SpeechT5Wrapper(Wrapper):
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
-            return torch.cat(all_embeddings, dim=0)
+            return torch.cat(all_embeddings, dim=0).cpu().numpy()
         else:
-            return torch.zeros((0, self.asr_model.config.hidden_size))
+            return torch.zeros((0, self.asr_model.config.hidden_size)).cpu().numpy()
 
     def get_text_embeddings(
         self,

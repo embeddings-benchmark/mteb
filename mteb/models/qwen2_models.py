@@ -113,7 +113,7 @@ class Qwen2AudioWrapper(Wrapper):
             for i in range(0, len(processed), batch_size):
                 batch = processed[i : i + batch_size]
 
-                audio_list = [w.numpy() for w in batch]
+                audio_list = [w.cpu().numpy() for w in batch]
                 prompt = " ".join(["<|AUDIO|>"] * len(audio_list))
 
                 inputs = self.processor(
