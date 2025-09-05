@@ -6,7 +6,6 @@ import os
 from typing import Any
 
 import numpy as np
-import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -113,7 +112,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
                 **self.encode_kwargs,
             )
             X_train_list.append(batch_embeddings)
-        X_train = torch.cat(X_train_list, dim=0).cpu().numpy()
+        X_train = np.concatenate(X_train_list, axis=0)
 
         dataloader = DataLoader(
             self.dataset_test,
@@ -137,7 +136,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
                 **self.encode_kwargs,
             )
             X_test_list.append(batch_embeddings)
-        X_test = torch.cat(X_test_list, dim=0).cpu().numpy()
+        X_test = np.concatenate(X_test_list, axis=0)
         test_cache = X_test
 
         logger.info("Fitting logistic regression classifier...")

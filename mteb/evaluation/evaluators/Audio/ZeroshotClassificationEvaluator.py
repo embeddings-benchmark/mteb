@@ -5,6 +5,7 @@ import math
 import os
 from typing import Any
 
+import numpy as np
 import torch
 from sklearn import metrics
 from torch.utils.data import DataLoader
@@ -90,7 +91,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
                 **encode_kwargs,
             )
             audio_embeddings_list.append(batch_embeddings)
-        audio_embeddings = torch.cat(audio_embeddings_list, dim=0).cpu().numpy()
+        audio_embeddings = np.concatenate(audio_embeddings_list, axis=0)
 
         # Calculate similarity scores
         similarity = (

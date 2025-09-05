@@ -7,7 +7,6 @@ from collections import defaultdict
 from typing import Any
 
 import numpy as np
-import torch
 from sklearn.metrics import average_precision_score
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -135,7 +134,7 @@ class AudioPairClassificationEvaluator(Evaluator):
                 **encode_kwargs,
             )
             embeddings_list.append(batch_embeddings)
-        embeddings = torch.cat(embeddings_list, dim=0).cpu().numpy()
+        embeddings = np.concatenate(embeddings_list, axis=0)
 
         emb_dict = {
             tuple(audio.tolist() if isinstance(audio, np.ndarray) else audio): embedding

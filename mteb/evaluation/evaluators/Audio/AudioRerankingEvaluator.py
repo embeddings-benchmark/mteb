@@ -153,7 +153,7 @@ class AudioRerankingEvaluator(Evaluator):
                 **self.encode_kwargs,
             )
             all_query_embs_list.append(batch_embeddings)
-        all_query_embs = np.asarray(torch.cat(all_query_embs_list, dim=0).cpu().numpy())
+        all_query_embs = np.concatenate(all_query_embs_list, axis=0)
 
         all_mrr_scores = []
         all_ap_scores = []
@@ -202,7 +202,7 @@ class AudioRerankingEvaluator(Evaluator):
                 **self.encode_kwargs,
             )
             all_docs_embs_list.append(batch_embeddings)
-        all_docs_embs = np.asarray(torch.cat(all_docs_embs_list, dim=0).cpu().numpy())
+        all_docs_embs = np.concatenate(all_docs_embs_list, axis=0)
 
         # Compute scores
         logger.info("Evaluating...")
@@ -317,7 +317,7 @@ class AudioRerankingEvaluator(Evaluator):
                     **self.encode_kwargs,
                 )
                 query_embs_list.append(batch_embeddings)
-            query_emb = np.asarray(torch.cat(query_embs_list, dim=0).cpu().numpy())
+            query_emb = np.concatenate(query_embs_list, axis=0)
 
             # docs_emb = np.asarray(
             #     model.get_audio_embeddings(
@@ -337,7 +337,7 @@ class AudioRerankingEvaluator(Evaluator):
                     **self.encode_kwargs,
                 )
                 docs_embs_list.append(batch_embeddings)
-            docs_emb = np.asarray(torch.cat(docs_embs_list, dim=0).cpu().numpy())
+            docs_emb = np.concatenate(docs_embs_list, axis=0)
 
             # Calculate similarity scores
             sim_scores = cos_sim(query_emb, docs_emb)

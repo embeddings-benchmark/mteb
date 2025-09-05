@@ -112,11 +112,11 @@ class Wav2ClipZeroShotWrapper:
                 batch_embeddings = self._process_audio_batch(wavs, batch_size)
                 all_embeddings.extend(batch_embeddings)
 
-            return torch.cat(all_embeddings, dim=0)
+            return np.concatenate(all_embeddings, axis=0)
         else:
             wavs = self._handle_batch(audio)
             batch_embeddings = self._process_audio_batch(wavs, batch_size)
-            return torch.cat(batch_embeddings, dim=0)
+            return np.concatenate(batch_embeddings, axis=0)
 
     def _process_audio_batch(
         self, wavs: list[torch.Tensor], batch_size: int
@@ -161,7 +161,7 @@ class Wav2ClipZeroShotWrapper:
 
                 # For batch processing
                 for embed in normalized_embeds:
-                    all_embeddings.append(torch.from_numpy(embed).unsqueeze(0))
+                    all_embeddings.append(embed.reshape(1, -1))
 
             except Exception as e:
                 logger.warning(
@@ -175,7 +175,7 @@ class Wav2ClipZeroShotWrapper:
                     # Normalize
                     norm = np.linalg.norm(embed, axis=-1, keepdims=True)
                     normalized_embed = embed / norm
-                    all_embeddings.append(torch.from_numpy(normalized_embed))
+                    all_embeddings.append(normalized_embed)
                 logger.info(
                     f"🔄 Individual processing completed for {len(batch_wavs)} audio files"
                 )

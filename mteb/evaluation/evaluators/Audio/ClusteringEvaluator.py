@@ -5,9 +5,9 @@ import math
 import os
 from typing import Any
 
+import numpy as np
 import sklearn
 import sklearn.cluster
-import torch
 from datasets import Audio
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
@@ -88,7 +88,7 @@ class AudioClusteringEvaluator(Evaluator):
                 **encode_kwargs,
             )
             audio_embeddings_list.append(batch_embeddings)
-        audio_embeddings = torch.cat(audio_embeddings_list, dim=0).cpu().numpy()
+        audio_embeddings = np.concatenate(audio_embeddings_list, axis=0)
 
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
