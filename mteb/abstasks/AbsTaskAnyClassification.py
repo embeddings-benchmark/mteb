@@ -7,7 +7,6 @@ from typing import Any
 import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import ImageFile
-from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 
 from mteb.models.models_protocols import Encoder
@@ -19,7 +18,10 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators.classification_evaluator import ClassificationEvaluator
+from ..evaluation.evaluators.classification_evaluator import (
+    ClassificationEvaluator,
+    SklearnClassifierProtocol,
+)
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
@@ -66,7 +68,7 @@ class AbsTaskAnyClassification(AbsTask):
     """
 
     evaluator: type[ClassificationEvaluator] = ClassificationEvaluator
-    classifier: BaseEstimator = LogisticRegression(
+    classifier: SklearnClassifierProtocol = LogisticRegression(
         n_jobs=-1,
         max_iter=100,
     )
