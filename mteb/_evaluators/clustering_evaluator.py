@@ -9,9 +9,9 @@ from sklearn import cluster, metrics
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.models.models_protocols import Encoder
 
-from ...create_dataloaders import create_image_dataloader
 from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

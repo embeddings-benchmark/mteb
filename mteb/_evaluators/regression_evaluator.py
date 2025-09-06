@@ -11,10 +11,10 @@ from torch.utils.data import DataLoader
 from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.models.models_protocols import Encoder
+from mteb.types._encoder_io import BatchedInput
 
-from ...create_dataloaders import create_image_dataloader
-from ...types import BatchedInput
 from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

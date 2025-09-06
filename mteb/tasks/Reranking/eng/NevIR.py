@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.retrieval_metrics import paired_accuracy
+from mteb._evaluators.retrieval_metrics import paired_accuracy
+from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 
 
 class NevIR(AbsTaskRetrieval):

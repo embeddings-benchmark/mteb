@@ -10,10 +10,10 @@ import tqdm
 from scipy.stats import pearsonr, spearmanr
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models.models_protocols import Encoder
 from mteb.similarity_functions import cos_sim, dot_score
 
-from ....create_dataloaders import create_dataloader_from_texts
 from ..evaluator import Evaluator
 
 # if later than python 3.13 use typing module

@@ -10,15 +10,15 @@ import pandas as pd
 from datasets import DatasetDict
 from sklearn.linear_model import LinearRegression
 
+from mteb._evaluators.regression_evaluator import (
+    LinearRegressionEvaluator,
+    SklearnRegressorModel,
+)
 from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.evaluation.evaluators.regression_evaluator import (
-    LinearRegressionEvaluator,
-    SklearnRegressorModel,
-)
 from mteb.load_results.task_results import ScoresDict
 from mteb.models.models_protocols import MTEBModels
 from mteb.types import HFSubset
