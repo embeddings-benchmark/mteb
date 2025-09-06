@@ -161,7 +161,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
 
     def _undersample_data_indices(
         self, y: list[list[int]], samples_per_label: int, idxs: list[int] | None = None
-    ):
+    ) -> tuple[list[int], list[int]]:
         """Undersample data to have samples_per_label samples of each label"""
         sample_indices = []
         if idxs is None:
