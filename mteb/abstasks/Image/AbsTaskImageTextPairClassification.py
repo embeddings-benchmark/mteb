@@ -5,11 +5,11 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb._evaluators import ImageTextPairClassificationEvaluator
+from mteb.models.models_protocols import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
-from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
-from ...models.models_protocols import Encoder
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

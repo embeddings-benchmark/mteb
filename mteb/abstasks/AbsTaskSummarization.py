@@ -6,11 +6,11 @@ from typing import Any
 import numpy as np
 from datasets import Dataset
 
-from mteb.models.models_protocols import Encoder
+from mteb._evaluators import SummarizationEvaluator
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
-from ..evaluation.evaluators import SummarizationEvaluator
 from ._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,

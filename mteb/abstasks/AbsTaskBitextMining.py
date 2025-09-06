@@ -5,11 +5,11 @@ from typing import Any
 
 from datasets import Dataset, DatasetDict
 
-from mteb.models.models_protocols import Encoder
+from mteb._evaluators import BitextMiningEvaluator
+from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, TextStatistics
 
-from ..evaluation.evaluators import BitextMiningEvaluator
 from ._statistics_calculation import calculate_text_statistics
 from .AbsTask import AbsTask
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -11,6 +12,11 @@ from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
 from mteb.types import ModelName, Revision
+
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +42,10 @@ def _model_name_and_revision(
     return model_name, revision
 
 
+@deprecated(
+    "`load_results` is deprecated and will be removed in future versions. "
+    + "Please use the `ResultCache`'s `.load_results` method instead."
+)
 def load_results(
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,

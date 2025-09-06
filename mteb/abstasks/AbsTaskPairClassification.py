@@ -5,10 +5,10 @@ from collections import defaultdict
 
 from datasets import Dataset
 
+from mteb._evaluators import PairClassificationEvaluator
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
-from ..evaluation.evaluators import PairClassificationEvaluator
 from ..models.models_protocols import Encoder
 from ._statistics_calculation import (
     calculate_label_statistics,

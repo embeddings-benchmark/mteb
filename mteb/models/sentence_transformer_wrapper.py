@@ -7,8 +7,9 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
 
-from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
+
+from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata

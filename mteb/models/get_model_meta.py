@@ -9,14 +9,14 @@ from huggingface_hub import ModelCard
 from huggingface_hub.errors import RepositoryNotFoundError
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.models.model_implementations import MODEL_REGISTRY
-from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import MTEBModels
-from mteb.models.sentence_transformer_wrapper import (
+from mteb.abstasks import AbsTask
+from mteb.models import (
     CrossEncoderWrapper,
+    ModelMeta,
+    MTEBModels,
     sentence_transformers_loader,
 )
+from mteb.models.model_implementations import MODEL_REGISTRY
 
 logger = logging.getLogger(__name__)
 

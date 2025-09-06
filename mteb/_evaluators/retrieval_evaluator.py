@@ -4,7 +4,7 @@ import logging
 from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import SearchProtocol
+from mteb.models import SearchProtocol
 from mteb.types import (
     CorpusDatasetType,
     QueryDatasetType,

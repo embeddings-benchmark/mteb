@@ -5,14 +5,13 @@ watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
   name: material
-  favicon: images/logos/mteb_logo/mteb_logo_transparent.png # TODO: probably not very good logo
-  logo: images/logos/mteb_logo/mteb_logo_transparent.png
+  favicon: images/logos/mteb_logo/dots-icon.png 
+  logo: images/logos/mteb_logo/dots-icon.png 
   features:
     - navigation.tracking
     - navigation.instant
     - navigation.tabs
     - navigation.sections
-    - toc.integrate
     - navigation.top
     - search.suggest
     - search.highlight
@@ -31,6 +30,8 @@ theme:
     accent: light blue
 
 markdown_extensions:
+  - admonition
+  - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
@@ -41,15 +42,22 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - tables
-  - pymdownx.details
 
-copyright: Copyright &copy; 2024 The Embedding Benchmark Team
+copyright: This text is freely available under a Creative Commons Attribution 4.0 license
 
 nav:
-  # - Home:
-  #     - Overview: index.md
-      # - Getting Started: getting_started.md # TODO: Move usage documentation to docs (Keeping a minimal example in readme.md)
-      # - Command Line Interface: cli.md # TODO: Add CLI documentation
+  - Get Started:
+      - Overview: index.md
+      - whats_new.md
+      - Installation: installation.md
+      - Usage:
+        - Get Started: usage/get_started.md
+        - Defining the Model: usage/defining_the_model.md
+        - Selecting Tasks: usage/selecting_tasks.md
+        - Running the Evaluation: usage/running_the_evaluation.md
+        - Loading Results: usage/loading_results.md
+        - Command Line Interface: usage/cli.md
+        - Running the Leaderboard: usage/leaderboard.md
   # - Overview: # <-- TODO: find a better word
   #     - Benchmarks: benchmarks.md
   #     - Tasks: tasks.md
@@ -60,7 +68,7 @@ nav:
   #     - Adding a Task: adding_a_dataset.md
   #     - Development Setup: CONTRIBUTING.md
   - API:
-      - Overview: index.md
+      - Overview: api/index.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md

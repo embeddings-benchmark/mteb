@@ -5,7 +5,9 @@ import logging
 import warnings
 
 import mteb.benchmarks.benchmarks as benchmark_module
-from mteb.benchmarks.benchmarks import (
+
+from .benchmark import Benchmark
+from .benchmarks import (
     BRIGHT_LONG,
     C_MTEB,
     FA_MTEB,
@@ -26,8 +28,6 @@ from mteb.benchmarks.benchmarks import (
     MTEB_code,
     MTEB_multilingual_v2,
 )
-
-from .benchmark import Benchmark
 
 logger = logging.getLogger(__name__)
 

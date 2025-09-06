@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from mteb.evaluation import SummarizationEvaluator
+from mteb._evaluators import SummarizationEvaluator
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockSummarizationTask
 

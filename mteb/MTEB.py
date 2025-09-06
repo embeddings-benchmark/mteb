@@ -27,12 +27,13 @@ import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.load_results.task_results import TaskResult
-from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder, MTEBModels
-from mteb.models.sentence_transformer_wrapper import (
+from mteb.models import (
     CrossEncoderWrapper,
+    Encoder,
+    ModelMeta,
+    MTEBModels,
     SentenceTransformerEncoderWrapper,
 )
 

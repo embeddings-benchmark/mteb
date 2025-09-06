@@ -16,7 +16,7 @@ import mteb.overview
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.cli.generate_readme import generate_readme
-from mteb.evaluation.MTEB import logger
+from mteb.MTEB import logger
 from mteb.types import Array, BatchedInput, PromptType
 
 from .mock_models import (

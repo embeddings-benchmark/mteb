@@ -6,15 +6,6 @@ from typing import Any
 
 from pydantic import ConfigDict, model_validator
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.task_metadata import (
-    AnnotatorType,
-    SampleCreationMethod,
-    TaskDomain,
-    TaskMetadata,
-    TaskSubtype,
-    TaskType,
-)
 from mteb.types import (
     HFSubset,
     ISOLanguageScript,
@@ -22,6 +13,16 @@ from mteb.types import (
     Licenses,
     Modalities,
     StrDate,
+)
+
+from .AbsTask import AbsTask
+from .task_metadata import (
+    AnnotatorType,
+    SampleCreationMethod,
+    TaskDomain,
+    TaskMetadata,
+    TaskSubtype,
+    TaskType,
 )
 
 logger = logging.getLogger(__name__)

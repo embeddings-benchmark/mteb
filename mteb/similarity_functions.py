@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import torch
 
-import mteb
+from mteb.models import Encoder
 from mteb.types import Array
 
 
@@ -23,7 +23,7 @@ def convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
 
 
 def compute_pairwise_similarity(
-    model: mteb.Encoder, embedding1: Array, embedding2: Array
+    model: Encoder, embedding1: Array, embedding2: Array
 ) -> Array:
     """Computes pairwise similarity. It first attempts to use the model.simarity_pairwise method if it exists
     otherwise it uses the model.similarity method

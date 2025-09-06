@@ -14,10 +14,11 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.languages import check_language_code
-from mteb.models.models_protocols import Encoder, MTEBModels
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
+
+from .models_protocols import Encoder, MTEBModels
 
 logger = logging.getLogger(__name__)
 

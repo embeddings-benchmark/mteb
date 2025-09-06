@@ -13,11 +13,11 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_dataloader_from_texts
+from mteb.models import Encoder
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import Encoder
+from mteb.similarity_functions import compute_pairwise_similarity
 
-from ....create_dataloaders import create_dataloader_from_texts
-from ....similarity_functions import compute_pairwise_similarity
 from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

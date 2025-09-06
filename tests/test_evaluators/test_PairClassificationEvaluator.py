@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from mteb.evaluation.evaluators import PairClassificationEvaluator
+from mteb._evaluators import PairClassificationEvaluator
 
 TOL = 0.0001
 

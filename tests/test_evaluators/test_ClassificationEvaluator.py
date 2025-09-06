@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from mteb.evaluation import ClassificationEvaluator
+from mteb._evaluators import ClassificationEvaluator
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockClassificationTask
 
