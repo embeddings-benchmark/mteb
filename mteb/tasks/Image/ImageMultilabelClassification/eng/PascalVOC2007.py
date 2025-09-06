@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
-    AbsTaskImageMultilabelClassification,
-)
+from sklearn.linear_model import LogisticRegression
+from sklearn.multioutput import MultiOutputClassifier
+
+from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
 # NOTE: In the paper, this is grouped with linear probe tasks.
 # See https://github.com/embeddings-benchmark/mteb/pull/2035#issuecomment-2661626309.
-class VOC2007Classification(AbsTaskImageMultilabelClassification):
+class VOC2007Classification(AbsTaskMultilabelClassification):
+    # class VOC2007Classification(AbsTaskImageMultilabelClassification):
     metadata = TaskMetadata(
         name="VOC2007",
         description="Classifying bird images from 500 species.",
@@ -54,3 +56,5 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
 
     # To be removed when we want full results
     n_experiments: int = 5
+    values_column_name: str = "image"
+    classifier = MultiOutputClassifier(estimator=LogisticRegression())

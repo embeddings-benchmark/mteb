@@ -7,15 +7,17 @@ from typing import Any
 
 import numpy as np
 from datasets import Dataset, DatasetDict
-from sklearn.base import ClassifierMixin, clone
+from sklearn.base import clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
+from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
-from torch.utils.data import DataLoader
 
 from mteb.models.models_protocols import Encoder
 from mteb.types import ScoresDict
 
+from ..create_dataloaders import create_dataloader
+from ..evaluation.evaluators.classification_evaluator import SklearnClassifierProtocol
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
@@ -26,14 +28,18 @@ def evaluate_classifier(
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
     y_test: np.ndarray,
-    classifier: ClassifierMixin,
+    classifier: SklearnClassifierProtocol,
 ) -> dict[str, float]:
-    classifier = clone(classifier)
+    classifier: SklearnClassifierProtocol = clone(classifier)
     classifier.fit(embeddings_train, y_train)
     y_pred = classifier.predict(embeddings_test)
     accuracy = classifier.score(embeddings_test, y_test)
+    if isinstance(classifier, MultiOutputClassifier):
+        probs = classifier.predict_proba(embeddings_test)
+        lrap = label_ranking_average_precision_score(y_test, probs)
+    else:
+        lrap = label_ranking_average_precision_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred, average="macro")
-    lrap = label_ranking_average_precision_score(y_test, y_pred)
     return {
         "accuracy": accuracy,
         "f1": f1,
@@ -54,7 +60,9 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
 
     """
 
-    evaluator = KNeighborsClassifier(n_neighbors=5)
+    evaluator: SklearnClassifierProtocol = KNeighborsClassifier(n_neighbors=5)
+    values_column_name: str = "text"
+    label_column_name: str = "label"
 
     def _evaluate_subset(
         self,
@@ -74,15 +82,23 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         train_samples = []
         for _ in range(self.n_experiments):
             sample_indices, _ = self._undersample_data_indices(
-                train_split["label"], self.samples_per_label, None
+                train_split[self.label_column_name], self.samples_per_label, None
             )
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
-        unique_train_dataset = train_split.select(unique_train_indices)
+        unique_train_dataset = train_split.select(unique_train_indices).select_columns(
+            [self.values_column_name]
+        )
+        dataloader_train = create_dataloader(
+            unique_train_dataset,
+            self.metadata,
+            input_column=self.values_column_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
 
         _unique_train_embeddings = model.encode(
-            DataLoader(unique_train_dataset),
+            dataloader_train,
             task_metadata=self.metadata,
             hf_split=self.train_split,
             hf_subset=hf_subset,
@@ -102,15 +118,22 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
+        dataloader_test = create_dataloader(
+            test_dataset.select_columns([self.values_column_name]),
+            self.metadata,
+            input_column=self.values_column_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
+
         X_test = model.encode(
-            DataLoader(test_dataset),
+            dataloader_test,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **encode_kwargs,
         )
         binarizer = MultiLabelBinarizer()
-        y_test = binarizer.fit_transform(test_dataset["label"])
+        y_test = binarizer.fit_transform(test_dataset[self.label_column_name])
 
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
@@ -119,7 +142,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
                 + "=" * 10
             )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
-            y_train = train_split.select(sample_indices)["label"]
+            y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
             scores_exp = evaluate_classifier(
                 X_train, y_train, X_test, y_test, self.evaluator
@@ -133,7 +156,9 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
 
         return avg_scores
 
-    def _undersample_data_indices(self, y, samples_per_label, idxs=None):
+    def _undersample_data_indices(
+        self, y: list[list[int]], samples_per_label: int, idxs: list[int] | None = None
+    ):
         """Undersample data to have samples_per_label samples of each label"""
         sample_indices = []
         if idxs is None:

@@ -223,12 +223,6 @@ class AbsTaskImageMultilabelClassification(AbsTask):
     ) -> ScoresDict:
         train_split = dataset[train_split]
         eval_split = dataset[hf_split]
-        params = {
-            "classifier_type": type(self.classifier).__name__,
-            "classifier_params": self.classifier.get_params(),
-            "batch_size": self.batch_size,
-        }
-        params.update(kwargs)
 
         scores = []
         # Bootstrap sample indices from training set for each experiment
@@ -242,7 +236,9 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
 
         dataloader_train = create_image_dataloader(
-            train_split.select(unique_train_indices),
+            train_split.select(unique_train_indices).select_columns(
+                [self.label_column_name]
+            ),
             image_column_name=self.image_column_name,
             batch_size=encode_kwargs["batch_size"],
         )
@@ -268,7 +264,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
         dataloader_test = create_image_dataloader(
-            test_images,
+            test_images.select_columns([self.label_column_name]),
             image_column_name=self.image_column_name,
             batch_size=encode_kwargs["batch_size"],
         )
