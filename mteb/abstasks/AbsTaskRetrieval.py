@@ -24,6 +24,7 @@ from mteb.types import (
 )
 from mteb.types.statistics import (
     DescriptiveStatistics,
+    ImageStatistics,
     RelevantDocsStatistics,
     TextStatistics,
     TopRankedStatistics,
@@ -38,6 +39,7 @@ from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from ..models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from ._statistics_calculation import (
+    calculate_image_statistics,
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
     calculate_top_ranked_statistics,
@@ -59,8 +61,10 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
         num_samples: Number of queries and documents
         number_of_characters: Total number of characters in queries and documents
 
-        documents_statistics: Statistics for documents
-        queries_statistics: Statistics for queries
+        documents_text_statistics: Statistics for documents
+        documents_image_statistics: Statistics for documents
+        queries_text_statistics: Statistics for queries
+        queries_image_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
@@ -68,8 +72,10 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     num_samples: int
     number_of_characters: int
 
-    documents_statistics: TextStatistics
-    queries_statistics: TextStatistics
+    documents_text_statistics: TextStatistics | None
+    documents_image_statistics: ImageStatistics | None
+    queries_text_statistics: TextStatistics | None
+    queries_image_statistics: ImageStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
 
@@ -133,6 +139,7 @@ class AbsTaskRetrieval(AbsTask):
     support_cross_encoder: bool = True
     support_search: bool = True
     previous_results_model_meta: dict[str, Any] | None = None
+    skip_first_result: bool = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -203,19 +210,31 @@ class AbsTaskRetrieval(AbsTask):
             for split in self.queries:
                 queries = self.queries[split]
                 corpus = self.corpus[split]
-                self.dataset[subset][split]["queries"] = Dataset.from_list(
-                    [{"id": k, "text": v} for k, v in queries.items()]
-                )
-                self.dataset[subset][split]["corpus"] = Dataset.from_list(
-                    [
-                        {
-                            "id": k,
-                            "text": v["text"],
-                            "title": v.get("title", ""),
-                        }
-                        for k, v in corpus.items()
-                    ]
-                )
+                if isinstance(queries, dict):
+                    self.dataset[subset][split]["queries"] = Dataset.from_list(
+                        [{"id": k, "text": v} for k, v in queries.items()]
+                    )
+                elif isinstance(queries, Dataset):
+                    self.dataset[subset][split]["queries"] = queries
+                else:
+                    raise ValueError(f"Can't convert queries of type {type(queries)}")
+
+                if isinstance(corpus, dict):
+                    self.dataset[subset][split]["corpus"] = Dataset.from_list(
+                        [
+                            {
+                                "id": k,
+                                "text": v["text"],
+                                "title": v.get("title", ""),
+                            }
+                            for k, v in corpus.items()
+                        ]
+                    )
+                elif isinstance(corpus, Dataset):
+                    self.dataset[subset][split]["corpus"] = corpus
+                else:
+                    raise ValueError(f"Can't convert corpus of type {type(corpus)}")
+
                 self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
                 ].copy()
@@ -390,11 +409,13 @@ class AbsTaskRetrieval(AbsTask):
             naucs,
             mrr,
             naucs_mrr,
+            cv_recall,
         ) = retriever.evaluate(
             data_split["relevant_docs"],
             results,
             self.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
+            skip_first_result=self.skip_first_result,
         )
         task_specific_scores = self.task_specific_scores(
             all_scores,
@@ -412,6 +433,7 @@ class AbsTaskRetrieval(AbsTask):
             mrr,
             naucs,
             naucs_mrr,
+            cv_recall,
             task_specific_scores,
             self.previous_results_model_meta,
         )
@@ -474,10 +496,38 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
 
-        corpus = corpus.map(corpus_to_dict)["text"]
-        queries_texts = [q for q in queries["text"] if isinstance(q, str)]
         num_documents = len(corpus)
-        num_queries = len(queries_texts)
+        num_queries = len(queries)
+
+        queries_modalities, corpus_modalities = self.metadata.category.split("2")
+        number_of_characters = 0
+
+        documents_text_statistics = None
+        documents_image_statistics = None
+        queries_text_statistics = None
+        queries_image_statistics = None
+
+        if "t" in corpus_modalities:
+            corpus_texts = corpus.map(corpus_to_dict)["text"]
+            documents_text_statistics = calculate_text_statistics(corpus_texts)
+            number_of_characters += documents_text_statistics["total_text_length"]
+
+        if "i" in corpus_modalities:
+            documents_image_statistics = calculate_image_statistics(corpus["image"])
+
+        if "t" in queries_modalities:
+            queries_ = queries
+            if "instruction" in queries_[0]:
+                queries_ = queries_.map(combine_queries_with_instruction_text)
+
+            if isinstance(queries_["text"][0], (dict, list)):
+                queries_ = queries_.map(convert_conv_history_to_query)
+            queries_text_statistics = calculate_text_statistics(queries_["text"])
+
+            number_of_characters += queries_text_statistics["total_text_length"]
+
+        if "i" in queries_modalities:
+            queries_image_statistics = calculate_image_statistics(queries["image"])
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
 
@@ -488,23 +538,13 @@ class AbsTaskRetrieval(AbsTask):
         else:
             top_ranked_statistics = None
 
-        corpus_statistics = calculate_text_statistics(corpus)
-        if isinstance(queries["text"][0], (dict, list)):
-            queries = queries.map(convert_conv_history_to_query)
-        if "instruction" in queries[0]:
-            queries = queries.map(combine_queries_with_instruction_text)
-        queries_statistics = calculate_text_statistics(queries["text"])
-
-        number_of_characters = (
-            corpus_statistics["total_text_length"]
-            + queries_statistics["total_text_length"]
-        )
-
         return RetrievalDescriptiveStatistics(
             num_samples=num_documents + num_queries,
             number_of_characters=number_of_characters,
-            documents_statistics=corpus_statistics,
-            queries_statistics=queries_statistics,
+            documents_text_statistics=documents_text_statistics,
+            documents_image_statistics=documents_image_statistics,
+            queries_text_statistics=queries_text_statistics,
+            queries_image_statistics=queries_image_statistics,
             relevant_docs_statistics=relevant_docs_statistics,
             top_ranked_statistics=top_ranked_statistics,
         )
