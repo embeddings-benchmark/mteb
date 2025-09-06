@@ -18,11 +18,12 @@ from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.task_results import ScoresDict
-from mteb.models.models_protocols import MTEBModels
+from mteb.models import MTEBModels
 from mteb.types import HFSubset
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
+
+from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

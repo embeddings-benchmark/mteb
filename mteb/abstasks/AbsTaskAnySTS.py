@@ -6,7 +6,7 @@ from typing import Any
 from datasets import Dataset
 
 from mteb._evaluators import AnySTSEvaluator
-from mteb.models.models_protocols import Encoder
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,

@@ -7,7 +7,7 @@ import numpy as np
 from datasets import Dataset
 
 from mteb._evaluators import SummarizationEvaluator
-from mteb.models.models_protocols import Encoder
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 

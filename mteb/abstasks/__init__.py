@@ -9,6 +9,7 @@ from .AbsTaskBitextMining import AbsTaskBitextMining
 from .AbsTaskClusteringFast import AbsTaskClusteringFast
 from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from .AbsTaskPairClassification import AbsTaskPairClassification
+from .AbsTaskReranking import AbsTaskReranking
 from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSummarization import AbsTaskSummarization
 from .AbsTaskTextRegression import AbsTaskTextRegression
@@ -18,7 +19,6 @@ from .Image import (
     AbsTaskImageMultilabelClassification,
     AbsTaskImageTextPairClassification,
 )
-from .task_metadata import TaskMetadata
 
 __all__ = [
     "AbsTask",
@@ -29,6 +29,7 @@ __all__ = [
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
     "AbsTaskRetrieval",
+    "AbsTaskReranking",
     "AbsTaskAnySTS",
     "AbsTaskSummarization",
     "AbsTaskAny2AnyMultiChoice",
@@ -37,5 +38,4 @@ __all__ = [
     "AbsTaskImageTextPairClassification",
     "AbsTaskAnyZeroShotClassification",
     "AbsTaskTextRegression",
-    "TaskMetadata",
 ]

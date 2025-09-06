@@ -12,8 +12,8 @@ from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
-from mteb.models.models_protocols import Encoder
-from mteb.types._encoder_io import BatchedInput
+from mteb.models import Encoder
+from mteb.types import BatchedInput
 
 from .evaluator import Evaluator
 

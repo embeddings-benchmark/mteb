@@ -6,7 +6,8 @@ from collections import defaultdict
 import tqdm
 
 from mteb._evaluators.retrieval_metrics import max_over_subqueries
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

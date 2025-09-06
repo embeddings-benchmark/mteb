@@ -10,10 +10,10 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import cast
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
-from mteb.models.model_meta import ModelMeta
+from mteb.models import ModelMeta
 from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)

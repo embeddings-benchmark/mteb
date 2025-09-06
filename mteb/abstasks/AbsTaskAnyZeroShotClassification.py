@@ -14,7 +14,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..models.models_protocols import Encoder
+from ..models import Encoder
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,

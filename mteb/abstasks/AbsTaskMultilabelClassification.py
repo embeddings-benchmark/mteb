@@ -13,7 +13,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from torch.utils.data import DataLoader
 
-from mteb.models.models_protocols import Encoder
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
