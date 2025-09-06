@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -70,7 +70,7 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreArxivQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreArxivQARetrieval",
         description="Retrieve associated pages according to questions.",
@@ -114,7 +114,7 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreDocVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreDocVQARetrieval",
         description="Retrieve associated pages according to questions.",
@@ -158,7 +158,7 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreInfoVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreInfoVQARetrieval",
         description="Retrieve associated pages according to questions.",
@@ -202,7 +202,7 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreTabfquadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreTabfquadRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -246,7 +246,7 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreTatdqaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreTatdqaRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -290,7 +290,7 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreShiftProjectRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreShiftProjectRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -334,7 +334,7 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAAIRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAAIRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -378,7 +378,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAEnergyRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -422,7 +422,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAGovernmentReportsRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -466,7 +466,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         description="Retrieve associated pages according to questions.",

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
+class StanfordCarsI2I(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StanfordCarsI2IRetrieval",
         description="Retrieve car images from 196 makes.",

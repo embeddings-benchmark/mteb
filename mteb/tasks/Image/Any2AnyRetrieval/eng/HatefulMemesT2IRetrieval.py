@@ -3,7 +3,7 @@ from __future__ import annotations
 import polars as pl
 from datasets import concatenate_datasets, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -63,7 +63,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
     return corpus, queries, relevant_docs
 
 
-class HatefulMemesT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class HatefulMemesT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HatefulMemesT2IRetrieval",
         description="Retrieve captions based on memes to assess OCR abilities.",

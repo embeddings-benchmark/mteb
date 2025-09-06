@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from collections import defaultdict
+
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
+class BLINKIT2TMultiChoice(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2TMultiChoice",
         description="Retrieve the correct text answer based on images and specific retrieval instructions.",
@@ -35,3 +37,12 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
     )
+
+    def dataset_transform(self, **kwargs):
+        for subset, split_data in self.dataset.items():
+            for split, dataset in split_data.items():
+                top_ranked = defaultdict(list)
+                for query_id, relevant in dataset["relevant_docs"].items():
+                    for corpus_id, score in relevant.items():
+                        top_ranked[query_id].append(corpus_id)
+                dataset["top_ranked"] = top_ranked

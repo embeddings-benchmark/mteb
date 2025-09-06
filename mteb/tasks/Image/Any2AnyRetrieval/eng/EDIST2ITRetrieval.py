@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EDIST2ITRetrieval(AbsTaskAny2AnyRetrieval):
+class EDIST2ITRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="EDIST2ITRetrieval",
         description="Retrieve news images and titles based on news content.",

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
+class OVENIT2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="OVENIT2TRetrieval",
         description="Retrieval a Wiki passage to answer query about an image.",

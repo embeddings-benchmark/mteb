@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GLDv2I2IRetrieval(AbsTaskAny2AnyRetrieval):
+class GLDv2I2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GLDv2I2IRetrieval",
         description="Retrieve names of landmarks based on their image.",

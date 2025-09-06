@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from mteb.abstasks import AbsTask, AbsTaskAny2AnyRetrieval
+from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.overview import get_tasks
@@ -539,7 +539,7 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
         return
 
-    if "image" in task.metadata.modalities or isinstance(task, AbsTaskAny2AnyRetrieval):
+    if "image" in task.metadata.modalities:
         return
 
     # TODO add descriptive_stat for CodeRAGStackoverflowPosts. Required > 128GB of RAM

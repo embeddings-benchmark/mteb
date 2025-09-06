@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -98,7 +98,7 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore2ESGReportsRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -146,7 +146,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore2EconomicsReportsRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -194,7 +194,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore2BioMedicalLecturesRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -242,7 +242,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore2ESGReportsHLRetrieval",
         description="Retrieve associated pages according to questions.",

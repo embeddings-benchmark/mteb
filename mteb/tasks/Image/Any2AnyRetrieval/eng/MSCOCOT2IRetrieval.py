@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MSCOCOT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class MSCOCOT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSCOCOT2IRetrieval",
         description="Retrieve images based on captions.",
@@ -12,7 +12,6 @@ class MSCOCOT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "MRBench/mbeir_mscoco_task0",
             "revision": "cfe15bd2791dde5f8f20aebecf0b4eb3812972d6",
-            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2i",

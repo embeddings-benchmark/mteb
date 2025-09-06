@@ -9,8 +9,7 @@ from datasets import Dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
-    create_dataloader_for_retrieval_corpus,
-    create_text_queries_dataloader,
+    create_dataloader,
 )
 from mteb.types import (
     Array,
@@ -85,8 +84,11 @@ class SearchEncoderWrapper:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
-        queries_dataloader = create_text_queries_dataloader(
-            queries, batch_size=encode_kwargs.get("batch_size", 32)
+        queries_dataloader = create_dataloader(
+            queries,
+            task_metadata,
+            prompt_type=PromptType.query,
+            batch_size=encode_kwargs.get("batch_size", 32),
         )
 
         query_embeddings = self.model.encode(
@@ -155,9 +157,13 @@ class SearchEncoderWrapper:
             sub_corpus = self.task_corpus.select(
                 range(corpus_start_idx, corpus_end_idx)
             )
+            sub_corpus_ids = sub_corpus["id"]
             sub_corpus_embeddings = self.model.encode(
-                create_dataloader_for_retrieval_corpus(
-                    sub_corpus, batch_size=encode_kwargs.get("batch_size", 32)
+                create_dataloader(
+                    sub_corpus,
+                    task_metadata,
+                    prompt_type=PromptType.document,
+                    batch_size=encode_kwargs.get("batch_size", 32),
                 ),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
@@ -167,7 +173,7 @@ class SearchEncoderWrapper:
             )
 
             # Compute similarities using either cosine-similarity or dot product
-            logging.info("Computing Similarities...")
+            logger.info("Computing Similarities...")
             scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
@@ -180,14 +186,16 @@ class SearchEncoderWrapper:
                 dim=1,
                 largest=True,
             )
+            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
 
             for query_itr in range(len(query_embeddings)):
                 query_id = query_idx_to_id[query_itr]
                 for sub_corpus_id, score in zip(
-                    cos_scores_top_k_idx[query_itr].cpu().tolist(),
-                    cos_scores_top_k_values[query_itr].cpu().tolist(),
+                    cos_scores_top_k_idx[query_itr],
+                    cos_scores_top_k_values[query_itr],
                 ):
-                    corpus_id = sub_corpus[sub_corpus_id]["id"]
+                    corpus_id = sub_corpus_ids[sub_corpus_id]
                     if len(result_heaps[query_id]) < top_k:
                         # push item on the heap
                         heapq.heappush(result_heaps[query_id], (score, corpus_id))
@@ -212,8 +220,11 @@ class SearchEncoderWrapper:
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
         all_doc_embeddings = self.model.encode(
-            create_dataloader_for_retrieval_corpus(
-                self.task_corpus, batch_size=encode_kwargs.get("batch_size", 32)
+            create_dataloader(
+                self.task_corpus,
+                task_metadata,
+                prompt_type=PromptType.document,
+                batch_size=encode_kwargs.get("batch_size", 32),
             ),
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -323,12 +334,16 @@ class SearchCrossEncoderWrapper:
                 total_queries.append(queries[query_idx])
                 total_docs.append(self.task_corpus[doc_id_to_idx[corpus_id]])
 
-        queries_loader = create_text_queries_dataloader(
+        queries_loader = create_dataloader(
             Dataset.from_list(total_queries),
+            task_metadata,
+            prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
         )
-        corpus_loader = create_text_queries_dataloader(
+        corpus_loader = create_dataloader(
             Dataset.from_list(total_docs),
+            task_metadata,
+            prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
         )
         predictions = self.model.predict(

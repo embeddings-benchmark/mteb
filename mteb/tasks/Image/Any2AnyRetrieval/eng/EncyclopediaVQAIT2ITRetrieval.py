@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EncyclopediaVQAIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
+class EncyclopediaVQAIT2ITRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="EncyclopediaVQAIT2ITRetrieval",
         description="Retrieval Wiki passage and image and passage to answer query about an image.",

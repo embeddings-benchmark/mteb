@@ -10,8 +10,6 @@ from tests.test_benchmark.task_grid import ALL_TASK_TEST_GRID
     ALL_TASK_TEST_GRID,
 )
 def test_descriptive_stats(task):
-    if task.metadata.name == "MockMultilingualMultiChoice":
-        pytest.skip("Task computed stats are not implemented correctly yet")
     result_stat = task.calculate_metadata_metrics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()

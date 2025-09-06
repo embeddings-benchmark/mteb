@@ -4,9 +4,7 @@ from .any_sts_evaluator import AnySTSEvaluator
 from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .evaluator import Evaluator
-from .image import (
-    Any2AnyMultiChoiceEvaluator,
-    Any2AnyRetrievalEvaluator,
+from .image.imagetext_pairclassification_evaluator import (
     ImageTextPairClassificationEvaluator,
 )
 from .regression_evaluator import LinearRegressionEvaluator
@@ -28,8 +26,6 @@ __all__ = [
     "ClusteringEvaluator",
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",
-    "Any2AnyMultiChoiceEvaluator",
-    "Any2AnyRetrievalEvaluator",
     "ImageTextPairClassificationEvaluator",
     "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Fashion200kT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class Fashion200kT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Fashion200kT2IRetrieval",
         description="Retrieve clothes based on descriptions.",
@@ -12,7 +12,6 @@ class Fashion200kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "MRBench/mbeir_fashion200k_task0",
             "revision": "1b86e2dde50e671d5c83d07a79e8b1d8c696964b",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2i",

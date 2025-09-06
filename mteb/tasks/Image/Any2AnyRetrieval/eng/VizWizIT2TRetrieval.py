@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
+class VizWizIT2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VizWizIT2TRetrieval",
         description="Retrieve the correct answer for a question about an image.",
@@ -12,7 +12,6 @@ class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "JamieSJS/vizwiz",
             "revision": "044af162d55f82ab603fa16ffcf7f1e4dbf300e9",
-            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="it2t",

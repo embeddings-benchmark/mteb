@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RP2kI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class RP2kI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RP2kI2IRetrieval",
         description="Retrieve photos of 39457 products.",

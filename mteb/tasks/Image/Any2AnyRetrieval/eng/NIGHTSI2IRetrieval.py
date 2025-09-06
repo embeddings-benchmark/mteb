@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NIGHTSI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class NIGHTSI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NIGHTSI2IRetrieval",
         description="Retrieval identical image to the given image.",

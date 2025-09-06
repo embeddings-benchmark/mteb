@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WebQAT2ITRetrieval(AbsTaskAny2AnyRetrieval):
+class WebQAT2ITRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WebQAT2ITRetrieval",
         description="Retrieve sources of information based on questions.",

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class SOPI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SOPI2IRetrieval",
         description="Retrieve product photos of 22634 online products.",
