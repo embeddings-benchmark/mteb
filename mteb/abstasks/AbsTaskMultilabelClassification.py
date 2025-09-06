@@ -91,7 +91,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_dataset = train_split.select(unique_train_indices).select_columns(
-            [self.input_column_name]
+            self.input_column_name
         )
         dataloader_train = create_dataloader(
             unique_train_dataset,
@@ -122,7 +122,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         dataloader_test = create_dataloader(
-            test_dataset.select_columns([self.input_column_name]),
+            test_dataset.select_columns(self.input_column_name),
             self.metadata,
             input_column=self.input_column_name,
             batch_size=encode_kwargs["batch_size"],
