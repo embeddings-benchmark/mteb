@@ -35,8 +35,11 @@ def evaluate_classifier(
     y_pred = classifier.predict(embeddings_test)
     accuracy = classifier.score(embeddings_test, y_test)
     if isinstance(classifier, MultiOutputClassifier):
-        probs = classifier.predict_proba(embeddings_test)
-        lrap = label_ranking_average_precision_score(y_test, probs)
+        predictions = classifier.predict_proba(embeddings_test)
+        all_probs = [emb[:, 1] for emb in predictions]
+
+        y_score = np.stack(all_probs, axis=1)  # shape: (n_samples, n_labels)
+        lrap = label_ranking_average_precision_score(y_test, y_score)
     else:
         lrap = label_ranking_average_precision_score(y_test, y_pred)
     f1 = f1_score(y_test, y_pred, average="macro")
@@ -61,7 +64,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     """
 
     evaluator: SklearnClassifierProtocol = KNeighborsClassifier(n_neighbors=5)
-    values_column_name: str = "text"
+    input_column_name: str = "text"
     label_column_name: str = "label"
 
     def _evaluate_subset(
@@ -88,12 +91,12 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_dataset = train_split.select(unique_train_indices).select_columns(
-            [self.values_column_name]
+            [self.input_column_name]
         )
         dataloader_train = create_dataloader(
             unique_train_dataset,
             self.metadata,
-            input_column=self.values_column_name,
+            input_column=self.input_column_name,
             batch_size=encode_kwargs["batch_size"],
         )
 
@@ -119,9 +122,9 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         dataloader_test = create_dataloader(
-            test_dataset.select_columns([self.values_column_name]),
+            test_dataset.select_columns([self.input_column_name]),
             self.metadata,
-            input_column=self.values_column_name,
+            input_column=self.input_column_name,
             batch_size=encode_kwargs["batch_size"],
         )
 
