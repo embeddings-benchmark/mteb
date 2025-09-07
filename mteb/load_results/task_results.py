@@ -736,9 +736,8 @@ class TaskResult(BaseModel):
                 missing_splits[splits] = task.hf_subsets
             if splits in self.scores:
                 hf_subsets = {score["hf_subset"] for score in self.scores[splits]}
-
-                missing_splits[splits] = [
-                    subset for subset in task.hf_subsets if subset not in hf_subsets
-                ]
+                missing_subsets = list(set(task.hf_subsets) - hf_subsets)
+                if missing_subsets:
+                    missing_splits[splits] = missing_subsets
 
         return missing_splits

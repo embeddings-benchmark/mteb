@@ -1,4 +1,4 @@
-## New in v2.0 🎉
+# New in v2.0 🎉
 <!-- TODO: not finished -->
 This section goes through new features added in v2. Below we give an overview of changes following by detailed examples.
 
