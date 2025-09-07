@@ -1,0 +1,116 @@
+from __future__ import annotations
+
+from collections import defaultdict
+
+from datasets import load_dataset
+
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+_INDUSTRY_DOMAIN = "aerospace"
+# head or tail
+_POSITION = "Tail"
+
+
+def _load_data(
+    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+):
+    queries = defaultdict(dict)
+    corpus = defaultdict(dict)
+    relevant_docs = defaultdict(dict)
+
+    for lang in langs:
+        # load queries data
+        data = load_dataset(
+            path,
+            data_files=f"{lang}/{_INDUSTRY_DOMAIN}/queries.parquet",
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+
+        queries[lang][split] = {
+            item["_id"]: item["text"]
+            for item in data["train"]
+            if item["reference_position"] == _POSITION.lower()
+        }
+
+        # get corpus
+        data = load_dataset(
+            path,
+            data_files=f"{lang}/{_INDUSTRY_DOMAIN}/corpus.parquet",
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+        corpus[lang][split] = {item["_id"]: item for item in data["train"]}
+
+        # get relevant_docs
+        data = load_dataset(
+            path,
+            name=f"{lang}-{_INDUSTRY_DOMAIN}",
+            split=split,
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+        # the qrels contain all labels, we only use the selected labels
+        relevant_docs[lang][split] = {
+            item["query-id"]: {item["corpus-id"]: 1}
+            for item in data
+            if item["query-id"] in queries[lang][split]
+        }
+
+    return corpus, queries, relevant_docs
+
+
+class PosIRAerospaceTailRetrieval(MultilingualTask, AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        dataset={
+            "path": "infgrad/PosIR-Benchmark-v1",
+            "revision": "8faa66a19e4b2cf5764bc2e2adb19e9eca503d63",
+        },
+        name="PosIRAerospaceTailRetrieval",
+        description="The Position-aware Information Retrieval (PosIR) Benchmark spans 31 domains and 2 languages, featuring query-related content that appears at varying positions within passages.",
+        type="Retrieval",
+        category="s2p",
+        reference="https://huggingface.co/datasets/infgrad/PosIR-Benchmark-v1",
+        eval_splits=["test"],
+        eval_langs={"cmn-Hans": ["cmn-Hans"], "eng-Latn": ["eng-Latn"]},
+        main_score="ndcg_at_10",
+        date=("2025-03-04", "2025-08-20"),
+        domains=["Engineering"],
+        task_subtypes=["Article retrieval"],
+        license="mit",
+        annotations_creators="LM-generated and reviewed",
+        dialect=[],
+        sample_creation="LM-generated and verified",
+        prompt={
+            "query": "Given a web search query, retrieve relevant passages that answer the query",
+            "passage": "",
+        },
+        modalities=["text"],
+        bibtex_citation=r"""
+@misc{zeng2025empiricalstudypositionbias,
+  archiveprefix = {arXiv},
+  author = {Ziyang Zeng and Dun Zhang and Jiacheng Li and Panxiang Zou and Yuqing Yang},
+  eprint = {2505.13950},
+  primaryclass = {cs.IR},
+  title = {An Empirical Study of Position Bias in Modern Information Retrieval},
+  url = {https://arxiv.org/abs/2505.13950},
+  year = {2025},
+}
+""",
+    )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            langs=self.hf_subsets,
+            split=self.metadata.eval_splits[0],
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+
+        self.data_loaded = True

@@ -1,0 +1,58 @@
+{
+    "test": {
+        "number_of_characters": 429640,
+        "num_samples": 125173,
+        "num_queries": 1324,
+        "num_documents": 123849,
+        "min_document_length": 7,
+        "average_document_length": 0.46906313333171845,
+        "max_document_length": 122,
+        "unique_documents": 123849,
+        "min_query_length": 3,
+        "average_query_length": 280.6246223564955,
+        "max_query_length": 3,
+        "unique_queries": 1324,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.0,
+        "max_relevant_docs_per_query": 1,
+        "unique_relevant_docs": 584,
+        "hf_subset_descriptive_stats": {
+            "cmn-Hans": {
+                "number_of_characters": 204852,
+                "num_samples": 65022,
+                "num_queries": 612,
+                "num_documents": 64410,
+                "min_document_length": 7,
+                "average_document_length": 0.18043782021425245,
+                "max_document_length": 69,
+                "unique_documents": 64410,
+                "min_query_length": 3,
+                "average_query_length": 315.7352941176471,
+                "max_query_length": 3,
+                "unique_queries": 612,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 278
+            },
+            "eng-Latn": {
+                "number_of_characters": 224788,
+                "num_samples": 60151,
+                "num_queries": 712,
+                "num_documents": 59439,
+                "min_document_length": 27,
+                "average_document_length": 0.7818267467487676,
+                "max_document_length": 122,
+                "unique_documents": 59439,
+                "min_query_length": 3,
+                "average_query_length": 250.44522471910113,
+                "max_query_length": 3,
+                "unique_queries": 712,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 306
+            }
+        }
+    }
+}
