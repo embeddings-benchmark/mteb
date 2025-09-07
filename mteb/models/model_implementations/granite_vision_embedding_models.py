@@ -10,7 +10,7 @@ from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
 from transformers.utils.import_utils import is_flash_attn_2_available
 
-from mteb.abstasks import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import (
     requires_image_dependencies,

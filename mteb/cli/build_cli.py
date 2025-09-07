@@ -8,9 +8,10 @@ import torch
 
 import mteb
 from mteb.cache import ResultCache
-from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
-from mteb.cli.generate_readme import generate_readme
 from mteb.evaluate import OverwriteStrategy
+
+from ._display_tasks import _display_benchmarks, _display_tasks
+from .generate_readme import generate_readme
 
 logger = logging.getLogger(__name__)
 

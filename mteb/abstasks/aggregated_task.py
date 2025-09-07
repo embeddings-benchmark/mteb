@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from .AbsTask import AbsTask
+from .aggregate_task_metadata import AggregateTaskMetadata
 
 if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
