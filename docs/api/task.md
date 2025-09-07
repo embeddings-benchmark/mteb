@@ -19,8 +19,22 @@ A task is an implementation of a dataset for evaluation. It could, for instance,
 Each task also contains extensive metadata. We annotate this using the following object, which allows us to use [pydantic](https://docs.pydantic.dev/latest/) to validate the metadata.
 
 :::mteb.TaskMetadata
-    options:
-        show_docstring_type_parameters: false
+
+## Metadata Types
+
+:::mteb.abstasks.task_metadata.AnnotatorType
+
+:::mteb.abstasks.task_metadata.SampleCreationMethod
+
+:::mteb.abstasks.task_metadata.TaskCategory
+
+:::mteb.abstasks.task_metadata.TaskDomain
+
+:::mteb.abstasks.task_metadata.TaskType
+
+:::mteb.abstasks.task_metadata.TaskSubtype
+
+:::mteb.abstasks.task_metadata.PromptDict
 
 
 ## The Task Object

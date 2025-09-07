@@ -72,6 +72,7 @@ nav:
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
+      - Additional Types: api/types.md
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 plugins:
@@ -87,6 +88,7 @@ plugins:
             heading_level: 3
             show_source: true
             show_root_heading: true
+
   - bibtex:
       bib_file: "docs/references.bib"
 

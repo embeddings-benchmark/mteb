@@ -54,7 +54,7 @@ class SearchProtocol(Protocol):
         encode_kwargs: dict[str, Any],
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
-        """Search the corpus for the given queries.
+        """Search the corpus using the given queries.
 
         Args:
             queries: Queries to find
@@ -85,7 +85,7 @@ class Encoder(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs) -> None:
+    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
@@ -109,8 +109,9 @@ class Encoder(Protocol):
 
         Args:
             inputs: Batch of inputs to encode.
-            task_metadata: The metadata of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
+            task_metadata: The metadata of the task. Encoders (e.g. SentenceTransformers) use to
+                select the appropriate prompts, with priority given to more specific task/prompt combinations over general ones.
+
                 The order of priorities for prompt selection are:
                     1. Composed prompt of task name + prompt type (query or passage)
                     2. Specific task prompt
@@ -135,7 +136,7 @@ class Encoder(Protocol):
     ) -> Array:
         """Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings
         from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
-        between each pair of embeddings.
+        between corresponding pairs of embeddings.
 
         read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity
 
@@ -175,13 +176,13 @@ class Encoder(Protocol):
 
 @runtime_checkable
 class CrossEncoderProtocol(Protocol):
-    """The interface for an CrossEncoder in MTEB.
+    """The interface for a CrossEncoder in MTEB.
 
     Besides the required functions specified below, the cross-encoder can additionally specify the following signatures seen below.
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs) -> None:
+    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
@@ -205,8 +206,8 @@ class CrossEncoderProtocol(Protocol):
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
         Args:
-            inputs1: First Dataloader of inputs to encode. For reranking will be queries (for text only tasks `QueryDatasetType`).
-            inputs2: Second Dataloader of inputs to encode. For reranking will be documents (for text only tasks `RetrievalOutputType`).
+            inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
+            inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
             task_metadata: Metadata of the current task.
             hf_split: Split of current task, allows to know some additional information about current split.
                 E.g. Current language
@@ -226,3 +227,4 @@ class CrossEncoderProtocol(Protocol):
 
 
 MTEBModels = Union[Encoder, CrossEncoderProtocol, SearchProtocol]
+"""Type alias for all MTEB model types as many models implement multiple protocols and many tasks can be solved by multiple model types."""
