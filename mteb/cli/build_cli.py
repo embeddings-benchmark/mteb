@@ -13,7 +13,6 @@ from mteb.evaluate import OverwriteStrategy
 from ._display_tasks import _display_benchmarks, _display_tasks
 from .generate_readme import generate_readme
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -297,6 +296,8 @@ def build_cli() -> argparse.ArgumentParser:
 
 def main() -> None:
     """Main entry point for the MTEB CLI."""
+    logging.basicConfig(level=logging.WARNING)
+
     parser = build_cli()
     args = parser.parse_args()
     args.func(args)
