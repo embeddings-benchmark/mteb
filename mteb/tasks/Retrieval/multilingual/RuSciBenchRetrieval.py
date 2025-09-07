@@ -34,21 +34,15 @@ def load_ruscibench_data(
     for lang in langs:
         lang_corpus = cast(
             datasets.Dataset,
-            datasets.load_dataset(
-                path, f"corpus-{lang}", cache_dir=cache_dir, revision=revision
-            ),
+            datasets.load_dataset(path, f"corpus-{lang}", revision=revision),
         )["corpus"]
         lang_queries = cast(
             datasets.Dataset,
-            datasets.load_dataset(
-                path, f"queries-{lang}", cache_dir=cache_dir, revision=revision
-            ),
+            datasets.load_dataset(path, f"queries-{lang}", revision=revision),
         )["queries"]
         lang_qrels = cast(
             datasets.Dataset,
-            datasets.load_dataset(
-                path, f"{lang}", cache_dir=cache_dir, revision=revision
-            ),
+            datasets.load_dataset(path, f"{lang}", revision=revision),
         )["test"]
         corpus[lang] = {
             "test": {
@@ -116,7 +110,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -124,7 +118,6 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -181,7 +174,7 @@ class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -189,7 +182,6 @@ class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

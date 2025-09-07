@@ -42,10 +42,10 @@ def load_bright_data(
 
     for domain in domains:
         domain_corpus = datasets.load_dataset(
-            path, "documents", split=domain, cache_dir=cache_dir, revision=revision
+            path, "documents", split=domain, revision=revision
         )
         examples = datasets.load_dataset(
-            path, "examples", split=domain, cache_dir=cache_dir, revision=revision
+            path, "examples", split=domain, revision=revision
         )
         queries[domain]["standard"] = {e["id"]: e["query"] for e in examples}
         if domain in DOMAINS_LONG and self.is_long:
@@ -53,7 +53,6 @@ def load_bright_data(
                 path,
                 "long_documents",
                 split=domain,
-                cache_dir=cache_dir,
                 revision=revision,
             )
             corpus[domain]["long"] = {
@@ -86,7 +85,7 @@ def load_bright_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self, **kwargs):
+def load_data(self) -> None:
     if self.data_loaded:
         return
 
@@ -94,7 +93,6 @@ def load_data(self, **kwargs):
         path=self.metadata.dataset["path"],
         domains=list(self.metadata.eval_langs.keys()),
         eval_splits=self.metadata.eval_splits,
-        cache_dir=kwargs.get("cache_dir", None),
         revision=self.metadata.dataset["revision"],
     )
     self.data_loaded = True

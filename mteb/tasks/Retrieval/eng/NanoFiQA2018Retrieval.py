@@ -45,7 +45,7 @@ class NanoFiQA2018Retrieval(AbsTaskRetrieval):
         adapted_from=["FiQA2018"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

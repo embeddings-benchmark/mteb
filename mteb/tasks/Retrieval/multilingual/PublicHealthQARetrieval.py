@@ -33,7 +33,6 @@ def _load_publichealthqa_data(
             path,
             lang,
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         question_ids = {
@@ -96,7 +95,7 @@ class PublicHealthQARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -104,7 +103,6 @@ class PublicHealthQARetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             split=self.metadata.eval_splits[0],
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

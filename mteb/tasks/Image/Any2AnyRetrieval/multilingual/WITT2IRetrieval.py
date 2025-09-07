@@ -33,7 +33,6 @@ def _load_wit_data(
         lang_data = load_dataset(
             path,
             split=lang,
-            cache_dir=cache_dir,
             revision=revision,
             # trust_remote_code=True,
         )
@@ -125,7 +124,7 @@ class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -133,7 +132,6 @@ class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

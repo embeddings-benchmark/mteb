@@ -38,7 +38,6 @@ def _load_data_retrieval(
         qrels_data = datasets.load_dataset(
             path,
             name=f"{lang}-qrels",
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )[split]
@@ -54,7 +53,6 @@ def _load_data_retrieval(
         corpus_data = datasets.load_dataset(
             path,
             name=f"{lang}-corpus",
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )["train"]
@@ -68,7 +66,6 @@ def _load_data_retrieval(
         queries_data = datasets.load_dataset(
             path,
             name=f"{lang}-queries",
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )[split]
@@ -116,7 +113,7 @@ class MrTidyRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -124,7 +121,6 @@ class MrTidyRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

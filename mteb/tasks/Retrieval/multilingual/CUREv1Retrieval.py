@@ -67,7 +67,6 @@ class CUREv1Retrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
             name="corpus",
             split=split,
-            cache_dir=cache_dir,
         )
 
         corpus = {
@@ -82,7 +81,6 @@ class CUREv1Retrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
             name="qrels",
             split=split,
-            cache_dir=cache_dir,
         )
 
         qrels = {}
@@ -103,20 +101,18 @@ class CUREv1Retrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
             name=f"queries-{language}",
             split=split,
-            cache_dir=cache_dir,
         )
 
         queries = {query["_id"]: query["text"] for query in ds}
 
         return queries
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
-        eval_splits = kwargs.get("eval_splits", self.metadata.eval_splits)
-        languages = kwargs.get("eval_langs", self.metadata.eval_langs)
-        cache_dir = kwargs.get("cache_dir", None)
+        eval_splits = self.metadata.eval_splits
+        languages = self.metadata.eval_langs
 
         # Iterate over splits and languages
         corpus = {language: dict.fromkeys(eval_splits) for language in languages}
@@ -124,8 +120,8 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         relevant_docs = {language: dict.fromkeys(eval_splits) for language in languages}
         for split in eval_splits:
             # Since this is a cross-lingual dataset, the corpus and the relevant documents do not depend on the language
-            split_corpus = self._load_corpus(split=split, cache_dir=cache_dir)
-            split_qrels = self._load_qrels(split=split, cache_dir=cache_dir)
+            split_corpus = self._load_corpus(split=split)
+            split_qrels = self._load_qrels(split=split)
 
             # Queries depend on the language
             for language in languages:
@@ -133,7 +129,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
                 relevant_docs[language][split] = split_qrels
 
                 queries[language][split] = self._load_queries(
-                    split=split, language=language, cache_dir=cache_dir
+                    split=split, language=language
                 )
 
         # Convert into DatasetDict

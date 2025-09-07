@@ -46,7 +46,7 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         adapted_from=["ClimateFEVER"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

@@ -297,7 +297,7 @@ class AbsTask(ABC):
             )  ## only take the specified test split.
         return dataset_dict
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the

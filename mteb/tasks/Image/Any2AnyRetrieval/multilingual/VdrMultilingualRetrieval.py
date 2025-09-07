@@ -34,7 +34,6 @@ def _load_vdr_multilingual_data(
             path=path,
             name=lang_code,
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
@@ -132,7 +131,7 @@ class VDRMultilingualRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -140,7 +139,6 @@ class VDRMultilingualRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             split=_EVAL_SPLIT,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset.get("revision", None),
             trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
         )

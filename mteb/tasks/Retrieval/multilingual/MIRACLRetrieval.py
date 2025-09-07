@@ -50,7 +50,6 @@ def _load_miracl_data(
         corpus_data = datasets.load_dataset(
             path,
             corpus_identifier,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
@@ -66,7 +65,6 @@ def _load_miracl_data(
         queries_data = datasets.load_dataset(
             path,
             queries_identifier,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
@@ -81,7 +79,6 @@ def _load_miracl_data(
         qrels_data = datasets.load_dataset(
             path,
             qrels_identifier,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
@@ -145,7 +142,7 @@ class MIRACLRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -154,7 +151,6 @@ class MIRACLRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
 
@@ -201,7 +197,6 @@ def _load_miracl_data_hard_negatives(
             corpus_data = datasets.load_dataset(
                 path,
                 corpus_identifier,
-                cache_dir=cache_dir,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
             )
@@ -217,7 +212,6 @@ def _load_miracl_data_hard_negatives(
             queries_data = datasets.load_dataset(
                 path,
                 queries_identifier,
-                cache_dir=cache_dir,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
             )
@@ -232,7 +226,6 @@ def _load_miracl_data_hard_negatives(
             qrels_data = datasets.load_dataset(
                 path,
                 qrels_identifier,
-                cache_dir=cache_dir,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
             )
@@ -250,7 +243,6 @@ def _load_miracl_data_hard_negatives(
             corpus_data = datasets.load_dataset(
                 "miracl/mmteb-miracl",
                 corpus_identifier,
-                cache_dir=cache_dir,
                 trust_remote_code=trust_remote_code,
             )
             corpus[lang][split] = {}
@@ -265,7 +257,6 @@ def _load_miracl_data_hard_negatives(
             queries_data = datasets.load_dataset(
                 "miracl/mmteb-miracl",
                 queries_identifier,
-                cache_dir=cache_dir,
                 trust_remote_code=trust_remote_code,
             )
             queries[lang][split] = {}
@@ -279,7 +270,6 @@ def _load_miracl_data_hard_negatives(
             qrels_data = datasets.load_dataset(
                 "miracl/mmteb-miracl",
                 qrels_identifier,
-                cache_dir=cache_dir,
                 trust_remote_code=trust_remote_code,
             )
             relevant_docs[lang][split] = {}
@@ -340,7 +330,7 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
         adapted_from=["MIRACLRetrieval"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -349,7 +339,6 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 langs=self.hf_subsets,
                 splits=self.metadata.eval_splits,
-                cache_dir=kwargs.get("cache_dir", None),
                 revision=self.metadata.dataset["revision"],
                 trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
             )

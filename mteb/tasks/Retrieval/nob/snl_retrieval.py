@@ -39,7 +39,7 @@ class SNLRetrieval(AbsTaskRetrieval):
         task_subtypes=["Article retrieval"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

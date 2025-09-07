@@ -19,13 +19,13 @@ def load_r2med_data(
     queries = {eval_split: None}
     relevant_docs = {eval_split: None}
     domain_corpus = datasets.load_dataset(
-        path, name="corpus", split="corpus", cache_dir=cache_dir, revision=revision
+        path, name="corpus", split="corpus", revision=revision
     )
     domain_queries = datasets.load_dataset(
-        path, name="query", split="query", cache_dir=cache_dir, revision=revision
+        path, name="query", split="query", revision=revision
     )
     domain_qrels = datasets.load_dataset(
-        path, name="qrels", split="qrels", cache_dir=cache_dir, revision=revision
+        path, name="qrels", split="qrels", revision=revision
     )
     corpus[eval_split] = {e["id"]: {"text": e["text"]} for e in domain_corpus}
     queries[eval_split] = {e["id"]: e["text"] for e in domain_queries}
@@ -73,14 +73,13 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -118,14 +117,13 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -163,14 +161,13 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -208,14 +205,13 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -253,14 +249,13 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -298,14 +293,13 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -343,14 +337,13 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -388,14 +381,13 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = load_r2med_data(
             path=self.metadata.dataset["path"],
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True

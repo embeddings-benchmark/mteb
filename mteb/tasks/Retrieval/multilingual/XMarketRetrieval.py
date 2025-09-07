@@ -28,7 +28,6 @@ def _load_xmarket_data(
             f"corpus-{lang}",
             languages=[lang],
             split=split,
-            cache_dir=cache_dir,
             trust_remote_code=True,
         )
         query_rows = datasets.load_dataset(
@@ -37,7 +36,6 @@ def _load_xmarket_data(
             languages=[lang],
             revision=revision,
             split=split,
-            cache_dir=cache_dir,
             trust_remote_code=True,
         )
         qrels_rows = datasets.load_dataset(
@@ -46,7 +44,6 @@ def _load_xmarket_data(
             languages=[lang],
             revision=revision,
             split=split,
-            cache_dir=cache_dir,
             trust_remote_code=True,
         )
 
@@ -101,7 +98,7 @@ class XMarket(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -109,7 +106,6 @@ class XMarket(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             split=self.metadata.eval_splits[0],
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
