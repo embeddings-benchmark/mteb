@@ -591,6 +591,22 @@ def calculate_cv_recall(
     k_values: list[int],
     skip_first_result: bool = False,
 ) -> dict[str, float]:
+    """Calculate Cross-Validation Recall (CV Recall) for a set of search results.
+
+    This function computes a binary recall-like metric at various cutoff levels (k-values).
+    For each query, it checks whether at least one relevant document appears within the top-k
+    retrieved results. The final score is averaged over all queries.
+
+    Arguments:
+        results: A mapping from query IDs to a dictionary of document IDs and their scores.
+        qrels: A mapping from query IDs to relevant documents with relevance scores.
+        k_values: A list of cutoff values at which to compute CV Recall, e.g., [1, 5, 10].
+        skip_first_result: Whether to skip the top-ranked result.
+
+    Returns:
+        A dictionary mapping metric names (e.g., "CV_Recall@1") to their corresponding
+        averaged scores across all queries, rounded to 5 decimal places.
+    """
     all_cv_recalls = defaultdict(list)
     sorted_results: dict[str, list[tuple[str, float]]] = {
         qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
