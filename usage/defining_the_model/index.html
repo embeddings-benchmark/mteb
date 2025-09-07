@@ -738,6 +738,8 @@
       
         
       
+        
+      
     
     
     
@@ -842,6 +844,29 @@
   
   <span class="md-ellipsis">
     Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional Types
     
   </span>
   
@@ -968,7 +993,7 @@
 
 <h1 id="defining-the-model">Defining the Model<a class="headerlink" href="#defining-the-model" title="Permanent link">&para;</a></h1>
 <h2 id="using-a-pre-defined-model">Using a pre-defined Model<a class="headerlink" href="#using-a-pre-defined-model" title="Permanent link">&para;</a></h2>
-<p>MTEB comes with an implementation of many popular models and APIs. These can be loaded using <a href="missing"><code>mteb.get_model_meta</code></a> or <a href="missing"><code>mteb.get_model</code></a>:</p>
+<p>MTEB comes with an implementation of many popular models and APIs. These can be loaded using <a href="../../api/model/#mteb.get_model_meta"><code>mteb.get_model_meta</code></a> or <a href="../../api/model/#mteb.get_model"><code>mteb.get_model</code></a>:</p>
 <div class="highlight"><pre><span></span><code><span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;intfloat/multilingual-e5-small&quot;</span>
 <span class="n">meta</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_model_meta</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">load_model</span><span class="p">()</span>
@@ -1011,8 +1036,8 @@ on <code>MTEB</code>:</p>
 <span class="k">class</span><span class="w"> </span><span class="nc">CustomModel</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">sentences</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">[</span><span class="n">BatchedInput</span><span class="p">],</span>
+        <span class="n">task_metadata</span><span class="p">:</span> <span class="n">TaskMetadata</span><span class="p">,</span>
         <span class="n">prompt_type</span><span class="p">:</span> <span class="n">PromptType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
@@ -1035,7 +1060,7 @@ on <code>MTEB</code>:</p>
 <span class="n">tasks</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_tasks</span><span class="p">(</span><span class="n">tasks</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Banking77Classification&quot;</span><span class="p">])</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">)</span>
 </code></pre></div>
-<p>If you want to submit your implementation to be included in the leaderboard see the section on <a href="missing">submitting a model</a>.</p>
+<p>If you want to submit your implementation to be included in the leaderboard see the section on <a href="https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md">submitting a model</a>.</p>
 
 
 

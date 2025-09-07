@@ -661,6 +661,8 @@
       
         
       
+        
+      
     
     
     
@@ -778,6 +780,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -881,7 +906,7 @@ as well as the correct documents to retrieve for a given query. In addition to t
 <p>A model implementation is simply an implementation of an embedding model or API to ensure that others can reproduce the <em>exact</em> results on a given task.
 For instance, when running the OpenAI embedding API on a document larger than the maximum amount of tokens a user will have to decide how they want to
 deal with this limitations (e.g. by truncating the sequence). Having a shared implementation allow us to examine these implementtion assumptions and allow
-for reproducible workflow. To ensure consistency we define a <a href="api/model.md#the-encoder-interface">standard interface</a> that models should follow to be implemented. These implementations additionally come with <a href="api/model.md#metadata">metadata</a>, that for exampe include license, compatible frameworks, and whether the weight are public or not.</p>
+for reproducible workflow. To ensure consistency we define a <a href="model/#model-protocols">standard interface/protocol</a> that models should follow to be implemented. These implementations additionally come with <a href="model/#metadata">metadata</a>, that for exampe include license, compatible frameworks, and whether the weight are public or not.</p>
 <figure>
     <img alt="" src="../images/visualizations/modelmeta_explainer.png" width="80%" />
     <figcaption>An overview of the model and its metadata within <code>mteb</code></figcaption>

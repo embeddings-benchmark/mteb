@@ -753,6 +753,8 @@
       
         
       
+        
+      
     
     
     
@@ -857,6 +859,29 @@
   
   <span class="md-ellipsis">
     Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional Types
     
   </span>
   
@@ -1020,7 +1045,7 @@ External benchmarks implemented in MTEB like <code>CoIR</code><sup id="fnref:coi
 </code></pre></div>
 <p>When using a benchmark from MTEB please cite <code>mteb</code> along with the citations of the benchmark which you can access using <a href="../../api/benchmark/#mteb.Benchmark"><code>benchmark.citation</code></a>.</p>
 <h2 id="selecting-a-task">Selecting a Task<a class="headerlink" href="#selecting-a-task" title="Permanent link">&para;</a></h2>
-<p><code>mteb</code> comes with the utility function <a href="missing"><code>get_task</code></a> and <a href="missing"><code>get_tasks</code></a> for fetching and analysing the tasks of interest.</p>
+<p><code>mteb</code> comes with the utility function <a href="../../api/task/#mteb.get_task"><code>get_task</code></a> and <a href="../../api/task/#mteb.get_tasks"><code>get_tasks</code></a> for fetching and analysing the tasks of interest.</p>
 <p>This can be done in multiple ways, e.g.:</p>
 <ul>
 <li>by the task name</li>
@@ -1051,7 +1076,7 @@ External benchmarks implemented in MTEB like <code>CoIR</code><sup id="fnref:coi
     <span class="n">mteb</span><span class="o">.</span><span class="n">get_task</span><span class="p">(</span><span class="s2">&quot;BUCCBitextMining&quot;</span><span class="p">,</span> <span class="n">languages</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;deu&quot;</span><span class="p">]),</span> <span class="c1"># all subsets containing &quot;deu&quot;</span>
 <span class="p">]</span>
 </code></pre></div>
-For more information see the documention for <a href="missing"><code>get_tasks</code></a> and <a href="missing"><code>get_task</code></a>.</p>
+For more information see the documention for <a href="../../api/task/#mteb.get_tasks"><code>get_tasks</code></a> and <a href="../../api/task/#mteb.get_task"><code>get_task</code></a>.</p>
 <h3 id="selecting-evaluation-split-or-subsets">Selecting Evaluation Split or Subsets<a class="headerlink" href="#selecting-evaluation-split-or-subsets" title="Permanent link">&para;</a></h3>
 <p>A task in <code>mteb</code> mirrors the structure of a dataset on Huggingface. It includes a splits (i.e. "test") and a subset.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># selecting an evaluation split</span>
