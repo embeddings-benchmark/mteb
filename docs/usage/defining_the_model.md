@@ -83,4 +83,4 @@ tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 model = mteb.evaluate(model, tasks=tasks)
 ```
 
-If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](missing).
+If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md).

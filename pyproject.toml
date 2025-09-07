@@ -105,6 +105,7 @@ docs = [
     "mkdocs-material>=9.5.47",
     "mkdocstrings-python>=1.18.2",
     "mkdocs-bibtex>=2.16.2",
+    
 ]
 dev = [
     {include-group = "lint"},

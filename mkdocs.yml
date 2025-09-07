@@ -77,6 +77,20 @@ nav:
 
 plugins:
   - search
+  - exclude:
+      glob:
+        # contributing segments
+        - adding_a_dataset.md
+        - adding_a_model.md
+        - adding_a_benchmark.md
+        # projects
+        - mieb/*
+        - mmteb/*
+        # overview
+        - benchmarks.md
+        - tasks.md
+        # other
+        - reproducible_workflow.md
   - mkdocstrings:
       handlers:
         python:

@@ -23,7 +23,7 @@ A benchmark consist of a collection of tasks. When a model is run on a benchmark
 ## Task
 
 A task is an implementation of a dataset for evaluation. It could for instance be the MIRACL dataset consisting of queries, a corpus of documents
-as well as the correct documents to retrieve for a given query. In addition to the dataset a task includes specification for how a model should be run on the dataset and how its output should be evaluation. We implement a variety of different tasks e.g. for evaluating classification, retrieval etc., We denote these [task categories](./task.md#metadata). Each task also come with extensive [metadata](/task.md#metadata) including the license, who annotated the data and so on.
+as well as the correct documents to retrieve for a given query. In addition to the dataset a task includes specification for how a model should be run on the dataset and how its output should be evaluation. We implement a variety of different tasks e.g. for evaluating classification, retrieval etc., We denote these [task categories](./task.md#metadata). Each task also come with extensive [metadata](./task.md#metadata) including the license, who annotated the data and so on.
 
 <figure markdown="span">
     ![](../images/visualizations/task_explainer.png){ width="80%" }
