@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.benchmarks import Benchmark
 from mteb.overview import MTEBTasks
 

@@ -10,9 +10,18 @@ from typing import Any, Callable
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
 
-from mteb.models.models_protocols import (
+from mteb._evaluators import RetrievalEvaluator
+from mteb._evaluators.retrieval_metrics import make_score_dict
+from mteb.create_dataloaders import (
+    combine_queries_with_instruction_text,
+    convert_conv_history_to_query,
+    corpus_to_dict,
+)
+from mteb.models import (
     CrossEncoderProtocol,
     Encoder,
+    SearchCrossEncoderWrapper,
+    SearchEncoderWrapper,
     SearchProtocol,
 )
 from mteb.types import (
@@ -30,14 +39,6 @@ from mteb.types.statistics import (
     TopRankedStatistics,
 )
 
-from ..create_dataloaders import (
-    combine_queries_with_instruction_text,
-    convert_conv_history_to_query,
-    corpus_to_dict,
-)
-from ..evaluation.evaluators import RetrievalEvaluator
-from ..evaluation.evaluators.retrieval_metrics import make_score_dict
-from ..models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_relevant_docs_statistics,

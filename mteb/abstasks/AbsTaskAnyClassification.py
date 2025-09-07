@@ -10,7 +10,8 @@ from PIL import ImageFile
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 
-from mteb.models.models_protocols import Encoder
+from mteb._evaluators import ClassificationEvaluator
+from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -19,7 +20,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators.classification_evaluator import ClassificationEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
