@@ -82,7 +82,10 @@ def get_model_metas(
 def get_model(
     model_name: str, revision: str | None = None, **kwargs: Any
 ) -> MTEBModels:
-    """A function to fetch a model object by name.
+    """A function to fetch and load model object by name.
+
+    !!! note
+        This function loads the model into memory. If you only want to fetch the metadata, use [`get_model_meta`](#mteb.get_model_meta) instead.
 
     Args:
         model_name: Name of the model to fetch

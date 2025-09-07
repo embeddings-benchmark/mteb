@@ -13,11 +13,25 @@ length, valid frameworks, license, and degree of openness.
 </figure>
 
 
+## Utilities
+
+:::mteb.get_model_metas
+
+:::mteb.get_model_meta
+
+:::mteb.get_model
+
 
 ## Metadata
 
 :::mteb.models.model_meta.ModelMeta
 
-## The Encoder Interface
+## Model Protocols
 
-:::mteb.Encoder
+:::mteb.models.Encoder
+
+:::mteb.models.SearchProtocol
+
+:::mteb.models.CrossEncoderProtocol
+
+:::mteb.models.MTEBModels

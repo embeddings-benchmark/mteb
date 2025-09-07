@@ -48,7 +48,7 @@ To see more check out the [installation guide](./installation.md).
     results = mteb.evaluate(model, tasks=tasks)
     ```
 
-    To see more check out the [usage documentation](./usage/usage.md)
+    To see more check out the [usage documentation](./usage/get_started.md)
 
 === "Using the CLI"
 
@@ -60,7 +60,7 @@ To see more check out the [installation guide](./installation.md).
         --output-folder results
     ```
 
-    To read more about what you can do with the command line interface check out its [documentation](./cli.md)
+    To read more about what you can do with the command line interface check out its [documentation](./usage/cli.md)
 
 ---
 
