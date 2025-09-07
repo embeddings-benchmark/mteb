@@ -78,10 +78,10 @@ class ImageInput(TypedDict):
     """The input to the encoder for images.
 
     Args:
-        image: The image to encode. Can be a list of images or a list of lists of images.
+        image: The image to encode. Can be a list of images or a list of lists of images. List of lists will be for `TextPairClassification`.
     """
 
-    image: list[list[Image.Image]]
+    image: list[list[Image.Image] | list[Image.Image]]
 
 
 class AudioInput(TypedDict):

@@ -9,6 +9,7 @@ from typing import Any
 
 import numpy as np
 import torch
+from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader
 
@@ -264,9 +265,12 @@ class CachedEmbeddingWrapper(AbsEncoder):
                 for u in uncached_items:
                     if isinstance(u, str):
                         dummy_ds.append({"text": [u]})
-                    elif isinstance(u, Image.Image):
-                        dummy_ds.append({"image": [[u]]})
-                dl = DataLoader(dummy_ds, batch_size=batch_size)
+                    elif isinstance(u, Image.Image) or (
+                        isinstance(u, list) and isinstance(u[0], Image.Image)
+                    ):
+                        dummy_ds.append({"image": [u]})
+
+                dl = DataLoader(Dataset.from_list(dummy_ds), batch_size=batch_size)
                 new_vectors = self._model.encode(
                     dl,
                     task_metadata=task_metadata,
