@@ -618,7 +618,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     adapted_from="UBC-NLP/MARBERTv2",
     superseded_by=None,
 )
-consciousAI__cai_lunaris_text_embeddings = ModelMeta(
+consciousai__cai_lunaris_text_embeddings = ModelMeta(
     name="consciousAI/cai-lunaris-text-embeddings",
     revision="8332c464d13505968ff7a6e2213f36fd8730b4c7",
     release_date="2023-06-22",
@@ -640,7 +640,7 @@ consciousAI__cai_lunaris_text_embeddings = ModelMeta(
     adapted_from="/root/.cache/torch/sentence_transformers/intfloat_e5-large-v2",
     superseded_by=None,
 )
-consciousAI__cai_stellaris_text_embeddings = ModelMeta(
+consciousai__cai_stellaris_text_embeddings = ModelMeta(
     name="consciousAI/cai-stellaris-text-embeddings",
     revision="c000ec4b29588daf0f4a0b2ad4e72ee807d8efc0",
     release_date="2023-06-23",
@@ -1123,7 +1123,7 @@ izhx__udever_bloom_7b1 = ModelMeta(
     adapted_from="bigscience/bloom-7b1",
     superseded_by=None,
 )
-avsolatorio__GIST_Embedding_v0 = ModelMeta(
+avsolatorio__gist_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-Embedding-v0",
     revision="bf6b2e55e92f510a570ad4d7d2da2ec8cd22590c",
     release_date="2024-01-31",
@@ -1162,7 +1162,7 @@ avsolatorio__GIST_Embedding_v0 = ModelMeta(
     adapted_from="BAAI/bge-large-en-v1.5",
     superseded_by=None,
 )
-avsolatorio__GIST_all_MiniLM_L6_v2 = ModelMeta(
+avsolatorio__gist_all_minilm_l6_v2 = ModelMeta(
     name="avsolatorio/GIST-all-MiniLM-L6-v2",
     revision="ea89dfad053bba14677bb784a4269898abbdce44",
     release_date="2024-02-03",
@@ -1201,7 +1201,7 @@ avsolatorio__GIST_all_MiniLM_L6_v2 = ModelMeta(
     adapted_from=None,
     superseded_by=None,
 )
-avsolatorio__GIST_large_Embedding_v0 = ModelMeta(
+avsolatorio__gist_large_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-large-Embedding-v0",
     revision="7831200e2f7819b994490c091cf3258a2b821f0c",
     release_date="2024-02-14",
@@ -1240,7 +1240,7 @@ avsolatorio__GIST_large_Embedding_v0 = ModelMeta(
     adapted_from=None,
     superseded_by=None,
 )
-avsolatorio__GIST_small_Embedding_v0 = ModelMeta(
+avsolatorio__gist_small_embedding_v0 = ModelMeta(
     name="avsolatorio/GIST-small-Embedding-v0",
     revision="d6c4190f9e01b9994dc7cac99cf2f2b85cfb57bc",
     release_date="2024-02-03",
@@ -1301,7 +1301,7 @@ bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     adapted_from="/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/bloomckpt/6b3/bloom-7b1",
     superseded_by=None,
 )
-aari1995__German_Semantic_STS_V2 = ModelMeta(
+aari1995__german_semantic_sts_v2 = ModelMeta(
     name="aari1995/German_Semantic_STS_V2",
     revision="22912542b0ec7a7ef369837e28ffe6352a27afc9",
     release_date="2022-11-17",
@@ -1324,7 +1324,7 @@ aari1995__German_Semantic_STS_V2 = ModelMeta(
     adapted_from="/content/drive/MyDrive/Stanford_NLU/Project/false_friends/gbert_large_sts_only",
     superseded_by=None,
 )
-abhinand__MedEmbed_small_v0_1 = ModelMeta(
+abhinand__medembed_small_v0_1 = ModelMeta(
     name="abhinand/MedEmbed-small-v0.1",
     revision="40a5850d046cfdb56154e332b4d7099b63e8d50e",
     release_date="2024-10-20",
@@ -1355,7 +1355,7 @@ abhinand__MedEmbed_small_v0_1 = ModelMeta(
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
 )
-avsolatorio__NoInstruct_small_Embedding_v0 = ModelMeta(
+avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
     revision="b38747000553d8268915c95a55fc87e707c9aadd",
     release_date="2024-05-01",
@@ -1487,7 +1487,7 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     adapted_from="FacebookAI/xlm-roberta-large",
     superseded_by=None,
 )
-openbmb__MiniCPM_Embedding = ModelMeta(
+openbmb__minicpm_embedding = ModelMeta(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         model_kwargs={

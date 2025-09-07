@@ -271,6 +271,7 @@ class TaskMetadata(BaseModel):
         self._eval_langs_are_valid(self.eval_langs)
 
     @field_validator("dataset")
+    @classmethod
     def _check_dataset_path_is_specified(
         cls, dataset: dict[str, Any]
     ) -> dict[str, Any]:
@@ -278,6 +279,7 @@ class TaskMetadata(BaseModel):
         return dataset
 
     @field_validator("dataset")
+    @classmethod
     def _check_dataset_revision_is_specified(
         cls, dataset: dict[str, Any]
     ) -> dict[str, Any]:
@@ -285,6 +287,7 @@ class TaskMetadata(BaseModel):
         return dataset
 
     @field_validator("prompt")
+    @classmethod
     def _check_prompt_is_valid(
         cls, prompt: str | PromptDict | None
     ) -> str | PromptDict | None:

@@ -46,7 +46,7 @@ from sklearn.model_selection._split import _BaseKFold
 from sklearn.utils import check_random_state
 
 
-def _iterative_train_test_split(X, y, test_size, random_state=None):
+def _iterative_train_test_split(X, y, test_size, random_state=None):  # noqa: N803
     """Iteratively stratified train/test split
 
             Slighltly modified from:
@@ -78,7 +78,7 @@ def _iterative_train_test_split(X, y, test_size, random_state=None):
 
 def _fold_tie_break(
     desired_samples_per_fold: np.ndarray,
-    M: np.ndarray,
+    M: np.ndarray,  # noqa: N803
     random_state: np.random.RandomState,
 ):
     """Helper function to split a tie between folds with same desirability of a given sample
@@ -300,7 +300,7 @@ class IterativeStratification(_BaseKFold):
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
-    def _iter_test_indices(self, X, y=None, groups=None):
+    def _iter_test_indices(self, X, y=None, groups=None):  # noqa: N803
         """Internal method for providing scikit-learn's split with folds
 
         Args:

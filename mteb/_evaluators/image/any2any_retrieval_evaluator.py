@@ -24,7 +24,7 @@ from ..retrieval_metrics import (
     confidence_scores,
     hole,
     mrr,
-    nAUC,
+    nauc,
     recall_cap,
     top_k_accuracy,
 )
@@ -368,7 +368,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
 
         for metric_name, scores in metric_scores.items():
             for fct, conf_scores in all_conf_scores.items():
-                naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
+                naucs[f"nAUC_{metric_name}_{fct}"] = nauc(conf_scores, scores)
 
         return naucs
 

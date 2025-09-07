@@ -173,7 +173,7 @@ jina_colbert_v2 = ModelMeta(
 )
 
 
-lightonai__GTE_ModernColBERT_v1 = ModelMeta(
+lightonai__gte_moderncolbert_v1 = ModelMeta(
     loader=ColBERTModel,
     name="lightonai/GTE-ModernColBERT-v1",
     languages=[
