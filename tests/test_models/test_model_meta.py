@@ -165,3 +165,9 @@ def test_model_meta_colbert():
     assert meta.framework[0] == "Sentence Transformers"
     assert meta.name == model_name
     assert meta.revision == revision
+
+
+@pytest.mark.parametrize("model_meta", mteb.get_model_metas())
+def test_check_model_name_and_revision(model_meta: ModelMeta):
+    assert model_meta.model_name is not None
+    assert model_meta.revision is not None
