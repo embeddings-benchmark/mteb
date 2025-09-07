@@ -427,7 +427,7 @@ class AbsTaskRetrieval(AbsTask):
     ) -> dict[str, float]:
         return {}
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
         self.convert_v1_dataset_format_to_v2()
@@ -466,7 +466,7 @@ class AbsTaskRetrieval(AbsTask):
                     )
         else:
             if "default" in self.dataset and split != "default":
-                return self._calculate_metrics_from_split(
+                return self._calculate_descriptive_statistics_from_split(
                     split=split, hf_subset="default"
                 )
             split_data = self.dataset["default"][split]
