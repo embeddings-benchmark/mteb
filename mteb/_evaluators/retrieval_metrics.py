@@ -407,6 +407,8 @@ def make_score_dict(
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
         **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
         **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
+        # For MTEB multichoice tasks, we report recall@1 as the main metric.
+        # This follows how MTEB implements these tasks, and recall@1 here is equivalent to accuracy.
         "accuracy": recall["Recall@1"],
         **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
         **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
