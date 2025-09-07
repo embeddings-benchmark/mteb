@@ -1759,7 +1759,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             {
                 "id": ["q1", "q2"],
                 "text": [
-                    # dialogs with different line to test DatasetLoader with items with different item size
+                    # dialogs with different lengths to test DatasetLoader with items with different item size
                     [
                         {"role": "user", "content": "What is the weather like today?"},
                     ],
