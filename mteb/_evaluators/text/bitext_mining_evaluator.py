@@ -10,9 +10,9 @@ from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import Encoder
+from mteb.create_dataloaders import create_dataloader_from_texts
+from mteb.models import Encoder
 
-from ....create_dataloaders import create_dataloader_from_texts
 from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

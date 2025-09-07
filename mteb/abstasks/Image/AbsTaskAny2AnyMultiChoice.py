@@ -12,11 +12,10 @@ import tqdm
 from datasets import Features, Value, load_dataset
 from PIL import Image
 
+from mteb._evaluators import Any2AnyMultiChoiceEvaluator
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
-
-from ...evaluation.evaluators import Any2AnyMultiChoiceEvaluator
 
 logger = logging.getLogger(__name__)
 
