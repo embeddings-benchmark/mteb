@@ -1692,7 +1692,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 2,
-            "number_of_characters": 257,
+            "number_of_characters": 201,
             "documents_statistics": {
                 "total_text_length": 84,
                 "min_text_length": 39,
@@ -1701,10 +1701,10 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 173,
-                "min_text_length": 80,
-                "average_text_length": 86.5,
-                "max_text_length": 93,
+                "total_text_length": 117,
+                "min_text_length": 37,
+                "average_text_length": 58.5,
+                "max_text_length": 80,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
@@ -1718,7 +1718,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 2,
-            "number_of_characters": 257,
+            "number_of_characters": 201,
             "documents_statistics": {
                 "total_text_length": 84,
                 "min_text_length": 39,
@@ -1727,10 +1727,10 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "unique_texts": 2,
             },
             "queries_statistics": {
-                "total_text_length": 173,
-                "min_text_length": 80,
-                "average_text_length": 86.5,
-                "max_text_length": 93,
+                "total_text_length": 117,
+                "min_text_length": 37,
+                "average_text_length": 58.5,
+                "max_text_length": 80,
                 "unique_texts": 2,
             },
             "relevant_docs_statistics": {
