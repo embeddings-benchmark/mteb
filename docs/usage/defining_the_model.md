@@ -58,8 +58,8 @@ import numpy as np
 class CustomModel:
     def encode(
         self,
-        sentences: list[str],
-        task_name: str,
+        inputs: DataLoader[BatchedInput],
+        task_metadata: TaskMetadata,
         prompt_type: PromptType | None = None,
         **kwargs,
     ) -> np.ndarray:
