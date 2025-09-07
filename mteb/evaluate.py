@@ -84,7 +84,7 @@ def _get_model_meta(model: Encoder | SentenceTransformer | CrossEncoder) -> Mode
     return meta
 
 
-def _evaluate(
+def _evaluate_task(
     model: Encoder,
     task: AbsTask,
     *,
@@ -93,7 +93,7 @@ def _evaluate(
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
 ) -> TaskResult:
-    """The core logic to run a model on a given task. See `run_task` for more details."""
+    """The core logic to run a model on a given task. See `evaluate` for more details."""
     if co2_tracker is None or co2_tracker is True:
         try:
             from codecarbon import EmissionsTracker  # type: ignore[import]
@@ -113,7 +113,7 @@ def _evaluate(
             logging_logger=logger,  # type: ignore[arg-type]
             allow_multiple_runs=False,
         ) as tracker:
-            result = _evaluate(
+            result = _evaluate_task(
                 model,
                 task,
                 splits=splits,
@@ -262,14 +262,6 @@ def evaluate(
         )
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-    if encode_kwargs is None:
-        encode_kwargs = {}
-
-    if "batch_size" not in encode_kwargs:
-        encode_kwargs["batch_size"] = 32
-        logger.info(
-            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
-        )
 
     meta = _get_model_meta(model) if not isinstance(model, ModelMeta) else model
     model_name = cast(str, meta.name)
@@ -327,20 +319,23 @@ def evaluate(
         )
         model = model.load_model()
 
+    if encode_kwargs is None:
+        encode_kwargs = {}
+    if "batch_size" not in encode_kwargs:
+        encode_kwargs["batch_size"] = 32
+        logger.info(
+            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
+        )
+
     if raise_error is False:
         try:
-            result = _evaluate(
+            result = _evaluate_task(
                 model=model,
                 splits=missing_eval,
                 task=task,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
-            )
-            return ModelResult(
-                model_name=model_name,
-                model_revision=model_revision,
-                task_results=[result],
             )
         except Exception as e:
             logger.error(
@@ -351,14 +346,15 @@ def evaluate(
                 model_revision=model_revision,
                 task_results=[],
             )
-    result = _evaluate(
-        model=model,
-        splits=missing_eval,
-        task=task,
-        co2_tracker=False,
-        encode_kwargs=encode_kwargs,
-        prediction_folder=prediction_folder,
-    )
+    else:
+        result = _evaluate_task(
+            model=model,
+            splits=missing_eval,
+            task=task,
+            co2_tracker=False,
+            encode_kwargs=encode_kwargs,
+            prediction_folder=prediction_folder,
+        )
 
     if existing_results:
         result = result.merge(existing_results)

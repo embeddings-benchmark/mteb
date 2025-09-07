@@ -139,7 +139,7 @@ def _add_task_selection_args(parser: argparse.ArgumentParser) -> None:
 
 def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser(
-        "available_tasks", help="List the available tasks within MTEB"
+        "available-tasks", help="List the available tasks within MTEB"
     )
     _add_task_selection_args(parser)
 
@@ -148,7 +148,7 @@ def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
 
 def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser(
-        "available_benchmarks", help="List the available benchmarks within MTEB"
+        "available-benchmarks", help="List the available benchmarks within MTEB"
     )
     _add_benchmark_selection_args(parser)
 
