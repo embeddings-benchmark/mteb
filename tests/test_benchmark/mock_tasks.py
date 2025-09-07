@@ -1759,12 +1759,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             {
                 "id": ["q1", "q2"],
                 "text": [
+                    # dialogs with different line to test DatasetLoader with items with different item size
                     [
                         {"role": "user", "content": "What is the weather like today?"},
-                        {
-                            "role": "assistant",
-                            "content": "The weather is sunny with a chance of rain.",
-                        },
                     ],
                     [
                         {"role": "user", "content": "What is the capital of France?"},

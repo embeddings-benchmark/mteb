@@ -38,6 +38,7 @@ from .mock_tasks import (
     MockMultilingualRerankingTask,
     MockMultilingualRetrievalTask,
     MockRerankingTask,
+    MockRetrievalDialogTask,
     MockRetrievalTask,
 )
 from .task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
@@ -454,3 +455,22 @@ def test_task_modality_filtering_model_modalities_more_than_task_modalities(task
         output_folder="tests/results",
         overwrite_results=True,
     )
+
+
+def test_dialogs_with_different_length_dataloader(tmp_path: Path):
+    class MockNumpyTextEncoder(AbsMockEncoder):
+        def encode(
+            self,
+            inputs: DataLoader[BatchedInput],
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> Array:
+            # iterate through dataloader to test input lengths
+            sentences = [text for batch in inputs for text in batch["text"]]
+            return np.random.rand(len(sentences), 10)  # type: ignore # noqa: NPY002
+
+    mteb.evaluate(MockNumpyTextEncoder(), MockRetrievalDialogTask())
