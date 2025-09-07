@@ -18,7 +18,6 @@ def load_ruscibench_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus: dict[str, dict[str, dict[str, dict[str, str]] | None]] = {

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def _load_code_search_code_retrieval(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
+    path: str, langs: list, splits: str, revision: str = None
 ):
     corpus = {lang: {split: {} for split in splits} for lang in langs}
     queries = {lang: {split: {} for split in splits} for lang in langs}

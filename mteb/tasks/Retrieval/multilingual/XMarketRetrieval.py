@@ -15,9 +15,7 @@ _EVAL_LANGS = {
 }
 
 
-def _load_xmarket_data(
-    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
-):
+def _load_xmarket_data(path: str, langs: list, split: str, revision: str = None):
     corpus = {lang: {split: None} for lang in langs}
     queries = {lang: {split: None} for lang in langs}
     relevant_docs = {lang: {split: None} for lang in langs}

@@ -21,9 +21,7 @@ _LANGS = {
 }
 
 
-def _load_publichealthqa_data(
-    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
-):
+def _load_publichealthqa_data(path: str, langs: list, split: str, revision: str = None):
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
     relevant_docs = {lang: {split: {}} for lang in langs}

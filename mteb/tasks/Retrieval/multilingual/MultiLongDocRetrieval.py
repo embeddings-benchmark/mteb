@@ -26,7 +26,6 @@ def load_mldr_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str = None,
     revision: str = None,
 ):
     corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}

@@ -17,9 +17,7 @@ _LANGUAGES = {
 }
 
 
-def _load_xflickrco_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+def _load_xflickrco_data(path: str, langs: list, splits: str, revision: str = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}

@@ -62,7 +62,6 @@ def _load_single_language(
     path: str,
     split: str,
     lang: str | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     query_ds = load_dataset(
@@ -110,7 +109,6 @@ def _load_data(
     path: str,
     splits: str,
     langs: list | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     if langs is None or len(langs) == 1:

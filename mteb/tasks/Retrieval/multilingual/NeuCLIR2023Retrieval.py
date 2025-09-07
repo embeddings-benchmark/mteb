@@ -20,7 +20,6 @@ def load_neuclir_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
@@ -105,7 +104,6 @@ def load_neuclir_data_hard_negatives(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     split = "test"

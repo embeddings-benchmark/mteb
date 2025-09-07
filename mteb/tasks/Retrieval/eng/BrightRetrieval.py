@@ -33,7 +33,6 @@ def load_bright_data(
     path: str,
     domains: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {domain: dict.fromkeys(eval_splits) for domain in domains}

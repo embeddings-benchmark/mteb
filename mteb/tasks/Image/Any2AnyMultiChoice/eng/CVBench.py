@@ -9,7 +9,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 def _load_data(
     path: str,
     splits: list[str],
-    cache_dir: str = None,
     revision: str = None,
     subtask: str = "Count",
 ):

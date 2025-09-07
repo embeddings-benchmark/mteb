@@ -17,7 +17,6 @@ def _load_data(
     path: str,
     splits: list[str],
     langs: list | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     if langs is None:

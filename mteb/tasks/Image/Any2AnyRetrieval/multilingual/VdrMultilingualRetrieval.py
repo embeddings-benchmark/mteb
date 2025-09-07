@@ -20,7 +20,6 @@ def _load_vdr_multilingual_data(
     path: str,
     langs: list,
     split: str,
-    cache_dir: str = None,
     revision: str = None,
     trust_remote_code: bool = False,
 ):

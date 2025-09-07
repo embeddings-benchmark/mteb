@@ -47,7 +47,6 @@ def load_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {lang: {EVAL_SPLIT: {}} for lang in langs}

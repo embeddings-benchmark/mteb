@@ -24,7 +24,6 @@ def _load_mintaka_data(
     langs: list,
     split: str,
     trust_remote_code: bool,
-    cache_dir: str = None,
     revision: str = None,
 ):
     queries = {lang: {split: {}} for lang in langs}

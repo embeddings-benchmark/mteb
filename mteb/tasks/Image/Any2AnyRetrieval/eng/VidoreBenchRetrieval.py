@@ -9,7 +9,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 def _load_data(
     path: str,
     splits: str,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {}

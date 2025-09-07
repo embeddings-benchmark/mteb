@@ -33,7 +33,6 @@ def _load_miracl_data(
     path: str,
     langs: list,
     splits: str,
-    cache_dir: str | None = None,
     revision: str | None = None,
     trust_remote_code: bool = False,
 ):

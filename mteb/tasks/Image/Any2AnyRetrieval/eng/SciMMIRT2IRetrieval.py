@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
+def _load_data(path: str, splits: str, revision: str = None):
     corpus = {}
     queries = {}
     relevant_docs = {}
