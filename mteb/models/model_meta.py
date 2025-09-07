@@ -60,16 +60,16 @@ class ModelMeta(BaseModel):
     """The model metadata object.
 
     Attributes:
+        name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
+        revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         loader: the function that loads the model. If None it will assume that the model is not implemented. Cross-encoders like models would implement *only* `SearchInterface`.
         loader_kwargs: The keyword arguments to pass to the loader function.
-        name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
         memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-        revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
@@ -95,10 +95,10 @@ class ModelMeta(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     # loaders
-    loader: Callable[..., MTEBModels] | None
+    name: str
+    revision: str
+    loader: Callable[..., MTEBModels]
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
-    name: str | None
-    revision: str | None
     release_date: StrDate | None
     languages: list[ISOLanguageScript] | None
     n_parameters: int | None
