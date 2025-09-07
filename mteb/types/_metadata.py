@@ -7,7 +7,7 @@ from ._result import HFSubset
 
 ## LANGUAGE TYPES ##
 ISOLanguageScript = str
-"""A string represenitng the language and script. Language is denoted as a 3-letter [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) language code and the script is denoted by a 4-letter [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924) script code (e.g. "eng-Latn")."""
+"""A string representing the language and script. Language is denoted as a 3-letter [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) language code and the script is denoted by a 4-letter [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924) script code (e.g. "eng-Latn")."""
 
 ISOLanguage = str
 """A string representing the language. Language is denoted as a 3-letter [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) language code (e.g. "eng")."""
