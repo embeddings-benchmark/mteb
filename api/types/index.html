@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../model/">
+        <link rel="prev" href="../results/">
       
       
       
@@ -661,6 +661,8 @@
       
         
       
+        
+      
     
     
     
@@ -768,6 +770,29 @@
   
   <span class="md-ellipsis">
     Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Results
     
   </span>
   
@@ -1073,6 +1098,28 @@
 
 
 
+<h4 id="mteb.types.HFSubset" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">HFSubset</span> <span class="o">=</span> <span class="nb">str</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#mteb.types.HFSubset" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The name of a HuggingFace dataset subset, e.g. 'en-de', 'en', 'default' (default is used when there is no subset).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
 <h4 id="mteb.types.ISOLanguage" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">ISOLanguage</span> <span class="o">=</span> <span class="nb">str</span></code>
 
@@ -1329,6 +1376,72 @@ scores. Should have columns <code>query-id</code>, <code>corpus-id</code>, <code
     <div class="doc doc-contents ">
 
         <p>The revision of a model, typically a git commit hash. For APIs this can be a version string e.g. <code>1</code>.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="mteb.types.Score" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Score</span> <span class="o">=</span> <span class="n">Any</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#mteb.types.Score" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>A score value, could e.g. be accuracy. Normally it is a float or int, but it can take on any value. Should be json serializable.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="mteb.types.ScoresDict" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">ScoresDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#mteb.types.ScoresDict" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>A dictionary of scores, typically also include metadata, e.g {'main_score': 0.5, 'accuracy': 0.5, 'f1': 0.6, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="mteb.types.SplitName" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">SplitName</span> <span class="o">=</span> <span class="nb">str</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#mteb.types.SplitName" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The name of a data split, e.g. 'test', 'validation', 'train'.</p>
 
     </div>
 
@@ -1596,8 +1709,7 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
 
               <details class="quote">
                 <summary>Source code in <code>mteb/types/_result.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
-<span class="normal">16</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
@@ -1606,7 +1718,8 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RetrievalEvaluationResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RetrievalEvaluationResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Holds the results of retrieval evaluation metrics.&quot;&quot;&quot;</span>
 
     <span class="n">all_scores</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span>
@@ -1686,7 +1799,7 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../model/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Model">
+          <a href="../results/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Results">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1696,7 +1809,7 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Model
+                Results
               </div>
             </div>
           </a>
