@@ -10,7 +10,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ....evaluation.evaluators.retrieval_metrics import max_over_subqueries
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
