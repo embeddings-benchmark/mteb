@@ -361,7 +361,7 @@ def evaluate(
     )
 
     if existing_results:
-        result = result.merge(existing_results)
+        result = existing_results.merge(result)
 
     if cache:
         cache.save_to_cache(result, meta)
