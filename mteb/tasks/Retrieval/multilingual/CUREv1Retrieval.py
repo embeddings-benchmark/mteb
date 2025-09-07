@@ -61,7 +61,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         },
     )
 
-    def _load_corpus(self, split: str, cache_dir: str | None = None):
+    def _load_corpus(self, split: str):
         ds = load_dataset(
             path=self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],
@@ -75,7 +75,10 @@ class CUREv1Retrieval(AbsTaskRetrieval):
 
         return corpus
 
-    def _load_qrels(self, split: str, cache_dir: str | None = None):
+    def _load_qrels(
+        self,
+        split: str,
+    ):
         ds = load_dataset(
             path=self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],
@@ -95,7 +98,11 @@ class CUREv1Retrieval(AbsTaskRetrieval):
 
         return qrels
 
-    def _load_queries(self, split: str, language: str, cache_dir: str | None = None):
+    def _load_queries(
+        self,
+        split: str,
+        language: str,
+    ):
         ds = load_dataset(
             path=self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],

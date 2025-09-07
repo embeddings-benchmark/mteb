@@ -11,7 +11,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 def load_r2med_data(
     path: str,
     eval_splits: list,
-    cache_dir: str,
     revision: str,
 ):
     eval_split = eval_splits[0]
