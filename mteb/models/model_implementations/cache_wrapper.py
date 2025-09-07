@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import logging
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -13,7 +14,7 @@ from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader
 
-from mteb import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.models_protocols import Encoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -261,16 +262,14 @@ class CachedEmbeddingWrapper(AbsEncoder):
             if uncached_items:
                 logger.info(f"Encoding {len(uncached_items)} new items")
                 # Build a simple DataLoader with only uncached items
-                dummy_ds = []
+                dummy_ds = defaultdict(list)
                 for u in uncached_items:
                     if isinstance(u, str):
-                        dummy_ds.append({"text": [u]})
-                    elif isinstance(u, Image.Image) or (
-                        isinstance(u, list) and isinstance(u[0], Image.Image)
-                    ):
-                        dummy_ds.append({"image": [u]})
+                        dummy_ds["text"].append(u)
+                    elif isinstance(u, Image.Image):
+                        dummy_ds["image"].append(u)
 
-                dl = DataLoader(Dataset.from_list(dummy_ds), batch_size=batch_size)
+                dl = DataLoader(Dataset.from_dict(dummy_ds), batch_size=batch_size)
                 new_vectors = self._model.encode(
                     dl,
                     task_metadata=task_metadata,
@@ -288,16 +287,16 @@ class CachedEmbeddingWrapper(AbsEncoder):
             else:
                 logger.info("All items found in cache")
 
-            final_results = [None] * len(all_items)
+            final_results = []
             uncached_idx = 0
             for i in range(len(all_items)):
                 if i in uncached_indices:
-                    final_results[i] = results[
-                        len(all_items) - len(uncached_items) + uncached_idx
-                    ]
+                    final_results.append(
+                        results[len(all_items) - len(uncached_items) + uncached_idx]
+                    )
                     uncached_idx += 1
                 else:
-                    final_results[i] = results[i - uncached_idx]
+                    final_results.append(results[i - uncached_idx])
 
             return np.array(final_results)
         except Exception as e:
