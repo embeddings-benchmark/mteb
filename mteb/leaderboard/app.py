@@ -37,7 +37,7 @@ def load_results():
     if not results_cache_path.exists():
         all_results = mteb.load_results(
             only_main_score=True, require_model_meta=False, models=ALL_MODELS
-        ).filter_models()
+        )._filter_models()
         all_results.to_disk(results_cache_path)
         return all_results
     else:
@@ -207,7 +207,7 @@ def get_leaderboard_app() -> gr.Blocks:
     default_results = all_benchmark_results[default_benchmark.name]
     logger.info("Benchmark results loaded")
 
-    default_scores = default_results.get_scores(format="long")
+    default_scores = default_results._get_scores(format="long")
     all_models = list({entry["model_name"] for entry in default_scores})
     filtered_models = filter_models(
         all_models,
@@ -458,7 +458,7 @@ def get_leaderboard_app() -> gr.Blocks:
             )
             elapsed = time.time() - start_time
             benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results.get_scores(format="long")
+            scores = benchmark_results._get_scores(format="long")
             logger.debug(f"on_benchmark_select callback: {elapsed}s")
             return (
                 languages,
@@ -493,7 +493,7 @@ def get_leaderboard_app() -> gr.Blocks:
             if not len(languages):
                 return []
             benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results.get_scores(languages=languages, format="long")
+            scores = benchmark_results._get_scores(languages=languages, format="long")
             elapsed = time.time() - start_time
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores

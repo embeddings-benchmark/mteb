@@ -28,7 +28,6 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.load_results.task_results import TaskResult
 from mteb.models import (
     CrossEncoderWrapper,
     Encoder,
@@ -36,6 +35,7 @@ from mteb.models import (
     MTEBModels,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.results import TaskResult
 
 if TYPE_CHECKING:
     from mteb.benchmarks import Benchmark

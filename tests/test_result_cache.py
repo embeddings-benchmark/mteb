@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from mteb.cache import ResultCache
-from mteb.load_results.task_results import TaskResult
+from mteb.results import TaskResult
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
 

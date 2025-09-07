@@ -216,6 +216,7 @@ class TaskResult(BaseModel):
 
     @property
     def languages(self) -> list[str]:
+        """Get the languages present in the scores."""
         langs = []
         for split, split_res in self.scores.items():
             for entry in split_res:
@@ -224,12 +225,14 @@ class TaskResult(BaseModel):
 
     @cached_property
     def task(self) -> AbsTask:
+        """Get the task associated with the result."""
         from mteb.overview import get_task
 
         return get_task(self.task_name)
 
     @property
     def domains(self) -> list[str]:
+        """Get the domains of the task."""
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
@@ -237,6 +240,7 @@ class TaskResult(BaseModel):
 
     @property
     def task_type(self) -> str:
+        """Get the type of the task."""
         return self.task.metadata.type
 
     @property
@@ -254,10 +258,12 @@ class TaskResult(BaseModel):
         return list(self.scores.keys())
 
     def to_dict(self) -> dict:
+        """Convert the TaskResult to a dictionary."""
         return self.model_dump()
 
     @classmethod
     def from_dict(cls, data: dict) -> TaskResult:
+        """Create a TaskResult from a dictionary."""
         return cls.model_validate(data)
 
     def _round_scores(self, scores: dict[SplitName, list[ScoresDict]], n: int) -> None:
@@ -485,14 +491,13 @@ class TaskResult(BaseModel):
 
         return aggregation(values)
 
-    def get_score_fast(
+    def _get_score_fast(
         self,
         splits: Iterable[str] | None = None,
         languages: str | None = None,
         subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
-        # TODO: v2: We should make this private
         if splits is None:
             splits = self.scores.keys()
         val_sum = 0
