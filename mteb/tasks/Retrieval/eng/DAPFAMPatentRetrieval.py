@@ -7,26 +7,24 @@ from ....abstasks.TaskMetadata import TaskMetadata
 
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
-BIBTEX = r"""
-@misc{ayaou2025dapfamdomainawarefamilyleveldataset,
-      title = {DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval},
-      author = {Iliass Ayaou and Denis Cavallucci and Hicham Chibane},
-      year = {2025},
-      eprint = {2506.22141},
-      archivePrefix = {arXiv},
-      primaryClass = {cs.CL},
-      url = {https://arxiv.org/abs/2506.22141},
-}
-"""
+BIBTEX = r"""@misc{ayaou2025dapfamdomainawarefamilyleveldataset,
+  archiveprefix = {arXiv},
+  author = {Iliass Ayaou and Denis Cavallucci and Hicham Chibane},
+  eprint = {2506.22141},
+  primaryclass = {cs.CL},
+  title = {DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval},
+  url = {https://arxiv.org/abs/2506.22141},
+  year = {2025},
+}"""
 
 _SHARED_METADATA = dict(
     dataset={"path": HF_REPO, "revision": "780f4011d60297fc6e97a4119b0c516d13afea2d"},
     reference=REFERENCE,
     type="Retrieval",
+    modalities=["text"],
     category="p2p",
     task_subtypes=["Article retrieval", "Patent retrieval"],
-    eval_splits=["test"],
-    load_splits=["train"],
+    eval_splits=["train"],
     eval_langs=["eng-Latn"],
     main_score="ndcg_at_100",
     date=("1964-06-26", "2023-06-20"),
@@ -34,7 +32,9 @@ _SHARED_METADATA = dict(
     license="cc-by-nc-sa-4.0",
     annotations_creators="derived",
     sample_creation="created",
+    dialect=[],
     bibtex_citation=BIBTEX,
+    is_public=True,
 )
 
 # text-field dictionaries
@@ -65,7 +65,7 @@ class _DAPFAMMixin:
         ds_c = load_dataset(
             kwargs.get("dataset", {}).get("path", HF_REPO),
             "corpus",
-            split=kwargs.get("load_splits", "train"),
+            split=kwargs.get("eval_splits", "train"),
             revision=kwargs.get("dataset", {}).get(
                 "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
             ),
@@ -73,7 +73,7 @@ class _DAPFAMMixin:
         ds_q = load_dataset(
             kwargs.get("dataset", {}).get("path", HF_REPO),
             "queries",
-            split=kwargs.get("load_splits", "train"),
+            split=kwargs.get("eval_splits", "train"),
             revision=kwargs.get("dataset", {}).get(
                 "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
             ),
@@ -81,14 +81,14 @@ class _DAPFAMMixin:
         ds_r = load_dataset(
             kwargs.get("dataset", {}).get("path", HF_REPO),
             "relations",
-            split=kwargs.get("load_splits", "train"),
+            split=kwargs.get("eval_splits", "train"),
             revision=kwargs.get("dataset", {}).get(
                 "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
             ),
         )
 
         self.corpus = {
-            "test": {
+            "train": {
                 r["relevant_id"]: "\n".join(
                     str(r[f]) for f in self.corpus_fields if r.get(f)
                 )
@@ -96,7 +96,7 @@ class _DAPFAMMixin:
             }
         }
         self.queries = {
-            "test": {
+            "train": {
                 r["query_id"]: "\n".join(
                     str(r[f]) for f in self.query_fields if r.get(f)
                 )
@@ -112,7 +112,7 @@ class _DAPFAMMixin:
                 float(r["relevance_score"]),
                 r["domain_rel"],
             )
-        self._qrels_raw = {"test": raw}
+        self._qrels_raw = {"train": raw}
 
         qrels_int: dict[str, dict[str, int]] = {}
         for qid, pairs in raw.items():
@@ -127,7 +127,7 @@ class _DAPFAMMixin:
             if pos:
                 qrels_int[qid] = pos
 
-        self.relevant_docs = {"test": qrels_int}
+        self.relevant_docs = {"train": qrels_int}
         self.data_loaded = True
         return self.corpus, self.queries, self.relevant_docs
 
