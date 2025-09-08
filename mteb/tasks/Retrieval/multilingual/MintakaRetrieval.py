@@ -24,7 +24,6 @@ def _load_mintaka_data(
     langs: list,
     split: str,
     trust_remote_code: bool,
-    cache_dir: str = None,
     revision: str = None,
 ):
     queries = {lang: {split: {}} for lang in langs}
@@ -36,7 +35,6 @@ def _load_mintaka_data(
             path,
             lang,
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
@@ -103,7 +101,7 @@ Saffari, Amir},
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -111,7 +109,6 @@ Saffari, Amir},
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             split=self.metadata.eval_splits[0],
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
             trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )

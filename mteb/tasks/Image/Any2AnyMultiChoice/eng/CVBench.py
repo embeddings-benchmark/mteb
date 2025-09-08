@@ -11,7 +11,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 def _load_data(
     path: str,
     splits: list[str],
-    cache_dir: str = None,
     revision: str = None,
     subtask: str = "Count",
 ):
@@ -22,7 +21,6 @@ def _load_data(
 
     dataset = load_dataset(
         path,
-        cache_dir=cache_dir,
         revision=revision,
     )
     dataset = dataset.filter(lambda example: example["task"] == subtask)
@@ -127,11 +125,10 @@ class CVBenchCount(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
             subtask="Count",
         )
@@ -170,11 +167,10 @@ class CVBenchRelation(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
             subtask="Relation",
         )
@@ -213,11 +209,10 @@ class CVBenchDepth(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
             subtask="Depth",
         )
@@ -256,11 +251,10 @@ class CVBenchDistance(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
             subtask="Distance",
         )

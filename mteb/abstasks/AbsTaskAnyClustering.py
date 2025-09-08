@@ -7,7 +7,8 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
-from mteb.models.models_protocols import Encoder
+from mteb._evaluators import ClusteringEvaluator
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -16,7 +17,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import ClusteringEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
@@ -116,7 +116,7 @@ class AbsTaskAnyClustering(AbsTask):
         self._add_main_score(metrics)
         return metrics
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringDescriptiveStatistics:
         if hf_subset:

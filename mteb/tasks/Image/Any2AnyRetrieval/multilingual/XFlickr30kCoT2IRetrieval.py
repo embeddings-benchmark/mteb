@@ -17,9 +17,7 @@ _LANGUAGES = {
 }
 
 
-def _load_xflickrco_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+def _load_xflickrco_data(path: str, langs: list, splits: str, revision: str = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -29,7 +27,6 @@ def _load_xflickrco_data(
     for lang in langs:
         lang_data = load_dataset(
             path,
-            cache_dir=cache_dir,
             revision=revision,
             # trust_remote_code=True,
         )[lang]
@@ -107,7 +104,7 @@ class XFlickr30kCoT2IRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -115,7 +112,6 @@ class XFlickr30kCoT2IRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

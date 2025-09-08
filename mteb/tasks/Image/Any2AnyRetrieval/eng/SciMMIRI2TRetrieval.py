@@ -6,14 +6,13 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
+def _load_data(path: str, splits: str, revision: str = None):
     corpus = {}
     queries = {}
     relevant_docs = {}
 
     dataset = load_dataset(
         path,
-        cache_dir=cache_dir,
         revision=revision,
     )
 
@@ -95,13 +94,12 @@ class SciMMIRI2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

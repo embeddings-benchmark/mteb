@@ -13,7 +13,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.models.models_protocols import Encoder
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 
 from ..create_dataloaders import create_dataloader

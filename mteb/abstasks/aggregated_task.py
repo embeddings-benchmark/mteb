@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
+from .AbsTask import AbsTask
+from .aggregate_task_metadata import AggregateTaskMetadata
 
 if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
@@ -146,7 +146,7 @@ class AbsTaskAggregate(AbsTask):
             "Aggregate tasks does not implement a _evaluate_subset. Instead use the individual tasks."
         )
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> DescriptiveStatistics:
         raise NotImplementedError(

@@ -10,19 +10,20 @@ import pandas as pd
 from datasets import DatasetDict
 from sklearn.linear_model import LinearRegression
 
+from mteb._evaluators.regression_evaluator import (
+    LinearRegressionEvaluator,
+    SklearnRegressorModel,
+)
 from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.evaluation.evaluators.regression_evaluator import (
-    LinearRegressionEvaluator,
-    SklearnRegressorModel,
-)
 from mteb.load_results.task_results import ScoresDict
-from mteb.models.models_protocols import MTEBModels
+from mteb.models import MTEBModels
 from mteb.types import HFSubset
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
+
+from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -215,7 +216,7 @@ class AbsTaskTextRegression(AbsTask):
 
         return dataset_dict
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RegressionDescriptiveStatistics:
         train_text = []

@@ -1,10 +1,9 @@
 # Loading and working with results
 
-You can load your results from the cache using the `ResultCache` object.
+To make the results more easily accessible, we have designed functionality for retrieving results from both online and the local cache.
+Generally you access this functionality using the `ResultCache` object.
 
-
-
-To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+For instance, if you are selecting the best model for semantic text similarity (STS) you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
 import mteb
@@ -15,24 +14,28 @@ model_names = ["intfloat/multilingual-e5-large"]
 
 cache = ResultCache("~/.cache/mteb")
 results = cache.load_results(models=model_names, tasks=tasks)
-
 ```
 
-From this you will get a results object:
-```py
+From this you will get a `BenchmarkResults` object:
+```python
 results
 # BenchmarkResults(model_results=[...](#1))
 type(results)
 # mteb.load_results.benchmark_results.BenchmarkResults
 ```
+Which you can then convert to a dataframe:
 
-## Working with remote results
+```python
+df = results.to_dataframe()
+```
+
+## Working with public results
 
 All previously submitted results are available results [repository](https://github.com/embeddings-benchmark/results).
 
 You can download this using:
 
-```py
+```python
 from mteb.cache import ResultCache
 
 cache = ResultCache()
@@ -41,7 +44,7 @@ cache.download_from_remote() # download results from the remote repository
 
 From here, you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents, you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
-```py
+```python
 from mteb.cache import ResultCache
 
 # select your tasks
@@ -67,10 +70,10 @@ results = cache.load_results(
 
 The result object is a convenient object in `mteb` for working with dataframes and allows you to quick examine your results.
 
-![](images/visualizations/result_objects.png)
+![](../images/visualizations/result_objects.png)
 
 The object contain a lot of convenience functions for inspecting and examining the results:
-```py
+```python
 print(results.model_names)
 # ['GritLM/GritLM-7B', 'intfloat/multilingual-e5-large']
 
@@ -82,7 +85,7 @@ print(task_names)
 ### Filtering Results
 
 There is also utility function that allows you to select certain models or tasks:
-```py
+```python
 # select only gritLM
 results = results.select_models(["GritLM/GritLM-7B"])
 
@@ -95,7 +98,7 @@ results = results.select_tasks(retrieval_tasks)
 
 ### Creating a Dataframe
 
-```py
+```python
 df = results.to_dataframe()
 
 print(df)
@@ -122,7 +125,7 @@ print(df)
 
 By default this will give you the results in a `"wide"` format. However, you can just as well get them in a long format:
 
-```py
+```python
 long_format_df = results.to_dataframe(format="long")
 
 print(long_format_df.head(5))
@@ -138,7 +141,7 @@ print(long_format_df.head(5))
 
 One might want to add some more metadata to the table. This is luckily quite easy using:
 
-```py
+```python
 import pandas as pd
 
 task_df = tasks.to_dataframe(properties=["name", "type", "domains"])

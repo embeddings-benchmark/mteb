@@ -55,7 +55,7 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval):
     )
     num_of_distractors = 4
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
         Loading the hf dataset, it populates the following three variables to be used for retrieval evaluation.
 

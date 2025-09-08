@@ -6,11 +6,11 @@ from typing import Any
 import numpy as np
 from datasets import Dataset
 
-from mteb.models.models_protocols import Encoder
+from mteb._evaluators import SummarizationEvaluator
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
 
-from ..evaluation.evaluators import SummarizationEvaluator
 from ._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
@@ -89,7 +89,7 @@ class AbsTaskSummarization(AbsTask):
         self._add_main_score(scores)
         return scores
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:

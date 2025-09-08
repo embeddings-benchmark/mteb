@@ -103,8 +103,9 @@ test = [
 docs = [
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.5.47",
-    "mkdocstrings[python]>=0.18",
+    "mkdocstrings-python>=1.18.2",
     "mkdocs-bibtex>=2.16.2",
+    
 ]
 dev = [
     {include-group = "lint"},

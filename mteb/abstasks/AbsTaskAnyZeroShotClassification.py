@@ -5,6 +5,7 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -13,8 +14,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import ZeroShotClassificationEvaluator
-from ..models.models_protocols import Encoder
+from ..models import Encoder
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
@@ -66,7 +66,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
         if hf_subset:

@@ -9,7 +9,7 @@ from datasets import Dataset, DatasetDict
 from PIL import ImageFile
 from sklearn.linear_model import LogisticRegression
 
-from mteb.models.models_protocols import Encoder
+from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -18,7 +18,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators.classification_evaluator import (
+from .._evaluators.classification_evaluator import (
     ClassificationEvaluator,
     SklearnClassifierProtocol,
 )
@@ -203,7 +203,7 @@ class AbsTaskAnyClassification(AbsTask):
 
         return dataset.select(sampled_idxs), idxs
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
         train_text = []

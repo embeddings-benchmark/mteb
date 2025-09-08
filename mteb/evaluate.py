@@ -276,7 +276,7 @@ def evaluate(
         model = cast(CrossEncoderProtocol, model)
 
     existing_results = None
-    if cache:
+    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
         results = cache.load_task_result(task.metadata.name, meta)
         if results:
             existing_results = results
@@ -337,11 +337,6 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
             )
-            return ModelResult(
-                model_name=model_name,
-                model_revision=model_revision,
-                task_results=[result],
-            )
         except Exception as e:
             logger.error(
                 f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
@@ -351,14 +346,15 @@ def evaluate(
                 model_revision=model_revision,
                 task_results=[],
             )
-    result = _evaluate_task(
-        model=model,
-        splits=missing_eval,
-        task=task,
-        co2_tracker=False,
-        encode_kwargs=encode_kwargs,
-        prediction_folder=prediction_folder,
-    )
+    else:
+        result = _evaluate_task(
+            model=model,
+            splits=missing_eval,
+            task=task,
+            co2_tracker=False,
+            encode_kwargs=encode_kwargs,
+            prediction_folder=prediction_folder,
+        )
 
     if existing_results:
         result = result.merge(existing_results)

@@ -19,8 +19,8 @@ from mteb.abstasks.task_metadata import (
     TaskType,
 )
 from mteb.load_results.task_results import TaskResult
+from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
-from mteb.models.model_meta import ModelMeta
 from mteb.types import (
     ISOLanguage,
     ISOLanguageScript,

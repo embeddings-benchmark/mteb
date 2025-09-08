@@ -45,7 +45,7 @@ and that data is used as a positive example for the question text.""",
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

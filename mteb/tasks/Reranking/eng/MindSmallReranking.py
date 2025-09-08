@@ -5,12 +5,10 @@ from collections import defaultdict
 
 import tqdm
 
+from mteb._evaluators.retrieval_metrics import max_over_subqueries
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.retrieval_metrics import max_over_subqueries
-
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -123,13 +121,13 @@ Recommendation},
 
         return example_data
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load and transform the dataset with efficient deduplication."""
         if self.data_loaded:
             return
 
         # Call parent class method
-        super(AbsTaskRetrieval, self).load_data(**kwargs)
+        super(AbsTaskRetrieval, self).load_data()
 
         logging.info(
             f"Transforming old format to standard format for {self.metadata.name}"

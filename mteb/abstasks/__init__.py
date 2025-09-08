@@ -9,6 +9,7 @@ from .AbsTaskBitextMining import AbsTaskBitextMining
 from .AbsTaskClusteringFast import AbsTaskClusteringFast
 from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from .AbsTaskPairClassification import AbsTaskPairClassification
+from .AbsTaskReranking import AbsTaskReranking
 from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSummarization import AbsTaskSummarization
 from .AbsTaskTextRegression import AbsTaskTextRegression
@@ -25,6 +26,7 @@ __all__ = [
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
     "AbsTaskRetrieval",
+    "AbsTaskReranking",
     "AbsTaskAnySTS",
     "AbsTaskSummarization",
     "AbsTaskImageTextPairClassification",

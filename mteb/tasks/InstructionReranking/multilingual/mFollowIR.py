@@ -4,10 +4,9 @@ from logging import getLogger
 
 import datasets
 
+from mteb._evaluators.retrieval_metrics import evaluate_p_mrr_change
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change
 
 logger = getLogger(__name__)
 
@@ -48,7 +47,6 @@ def load_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {lang: {EVAL_SPLIT: {}} for lang in langs}
@@ -69,7 +67,6 @@ def load_data(
         corpus_data = datasets.load_dataset(
             path,
             f"corpus-{loading_lang}",
-            cache_dir=cache_dir,
             revision=revision,
         )
         corpus[lang][EVAL_SPLIT] = {
@@ -81,7 +78,6 @@ def load_data(
         queries_data = datasets.load_dataset(
             path,
             f"queries-{loading_lang}",
-            cache_dir=cache_dir,
             revision=revision,
         )
         queries[lang][EVAL_SPLIT] = {
@@ -92,7 +88,6 @@ def load_data(
         instructions_data = datasets.load_dataset(
             path,
             f"instruction-{loading_lang}",
-            cache_dir=cache_dir,
             revision=revision,
         )
         instructions[lang][EVAL_SPLIT] = {
@@ -104,7 +99,6 @@ def load_data(
         qrels_og_data = datasets.load_dataset(
             path,
             f"default-{loading_lang}",
-            cache_dir=cache_dir,
             revision=revision,
         )
         for row in qrels_og_data[EVAL_SPLIT]:
@@ -121,7 +115,6 @@ def load_data(
         top_ranked_data = datasets.load_dataset(
             path,
             f"top_ranked-{loading_lang}",
-            cache_dir=cache_dir,
             revision=revision,
         )
         for row in top_ranked_data["top_ranked"]:
@@ -131,7 +124,6 @@ def load_data(
             path,
             f"qrel_diff-{loading_lang}",
             split="qrel_diff",
-            cache_dir=cache_dir,
             revision=revision,
         )
 
@@ -185,7 +177,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -200,7 +192,6 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -254,7 +245,7 @@ class mFollowIR(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -269,7 +260,6 @@ class mFollowIR(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

@@ -5,7 +5,8 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.models.models_protocols import Encoder
+from mteb._evaluators import AnySTSEvaluator
+from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     DescriptiveStatistics,
@@ -14,7 +15,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..evaluation.evaluators import AnySTSEvaluator
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
@@ -91,7 +91,7 @@ class AbsTaskAnySTS(AbsTask):
         scores = evaluator(model, encode_kwargs=encode_kwargs)
         return scores
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
         first_column, second_column = self.column_names
