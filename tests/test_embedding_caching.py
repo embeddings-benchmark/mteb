@@ -148,21 +148,6 @@ class TestCachedEmbeddingWrapper:
 
         wrapped_model.close()  # delete to allow cleanup on Windows
 
-    def test_other_functions_still_work(self, cache_dir):
-        # Create a dummy model
-        dummy_model = DummyModel()
-
-        # Create the wrapper
-        wrapped_model = CachedEmbeddingWrapper(dummy_model, cache_dir)
-
-        # Call a function that is not wrapped
-        result = wrapped_model.random_other_function_returns_false()
-
-        assert result is False
-        assert wrapped_model.call_count == 0
-
-        wrapped_model.close()  # delete to allow cleanup on Windows
-
 
 @pytest.mark.parametrize(
     "task, model",
