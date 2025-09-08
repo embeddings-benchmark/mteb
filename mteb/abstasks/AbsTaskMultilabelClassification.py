@@ -16,8 +16,8 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from mteb.models import Encoder
 from mteb.types import ScoresDict
 
+from .._evaluators.classification_evaluator import SklearnClassifierProtocol
 from ..create_dataloaders import create_dataloader
-from ..evaluation.evaluators.classification_evaluator import SklearnClassifierProtocol
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
