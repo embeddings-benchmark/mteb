@@ -436,7 +436,7 @@ class MTEB:
 
             try:
                 task.check_if_dataset_is_superseded()
-                task.load_data(**kwargs)
+                task.load_data()
 
                 task_results = {}
                 evaluation_time = 0

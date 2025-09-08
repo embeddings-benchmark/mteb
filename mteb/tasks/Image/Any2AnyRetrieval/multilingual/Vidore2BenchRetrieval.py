@@ -17,7 +17,6 @@ def _load_data(
     path: str,
     splits: list[str],
     langs: list | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     if langs is None:
@@ -34,7 +33,6 @@ def _load_data(
             path,
             "queries",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         query_ds = query_ds.map(
@@ -51,7 +49,6 @@ def _load_data(
             path,
             "corpus",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         corpus_ds = corpus_ds.map(
@@ -67,7 +64,6 @@ def _load_data(
             path,
             "qrels",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
 
@@ -131,7 +127,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -139,7 +135,6 @@ class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -179,7 +174,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -187,7 +182,6 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -227,7 +221,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -235,7 +229,6 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             langs=_LANGS.keys(),
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -275,14 +268,13 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

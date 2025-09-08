@@ -55,7 +55,7 @@ Questions}},
         adapted_from=["Touche2020"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

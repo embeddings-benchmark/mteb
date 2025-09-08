@@ -53,14 +53,13 @@ Lukas, Leon},
     def get_hash(input_str) -> str:
         return hashlib.md5(input_str.encode("utf-8")).hexdigest()
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         dataset = datasets.load_dataset(
             path=self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         corpus = {}

@@ -54,7 +54,7 @@ Dolan, Bill},
         # sum of 4 languages after neutral filtering
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

@@ -73,7 +73,7 @@ class MKQARetrieval(AbsTaskRetrieval):
         """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """In this retrieval dataset, corpus and queries are in the same language."""
         if self.data_loaded:
             return

@@ -113,7 +113,7 @@ class MLQARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """In this retrieval datasets, corpus is in lang XX and queries in lang YY."""
         if self.data_loaded:
             return

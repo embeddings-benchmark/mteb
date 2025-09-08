@@ -62,14 +62,12 @@ def _load_single_language(
     path: str,
     split: str,
     lang: str | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     query_ds = load_dataset(
         path,
         data_dir=f"{lang}/queries" if lang else "queries",
         split=split,
-        cache_dir=cache_dir,
         revision=revision,
     )
     query_ds = query_ds.map(
@@ -86,7 +84,6 @@ def _load_single_language(
         path,
         data_dir=f"{lang}/corpus" if lang else "corpus",
         split=split,
-        cache_dir=cache_dir,
         revision=revision,
     )
     corpus_ds = corpus_ds.map(
@@ -102,7 +99,6 @@ def _load_single_language(
         path,
         data_dir=f"{lang}/qrels" if lang else "qrels",
         split=split,
-        cache_dir=cache_dir,
         revision=revision,
     )
 
@@ -113,7 +109,6 @@ def _load_data(
     path: str,
     splits: str,
     langs: list | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     if langs is None or len(langs) == 1:
@@ -132,7 +127,6 @@ def _load_data(
                 path=path,
                 split=split,
                 lang=lang,
-                cache_dir=cache_dir,
                 revision=revision,
             )
 
@@ -158,7 +152,7 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self, **kwargs):
+def load_data(self) -> None:
     if self.data_loaded:
         return
 
@@ -166,7 +160,6 @@ def load_data(self, **kwargs):
         path=self.metadata.dataset["path"],
         splits=self.metadata.eval_splits,
         langs=self.metadata.eval_langs,
-        cache_dir=kwargs.get("cache_dir", None),
         revision=self.metadata.dataset["revision"],
     )
 

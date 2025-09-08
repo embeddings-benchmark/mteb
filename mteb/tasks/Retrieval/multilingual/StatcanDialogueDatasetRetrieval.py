@@ -17,9 +17,7 @@ _LANGS = {
 }
 
 
-def _load_statcan_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+def _load_statcan_data(path: str, langs: list, splits: str, revision: str = None):
     queries = {lang: {split: {} for split in splits} for lang in langs}
     corpus = {lang: {split: {} for split in splits} for lang in langs}
     relevant_docs = {lang: {split: {} for split in splits} for lang in langs}
@@ -30,14 +28,12 @@ def _load_statcan_data(
                 path,
                 f"queries_{lang}",
                 split=split,
-                cache_dir=cache_dir,
                 revision=revision,
             )
             corpus_table = datasets.load_dataset(
                 path,
                 "corpus",
                 split=lang,
-                cache_dir=cache_dir,
                 revision=revision,
             )
 
@@ -101,7 +97,7 @@ de Vries, Harm},
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -109,7 +105,6 @@ de Vries, Harm},
             path=self.metadata.dataset["path"],
             langs=list(_LANGS.keys()),
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

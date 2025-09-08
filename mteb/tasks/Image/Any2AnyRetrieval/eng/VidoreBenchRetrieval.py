@@ -9,7 +9,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 def _load_data(
     path: str,
     splits: str,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {}
@@ -21,7 +20,6 @@ def _load_data(
             path,
             "queries",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         query_ds = query_ds.map(
@@ -39,7 +37,6 @@ def _load_data(
             path,
             "corpus",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         corpus_ds = corpus_ds.map(
@@ -56,7 +53,6 @@ def _load_data(
             path,
             "qrels",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         relevant_docs[split] = {}
@@ -103,11 +99,10 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -147,11 +142,10 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -191,11 +185,10 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -235,11 +228,10 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -279,11 +271,10 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -323,11 +314,10 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -367,11 +357,10 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -411,11 +400,10 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -455,11 +443,10 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
@@ -499,11 +486,10 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

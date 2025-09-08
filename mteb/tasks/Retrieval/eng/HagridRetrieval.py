@@ -46,7 +46,7 @@ class HagridRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Loads the different split of the dataset (queries/corpus/relevants)"""
         if self.data_loaded:
             return

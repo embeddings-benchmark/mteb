@@ -52,11 +52,11 @@ class FaithDialRetrieval(AbsTaskRetrieval):
     )
 
     # TODO: Will be removed if curated and added to mteb HF
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
+        for split in self.metadata.eval_splits:
             corpus, queries, qrels = self._load_data_for_split(split)
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,

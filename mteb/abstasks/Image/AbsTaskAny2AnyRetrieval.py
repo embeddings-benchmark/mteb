@@ -272,13 +272,13 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata.dataset["path"]
 
-        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
+        for split in self.metadata.eval_splits:
             corpus, queries, qrels = HFDataLoader(
                 hf_repo=dataset_path,
                 streaming=False,

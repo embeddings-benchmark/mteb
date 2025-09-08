@@ -38,7 +38,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
