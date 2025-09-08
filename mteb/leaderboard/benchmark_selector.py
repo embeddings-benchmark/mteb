@@ -78,17 +78,7 @@ BENCHMARK_ENTRIES = [
                         "VN-MTEB (vie, v1)",
                     ]
                 )
-                + [
-                    MenuEntry(
-                        "Other",
-                        mteb.get_benchmarks(
-                            [
-                                "MTEB(eng, v1)",
-                                "MTEB(fas, v1)",
-                            ]
-                        ),
-                    )
-                ],
+                + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)", "MTEB(fas, v1)"]))],
             ),
             MenuEntry(
                 "Miscellaneous",  # All of these are retrieval benchmarks
