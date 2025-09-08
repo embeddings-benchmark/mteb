@@ -224,8 +224,8 @@ class CachedEmbeddingWrapper(AbsEncoder):
 
     def __init__(self, model: Encoder, cache_path: str | Path):
         """Args:
-        model:
-        cache_path:
+        model: Model to be wrapped.
+        cache_path: Path to the directory where cached embeddings are stored.
         """
         self._model = model
         self.cache_path = Path(cache_path)
@@ -246,6 +246,27 @@ class CachedEmbeddingWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: Batch of inputs to encode.
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
+            hf_split: Split of current task
+            hf_subset: Subset of current task
+            prompt_type: The name type of prompt. (query or passage)
+            batch_size: Batch size
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
+        """
         task_name = task_metadata.name
         try:
             if task_name not in self.cache_dict:
@@ -315,5 +336,6 @@ class CachedEmbeddingWrapper(AbsEncoder):
         self.close()
 
     def close(self) -> None:
+        """Unload cache from memory."""
         for task in list(self.cache_dict.keys()):
             self.cache_dict[task].close()
