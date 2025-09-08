@@ -71,6 +71,7 @@ TaskSubtype = Literal[
     "Rendered semantic textual similarity",
     "Intent classification",
 ]
+"""The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
 TaskDomain = Literal[
     "Academic",
@@ -112,6 +113,7 @@ SampleCreationMethod = Literal[
     "rendered",
     "multiple",
 ]
+"""How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
@@ -144,6 +146,7 @@ _TASK_TYPE = (
 ) + MIEB_TASK_TYPE
 
 TaskType = Literal[_TASK_TYPE]
+"""The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
 TaskCategory = Literal[
@@ -159,6 +162,7 @@ TaskCategory = Literal[
     "t2it",  # text-to-image+text
     "it2it",  # image+text-to-image+text
 ]
+"""The category of the task. E.g. includes "t2t" (text to text), "t2i" (text to image) and "i2c" (image to category)."""
 
 AnnotatorType = Literal[
     "expert-annotated",
@@ -167,12 +171,13 @@ AnnotatorType = Literal[
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
 ]
+"""The type of the annotators. Is often important for understanding the quality of a dataset."""
 
 
 class PromptDict(TypedDict, total=False):
     """A dictionary containing the prompt used for the task.
 
-    Args:
+    Attributes:
         query: The prompt used for the queries in the task.
         document: The prompt used for the documents in the task.
     """
@@ -184,7 +189,7 @@ class PromptDict(TypedDict, total=False):
 class MetadataDatasetDict(TypedDict, total=False):
     """A dictionary containing the dataset path and revision.
 
-    Args:
+    Attributes:
         path: The path to the dataset.
         revision: The revision of the dataset.
         name: The name the dataset config.
@@ -203,7 +208,7 @@ class MetadataDatasetDict(TypedDict, total=False):
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
-    Args:
+    Attributes:
         dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.

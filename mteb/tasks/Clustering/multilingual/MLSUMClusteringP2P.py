@@ -53,7 +53,7 @@ class MLSUMClusteringP2P(AbsTaskAnyClustering):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
@@ -126,7 +126,7 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast):
         adapted_from=["MLSUMClusteringP2P"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return

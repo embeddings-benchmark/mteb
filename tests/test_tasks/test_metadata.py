@@ -10,7 +10,7 @@ from tests.test_benchmark.task_grid import ALL_TASK_TEST_GRID
     ALL_TASK_TEST_GRID,
 )
 def test_descriptive_stats(task):
-    result_stat = task.calculate_metadata_metrics()
+    result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
     task_stat = task.expected_stats

@@ -55,26 +55,23 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
         corpus = load_dataset(
             self.metadata.dataset["path"],
             "corpus",
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )["corpus"]
         query = load_dataset(
             self.metadata.dataset["path"],
             "query",
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )["test"]
         qrels = load_dataset(
             self.metadata.dataset["path"],
             "qrels",
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )["test"]
 

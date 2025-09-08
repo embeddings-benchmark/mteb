@@ -59,7 +59,7 @@ class GermanDPR(AbsTaskRetrieval):
             result[id_value] = {"title": title, "text": formatted_content}
         return result
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

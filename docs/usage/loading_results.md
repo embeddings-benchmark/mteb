@@ -70,7 +70,7 @@ results = cache.load_results(
 
 The result object is a convenient object in `mteb` for working with dataframes and allows you to quick examine your results.
 
-![](images/visualizations/result_objects.png)
+![](../images/visualizations/result_objects.png)
 
 The object contain a lot of convenience functions for inspecting and examining the results:
 ```python

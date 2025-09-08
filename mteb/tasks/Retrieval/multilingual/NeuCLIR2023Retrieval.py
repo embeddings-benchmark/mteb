@@ -20,7 +20,6 @@ def load_neuclir_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
@@ -28,15 +27,13 @@ def load_neuclir_data(
     relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
 
     for lang in langs:
-        lang_corpus = datasets.load_dataset(
-            path, f"corpus-{lang}", cache_dir=cache_dir, revision=revision
-        )["corpus"]
+        lang_corpus = datasets.load_dataset(path, f"corpus-{lang}", revision=revision)[
+            "corpus"
+        ]
         lang_queries = datasets.load_dataset(
-            path, f"queries-{lang}", cache_dir=cache_dir, revision=revision
+            path, f"queries-{lang}", revision=revision
         )["queries"]
-        lang_qrels = datasets.load_dataset(
-            path, f"{lang}", cache_dir=cache_dir, revision=revision
-        )["test"]
+        lang_qrels = datasets.load_dataset(path, f"{lang}", revision=revision)["test"]
         corpus[lang] = {
             "test": {
                 str(e["_id"]): {"text": e["text"], "title": e["title"]}
@@ -90,7 +87,7 @@ class NeuCLIR2023Retrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -98,7 +95,6 @@ class NeuCLIR2023Retrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
@@ -108,7 +104,6 @@ def load_neuclir_data_hard_negatives(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     split = "test"
@@ -121,7 +116,6 @@ def load_neuclir_data_hard_negatives(
         corpus_data = datasets.load_dataset(
             path,
             corpus_identifier,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )
@@ -137,7 +131,6 @@ def load_neuclir_data_hard_negatives(
         queries_data = datasets.load_dataset(
             path,
             queries_identifier,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )
@@ -152,7 +145,6 @@ def load_neuclir_data_hard_negatives(
         qrels_data = datasets.load_dataset(
             path,
             qrels_identifier,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )
@@ -208,7 +200,7 @@ class NeuCLIR2023RetrievalHardNegatives(AbsTaskRetrieval):
         adapted_from=["NeuCLIR2022Retrieval"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -217,7 +209,6 @@ class NeuCLIR2023RetrievalHardNegatives(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 langs=self.metadata.eval_langs,
                 eval_splits=self.metadata.eval_splits,
-                cache_dir=kwargs.get("cache_dir", None),
                 revision=self.metadata.dataset["revision"],
             )
         )

@@ -60,7 +60,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ImageTextPairClassificationDescriptiveStatistics:
         if compute_overall:

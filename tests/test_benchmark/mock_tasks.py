@@ -161,7 +161,7 @@ class MockClassificationTask(AbsTaskAnyClassification):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
 
@@ -316,7 +316,7 @@ class MockMultilingualClassificationTask(AbsTaskAnyClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
@@ -374,7 +374,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -465,7 +465,7 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -563,7 +563,7 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         "fra_Latn-eng_Latn": ["eng-Latn", "fra-Latn"],
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -613,7 +613,7 @@ class MockClusteringTask(AbsTaskAnyClustering):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -715,7 +715,7 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -772,7 +772,7 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -868,7 +868,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -930,7 +930,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = [["This is a test sentence", "This is another test sentence"]]
         sentence2 = [
             [
@@ -1046,7 +1046,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1106,7 +1106,7 @@ class MockSTSTask(AbsTaskAnySTS):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1219,7 +1219,7 @@ class MockMultilingualSTSTask(AbsTaskAnySTS):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -1283,7 +1283,7 @@ class MockSummarizationTask(AbsTaskSummarization):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -1413,7 +1413,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -1490,7 +1490,7 @@ class MockRerankingTask(AbsTaskRetrieval):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         self.dataset["default"]["test"] = base_datasplit
@@ -1610,7 +1610,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         self.dataset["eng"]["test"] = base_datasplit
@@ -1687,7 +1687,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -1765,7 +1765,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -1980,7 +1980,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -2040,7 +2040,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -2194,7 +2194,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -2262,7 +2262,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
@@ -2314,7 +2314,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
         **general_args,  # type: ignore
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
 
         self.dataset["default"]["test"] = base_datasplit
@@ -2419,7 +2419,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
@@ -2541,7 +2541,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
 
         for subset in ["eng", "fra"]:
@@ -2606,7 +2606,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2788,7 +2788,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2877,7 +2877,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -2953,7 +2953,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "t2i"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3044,7 +3044,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
     samples_per_label = 5
     input_column_name = "image"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3217,7 +3217,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
     metadata.eval_langs = multilingual_eval_langs
     input_column_name = "image"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3282,7 +3282,7 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
     input_column_name = "image"
     label_column_name = "label"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3336,7 +3336,7 @@ class MockImageMultilabelClassificationTask(AbsTaskImageMultilabelClassification
     n_experiments = 1
     samples_per_label = 3
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3436,7 +3436,7 @@ class MockMultilingualImageMultilabelClassificationTask(
     metadata.modalities = ["image"]
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3489,7 +3489,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3548,7 +3548,7 @@ class MockMultilingualImageTextPairClassificationTask(
 
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
@@ -3611,7 +3611,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
     metadata.modalities = ["image"]
     metadata.category = "i2i"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
 
         images = [
@@ -3674,7 +3674,7 @@ class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
 
         images = [
@@ -3738,7 +3738,7 @@ class MockTextZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
     metadata.category = "t2t"
     input_column_name = "text"
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         labels = ["label1", "label2"]
 

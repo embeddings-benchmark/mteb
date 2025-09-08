@@ -44,7 +44,7 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
         adapted_from=["SciFact"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

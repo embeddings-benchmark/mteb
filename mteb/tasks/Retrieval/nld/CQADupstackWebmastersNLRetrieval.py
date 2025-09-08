@@ -45,7 +45,7 @@ class CQADupstackWebmastersNLRetrieval(AbsTaskRetrieval):
         adapted_from=["CQADupstackWebmastersRetrieval"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

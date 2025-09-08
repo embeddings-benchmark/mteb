@@ -8,9 +8,12 @@ from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 pastdate_adapter = TypeAdapter(date)
 StrDate = Annotated[
     str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
+]
+"""A string that is a valid date in the past, e.g. formatted as YYYY-MM-DD."""
+
 
 http_url_adapter = TypeAdapter(AnyUrl)
 StrURL = Annotated[
     str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
+]
+"""A string that is a valid URL."""

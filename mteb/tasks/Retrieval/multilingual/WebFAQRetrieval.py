@@ -61,9 +61,7 @@ _LANGUAGES = {
 }
 
 
-def _load_webfaq_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+def _load_webfaq_data(path: str, langs: list, splits: str, revision: str = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -76,7 +74,6 @@ def _load_webfaq_data(
         corpus_data = datasets.load_dataset(
             path,
             corpus_identifier,
-            cache_dir=cache_dir,
             revision=revision,
         )
         corpus[lang][split] = {}
@@ -91,7 +88,6 @@ def _load_webfaq_data(
         queries_data = datasets.load_dataset(
             path,
             queries_identifier,
-            cache_dir=cache_dir,
             revision=revision,
         )
         queries[lang][split] = {}
@@ -105,7 +101,6 @@ def _load_webfaq_data(
         qrels_data = datasets.load_dataset(
             path,
             qrels_identifier,
-            cache_dir=cache_dir,
             revision=revision,
         )
         relevant_docs[lang][split] = {}
@@ -159,7 +154,7 @@ class WebFAQRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -167,7 +162,6 @@ class WebFAQRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=_EVAL_SPLIT,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
