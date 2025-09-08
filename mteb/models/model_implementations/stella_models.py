@@ -41,7 +41,7 @@ stella_zh_datasets = {
 # https://huggingface.co/datasets/Skywork/SkyPile-150B
 # https://huggingface.co/datasets/m-a-p/Matrix
 
-stella_en_400M = ModelMeta(
+stella_en_400m = ModelMeta(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
     loader=instruct_wrapper,
     loader_kwargs=dict(

@@ -140,7 +140,7 @@ def test_get_tasks_filtering():
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
-def test_MTEBTasks(
+def test_mteb_mteb_tasks(
     script: list[str],
     task_types: list[TaskType] | None,
     modalities: list[Modalities] | None,
