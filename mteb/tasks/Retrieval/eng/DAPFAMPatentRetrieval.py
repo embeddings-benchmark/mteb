@@ -20,12 +20,13 @@ BIBTEX = r"""
 """
 
 _SHARED_METADATA = dict(
-    dataset={"path": HF_REPO, "revision": "3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544"},
+    dataset={"path": HF_REPO, "revision": "780f4011d60297fc6e97a4119b0c516d13afea2d"},
     reference=REFERENCE,
     type="Retrieval",
     category="p2p",
     task_subtypes=["Article retrieval", "Patent retrieval"],
     eval_splits=["test"],
+    load_splits=["train"],
     eval_langs=["eng-Latn"],
     main_score="ndcg_at_100",
     date=("1964-06-26", "2023-06-20"),
@@ -52,32 +53,38 @@ _CORPUS_FIELDS = {
     ],
 }
 
-# MIX-IN with shared logic + metric implementation
+
+# MIX-IN with shared logic
 class _DAPFAMMixin:
     # class-level attributes are filled in each concrete subclass
     domain_filter: str | None = None
     query_fields: list[str] = []
     corpus_fields: list[str] = []
-    in_paper: bool = False
 
-    def load_data(self, **_) -> tuple[dict, dict, dict]:
+    def load_data(self, **kwargs) -> tuple[dict, dict, dict]:
         ds_c = load_dataset(
-            HF_REPO,
+            kwargs.get("dataset", {}).get("path", HF_REPO),
             "corpus",
-            split="train",
-            revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544",
+            split=kwargs.get("load_splits", "train"),
+            revision=kwargs.get("dataset", {}).get(
+                "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
+            ),
         )
         ds_q = load_dataset(
-            HF_REPO,
+            kwargs.get("dataset", {}).get("path", HF_REPO),
             "queries",
-            split="train",
-            revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544",
+            split=kwargs.get("load_splits", "train"),
+            revision=kwargs.get("dataset", {}).get(
+                "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
+            ),
         )
         ds_r = load_dataset(
-            HF_REPO,
+            kwargs.get("dataset", {}).get("path", HF_REPO),
             "relations",
-            split="train",
-            revision="3ad6eab6ed9b5fb1c0609b4dbf40e391ebb5a544",
+            split=kwargs.get("load_splits", "train"),
+            revision=kwargs.get("dataset", {}).get(
+                "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
+            ),
         )
 
         self.corpus = {
