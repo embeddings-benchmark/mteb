@@ -848,8 +848,8 @@ class DigikalamagClassification(AbsTaskClassification):
 class FaIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FaIntentClassification",
-        description="",
-        reference="https://mcinext.com/",
+        description="Questions in 4 different categories that a user might ask their voice assistant to do",
+        reference="https://github.com/HalflingWizard/FA-Intent-Classification-and-Slot-Filling",
         dataset={
             "path": "MCINext/FaIntent",
             "revision": "fc380690afbee9dba4dc618ef852285fa26f1d51",
@@ -861,10 +861,10 @@ class FaIntentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
         main_score="accuracy",
-        date=("2024-09-01", "2024-12-31"),
-        domains=["Web"],
+        date=("2021-09-01", "2021-12-31"),
+        domains=["Spoken"],
         task_subtypes=[],
-        license="not specified",
+        license="GPL-3.0 license",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -880,8 +880,8 @@ class FaIntentClassification(AbsTaskClassification):
 class StyleClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="StyleClassification",
-        description="",
-        reference="https://mcinext.com/",
+        description="A dataset containing formal and informal sentences in Persian for style classification.",
+        reference="https://huggingface.co/datasets/MCINext/style-classification",
         dataset={
             "path": "MCINext/style-classification",
             "revision": "41a0848f718a28b9a6333b2be47b6dc93d5c1803",
@@ -894,7 +894,7 @@ class StyleClassification(AbsTaskClassification):
         eval_langs=["fas-Arab"],
         main_score="accuracy",
         date=("2024-09-01", "2024-12-31"),
-        domains=["Web"],
+        domains=["Spoken"],
         task_subtypes=[],
         license="not specified",
         annotations_creators="derived",
@@ -914,8 +914,8 @@ class StyleClassification(AbsTaskClassification):
 class PerShopDomainClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PerShopDomainClassification",
-        description="",
-        reference="https://mcinext.com/",
+        description="PerSHOP - A Persian dataset for shopping dialogue systems modeling",
+        reference="https://github.com/keyvanmahmoudi/PerSHOP",
         dataset={
             "path": "MCINext/pershop-classification",
             "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
@@ -927,14 +927,19 @@ class PerShopDomainClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
         main_score="accuracy",
-        date=("2024-09-01", "2024-12-31"),
-        domains=["Web"],
+        date=("2023-09-01", "2024-01-31"),
+        domains=["Spoken"],
         task_subtypes=[],
         license="not specified",
-        annotations_creators="derived",
+        annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="found",
-        bibtex_citation=""" """,
+        sample_creation="created",
+        bibtex_citation="""@article{mahmoudi2024pershop,
+  title={PerSHOP--A Persian dataset for shopping dialogue systems modeling},
+  author={Mahmoudi, Keyvan and Faili, Heshaam},
+  journal={arXiv preprint arXiv:2401.00811},
+  year={2024}
+}""",
     )
     samples_per_label = 32
 
@@ -945,8 +950,8 @@ class PerShopDomainClassification(AbsTaskClassification):
 class PerShopIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PerShopIntentClassification",
-        description="",
-        reference="https://mcinext.com/",
+        description="PerSHOP - A Persian dataset for shopping dialogue systems modeling",
+        reference="https://github.com/keyvanmahmoudi/PerSHOP",
         dataset={
             "path": "MCINext/pershop-classification",
             "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
@@ -958,14 +963,19 @@ class PerShopIntentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
         main_score="accuracy",
-        date=("2024-09-01", "2024-12-31"),
-        domains=["Web"],
+        date=("2023-09-01", "2024-01-31"),
+        domains=["Spoken"],
         task_subtypes=[],
         license="not specified",
-        annotations_creators="derived",
+        annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="found",
-        bibtex_citation=""" """,
+        sample_creation="created",
+        bibtex_citation="""@article{mahmoudi2024pershop,
+  title={PerSHOP--A Persian dataset for shopping dialogue systems modeling},
+  author={Mahmoudi, Keyvan and Faili, Heshaam},
+  journal={arXiv preprint arXiv:2401.00811},
+  year={2024}
+}""",
     )
     samples_per_label = 32
 
