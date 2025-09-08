@@ -864,7 +864,7 @@ class FaIntentClassification(AbsTaskClassification):
         date=("2021-09-01", "2021-12-31"),
         domains=["Spoken"],
         task_subtypes=[],
-        license="GPL-3.0 license",
+        license="gpl-3.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
