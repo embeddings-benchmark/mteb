@@ -63,28 +63,22 @@ class _DAPFAMMixin:
 
     def load_data(self, **kwargs) -> tuple[dict, dict, dict]:
         ds_c = load_dataset(
-            kwargs.get("dataset", {}).get("path", HF_REPO),
+            self.metadata.dataset["path"],
             "corpus",
-            split=kwargs.get("eval_splits", "train"),
-            revision=kwargs.get("dataset", {}).get(
-                "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
-            ),
+            split=self.metadata.eval_splits[0],
+            revision=self.metadata.dataset["revision"],
         )
         ds_q = load_dataset(
-            kwargs.get("dataset", {}).get("path", HF_REPO),
+            self.metadata.dataset["path"],
             "queries",
-            split=kwargs.get("eval_splits", "train"),
-            revision=kwargs.get("dataset", {}).get(
-                "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
-            ),
+            split=self.metadata.eval_splits[0],
+            revision=self.metadata.dataset["revision"],
         )
         ds_r = load_dataset(
-            kwargs.get("dataset", {}).get("path", HF_REPO),
+            self.metadata.dataset["path"],
             "relations",
-            split=kwargs.get("eval_splits", "train"),
-            revision=kwargs.get("dataset", {}).get(
-                "revision", "780f4011d60297fc6e97a4119b0c516d13afea2d"
-            ),
+            split=self.metadata.eval_splits[0],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.corpus = {
