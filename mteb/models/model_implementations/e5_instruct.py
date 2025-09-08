@@ -114,7 +114,7 @@ e5_mistral = ModelMeta(
     adapted_from="mistralai/Mistral-7B-v0.1",
 )
 
-zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
+zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,

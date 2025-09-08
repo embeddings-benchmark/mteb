@@ -64,12 +64,12 @@ class HFDataLoader:
         self.keep_in_memory = keep_in_memory
 
     @staticmethod
-    def check(fIn: str, ext: str):
-        if not os.path.exists(fIn):
-            raise ValueError(f"File {fIn} not present! Please provide accurate file.")
+    def check(f_in: str, ext: str):
+        if not os.path.exists(f_in):
+            raise ValueError(f"File {f_in} not present! Please provide accurate file.")
 
-        if not fIn.endswith(ext):
-            raise ValueError(f"File {fIn} must be present with extension {ext}")
+        if not f_in.endswith(ext):
+            raise ValueError(f"File {f_in} must be present with extension {ext}")
 
     def load(
         self, split="test"
@@ -80,9 +80,9 @@ class HFDataLoader:
     ]:
         if not self.hf_repo:
             self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
-            self.check(fIn=self.corpus_file, ext="jsonl")
-            self.check(fIn=self.query_file, ext="jsonl")
-            self.check(fIn=self.qrels_file, ext="tsv")
+            self.check(f_in=self.corpus_file, ext="jsonl")
+            self.check(f_in=self.query_file, ext="jsonl")
+            self.check(f_in=self.qrels_file, ext="tsv")
 
         if not len(self.corpus):
             logger.info("Loading Corpus...")
@@ -111,7 +111,7 @@ class HFDataLoader:
 
     def load_corpus(self) -> dict[str, dict[str, str]]:
         if not self.hf_repo:
-            self.check(fIn=self.corpus_file, ext="jsonl")
+            self.check(f_in=self.corpus_file, ext="jsonl")
 
         if not len(self.corpus):
             logger.info("Loading Corpus...")

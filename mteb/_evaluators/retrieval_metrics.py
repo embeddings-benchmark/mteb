@@ -265,12 +265,12 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
     return conf_scores
 
 
-def nAUC(
+def nauc(
     conf_scores: np.ndarray,
     metrics: np.ndarray,
     abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
 ) -> float:
-    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
+    """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
     1/ Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
     2/ Computes the oracle abstention curve, i.e., the best theoretical abstention curve (e.g.: at a 10% abstention rate, the oracle abstains on the bottom-10% instances with regard to the evaluation metric)
     3/ Computes the flat abstention curve, i.e., the one remains flat for all abstention rates (ineffective abstention)
@@ -571,6 +571,6 @@ def evaluate_abstention(
 
     for metric_name, scores in metric_scores.items():
         for fct, conf_scores in all_conf_scores.items():
-            naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
+            naucs[f"nAUC_{metric_name}_{fct}"] = nauc(conf_scores, scores)
 
     return naucs
