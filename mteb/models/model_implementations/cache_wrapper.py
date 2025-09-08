@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import hashlib
-import io
 import json
 import logging
-from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +13,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import create_dataloader
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.models_protocols import Encoder
 from mteb.types import Array, BatchedInput, PromptType
@@ -22,7 +21,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class VectorCacheMap:
+class _VectorCacheMap:
     """Generic vector cache for both text and images."""
 
     def __init__(self, directory: str | Path, initial_vectors: int = 100000):
@@ -39,15 +38,18 @@ class VectorCacheMap:
         self._initialize_vectors_file()
 
     def _hash_item(self, item: str | Image.Image) -> str:
-        if isinstance(item, str):
-            return hashlib.sha256(item.encode()).hexdigest()
-        elif isinstance(item, Image.Image):
-            with io.BytesIO() as output:
-                item.save(output, format="PNG")  # normalize to PNG
-                img_bytes = output.getvalue()
-            return hashlib.sha256(img_bytes).hexdigest()
-        else:
+        item_hash = ""
+        if "text" in item:
+            item_hash = hashlib.sha256(item["text"].encode()).hexdigest()
+
+        if "image" in item:
+            image: Image.Image = item["image"]
+            item_hash += hashlib.sha256(image.tobytes()).hexdigest()
+
+        if item_hash == 0:
             raise TypeError(f"Unsupported cache key type: {type(item)}")
+
+        return item_hash
 
     def add(self, item: str | Image.Image, vector: np.ndarray) -> None:
         try:
@@ -181,7 +183,7 @@ class VectorCacheMap:
             logger.error(f"Error loading VectorCacheMap ({name or ''}): {str(e)}")
             raise
 
-    def get_vector(self, item: str | Image.Image) -> np.ndarray | None:
+    def get_vector(self, item: BatchedInput) -> np.ndarray | None:
         try:
             item_hash = self._hash_item(item)
             if item_hash not in self.hash_to_index:
@@ -204,19 +206,33 @@ class VectorCacheMap:
             self.vectors.flush()
             del self.vectors
             self.vectors = None
-        logger.info(f"Closed VectorCacheMap in directory: {self.directory}")
 
 
 class CachedEmbeddingWrapper(AbsEncoder):
-    """Wraps an encoder and caches embeddings for text and images."""
+    """Wraps an encoder and caches embeddings for text and images.
+
+    Examples:
+        >>> import mteb
+        >>> from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
+        >>> from pathlib import Path
+        >>> model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+        >>> cache_path = Path.cwd() / "cache"
+        >>> cached_model = CachedEmbeddingWrapper(model, cache_path)
+        >>> task = mteb.get_task("NanoArguAnaRetrieval")
+        >>> mteb.evaluate(cached_model, task)
+    """
 
     def __init__(self, model: Encoder, cache_path: str | Path):
+        """Args:
+        model:
+        cache_path:
+        """
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
-        self.cache_dict: dict[str, VectorCacheMap] = {}
+        self.cache_dict: dict[str, _VectorCacheMap] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
     def encode(
@@ -233,23 +249,15 @@ class CachedEmbeddingWrapper(AbsEncoder):
         task_name = task_metadata.name
         try:
             if task_name not in self.cache_dict:
-                self.cache_dict[task_name] = VectorCacheMap(self.cache_path / task_name)
+                self.cache_dict[task_name] = _VectorCacheMap(
+                    self.cache_path / task_name
+                )
                 self.cache_dict[task_name].load(name=task_name)
 
-            all_items: list[str | Image.Image] = []
-            for batch in inputs:
-                if "text" in batch:
-                    all_items.extend(batch["text"])
-                if "image" in batch:
-                    if isinstance(batch["image"][0], list):
-                        flat_imgs = [img for sub in batch["image"] for img in sub]
-                        all_items.extend(flat_imgs)
-                    else:
-                        all_items.extend(batch["image"])
-
             results: list[np.ndarray] = []
-            uncached_items: list[str | Image.Image] = []
+            uncached_items: list[BatchedInput] = []
             uncached_indices: list[int] = []
+            all_items = inputs.dataset
 
             for i, item in enumerate(all_items):
                 vector = self.cache_dict[task_name].get_vector(item)
@@ -262,20 +270,20 @@ class CachedEmbeddingWrapper(AbsEncoder):
             if uncached_items:
                 logger.info(f"Encoding {len(uncached_items)} new items")
                 # Build a simple DataLoader with only uncached items
-                dummy_ds = defaultdict(list)
-                for u in uncached_items:
-                    if isinstance(u, str):
-                        dummy_ds["text"].append(u)
-                    elif isinstance(u, Image.Image):
-                        dummy_ds["image"].append(u)
-
-                dl = DataLoader(Dataset.from_dict(dummy_ds), batch_size=batch_size)
+                dataset = Dataset.from_list(uncached_items)
+                dl = create_dataloader(
+                    dataset,
+                    task_metadata=task_metadata,
+                    prompt_type=prompt_type,
+                    batch_size=batch_size,
+                )
                 new_vectors = self._model.encode(
                     dl,
                     task_metadata=task_metadata,
                     hf_split=hf_split,
                     hf_subset=hf_subset,
                     prompt_type=prompt_type,
+                    batch_size=batch_size,
                     **kwargs,
                 )
                 if isinstance(new_vectors, torch.Tensor):
@@ -303,19 +311,9 @@ class CachedEmbeddingWrapper(AbsEncoder):
             logger.error(f"Error in cached encoding: {str(e)}")
             raise
 
-    def __getattr__(self, name: str) -> Any:
-        try:
-            return self.__dict__[name]
-        except KeyError:
-            return getattr(self._model, name)
-
-    def __dir__(self) -> list[str]:
-        return list(set(super().__dir__() + dir(self._model)))  # type: ignore
-
     def __del__(self):
         self.close()
 
     def close(self) -> None:
         for task in list(self.cache_dict.keys()):
             self.cache_dict[task].close()
-        logger.info("Closed CachedEmbeddingWrapper")

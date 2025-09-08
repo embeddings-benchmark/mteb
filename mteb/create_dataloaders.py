@@ -269,7 +269,7 @@ def create_dataloader(
 ) -> DataLoader:
     if "image" in task_metadata.modalities:
         return create_image_dataloader(
-            (dataset.select_columns(input_column).rename_column(input_column, "image")),
+            dataset,
             **dataloader_kwargs,
         )
     if "text" in task_metadata.modalities and input_column is not None:
