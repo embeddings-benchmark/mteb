@@ -39,13 +39,20 @@ def create_dataloader_from_texts(
 def corpus_to_dict(
     row: dict[str, str],
 ) -> dict[str, str]:
-    return {
-        "text": (row["title"] + " " + row["text"]).strip()
+    text = (
+        (row["title"] + " " + row["text"]).strip()
         if "title" in row
-        else row["text"].strip(),
-        "title": row.get("title", None),
-        "body": row.get("text", None),
+        else row["text"].strip()
+    )
+    new_row = {
+        "id": row["id"],
+        "text": text,
+        "body": row["text"],
     }
+    # dataloders can't handle None
+    if "title" in row and row["title"] is not None:
+        new_row["title"] = row["title"]
+    return new_row
 
 
 def create_dataloader_for_retrieval_corpus(
