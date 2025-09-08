@@ -145,7 +145,7 @@ def load_qrel_diff(metadata: TaskMetadata, hf_subset: str) -> dict[str, list[str
     return {item["query-id"]: item["corpus-ids"] for item in qrel_diff_ds}
 
 
-class mFollowIRCrossLingual(AbsTaskRetrieval):
+class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
     metadata = TaskMetadata(
         name="mFollowIRCrossLingual",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
@@ -213,7 +213,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
         )
 
 
-class mFollowIR(AbsTaskRetrieval):
+class mFollowIR(AbsTaskRetrieval):  # noqa: N801
     metadata = TaskMetadata(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",

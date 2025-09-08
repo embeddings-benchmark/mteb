@@ -13,7 +13,7 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class llama_nemoretriever_colembed(AbsEncoder):
+class LlamaNemoretrieverColembed(AbsEncoder):
     def __init__(
         self,
         model_name_or_path: str,
@@ -127,7 +127,7 @@ TRAINING_DATA = {
 }
 
 llama_nemoretriever_colembed_1b_v1 = ModelMeta(
-    loader=llama_nemoretriever_colembed,
+    loader=LlamaNemoretrieverColembed,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -152,7 +152,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
-    loader=llama_nemoretriever_colembed,
+    loader=LlamaNemoretrieverColembed,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),

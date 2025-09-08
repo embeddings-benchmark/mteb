@@ -649,7 +649,7 @@ def load_dataset(file_path: Path, class_name: str) -> DatasetDict:  # noqa: F811
     spec = importlib.util.spec_from_file_location("task_module", str(file_path))
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    TaskClass = getattr(module, class_name)
+    TaskClass = getattr(module, class_name)  # noqa
     task = TaskClass()
     task.load_data()
     ds = task.dataset

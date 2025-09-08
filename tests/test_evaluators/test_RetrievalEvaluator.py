@@ -116,7 +116,7 @@ class TestRetrievalEvaluator:
             ),
         ],
     )
-    def test_nAUC(self, ignore_identical_ids, expected_naucs):
+    def test_n_auc(self, ignore_identical_ids, expected_naucs):
         relevant_docs = {
             "0": {"0": 1, "1": 1},
             "1": {"0": 1},

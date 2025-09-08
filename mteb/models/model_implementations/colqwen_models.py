@@ -40,7 +40,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         )
 
 
-class ColQwen2_5Wrapper(ColPaliEngineWrapper):
+class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
     """Wrapper for ColQwen2.5 model."""
 
     def __init__(
