@@ -1,15 +1,20 @@
 from __future__ import annotations
 
 import shutil
+from pathlib import Path
 
 import numpy as np
 import pytest
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
+import mteb
 from mteb import TaskMetadata
+from mteb.abstasks import AbsTask
 from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.models_protocols import Encoder
+from tests.test_benchmark.mock_models import MockCLIPEncoder, MockNumpyEncoder
+from tests.test_benchmark.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 
 class DummyModel(Encoder):
@@ -157,3 +162,16 @@ class TestCachedEmbeddingWrapper:
         assert wrapped_model.call_count == 0
 
         wrapped_model.close()  # delete to allow cleanup on Windows
+
+
+@pytest.mark.parametrize(
+    "task, model",
+    [
+        (MockMultiChoiceTask(), MockCLIPEncoder()),
+        (MockRetrievalTask(), MockNumpyEncoder()),
+    ],
+)
+def test_wrapper_mock_tasks(task: AbsTask, model: Encoder, tmp_path: Path):
+    cached_model = CachedEmbeddingWrapper(model, tmp_path)
+    mteb.evaluate(cached_model, task)
+    assert len(list((tmp_path / task.metadata.name).glob("*"))) == 3
