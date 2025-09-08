@@ -497,7 +497,8 @@ class SynPerTextToneClassificationV2(AbsTaskClassification):
 class SynPerTextToneClassificationV3(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerTextToneClassification.v3",
-        description="""Persian Text Tone""",
+        description="""This version of the Persian text tone classification dataset is an improved version of its predecessors.
+         It excludes several classes identified as having low-quality data, leading to a more reliable benchmark.""",
         reference="https://mcinext.com/",
         dataset={
             "path": "MCINext/synthetic-persian-text-tone-classification-v3",
