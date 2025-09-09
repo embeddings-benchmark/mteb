@@ -552,7 +552,7 @@ class TaskMetadata(BaseModel):
             license_mapping = {
                 "not specified": "unknown",
                 "msr-la-nc": "other",
-                "cc-by-nd-2.1-jp": "cc-by-nd-2.1",
+                "cc-by-nd-2.1-jp": "other",
             }
             dataset_license = license_mapping.get(
                 dataset_license,
