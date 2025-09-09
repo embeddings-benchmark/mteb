@@ -58,21 +58,21 @@ nav:
         - Loading Results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
         - Running the Leaderboard: usage/leaderboard.md
-  # - Overview: # <-- TODO: find a better word
-  #     - Benchmarks: benchmarks.md
-  #     - Tasks: tasks.md
-  #     - Models: models.md
-  # - Contribute: # TODO: Add contributions
-  #     - Adding a Model: adding_a_model.md
-  #     - Adding a Benchmark: adding_a_leaderboard_tab.md
-  #     - Adding a Task: adding_a_dataset.md
-  #     - Development Setup: CONTRIBUTING.md
   - API:
       - Overview: api/index.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
       - Additional Types: api/types.md
+  - Overview:
+      - Tasks: overview/available_tasks.md
+  #     - Benchmarks: overview/available_benchmarks.md
+  #     - Models: overview/available_models.md
+  # - Contribute: # TODO: Add contributions
+  #     - Adding a Model: adding_a_model.md
+  #     - Adding a Benchmark: adding_a_leaderboard_tab.md
+  #     - Adding a Task: adding_a_dataset.md
+  #     - Development Setup: CONTRIBUTING.md
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 plugins:

@@ -1,6 +1,5 @@
 # GitHub action for the task table generation.
-
-name: documentation
+name: tables
 
 on:
   push:
@@ -47,7 +46,7 @@ jobs:
 
       - name: Create table
         run: |
-          make build-docs
+          make build-tables
 
       - name: Push table
         env:
