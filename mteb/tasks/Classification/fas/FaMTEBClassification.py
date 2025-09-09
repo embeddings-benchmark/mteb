@@ -852,8 +852,7 @@ class FaIntentClassification(AbsTaskClassification):
         reference="https://github.com/HalflingWizard/FA-Intent-Classification-and-Slot-Filling",
         dataset={
             "path": "MCINext/FaIntent",
-            "revision": "fc380690afbee9dba4dc618ef852285fa26f1d51",
-            "trust_remote_code": True,
+            "revision": "fc380690afbee9dba4dc618ef852285fa26f1d51"
         },
         type="Classification",
         category="s2s",
@@ -884,8 +883,7 @@ class StyleClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/MCINext/style-classification",
         dataset={
             "path": "MCINext/style-classification",
-            "revision": "41a0848f718a28b9a6333b2be47b6dc93d5c1803",
-            "trust_remote_code": True,
+            "revision": "41a0848f718a28b9a6333b2be47b6dc93d5c1803"
         },
         type="Classification",
         category="s2s",
@@ -918,8 +916,7 @@ class PerShopDomainClassification(AbsTaskClassification):
         reference="https://github.com/keyvanmahmoudi/PerSHOP",
         dataset={
             "path": "MCINext/pershop-classification",
-            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
-            "trust_remote_code": True,
+            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e"
         },
         type="Classification",
         category="s2s",
@@ -954,8 +951,7 @@ class PerShopIntentClassification(AbsTaskClassification):
         reference="https://github.com/keyvanmahmoudi/PerSHOP",
         dataset={
             "path": "MCINext/pershop-classification",
-            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
-            "trust_remote_code": True,
+            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e"
         },
         type="Classification",
         category="s2s",
