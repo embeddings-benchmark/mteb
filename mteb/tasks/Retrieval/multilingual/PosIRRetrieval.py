@@ -27,7 +27,7 @@ _POSIR_METADATA = {
     "sample_creation": "LM-generated and verified",
     "prompt": {
         "query": "Given a web search query, retrieve relevant passages that answer the query",
-        "passage": "",
+        "document": "",
     },
     "modalities": ["text"],
     "bibtex_citation": r"""
