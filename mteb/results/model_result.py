@@ -103,7 +103,6 @@ class ModelResult(BaseModel):
         task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
     ) -> ModelResult:
-        # TODO: v2 see filter_tasks in BenchmarkResults - but can be moved to a private function or removed
         new_task_results = []
         for task_result in self.task_results:
             if (task_names is not None) and (task_result.task_name not in task_names):
