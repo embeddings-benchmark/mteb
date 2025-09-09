@@ -39,13 +39,20 @@ def create_dataloader_from_texts(
 def corpus_to_dict(
     row: dict[str, str],
 ) -> dict[str, str]:
-    return {
-        "text": (row["title"] + " " + row["text"]).strip()
+    text = (
+        (row["title"] + " " + row["text"]).strip()
         if "title" in row
-        else row["text"].strip(),
-        "title": row.get("title", ""),  # dataloader don't like `None`
-        "body": row.get("text", ""),
+        else row["text"].strip()
+    )
+    new_row = {
+        "id": row["id"],
+        "text": text,
+        "body": row["text"],
     }
+    # dataloders can't handle None
+    if "title" in row and row["title"] is not None:
+        new_row["title"] = row["title"]
+    return new_row
 
 
 def create_dataloader_for_retrieval_corpus(
@@ -139,7 +146,7 @@ def convert_conv_history_to_query(
     row["query"] = conv_str
 
     if "instruction" in row:
-        conv_str = row["instruction"] + conv_str
+        conv_str = f"{row['instruction']} {conv_str}"
 
     row["text"] = conv_str
     row["conversation"] = current_conversation
@@ -163,6 +170,7 @@ def create_dataloader_for_queries_conversation(
         queries.map(
             convert_conv_history_to_query, desc="Converting conversations to queries"
         ),
+        collate_fn=custom_collate_fn,
         **dataloader_kwargs,
     )
 
@@ -216,14 +224,14 @@ def prepare_image_dataset(
 
 def custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     """Custom collate function that mimics the old pipeline:
-    - For the "image" key, leave the images as a list (to avoid stacking errors).
+    - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
     - For other keys, use the default collate.
     """
     collated: dict[str, Any] = {}
     for key in batch[0]:
-        if key == "image":
+        if key in ("image", "conversation"):
             # Leave the images as a list to avoid stacking errors.
-            collated["image"] = [item["image"] for item in batch]
+            collated[key] = [item[key] for item in batch]
         else:
             collated[key] = default_collate([item[key] for item in batch])
     return collated

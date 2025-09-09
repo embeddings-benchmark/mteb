@@ -4,7 +4,9 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+import sentence_transformers
 import torch
+from packaging.version import Version
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
 
@@ -16,6 +18,13 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
+
+SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
+
+HAS_QUERY_ENCODE = (
+    Version(sentence_transformers.__version__).release
+    >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+)
 
 
 def sentence_transformers_loader(
@@ -138,7 +147,17 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             )
         logger.info(f"Encoding {len(_inputs)} sentences.")
 
-        embeddings = self.model.encode(
+        if prompt_type and HAS_QUERY_ENCODE:
+            if prompt_type == PromptType.query:
+                encode_function = self.model.encode_query
+            elif prompt_type == PromptType.document:
+                encode_function = self.model.encode_corpus
+            else:
+                raise ValueError(f"Unknown prompt type: {prompt_type}")
+        else:
+            encode_function = self.model.encode
+
+        embeddings = encode_function(
             _inputs,
             prompt=prompt,
             **kwargs,
