@@ -90,10 +90,8 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
-            "trust_remote_code": True,
-            "dataset_version": "v1",
+            "path": "mteb/NLPJournalTitleIntroRetrieval",
+            "revision": "7595286313d52a3797829a93e048ed0ae91dd4ad",
         },
         type="Retrieval",
         category="t2t",

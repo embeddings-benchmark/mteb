@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -18,9 +16,8 @@ class AfriSentiClassification(AbsTaskAnyClassification):
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",
         dataset={
-            "path": "shmuhammad/AfriSenti-twitter-sentiment",
-            "revision": "b52e930385cf5ed7f063072c3f7bd17b599a16cf",
-            "trust_remote_code": True,
+            "path": "mteb/AfriSentiClassification",
+            "revision": "463850b9da81847227ff03f3f80a3310b93cba3c",
         },
         reference="https://arxiv.org/abs/2302.08956",
         type="Classification",
@@ -59,15 +56,3 @@ class AfriSentiClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            metadata = self.metadata.dataset
-            dataset = datasets.load_dataset(name=lang, **metadata)
-            self.dataset[lang] = _transform(dataset, lang)
-        self.dataset_transform()
-        self.data_loaded = True

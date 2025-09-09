@@ -11,9 +11,8 @@ class NorwegianParliamentClassification(AbsTaskAnyClassification):
         description="Norwegian parliament speeches annotated for sentiment",
         reference="https://huggingface.co/datasets/NbAiLab/norwegian_parliament",
         dataset={
-            "path": "NbAiLab/norwegian_parliament",
-            "revision": "f7393532774c66312378d30b197610b43d751972",
-            "trust_remote_code": True,
+            "path": "mteb/NorwegianParliamentClassification",
+            "revision": "3047317d2586abb183293f92b1b7d66d1c9ec81a",
         },
         type="Classification",
         category="t2c",

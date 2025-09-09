@@ -201,7 +201,7 @@ class MetadataDatasetDict(TypedDict, total=False):
     revision: str
     name: str
     split: str
-    trust_remote_code: bool
+    trust_remote_code: bool  # TODO remove
     dataset_version: str  # NLPJournalAbsArticleRetrieval.V2
 
 

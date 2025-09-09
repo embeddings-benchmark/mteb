@@ -103,9 +103,8 @@ class MIRACLRetrieval(AbsTaskRetrieval):
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="http://miracl.ai",
         dataset={
-            "path": "miracl/mmteb-miracl",
-            "revision": "main",
-            "trust_remote_code": True,
+            "path": "mteb/MIRACLRetrieval",
+            "revision": "9c09abc13478308c27598f350e31d8f06b9b5481",
         },
         type="Retrieval",
         category="t2t",
@@ -140,20 +139,6 @@ class MIRACLRetrieval(AbsTaskRetrieval):
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.metadata.dataset["path"],
-            revision=self.metadata.dataset["revision"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            trust_remote_code=self.metadata.dataset["trust_remote_code"],
-        )
-
-        self.data_loaded = True
 
 
 def _load_miracl_data_hard_negatives(

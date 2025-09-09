@@ -10,9 +10,8 @@ class FrenkEnClassification(AbsTaskAnyClassification):
         name="FrenkEnClassification",
         description="English subset of the FRENK dataset",
         dataset={
-            "path": "classla/FRENK-hate-en",
-            "revision": "52483dba0ff23291271ee9249839865e3c3e7e50",
-            "trust_remote_code": True,
+            "path": "mteb/FrenkEnClassification",
+            "revision": "d7abc39711be5ec3d803826506eb6137108e66ed",
         },
         reference="https://arxiv.org/abs/1906.02045",
         type="Classification",

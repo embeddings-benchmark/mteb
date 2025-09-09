@@ -11,9 +11,8 @@ class ARCChallenge(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on ARC-Challenge.",
         reference="https://allenai.org/data/arc",
         dataset={
-            "path": "RAR-b/ARC-Challenge",
-            "revision": "c481e0da3dcbbad8bce7721dea9085b74320a0a3",
-            "trust_remote_code": True,
+            "path": "mteb/ARCChallenge",
+            "revision": "61b42fe57d9a44e30f47b9b878b664a95472ec80",
         },
         type="Retrieval",
         category="t2t",

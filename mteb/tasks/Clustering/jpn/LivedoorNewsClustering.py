@@ -13,10 +13,8 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics). Version 2 updated on LivedoorNewsClustering by removing pairs where one of entries contain an empty sentences.",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "name": "livedoor_news",
-            "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
-            "trust_remote_code": True,
+            "path": "mteb/LivedoorNewsClustering.v2",
+            "revision": "21637d8f5a8978f029d1175e7e70fd0e9d9ed51e",
         },
         type="Clustering",
         category="t2c",
@@ -34,17 +32,6 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         bibtex_citation="",
         adapted_from=["LivedoorNewsClustering"],
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"text": "sentences", "label": "labels"}
-        )
-
-        for split in self.metadata.eval_splits:
-            # remove empty sentences (there is only one per split)
-            self.dataset[split] = self.dataset[split].filter(
-                lambda x: len(x["sentences"]) > 0
-            )
 
 
 class LivedoorNewsClustering(AbsTaskClusteringFast):

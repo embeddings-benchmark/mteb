@@ -90,10 +90,8 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
-            "trust_remote_code": True,
-            "dataset_version": "v1",
+            "path": "mteb/NLPJournalTitleAbsRetrieval",
+            "revision": "f566a317baefdcb75c6c2f350cf12fca2b2ff043",
         },
         type="Retrieval",
         category="t2t",
@@ -117,33 +115,3 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        query_list = datasets.load_dataset(
-            name="nlp_journal_title_abs-query",
-            split=_EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-
-        queries = {}
-        qrels = {}
-        for row_id, row in enumerate(query_list):
-            queries[str(row_id)] = row["query"]
-            qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
-
-        corpus_list = datasets.load_dataset(
-            name="nlp_journal_title_abs-corpus",
-            split="corpus",
-            **self.metadata.dataset,
-        )
-
-        corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
-
-        self.corpus = {_EVAL_SPLIT: corpus}
-        self.queries = {_EVAL_SPLIT: queries}
-        self.relevant_docs = {_EVAL_SPLIT: qrels}
-
-        self.data_loaded = True

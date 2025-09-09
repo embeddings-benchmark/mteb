@@ -32,7 +32,6 @@ def _load_wit_data(path: str, langs: list, splits: str, revision: str = None):
             path,
             split=lang,
             revision=revision,
-            # trust_remote_code=True,
         )
         lang_corpus = lang_data.map(
             lambda x: {

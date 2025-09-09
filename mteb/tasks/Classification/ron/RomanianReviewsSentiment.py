@@ -11,9 +11,8 @@ class RomanianReviewsSentiment(AbsTaskAnyClassification):
         description="LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian",
         reference="https://arxiv.org/abs/2101.04197",
         dataset={
-            "path": "universityofbucharest/laroseda",
-            "revision": "358bcc95aeddd5d07a4524ee416f03d993099b23",
-            "trust_remote_code": True,
+            "path": "mteb/RomanianReviewsSentiment",
+            "revision": "acfa5c2974c1d6f889e0ddf86a588b59aefd5e22",
         },
         type="Classification",
         category="t2c",
@@ -37,14 +36,6 @@ class RomanianReviewsSentiment(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"content": "text", "starRating": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class RomanianReviewsSentimentV2(AbsTaskAnyClassification):

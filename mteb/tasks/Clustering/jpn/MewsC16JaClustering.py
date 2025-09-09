@@ -15,10 +15,8 @@ class MewsC16JaClustering(AbsTaskClusteringFast):
         More detailed information is available in the Appendix E of the citation.""",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "name": "mewsc16_ja",
-            "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
-            "trust_remote_code": True,
+            "path": "mteb/MewsC16JaClustering",
+            "revision": "f50ef5a569175d8a1a04cbbe2c8012d138eb5e71",
         },
         type="Clustering",
         category="t2c",
@@ -52,8 +50,3 @@ Echizen, Isao},
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"text": "sentences", "label": "labels"}
-        )
