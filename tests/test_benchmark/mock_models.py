@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from types import SimpleNamespace as Namespace
+from types import SimpleNamespace
 from typing import Any, Literal
 
 import numpy as np
@@ -167,7 +167,7 @@ class MockMocoEncoder(AbsMockEncoder):
 class MockSentenceTransformer(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
-    model_card_data = Namespace(
+    model_card_data = SimpleNamespace(
         model_name="mock/MockSentenceTransformer",
         base_model_revision="1.0.0",
     )
