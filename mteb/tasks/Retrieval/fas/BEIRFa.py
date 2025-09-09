@@ -894,7 +894,7 @@ class HotpotQAFaHardNegatives(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2",
         dataset={
             "path": "MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2",
-            "revision": "b591262de1a2498c3618a4dd386d590450e85dcd",
+            "revision": "42a3220e6adc48e678a6f4bbe49f226ca7d0ed83",
         },
         type="Retrieval",
         category="s2p",
@@ -923,7 +923,7 @@ class MSMARCOFaHardNegatives(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2",
         dataset={
             "path": "MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2",
-            "revision": "f22eecc8ad7f25875a77b5e5e23d484b7cc74c59",
+            "revision": "1c67fef70e75a14e416a5da6e38d0b913f9fcc62",
         },
         type="Retrieval",
         category="s2p",
@@ -950,7 +950,7 @@ class NQFaHardNegatives(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/NQ_FA_test_top_250_only_w_correct-v2",
         dataset={
             "path": "MCINext/NQ_FA_test_top_250_only_w_correct-v2",
-            "revision": "cf7db7133d355e1ab152c8bd5cd25ecbd4114270",
+            "revision": "69bb4efac89a25da5e70d15793c4ec1498dbe06f",
         },
         type="Retrieval",
         category="s2p",
@@ -979,7 +979,7 @@ class FEVERFaHardNegatives(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/FEVER_FA_test_top_250_only_w_correct-v2",
         dataset={
             "path": "MCINext/FEVER_FA_test_top_250_only_w_correct-v2",
-            "revision": "a30774c99c358b3e04948b0eb8bd21f26461ef42",
+            "revision": "6eeb028da2a2c8f888e633a878310bf14ce33e09",
         },
         type="Retrieval",
         category="s2p",
