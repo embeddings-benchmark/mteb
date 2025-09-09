@@ -27,7 +27,7 @@ jobs:
 
       - name: Create table
         run: |
-          make build-docs
+          make build-tables
 
   create-table-and-push:
     if: github.ref == 'refs/heads/main'
