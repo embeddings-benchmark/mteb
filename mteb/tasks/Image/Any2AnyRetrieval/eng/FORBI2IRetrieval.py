@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FORBI2I(AbsTaskAny2AnyRetrieval):
+class FORBI2I(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FORBI2IRetrieval",
         description="Retrieve flat object images from 8 classes.",

@@ -24,3 +24,4 @@ class RetrievalEvaluationResult(NamedTuple):
     naucs: dict[str, float]
     mrr: dict[str, float]
     naucs_mrr: dict[str, float]
+    cv_recall: dict[str, float]

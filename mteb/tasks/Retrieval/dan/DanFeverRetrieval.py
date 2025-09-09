@@ -50,7 +50,7 @@ Derczynski, Leon},
         task_subtypes=["Claim verification"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -153,7 +153,7 @@ Derczynski, Leon},
         task_subtypes=["Claim verification"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

@@ -297,7 +297,7 @@ class AbsTask(ABC):
             )  ## only take the specified test split.
         return dataset_dict
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
@@ -342,7 +342,7 @@ class AbsTask(ABC):
         for lang, subset in self.dataset.items():
             self.dataset[lang] = datasets.DatasetDict(subset)
 
-    def calculate_metadata_metrics(
+    def calculate_descriptive_statistics(
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
         """Calculates descriptive statistics from the dataset."""
@@ -366,8 +366,10 @@ class AbsTask(ABC):
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
             if self.metadata.is_multilingual:
-                descriptive_stats[split] = self._calculate_metrics_from_split(
-                    split, compute_overall=True
+                descriptive_stats[split] = (
+                    self._calculate_descriptive_statistics_from_split(
+                        split, compute_overall=True
+                    )
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
 
@@ -378,10 +380,12 @@ class AbsTask(ABC):
                 for hf_subset in pbar_subsets:
                     pbar_subsets.set_postfix_str(f"Huggingface subset: {hf_subset}")
                     logger.info(f"Processing metadata for subset {hf_subset}")
-                    split_details = self._calculate_metrics_from_split(split, hf_subset)
+                    split_details = self._calculate_descriptive_statistics_from_split(
+                        split, hf_subset
+                    )
                     descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
-                split_details = self._calculate_metrics_from_split(split)
+                split_details = self._calculate_descriptive_statistics_from_split(split)
                 descriptive_stats[split] = split_details
 
         with self.metadata.descriptive_stat_path.open("w") as f:
@@ -389,8 +393,15 @@ class AbsTask(ABC):
 
         return descriptive_stats
 
+    def calculate_metadata_metrics(
+        self, overwrite_results: bool = False
+    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        return self.calculate_descriptive_statistics(
+            overwrite_results=overwrite_results
+        )
+
     @abstractmethod
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> DescriptiveStatistics:
         raise NotImplementedError

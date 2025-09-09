@@ -2,18 +2,17 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
+def _load_data(path: str, splits: str, revision: str = None):
     corpus = {}
     queries = {}
     relevant_docs = {}
 
     dataset = load_dataset(
         path,
-        cache_dir=cache_dir,
         revision=revision,
     )
 
@@ -63,7 +62,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
     return corpus, queries, relevant_docs
 
 
-class SciMMIRI2TRetrieval(AbsTaskAny2AnyRetrieval):
+class SciMMIRI2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciMMIRI2TRetrieval",
         description="Retrieve captions based on figures and tables.",
@@ -71,7 +70,6 @@ class SciMMIRI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "m-a-p/SciMMIR",
             "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -96,13 +94,12 @@ class SciMMIRI2TRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

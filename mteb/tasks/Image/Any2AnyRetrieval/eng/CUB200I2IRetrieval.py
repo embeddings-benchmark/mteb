@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CUB200I2I(AbsTaskAny2AnyRetrieval):
+class CUB200I2I(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CUB200I2IRetrieval",
         description="Retrieve bird images from 200 classes.",

@@ -62,7 +62,7 @@ inf_retriever_v1 = ModelMeta(
     training_datasets=inf_retreiver_v1_training_data,
 )
 
-inf_retriever_v1_1_5B = ModelMeta(
+inf_retriever_v1_1_5b = ModelMeta(
     loader=sentence_transformers_loader,
     loader_kwargs=dict(
         trust_remote_code=True,

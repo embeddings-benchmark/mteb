@@ -30,7 +30,7 @@ GTE_CITATION = """
 }
 """
 
-gte_Qwen2_7B_instruct = ModelMeta(
+gte_qwen2_7b_instruct = ModelMeta(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -63,7 +63,7 @@ gte_Qwen2_7B_instruct = ModelMeta(
     max_tokens=32_768,
 )
 
-gte_Qwen1_5_7B_instruct = ModelMeta(
+gte_qwen1_5_7b_instruct = ModelMeta(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,
@@ -93,7 +93,7 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     training_datasets=None,
 )
 
-gte_Qwen2_1_5B_instruct = ModelMeta(
+gte_qwen2_1_5b_instruct = ModelMeta(
     loader=instruct_wrapper,
     loader_kwargs=dict(
         instruction_template=instruction_template,

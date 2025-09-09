@@ -36,7 +36,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -47,7 +47,6 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         data = load_dataset(
             self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         question_ids = {

@@ -275,7 +275,7 @@ def evaluate(
         model = cast(CrossEncoderProtocol, model)
 
     existing_results = None
-    if cache:
+    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
         results = cache.load_task_result(task.metadata.name, meta)
         if results:
             existing_results = results

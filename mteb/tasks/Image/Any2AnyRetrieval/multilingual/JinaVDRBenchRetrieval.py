@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -62,14 +62,12 @@ def _load_single_language(
     path: str,
     split: str,
     lang: str | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     query_ds = load_dataset(
         path,
         data_dir=f"{lang}/queries" if lang else "queries",
         split=split,
-        cache_dir=cache_dir,
         revision=revision,
     )
     query_ds = query_ds.map(
@@ -86,7 +84,6 @@ def _load_single_language(
         path,
         data_dir=f"{lang}/corpus" if lang else "corpus",
         split=split,
-        cache_dir=cache_dir,
         revision=revision,
     )
     corpus_ds = corpus_ds.map(
@@ -102,7 +99,6 @@ def _load_single_language(
         path,
         data_dir=f"{lang}/qrels" if lang else "qrels",
         split=split,
-        cache_dir=cache_dir,
         revision=revision,
     )
 
@@ -113,7 +109,6 @@ def _load_data(
     path: str,
     splits: str,
     langs: list | None = None,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     if langs is None or len(langs) == 1:
@@ -132,7 +127,6 @@ def _load_data(
                 path=path,
                 split=split,
                 lang=lang,
-                cache_dir=cache_dir,
                 revision=revision,
             )
 
@@ -158,7 +152,7 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self, **kwargs):
+def load_data(self) -> None:
     if self.data_loaded:
         return
 
@@ -166,14 +160,13 @@ def load_data(self, **kwargs):
         path=self.metadata.dataset["path"],
         splits=self.metadata.eval_splits,
         langs=self.metadata.eval_langs,
-        cache_dir=kwargs.get("cache_dir", None),
         revision=self.metadata.dataset["revision"],
     )
 
     self.data_loaded = True
 
 
-class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMedicalPrescriptionsRetrieval",
         description="Retrieve medical prescriptions based on templated queries.",
@@ -194,7 +187,7 @@ class JinaVDRMedicalPrescriptionsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRStanfordSlideRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRStanfordSlideRetrieval",
         description="Retrieve scientific and engineering slides based on human annotated queries.",
@@ -215,7 +208,7 @@ class JinaVDRStanfordSlideRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDonutVQAISynHMPRetrieval",
         description="Retrieve medical records based on templated queries.",
@@ -236,7 +229,7 @@ class JinaVDRDonutVQAISynHMPRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRTableVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTableVQARetrieval",
         description="Retrieve scientific tables based on LLM generated queries.",
@@ -257,7 +250,7 @@ class JinaVDRTableVQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRChartQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRChartQARetrieval",
         description="Retrieve charts based on LLM generated queries.",
@@ -278,7 +271,7 @@ class JinaVDRChartQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRTQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTQARetrieval",
         description="Retrieve textbook pages (images and text) based on LLM generated queries from the text.",
@@ -299,7 +292,7 @@ class JinaVDRTQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDROpenAINewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDROpenAINewsRetrieval",
         description="Retrieve news articles from the OpenAI news website based on human annotated queries.",
@@ -320,7 +313,7 @@ class JinaVDROpenAINewsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDREuropeanaDeNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaDeNewsRetrieval",
         description="Retrieve German news articles based on LLM generated queries.",
@@ -341,7 +334,7 @@ class JinaVDREuropeanaDeNewsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDREuropeanaEsNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaEsNewsRetrieval",
         description="Retrieve Spanish news articles based on LLM generated queries.",
@@ -362,7 +355,7 @@ class JinaVDREuropeanaEsNewsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDREuropeanaItScansRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaItScansRetrieval",
         description="Retrieve Italian historical articles based on LLM generated queries.",
@@ -383,7 +376,7 @@ class JinaVDREuropeanaItScansRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDREuropeanaNlLegalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaNlLegalRetrieval",
         description="Retrieve Dutch historical legal documents based on LLM generated queries.",
@@ -404,7 +397,7 @@ class JinaVDREuropeanaNlLegalRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRHindiGovVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRHindiGovVQARetrieval",
         description="Retrieve Hindi government documents based on LLM generated queries.",
@@ -425,7 +418,7 @@ class JinaVDRHindiGovVQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRAutomobileCatelogRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAutomobileCatelogRetrieval",
         description="Retrieve automobile marketing documents based on LLM generated queries.",
@@ -446,7 +439,7 @@ class JinaVDRAutomobileCatelogRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRBeveragesCatalogueRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRBeveragesCatalogueRetrieval",
         description="Retrieve beverages marketing documents based on LLM generated queries.",
@@ -467,7 +460,7 @@ class JinaVDRBeveragesCatalogueRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRRamensBenchmarkRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRRamensBenchmarkRetrieval",
         description="Retrieve ramen restaurant marketing documents based on LLM generated queries.",
@@ -488,7 +481,7 @@ class JinaVDRRamensBenchmarkRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRJDocQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRJDocQARetrieval",
         description="Retrieve Japanese documents in various formats based on human annotated queries.",
@@ -509,7 +502,7 @@ class JinaVDRJDocQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRHungarianDocQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRHungarianDocQARetrieval",
         description="Retrieve Hungarian documents in various formats based on human annotated queries.",
@@ -530,7 +523,7 @@ class JinaVDRHungarianDocQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRArabicChartQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArabicChartQARetrieval",
         description="Retrieve Arabic charts based on queries.",
@@ -551,7 +544,7 @@ class JinaVDRArabicChartQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRArabicInfographicsVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArabicInfographicsVQARetrieval",
         description="Retrieve Arabic infographics based on queries.",
@@ -572,7 +565,7 @@ class JinaVDRArabicInfographicsVQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDROWIDChartsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDROWIDChartsRetrieval",
         description="Retrieve charts from the OWID dataset based on accompanied text snippets.",
@@ -593,7 +586,7 @@ class JinaVDROWIDChartsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRMPMQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMPMQARetrieval",
         description="Retrieve product manuals based on human annotated queries.",
@@ -614,7 +607,7 @@ class JinaVDRMPMQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRJina2024YearlyBookRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRJina2024YearlyBookRetrieval",
         description="Retrieve pages from the 2024 Jina yearbook based on human annotated questions.",
@@ -635,7 +628,7 @@ class JinaVDRJina2024YearlyBookRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsMapsRetrieval",
         description="Retrieve maps from Wikimedia Commons based on their description.",
@@ -656,7 +649,7 @@ class JinaVDRWikimediaCommonsMapsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRPlotQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRPlotQARetrieval",
         description="Retrieve plots from the PlotQA dataset based on LLM generated queries.",
@@ -677,7 +670,7 @@ class JinaVDRPlotQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRMMTabRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRMMTabRetrieval",
         description="Retrieve tables from the MMTab dataset based on queries.",
@@ -698,7 +691,7 @@ class JinaVDRMMTabRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRCharXivOCRRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRCharXivOCRRetrieval",
         description="Retrieve charts from scientific papers based on human annotated queries.",
@@ -719,7 +712,7 @@ class JinaVDRCharXivOCRRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRStudentEnrollmentSyntheticRetrieval",
         description="Retrieve student enrollment data based on templated queries.",
@@ -740,7 +733,7 @@ class JinaVDRStudentEnrollmentSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRGitHubReadmeRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRGitHubReadmeRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRGitHubReadmeRetrieval",
         description="Retrieve GitHub readme files based their description.",
@@ -781,7 +774,7 @@ class JinaVDRGitHubReadmeRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTweetStockSyntheticsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRTweetStockSyntheticsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTweetStockSyntheticsRetrieval",
         description="Retrieve rendered tables of stock prices based on templated queries.",
@@ -804,7 +797,7 @@ class JinaVDRTweetStockSyntheticsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRAirbnbSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRAirbnbSyntheticRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRAirbnbSyntheticRetrieval",
         description="Retrieve rendered tables from Airbnb listings based on templated queries.",
@@ -827,7 +820,7 @@ class JinaVDRAirbnbSyntheticRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRShanghaiMasterPlanRetrieval",
         description="Retrieve pages from the Shanghai Master Plan based on human annotated queries.",
@@ -848,7 +841,7 @@ class JinaVDRShanghaiMasterPlanRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRWikimediaCommonsDocumentsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRWikimediaCommonsDocumentsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRWikimediaCommonsDocumentsRetrieval",
         description="Retrieve historical documents from Wikimedia Commons based on their description.",
@@ -892,7 +885,7 @@ class JinaVDRWikimediaCommonsDocumentsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDREuropeanaFrNewsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDREuropeanaFrNewsRetrieval",
         description="Retrieve French news articles from Europeana based on LLM generated queries.",
@@ -913,7 +906,7 @@ class JinaVDREuropeanaFrNewsRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAHealthcareIndustryRetrieval",
         description="Retrieve healthcare industry documents based on LLM generated queries.",
@@ -934,7 +927,7 @@ class JinaVDRDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
+class JinaVDRDocQAAI(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAAI",
         description="Retrieve AI documents based on LLM generated queries.",
@@ -955,7 +948,7 @@ class JinaVDRDocQAAI(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRShiftProjectRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRShiftProjectRetrieval",
         description="Retrieve documents with graphs from the Shift Project based on LLM generated queries.",
@@ -976,7 +969,7 @@ class JinaVDRShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRTatQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTatQARetrieval",
         description="Retrieve financial reports based on human annotated queries.",
@@ -997,7 +990,7 @@ class JinaVDRTatQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRInfovqaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRInfovqaRetrieval",
         description="Retrieve infographics based on human annotated queries.",
@@ -1018,7 +1011,7 @@ class JinaVDRInfovqaRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRDocVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocVQARetrieval",
         description="Retrieve industry documents based on human annotated queries.",
@@ -1039,7 +1032,7 @@ class JinaVDRDocVQARetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRDocQAGovReportRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAGovReportRetrieval",
         description="Retrieve government reports based on LLM generated queries.",
@@ -1060,7 +1053,7 @@ class JinaVDRDocQAGovReportRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRTabFQuadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRTabFQuadRetrieval",
         description="Retrieve tables from industry documents based on LLM generated queries.",
@@ -1081,7 +1074,7 @@ class JinaVDRTabFQuadRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRDocQAEnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRDocQAEnergyRetrieval",
         description="Retrieve energy industry documents based on LLM generated queries.",
@@ -1102,7 +1095,7 @@ class JinaVDRDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
     load_data = load_data
 
 
-class JinaVDRArxivQARetrieval(AbsTaskAny2AnyRetrieval):
+class JinaVDRArxivQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JinaVDRArxivQARetrieval",
         description="Retrieve figures from scientific papers from arXiv based on LLM generated queries.",

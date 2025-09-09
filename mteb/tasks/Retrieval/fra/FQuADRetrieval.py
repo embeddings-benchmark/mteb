@@ -54,7 +54,7 @@ Liu, Yang},
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
         dataset_raw = datasets.load_dataset(

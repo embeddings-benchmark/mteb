@@ -61,7 +61,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

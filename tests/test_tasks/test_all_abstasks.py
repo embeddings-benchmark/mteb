@@ -10,8 +10,6 @@ import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
@@ -58,8 +56,6 @@ def test_load_data(
     # TODO: We skip because this load_data is completely different.
     if (
         isinstance(task, AbsTaskRetrieval)
-        or isinstance(task, AbsTaskAny2AnyRetrieval)
-        or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or isinstance(task, AbsTaskImageTextPairClassification)
         or task.metadata.is_multilingual
     ):

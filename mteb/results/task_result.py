@@ -189,6 +189,7 @@ class TaskResult(BaseModel):
         )
 
     @field_validator("scores")
+    @classmethod
     def _validate_scores(
         cls, v: dict[SplitName, list[ScoresDict]]
     ) -> dict[SplitName, list[ScoresDict]]:
