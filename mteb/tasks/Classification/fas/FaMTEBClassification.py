@@ -931,12 +931,14 @@ class PerShopDomainClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{mahmoudi2024pershop,
-  title={PerSHOP--A Persian dataset for shopping dialogue systems modeling},
-  author={Mahmoudi, Keyvan and Faili, Heshaam},
-  journal={arXiv preprint arXiv:2401.00811},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+        @article{mahmoudi2024pershop,
+        title = {PerSHOP--A Persian dataset for shopping dialogue systems modeling},
+        author = {Mahmoudi, Keyvan and Faili, Heshaam},
+        journal = {arXiv preprint arXiv:2401.00811},
+        year = {2024}
+        }
+        """,
     )
     samples_per_label = 32
 
@@ -966,12 +968,14 @@ class PerShopIntentClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{mahmoudi2024pershop,
-  title={PerSHOP--A Persian dataset for shopping dialogue systems modeling},
-  author={Mahmoudi, Keyvan and Faili, Heshaam},
-  journal={arXiv preprint arXiv:2401.00811},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+        @article{mahmoudi2024pershop,
+        title = {PerSHOP--A Persian dataset for shopping dialogue systems modeling},
+        author = {Mahmoudi, Keyvan and Faili, Heshaam},
+        journal = {arXiv preprint arXiv:2401.00811},
+        year = {2024}
+        }
+        """,
     )
     samples_per_label = 32
 
