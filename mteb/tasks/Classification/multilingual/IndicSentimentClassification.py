@@ -67,3 +67,4 @@ class IndicSentimentClassification(AbsTaskAnyClassification):
             self.dataset[lang] = self.dataset[lang].map(
                 lambda x: {"label": label_map[x["label_text"]]}
             )
+            self.dataset[lang] = self.dataset[lang].select_columns(["text", "label"])

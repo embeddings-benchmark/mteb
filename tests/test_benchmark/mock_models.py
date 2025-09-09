@@ -72,7 +72,11 @@ class MockNumpyEncoder(AbsMockEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        return np.random.rand(len(inputs.dataset), 10)  # type: ignore # noqa: NPY002
+        n = 0
+        for batch in inputs:
+            batch_column = list(batch.keys())[0]
+            n += len(batch[batch_column])
+        return np.random.rand(n, 10)  # type: ignore # noqa: NPY002
 
 
 class MockTorchEncoder(AbsMockEncoder):
