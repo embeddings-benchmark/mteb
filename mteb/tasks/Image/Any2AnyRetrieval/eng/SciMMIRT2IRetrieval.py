@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -62,7 +62,7 @@ def _load_data(path: str, splits: str, revision: str = None):
     return corpus, queries, relevant_docs
 
 
-class SciMMIRT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class SciMMIRT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciMMIRT2IRetrieval",
         description="Retrieve figures and tables based on captions.",
@@ -70,7 +70,6 @@ class SciMMIRT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "m-a-p/SciMMIR",
             "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2i",

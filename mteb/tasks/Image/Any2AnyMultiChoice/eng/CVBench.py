@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from datasets import Dataset, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -15,6 +17,7 @@ def _load_data(
     corpus = {}
     queries = {}
     relevant_docs = {}
+    top_ranked = defaultdict(lambda: defaultdict(list))
 
     dataset = load_dataset(
         path,
@@ -76,7 +79,12 @@ def _load_data(
         for corpus_id, doc in zip(corpus_ids, docs):
             corpus_records.append({"id": corpus_id, "text": doc, "modality": "text"})
         corpus[split] = Dataset.from_list(corpus_records)
-    return corpus, queries, relevant_docs
+
+        for query_id, relevant in relevant_docs[split].items():
+            for corpus_id, score in relevant.items():
+                top_ranked[split][query_id].append(corpus_id)
+
+    return corpus, queries, relevant_docs, top_ranked
 
 
 def transform_choices(example):
@@ -85,7 +93,7 @@ def transform_choices(example):
     return example
 
 
-class CVBenchCount(AbsTaskAny2AnyMultiChoice):
+class CVBenchCount(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchCount",
         description="count the number of objects in the image.",
@@ -118,7 +126,7 @@ class CVBenchCount(AbsTaskAny2AnyMultiChoice):
     )
 
     def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -127,7 +135,7 @@ class CVBenchCount(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
+class CVBenchRelation(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchRelation",
         description="decide the relation of the objects in the image.",
@@ -160,7 +168,7 @@ class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
     )
 
     def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -169,7 +177,7 @@ class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
+class CVBenchDepth(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchDepth",
         description="judge the depth of the objects in the image with similarity matching.",
@@ -202,7 +210,7 @@ class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
     )
 
     def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
@@ -211,7 +219,7 @@ class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
         self.data_loaded = True
 
 
-class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
+class CVBenchDistance(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchDistance",
         description="judge the distance of the objects in the image with similarity matching.",
@@ -244,7 +252,7 @@ class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
     )
 
     def load_data(self) -> None:
-        self.corpus, self.queries, self.relevant_docs = _load_data(
+        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],

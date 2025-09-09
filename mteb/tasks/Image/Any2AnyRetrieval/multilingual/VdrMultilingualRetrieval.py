@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -95,7 +95,7 @@ def _load_vdr_multilingual_data(
     return corpus_dataset_dict, queries_dataset_dict, relevant_docs_dataset_dict
 
 
-class VDRMultilingualRetrieval(AbsTaskAny2AnyRetrieval):
+class VDRMultilingualRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VDRMultilingualRetrieval",
         description="Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Spanish, English, French and German",

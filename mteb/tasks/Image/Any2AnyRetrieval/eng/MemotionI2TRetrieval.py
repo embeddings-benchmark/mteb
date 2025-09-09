@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import concatenate_datasets, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -85,7 +85,7 @@ def _load_data(path: str, splits: str, revision: str = None):
     return corpus, queries, relevant_docs
 
 
-class MemotionI2TRetrieval(AbsTaskAny2AnyRetrieval):
+class MemotionI2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MemotionI2TRetrieval",
         description="Retrieve captions based on memes.",
@@ -93,7 +93,6 @@ class MemotionI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "Ahren09/MMSoc_Memotion",
             "revision": "cdb15b61d84d56db73e0e59535dfea81ea3c22f4",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="i2t",

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class TUBerlinT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TUBerlinT2IRetrieval",
         description="Retrieve sketch images based on text descriptions.",
@@ -12,7 +12,6 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "gowitheflow/tu-berlin",
             "revision": "0cd78cd1ddbd3cafa9f319c638ebd77836ec9ff6",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2i",

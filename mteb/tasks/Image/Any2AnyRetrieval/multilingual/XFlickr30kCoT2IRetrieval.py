@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import DatasetDict, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -70,7 +70,7 @@ def _load_xflickrco_data(path: str, langs: list, splits: str, revision: str = No
     return corpus, queries, relevant_docs
 
 
-class XFlickr30kCoT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class XFlickr30kCoT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XFlickr30kCoT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -78,7 +78,6 @@ class XFlickr30kCoT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "floschne/xflickrco",
             "revision": "0af2c2eba58b27a71898787e286be04befdd7a20",
-            # "trust_remote_code": True,
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",

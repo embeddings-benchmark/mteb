@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import Dataset, DatasetDict, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -87,7 +87,7 @@ def _load_wit_data(path: str, langs: list, splits: str, revision: str = None):
     return corpus, queries, relevant_docs
 
 
-class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class WITT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WITT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -95,7 +95,6 @@ class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "mteb/wit",
             "revision": "91ac153f1371a98b209ed763205e25e115ecd06e",
-            # "trust_remote_code": True,
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",

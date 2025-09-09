@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
+class BLINKIT2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2TRetrieval",
         description="Retrieve images based on images and specific retrieval instructions.",
@@ -12,7 +12,6 @@ class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "JamieSJS/blink-it2t",
             "revision": "c6470936de49d6d2ae5fc09612752c75175ce5b6",
-            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="it2t",

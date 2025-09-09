@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class InfoSeekIT2TRetrieval(AbsTaskAny2AnyRetrieval):
+class InfoSeekIT2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="InfoSeekIT2TRetrieval",
         description="Retrieve source information to answer questions about images.",
@@ -12,7 +12,6 @@ class InfoSeekIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "MRBench/mbeir_infoseek_task6",
             "revision": "d4f4606f7a42bbf311c2957419ef3734fe81c47f",
-            "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="it2t",
