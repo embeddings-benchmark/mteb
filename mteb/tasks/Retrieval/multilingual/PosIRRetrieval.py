@@ -121,9 +121,9 @@ class PosIRAccommodationCateringHotelRetrieval(MultilingualTask, AbsTaskRetrieva
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRAccommodationCateringHotelRetrieval",
-        domains=["Non-fiction"],
+        domains=["Written"],
         description=(
-            "This test set is based on the accommodation_catering_hotel subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the accommodation_catering_hotel subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -136,9 +136,9 @@ class PosIRAerospaceRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRAerospaceRetrieval",
-        domains=["Engineering"],
+        domains=["Engineering", "Written"],
         description=(
-            "This test set is based on the aerospace subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the aerospace subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -153,9 +153,9 @@ class PosIRAgricultureForestryAnimalHusbandryFisheryRetrieval(
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRAgricultureForestryAnimalHusbandryFisheryRetrieval",
-        domains=["Non-fiction"],
+        domains=["Written"],
         description=(
-            "This test set is based on the agriculture_forestry_animal_husbandry_fishery subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the agriculture_forestry_animal_husbandry_fishery subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -170,9 +170,9 @@ class PosIRArtificialIntelligenceMachineLearningRetrieval(
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRArtificialIntelligenceMachineLearningRetrieval",
-        domains=["Engineering"],
+        domains=["Academic", "Written"],
         description=(
-            "This test set is based on the artificial_intelligence_machine_learning subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the artificial_intelligence_machine_learning subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -185,9 +185,9 @@ class PosIRAutomobileRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRAutomobileRetrieval",
-        domains=["Engineering"],
+        domains=["Engineering", "Written"],
         description=(
-            "This test set is based on the automobile subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the automobile subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -200,9 +200,9 @@ class PosIRBiomedicineRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRBiomedicineRetrieval",
-        domains=["Medical"],
+        domains=["Medical", "Written"],
         description=(
-            "This test set is based on the biomedicine subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the biomedicine subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -215,9 +215,9 @@ class PosIRComputerCommunicationRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRComputerCommunicationRetrieval",
-        domains=["Engineering"],
+        domains=["Web", "Written"],
         description=(
-            "This test set is based on the computer_communication subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the computer_communication subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -230,9 +230,9 @@ class PosIRComputerProgrammingCodeRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRComputerProgrammingCodeRetrieval",
-        domains=["Engineering"],
+        domains=["Programming"],
         description=(
-            "This test set is based on the computer_programming_code subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the computer_programming_code subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -247,9 +247,9 @@ class PosIRCurrentAffairsGovernmentAdministrationRetrieval(
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRCurrentAffairsGovernmentAdministrationRetrieval",
-        domains=["News"],
+        domains=["News", "Government"],
         description=(
-            "This test set is based on the current_affairs_government_administration subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the current_affairs_government_administration subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -262,9 +262,9 @@ class PosIRElectricPowerEnergyRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRElectricPowerEnergyRetrieval",
-        domains=["Engineering"],
+        domains=["Engineering", "Written"],
         description=(
-            "This test set is based on the electric_power_energy subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the electric_power_energy subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -277,9 +277,9 @@ class PosIRFilmEntertainmentRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRFilmEntertainmentRetrieval",
-        domains=["Entertainment"],
+        domains=["Entertainment", "Written"],
         description=(
-            "This test set is based on the film_entertainment subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the film_entertainment subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -292,9 +292,9 @@ class PosIRFinanceEconomicsRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRFinanceEconomicsRetrieval",
-        domains=["Financial"],
+        domains=["Financial", "Written"],
         description=(
-            "This test set is based on the finance_economics subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the finance_economics subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -307,7 +307,7 @@ class PosIRFinewebRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRFinewebRetrieval",
-        domains=["Web"],
+        domains=["Encyclopaedic", "Web", "Written"],
         description=(
             "This test set is based on the fineweb dataset. "
             + _COMMON_DESCRIPTION_SUFFIX
@@ -322,9 +322,9 @@ class PosIRFireSafetyFoodSafetyRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRFireSafetyFoodSafetyRetrieval",
-        domains=["Non-fiction"],
+        domains=["Written"],
         description=(
-            "This test set is based on the fire_safety_food_safety subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the fire_safety_food_safety subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -337,9 +337,9 @@ class PosIRGameRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRGameRetrieval",
-        domains=["Entertainment"],
+        domains=["Entertainment", "Written"],
         description=(
-            "This test set is based on the game subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the game subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -352,9 +352,9 @@ class PosIRLawJudiciaryRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRLawJudiciaryRetrieval",
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         description=(
-            "This test set is based on the law_judiciary subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the law_judiciary subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -367,9 +367,9 @@ class PosIRLiteratureEmotionRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRLiteratureEmotionRetrieval",
-        domains=["Written"],
+        domains=["Fiction"],
         description=(
-            "This test set is based on the literature_emotion subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the literature_emotion subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -382,9 +382,9 @@ class PosIRMathematicsStatisticsRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRMathematicsStatisticsRetrieval",
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         description=(
-            "This test set is based on the mathematics_statistics subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the mathematics_statistics subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -399,9 +399,9 @@ class PosIRMedicineHealthPsychologyTraditionalChineseMedicineRetrieval(
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRMedicineHealthPsychologyTraditionalChineseMedicineRetrieval",
-        domains=["Medical"],
+        domains=["Medical", "Written"],
         description=(
-            "This test set is based on the medicine_health_psychology_traditional_chinese_medicine subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the medicine_health_psychology_traditional_chinese_medicine subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -414,9 +414,9 @@ class PosIRMiningRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRMiningRetrieval",
-        domains=["Engineering"],
+        domains=["Engineering", "Written"],
         description=(
-            "This test set is based on the mining subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the mining subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -429,9 +429,9 @@ class PosIRNewsMediaRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRNewsMediaRetrieval",
-        domains=["News"],
+        domains=["News", "Written"],
         description=(
-            "This test set is based on the news_media subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the news_media subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -446,9 +446,9 @@ class PosIROtherInformationServicesInformationSecurityRetrieval(
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIROtherInformationServicesInformationSecurityRetrieval",
-        domains=["Engineering"],
+        domains=["Web", "Written"],
         description=(
-            "This test set is based on the other_information_services_information_security subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the other_information_services_information_security subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -461,9 +461,9 @@ class PosIROtherManufacturingRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIROtherManufacturingRetrieval",
-        domains=["Engineering"],
+        domains=["Engineering", "Written"],
         description=(
-            "This test set is based on the other_manufacturing subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the other_manufacturing subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -476,9 +476,9 @@ class PosIRPetrochemicalRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRPetrochemicalRetrieval",
-        domains=["Engineering"],
+        domains=["Chemistry", "Written"],
         description=(
-            "This test set is based on the petrochemical subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the petrochemical subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -491,9 +491,9 @@ class PosIRRealEstateConstructionRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRRealEstateConstructionRetrieval",
-        domains=["Non-fiction"],
+        domains=["Engineering", "Constructed", "Written"],
         description=(
-            "This test set is based on the real_estate_construction subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the real_estate_construction subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -506,9 +506,9 @@ class PosIRSportsRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRSportsRetrieval",
-        domains=["Entertainment"],
+        domains=["Entertainment", "Written"],
         description=(
-            "This test set is based on the sports subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the sports subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -521,9 +521,9 @@ class PosIRSubjectEducationEducationRetrieval(MultilingualTask, AbsTaskRetrieval
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRSubjectEducationEducationRetrieval",
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         description=(
-            "This test set is based on the subject_education_education subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the subject_education_education subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -536,9 +536,9 @@ class PosIRTechnologyScientificResearchRetrieval(MultilingualTask, AbsTaskRetrie
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRTechnologyScientificResearchRetrieval",
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         description=(
-            "This test set is based on the technology_scientific_research subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the technology_scientific_research subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -551,9 +551,9 @@ class PosIRTourismGeographyRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRTourismGeographyRetrieval",
-        domains=["Non-fiction"],
+        domains=["Written"],
         description=(
-            "This test set is based on the tourism_geography subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the tourism_geography subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -566,9 +566,9 @@ class PosIRTransportationRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRTransportationRetrieval",
-        domains=["Engineering"],
+        domains=["Written"],
         description=(
-            "This test set is based on the transportation subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the transportation subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
@@ -581,9 +581,9 @@ class PosIRWaterResourcesOceanRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         **_POSIR_METADATA,
         name="PosIRWaterResourcesOceanRetrieval",
-        domains=["Non-fiction"],
+        domains=["Written"],
         description=(
-            "This test set is based on the water_resources_ocean subset of the BAAI/IndustryCorpus2 dataset. "
+            "This test set is based on the water_resources_ocean subset of the BAAI/IndustryCorpus2 sampled from NLP pre-trained corpora (such as WuDaoCorpora, redpajama, and SkyPile-150B, among others). "
             + _COMMON_DESCRIPTION_SUFFIX
         ),
     )
