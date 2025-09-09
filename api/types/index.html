@@ -9,12 +9,14 @@
       
       
       
-        <link rel="prev" href="../results/">
+        <link rel="prev" href="../model/">
       
+      
+        <link rel="next" href="../../overview/available_tasks/">
       
       
       <link rel="icon" href="../../images/logos/mteb_logo/dots-icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.19">
     
     
       
@@ -223,6 +225,28 @@
     
   
   API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../overview/available_tasks/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Overview
 
         </a>
       </li>
@@ -661,8 +685,6 @@
       
         
       
-        
-      
     
     
     
@@ -784,29 +806,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../results/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Results
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -872,6 +871,83 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Overview
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/available_tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tasks
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1089,28 +1165,6 @@
     <div class="doc doc-contents ">
 
         <p>Retrieval corpus dataset, containing documents. Should have columns <code>id</code>, <code>title</code>, <code>body</code>.</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h4 id="mteb.types.HFSubset" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">HFSubset</span> <span class="o">=</span> <span class="nb">str</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-<a href="#mteb.types.HFSubset" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>The name of a HuggingFace dataset subset, e.g. 'en-de', 'en', 'default' (default is used when there is no subset).</p>
 
     </div>
 
@@ -1385,72 +1439,6 @@ scores. Should have columns <code>query-id</code>, <code>corpus-id</code>, <code
 
 
 
-<h4 id="mteb.types.Score" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">Score</span> <span class="o">=</span> <span class="n">Any</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-<a href="#mteb.types.Score" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>A score value, could e.g. be accuracy. Normally it is a float or int, but it can take on any value. Should be json serializable.</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h4 id="mteb.types.ScoresDict" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">ScoresDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-<a href="#mteb.types.ScoresDict" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>A dictionary of scores, typically also include metadata, e.g {'main_score': 0.5, 'accuracy': 0.5, 'f1': 0.6, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
-<h4 id="mteb.types.SplitName" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">SplitName</span> <span class="o">=</span> <span class="nb">str</span></code>
-
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
-  </span>
-
-<a href="#mteb.types.SplitName" class="headerlink" title="Permanent link">&para;</a></h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>The name of a data split, e.g. 'test', 'validation', 'train'.</p>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-attribute">
-
-
-
 <h4 id="mteb.types.StrDate" class="doc doc-heading">
             <code class="highlight language-python"><span class="n">StrDate</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BeforeValidator</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pastdate_adapter</span><span class="o">.</span><span class="n">validate_python</span><span class="p">(</span><span class="n">value</span><span class="p">)))]</span></code>
 
@@ -1709,7 +1697,8 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
 
               <details class="quote">
                 <summary>Source code in <code>mteb/types/_result.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
+<span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
 <span class="normal">19</span>
@@ -1730,6 +1719,7 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
     <span class="n">naucs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
     <span class="n">mrr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
     <span class="n">naucs_mrr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+    <span class="n">cv_recall</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -1799,7 +1789,7 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../results/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Results">
+          <a href="../model/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Model">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1809,11 +1799,27 @@ have columns <code>query-id</code>, <code>corpus-ids</code>.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Results
+                Model
               </div>
             </div>
           </a>
         
+        
+          
+          <a href="../../overview/available_tasks/" class="md-footer__link md-footer__link--next" aria-label="Next: Tasks">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Tasks
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
         
       </nav>
     
