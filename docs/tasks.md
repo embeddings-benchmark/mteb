@@ -254,6 +254,24 @@ The following tables give you an overview of the tasks in MTEB.
 | [CzechProductReviewSentimentClassification.v2](https://aclanthology.org/W13-1609/) (Habernal et al., 2013) | ['ces'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CzechSoMeSentimentClassification.v2](https://aclanthology.org/W13-1609/) (Habernal et al., 2013) | ['ces'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) (P{\v{r, 2022) | ['ces'] | Classification | s2s | [Reviews, Written] | None | None |
+| [DAPFAMAllTitlAbsClmToFullTextRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMAllTitlAbsClmToTitlAbsRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMAllTitlAbsToFullTextRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMAllTitlAbsToTitlAbsClmRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMAllTitlAbsToTitlAbsRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMInTitlAbsClmToFullTextRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMInTitlAbsClmToTitlAbsClmRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMInTitlAbsClmToTitlAbsRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMInTitlAbsToFullTextRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMInTitlAbsToTitlAbsClmRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMInTitlAbsToTitlAbsRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMOutTitlAbsClmToFullTextRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMOutTitlAbsClmToTitlAbsRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMOutTitlAbsToFullTextRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMOutTitlAbsToTitlAbsClmRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
+| [DAPFAMOutTitlAbsToTitlAbsRetrieval](https://arxiv.org/abs/2506.22141) (Iliass Ayaou, 2025) | ['eng'] | Retrieval | p2p | [Chemistry, Engineering, Legal] | None | None |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [DBPedia-Fa](https://huggingface.co/datasets/MCINext/dbpedia-fa) | ['fas'] | Retrieval | s2p | [Encyclopaedic] | None | None |
 | [DBPedia-NL](https://huggingface.co/datasets/clips/beir-nl-dbpedia-entity) (Nikolay Banar, 2024) | ['nld'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
@@ -1339,7 +1357,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 44 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 137 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 559 |
+| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 44 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 10 | 155 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 577 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -2112,7 +2130,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 137 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 680 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1496 | 868 | 321 | 7 | 137 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 698 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
