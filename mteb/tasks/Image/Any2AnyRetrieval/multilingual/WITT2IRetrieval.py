@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import Dataset, DatasetDict, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -20,9 +20,7 @@ _LANGUAGES = {
 }
 
 
-def _load_wit_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+def _load_wit_data(path: str, langs: list, splits: str, revision: str = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -33,7 +31,6 @@ def _load_wit_data(
         lang_data = load_dataset(
             path,
             split=lang,
-            cache_dir=cache_dir,
             revision=revision,
             # trust_remote_code=True,
         )
@@ -90,7 +87,7 @@ def _load_wit_data(
     return corpus, queries, relevant_docs
 
 
-class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class WITT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WITT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -98,7 +95,6 @@ class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "mteb/wit",
             "revision": "91ac153f1371a98b209ed763205e25e115ecd06e",
-            # "trust_remote_code": True,
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",
@@ -125,7 +121,7 @@ class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -133,7 +129,6 @@ class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

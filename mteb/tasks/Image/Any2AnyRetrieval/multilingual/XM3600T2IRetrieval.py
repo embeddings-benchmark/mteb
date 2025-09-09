@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datasets import Dataset, DatasetDict, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -45,9 +45,7 @@ _LANGUAGES = {
 }
 
 
-def _load_xm3600_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+def _load_xm3600_data(path: str, langs: list, splits: list[str], revision: str = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -58,7 +56,6 @@ def _load_xm3600_data(
         lang_data = load_dataset(
             path,
             split=lang,
-            cache_dir=cache_dir,
             revision=revision,
             # trust_remote_code=True,
         )
@@ -118,7 +115,7 @@ def _load_xm3600_data(
     return corpus, queries, relevant_docs
 
 
-class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
+class XM3600T2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XM3600T2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -126,7 +123,6 @@ class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "floschne/xm3600",
             "revision": "8d3e5665526c55a5855cd6ddfbaba2032bc7cee4",
-            # "trust_remote_code": True,
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",
@@ -152,7 +148,7 @@ class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -160,7 +156,6 @@ class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

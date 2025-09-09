@@ -108,7 +108,7 @@ class XGlueWPRReranking(AbsTaskReranking):
         bibtex_citation=_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         def _aggregate_texts(group, neg_label):
             return pd.Series(
                 {

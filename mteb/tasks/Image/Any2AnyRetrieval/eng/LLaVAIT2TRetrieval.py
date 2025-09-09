@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class LLaVAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
+class LLaVAIT2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LLaVAIT2TRetrieval",
         description="Retrieve responses to answer questions about images.",

@@ -26,7 +26,6 @@ def load_mldr_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str = None,
     revision: str = None,
 ):
     corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
@@ -37,12 +36,11 @@ def load_mldr_data(
         lang_corpus = datasets.load_dataset(
             path,
             f"corpus-{lang}",
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=True,
         )["corpus"]
         lang_corpus = {e["docid"]: {"text": e["text"]} for e in lang_corpus}
-        lang_data = datasets.load_dataset(path, lang, cache_dir=cache_dir)
+        lang_data = datasets.load_dataset(path, lang)
         for split in eval_splits:
             corpus[lang][split] = lang_corpus
             queries[lang][split] = {e["query_id"]: e["query"] for e in lang_data[split]}
@@ -101,7 +99,7 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -109,7 +107,6 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True

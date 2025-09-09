@@ -52,7 +52,6 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining):
             dataset = load_dataset(
                 self.metadata.dataset["path"],
                 split=_EVAL_SPLIT,
-                cache_dir=kwargs.get("cache_dir", None),
                 revision=self.metadata.dataset["revision"],
             )
             dataset = dataset.rename_columns(

@@ -121,13 +121,13 @@ Recommendation},
 
         return example_data
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         """Load and transform the dataset with efficient deduplication."""
         if self.data_loaded:
             return
 
         # Call parent class method
-        super(AbsTaskRetrieval, self).load_data(**kwargs)
+        super(AbsTaskRetrieval, self).load_data()
 
         logging.info(
             f"Transforming old format to standard format for {self.metadata.name}"

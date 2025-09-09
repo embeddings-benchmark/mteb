@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
 def _load_data(
     path: str,
     splits: str,
-    cache_dir: str | None = None,
     revision: str | None = None,
 ):
     corpus = {}
@@ -21,7 +20,6 @@ def _load_data(
             path,
             "queries",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         query_ds = query_ds.map(
@@ -39,7 +37,6 @@ def _load_data(
             path,
             "corpus",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         corpus_ds = corpus_ds.map(
@@ -56,7 +53,6 @@ def _load_data(
             path,
             "qrels",
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
         )
         relevant_docs[split] = {}
@@ -70,7 +66,7 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreArxivQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreArxivQARetrieval",
         description="Retrieve associated pages according to questions.",
@@ -103,18 +99,17 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreDocVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreDocVQARetrieval",
         description="Retrieve associated pages according to questions.",
@@ -147,18 +142,17 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreInfoVQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreInfoVQARetrieval",
         description="Retrieve associated pages according to questions.",
@@ -191,18 +185,17 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreTabfquadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreTabfquadRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -235,18 +228,17 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreTatdqaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreTatdqaRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -279,18 +271,17 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreShiftProjectRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreShiftProjectRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -323,18 +314,17 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAAIRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAAIRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -367,18 +357,17 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAEnergyRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -411,18 +400,17 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAGovernmentReportsRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -455,18 +443,17 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
 
 
-class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
+class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         description="Retrieve associated pages according to questions.",
@@ -499,11 +486,10 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

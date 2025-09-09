@@ -25,7 +25,7 @@ OLD_FORMAT_RERANKING_TASKS = [
 class AbsTaskReranking(AbsTaskRetrieval):
     """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but here to adapt the old format to the new format. TODO: update these tasks to the new format and delete this class."""
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -33,7 +33,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data(**kwargs)
+            return super().load_data()
 
     def process_example(self, example: dict, split: str, query_idx: int) -> dict:
         """Process a single example from the dataset."""

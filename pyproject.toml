@@ -103,8 +103,9 @@ test = [
 docs = [
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.5.47",
-    "mkdocstrings[python]>=0.18",
+    "mkdocstrings-python>=1.18.2",
     "mkdocs-bibtex>=2.16.2",
+    
 ]
 dev = [
     {include-group = "lint"},
@@ -157,6 +158,25 @@ select = [
     "FA", # Future annotations
     "C4", # cleaner comprehensions
     "NPY", # numpy
+    # "N":  # PEP8 naming convention (slowly adopting it over multiple commits
+    "N801",
+    "N802",
+    "N803",
+    "N804",
+    "N805",
+    "N807",
+    "N811",
+    "N813",
+    "N814",
+    "N815",
+    "N816",
+    "N817",
+    "N818",
+    # "N999", # no camelcase in module name (for a seperate PR)
+    # would exclude:
+    # "N806", # probably not worth it
+    # "N812" # disallows: import torch.nn.functional as F which is standard
+
 ]
 
 

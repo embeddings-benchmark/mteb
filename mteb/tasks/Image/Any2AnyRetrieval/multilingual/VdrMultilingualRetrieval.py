@@ -3,7 +3,7 @@ from __future__ import annotations
 import datasets
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -20,7 +20,6 @@ def _load_vdr_multilingual_data(
     path: str,
     langs: list,
     split: str,
-    cache_dir: str = None,
     revision: str = None,
     trust_remote_code: bool = False,
 ):
@@ -34,7 +33,6 @@ def _load_vdr_multilingual_data(
             path=path,
             name=lang_code,
             split=split,
-            cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
@@ -97,7 +95,7 @@ def _load_vdr_multilingual_data(
     return corpus_dataset_dict, queries_dataset_dict, relevant_docs_dataset_dict
 
 
-class VDRMultilingualRetrieval(AbsTaskAny2AnyRetrieval):
+class VDRMultilingualRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VDRMultilingualRetrieval",
         description="Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Spanish, English, French and German",
@@ -132,7 +130,7 @@ class VDRMultilingualRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
@@ -140,7 +138,6 @@ class VDRMultilingualRetrieval(AbsTaskAny2AnyRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             split=_EVAL_SPLIT,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset.get("revision", None),
             trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
         )

@@ -2,18 +2,17 @@ from __future__ import annotations
 
 from datasets import concatenate_datasets, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
+def _load_data(path: str, splits: str, revision: str = None):
     corpus = {}
     queries = {}
     relevant_docs = {}
 
     dataset = load_dataset(
         path,
-        cache_dir=cache_dir,
         revision=revision,
     )
     dataset_splits = list(dataset)
@@ -84,7 +83,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
     return corpus, queries, relevant_docs
 
 
-class MemotionT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class MemotionT2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MemotionT2IRetrieval",
         description="Retrieve memes based on captions.",
@@ -92,7 +91,6 @@ class MemotionT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "Ahren09/MMSoc_Memotion",
             "revision": "cdb15b61d84d56db73e0e59535dfea81ea3c22f4",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -118,13 +116,12 @@ class MemotionT2IRetrieval(AbsTaskAny2AnyRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
-            cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata.dataset["revision"],
         )
 

@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import MultiChoiceEvaluationMixin
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RParisEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
+class RParisEasyI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RParisEasyI2IRetrieval",
         description="Retrieve photos of landmarks in Paris, UK.",
@@ -40,7 +39,7 @@ class RParisEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval
     skip_first_result = False
 
 
-class RParisMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
+class RParisMediumI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RParisMediumI2IRetrieval",
         description="Retrieve photos of landmarks in Paris, UK.",
@@ -75,7 +74,7 @@ class RParisMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetriev
     skip_first_result = False
 
 
-class RParisHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
+class RParisHardI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RParisHardI2IRetrieval",
         description="Retrieve photos of landmarks in Paris, UK.",

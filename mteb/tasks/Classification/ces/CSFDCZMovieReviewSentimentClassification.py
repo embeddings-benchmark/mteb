@@ -42,13 +42,11 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskAnyClassification):
     samples_per_label = 20
 
     def dataset_transform(self):
-        N_SAMPLES = 2048
-
         self.dataset = self.dataset.rename_columns(
             {"comment": "text", "rating_int": "label"}
         )
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], n_samples=N_SAMPLES
+            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
         )
 
 
@@ -91,8 +89,6 @@ class CSFDCZMovieReviewSentimentClassificationV2(AbsTaskAnyClassification):
     samples_per_label = 20
 
     def dataset_transform(self):
-        N_SAMPLES = 2048
-
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], n_samples=N_SAMPLES
+            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
         )

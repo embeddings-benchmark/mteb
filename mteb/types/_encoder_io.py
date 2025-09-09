@@ -13,10 +13,13 @@ from typing_extensions import NotRequired
 # --- Output types ---
 # should be as Union, because `|` won't work for python3.9
 Array = Union[np.ndarray, torch.Tensor]
+"""General array type, can be a numpy array or a torch tensor."""
 
 
 # --- Input types ---
 class PromptType(str, Enum):
+    """The type of prompt used in the input for retrieval models. Used to differentiate between queries and documents."""
+
     query = "query"
     document = "document"
 
@@ -24,7 +27,7 @@ class PromptType(str, Enum):
 class ConversationTurn(TypedDict):
     """A conversation, consisting of a list of messages.
 
-    Args:
+    Attributes:
         role: The role of the message sender.
         content: The content of the message.
     """
@@ -34,12 +37,13 @@ class ConversationTurn(TypedDict):
 
 
 Conversation = list[ConversationTurn]
+"""A conversation, consisting of a list of messages."""
 
 
 class TextInput(TypedDict):
     """The input to the encoder for text.
 
-    Args:
+    Attributes:
         text: The text to encode. Can be a list of texts or a list of lists of texts.
     """
 
@@ -81,7 +85,7 @@ class ImageInput(TypedDict):
         image: The image to encode. Can be a list of images or a list of lists of images.
     """
 
-    image: list[list[Image.Image]]
+    image: list[Image.Image]
 
 
 class AudioInput(TypedDict):
@@ -104,9 +108,10 @@ class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput
 BatchedInput = Union[
     TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, MultimodalInput
 ]
+"""The input to the encoder for a batch of data."""
 
 TextBatchedInput = Union[TextInput, CorpusInput, QueryInput]
-
+"""The input to the encoder for a batch of text data."""
 
 QueryDatasetType = Dataset
 """Retrieval query dataset, containing queries. Should have columns `id`, `text`."""

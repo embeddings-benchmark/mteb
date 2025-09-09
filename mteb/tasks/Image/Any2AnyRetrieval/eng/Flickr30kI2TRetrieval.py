@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Flickr30kI2TRetrieval(AbsTaskAny2AnyRetrieval):
+class Flickr30kI2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Flickr30kI2TRetrieval",
         description="Retrieve captions based on images.",

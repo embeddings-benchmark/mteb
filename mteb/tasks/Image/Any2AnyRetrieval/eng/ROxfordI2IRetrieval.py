@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import logging
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import MultiChoiceEvaluationMixin
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
-class ROxfordEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
+class ROxfordEasyI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ROxfordEasyI2IRetrieval",
         description="Retrieve photos of landmarks in Oxford, UK.",
@@ -44,7 +43,7 @@ class ROxfordEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieva
     skip_first_result = False
 
 
-class ROxfordMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
+class ROxfordMediumI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ROxfordMediumI2IRetrieval",
         description="Retrieve photos of landmarks in Oxford, UK.",
@@ -79,7 +78,7 @@ class ROxfordMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrie
     skip_first_result = False
 
 
-class ROxfordHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
+class ROxfordHardI2IRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ROxfordHardI2IRetrieval",
         description="Retrieve photos of landmarks in Oxford, UK.",

@@ -72,10 +72,25 @@ nav:
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
+      - Additional Types: api/types.md
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 plugins:
   - search
+  - exclude:
+      glob:
+        # contributing segments
+        - adding_a_dataset.md
+        - adding_a_model.md
+        - adding_a_benchmark.md
+        # projects
+        - mieb/*
+        - mmteb/*
+        # overview
+        - benchmarks.md
+        - tasks.md
+        # other
+        - reproducible_workflow.md
   - mkdocstrings:
       handlers:
         python:
@@ -87,6 +102,7 @@ plugins:
             heading_level: 3
             show_source: true
             show_root_heading: true
+
   - bibtex:
       bib_file: "docs/references.bib"
 

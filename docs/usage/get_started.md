@@ -1,7 +1,7 @@
 # Get Started
 
 This usage documentation first introduces a simple example of how to evaluate a model using `mteb`.
-Then introduces model detailed section of [defining model](missing), [selecting tasks](missing) and [running the evaluation](./running_the_evaluation.md). Each section contains subsections pertaining to these.
+Then introduces model detailed section of [defining model](defining_the_model.md), [selecting tasks](selecting_tasks.md) and [running the evaluation](./running_the_evaluation.md). Each section contains subsections pertaining to these.
 
 
 ## Evaluating a Model

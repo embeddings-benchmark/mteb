@@ -112,7 +112,7 @@ sent_trf_training_dataset = {
     # "embedding-data/WikiAnswers",
 }
 
-all_MiniLM_L6_v2 = ModelMeta(
+all_minilm_l6_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
@@ -136,7 +136,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     citation=SBERT_CITATION,
 )
 
-all_MiniLM_L12_v2 = ModelMeta(
+all_minilm_l12_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L12-v2",
     languages=["eng-Latn"],
@@ -160,7 +160,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     public_training_data=None,
 )
 
-paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
+paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     languages=paraphrase_langs,
@@ -256,7 +256,7 @@ labse = ModelMeta(
     public_training_data=None,
 )
 
-multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
+multi_qa_minilm_l6_cos_v1 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     languages=["eng-Latn"],

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from collections import defaultdict
+
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
+class BLINKIT2IMultiChoice(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2IMultiChoice",
         description="Retrieve images based on images and specific retrieval instructions.",
@@ -12,7 +14,6 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         dataset={
             "path": "JamieSJS/blink-it2i-multi",
             "revision": "a9f994925551c14503d00d86f1307bac6e2ead6a",
-            "trust_remote_code": True,
         },
         type="VisionCentricQA",
         category="it2i",
@@ -36,3 +37,12 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
     )
+
+    def dataset_transform(self, **kwargs):
+        for subset, split_data in self.dataset.items():
+            for split, dataset in split_data.items():
+                top_ranked = defaultdict(list)
+                for query_id, relevant in dataset["relevant_docs"].items():
+                    for corpus_id, score in relevant.items():
+                        top_ranked[query_id].append(corpus_id)
+                dataset["top_ranked"] = top_ranked

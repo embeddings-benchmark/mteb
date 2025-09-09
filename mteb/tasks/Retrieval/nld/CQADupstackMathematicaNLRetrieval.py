@@ -45,7 +45,7 @@ class CQADupstackMathematicaNLRetrieval(AbsTaskRetrieval):
         adapted_from=["CQADupstackMathematicaRetrieval"],
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 

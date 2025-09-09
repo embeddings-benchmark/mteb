@@ -91,7 +91,7 @@ class AbsTaskAnySTS(AbsTask):
         scores = evaluator(model, encode_kwargs=encode_kwargs)
         return scores
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
         first_column, second_column = self.column_names

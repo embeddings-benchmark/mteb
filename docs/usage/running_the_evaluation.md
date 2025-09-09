@@ -8,7 +8,7 @@ Evalauting models in `mteb` typically takes the simple form:
 
 ```python
 model = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
-tasks = mteb.get_task(["MultiHateClassification"], languages=["ita", "dan"])
+tasks = mteb.get_task(["MultiHateClassification"], languages = ["ita", "dan"])
 
 results = mteb.evaluate(model, tasks=tasks)
 ```

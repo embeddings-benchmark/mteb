@@ -14,9 +14,6 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSummarization import AbsTaskSummarization
 from .AbsTaskTextRegression import AbsTaskTextRegression
 from .Image import (
-    AbsTaskAny2AnyMultiChoice,
-    AbsTaskAny2AnyRetrieval,
-    AbsTaskImageMultilabelClassification,
     AbsTaskImageTextPairClassification,
 )
 
@@ -32,9 +29,6 @@ __all__ = [
     "AbsTaskReranking",
     "AbsTaskAnySTS",
     "AbsTaskSummarization",
-    "AbsTaskAny2AnyMultiChoice",
-    "AbsTaskAny2AnyRetrieval",
-    "AbsTaskImageMultilabelClassification",
     "AbsTaskImageTextPairClassification",
     "AbsTaskAnyZeroShotClassification",
     "AbsTaskTextRegression",
