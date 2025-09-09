@@ -121,7 +121,6 @@ class ASTWrapper(Wrapper):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     truncation=True,
-                    max_length=30 * self.sampling_rate,
                     padding=True,
                 ).to(self.device)
 
