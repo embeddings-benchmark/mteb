@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 from datasets import Dataset
-from sklearn.base import BaseEstimator
 from sklearn.metrics import (
     accuracy_score,
     average_precision_score,
@@ -14,6 +13,7 @@ from sklearn.metrics import (
     recall_score,
 )
 from torch.utils.data import DataLoader
+from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
@@ -23,6 +23,14 @@ from mteb.types import BatchedInput
 from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
+
+
+class SklearnClassifierProtocol(Protocol):
+    def fit(self, X: np.ndarray, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
+    def predict(self, X: np.ndarray) -> np.ndarray: ...  # noqa: N803
+    def get_params(self) -> dict[str, Any]: ...
+    def set_params(self, **kwargs: dict[str, Any]) -> Self: ...
+    def score(self, X: np.ndarray, y: np.ndarray | list[int]) -> list[int]: ...  # noqa: N803
 
 
 class ClassificationEvaluator(Evaluator):
@@ -35,7 +43,7 @@ class ClassificationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        classifier: BaseEstimator,
+        classifier: SklearnClassifierProtocol,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)

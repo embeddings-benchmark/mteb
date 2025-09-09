@@ -306,20 +306,21 @@ def create_dataloader(
         return create_queries_dataloader(
             dataset,
             task_metadata,
-            input_column,
+            input_column=input_column,
             **dataloader_kwargs,
         )
     if prompt_type == PromptType.document:
         return create_document_dataloader(
             dataset,
             task_metadata,
-            input_column,
+            input_column=input_column,
             **dataloader_kwargs,
         )
 
     if "image" in task_metadata.modalities:
         return create_image_dataloader(
             dataset,
+            image_column_name=input_column,
             **dataloader_kwargs,
         )
     if "text" in task_metadata.modalities and input_column is not None:
