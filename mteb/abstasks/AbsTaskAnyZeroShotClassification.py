@@ -60,12 +60,6 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
     input_column_name: str = "image"
     label_column_name: str = "label"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
@@ -125,6 +119,17 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
             **kwargs,
         )
         return evaluator(model, encode_kwargs=encode_kwargs)
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(
+            repo_name,
+            [
+                self.input_column_name,
+                self.label_column_name,
+            ],
+        )
+        labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
+        labels_dataset.push_to_hub(repo_name)
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""

@@ -275,3 +275,6 @@ class FloresBitextMining(AbsTaskBitextMining):
             return
         self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self.datasetz.push_to_hub(repo_name)

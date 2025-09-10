@@ -926,6 +926,10 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
                 {l1: "sentence1", l2: "sentence2"}
             )
 
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        for config in self.dataset:
+            self.dataset[config].push_to_hub(repo_name, config_name=config)
+
     @staticmethod
     def _transform_lang_name_hf(lang):
         # Transform language name to match huggingface configuration
