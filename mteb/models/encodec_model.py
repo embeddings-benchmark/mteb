@@ -122,15 +122,15 @@ class EncodecWrapper(Wrapper):
                 batch = processed_audio[i : i + batch_size]
 
                 # Process audio through EnCodec's processor
-                batch_np = [audio.cpu().numpy() for audio in batch]
-
+                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+                batch_np = [audio[:max_samples].cpu().numpy() for audio in batch]
+          
                 inputs = self.processor(
                     raw_audio=batch_np,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding=True,
-                    truncation=True,
-                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                    padding="max_length",
+                    max_length=max_samples,
                 ).to(self.device)
 
                 # Get the latent representations directly from the encoder
