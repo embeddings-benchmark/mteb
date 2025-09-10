@@ -1516,7 +1516,7 @@ FA_MTEB_2 = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark.",
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark. For more details on the improvements, see the main PR comment: [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157).",
     reference="https://arxiv.org/abs/2502.11571",
     citation=r"""
 @article{zinvandi2025famteb,
