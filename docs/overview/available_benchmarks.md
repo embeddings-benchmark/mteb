@@ -3,7 +3,7 @@
 
 <!-- This following is auto-generated. Changes will be overwritten. Please change the generating script. -->
 <!-- START TASK DESCRIPTION -->
-####  BEIR
+###  BEIR
 
 BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.
 
@@ -33,7 +33,7 @@ BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides 
     
 
 
-####  BEIR-NL
+###  BEIR-NL
 
 BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated translation.
 
@@ -63,7 +63,7 @@ BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created 
     
 
 
-####  BRIGHT
+###  BRIGHT
 
 BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
@@ -85,7 +85,7 @@ BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     
 
 
-####  BRIGHT(long)
+###  BRIGHT(long)
 
 BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
 BRIGHT is the first text retrieval
@@ -109,7 +109,7 @@ This is the long version of the benchmark, which only filter longer documents.
     
 
 
-####  BuiltBench(eng)
+###  BuiltBench(eng)
 
 "Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.
 
@@ -128,7 +128,7 @@ This is the long version of the benchmark, which only filter longer documents.
     
 
 
-####  ChemTEB
+###  ChemTEB
 
 ChemTEB evaluates the performance of text embedding models on chemical domain data.
 
@@ -170,7 +170,7 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
     
 
 
-####  CoIR
+###  CoIR
 
 CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
 
@@ -195,7 +195,7 @@ CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
     
 
 
-####  CodeRAG
+###  CodeRAG
 
 A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.
 
@@ -214,7 +214,7 @@ A benchmark for evaluating code retrieval augmented generation, testing models' 
     
 
 
-####  Encodechka
+###  Encodechka
 
 A benchmark for evaluating text embedding models on Russian data.
 
@@ -236,7 +236,7 @@ A benchmark for evaluating text embedding models on Russian data.
     
 
 
-####  FollowIR
+###  FollowIR
 
 Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.
 
@@ -254,7 +254,7 @@ Retrieval w/Instructions is the task of finding relevant documents for a query t
     
 
 
-####  JinaVDR
+###  JinaVDR
 
 Multilingual, domain-diverse and layout-rich document retrieval benchmark.
 
@@ -312,7 +312,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
     
 
 
-####  LongEmbed
+###  LongEmbed
 
 LongEmbed is a benchmark oriented at exploring models' performance on long-context retrieval.
     The benchmark comprises two synthetic tasks and four carefully chosen real-world tasks,
@@ -336,7 +336,7 @@ LongEmbed is a benchmark oriented at exploring models' performance on long-conte
     
 
 
-####  MIEB(Img)
+###  MIEB(Img)
 
 A image-only version of MIEB(Multilingual) that consists of 49 tasks.
 
@@ -400,7 +400,7 @@ A image-only version of MIEB(Multilingual) that consists of 49 tasks.
     
 
 
-####  MIEB(Multilingual)
+###  MIEB(Multilingual)
 
 MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
@@ -548,7 +548,7 @@ MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 ta
     
 
 
-####  MIEB(eng)
+###  MIEB(eng)
 
 MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
@@ -690,7 +690,7 @@ MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, 
     
 
 
-####  MIEB(lite)
+###  MIEB(lite)
 
 MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks.
     This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
@@ -758,7 +758,7 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
     
 
 
-####  MINERSBitextMining
+###  MINERSBitextMining
 
 Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate the
     ability of multilingual LMs in semantic retrieval tasks,
@@ -783,7 +783,7 @@ Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate 
     
 
 
-####  MTEB(Code, v1)
+###  MTEB(Code, v1)
 
 A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.
 
@@ -806,7 +806,7 @@ A massive code embedding benchmark covering retrieval tasks in a miriad of popul
     
 
 
-####  MTEB(Europe, v1)
+###  MTEB(Europe, v1)
 
 A regional geopolitical text embedding benchmark targetting embedding performance on European languages.
 
@@ -891,7 +891,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
     
 
 
-####  MTEB(Indic, v1)
+###  MTEB(Indic, v1)
 
 A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.
 
@@ -925,7 +925,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
     
 
 
-####  MTEB(Law, v1)
+###  MTEB(Law, v1)
 
 A benchmark of retrieval tasks in the legal domain.
 
@@ -944,7 +944,7 @@ A benchmark of retrieval tasks in the legal domain.
     
 
 
-####  MTEB(Medical, v1)
+###  MTEB(Medical, v1)
 
 A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.
 
@@ -967,7 +967,7 @@ A curated set of MTEB tasks designed to evaluate systems in the context of medic
     
 
 
-####  MTEB(Multilingual, v1)
+###  MTEB(Multilingual, v1)
 
 A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. This benhcmark has been replaced by MTEB(Multilingual, v2) as one of the datasets (SNLHierarchicalClustering) included in v1 was removed from the Hugging Face Hub.
 
@@ -1114,7 +1114,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
     
 
 
-####  MTEB(Multilingual, v2)
+###  MTEB(Multilingual, v2)
 
 A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. 
 
@@ -1260,7 +1260,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
     
 
 
-####  MTEB(Scandinavian, v1)
+###  MTEB(Scandinavian, v1)
 
 A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.
 
@@ -1303,7 +1303,7 @@ A curated selection of tasks coverering the Scandinavian languages; Danish, Swed
     
 
 
-####  MTEB(cmn, v1)
+###  MTEB(cmn, v1)
 
 The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.
 
@@ -1350,7 +1350,7 @@ The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchma
     
 
 
-####  MTEB(deu, v1)
+###  MTEB(deu, v1)
 
 A benchmark for text-embedding performance in German.
 
@@ -1384,10 +1384,9 @@ A benchmark for text-embedding performance in German.
     
 
 
-####  MTEB(eng, v1)
+###  MTEB(eng, v1)
 
 The original English benchmark by Muennighoff et al., (2023).
-This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, as it uses updated versions of the task, making it notably faster to run and resolving [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning, such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
     
 
@@ -1454,14 +1453,14 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
     
 
 
-####  MTEB(eng, v2)
+###  MTEB(eng, v2)
 
 The new English Massive Text Embedding Benchmark.
 This benchmark was created to account for the fact that many models have now been finetuned
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
+The original MTEB leaderboard is available under the name [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29).
     
 
 ??? info Tasks
@@ -1512,7 +1511,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
     
 
 
-####  MTEB(fas, v1)
+###  MTEB(fas, v1)
 
 The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.
 
@@ -1587,7 +1586,7 @@ The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchma
     
 
 
-####  MTEB(fra, v1)
+###  MTEB(fra, v1)
 
 MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.
 
@@ -1627,7 +1626,7 @@ MTEB-French, a French expansion of the original benchmark with high-quality nati
     
 
 
-####  MTEB(jpn, v1)
+###  MTEB(jpn, v1)
 
 JMTEB is a benchmark for evaluating Japanese text embedding models.
 
@@ -1658,7 +1657,7 @@ JMTEB is a benchmark for evaluating Japanese text embedding models.
     
 
 
-####  MTEB(kor, v1)
+###  MTEB(kor, v1)
 
 A benchmark and leaderboard for evaluation of text embedding in Korean.
 
@@ -1675,7 +1674,7 @@ A benchmark and leaderboard for evaluation of text embedding in Korean.
     
 
 
-####  MTEB(pol, v1)
+###  MTEB(pol, v1)
 
 Polish Massive Text Embedding Benchmark (PL-MTEB), a comprehensive benchmark for text embeddings in Polish. The PL-MTEB consists of 28 diverse NLP
 tasks from 5 task types. With tasks adapted based on previously used datasets by the Polish
@@ -1711,7 +1710,7 @@ two novel clustering tasks.
     
 
 
-####  MTEB(rus, v1)
+###  MTEB(rus, v1)
 
 A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.
 
@@ -1749,7 +1748,7 @@ A Russian version of the Massive Text Embedding Benchmark with a number of novel
     
 
 
-####  NanoBEIR
+###  NanoBEIR
 
 A benchmark to evaluate with subsets of BEIR datasets to use less computational power
 
@@ -1777,7 +1776,7 @@ A benchmark to evaluate with subsets of BEIR datasets to use less computational 
     
 
 
-####  R2MED
+###  R2MED
 
 R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
     R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
@@ -1803,7 +1802,7 @@ R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
     
 
 
-####  RAR-b
+###  RAR-b
 
 A benchmark to evaluate reasoning capabilities of retrievers.
 
@@ -1835,7 +1834,7 @@ A benchmark to evaluate reasoning capabilities of retrievers.
     
 
 
-####  RuSciBench
+###  RuSciBench
 
 RuSciBench is a benchmark designed for evaluating sentence encoders and language models on scientific texts in both Russian and English. The data is sourced from eLibrary (www.elibrary.ru), Russia's largest electronic library of scientific publications. This benchmark facilitates the evaluation and comparison of models on various research-related tasks.
 
@@ -1859,7 +1858,7 @@ RuSciBench is a benchmark designed for evaluating sentence encoders and language
     
 
 
-####  VN-MTEB (vie, v1)
+###  VN-MTEB (vie, v1)
 
 A benchmark for text-embedding performance in Vietnamese.
 
@@ -1924,7 +1923,7 @@ A benchmark for text-embedding performance in Vietnamese.
     
 
 
-####  ViDoRe(v1)
+###  ViDoRe(v1)
 
 Retrieve associated pages according to questions.
 
@@ -1949,7 +1948,7 @@ Retrieve associated pages according to questions.
     
 
 
-####  ViDoRe(v2)
+###  ViDoRe(v2)
 
 Retrieve associated pages according to questions.
 
@@ -1968,7 +1967,7 @@ Retrieve associated pages according to questions.
     
 
 
-####  VisualDocumentRetrieval
+###  VisualDocumentRetrieval
 
 A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2.
 
