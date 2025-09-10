@@ -10,13 +10,13 @@ START_INSERT = "<!-- START TASK DESCRIPTION -->"
 END_INSERT = "<!-- END TASK DESCRIPTION -->"
 
 benchmark_entry = """
-####  {benchmark_name}
+###  {benchmark_name}
 
 {description}
 
 ??? info Tasks
 
-    {task_table}
+{task_table}
 """
 learn_more = "[Learn more →]({reference})"
 
@@ -31,10 +31,12 @@ def format_benchmark_entry(benchmark: mteb.Benchmark) -> str:
 
     tasks_md = benchmark.tasks.to_markdown(["type", "modalities"])
 
+    task_md_indented = "\n".join([f"    {line}" for line in tasks_md.split("\n")])
+
     return benchmark_entry.format(
         benchmark_name=benchmark.name,
         description=description,
-        task_table=tasks_md,
+        task_table=task_md_indented,
     )
 
 

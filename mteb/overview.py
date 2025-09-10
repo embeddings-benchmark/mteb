@@ -199,13 +199,13 @@ class MTEBTasks(tuple):
         Returns:
             string with a markdown table.
         """
-        markdown_table = "| Task" + "".join([f"| {p} " for p in properties]) + "|\n"
-        _head_sep = "| ---" * len(properties) + " |\n"
+        markdown_table = "| Task" + "".join([f"| {p}  " for p in properties]) + "|\n"
+        _head_sep = "| ---" * (len(properties) + 1) + " |\n"
         markdown_table += _head_sep
         for task in self:
-            markdown_table += f"| {task.metadata.name}"
+            markdown_table += f"| {task.metadata.name} "
             markdown_table += "".join(
-                [f"| {self._extract_property_from_task(task, p)}" for p in properties]
+                [f"| {self._extract_property_from_task(task, p)} " for p in properties]
             )
             markdown_table += " |\n"
         return markdown_table
