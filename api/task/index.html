@@ -3872,8 +3872,7 @@ mturkers), "derived" (derived from structure in the data).</p>
 <span class="normal">717</span>
 <span class="normal">718</span>
 <span class="normal">719</span>
-<span class="normal">720</span>
-<span class="normal">721</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TaskMetadata</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">720</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TaskMetadata</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Metadata for a task.</span>
 
 <span class="sd">    Attributes:</span>
@@ -4124,7 +4123,6 @@ mturkers), "derived" (derived from structure in the data).</p>
 
 <span class="sd">        Args:</span>
 <span class="sd">            existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.</span>
-<span class="sd">            reupload: If true, then `source_datasets` will be added to model card with source dataset.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A DatasetCardData object with the metadata for the task with kwargs to card</span>
@@ -4275,7 +4273,7 @@ mturkers), "derived" (derived from structure in the data).</p>
         <span class="n">existing_dataset_card_data</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">existing_dataset_card</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="n">existing_dataset_card</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="p">)</span>
-        <span class="n">dataset_card_data</span><span class="p">,</span> <span class="n">template_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_dataset_card_data</span><span class="p">(</span>
+        <span class="n">dataset_card_data</span><span class="p">,</span> <span class="n">template_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dataset_card_data</span><span class="p">(</span>
             <span class="n">existing_dataset_card_data</span>
         <span class="p">)</span>
         <span class="n">dataset_card</span> <span class="o">=</span> <span class="n">DatasetCard</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
@@ -4715,7 +4713,8 @@ mturkers), "derived" (derived from structure in the data).</p>
 
             <details class="quote">
               <summary>Source code in <code>mteb/abstasks/task_metadata.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">594</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">593</span>
+<span class="normal">594</span>
 <span class="normal">595</span>
 <span class="normal">596</span>
 <span class="normal">597</span>
@@ -4738,8 +4737,7 @@ mturkers), "derived" (derived from structure in the data).</p>
 <span class="normal">614</span>
 <span class="normal">615</span>
 <span class="normal">616</span>
-<span class="normal">617</span>
-<span class="normal">618</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_dataset_card</span><span class="p">(</span>
+<span class="normal">617</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_dataset_card</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">existing_dataset_card</span><span class="p">:</span> <span class="n">DatasetCard</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetCard</span><span class="p">:</span>
@@ -4755,7 +4753,7 @@ mturkers), "derived" (derived from structure in the data).</p>
     <span class="n">existing_dataset_card_data</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">existing_dataset_card</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="n">existing_dataset_card</span> <span class="k">else</span> <span class="kc">None</span>
     <span class="p">)</span>
-    <span class="n">dataset_card_data</span><span class="p">,</span> <span class="n">template_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_dataset_card_data</span><span class="p">(</span>
+    <span class="n">dataset_card_data</span><span class="p">,</span> <span class="n">template_kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_dataset_card_data</span><span class="p">(</span>
         <span class="n">existing_dataset_card_data</span>
     <span class="p">)</span>
     <span class="n">dataset_card</span> <span class="o">=</span> <span class="n">DatasetCard</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
@@ -4852,7 +4850,8 @@ mturkers), "derived" (derived from structure in the data).</p>
 
             <details class="quote">
               <summary>Source code in <code>mteb/abstasks/task_metadata.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">620</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">619</span>
+<span class="normal">620</span>
 <span class="normal">621</span>
 <span class="normal">622</span>
 <span class="normal">623</span>
@@ -4865,8 +4864,7 @@ mturkers), "derived" (derived from structure in the data).</p>
 <span class="normal">630</span>
 <span class="normal">631</span>
 <span class="normal">632</span>
-<span class="normal">633</span>
-<span class="normal">634</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">push_dataset_card_to_hub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">633</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">push_dataset_card_to_hub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pushes the dataset card to the huggingface hub.</span>
 
 <span class="sd">    Args:</span>
