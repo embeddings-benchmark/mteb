@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -57,9 +53,8 @@ class IN22GenBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="IN22GenBitextMining",
         dataset={
-            "path": "mteb/IN22-Gen",
-            "revision": "ec381535fe3ddf699297a023bcecaa548096ed68",
-            "trust_remote_code": True,
+            "path": "mteb/IN22GenBitextMining",
+            "revision": "aed6ff7eed647cd6eead02f70efa23a4e67329dc",
         },
         description="IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Gen",
@@ -96,10 +91,3 @@ class IN22GenBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.data_loaded = True

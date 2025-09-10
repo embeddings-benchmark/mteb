@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -239,9 +235,8 @@ class FloresBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="FloresBitextMining",
         dataset={
-            "path": "mteb/flores",
-            "revision": "e6b647fcb6299a2f686f742f4d4c023e553ea67e",
-            "trust_remote_code": True,
+            "path": "mteb/FloresBitextMining",
+            "revision": "2144d16cc15edd22d4a9237d12bff5f31f5c07fc",
         },
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
         reference="https://huggingface.co/datasets/facebook/flores",
@@ -268,13 +263,3 @@ class FloresBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.data_loaded = True
-
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self.datasetz.push_to_hub(repo_name)

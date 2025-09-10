@@ -1,10 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-from datasets import concatenate_datasets
-
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -4684,8 +4679,8 @@ class MAUDLegalBenchClassification(AbsTaskAnyClassification):
         """,
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
-            "path": "nguha/legalbench",
-            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+            "path": "mteb/MAUDLegalBenchClassification",
+            "revision": "bc3a598904d4d5c8a642156c4864b48e6420254d",
         },
         type="Classification",
         category="t2c",
@@ -4718,71 +4713,6 @@ class MAUDLegalBenchClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        _hf_dataset = None
-        class_count = 0
-        for dataset_col_map in _MAUD_DATASET_MAP:
-            _dataset = datasets.load_dataset(
-                self.metadata.dataset["path"],
-                dataset_col_map["name"],
-                revision=self.metadata.dataset["revision"],
-                trust_remote_code=True,
-            )
-
-            _dataset = _dataset.rename_column("answer", "label")
-
-            # Remove classes with less than 2 examples
-            _dataset = _dataset.filter(
-                lambda example: example["label"] not in dataset_col_map["filter_cols"]
-            )
-
-            # Get all labels in the dataset
-            unique_classes = list(set().union(*_dataset.unique("label").values()))
-            mapping = {
-                class_val: str(new_label)
-                for class_val, new_label in zip(
-                    unique_classes,
-                    range(class_count, class_count + len(unique_classes)),
-                )
-            }
-            _dataset = _dataset.map(
-                lambda example: {
-                    "label": mapping.get(example["label"].lower(), example["label"])
-                }
-            )
-            class_count += len(unique_classes) + 1
-
-            if _hf_dataset is None:
-                _hf_dataset = _dataset
-            else:
-                _hf_dataset["train"] = datasets.concatenate_datasets(
-                    [_hf_dataset["train"], _dataset["train"]]
-                )
-                _hf_dataset["test"] = datasets.concatenate_datasets(
-                    [_hf_dataset["test"], _dataset["test"]]
-                )
-
-        self.dataset = _hf_dataset
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self):
-        # The train split has one example in each dataset, so we combine it with the test split and resample
-        self.dataset = concatenate_datasets(
-            [self.dataset["train"], self.dataset["test"]]
-        )
-        self.dataset = self.dataset.class_encode_column("label")
-        self.dataset = self.dataset.train_test_split(
-            train_size=0.2, seed=self.seed, stratify_by_column="label"
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class MAUDLegalBenchClassificationV2(AbsTaskAnyClassification):

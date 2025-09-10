@@ -16,9 +16,8 @@ class FGVCAircraftClassification(AbsTaskAnyClassification):
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
-            "path": "HuggingFaceM4/FGVC-Aircraft",
-            "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
-            "trust_remote_code": True,
+            "path": "mteb/FGVCAircraft",
+            "revision": "3ae0e4e94e37c610c26df758ec3255fa90d80e67",
         },
         type="ImageClassification",
         category="i2c",

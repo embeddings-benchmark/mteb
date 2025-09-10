@@ -44,10 +44,8 @@ class LivedoorNewsClustering(AbsTaskClusteringFast):
         description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics).",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "name": "livedoor_news",
-            "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
-            "trust_remote_code": True,
+            "path": "mteb/LivedoorNewsClustering",
+            "revision": "4e1f50751b9dc2bbcbf56e3ebde55f82b74b6988",
         },
         type="Clustering",
         category="t2c",
@@ -64,8 +62,3 @@ class LivedoorNewsClustering(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation="",
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"text": "sentences", "label": "labels"}
-        )

@@ -865,7 +865,6 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
             "path": "davidstap/biblenlp-corpus-mmteb",
             "revision": "264a18480c529d9e922483839b4b9758e690b762",
             "split": f"train[:{_N}]",
-            "trust_remote_code": True,
         },
         description="Partial Bible translations in 829 languages, aligned by verse.",
         reference="https://arxiv.org/abs/2304.09919",
@@ -925,10 +924,6 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {l1: "sentence1", l2: "sentence2"}
             )
-
-    def _push_dataset_to_hub(self, repo_name: str) -> None:
-        for config in self.dataset:
-            self.dataset[config].push_to_hub(repo_name, config_name=config)
 
     @staticmethod
     def _transform_lang_name_hf(lang):

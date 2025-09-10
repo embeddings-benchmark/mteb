@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -249,9 +245,8 @@ class NTREXBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NTREXBitextMining",
         dataset={
-            "path": "mteb/NTREX",
-            "revision": "ed9a4403ed4adbfaf4aab56d5b2709e9f6c3ba33",
-            "trust_remote_code": True,
+            "path": "mteb/NTREXBitextMining",
+            "revision": "66b8b27efc99658903127730575e9fa0cb9f075c",
         },
         description="NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.",
         reference="https://huggingface.co/datasets/davidstap/NTREX",
@@ -283,10 +278,3 @@ class NTREXBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.data_loaded = True

@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -26,9 +22,8 @@ class SRNCorpusBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SRNCorpusBitextMining",
         dataset={
-            "path": "davidstap/sranantongo",
-            "revision": "2903226ff89ca0b15221a75d32b6355248295119",
-            "trust_remote_code": True,
+            "path": "mteb/SRNCorpusBitextMining",
+            "revision": "e0200efcb6654e6d418f9a7c296497fabee8f89d",
         },
         description="SRNCorpus is a machine translation corpus for creole language Sranantongo and Dutch.",
         reference="https://arxiv.org/abs/2212.06383",
@@ -54,27 +49,3 @@ class SRNCorpusBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-
-        def _clean_columns(batch, keys):
-            """Clean dataset features"""
-            return {key: [s.strip("\r") for s in batch[key]] for key in keys}
-
-        for lang in self.hf_subsets:
-            l1, l2 = lang.split("-")
-            dataset = datasets.load_dataset(
-                name="srn-nl_other",
-                split="test",
-                **self.metadata.dataset,
-            ).map(lambda batch: _clean_columns(batch, ["nl", "srn"]), batched=True)
-            dataset = dataset.rename_columns(
-                {_LANGUAGES[l1]: "sentence1", _LANGUAGES[l2]: "sentence2"}
-            )
-            self.dataset[lang] = datasets.DatasetDict({"test": dataset})
-
-        self.data_loaded = True

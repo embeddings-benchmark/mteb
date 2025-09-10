@@ -15,10 +15,8 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
         description="Classifying bird images from 500 species.",
         reference="http://host.robots.ox.ac.uk/pascal/VOC/",
         dataset={
-            "path": "HuggingFaceM4/pascal_voc",
-            "name": "voc2007_main",
-            "revision": "dbafdb9e1506c9c419c5c4672e409463cd21ba50",
-            "trust_remote_code": True,
+            "path": "mteb/VOC2007",
+            "revision": "96d47458fb2f40713997b0ea271688c02bac840b",
         },
         type="ImageClassification",
         category="i2c",
