@@ -1,11 +1,10 @@
+"""Updates the available tasks markdown files."""
+
 from __future__ import annotations
 
 from pathlib import Path
 
 import mteb
-
-START_INSERT = "<!-- START TASK DESCRIPTION -->"
-END_INSERT = "<!-- END TASK DESCRIPTION -->"
 
 task_entry = """
 #### {task_name}
@@ -21,9 +20,11 @@ task_entry = """
 """
 
 task_type_section = """
-## {task_type}
+# {task_type}
 
-- **Number of tasks of the given type:** {num_tasks} 
+<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
+
+- **Number of tasks:** {num_tasks} 
 
 {tasks_md}
 """
@@ -98,23 +99,7 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     )
 
 
-def insert_between_markers(
-    content: str,
-    insert: str,
-    start_marker: str = START_INSERT,
-    end_marker: str = END_INSERT,
-) -> str:
-    """Insert `insert` between the `start_marker` and `end_marker` in `content`. Delete any content in between.
-
-    Keeps the markers.
-    """
-    start_idx = content.index(start_marker) + len(start_marker)
-    end_idx = content.index(end_marker)
-    new_content = content[:start_idx] + "\n" + insert + "\n" + content[end_idx:]
-    return new_content
-
-
-def main(doc_path: Path) -> None:
+def main(folder: Path) -> None:
     tasks = mteb.get_tasks(exclude_superseded=False, exclude_aggregate=True)
     task_types = sorted({task.metadata.type for task in tasks})
 
@@ -122,28 +107,21 @@ def main(doc_path: Path) -> None:
     for task in tasks:
         task_types2tasks[task.metadata.type].append(task)
 
-    md = ""
     for task_type, tasks in task_types2tasks.items():
         _task_entries = ""
         for task in sorted(tasks, key=lambda t: t.metadata.name):
             _task_entries += format_task_entry(task) + "\n"
-        md += (
-            task_type_section.format(
-                task_type=task_type,
-                num_tasks=len(tasks),
-                tasks_md=_task_entries.strip(),
-            )
-            + "\n\n"
+        md = task_type_section.format(
+            task_type=task_type,
+            num_tasks=len(tasks),
+            tasks_md=_task_entries.strip(),
         )
-    md = md.strip()
+        doc_task = folder / f"{task_type.lower()}.md"
 
-    with doc_path.open("r") as f:
-        content = f.read()
-    content = insert_between_markers(content, md)
-    with doc_path.open("w") as f:
-        f.write(content)
+        with doc_task.open("w") as f:
+            f.write(md)
 
 
 if __name__ == "__main__":
     root = Path(__file__).parent / ".." / ".."
-    main(root / "docs" / "overview" / "available_tasks.md")
+    main(root / "docs" / "overview" / "available_tasks")
