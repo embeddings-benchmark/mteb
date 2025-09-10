@@ -100,7 +100,25 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     )
 
 
+def insert_between_markers(
+    content: str,
+    insert: str,
+    start_marker: str = START_INSERT,
+    end_marker: str = END_INSERT,
+) -> str:
+    """Insert `insert` between the `start_marker` and `end_marker` in `content`. Delete any content in between.
+
+    Keeps the markers.
+    """
+    start_idx = content.index(start_marker) + len(start_marker)
+    end_idx = content.index(end_marker)
+    new_content = content[:start_idx] + "\n" + insert + "\n" + content[end_idx:]
+    return new_content
+
+
 def main(folder: Path) -> None:
+    folder.mkdir(parents=True, exist_ok=True)
+
     tasks = mteb.get_tasks(exclude_superseded=False, exclude_aggregate=True)
     task_types = sorted({task.metadata.type for task in tasks})
 

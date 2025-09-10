@@ -105,6 +105,8 @@ docs = [
     "mkdocs-material>=9.5.47",
     "mkdocstrings-python>=1.18.2",
     "mkdocs-bibtex>=2.16.2",
+    "mkdocs-exclude>=1.0.2",
+    "mkdocs-include-dir-to-nav>=1.2.0"
     
 ]
 dev = [

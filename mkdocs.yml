@@ -47,7 +47,7 @@ copyright: This text is freely available under a Creative Commons Attribution 4.
 
 nav:
   - Get Started:
-      - Overview: index.md
+      - index.md
       - whats_new.md
       - Installation: installation.md
       - Usage:
@@ -59,15 +59,17 @@ nav:
         - Command Line Interface: usage/cli.md
         - Running the Leaderboard: usage/leaderboard.md
   - API:
-      - Overview: api/index.md
+      - api/index.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
       - Additional Types: api/types.md
-  - Overview:
-      - Tasks: overview/available_tasks.md
-  #     - Benchmarks: overview/available_benchmarks.md
-  #     - Models: overview/available_models.md
+  - Overview: 
+      - overview/index.md
+      - Tasks: 
+        - Available Tasks: overview/available_tasks
+  #     - Benchmarks: overview/available_benchmarks
+  #     - Models: overview/available_models
   # - Contribute: # TODO: Add contributions
   #     - Adding a Model: adding_a_model.md
   #     - Adding a Benchmark: adding_a_leaderboard_tab.md
@@ -76,6 +78,7 @@ nav:
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 plugins:
+  - include_dir_to_nav
   - search
   - exclude:
       glob:
