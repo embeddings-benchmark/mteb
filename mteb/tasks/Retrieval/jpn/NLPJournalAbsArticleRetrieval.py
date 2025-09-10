@@ -20,10 +20,10 @@ class NLPJournalAbsArticleRetrievalV2(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
             "path": "mteb/NLPJournalAbsArticleRetrieval.V2",
-            "revision": "7d5cddec4cb64623edc728ceb04a1065f8e8a6e8",
+            "revision": "683ad149644acc21180dceeac3a5c57eac171df3",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
@@ -61,7 +61,7 @@ class NLPJournalAbsArticleRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
             "path": "mteb/NLPJournalAbsArticleRetrieval",
-            "revision": "1edc65a0a12d785d019beb8e08c61d3fa5c1b696",
+            "revision": "220fa5100225ffc2c44c035c9a8c7fbeee055a99",
         },
         type="Retrieval",
         category="t2t",
