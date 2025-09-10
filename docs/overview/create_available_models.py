@@ -10,20 +10,14 @@ START_INSERT = "<!-- START TASK DESCRIPTION -->"
 END_INSERT = "<!-- END TASK DESCRIPTION -->"
 
 model_entry = """
-####  `{model_name}`
+####  [`{model_name}`]({reference})
 
-**Revision:** `{revision}` • **License:** {license} • [Learn more →]({reference})
+ **License:** {license} 
 
 
-Max Tokens: {max_tokens}
-Embedding dimension: {embed_dim}
-Parameters: {n_parameters}
-Release date: {release_date}
-Languages: {languages}
-
-| Max Tokens | Embedding dimension | Parameters | Release date | Languages |
-|-------|-------|-------|-------|-------|
-| {max_tokens} | {embed_dim} | {n_parameters} | {release_date} | {languages} |
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| {max_tokens} | {embed_dim} | {n_parameters} | {required_memory} | {release_date} | {languages} |
 """
 
 h1_header = """
@@ -67,6 +61,16 @@ def modality_to_string(modality: tuple[str, ...]) -> str:
     return ("-".join(modality)).capitalize()
 
 
+def required_memory_string(mem_in_mb: int | None) -> str:
+    if mem_in_mb is None:
+        return "not specified"
+    if mem_in_mb < 1024:
+        return f"{mem_in_mb} MB"
+    else:
+        mem_in_gb = mem_in_mb / 1024
+        return f"{mem_in_gb:.1f} GB"
+
+
 def format_model_entry(meta: mteb.ModelMeta) -> str:
     model_name = meta.name
     revision = meta.revision or "not specified"
@@ -93,6 +97,7 @@ def format_model_entry(meta: mteb.ModelMeta) -> str:
     languages = (
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
+    required_mem = required_memory_string(meta.required_memory)
 
     return model_entry.format(
         model_name=model_name,
@@ -104,6 +109,7 @@ def format_model_entry(meta: mteb.ModelMeta) -> str:
         n_parameters=n_parameters,
         release_date=release_date,
         languages=languages,
+        required_memory=required_mem,
     )
 
 
