@@ -43,6 +43,8 @@ build-tables:
 build-docs:
 	@echo "--- 📚 Building documentation ---"
 	python docs/overview/create_available_tasks.py
+	python docs/overview/create_available_models.py
+	python docs/overview/create_available_benchmarks.py
 
 serve-docs:
 	@echo "--- 📚 Serving documentation ---"

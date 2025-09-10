@@ -194,43 +194,45 @@ MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
     display_name="Russian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
-    tasks=get_tasks(
-        languages=["rus"],
-        tasks=[
-            # Classification
-            "GeoreviewClassification",
-            "HeadlineClassification",
-            "InappropriatenessClassification",
-            "KinopoiskClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "RuReviewsClassification",
-            "RuSciBenchGRNTIClassification",
-            "RuSciBenchOECDClassification",
-            # Clustering
-            "GeoreviewClusteringP2P",
-            "RuSciBenchGRNTIClusteringP2P",
-            "RuSciBenchOECDClusteringP2P",
-            # MultiLabelClassification
-            "CEDRClassification",
-            "SensitiveTopicsClassification",
-            # PairClassification
-            "TERRa",
-            # Reranking
-            "MIRACLReranking",
-            "RuBQReranking",
-            # Retrieval
-            "MIRACLRetrieval",
-            "RiaNewsRetrieval",
-            "RuBQRetrieval",
-            # STS
-            "RUParaPhraserSTS",
-            "STS22",
-        ],
-    )
-    + get_tasks(
-        tasks=["RuSTSBenchmarkSTS"],
-        eval_splits=["test"],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["rus"],
+            tasks=[
+                # Classification
+                "GeoreviewClassification",
+                "HeadlineClassification",
+                "InappropriatenessClassification",
+                "KinopoiskClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "RuReviewsClassification",
+                "RuSciBenchGRNTIClassification",
+                "RuSciBenchOECDClassification",
+                # Clustering
+                "GeoreviewClusteringP2P",
+                "RuSciBenchGRNTIClusteringP2P",
+                "RuSciBenchOECDClusteringP2P",
+                # MultiLabelClassification
+                "CEDRClassification",
+                "SensitiveTopicsClassification",
+                # PairClassification
+                "TERRa",
+                # Reranking
+                "MIRACLReranking",
+                "RuBQReranking",
+                # Retrieval
+                "MIRACLRetrieval",
+                "RiaNewsRetrieval",
+                "RuBQRetrieval",
+                # STS
+                "RUParaPhraserSTS",
+                "STS22",
+            ],
+        )
+        + get_tasks(
+            tasks=["RuSTSBenchmarkSTS"],
+            eval_splits=["test"],
+        )
     ),
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
@@ -1262,25 +1264,27 @@ CODE_RAG = Benchmark(
 
 BEIR = Benchmark(
     name="BEIR",
-    tasks=get_tasks(
-        tasks=[
-            "TRECCOVID",
-            "NFCorpus",
-            "NQ",
-            "HotpotQA",
-            "FiQA2018",
-            "ArguAna",
-            "Touche2020",
-            "CQADupstackRetrieval",
-            "QuoraRetrieval",
-            "DBPedia",
-            "SCIDOCS",
-            "FEVER",
-            "ClimateFEVER",
-            "SciFact",
-        ],
-    )
-    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "TRECCOVID",
+                "NFCorpus",
+                "NQ",
+                "HotpotQA",
+                "FiQA2018",
+                "ArguAna",
+                "Touche2020",
+                "CQADupstackRetrieval",
+                "QuoraRetrieval",
+                "DBPedia",
+                "SCIDOCS",
+                "FEVER",
+                "ClimateFEVER",
+                "SciFact",
+            ],
+        )
+        + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
+    ),
     description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""

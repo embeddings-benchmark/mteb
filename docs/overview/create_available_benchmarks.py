@@ -1,3 +1,5 @@
+"""Updates the available benchmarks markdown file."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -12,25 +14,26 @@ benchmark_entry = """
 
 {description}
 
-[Learn more →]({reference})
-
 ??? info Tasks
 
     {task_table}
 """
+learn_more = "[Learn more →]({reference})"
 
 
 def format_benchmark_entry(benchmark: mteb.Benchmark) -> str:
     description = benchmark.description or "No description available."
-    assert benchmark.reference is not None
-    reference = benchmark.reference
+    if benchmark.reference:
+        # add learn more link to description
+        description += (
+            "\n\n" + learn_more.format(reference=benchmark.reference) + "\n\n"
+        )
 
     tasks_md = benchmark.tasks.to_markdown(["type", "modalities"])
 
     return benchmark_entry.format(
         benchmark_name=benchmark.name,
         description=description,
-        reference=reference,
         task_table=tasks_md,
     )
 
@@ -58,11 +61,10 @@ def main(path: Path) -> None:
     for benchmark in sorted(benchmarks, key=lambda b: b.name):
         benchmark_entries += format_benchmark_entry(benchmark) + "\n"
 
-    doc_benchmarks = path / "available_benchmarks.md"
-    with doc_benchmarks.open("r") as f:
+    with path.open("r") as f:
         content = f.read()
     new_content = insert_between_markers(content, benchmark_entries.strip())
-    with doc_benchmarks.open("w") as f:
+    with path.open("w") as f:
         f.write(new_content)
 
 
