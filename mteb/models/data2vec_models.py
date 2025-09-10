@@ -21,10 +21,12 @@ class Data2VecAudioWrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         # Data2Vec Audio also uses Wav2Vec2 feature extractor
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
@@ -130,6 +132,7 @@ class Data2VecAudioWrapper(Wrapper):
                     return_tensors="pt",
                     padding="longest",
                     truncation=True,
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                     return_attention_mask=True,
                 ).to(self.device)
 
