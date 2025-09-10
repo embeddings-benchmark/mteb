@@ -246,7 +246,6 @@ _EVAL_LANGS = extend_lang_pairs()
 
 
 class NTREXBitextMining(AbsTaskBitextMining):
-    parallel_subsets = True
     metadata = TaskMetadata(
         name="NTREXBitextMining",
         dataset={
