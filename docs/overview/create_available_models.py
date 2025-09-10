@@ -97,7 +97,7 @@ def format_model_entry(meta: mteb.ModelMeta) -> str:
     languages = (
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
-    required_mem = required_memory_string(meta.required_memory)
+    required_mem = required_memory_string(meta.memory_usage_mb)
 
     return model_entry.format(
         model_name=model_name,
