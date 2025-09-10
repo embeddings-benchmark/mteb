@@ -130,7 +130,6 @@ class Data2VecAudioWrapper(Wrapper):
                     return_tensors="pt",
                     padding="longest",
                     truncation=True,
-                    max_length=30 * self.sampling_rate,  # 30 seconds max
                     return_attention_mask=True,
                 ).to(self.device)
 
