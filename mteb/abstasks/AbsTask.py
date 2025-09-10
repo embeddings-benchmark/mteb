@@ -321,7 +321,7 @@ class AbsTask(ABC):
         self.dataset_transform()
         self.data_loaded = True
 
-    def fast_load(self, **kwargs: Any) -> None:
+    def fast_load(self) -> None:
         """**Deprecated**. Load all subsets at once, then group by language. Using fast loading has two requirements:
 
         - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair

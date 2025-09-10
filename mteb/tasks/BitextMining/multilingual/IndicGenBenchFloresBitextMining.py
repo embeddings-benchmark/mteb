@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
+import datasets
+from datasets import Dataset
+
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -125,3 +130,24 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
 }
 """,
     )
+
+    def load_data(self) -> None:
+        if self.data_loaded:
+            return
+
+        dataset = datasets.load_dataset(
+            **self.metadata.dataset,
+            split=self.metadata.eval_splits[0],
+        )
+        self.dataset = defaultdict(dict)
+        for lang in self.metadata.eval_langs:
+            first_lang, second_lang = lang.split("-")
+            ds = Dataset.from_dict(
+                {
+                    "sentence1": dataset[first_lang],
+                    "sentence2": dataset[second_lang],
+                }
+            )
+            self.dataset[lang][self.metadata.eval_splits[0]] = ds
+
+        self.data_loaded = True
