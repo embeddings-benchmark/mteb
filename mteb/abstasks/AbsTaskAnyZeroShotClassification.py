@@ -129,7 +129,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
             ],
         )
         labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
-        labels_dataset.push_to_hub(repo_name)
+        labels_dataset.push_to_hub(repo_name, config_name="labels")
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
