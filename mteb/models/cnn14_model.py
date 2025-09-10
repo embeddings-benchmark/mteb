@@ -21,10 +21,12 @@ class CNN14Wrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_s = max_audio_length_s
 
         requires_package(
             self,
@@ -94,8 +96,8 @@ class CNN14Wrapper(Wrapper):
             audio = torch.from_numpy(audio)
         audio = audio.squeeze()
 
-        # Apply audio truncation (30 seconds max)
-        max_length = 30 * self.sampling_rate  # 30 seconds
+        # Apply audio truncation (configurable limit)
+        max_length = int(self.max_audio_length_s * self.sampling_rate)
         if audio.shape[-1] > max_length:
             audio = audio[..., :max_length]
 
