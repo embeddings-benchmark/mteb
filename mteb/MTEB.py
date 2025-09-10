@@ -24,7 +24,6 @@ else:
     from typing_extensions import deprecated
 
 import datasets
-from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -38,6 +37,8 @@ from mteb.models import (
 )
 
 if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
     from mteb.benchmarks import Benchmark
     from mteb.types import ScoresDict
 
@@ -288,6 +289,7 @@ class MTEB:
             A list of TaskResult objects, one for each task evaluated.
         """
         # update logging to account for different levels of Verbosity (similar to the command line)
+        from sentence_transformers import CrossEncoder, SentenceTransformer
 
         if encode_kwargs is None:
             encode_kwargs = {}
@@ -307,6 +309,7 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
+
         if isinstance(model, SentenceTransformer):
             model = SentenceTransformerEncoderWrapper(model)
         elif isinstance(model, CrossEncoder):
