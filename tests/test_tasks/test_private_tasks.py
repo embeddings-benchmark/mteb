@@ -6,6 +6,7 @@ from mteb.overview import get_task, get_tasks
 
 # List of accepted private tasks - update this list as needed
 ACCEPTED_PRIVATE_TASKS = [
+    "JapaneseCode1Retrieval",
     # Add task names here that are allowed to be private
     # Example: "SomePrivateTask"
 ]
