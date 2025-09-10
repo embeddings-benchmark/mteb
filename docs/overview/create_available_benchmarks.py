@@ -10,7 +10,7 @@ START_INSERT = "<!-- START TASK DESCRIPTION -->"
 END_INSERT = "<!-- END TASK DESCRIPTION -->"
 
 benchmark_entry = """
-###  {benchmark_name}
+####  {benchmark_name}
 
 {description}
 
