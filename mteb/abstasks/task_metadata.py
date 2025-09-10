@@ -194,14 +194,15 @@ class MetadataDatasetDict(TypedDict, total=False):
         revision: The revision of the dataset.
         name: The name the dataset config.
         split: The split of the dataset.
-        trust_remote_code: Whether to trust the remote code.
+        trust_remote_code: Whether to use `trust_remote_code`. Datasets shouldn't use this since,
+         because datasets `v4` doesn't support this. This parameter is left for compatibility with forks/external usage.
     """
 
     path: str
     revision: str
     name: str
     split: str
-    trust_remote_code: bool  # TODO remove
+    trust_remote_code: bool
     dataset_version: str  # NLPJournalAbsArticleRetrieval.V2
 
 
