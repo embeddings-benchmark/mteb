@@ -18,7 +18,7 @@ class NLPJournalTitleIntroRetrievalV2(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
             "path": "mteb/NLPJournalTitleIntroRetrieval.V2",
-            "revision": "eff48da62f47061e313ff15952f73881db41966b",
+            "revision": "39b53c8298ce1948d2a4caaa55fee5b34eeb647e",
         },
         type="Retrieval",
         category="t2t",
@@ -57,7 +57,7 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
             "path": "mteb/NLPJournalTitleIntroRetrieval",
-            "revision": "7595286313d52a3797829a93e048ed0ae91dd4ad",
+            "revision": "4c58ad0940d449fa5d71ce4ec285502402671a5b",
         },
         type="Retrieval",
         category="t2t",
