@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections import defaultdict
 from typing import Any
 
 from datasets import Dataset, DatasetDict
@@ -181,34 +182,24 @@ class AbsTaskBitextMining(AbsTask):
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         if self.metadata.is_multilingual:
+            dataset = defaultdict(dict)
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
 
-                sentences = {}
                 if self.parallel_subsets:
-                    # If there are parallel subsets, process them
                     for split in self.dataset:
                         sent_1, sent_2 = config.split("-")
-                        sentences[split] = Dataset.from_dict(
-                            {
-                                "sentence1": self.dataset[split][sent_1],
-                                "sentence2": self.dataset[split][sent_2],
-                            }
-                        )
+                        dataset[split][sent_1] = self.dataset[split][sent_1]
+                        dataset[split][sent_2] = self.dataset[split][sent_2]
                 else:
-                    # Handle the non-parallel subset case
                     sent_1, sent_2 = self.get_pairs(self.parallel_subsets)[0]
                     for split in self.dataset[config]:
-                        sentences[split] = Dataset.from_dict(
-                            {
-                                "sentence1": self.dataset[config][split][sent_1],
-                                "sentence2": self.dataset[config][split][sent_2],
-                            }
-                        )
-                sentences = DatasetDict(sentences)
-                sentences.push_to_hub(
-                    repo_name, config, commit_message=f"Add {config} subset"
-                )
+                        dataset[split][sent_1] = self.dataset[split][sent_1]
+                        dataset[split][sent_2] = self.dataset[split][sent_2]
+            for split in dataset:
+                dataset[split] = Dataset.from_dict(dataset[split])
+            dataset = DatasetDict(dataset)
+            dataset.push_to_hub(repo_name)
         else:
             sentences = {}
             for split in self.dataset:
