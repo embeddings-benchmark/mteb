@@ -193,9 +193,10 @@ class AbsTaskBitextMining(AbsTask):
                         dataset[split][sent_2] = self.dataset[split][sent_2]
                 else:
                     sent_1, sent_2 = self.get_pairs(self.parallel_subsets)[0]
+                    lang_1, lang_2 = config.split("-")
                     for split in self.dataset[config]:
-                        dataset[split][sent_1] = self.dataset[split][sent_1]
-                        dataset[split][sent_2] = self.dataset[split][sent_2]
+                        dataset[split][lang_1] = self.dataset[config][split][sent_1]
+                        dataset[split][lang_2] = self.dataset[config][split][sent_2]
             for split in dataset:
                 dataset[split] = Dataset.from_dict(dataset[split])
             dataset = DatasetDict(dataset)
