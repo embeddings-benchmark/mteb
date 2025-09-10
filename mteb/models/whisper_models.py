@@ -22,11 +22,13 @@ class WhisperAudioWrapper(Wrapper):
         model_name: str = "openai/whisper-tiny",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         revision: str = "main",
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
         self.revision = revision
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = WhisperModel.from_pretrained(model_name, revision=revision).to(
             device
@@ -126,7 +128,7 @@ class WhisperAudioWrapper(Wrapper):
                     return_tensors="pt",
                     padding="max_length",
                     truncation=True,
-                    max_length=30 * self.sampling_rate,  # 30 seconds max
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                     return_attention_mask=True,
                 ).to(self.device)
 

@@ -21,10 +21,12 @@ class Qwen2AudioWrapper(Wrapper):
         self,
         model_name: str = "Qwen/Qwen2-Audio-7B",
         device: str | None = None,
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.max_audio_length_seconds = max_audio_length_seconds
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.model = Qwen2AudioForConditionalGeneration.from_pretrained(model_name)
 
@@ -83,12 +85,6 @@ class Qwen2AudioWrapper(Wrapper):
         if audio.ndim == 2:
             audio = audio.mean(dim=0)
         audio = audio.squeeze()
-
-        # Apply audio truncation (30 seconds max)
-        max_length = 30 * self.sampling_rate  # 30 seconds
-        if audio.shape[-1] > max_length:
-            audio = audio[..., :max_length]
-
         return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
@@ -99,12 +95,6 @@ class Qwen2AudioWrapper(Wrapper):
             resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
             waveform = resampler(waveform)
         waveform = waveform.squeeze()
-
-        # Apply audio truncation (30 seconds max)
-        max_length = 30 * self.sampling_rate  # 30 seconds
-        if waveform.shape[-1] > max_length:
-            waveform = waveform[..., :max_length]
-
         return waveform
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
@@ -140,6 +130,8 @@ class Qwen2AudioWrapper(Wrapper):
                     sampling_rate=self.processor.feature_extractor.sampling_rate,
                     return_tensors="pt",
                     padding=True,
+                    truncation=True,
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 )
 
                 input_features = inputs.input_features.to(self.device)
