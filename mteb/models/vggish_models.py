@@ -31,9 +31,11 @@ def vggish_loader(**kwargs):
         def __init__(
             self,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
             self.device = device
+            self.max_audio_length_seconds = max_audio_length_seconds
             self.model = vggish.get_vggish(with_classifier=False, pretrained=True)
             self.model.eval().to(self.device)
 
@@ -60,8 +62,8 @@ def vggish_loader(**kwargs):
             if audio.ndim > 1:
                 audio = audio.mean(dim=0)
 
-            # Apply audio truncation (30 seconds max)
-            max_length = 30 * self.sampling_rate  # 30 seconds
+            # Apply audio truncation
+            max_length = int(self.max_audio_length_seconds * self.sampling_rate)
             if audio.shape[-1] > max_length:
                 audio = audio[..., :max_length]
 
