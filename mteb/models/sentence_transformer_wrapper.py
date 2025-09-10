@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import sentence_transformers
 import torch
 from packaging.version import Version
@@ -165,6 +166,76 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             # ensure everything is on CPU and is float
             embeddings = embeddings.cpu().detach().float()
         return embeddings
+
+
+class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: The sentences to encode.
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+            prompt_type: The name type of prompt. (query or passage)
+            hf_split: Split of current task
+            hf_subset: Subset of current task
+            **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type (query or passage)
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type (query or passage)
+                4. Specific task type prompt
+                5. Specific prompt type (query or passage)
+
+
+        Returns:
+            The encoded sentences.
+        """
+        prompt = None
+        prompt_name = None
+        if self.model_prompts is not None:
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+            prompt = self.model_prompts.get(prompt_name, None)
+        if prompt_name:
+            logger.info(
+                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+            )
+
+        all_embeddings = []
+        for batch in inputs:
+            batch_column = list(batch.keys())[0]
+            batched_input = [dict() for _ in range(len(batch[batch_column]))]
+
+            # transform from {"text": [text1, text2], "image": [image1, image2]} to
+            # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
+            for key, values in batch.items():
+                for i, value in enumerate(values):
+                    batched_input[i][key] = value
+
+            embeddings = self.model.encode(
+                batched_input,
+                prompt=prompt,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                # ensure everything is on CPU and is float
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.stack(all_embeddings)
 
 
 class CrossEncoderWrapper:

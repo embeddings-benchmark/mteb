@@ -456,7 +456,6 @@ class TaskMetadata(BaseModel):
 
         Args:
             existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
-            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Returns:
             A DatasetCardData object with the metadata for the task with kwargs to card
@@ -607,7 +606,7 @@ class TaskMetadata(BaseModel):
         existing_dataset_card_data = (
             existing_dataset_card.data if existing_dataset_card else None
         )
-        dataset_card_data, template_kwargs = self.create_dataset_card_data(
+        dataset_card_data, template_kwargs = self._create_dataset_card_data(
             existing_dataset_card_data
         )
         dataset_card = DatasetCard.from_template(

@@ -1699,7 +1699,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
-            "number_of_characters": 257,
+            "number_of_characters": 201,
             "documents_text_statistics": {
                 "total_text_length": 84,
                 "min_text_length": 39,
@@ -1709,10 +1709,10 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "queries_text_statistics": {
-                "total_text_length": 173,
-                "min_text_length": 80,
-                "average_text_length": 86.5,
-                "max_text_length": 93,
+                "total_text_length": 117,
+                "min_text_length": 37,
+                "average_text_length": 58.5,
+                "max_text_length": 80,
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
@@ -1727,7 +1727,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         },
         "test": {
             "num_samples": 4,
-            "number_of_characters": 257,
+            "number_of_characters": 201,
             "documents_text_statistics": {
                 "total_text_length": 84,
                 "min_text_length": 39,
@@ -1737,10 +1737,10 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             },
             "documents_image_statistics": None,
             "queries_text_statistics": {
-                "total_text_length": 173,
-                "min_text_length": 80,
-                "average_text_length": 86.5,
-                "max_text_length": 93,
+                "total_text_length": 117,
+                "min_text_length": 37,
+                "average_text_length": 58.5,
+                "max_text_length": 80,
                 "unique_texts": 2,
             },
             "queries_image_statistics": None,
@@ -1770,12 +1770,9 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
             {
                 "id": ["q1", "q2"],
                 "text": [
+                    # dialogs with different lengths to test DatasetLoader with items with different item size
                     [
                         {"role": "user", "content": "What is the weather like today?"},
-                        {
-                            "role": "assistant",
-                            "content": "The weather is sunny with a chance of rain.",
-                        },
                     ],
                     [
                         {"role": "user", "content": "What is the capital of France?"},
