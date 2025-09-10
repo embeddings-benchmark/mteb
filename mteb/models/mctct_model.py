@@ -191,7 +191,6 @@ class MCTCTWrapper(Wrapper):
                     truncation=True,
                     max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 ).to(self.device)
-    
 
                 # Get embeddings from the model
                 outputs = self.model(

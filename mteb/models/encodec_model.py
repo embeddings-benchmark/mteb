@@ -124,7 +124,7 @@ class EncodecWrapper(Wrapper):
                 # Process audio through EnCodec's processor
                 max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
                 batch_np = [audio[:max_samples].cpu().numpy() for audio in batch]
-          
+
                 inputs = self.processor(
                     raw_audio=batch_np,
                     sampling_rate=self.sampling_rate,
