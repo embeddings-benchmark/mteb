@@ -66,10 +66,12 @@ nav:
       - Additional Types: api/types.md
   - Overview: 
       - overview/index.md
+      - Benchmarks:
+        - Available Benchmarks: overview/available_benchmarks.md
       - Tasks: 
         - Available Tasks: overview/available_tasks
-  #     - Benchmarks: overview/available_benchmarks
-  #     - Models: overview/available_models
+      - Models: 
+        - Available Models: overview/available_models
   # - Contribute: # TODO: Add contributions
   #     - Adding a Model: adding_a_model.md
   #     - Adding a Benchmark: adding_a_leaderboard_tab.md

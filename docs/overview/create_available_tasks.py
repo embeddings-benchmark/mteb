@@ -4,9 +4,6 @@ from pathlib import Path
 
 import mteb
 
-START_INSERT = "<!-- START TASK DESCRIPTION -->"
-END_INSERT = "<!-- END TASK DESCRIPTION -->"
-
 task_entry = """
 #### {task_name}
 
