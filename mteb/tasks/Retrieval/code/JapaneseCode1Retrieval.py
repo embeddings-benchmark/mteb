@@ -8,7 +8,7 @@ class JapaneseCode1Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JapaneseCode1Retrieval",
         description="Japanese code retrieval dataset. Japanese natural language queries paired with Python code snippets for cross-lingual code retrieval evaluation.",
-        reference="https://huggingface.co/datasets/mteb-private/JapaneseCode1Retrieval",
+        reference="https://huggingface.co/datasets/mteb-private/JapaneseCode1Retrieval-sample",
         dataset={
             "path": "mteb-private/JapaneseCode1Retrieval",
             "revision": "fc4cb6390055e65490dfc42526e1d6a379e8cd86",
