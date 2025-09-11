@@ -1,13 +1,9 @@
 name: Datasets available on HuggingFace - PR
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "mteb/tasks/**.py"
-
-permissions:
-  contents: read
-  pull-requests: write
 
 
 jobs:
