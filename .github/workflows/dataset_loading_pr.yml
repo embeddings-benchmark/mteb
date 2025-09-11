@@ -11,8 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        # IMPORTANT: For pull_request_target, check out the PR branch explicitly
+        ref: ${{ github.event.pull_request.head.sha }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
