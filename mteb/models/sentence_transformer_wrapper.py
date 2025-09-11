@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-
 import torch
 from packaging.version import Version
 from torch.utils.data import DataLoader
