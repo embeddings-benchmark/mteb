@@ -650,6 +650,7 @@ class MTEB:
 
     @staticmethod
     def _get_model_meta(model: Encoder) -> ModelMeta:
+        from sentence_transformers import CrossEncoder, SentenceTransformer
         if isinstance(model, CrossEncoder):
             meta = _model_meta_from_cross_encoder(model)
         elif isinstance(model, SentenceTransformer):
