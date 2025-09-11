@@ -2,7 +2,9 @@ name: Datasets available on HuggingFace - PR
 
 on:
   pull_request_target:
-
+    types: [opened, synchronize, edited]
+    paths:
+      - "mteb/tasks/**.py"
 
 jobs:
   run-pr-datasets-loading-check:
