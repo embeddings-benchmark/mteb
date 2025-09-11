@@ -5,7 +5,6 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from transformers import AutoModel
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -24,6 +23,8 @@ class LlamaNemoretrieverColembed(AbsEncoder):
         attn_implementation="flash_attention_2",
         **kwargs,
     ):
+        from transformers import AutoModel
+
         self.model = AutoModel.from_pretrained(
             model_name_or_path,
             revision=revision,

@@ -5,7 +5,6 @@ from typing import Any, Literal
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoImageProcessor, AutoModel
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -25,6 +24,7 @@ class DINOModel(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        from transformers import AutoImageProcessor, AutoModel
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(
@@ -36,7 +36,6 @@ class DINOModel(AbsEncoder):
 
     @staticmethod
     def get_text_embeddings(
-        self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,

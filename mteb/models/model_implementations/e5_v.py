@@ -3,11 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 import torch
-import transformers
 from packaging import version
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -27,6 +25,9 @@ class E5VModel(AbsEncoder):
         composed_prompt=None,
         **kwargs: Any,
     ):
+        from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
+        import transformers
+
         if version.parse(transformers.__version__) > version.parse(
             E5_V_TRANSFORMERS_VERSION
         ):

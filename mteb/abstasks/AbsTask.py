@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
@@ -11,13 +10,11 @@ from typing import Any, cast
 
 import datasets
 import numpy as np
-import torch
 import tqdm
-import transformers
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks._stratification import _iterative_train_test_split
+from mteb.set_seed import set_seed
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -30,13 +27,6 @@ from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
-
-
-def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
-    torch.manual_seed(seed)
-    np.random.seed(seed)  # noqa: NPY002
-    transformers.set_seed(seed)
-    return random.Random(seed), np.random.default_rng(seed)
 
 
 def _multilabel_subsampling(
@@ -56,6 +46,8 @@ def _multilabel_subsampling(
         label: the label with which the stratified sampling is based on.
         n_samples: Optional, number of samples to subsample. Default is max_n_samples.
     """
+    from ._stratification import _iterative_train_test_split
+
     for split in splits:
         n_split = len(dataset_dict[split])
         X_np = np.arange(n_split).reshape((-1, 1))

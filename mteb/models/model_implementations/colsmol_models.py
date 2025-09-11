@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 import torch
-from transformers.utils.import_utils import is_flash_attn_2_available
 
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import (
@@ -23,12 +22,19 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         model_name: str = "vidore/colqwen2-v1.0",
         revision: str | None = None,
         device: str | None = None,
+        attn_implementation: str | None = None,
         **kwargs,
     ):
         requires_package(
             self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
         )
         from colpali_engine.models import ColIdefics3, ColIdefics3Processor
+        from transformers.utils.import_utils import is_flash_attn_2_available
+
+        if attn_implementation is None:
+            attn_implementation = (
+                "flash_attention_2" if is_flash_attn_2_available() else "default"
+            )
 
         super().__init__(
             model_name=model_name,
@@ -44,9 +50,6 @@ colsmol_256m = ModelMeta(
     loader=ColSmolWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="vidore/colSmol-256M",
     languages=["eng-Latn"],
@@ -73,8 +76,6 @@ colsmol_500m = ModelMeta(
     loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="vidore/colSmol-500M",
     languages=["eng-Latn"],

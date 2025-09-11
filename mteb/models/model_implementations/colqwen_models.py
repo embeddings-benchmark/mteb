@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 import torch
-from transformers.utils.import_utils import is_flash_attn_2_available
 
 from mteb.models.model_meta import ModelMeta
 from mteb.requires_package import (
@@ -48,12 +47,19 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         model_name: str = "vidore/colqwen2.5-v0.2",
         revision: str | None = None,
         device: str | None = None,
+        attn_implementation: str | None = None,
         **kwargs,
     ):
         requires_package(
             self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
         )
         from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
+        from transformers.utils.import_utils import is_flash_attn_2_available
+
+        if attn_implementation is None:
+            attn_implementation = (
+                "flash_attention_2" if is_flash_attn_2_available() else None
+            )
 
         super().__init__(
             model_name=model_name,
@@ -69,9 +75,6 @@ colqwen2 = ModelMeta(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="vidore/colqwen2-v1.0",
     languages=["eng-Latn"],
@@ -97,9 +100,6 @@ colqwen2_5 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="vidore/colqwen2.5-v0.2",
     languages=["eng-Latn"],
@@ -125,9 +125,6 @@ colnomic_7b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
     languages=["eng-Latn"],
@@ -163,8 +160,6 @@ colnomic_3b = ModelMeta(
     loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
     languages=COLNOMIC_LANGUAGES,
@@ -190,9 +185,6 @@ colnomic_7b = ModelMeta(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
     languages=COLNOMIC_LANGUAGES,

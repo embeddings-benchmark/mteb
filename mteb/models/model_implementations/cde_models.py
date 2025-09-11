@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from transformers import AutoConfig
 
 import mteb
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -43,6 +42,8 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
     )
 
     def __init__(self, model: str, *args, **kwargs: Any) -> None:
+        from transformers import AutoConfig
+
         super().__init__(model, *args, **kwargs)
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size

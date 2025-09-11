@@ -7,7 +7,6 @@ from typing import Any
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from transformers import AutoModel, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -36,6 +35,8 @@ class NoInstructModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
+        from transformers import AutoModel, AutoTokenizer
+
         self.model_name = model_name
         device = kwargs.pop("device", None)
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
