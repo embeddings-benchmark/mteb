@@ -6,6 +6,11 @@ on:
     paths:
       - "mteb/tasks/**.py"
 
+permissions:
+  contents: read
+  pull-requests: read
+
+
 jobs:
   run-pr-datasets-loading-check:
     runs-on: ubuntu-latest
