@@ -6,8 +6,7 @@ import pandas as pd
 import pytest
 
 import mteb
-from mteb.load_results import ModelResult
-from mteb.load_results.task_results import TaskResult
+from mteb.results import ModelResult, TaskResult
 
 # TODO: v2 ^ we probably want to refactor such that this import looks like
 # from mteb.results import ModelResult, TaskResults

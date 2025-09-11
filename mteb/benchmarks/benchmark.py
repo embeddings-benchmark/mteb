@@ -4,12 +4,12 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from mteb.load_results.load_results import load_results
+from mteb.load_results import load_results
+from mteb.results import BenchmarkResults
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
-    from mteb.abstasks.AbsTask import AbsTask
-    from mteb.load_results.benchmark_results import BenchmarkResults
+    from mteb.abstasks import AbsTask
 
 
 @dataclass

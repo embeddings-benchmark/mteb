@@ -13,8 +13,6 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
-from mteb.load_results.benchmark_results import ModelResult
-from mteb.load_results.task_results import TaskResult
 from mteb.models.get_model_meta import (
     _model_meta_from_cross_encoder,
     _model_meta_from_sentence_transformers,
@@ -29,6 +27,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.results import ModelResult, TaskResult
 from mteb.types import HFSubset, SplitName
 
 logger = logging.getLogger(__name__)

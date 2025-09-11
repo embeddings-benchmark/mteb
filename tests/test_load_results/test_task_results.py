@@ -7,7 +7,7 @@ import pytest
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.load_results.task_results import TaskResult
+from mteb.results import TaskResult
 
 tests_folder = Path(__file__).parent.parent
 

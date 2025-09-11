@@ -9,8 +9,7 @@ import pandas as pd
 import pytest
 
 import mteb
-from mteb.load_results import ModelResult
-from mteb.load_results.benchmark_results import BenchmarkResults
+from mteb.results import BenchmarkResults, ModelResult
 
 
 @pytest.fixture

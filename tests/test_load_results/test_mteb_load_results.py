@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 import mteb
-from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
+from mteb.results import BenchmarkResults, ModelResult
 
 
 def test_mteb_load_results():

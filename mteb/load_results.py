@@ -7,10 +7,8 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.cache import ResultCache
-from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
-from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
+from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.types import ModelName, Revision
 
 if sys.version_info >= (3, 13):
@@ -69,6 +67,8 @@ def load_results(
             splits from the results object that are not default in the task metadata. Defaults to True.
         only_main_score: If True, only the main score will be loaded.
     """
+    from mteb.cache import ResultCache
+
     cache = ResultCache()
     if download_latest:
         cache.download_from_remote(remote=results_repo, download_latest=download_latest)
