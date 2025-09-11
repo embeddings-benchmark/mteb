@@ -22,6 +22,12 @@ jobs:
       run: |
           make install-for-tests
 
+    - name: HF auth
+      env:
+        HF_TOKEN: ${{ secrets.MTEB_PRIVATE }}
+      run: |
+        hf auth login --token $HF_TOKEN
+
     - name: Run dataset loading tests
       run: |
         make dataset-load-test
