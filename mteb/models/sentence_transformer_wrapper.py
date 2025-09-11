@@ -253,13 +253,14 @@ class CrossEncoderWrapper:
     ) -> None:
         from sentence_transformers import CrossEncoder
 
+        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
+
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, **kwargs)
-            from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 
-            self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
 
     def predict(
         self,
