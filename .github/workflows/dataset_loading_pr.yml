@@ -5,17 +5,12 @@ on:
     paths:
       - "mteb/tasks/**.py"
 
-permissions:
-  contents: read
-  pull-requests: read
-
-
 jobs:
   run-pr-datasets-loading-check:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Set up Python
@@ -27,12 +22,6 @@ jobs:
     - name: Install dependencies
       run: |
           make install-for-tests
-
-    - name: HF auth
-      env:
-        HF_TOKEN: ${{ secrets.MTEB_PRIVATE }}
-      run: |
-        hf auth login --token $HF_TOKEN
 
     - name: Run dataset loading tests
       run: |
