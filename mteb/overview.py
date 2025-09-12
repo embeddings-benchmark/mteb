@@ -216,7 +216,10 @@ class MTEBTasks(tuple):
         for task in self:
             markdown_table += f"| {task.metadata.name} "
             markdown_table += "".join(
-                [f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} " for p in properties]
+                [
+                    f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} "
+                    for p in properties
+                ]
             )
             markdown_table += " |\n"
         return markdown_table
