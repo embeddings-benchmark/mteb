@@ -93,13 +93,17 @@ class ASTWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size)):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 # AST processes raw waveforms directly through its feature extractor
@@ -117,7 +121,6 @@ class ASTWrapper(Wrapper):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     truncation=True,
-                    max_length=30 * self.sampling_rate,
                     padding=True,
                 ).to(self.device)
 

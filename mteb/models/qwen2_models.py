@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -20,10 +21,12 @@ class Qwen2AudioWrapper(Wrapper):
         self,
         model_name: str = "Qwen/Qwen2-Audio-7B",
         device: str | None = None,
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.max_audio_length_seconds = max_audio_length_seconds
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.model = Qwen2AudioForConditionalGeneration.from_pretrained(model_name)
 
@@ -81,7 +84,8 @@ class Qwen2AudioWrapper(Wrapper):
             audio = torch.from_numpy(audio)
         if audio.ndim == 2:
             audio = audio.mean(dim=0)
-        return audio.squeeze()
+        audio = audio.squeeze()
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sr = torchaudio.load(path)
@@ -90,7 +94,8 @@ class Qwen2AudioWrapper(Wrapper):
         if sr != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+        waveform = waveform.squeeze()
+        return waveform
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
         max_len = max(w.shape[0] for w in batch)
@@ -104,13 +109,16 @@ class Qwen2AudioWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed = self._process_audio(audio)
         embeddings_list: list[torch.Tensor] = []
 
         with torch.no_grad():
-            for i in range(0, len(processed), batch_size):
+            for i in tqdm(
+                range(0, len(processed), batch_size), disable=not show_progress_bar
+            ):
                 batch = processed[i : i + batch_size]
 
                 audio_list = [w.numpy() for w in batch]
@@ -122,6 +130,8 @@ class Qwen2AudioWrapper(Wrapper):
                     sampling_rate=self.processor.feature_extractor.sampling_rate,
                     return_tensors="pt",
                     padding=True,
+                    truncation=True,
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 )
 
                 input_features = inputs.input_features.to(self.device)

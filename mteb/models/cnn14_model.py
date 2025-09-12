@@ -21,10 +21,12 @@ class CNN14Wrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_s = max_audio_length_s
 
         requires_package(
             self,
@@ -92,7 +94,14 @@ class CNN14Wrapper(Wrapper):
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze()
+        audio = audio.squeeze()
+
+        # Apply audio truncation (configurable limit)
+        max_length = int(self.max_audio_length_s * self.sampling_rate)
+        if audio.shape[-1] > max_length:
+            audio = audio[..., :max_length]
+
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
@@ -113,13 +122,17 @@ class CNN14Wrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size)):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 # Convert batch to tensors and move to device

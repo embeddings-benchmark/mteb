@@ -31,9 +31,11 @@ def yamnet_loader(**kwargs):
         def __init__(
             self,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
             self.device = device
+            self.max_audio_length_seconds = max_audio_length_seconds
             self.model = yamnet.yamnet(pretrained=True)
             self.model.eval().to(self.device)
 
@@ -59,6 +61,11 @@ def yamnet_loader(**kwargs):
             audio = audio.float().squeeze()
             if audio.ndim > 1:
                 audio = audio.mean(dim=0)
+
+            # Apply audio truncation
+            max_length = int(self.max_audio_length_seconds * self.sampling_rate)
+            if audio.shape[-1] > max_length:
+                audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
             if audio.abs().max() > 1.0:
@@ -156,7 +163,14 @@ def yamnet_loader(**kwargs):
             return input_tensor
 
         def get_audio_embeddings(
-            self, audio, *, task_name=None, prompt_type=None, batch_size=4, **kwargs
+            self,
+            audio,
+            *,
+            task_name=None,
+            prompt_type=None,
+            batch_size=4,
+            show_progress_bar=True,
+            **kwargs,
         ):
             """Generate embeddings for audio inputs."""
             processed_audio = self._process_audio(audio)
@@ -164,7 +178,9 @@ def yamnet_loader(**kwargs):
 
             with torch.no_grad():
                 for i in tqdm(
-                    range(0, len(processed_audio), batch_size), desc="Processing audio"
+                    range(0, len(processed_audio), batch_size),
+                    desc="Processing audio",
+                    disable=not show_progress_bar,
                 ):
                     batch = processed_audio[i : i + batch_size]
                     batch_embeddings = []

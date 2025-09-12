@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -21,11 +22,13 @@ class WavlmWrapper(Wrapper):
         model_name: str,
         model_revision: str = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.model_revision = model_revision
         self.device = device
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = WavLMModel.from_pretrained(
             self.model_name, revision=self.model_revision
@@ -108,13 +111,17 @@ class WavlmWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
         with torch.no_grad():
-            for i in range(0, len(processed_audio), batch_size):
+            for i in tqdm(
+                range(0, len(processed_audio), batch_size),
+                disable=not show_progress_bar,
+            ):
                 batch = processed_audio[i : i + batch_size]
 
                 batch_tensor = self._pad_audio_batch(batch)
@@ -130,7 +137,7 @@ class WavlmWrapper(Wrapper):
                     return_tensors="pt",
                     padding="longest",
                     truncation=True,
-                    max_length=480000,
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                     return_attention_mask=True,
                 ).to(self.device)
 

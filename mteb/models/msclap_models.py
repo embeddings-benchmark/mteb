@@ -23,6 +23,7 @@ class MSClapWrapper:
         self,
         model_name: str = "microsoft/msclap-2023",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         requires_package(
@@ -35,17 +36,22 @@ class MSClapWrapper:
         self.model_name = model_name
         self.device = device
         self.sampling_rate = 48000
+        self.max_audio_length_s = max_audio_length_s
 
         if "2022" in self.model_name:
             self.version = "2022"
+            self.text_length = 100
         elif "2023" in self.model_name:
             self.version = "2023"
+            self.text_length = 77
         else:
             self.version = "2023"
+            self.text_length = 77
 
         self.use_cuda = device == "cuda"
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
+        self.tokenizer = self.model.tokenizer
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -93,6 +99,13 @@ class MSClapWrapper:
                             )
                             audio_array = resampler(audio_array)
 
+                        # Apply audio truncation
+                        max_length_samples = int(
+                            self.max_audio_length_s * self.sampling_rate
+                        )
+                        if audio_array.shape[-1] > max_length_samples:
+                            audio_array = audio_array[..., :max_length_samples]
+
                         # Only squeeze here, don't call _convert_audio again
                         waveforms.append(audio_array.squeeze())
                     elif "path" in item:
@@ -107,15 +120,36 @@ class MSClapWrapper:
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze().float()  # Ensure float32
+        audio = audio.float()
+
+        # If stereo or multi-channel, downmix to mono
+        if audio.ndim > 1:
+            audio = torch.mean(audio, dim=0)
+
+        # Apply audio truncation
+        max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        if audio.shape[-1] > max_length_samples:
+            audio = audio[..., :max_length_samples]
+
+        return audio.squeeze()  # final shape [num_samples]
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
-        waveform = waveform.float()  # Ensure float32
+        waveform = waveform.float()
+
+        # Downmix to mono
+        if waveform.shape[0] > 1:
+            waveform = waveform.mean(dim=0, keepdim=True)
+
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+
+        max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        if waveform.shape[-1] > max_length_samples:
+            waveform = waveform[..., :max_length_samples]
+
+        return waveform.squeeze()  # [num_samples]
 
     def get_audio_embeddings(
         self,
@@ -124,13 +158,16 @@ class MSClapWrapper:
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
         all_features = []
         processed_audio = self._process_audio(audio)
 
         for i in tqdm(
-            range(0, len(processed_audio), batch_size), desc="Processing audio batches"
+            range(0, len(processed_audio), batch_size),
+            desc="Processing audio batches",
+            disable=not show_progress_bar,
         ):
             batch = processed_audio[i : i + batch_size]
 
@@ -178,19 +215,18 @@ class MSClapWrapper:
         texts: list[str],
         **kwargs: Any,
     ) -> np.ndarray:
+        inputs = self.tokenizer(
+            texts,
+            return_tensors="pt",
+            padding="max_length",
+            truncation=True,
+            max_length=self.text_length,
+        )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+
         with torch.no_grad():
-            preprocessed_texts = self.model.preprocess_text(texts)
-            if isinstance(preprocessed_texts, dict):
-                preprocessed_texts = {
-                    k: v.to(self.device) for k, v in preprocessed_texts.items()
-                }
-            else:
-                preprocessed_texts = preprocessed_texts.to(self.device)
-
-            text_features = self.model.clap.caption_encoder(preprocessed_texts)
-            # Normalize embeddings
+            text_features = self.model.clap.caption_encoder(inputs)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-
         return text_features.cpu().numpy()
 
     def encode(
