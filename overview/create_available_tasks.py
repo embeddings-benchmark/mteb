@@ -30,6 +30,21 @@ task_type_section = """
 """
 
 
+citation_admonition = """
+
+??? quote "Citation"
+
+{citation_chunk}
+
+"""
+
+citation_chunk = """
+```bibtex
+{bibtex_citation}
+```
+"""
+
+
 def pretty_long_list(items: list[str], max_items: int = 5) -> str:
     if len(items) <= max_items:
         return ", ".join(items)
@@ -83,7 +98,7 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     annotation_creators = task.metadata.annotations_creators or "not specified"
     sample_creation = task.metadata.sample_creation or "not specified"
 
-    return task_entry.format(
+    entry = task_entry.format(
         task_name=task.metadata.name,
         description=description,
         dataset_name=dataset_name,
@@ -97,6 +112,12 @@ def format_task_entry(task: mteb.AbsTask) -> str:
         annotation_creators=annotation_creators,
         sample_creation=sample_creation,
     )
+    if task.metadata.bibtex_citation:
+        citation = citation_chunk.format(bibtex_citation=task.metadata.bibtex_citation)
+        citation = "\n".join([f"    {line}" for line in citation.split("\n")])  # indent
+        entry += citation_admonition.format(citation_chunk=citation)
+
+    return entry
 
 
 def main(folder: Path) -> None:
