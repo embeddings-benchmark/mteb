@@ -17,6 +17,23 @@ Retrieve images based on images and specific retrieval instructions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{fu2024blink,
+      author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
+      journal = {arXiv preprint arXiv:2404.12390},
+      title = {Blink: Multimodal large language models can see but not perceive},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### BLINKIT2TMultiChoice
 
 Retrieve the correct text answer based on images and specific retrieval instructions.
@@ -26,6 +43,23 @@ Retrieve the correct text answer based on images and specific retrieval instruct
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image, text to text (it2t) | accuracy | eng | Encyclopaedic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{fu2024blink,
+      author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
+      journal = {arXiv preprint arXiv:2404.12390},
+      title = {Blink: Multimodal large language models can see but not perceive},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -41,6 +75,23 @@ count the number of objects in the image.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{tong2024cambrian,
+      author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+      journal = {arXiv preprint arXiv:2406.16860},
+      title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### CVBenchDepth
 
 judge the depth of the objects in the image with similarity matching.
@@ -50,6 +101,23 @@ judge the depth of the objects in the image with similarity matching.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image, text to text (it2t) | accuracy | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{tong2024cambrian,
+      author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+      journal = {arXiv preprint arXiv:2406.16860},
+      title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -65,6 +133,23 @@ judge the distance of the objects in the image with similarity matching.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{tong2024cambrian,
+      author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+      journal = {arXiv preprint arXiv:2406.16860},
+      title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### CVBenchRelation
 
 decide the relation of the objects in the image.
@@ -74,3 +159,19 @@ decide the relation of the objects in the image.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image, text to text (it2t) | accuracy | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{tong2024cambrian,
+      author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+      journal = {arXiv preprint arXiv:2406.16860},
+      title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+      year = {2024},
+    }
+    
+    ```

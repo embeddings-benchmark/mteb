@@ -17,6 +17,24 @@ Benchmark aila subset in aila within instruction following abilities. The instru
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
 #### IFIRCds
 
 Benchmark IFIR cds subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information. 
@@ -26,6 +44,24 @@ Benchmark IFIR cds subset within instruction following abilities. The instructio
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to text (t2t) | ndcg_at_20 | eng | Medical, Written | human-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
 
 
 
@@ -41,6 +77,24 @@ Benchmark IFIR fiqa subset within instruction following abilities. The instructi
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
 #### IFIRFire
 
 Benchmark IFIR fire subset within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents. 
@@ -50,6 +104,24 @@ Benchmark IFIR fire subset within instruction following abilities. The instructi
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to text (t2t) | ndcg_at_20 | eng | Legal, Written | human-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
 
 
 
@@ -65,6 +137,24 @@ Benchmark IFIR nfcorpus subset within instruction following abilities. The instr
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
 #### IFIRPm
 
 Benchmark IFIR pm subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information. 
@@ -74,6 +164,24 @@ Benchmark IFIR pm subset within instruction following abilities. The instruction
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to text (t2t) | ndcg_at_20 | eng | Medical, Written | human-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
 
 
 
@@ -89,6 +197,24 @@ Benchmark IFIR scifact_open subset within instruction following abilities. The i
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{song2025ifir,
+      author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+      booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+      pages = {10186--10204},
+      title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
 #### InstructIR
 
 A benchmark specifically designed to evaluate the instruction following ability in information retrieval models. Our approach focuses on user-aligned instructions tailored to each query instance, reflecting the diverse characteristics inherent in real-world search scenarios. **NOTE**: scores on this may differ unless you include instruction first, then "[SEP]" and then the query via redefining `combine_query_and_instruction` in your model.
@@ -98,3 +224,21 @@ A benchmark specifically designed to evaluate the instruction following ability 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to text (t2t) | robustness_at_10 | eng | Web | human-annotated | created |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{oh2024instructir,
+      archiveprefix = {{arXiv}},
+      author = {{Hanseok Oh and Hyunji Lee and Seonghyeon Ye and Haebin Shin and Hansol Jang and Changwook Jun and Minjoon Seo}},
+      eprint = {{2402.14334}},
+      primaryclass = {{cs.CL}},
+      title = {{INSTRUCTIR: A Benchmark for Instruction Following of Information Retrieval Models}},
+      year = {{2024}},
+    }
+    
+    ```

@@ -17,6 +17,25 @@ Retrieve images based on multilingual descriptions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{bugliarello2022iglue,
+      author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
+      booktitle = {International Conference on Machine Learning},
+      organization = {PMLR},
+      pages = {2370--2392},
+      title = {IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
+      year = {2022},
+    }
+    
+    ```
+    
+
+
+
 #### XFlickr30kCoT2IRetrieval
 
 Retrieve images based on multilingual descriptions.
@@ -29,6 +48,25 @@ Retrieve images based on multilingual descriptions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{bugliarello2022iglue,
+      author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
+      booktitle = {International Conference on Machine Learning},
+      organization = {PMLR},
+      pages = {2370--2392},
+      title = {IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
+      year = {2022},
+    }
+    
+    ```
+    
+
+
+
 #### XM3600T2IRetrieval
 
 Retrieve images based on multilingual descriptions.
@@ -38,3 +76,20 @@ Retrieve images based on multilingual descriptions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_10 | ara, ben, ces, dan, deu, ... (36) | Encyclopaedic, Written | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{thapliyal2022crossmodal,
+      author = {Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
+      booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
+      pages = {715--729},
+      title = {Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
+      year = {2022},
+    }
+    
+    ```

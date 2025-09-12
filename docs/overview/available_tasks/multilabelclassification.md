@@ -22,6 +22,32 @@
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{DBLP:journals/corr/abs-2010-04543,
+      author = {Joao Augusto Leite and
+    Diego F. Silva and
+    Kalina Bontcheva and
+    Carolina Scarton},
+      eprint = {2010.04543},
+      eprinttype = {arXiv},
+      journal = {CoRR},
+      timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
+      title = {Toxic Language Detection in Social Media for Brazilian Portuguese:
+    New Dataset and Multilingual Analysis},
+      url = {https://arxiv.org/abs/2010.04543},
+      volume = {abs/2010.04543},
+      year = {2020},
+    }
+    
+    ```
+    
+
+
+
 #### CEDRClassification
 
 Classification of sentences by emotions, labeled into 5 categories (joy, sadness, surprise, fear, and anger).
@@ -31,6 +57,26 @@ Classification of sentences by emotions, labeled into 5 categories (joy, sadness
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to category (t2c) | accuracy | rus | Blog, Social, Web, Written | human-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{sboev2021data,
+      author = {Sboev, Alexander and Naumov, Aleksandr and Rybka, Roman},
+      journal = {Procedia Computer Science},
+      pages = {637--642},
+      publisher = {Elsevier},
+      title = {Data-Driven Model for Emotion Detection in Russian Texts},
+      volume = {190},
+      year = {2021},
+    }
+    
+    ```
+    
 
 
 
@@ -47,6 +93,26 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to category (t2c) | accuracy | ita | Social, Written | expert-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{araque2023emit,
+      author = {Araque, O and Frenda, S and Sprugnoli, R and Nozza, D and Patti, V and others},
+      booktitle = {CEUR WORKSHOP PROCEEDINGS},
+      organization = {CEUR-WS},
+      pages = {1--8},
+      title = {EMit at EVALITA 2023: Overview of the Categorical Emotion Detection in Italian Social Media Task},
+      volume = {3473},
+      year = {2023},
+    }
+    
+    ```
+    
 
 
 
@@ -70,6 +136,34 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{lee-etal-2022-k,
+      address = {Gyeongju, Republic of Korea},
+      author = {Lee, Jean  and
+    Lim, Taejun  and
+    Lee, Heejun  and
+    Jo, Bogeun  and
+    Kim, Yangsok  and
+    Yoon, Heegeun  and
+    Han, Soyeon Caren},
+      booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+      month = oct,
+      pages = {3530--3538},
+      publisher = {International Committee on Computational Linguistics},
+      title = {K-{MH}a{S}: A Multi-label Hate Speech Detection Dataset in {K}orean Online News Comment},
+      url = {https://aclanthology.org/2022.coling-1.311},
+      year = {2022},
+    }
+    
+    ```
+    
+
+
+
 #### MalteseNewsClassification
 
 A multi-label topic classification dataset for Maltese News
@@ -87,6 +181,27 @@ A multi-label topic classification dataset for Maltese News
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{maltese-news-datasets,
+      author = {Chaudhary, Amit Kumar  and
+    Micallef, Kurt  and
+    Borg, Claudia},
+      booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation},
+      month = may,
+      publisher = {Association for Computational Linguistics},
+      title = {Topic Classification and Headline Generation for {M}altese using a Public News Corpus},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### MultiEURLEXMultilabelClassification
 
 EU laws in 23 EU languages containing annotated labels for 21 EUROVOC concepts.
@@ -99,6 +214,30 @@ EU laws in 23 EU languages containing annotated labels for 21 EUROVOC concepts.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{chalkidis-etal-2021-multieurlex,
+      author = {Chalkidis, Ilias
+    and Fergadiotis, Manos
+    and Androutsopoulos, Ion},
+      booktitle = {Proceedings of the 2021 Conference on Empirical Methods
+    in Natural Language Processing},
+      location = {Punta Cana, Dominican Republic},
+      publisher = {Association for Computational Linguistics},
+      title = {MultiEURLEX -- A multi-lingual and multi-label legal document
+    classification dataset for zero-shot cross-lingual transfer},
+      url = {https://arxiv.org/abs/2109.00904},
+      year = {2021},
+    }
+    
+    ```
+    
+
+
+
 #### SensitiveTopicsClassification
 
 Multilabel classification of sentences across 18 sensitive topics.
@@ -108,3 +247,41 @@ Multilabel classification of sentences across 18 sensitive topics.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to category (t2c) | accuracy | rus | Social, Web, Written | human-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{babakov-etal-2021-detecting,
+      abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
+      address = {Kiyv, Ukraine},
+      author = {Babakov, Nikolay  and
+    Logacheva, Varvara  and
+    Kozlova, Olga  and
+    Semenov, Nikita  and
+    Panchenko, Alexander},
+      booktitle = {Proceedings of the 8th Workshop on Balto-Slavic Natural Language Processing},
+      editor = {Babych, Bogdan  and
+    Kanishcheva, Olga  and
+    Nakov, Preslav  and
+    Piskorski, Jakub  and
+    Pivovarova, Lidia  and
+    Starko, Vasyl  and
+    Steinberger, Josef  and
+    Yangarber, Roman  and
+    Marci{\'n}czuk, Micha{\l}  and
+    Pollak, Senja  and
+    P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
+    Robnik-{\v{S}}ikonja, Marko},
+      month = apr,
+      pages = {26--36},
+      publisher = {Association for Computational Linguistics},
+      title = {Detecting Inappropriate Messages on Sensitive Topics that Could Harm a Company{'}s Reputation},
+      url = {https://aclanthology.org/2021.bsnlp-1.4},
+      year = {2021},
+    }
+    
+    ```

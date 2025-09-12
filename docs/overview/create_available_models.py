@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import mteb
+from mteb.models import ModelMeta
 
 START_INSERT = "<!-- START TASK DESCRIPTION -->"
 END_INSERT = "<!-- END TASK DESCRIPTION -->"
@@ -34,6 +35,21 @@ h2_header = """
 ## {instruction_based}
 
 {models_md}
+"""
+
+
+citation_admonition = """
+
+??? quote "Citation"
+
+{citation_chunk}
+
+"""
+
+citation_chunk = """
+```bibtex
+{bibtex_citation}
+```
 """
 
 
@@ -71,7 +87,7 @@ def required_memory_string(mem_in_mb: int | None) -> str:
         return f"{mem_in_gb:.1f} GB"
 
 
-def format_model_entry(meta: mteb.ModelMeta) -> str:
+def format_model_entry(meta: ModelMeta) -> str:
     model_name = meta.name
     revision = meta.revision or "not specified"
     license = meta.license or "not specified"
@@ -99,7 +115,7 @@ def format_model_entry(meta: mteb.ModelMeta) -> str:
     )
     required_mem = required_memory_string(meta.memory_usage_mb)
 
-    return model_entry.format(
+    entry = model_entry.format(
         model_name=model_name,
         revision=revision,
         license=license,
@@ -111,6 +127,12 @@ def format_model_entry(meta: mteb.ModelMeta) -> str:
         languages=languages,
         required_memory=required_mem,
     )
+
+    if meta.citation:
+        citation = citation_chunk.format(bibtex_citation=meta.citation)
+        citation = "\n".join([f"    {line}" for line in citation.split("\n")])
+        entry += citation_admonition.format(citation_chunk=citation)
+    return entry
 
 
 def main(folder: Path) -> None:

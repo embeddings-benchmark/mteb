@@ -17,6 +17,23 @@ SemEval-2012 Task 6.then rendered into images.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{xiao2024pixel,
+      author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+      journal = {arXiv preprint arXiv:2402.08183},
+      title = {Pixel Sentence Representation Learning},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### STS13VisualSTS
 
 SemEval STS 2013 dataset.then rendered into images.
@@ -26,6 +43,23 @@ SemEval STS 2013 dataset.then rendered into images.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image to image (i2i) | cosine_spearman | eng | News, Non-fiction, Web, Written | human-annotated | rendered |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{xiao2024pixel,
+      author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+      journal = {arXiv preprint arXiv:2402.08183},
+      title = {Pixel Sentence Representation Learning},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -41,6 +75,23 @@ SemEval STS 2014 dataset. Currently only the English dataset.rendered into image
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{xiao2024pixel,
+      author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+      journal = {arXiv preprint arXiv:2402.08183},
+      title = {Pixel Sentence Representation Learning},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### STS15VisualSTS
 
 SemEval STS 2015 datasetrendered into images.
@@ -53,6 +104,23 @@ SemEval STS 2015 datasetrendered into images.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{xiao2024pixel,
+      author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+      journal = {arXiv preprint arXiv:2402.08183},
+      title = {Pixel Sentence Representation Learning},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### STS16VisualSTS
 
 SemEval STS 2016 datasetrendered into images.
@@ -62,3 +130,19 @@ SemEval STS 2016 datasetrendered into images.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image to image (i2i) | cosine_spearman | eng | Blog, Spoken, Web | human-annotated | rendered |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{xiao2024pixel,
+      author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+      journal = {arXiv preprint arXiv:2402.08183},
+      title = {Pixel Sentence Representation Learning},
+      year = {2024},
+    }
+    
+    ```

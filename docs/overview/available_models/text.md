@@ -96,6 +96,33 @@
 | not specified | not specified | not specified | 2.1 GB | 2024-06-24 | ara-Arab, ben-Beng, dan-Latn, deu-Latn, eng-Latn, ... (32) |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @misc{li2023making,
+          title={Making Large Language Models A Better Foundation For Dense Retrieval},
+          author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
+          year={2023},
+          eprint={2312.15503},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+        }
+        @misc{chen2024bge,
+              title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+              author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+              year={2024},
+              eprint={2402.03216},
+              archivePrefix={arXiv},
+              primaryClass={cs.CL}
+        }
+        
+    ```
+    
+
+
+
 ####  [`ByteDance/ListConRanker`](https://huggingface.co/ByteDance/ListConRanker)
 
  **License:** mit 
@@ -146,6 +173,25 @@
 | 512.0 | 768 | 107.0M | 408.0 MB | 2022-06-28 | rus-Cyrl |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{https://doi.org/10.48550/arxiv.2205.02340,
+          doi = {10.48550/ARXIV.2205.02340},
+          url = {https://arxiv.org/abs/2205.02340},
+          author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Burtsev, Mikhail},
+          keywords = {Computation and Language (cs.CL), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+          title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
+          publisher = {arXiv},
+          year = {2022},
+          copyright = {arXiv.org perpetual, non-exclusive license}
+        }
+    ```
+    
+
+
+
 ####  [`DeepPavlov/rubert-base-cased`](https://huggingface.co/DeepPavlov/rubert-base-cased)
 
  **License:** not specified 
@@ -154,6 +200,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 512.0 | 768 | 1.3B | 4.8 GB | 2020-03-04 | rus-Cyrl |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{kuratov2019adaptationdeepbidirectionalmultilingual,
+          title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language},
+          author={Yuri Kuratov and Mikhail Arkhipov},
+          year={2019},
+          eprint={1905.07213},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/1905.07213},
+        }
+    ```
+    
+
 
 
 ####  [`DeepPavlov/rubert-base-cased-sentence`](https://huggingface.co/DeepPavlov/rubert-base-cased-sentence)
@@ -826,6 +890,24 @@
 | not specified | not specified | not specified | not specified | 2022-03-28 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{rosa2022parameterleftbehinddistillation,
+          title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
+          author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+          year={2022},
+          eprint={2206.02873},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2206.02873},
+        }
+    ```
+    
+
+
+
 ####  [`castorini/monot5-base-msmarco-10k`](https://huggingface.co/castorini/monot5-base-msmarco-10k)
 
  **License:** not specified 
@@ -834,6 +916,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | not specified | 2022-03-28 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{rosa2022parameterleftbehinddistillation,
+          title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
+          author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+          year={2022},
+          eprint={2206.02873},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2206.02873},
+        }
+    ```
+    
+
 
 
 ####  [`castorini/monot5-large-msmarco-10k`](https://huggingface.co/castorini/monot5-large-msmarco-10k)
@@ -846,6 +946,24 @@
 | not specified | not specified | not specified | not specified | 2022-03-28 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{rosa2022parameterleftbehinddistillation,
+          title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
+          author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+          year={2022},
+          eprint={2206.02873},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2206.02873},
+        }
+    ```
+    
+
+
+
 ####  [`castorini/monot5-small-msmarco-10k`](https://huggingface.co/castorini/monot5-small-msmarco-10k)
 
  **License:** not specified 
@@ -854,6 +972,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | not specified | 2022-03-28 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{rosa2022parameterleftbehinddistillation,
+          title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
+          author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+          year={2022},
+          eprint={2206.02873},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2206.02873},
+        }
+    ```
+    
+
 
 
 ####  [`codesage/codesage-base-v2`](https://huggingface.co/codesage/codesage-base-v2)
@@ -1026,6 +1162,23 @@
 | 512.0 | 768 | 150.0M | 572.0 MB | 2022-06-25 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @misc{izacard2021contriever,
+          title={Unsupervised Dense Information Retrieval with Contrastive Learning},
+          author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
+          year={2021},
+          url = {https://arxiv.org/abs/2112.09118},
+          doi = {10.48550/ARXIV.2112.09118},
+        }
+    ```
+    
+
+
+
 ####  [`fangxq/XYZ-embedding`](https://huggingface.co/fangxq/XYZ-embedding)
 
  **License:** mit 
@@ -1046,6 +1199,26 @@
 | not specified | not specified | not specified | 944.0 MB | 2022-10-21 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{10.48550/arxiv.2210.11416,
+          doi = {10.48550/ARXIV.2210.11416},
+          url = {https://arxiv.org/abs/2210.11416},
+          author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+          keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+          title = {Scaling Instruction-Finetuned Language Models},
+          publisher = {arXiv},
+          year = {2022},
+          copyright = {Creative Commons Attribution 4.0 International}
+        }
+        
+    ```
+    
+
+
+
 ####  [`google/flan-t5-large`](https://huggingface.co/google/flan-t5-large)
 
  **License:** not specified 
@@ -1054,6 +1227,26 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | 2.9 GB | 2022-10-21 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{10.48550/arxiv.2210.11416,
+          doi = {10.48550/ARXIV.2210.11416},
+          url = {https://arxiv.org/abs/2210.11416},
+          author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+          keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+          title = {Scaling Instruction-Finetuned Language Models},
+          publisher = {arXiv},
+          year = {2022},
+          copyright = {Creative Commons Attribution 4.0 International}
+        }
+        
+    ```
+    
+
 
 
 ####  [`google/flan-t5-xl`](https://huggingface.co/google/flan-t5-xl)
@@ -1066,6 +1259,26 @@
 | not specified | not specified | not specified | 10.6 GB | 2022-10-21 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{10.48550/arxiv.2210.11416,
+          doi = {10.48550/ARXIV.2210.11416},
+          url = {https://arxiv.org/abs/2210.11416},
+          author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+          keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+          title = {Scaling Instruction-Finetuned Language Models},
+          publisher = {arXiv},
+          year = {2022},
+          copyright = {Creative Commons Attribution 4.0 International}
+        }
+        
+    ```
+    
+
+
+
 ####  [`google/flan-t5-xxl`](https://huggingface.co/google/flan-t5-xxl)
 
  **License:** not specified 
@@ -1074,6 +1287,26 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | 42.0 GB | 2022-10-21 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{10.48550/arxiv.2210.11416,
+          doi = {10.48550/ARXIV.2210.11416},
+          url = {https://arxiv.org/abs/2210.11416},
+          author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+          keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+          title = {Scaling Instruction-Finetuned Language Models},
+          publisher = {arXiv},
+          year = {2022},
+          copyright = {Creative Commons Attribution 4.0 International}
+        }
+        
+    ```
+    
+
 
 
 ####  [`hiieu/halong_embedding`](https://huggingface.co/hiieu/halong_embedding)
@@ -1224,6 +1457,25 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | 13.5 GB | 2024-04-29 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @misc{weller2024followir,
+          title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+          author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
+          year={2024},
+          eprint={2403.15246},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR}
+        }
+        
+    ```
+    
+
 
 
 ####  [`jinaai/jina-colbert-v2`](https://huggingface.co/jinaai/jina-colbert-v2)
@@ -1416,6 +1668,24 @@
 | not specified | not specified | not specified | not specified | 2023-07-18 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{touvron2023llama2openfoundation,
+          title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
+          author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
+          year={2023},
+          eprint={2307.09288},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2307.09288},
+        }
+    ```
+    
+
+
+
 ####  [`meta-llama/Llama-2-7b-hf`](https://huggingface.co/meta-llama/Llama-2-7b-hf)
 
  **License:** not specified 
@@ -1424,6 +1694,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | not specified | 2023-07-18 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{touvron2023llama2openfoundation,
+          title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
+          author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
+          year={2023},
+          eprint={2307.09288},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2307.09288},
+        }
+    ```
+    
+
 
 
 ####  [`minishlab/M2V_base_glove`](https://huggingface.co/minishlab/M2V_base_glove)
@@ -1514,6 +1802,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | not specified | 2023-12-11 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{jiang2023mistral7b,
+          title={Mistral 7B},
+          author={Albert Q. Jiang and Alexandre Sablayrolles and Arthur Mensch and Chris Bamford and Devendra Singh Chaplot and Diego de las Casas and Florian Bressand and Gianna Lengyel and Guillaume Lample and Lucile Saulnier and Lélio Renard Lavaud and Marie-Anne Lachaux and Pierre Stock and Teven Le Scao and Thibaut Lavril and Thomas Wang and Timothée Lacroix and William El Sayed},
+          year={2023},
+          eprint={2310.06825},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2310.06825},
+        }
+    ```
+    
+
 
 
 ####  [`moka-ai/m3e-base`](https://huggingface.co/moka-ai/m3e-base)
@@ -1746,6 +2052,24 @@
 | 512.0 | 768 | 471.0M | 1.8 GB | 2019-11-01 | ara-Arab, bul-Cyrl, cat-Latn, ces-Latn, dan-Latn, ... (53) |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{feng2022languageagnosticbertsentenceembedding,
+          title={Language-agnostic BERT Sentence Embedding},
+          author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
+          year={2022},
+          eprint={2007.01852},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2007.01852},
+        }
+    ```
+    
+
+
+
 ####  [`sentence-transformers/all-MiniLM-L12-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2)
 
  **License:** apache-2.0 
@@ -1754,6 +2078,25 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 256.0 | 384 | 33.4M | 127.0 MB | 2021-08-30 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @inproceedings{reimers-2019-sentence-bert,
+        title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+        author = "Reimers, Nils and Gurevych, Iryna",
+        booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+        month = "11",
+        year = "2019",
+        publisher = "Association for Computational Linguistics",
+        url = "http://arxiv.org/abs/1908.10084",
+    }
+    
+    ```
+    
+
 
 
 ####  [`sentence-transformers/all-MiniLM-L6-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
@@ -1766,6 +2109,25 @@
 | 256.0 | 384 | 22.7M | 87.0 MB | 2021-08-30 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @inproceedings{reimers-2019-sentence-bert,
+        title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+        author = "Reimers, Nils and Gurevych, Iryna",
+        booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+        month = "11",
+        year = "2019",
+        publisher = "Association for Computational Linguistics",
+        url = "http://arxiv.org/abs/1908.10084",
+    }
+    
+    ```
+    
+
+
+
 ####  [`sentence-transformers/all-mpnet-base-v2`](https://huggingface.co/sentence-transformers/all-mpnet-base-v2)
 
  **License:** apache-2.0 
@@ -1774,6 +2136,25 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 384.0 | 768 | 109.0M | 418.0 MB | 2021-08-30 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @inproceedings{reimers-2019-sentence-bert,
+        title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+        author = "Reimers, Nils and Gurevych, Iryna",
+        booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+        month = "11",
+        year = "2019",
+        publisher = "Association for Computational Linguistics",
+        url = "http://arxiv.org/abs/1908.10084",
+    }
+    
+    ```
+    
+
 
 
 ####  [`sentence-transformers/gtr-t5-base`](https://huggingface.co/sentence-transformers/gtr-t5-base)
@@ -1826,6 +2207,25 @@
 | 512.0 | 384 | 22.7M | 87.0 MB | 2021-08-30 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @inproceedings{reimers-2019-sentence-bert,
+        title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+        author = "Reimers, Nils and Gurevych, Iryna",
+        booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+        month = "11",
+        year = "2019",
+        publisher = "Association for Computational Linguistics",
+        url = "http://arxiv.org/abs/1908.10084",
+    }
+    
+    ```
+    
+
+
+
 ####  [`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`](https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
 
  **License:** apache-2.0 
@@ -1836,6 +2236,25 @@
 | 512.0 | 768 | 118.0M | 449.0 MB | 2019-11-01 | ara-Arab, bul-Cyrl, cat-Latn, ces-Latn, dan-Latn, ... (53) |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @inproceedings{reimers-2019-sentence-bert,
+        title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+        author = "Reimers, Nils and Gurevych, Iryna",
+        booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+        month = "11",
+        year = "2019",
+        publisher = "Association for Computational Linguistics",
+        url = "http://arxiv.org/abs/1908.10084",
+    }
+    
+    ```
+    
+
+
+
 ####  [`sentence-transformers/paraphrase-multilingual-mpnet-base-v2`](https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2)
 
  **License:** apache-2.0 
@@ -1844,6 +2263,25 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 512.0 | 768 | 278.0M | 1.0 GB | 2019-11-01 | ara-Arab, bul-Cyrl, cat-Latn, ces-Latn, dan-Latn, ... (53) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @inproceedings{reimers-2019-sentence-bert,
+        title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+        author = "Reimers, Nils and Gurevych, Iryna",
+        booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+        month = "11",
+        year = "2019",
+        publisher = "Association for Computational Linguistics",
+        url = "http://arxiv.org/abs/1908.10084",
+    }
+    
+    ```
+    
+
 
 
 ####  [`sentence-transformers/sentence-t5-base`](https://huggingface.co/sentence-transformers/sentence-t5-base)
@@ -2034,6 +2472,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | not specified | not specified | not specified | 2022-01-05 | afr-Latn, amh-Ethi, ara-Arab, aze-Latn, bel-Cyrl, ... (101) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{bonifacio2021mmarco,
+          title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
+          author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
+          year={2021},
+          eprint={2108.13897},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+        }
+        
+    ```
+    
+
 
 
 ####  [`w601sxs/b1ade-embed`](https://huggingface.co/w601sxs/b1ade-embed)

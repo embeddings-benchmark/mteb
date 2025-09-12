@@ -19,6 +19,30 @@ Predicts the number of times a scientific article has been cited by other papers
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{vatolin2024ruscibench,
+      author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
+      doi = {10.1134/S1064562424602191},
+      issn = {1531-8362},
+      journal = {Doklady Mathematics},
+      month = {12},
+      number = {1},
+      pages = {S251--S260},
+      title = {RuSciBench: Open Benchmark for Russian and English Scientific Document Representations},
+      url = {https://doi.org/10.1134/S1064562424602191},
+      volume = {110},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### RuSciBenchYearPublRegression
 
 Predicts the publication year of a scientific article. The prediction is based on the
@@ -30,3 +54,26 @@ Predicts the publication year of a scientific article. The prediction is based o
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to category (t2c) | kendalltau | eng, rus | Academic, Non-fiction, Written | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{vatolin2024ruscibench,
+      author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
+      doi = {10.1134/S1064562424602191},
+      issn = {1531-8362},
+      journal = {Doklady Mathematics},
+      month = {12},
+      number = {1},
+      pages = {S251--S260},
+      title = {RuSciBench: Open Benchmark for Russian and English Scientific Document Representations},
+      url = {https://doi.org/10.1134/S1064562424602191},
+      volume = {110},
+      year = {2024},
+    }
+    
+    ```

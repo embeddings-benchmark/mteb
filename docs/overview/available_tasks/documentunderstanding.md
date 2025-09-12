@@ -17,6 +17,24 @@ Retrieve rendered tables from Airbnb listings based on templated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRArabicChartQARetrieval
 
 Retrieve Arabic charts based on queries.
@@ -26,6 +44,24 @@ Retrieve Arabic charts based on queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | ara | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -41,6 +77,24 @@ Retrieve Arabic infographics based on queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRArxivQARetrieval
 
 Retrieve figures from scientific papers from arXiv based on LLM generated queries.
@@ -50,6 +104,24 @@ Retrieve figures from scientific papers from arXiv based on LLM generated querie
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Web | LM-generated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -65,6 +137,24 @@ Retrieve automobile marketing documents based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRBeveragesCatalogueRetrieval
 
 Retrieve beverages marketing documents based on LLM generated queries.
@@ -74,6 +164,24 @@ Retrieve beverages marketing documents based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | rus | Web | LM-generated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -89,6 +197,24 @@ Retrieve charts from scientific papers based on human annotated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRChartQARetrieval
 
 Retrieve charts based on LLM generated queries.
@@ -98,6 +224,24 @@ Retrieve charts based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -113,6 +257,24 @@ Retrieve AI documents based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRDocQAEnergyRetrieval
 
 Retrieve energy industry documents based on LLM generated queries.
@@ -122,6 +284,24 @@ Retrieve energy industry documents based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -137,6 +317,24 @@ Retrieve government reports based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRDocQAHealthcareIndustryRetrieval
 
 Retrieve healthcare industry documents based on LLM generated queries.
@@ -146,6 +344,24 @@ Retrieve healthcare industry documents based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Medical | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -161,6 +377,24 @@ Retrieve industry documents based on human annotated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRDonutVQAISynHMPRetrieval
 
 Retrieve medical records based on templated queries.
@@ -170,6 +404,24 @@ Retrieve medical records based on templated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Medical | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -185,6 +437,24 @@ Retrieve German news articles based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDREuropeanaEsNewsRetrieval
 
 Retrieve Spanish news articles based on LLM generated queries.
@@ -194,6 +464,24 @@ Retrieve Spanish news articles based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | spa | News | LM-generated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -209,6 +497,24 @@ Retrieve French news articles from Europeana based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDREuropeanaItScansRetrieval
 
 Retrieve Italian historical articles based on LLM generated queries.
@@ -218,6 +524,24 @@ Retrieve Italian historical articles based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | ita | News | LM-generated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -233,6 +557,24 @@ Retrieve Dutch historical legal documents based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRGitHubReadmeRetrieval
 
 Retrieve GitHub readme files based their description.
@@ -242,6 +584,24 @@ Retrieve GitHub readme files based their description.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | ara, ben, deu, eng, fra, ... (17) | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -257,6 +617,24 @@ Retrieve Hindi government documents based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRHungarianDocQARetrieval
 
 Retrieve Hungarian documents in various formats based on human annotated queries.
@@ -266,6 +644,24 @@ Retrieve Hungarian documents in various formats based on human annotated queries
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | hun | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -281,6 +677,24 @@ Retrieve infographics based on human annotated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRJDocQARetrieval
 
 Retrieve Japanese documents in various formats based on human annotated queries.
@@ -290,6 +704,24 @@ Retrieve Japanese documents in various formats based on human annotated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | jpn | Web | LM-generated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -305,6 +737,24 @@ Retrieve pages from the 2024 Jina yearbook based on human annotated questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRMMTabRetrieval
 
 Retrieve tables from the MMTab dataset based on queries.
@@ -314,6 +764,24 @@ Retrieve tables from the MMTab dataset based on queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -329,6 +797,24 @@ Retrieve product manuals based on human annotated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRMedicalPrescriptionsRetrieval
 
 Retrieve medical prescriptions based on templated queries.
@@ -338,6 +824,24 @@ Retrieve medical prescriptions based on templated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Medical | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -353,6 +857,24 @@ Retrieve charts from the OWID dataset based on accompanied text snippets.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDROpenAINewsRetrieval
 
 Retrieve news articles from the OpenAI news website based on human annotated queries.
@@ -362,6 +884,24 @@ Retrieve news articles from the OpenAI news website based on human annotated que
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | News, Web | human-annotated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -377,6 +917,24 @@ Retrieve plots from the PlotQA dataset based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRRamensBenchmarkRetrieval
 
 Retrieve ramen restaurant marketing documents based on LLM generated queries.
@@ -386,6 +944,24 @@ Retrieve ramen restaurant marketing documents based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | jpn | Web | LM-generated | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -401,6 +977,24 @@ Retrieve pages from the Shanghai Master Plan based on human annotated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRShiftProjectRetrieval
 
 Retrieve documents with graphs from the Shift Project based on LLM generated queries.
@@ -410,6 +1004,24 @@ Retrieve documents with graphs from the Shift Project based on LLM generated que
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -425,6 +1037,24 @@ Retrieve scientific and engineering slides based on human annotated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRStudentEnrollmentSyntheticRetrieval
 
 Retrieve student enrollment data based on templated queries.
@@ -434,6 +1064,24 @@ Retrieve student enrollment data based on templated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -449,6 +1097,24 @@ Retrieve textbook pages (images and text) based on LLM generated queries from th
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRTabFQuadRetrieval
 
 Retrieve tables from industry documents based on LLM generated queries.
@@ -458,6 +1124,24 @@ Retrieve tables from industry documents based on LLM generated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -473,6 +1157,24 @@ Retrieve scientific tables based on LLM generated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRTatQARetrieval
 
 Retrieve financial reports based on human annotated queries.
@@ -482,6 +1184,24 @@ Retrieve financial reports based on human annotated queries.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -497,6 +1217,24 @@ Retrieve rendered tables of stock prices based on templated queries.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### JinaVDRWikimediaCommonsDocumentsRetrieval
 
 Retrieve historical documents from Wikimedia Commons based on their description.
@@ -506,6 +1244,24 @@ Retrieve historical documents from Wikimedia Commons based on their description.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | ara, ben, deu, eng, fra, ... (20) | Web | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
 
 
 
@@ -521,6 +1277,24 @@ Retrieve maps from Wikimedia Commons based on their description.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      archiveprefix = {arXiv},
+      author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      eprint = {2506.18902},
+      primaryclass = {cs.AI},
+      title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      url = {https://arxiv.org/abs/2506.18902},
+      year = {2025},
+    }
+    ```
+    
+
+
+
 #### MIRACLVisionRetrieval
 
 Retrieve associated pages according to questions.
@@ -530,6 +1304,25 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic | derived | created |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{osmulski2025miraclvisionlargemultilingualvisual,
+      author = {Radek Osmulski and Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Benedikt Schifferer and Even Oldridge},
+      eprint = {2505.11651},
+      journal = {arxiv},
+      title = {{MIRACL-VISION: A Large, multilingual, visual document retrieval benchmark}},
+      url = {https://arxiv.org/abs/2505.11651},
+      year = {2025},
+    }
+    
+    ```
+    
 
 
 
@@ -545,6 +1338,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{mace2025vidorev2,
+      author = {Macé, Quentin and Loison António and Faysse, Manuel},
+      journal = {arXiv preprint arXiv:2505.17166},
+      title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
 #### Vidore2ESGReportsHLRetrieval
 
 Retrieve associated pages according to questions.
@@ -554,6 +1364,23 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{mace2025vidorev2,
+      author = {Macé, Quentin and Loison António and Faysse, Manuel},
+      journal = {arXiv preprint arXiv:2505.17166},
+      title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
 
 
 
@@ -569,6 +1396,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{mace2025vidorev2,
+      author = {Macé, Quentin and Loison António and Faysse, Manuel},
+      journal = {arXiv preprint arXiv:2505.17166},
+      title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
+
+
+
 #### Vidore2EconomicsReportsRetrieval
 
 Retrieve associated pages according to questions.
@@ -578,6 +1422,23 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | deu, eng, fra, spa | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{mace2025vidorev2,
+      author = {Macé, Quentin and Loison António and Faysse, Manuel},
+      journal = {arXiv preprint arXiv:2505.17166},
+      title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+      year = {2025},
+    }
+    
+    ```
+    
 
 
 
@@ -593,6 +1454,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### VidoreDocVQARetrieval
 
 Retrieve associated pages according to questions.
@@ -602,6 +1480,23 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -617,6 +1512,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### VidoreShiftProjectRetrieval
 
 Retrieve associated pages according to questions.
@@ -626,6 +1538,23 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -641,6 +1570,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### VidoreSyntheticDocQAEnergyRetrieval
 
 Retrieve associated pages according to questions.
@@ -650,6 +1596,23 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -665,6 +1628,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### VidoreSyntheticDocQAHealthcareIndustryRetrieval
 
 Retrieve associated pages according to questions.
@@ -674,6 +1654,23 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
 
 
 
@@ -689,6 +1686,23 @@ Retrieve associated pages according to questions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### VidoreTatdqaRetrieval
 
 Retrieve associated pages according to questions.
@@ -698,3 +1712,19 @@ Retrieve associated pages according to questions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | text to image (t2i) | ndcg_at_5 | eng | Academic | derived | found |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{faysse2024colpali,
+      author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+      journal = {arXiv preprint arXiv:2407.01449},
+      title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+      year = {2024},
+    }
+    
+    ```

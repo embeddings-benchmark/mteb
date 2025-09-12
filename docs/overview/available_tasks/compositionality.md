@@ -17,6 +17,23 @@ Compositionality Evaluation of images to their captions.Each capation has four h
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{yuksekgonul2023and,
+      author = {Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
+      booktitle = {The Eleventh International Conference on Learning Representations},
+      title = {When and why vision-language models behave like bags-of-words, and what to do about it?},
+      year = {2023},
+    }
+    
+    ```
+    
+
+
+
 #### AROFlickrOrder
 
 Compositionality Evaluation of images to their captions.Each capation has four hard negatives created by order permutations.
@@ -26,6 +43,23 @@ Compositionality Evaluation of images to their captions.Each capation has four h
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{yuksekgonul2023and,
+      author = {Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
+      booktitle = {The Eleventh International Conference on Learning Representations},
+      title = {When and why vision-language models behave like bags-of-words, and what to do about it?},
+      year = {2023},
+    }
+    
+    ```
+    
 
 
 
@@ -41,6 +75,23 @@ Compositionality Evaluation of images to their captions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{yuksekgonul2023and,
+      author = {Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
+      booktitle = {The Eleventh International Conference on Learning Representations},
+      title = {When and why vision-language models behave like bags-of-words, and what to do about it?},
+      year = {2023},
+    }
+    
+    ```
+    
+
+
+
 #### AROVisualRelation
 
 Compositionality Evaluation of images to their captions.
@@ -50,6 +101,23 @@ Compositionality Evaluation of images to their captions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image to text (i2t) | text_acc | eng | Encyclopaedic | expert-annotated | created |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @inproceedings{yuksekgonul2023and,
+      author = {Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
+      booktitle = {The Eleventh International Conference on Learning Representations},
+      title = {When and why vision-language models behave like bags-of-words, and what to do about it?},
+      year = {2023},
+    }
+    
+    ```
+    
 
 
 
@@ -65,6 +133,23 @@ Identify the correct image from a set of similar images based on a precise capti
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{krojer2022image,
+      author = {Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
+      journal = {arXiv preprint arXiv:2203.15867},
+      title = {Image retrieval from contextual descriptions},
+      year = {2022},
+    }
+    
+    ```
+    
+
+
+
 #### SugarCrepe
 
 Compositionality Evaluation of images to their captions.
@@ -77,6 +162,24 @@ Compositionality Evaluation of images to their captions.
 
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{hsieh2024sugarcrepe,
+      author = {Hsieh, Cheng-Yu and Zhang, Jieyu and Ma, Zixian and Kembhavi, Aniruddha and Krishna, Ranjay},
+      journal = {Advances in neural information processing systems},
+      title = {Sugarcrepe: Fixing hackable benchmarks for vision-language compositionality},
+      volume = {36},
+      year = {2024},
+    }
+    
+    ```
+    
+
+
+
 #### Winoground
 
 Compositionality Evaluation of images to their captions.
@@ -86,3 +189,22 @@ Compositionality Evaluation of images to their captions.
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
 | image to text (i2t) | accuracy | eng | Social | expert-annotated | created |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{thrush2022winogroundprobingvisionlanguage,
+      archiveprefix = {arXiv},
+      author = {Tristan Thrush and Ryan Jiang and Max Bartolo and Amanpreet Singh and Adina Williams and Douwe Kiela and Candace Ross},
+      eprint = {2204.03162},
+      primaryclass = {cs.CV},
+      title = {Winoground: Probing Vision and Language Models for Visio-Linguistic Compositionality},
+      url = {https://arxiv.org/abs/2204.03162},
+      year = {2022},
+    }
+    
+    ```
