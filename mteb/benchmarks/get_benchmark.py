@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 def build_registry() -> dict[str, Benchmark]:
     import mteb.benchmarks.benchmarks as benchmark_module
 
-    BENCHMARK_REGISTRY = {
+    benchmark_registry = {
         inst.name: inst
         for nam, inst in benchmark_module.__dict__.items()
         if isinstance(inst, Benchmark)
     }
-    return BENCHMARK_REGISTRY
+    return benchmark_registry
 
 
 def get_previous_benchmark_names() -> dict[str, str]:
@@ -78,23 +78,23 @@ def get_benchmark(
         benchmark_name: The name of the benchmark to retrieve.
     """
     PREVIOUS_BENCHMARK_NAMES = get_previous_benchmark_names()
-    BENCHMARK_REGISTRY = build_registry()
+    benchmark_registry = build_registry()
     if benchmark_name in PREVIOUS_BENCHMARK_NAMES:
         warnings.warn(
             f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead.",
             DeprecationWarning,
         )
         benchmark_name = PREVIOUS_BENCHMARK_NAMES[benchmark_name]
-    if benchmark_name not in BENCHMARK_REGISTRY:
+    if benchmark_name not in benchmark_registry:
         close_matches = difflib.get_close_matches(
-            benchmark_name, BENCHMARK_REGISTRY.keys()
+            benchmark_name, benchmark_registry.keys()
         )
         if close_matches:
             suggestion = f"KeyError: '{benchmark_name}' not found. Did you mean: {close_matches[0]}?"
         else:
             suggestion = f"KeyError: '{benchmark_name}' not found and no similar keys were found."
         raise KeyError(suggestion)
-    return BENCHMARK_REGISTRY[benchmark_name]
+    return benchmark_registry[benchmark_name]
 
 
 def get_benchmarks(
@@ -106,10 +106,10 @@ def get_benchmarks(
         names: A list of benchmark names to retrieve. If None, all benchmarks are returned.
         display_on_leaderboard: If specified, filters benchmarks by whether they are displayed on the leaderboard.
     """
-    BENCHMARK_REGISTRY = build_registry()
+    benchmark_registry = build_registry()
 
     if names is None:
-        names = list(BENCHMARK_REGISTRY.keys())
+        names = list(benchmark_registry.keys())
     benchmarks = [get_benchmark(name) for name in names]
     if display_on_leaderboard is not None:
         benchmarks = [
