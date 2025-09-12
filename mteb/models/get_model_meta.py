@@ -3,11 +3,10 @@ from __future__ import annotations
 import difflib
 import logging
 from collections.abc import Iterable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from huggingface_hub import ModelCard
 from huggingface_hub.errors import RepositoryNotFoundError
-from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks import AbsTask
 from mteb.models import (
@@ -17,6 +16,9 @@ from mteb.models import (
     sentence_transformers_loader,
 )
 from mteb.models.model_implementations import MODEL_REGISTRY
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -95,6 +97,8 @@ def get_model(
     Returns:
         A model object
     """
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
     meta = get_model_meta(model_name, revision)
     model = meta.load_model(**kwargs)
 

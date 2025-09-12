@@ -4,7 +4,6 @@ import logging
 from typing import Any, Callable
 
 import torch
-from sentence_transformers import SentenceTransformer
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -26,6 +25,8 @@ class JasperModel(AbsEncoder):
         max_seq_length: int = 2048,
         **kwargs: Any,
     ):
+        from sentence_transformers import SentenceTransformer
+
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.instruction_template = instruction_template

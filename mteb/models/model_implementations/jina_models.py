@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import torch
-from sentence_transformers import __version__ as st_version
 from torch.utils.data import DataLoader
 from transformers import AutoModel
 
@@ -20,7 +19,6 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 MIN_SENTENCE_TRANSFORMERS_VERSION = (3, 1, 0)
-CURRENT_SENTENCE_TRANSFORMERS_VERSION = tuple(map(int, st_version.split(".")))
 
 XLMR_LANGUAGES = [
     "afr-Latn",
@@ -167,6 +165,10 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
+        from sentence_transformers import __version__ as st_version
+
+        CURRENT_SENTENCE_TRANSFORMERS_VERSION = tuple(map(int, st_version.split(".")))
+
         if CURRENT_SENTENCE_TRANSFORMERS_VERSION < MIN_SENTENCE_TRANSFORMERS_VERSION:
             raise RuntimeError(
                 f"sentence_transformers version {st_version} is lower than the required version 3.1.0"

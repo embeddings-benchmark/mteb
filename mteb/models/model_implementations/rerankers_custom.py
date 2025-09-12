@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 import torch
-from sentence_transformers import CrossEncoder
 from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
@@ -170,6 +169,8 @@ class JinaReranker(RerankerWrapper):
         torch_compile=False,
         **kwargs,
     ):
+        from sentence_transformers import CrossEncoder
+
         super().__init__(model_name_or_path, **kwargs)
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
