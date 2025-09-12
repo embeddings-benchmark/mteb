@@ -34,6 +34,7 @@ class RepLLaMAModel(AbsEncoder):
         **kwargs,
     ):
         from transformers import AutoModel, AutoTokenizer
+
         requires_package(
             self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
         )

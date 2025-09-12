@@ -74,8 +74,7 @@ colsmol_256m = ModelMeta(
 colsmol_500m = ModelMeta(
     loader=ColSmolWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
+        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     name="vidore/colSmol-500M",
     languages=["eng-Latn"],

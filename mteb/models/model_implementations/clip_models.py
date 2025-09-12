@@ -21,6 +21,7 @@ class CLIPModel(AbsEncoder):
         **kwargs: Any,
     ):
         from transformers import AutoModel, AutoProcessor
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(

@@ -22,6 +22,7 @@ MODEL2PROCESSOR = {
 
 def llm2clip_loader(model_name, **kwargs):
     from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
+
     requires_package(
         llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
     )

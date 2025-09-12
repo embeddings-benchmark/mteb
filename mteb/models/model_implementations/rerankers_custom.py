@@ -109,6 +109,7 @@ class MonoBERTReranker(RerankerWrapper):
         **kwargs,
     ):
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
         super().__init__(model_name_or_path, **kwargs)
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

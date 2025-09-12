@@ -137,6 +137,7 @@ class GmeQwen2VL(AbsEncoder):
         **kwargs,
     ) -> None:
         from transformers import AutoModelForVision2Seq, AutoProcessor
+
         model_name = model_path or model_name
         base = AutoModelForVision2Seq.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.float16, **kwargs

@@ -25,8 +25,8 @@ class E5VModel(AbsEncoder):
         composed_prompt=None,
         **kwargs: Any,
     ):
-        from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
         import transformers
+        from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
         if version.parse(transformers.__version__) > version.parse(
             E5_V_TRANSFORMERS_VERSION

@@ -158,8 +158,7 @@ COLNOMIC_LANGUAGES = [
 colnomic_3b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
+        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
     languages=COLNOMIC_LANGUAGES,

@@ -14,7 +14,6 @@ import tqdm
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.set_seed import set_seed
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -23,6 +22,7 @@ from mteb.models import (
     MTEBModels,
     SearchProtocol,
 )
+from mteb.set_seed import set_seed
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 

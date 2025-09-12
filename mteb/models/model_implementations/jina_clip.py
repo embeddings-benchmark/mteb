@@ -22,6 +22,7 @@ class JinaCLIPModel(AbsEncoder):
         **kwargs: Any,
     ):
         from transformers import AutoModel
+
         requires_image_dependencies()
 
         self.model_name = model_name

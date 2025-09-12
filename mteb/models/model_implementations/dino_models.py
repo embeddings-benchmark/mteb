@@ -25,6 +25,7 @@ class DINOModel(AbsEncoder):
         **kwargs: Any,
     ):
         from transformers import AutoImageProcessor, AutoModel
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(

@@ -7,8 +7,8 @@ from collections import defaultdict
 from typing import Any
 
 import numpy as np
-from sklearn.cluster import MiniBatchKMeans
 from datasets import Dataset, DatasetDict
+from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
 from torch.utils.data import DataLoader
 
