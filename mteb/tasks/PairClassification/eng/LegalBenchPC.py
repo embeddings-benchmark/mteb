@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -67,9 +63,8 @@ class LegalBenchPC(AbsTaskPairClassification):
         """,
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
-            "path": "nguha/legalbench",
-            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
-            "trust_remote_code": True,
+            "path": "mteb/LegalBenchPC",
+            "revision": "88408f054cc56b9ec8adc8113ffd65585995c099",
         },
         type="PairClassification",
         category="t2t",
@@ -121,63 +116,3 @@ class LegalBenchPC(AbsTaskPairClassification):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        _hf_dataset = None
-        for dataset_col_map in _DATASET_COLUMN_MAP:
-            _dataset = datasets.load_dataset(
-                self.metadata.dataset["path"],
-                dataset_col_map["name"],
-                revision=self.metadata.dataset["revision"],
-                trust_remote_code=True,
-            )
-
-            _dataset = _dataset.rename_columns(
-                {
-                    dataset_col_map["sent1"]: "sentence1",
-                    dataset_col_map["sent2"]: "sentence2",
-                    dataset_col_map["labels"]: "labels",
-                }
-            )
-            _dataset = _dataset.select_columns(["labels", "sentence1", "sentence2"])
-            mapping = dataset_col_map["mapping"]
-            _dataset = _dataset.map(
-                lambda example: {
-                    "labels": mapping.get(example["labels"].lower(), example["labels"])
-                }
-            )
-
-            if _hf_dataset is None:
-                _hf_dataset = _dataset
-            else:
-                _hf_dataset["train"] = datasets.concatenate_datasets(
-                    [_hf_dataset["train"], _dataset["train"]]
-                )
-                _hf_dataset["test"] = datasets.concatenate_datasets(
-                    [_hf_dataset["test"], _dataset["test"]]
-                )
-
-        self.dataset = _hf_dataset
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label="labels"
-        )
-
-        _dataset = {}
-        for split in self.metadata.eval_splits:
-            hf_dataset = self.dataset[split]
-            _dataset[split] = [
-                {
-                    "sentence1": hf_dataset["sentence1"],
-                    "sentence2": hf_dataset["sentence2"],
-                    "labels": hf_dataset["labels"],
-                }
-            ]
-        self.dataset = _dataset

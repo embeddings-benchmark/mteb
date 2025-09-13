@@ -19,9 +19,8 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         The language producers are users who left the comments on the Korean online news platform between 2018 and 2020.
         """,
         dataset={
-            "path": "jeanlee/kmhas_korean_hate_speech",
-            "revision": "c657d15baf277c48d467f0625f7d33c50d4352ef",
-            "trust_remote_code": True,
+            "path": "mteb/KorHateSpeechMLClassification",
+            "revision": "47cd2e61b64f2f11ccb006a579cda71318c6de9b",
         },
         reference="https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset",
         type="MultilabelClassification",
@@ -57,11 +56,3 @@ Han, Soyeon Caren},
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"], n_samples=8192
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
-        )

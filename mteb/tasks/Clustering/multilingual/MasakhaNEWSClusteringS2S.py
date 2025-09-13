@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import datasets
-import numpy as np
-
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -30,9 +27,8 @@ class MasakhaNEWSClusteringS2S(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",
         dataset={
-            "path": "masakhane/masakhanews",
-            "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
-            "trust_remote_code": True,
+            "path": "mteb/MasakhaNEWSClusteringS2S",
+            "revision": "b3b12a9f4a43adef3b5f4055eb41a40f91209066",
         },
         description=(
             "Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label."
@@ -61,32 +57,3 @@ class MasakhaNEWSClusteringS2S(AbsTaskAnyClustering):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        """Load dataset from HuggingFace hub and convert it to the standard format."""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang,
-                **self.metadata.dataset,
-            )
-            self.dataset_transform(lang)
-        self.data_loaded = True
-
-    def dataset_transform(self, lang):
-        """Convert to standard format"""
-        self.dataset[lang].pop("train")
-        self.dataset[lang].pop("validation")
-
-        self.dataset[lang] = self.dataset[lang].remove_columns(
-            ["url", "text", "headline_text"]
-        )
-        texts = self.dataset[lang]["test"]["headline"]
-        labels = self.dataset[lang]["test"]["label"]
-        new_format = {
-            "sentences": [split.tolist() for split in np.array_split(texts, 5)],
-            "labels": [split.tolist() for split in np.array_split(labels, 5)],
-        }
-        self.dataset[lang]["test"] = datasets.Dataset.from_dict(new_format)

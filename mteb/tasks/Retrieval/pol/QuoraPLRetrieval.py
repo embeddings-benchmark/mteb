@@ -47,9 +47,8 @@ class QuoraPLRetrievalHardNegatives(AbsTaskRetrieval):
         description="QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
-            "path": "mteb/Quora_PL_test_top_250_only_w_correct-v2",
-            "revision": "523ff30f3346cd9c36081c19fc6eaef0a2f8d53d",
-            "trust_remote_code": True,
+            "path": "mteb/Quora-PLHardNegatives",
+            "revision": "f9135f0b4610db2225a957c1dd68960b5c572270",
         },
         type="Retrieval",
         category="t2t",

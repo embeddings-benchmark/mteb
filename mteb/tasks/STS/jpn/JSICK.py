@@ -8,10 +8,8 @@ class JSICK(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="JSICK",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "name": "jsick",
-            "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
-            "trust_remote_code": True,
+            "path": "mteb/JSICK",
+            "revision": "729cfe4a16d3c2b61c6aa9f9f6c8a96bb5512868",
         },
         description="JSICK is the Japanese NLI and STS dataset by manually translating the English dataset SICK (Marelli et al., 2014) into Japanese.",
         reference="https://github.com/sbintuitions/JMTEB",
@@ -43,6 +41,3 @@ class JSICK(AbsTaskAnySTS):
 
     min_score = 1
     max_score = 5
-
-    def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_column("label", "score")

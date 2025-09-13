@@ -10,9 +10,8 @@ class NusaXSentiClassification(AbsTaskAnyClassification):
         description="NusaX is a high-quality multilingual parallel corpus that covers 12 languages, Indonesian, English, and 10 Indonesian local languages, namely Acehnese, Balinese, Banjarese, Buginese, Madurese, Minangkabau, Javanese, Ngaju, Sundanese, and Toba Batak. NusaX-Senti is a 3-labels (positive, neutral, negative) sentiment analysis dataset for 10 Indonesian local languages + Indonesian and English.",
         reference="https://arxiv.org/abs/2205.15960",
         dataset={
-            "path": "indonlp/NusaX-senti",
-            "revision": "a450ba4b1b6d2216c3674d3e576b2e85ce729add",
-            "trust_remote_code": True,
+            "path": "mteb/NusaX-senti",
+            "revision": "7b2ff4facde8a6473f667a38edef1d03ce9ca0dc",
         },
         type="Classification",
         category="t2c",

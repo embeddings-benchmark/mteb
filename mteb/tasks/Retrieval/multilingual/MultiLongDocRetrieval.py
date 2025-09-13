@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -22,39 +20,6 @@ _LANGUAGES = {
 }
 
 
-def load_mldr_data(
-    path: str,
-    langs: list,
-    eval_splits: list,
-    revision: str = None,
-):
-    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
-
-    for lang in langs:
-        lang_corpus = datasets.load_dataset(
-            path,
-            f"corpus-{lang}",
-            revision=revision,
-            trust_remote_code=True,
-        )["corpus"]
-        lang_corpus = {e["docid"]: {"text": e["text"]} for e in lang_corpus}
-        lang_data = datasets.load_dataset(path, lang)
-        for split in eval_splits:
-            corpus[lang][split] = lang_corpus
-            queries[lang][split] = {e["query_id"]: e["query"] for e in lang_data[split]}
-            relevant_docs[lang][split] = {
-                e["query_id"]: {e["positive_passages"][0]["docid"]: 1}
-                for e in lang_data[split]
-            }
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
-
-
 class MultiLongDocRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultiLongDocRetrieval",
@@ -62,8 +27,8 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
         It is constructed by sampling lengthy articles from Wikipedia, Wudao and mC4 datasets and randomly choose paragraphs from them. Then we use GPT-3.5 to generate questions based on these paragraphs. The generated question and the sampled article constitute a new text pair to the dataset.""",
         reference="https://arxiv.org/abs/2402.03216",  # also: https://huggingface.co/datasets/Shitao/MLDR
         dataset={
-            "path": "Shitao/MLDR",
-            "revision": "d67138e705d963e346253a80e59676ddb418810a",
+            "path": "mteb/MultiLongDocRetrieval",
+            "revision": "837028901907a7d419b4ab906f28e011ce1cc824",
         },
         type="Retrieval",
         category="t2t",
@@ -98,15 +63,3 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_mldr_data(
-            path=self.metadata.dataset["path"],
-            langs=self.metadata.eval_langs,
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True

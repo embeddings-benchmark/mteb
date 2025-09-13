@@ -23,10 +23,8 @@ class IndicXnliPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="IndicXnliPairClassification",
         dataset={
-            "path": "Divyanshu/indicxnli",
-            "revision": "7092c27872e919f31d0496fb8b9c47bd2cba3f6c",
-            "split": "test",
-            "trust_remote_code": True,
+            "path": "mteb/IndicXnliPairClassification",
+            "revision": "027e97b9afe84ea3447b57b7705b8864bb2b3a83",
         },
         description="""INDICXNLI is similar to existing XNLI dataset in shape/form, but
         focusses on Indic language family.
@@ -61,26 +59,4 @@ class IndicXnliPairClassification(AbsTaskPairClassification):
   year = {2022},
 }
 """,
-        # average of premise and hypothesis
     )
-
-    def dataset_transform(self) -> None:
-        # Convert to standard format
-        _dataset = {}
-        for lang in self.hf_subsets:
-            _dataset[lang] = {}
-            hf_dataset = self.dataset[lang]
-            # 0=entailment, 2=contradiction. Filter out neutral to match the task.
-            # Then map entailment as positive (1) and contradiction as negative (0).
-            hf_dataset = self.dataset[lang].filter(lambda x: x["label"] in [0, 2])
-            hf_dataset = hf_dataset.map(
-                lambda example: {"label": 0 if example["label"] == 2 else 1}
-            )
-            _dataset[lang]["test"] = [
-                {
-                    "sentence1": hf_dataset["premise"],
-                    "sentence2": hf_dataset["hypothesis"],
-                    "labels": hf_dataset["label"],
-                }
-            ]
-        self.dataset = _dataset

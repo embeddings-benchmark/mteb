@@ -8,9 +8,8 @@ class BornholmBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="BornholmBitextMining",
         dataset={
-            "path": "strombergnlp/bornholmsk_parallel",
-            "revision": "3bc5cfb4ec514264fe2db5615fac9016f7251552",
-            "trust_remote_code": True,
+            "path": "mteb/BornholmBitextMining",
+            "revision": "5b02048bd75e79275aa91a1fce6cdfd3f4a391cb",
         },
         description="Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the island of Bornholm, Denmark. Historically it is a part of east Danish which was also spoken in Scania and Halland, Sweden.",
         reference="https://aclanthology.org/W19-6138/",
@@ -43,8 +42,3 @@ class BornholmBitextMining(AbsTaskBitextMining):
 """,
         prompt="Retrieve parallel sentences.",
     )
-
-    def dataset_transform(self):
-        # Convert to standard format
-        self.dataset = self.dataset.rename_column("da", "sentence1")
-        self.dataset = self.dataset.rename_column("da_bornholm", "sentence2")

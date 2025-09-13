@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -14,9 +10,8 @@ class NaijaSenti(AbsTaskAnyClassification):
         description="NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset for the four most widely spoken languages in Nigeria — Hausa, Igbo, Nigerian-Pidgin, and Yorùbá — consisting of around 30,000 annotated tweets per language, including a significant fraction of code-mixed tweets.",
         reference="https://github.com/hausanlp/NaijaSenti",
         dataset={
-            "path": "HausaNLP/NaijaSenti-Twitter",
-            "revision": "a3d0415a828178edf3466246f49cfcd83b946ab3",
-            "trust_remote_code": True,
+            "path": "mteb/NaijaSenti",
+            "revision": "c28be06e6ee80878a7398a0bb71b72c1969167ea",
         },
         type="Classification",
         category="t2c",
@@ -61,28 +56,3 @@ Brazdil, Pavel},
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=f"{lang}",
-                **self.metadata.dataset,
-            )
-            self.dataset[lang] = datasets.DatasetDict(
-                {
-                    "train": self.dataset[lang]["train"],
-                    "test": self.dataset[lang]["test"],
-                }
-            )
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self) -> None:
-        for lang in self.hf_subsets:
-            self.dataset[lang] = self.dataset[lang].map(
-                lambda example: {"text": example["tweet"]}
-            )

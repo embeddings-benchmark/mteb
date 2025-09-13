@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import datasets
-from datasets import Dataset
-
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -20,9 +17,8 @@ class JaCWIRReranking(AbsTaskReranking):
         ),
         reference="https://huggingface.co/datasets/hotchpotch/JaCWIR",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
-            "trust_remote_code": True,
+            "path": "mteb/JaCWIRReranking",
+            "revision": "48d6b0851fb5ce83b648eb9d3689cf56a2e6d5b1",
         },
         type="Reranking",
         category="t2t",
@@ -45,60 +41,3 @@ class JaCWIRReranking(AbsTaskReranking):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        # Load queries
-        query_list = datasets.load_dataset(
-            name="jacwir-reranking-query",
-            split=_EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-
-        # Load corpus
-        corpus_list = datasets.load_dataset(
-            name="jacwir-reranking-corpus",
-            split="corpus",
-            **self.metadata.dataset,
-        )
-
-        # Create corpus mapping
-        corpus_map = {}
-        for row in corpus_list:
-            corpus_map[str(row["docid"])] = row["text"]
-
-        # Transform data to RerankingEvaluator format
-        transformed_data = []
-        for row in query_list:
-            query = row["query"]
-            retrieved_docs = row["retrieved_docs"]
-            relevance_scores = row["relevance_scores"]
-
-            positive_docs = []
-            negative_docs = []
-
-            for doc_id, score in zip(retrieved_docs, relevance_scores):
-                doc_text = corpus_map.get(str(doc_id), "")
-                if doc_text:  # Only include documents that exist in corpus
-                    if score == 1:
-                        positive_docs.append(doc_text)
-                    else:
-                        negative_docs.append(doc_text)
-
-            # Only include samples with both positive and negative documents
-            if positive_docs and negative_docs:
-                transformed_data.append(
-                    {
-                        "query": query,
-                        "positive": positive_docs,
-                        "negative": negative_docs,
-                    }
-                )
-
-        # Convert to Dataset
-        self.dataset = {_EVAL_SPLIT: Dataset.from_list(transformed_data)}
-        self.dataset_transform()  # do nothing
-        self.transform_old_dataset_format(self.dataset)
-        self.data_loaded = True

@@ -37,7 +37,6 @@ def _load_data_retrieval(path: str, langs: list, splits: str, revision: str = No
             path,
             name=f"{lang}-qrels",
             revision=revision,
-            trust_remote_code=True,
         )[split]
 
         for row in qrels_data:
@@ -52,7 +51,6 @@ def _load_data_retrieval(path: str, langs: list, splits: str, revision: str = No
             path,
             name=f"{lang}-corpus",
             revision=revision,
-            trust_remote_code=True,
         )["train"]
 
         for row in corpus_data:
@@ -65,7 +63,6 @@ def _load_data_retrieval(path: str, langs: list, splits: str, revision: str = No
             path,
             name=f"{lang}-queries",
             revision=revision,
-            trust_remote_code=True,
         )[split]
 
         for row in queries_data:

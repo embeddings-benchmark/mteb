@@ -7,7 +7,7 @@ model-index:
       name: MTEB BSARDRetrieval (default)
       revision: 5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59
       split: test
-      type: maastrichtlawtech/bsard
+      type: mteb/BSARDRetrieval
     metrics:
     - type: map_at_1
       value: 0.0
@@ -78,7 +78,7 @@ model-index:
       name: MTEB BornholmBitextMining (default)
       revision: 3bc5cfb4ec514264fe2db5615fac9016f7251552
       split: test
-      type: strombergnlp/bornholmsk_parallel
+      type: mteb/BornholmBitextMining
     metrics:
     - type: accuracy
       value: 36.0

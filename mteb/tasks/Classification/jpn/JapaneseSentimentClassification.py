@@ -8,16 +8,15 @@ class JapaneseSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="JapaneseSentimentClassification",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "name": "japanese_sentiment_classification",
-            "revision": "6fe2ff3fab4a9ee7172e4cd5791600d9e2e7fde5",
-            "trust_remote_code": True,
+            "path": "mteb/JapaneseSentimentClassification",
+            "revision": "113a72dd629207b956dd4db3c2d11445853f3b1f",
         },
-        description="""Japanese sentiment classification dataset with binary
-                       (positive vs negative sentiment) labels. This version reverts
-                       the morphological analysis from the original multilingual dataset
-                       to restore natural Japanese text without artificial spaces.
-                     """,
+        description=(
+            "Japanese sentiment classification dataset with binary\n"
+            "(positive vs negative sentiment) labels. This version reverts\n"
+            "the morphological analysis from the original multilingual dataset\n"
+            "to restore natural Japanese text without artificial spaces.\n"
+        ),
         reference="https://huggingface.co/datasets/mteb/multilingual-sentiment-classification",
         type="Classification",
         category="t2c",

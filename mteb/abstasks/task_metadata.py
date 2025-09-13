@@ -194,7 +194,8 @@ class MetadataDatasetDict(TypedDict, total=False):
         revision: The revision of the dataset.
         name: The name the dataset config.
         split: The split of the dataset.
-        trust_remote_code: Whether to trust the remote code.
+        trust_remote_code: Whether to use `trust_remote_code`. Datasets shouldn't use this since,
+         because datasets `v4` doesn't support this. This parameter is left for compatibility with forks/external usage.
     """
 
     path: str
@@ -552,7 +553,7 @@ class TaskMetadata(BaseModel):
             license_mapping = {
                 "not specified": "unknown",
                 "msr-la-nc": "other",
-                "cc-by-nd-2.1-jp": "cc-by-nd-2.1",
+                "cc-by-nd-2.1-jp": "other",
             }
             dataset_license = license_mapping.get(
                 dataset_license,

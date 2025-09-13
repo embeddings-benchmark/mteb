@@ -17,9 +17,8 @@ class MTOPDomainClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MTOPDomainClassification",
         dataset={
-            "path": "mteb/mtop_domain",
-            "revision": "d80d48c1eb48d3562165c59d59d0034df9fff0bf",
-            "trust_remote_code": True,
+            "path": "mteb/MTOPDomainClassification",
+            "revision": "a76d16fae880597b9c73047b50159220a441cb54",
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",

@@ -11,9 +11,8 @@ class HellaSwag(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on HellaSwag.",
         reference="https://rowanzellers.com/hellaswag/",
         dataset={
-            "path": "RAR-b/hellaswag",
-            "revision": "a5c990205e017d10761197ccab3000936689c3ae",
-            "trust_remote_code": True,
+            "path": "mteb/HellaSwag",
+            "revision": "944be88c186b87495f4b1f5e4a416a3a7ea5d680",
         },
         type="Retrieval",
         category="t2t",

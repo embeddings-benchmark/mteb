@@ -13,9 +13,8 @@ class RomanianSentimentClassification(AbsTaskAnyClassification):
         description="An Romanian dataset for sentiment classification.",
         reference="https://arxiv.org/abs/2009.08712",
         dataset={
-            "path": "dumitrescustefan/ro_sent",
-            "revision": "155048684cea7a6d6af1ddbfeb9a04820311ce93",
-            "trust_remote_code": True,
+            "path": "mteb/RomanianSentimentClassification",
+            "revision": "0f8df3d483924afb9130020e9f36ef09558fc9a1",
         },
         type="Classification",
         category="t2c",
@@ -39,12 +38,6 @@ class RomanianSentimentClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sentence", "text")
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class RomanianSentimentClassificationV2(AbsTaskAnyClassification):

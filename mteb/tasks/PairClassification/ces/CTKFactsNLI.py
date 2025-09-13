@@ -8,9 +8,8 @@ class CTKFactsNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="CTKFactsNLI",
         dataset={
-            "path": "ctu-aic/ctkfacts_nli",
-            "revision": "387ae4582c8054cb52ef57ef0941f19bd8012abf",
-            "trust_remote_code": True,
+            "path": "mteb/CTKFactsNLI",
+            "revision": "da834e176f18e4a4adc4cbc9ad9720c14168a4bb",
         },
         description="Czech Natural Language Inference dataset of around 3K evidence-claim pairs labelled with SUPPORTS, REFUTES or NOT ENOUGH INFO veracity labels. Extracted from a round of fact-checking experiments.",
         reference="https://arxiv.org/abs/2201.11115",
@@ -40,21 +39,3 @@ class CTKFactsNLI(AbsTaskPairClassification):
 }
 """,  # after removing label 1=NOT ENOUGH INFO
     )
-
-    def dataset_transform(self):
-        _dataset = {}
-        self.dataset.pop("train")
-        # keep labels 0=REFUTES and 2=SUPPORTS, and map them as 0 and 1 for binary classification
-        hf_dataset = self.dataset.filter(lambda x: x["label"] in [0, 2])
-        hf_dataset = hf_dataset.map(
-            lambda example: {"label": 1 if example["label"] == 2 else 0}
-        )
-        for split in self.metadata.eval_splits:
-            _dataset[split] = [
-                {
-                    "sentence1": hf_dataset[split]["evidence"],
-                    "sentence2": hf_dataset[split]["claim"],
-                    "labels": hf_dataset[split]["label"],
-                }
-            ]
-        self.dataset = _dataset

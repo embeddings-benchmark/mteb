@@ -12,9 +12,8 @@ class FGVCAircraftZeroShotClassification(AbsTaskAnyZeroShotClassification):
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
-            "path": "HuggingFaceM4/FGVC-Aircraft",
-            "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
-            "trust_remote_code": True,
+            "path": "mteb/FGVCAircraft",
+            "revision": "3ae0e4e94e37c610c26df758ec3255fa90d80e67",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -44,7 +43,7 @@ class FGVCAircraftZeroShotClassification(AbsTaskAnyZeroShotClassification):
 }
 """,
     )
-    label_column_name: str = "variant"  ## could be family, manufacturer, or variant. Variant has the higher number of classes.
+    label_column_name: str = "variant"  # could be family, manufacturer, or variant. Variant has the higher number of classes.
 
     def get_candidate_labels(self) -> list[str]:
         return [

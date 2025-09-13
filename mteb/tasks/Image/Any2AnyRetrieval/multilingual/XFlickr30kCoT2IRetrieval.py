@@ -28,7 +28,6 @@ def _load_xflickrco_data(path: str, langs: list, splits: str, revision: str = No
         lang_data = load_dataset(
             path,
             revision=revision,
-            # trust_remote_code=True,
         )[lang]
         lang_corpus = lang_data.map(
             lambda x: {

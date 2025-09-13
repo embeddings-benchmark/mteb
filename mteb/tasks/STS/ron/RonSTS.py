@@ -9,9 +9,8 @@ class RonSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="RonSTS",
         dataset={
-            "path": "dumitrescustefan/ro_sts",
-            "revision": "41a33183b739070f3d46d9d446492c1d2f98ce1a",
-            "trust_remote_code": True,
+            "path": "mteb/RonSTS",
+            "revision": "0e9021b8beb24b874230b4fc4e3d1612e72795e0",
         },
         description="High-quality Romanian translation of STSBenchmark.",
         reference="https://openreview.net/forum?id=JH61CD7afTv",

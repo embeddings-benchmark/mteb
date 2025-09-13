@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -45,10 +43,8 @@ class MKQARetrieval(AbsTaskRetrieval):
         For each query we collect new passage-independent answers. These queries and answers are then human translated into 25 Non-English languages.""",
         reference="https://github.com/apple/ml-mkqa",
         dataset={
-            "path": "apple/mkqa",
-            "revision": "325131889721ae0ed885b76ecb8011369d75abad",
-            "trust_remote_code": True,
-            "name": "mkqa",
+            "path": "mteb/MKQARetrieval",
+            "revision": "3e069e7a30079d214a859741f5a0de75cf878867",
         },
         type="Retrieval",
         category="t2t",
@@ -70,64 +66,5 @@ class MKQARetrieval(AbsTaskRetrieval):
   url = {https://arxiv.org/pdf/2007.15207.pdf},
   year = {2020},
 }
-        """,
+""",
     )
-
-    def load_data(self) -> None:
-        """In this retrieval dataset, corpus and queries are in the same language."""
-        if self.data_loaded:
-            return
-
-        self.queries, self.corpus, self.relevant_docs = {}, {}, {}
-
-        ds = datasets.load_dataset(
-            **self.metadata.dataset,
-        )
-
-        for lang in self.hf_subsets:
-            self.queries[lang] = {}
-            self.corpus[lang] = {}
-            self.relevant_docs[lang] = {}
-
-            for eval_split in self.metadata.eval_splits:
-                self.queries[lang][eval_split] = {}
-                self.corpus[lang][eval_split] = {}
-                self.relevant_docs[lang][eval_split] = {}
-
-                split_data = ds[eval_split]
-
-                query_ids = {
-                    query: f"Q{i}"
-                    for i, query in enumerate(
-                        {entry[lang] for entry in split_data["queries"]}
-                    )
-                }
-
-                context_texts = {
-                    hit["text"]
-                    for entry in split_data["answers"]
-                    for hit in entry[lang]
-                }
-
-                context_ids = {text: f"C{i}" for i, text in enumerate(context_texts)}
-
-                for row in split_data:
-                    query = row["queries"][lang]
-                    contexts = [entry["text"] for entry in row["answers"][lang]]
-
-                    if query is None or None in contexts:
-                        continue
-
-                    query_id = query_ids[query]
-                    for context in contexts:
-                        context_id = context_ids[context]
-                        self.queries[lang][eval_split][query_id] = query
-                        self.corpus[lang][eval_split][context_id] = {
-                            "title": "",
-                            "text": context,
-                        }
-                        if query_id not in self.relevant_docs[lang][eval_split]:
-                            self.relevant_docs[lang][eval_split][query_id] = {}
-                        self.relevant_docs[lang][eval_split][query_id][context_id] = 1
-
-            self.data_loaded = True

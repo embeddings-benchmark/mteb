@@ -11,9 +11,8 @@ class AlphaNLI(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on AlphaNLI.",
         reference="https://leaderboard.allenai.org/anli/submissions/get-started",
         dataset={
-            "path": "RAR-b/alphanli",
-            "revision": "303f40ef3d50918d3dc43577d33f2f7344ad72c1",
-            "trust_remote_code": True,
+            "path": "mteb/AlphaNLI",
+            "revision": "f145e68f0f5097f5d160c345eabeb2db8745eb13",
         },
         type="Retrieval",
         category="t2t",

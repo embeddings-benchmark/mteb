@@ -10,9 +10,8 @@ class HateSpeechPortugueseClassification(AbsTaskAnyClassification):
         description="HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized with their sentiment (2 classes).",
         reference="https://aclanthology.org/W19-3510",
         dataset={
-            "path": "hate-speech-portuguese/hate_speech_portuguese",
-            "revision": "b0f431acbf8d3865cb7c7b3effb2a9771a618ebc",
-            "trust_remote_code": True,
+            "path": "mteb/HateSpeechPortugueseClassification",
+            "revision": "46a9ecdbad49534ea2bd771edde6423e15a2364d",
         },
         type="Classification",
         category="t2c",
@@ -50,8 +49,3 @@ Waseem, Zeerak},
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )

@@ -50,9 +50,8 @@ class DigikalamagClustering(AbsTaskClusteringFast):
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
         reference="https://hooshvare.github.io/docs/datasets/tc",
         dataset={
-            "path": "PNLPhub/DigiMag",
-            "revision": "969b335c9f50eda5c384460be4eb2b55505c2c53",
-            "trust_remote_code": True,
+            "path": "mteb/DigikalamagClustering",
+            "revision": "0fe394ee57514d4dbc3deeb1b1ae5dbd8cb7e52b",
         },
         type="Clustering",
         category="t2c",
@@ -69,18 +68,6 @@ class DigikalamagClustering(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=""" """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"label": "labels", "content": "sentences"}
-        )
-
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["test"],
-            label="labels",
-        )
 
 
 class HamshahriClustring(AbsTaskClusteringFast):

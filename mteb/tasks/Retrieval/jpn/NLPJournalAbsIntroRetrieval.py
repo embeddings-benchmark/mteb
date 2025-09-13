@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -19,10 +17,8 @@ class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
-            "trust_remote_code": True,
-            "dataset_version": "v2",
+            "path": "mteb/NLPJournalAbsIntroRetrieval.V2",
+            "revision": "8a7ae2cbcd62a3df5a880f4e4afff30a977afe0d",
         },
         type="Retrieval",
         category="t2t",
@@ -48,34 +44,6 @@ class NLPJournalAbsIntroRetrievalV2(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        query_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-query",
-            split=_EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-
-        queries = {}
-        qrels = {}
-        for row_id, row in enumerate(query_list):
-            queries[str(row_id)] = row["query"]
-            qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
-
-        corpus_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-corpus", split="corpus", **self.metadata.dataset
-        )
-
-        corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
-
-        self.corpus = {_EVAL_SPLIT: corpus}
-        self.queries = {_EVAL_SPLIT: queries}
-        self.relevant_docs = {_EVAL_SPLIT: qrels}
-
-        self.data_loaded = True
-
 
 class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -88,10 +56,8 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/sbintuitions/JMTEB",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
-            "trust_remote_code": True,
-            "dataset_version": "v1",
+            "path": "mteb/NLPJournalAbsIntroRetrieval",
+            "revision": "e1b0d0b036b080a1b4642f5dd2e5f4e983e73d54",
         },
         type="Retrieval",
         category="t2t",
@@ -115,33 +81,3 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        query_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-query",
-            split=_EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-
-        queries = {}
-        qrels = {}
-        for row_id, row in enumerate(query_list):
-            queries[str(row_id)] = row["query"]
-            qrels[str(row_id)] = {str(row["relevant_docs"]): 1}
-
-        corpus_list = datasets.load_dataset(
-            name="nlp_journal_abs_intro-corpus",
-            split="corpus",
-            **self.metadata.dataset,
-        )
-
-        corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
-
-        self.corpus = {_EVAL_SPLIT: corpus}
-        self.queries = {_EVAL_SPLIT: queries}
-        self.relevant_docs = {_EVAL_SPLIT: qrels}
-
-        self.data_loaded = True

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -67,9 +65,8 @@ class XPQARetrieval(AbsTaskRetrieval):
         description="XPQARetrieval",
         reference="https://arxiv.org/abs/2305.09249",
         dataset={
-            "path": "jinaai/xpqa",
-            "revision": "c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
-            "trust_remote_code": True,
+            "path": "mteb/XPQARetrieval",
+            "revision": "fc4624be978945a0ceebbc4b85737258fe26330b",
         },
         type="Retrieval",
         category="t2t",
@@ -94,85 +91,3 @@ class XPQARetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        path = self.metadata.dataset["path"]
-        revision = self.metadata.dataset["revision"]
-        eval_splits = self.metadata.eval_splits
-        dataset = _load_dataset_csv(path, revision, eval_splits)
-
-        self.queries, self.corpus, self.relevant_docs = {}, {}, {}
-        for lang_pair, _ in self.metadata.eval_langs.items():
-            lang_corpus, lang_question = (
-                lang_pair.split("-")[0],
-                lang_pair.split("-")[1],
-            )
-            lang_not_english = lang_corpus if lang_corpus != "eng" else lang_question
-            dataset_language = dataset.filter(
-                lambda x: x["lang"] == _LANG_CONVERSION.get(lang_not_english)
-            )
-            question_key = "question_en" if lang_question == "eng" else "question"
-            corpus_key = "candidate" if lang_corpus == "eng" else "answer"
-
-            queries_to_ids = {
-                eval_split: {
-                    q: f"Q{str(_id)}"
-                    for _id, q in enumerate(
-                        set(dataset_language[eval_split][question_key])
-                    )
-                }
-                for eval_split in eval_splits
-            }
-
-            self.queries[lang_pair] = {
-                eval_split: {v: k for k, v in queries_to_ids[eval_split].items()}
-                for eval_split in eval_splits
-            }
-
-            corpus_to_ids = {
-                eval_split: {
-                    document: f"C{str(_id)}"
-                    for _id, document in enumerate(
-                        set(dataset_language[eval_split][corpus_key])
-                    )
-                }
-                for eval_split in eval_splits
-            }
-
-            self.corpus[lang_pair] = {
-                eval_split: {
-                    v: {"text": k} for k, v in corpus_to_ids[eval_split].items()
-                }
-                for eval_split in eval_splits
-            }
-
-            self.relevant_docs[lang_pair] = {}
-            for eval_split in eval_splits:
-                self.relevant_docs[lang_pair][eval_split] = {}
-                for example in dataset_language[eval_split]:
-                    query_id = queries_to_ids[eval_split].get(example[question_key])
-                    document_id = corpus_to_ids[eval_split].get(example[corpus_key])
-                    if query_id in self.relevant_docs[lang_pair][eval_split]:
-                        self.relevant_docs[lang_pair][eval_split][query_id][
-                            document_id
-                        ] = 1
-                    else:
-                        self.relevant_docs[lang_pair][eval_split][query_id] = {
-                            document_id: 1
-                        }
-
-        self.data_loaded = True
-
-
-def _load_dataset_csv(path: str, revision: str, eval_splits: list[str]):
-    data_files = {
-        eval_split: f"https://huggingface.co/datasets/{path}/resolve/{revision}/{eval_split}.csv"
-        for eval_split in eval_splits
-    }
-    dataset = datasets.load_dataset("csv", data_files=data_files)
-    dataset = dataset.filter(lambda x: x["answer"] is not None)
-
-    return dataset

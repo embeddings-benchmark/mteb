@@ -2,9 +2,6 @@ from __future__ import annotations
 
 import logging
 
-import datasets
-import pandas as pd
-
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -87,10 +84,8 @@ class XGlueWPRReranking(AbsTaskReranking):
         with respect to cross-lingual natural language understanding and generation. XGLUE is composed of 11 tasks spans 19 languages.""",
         reference="https://github.com/microsoft/XGLUE",
         dataset={
-            "path": "forresty/xglue",
-            "revision": "833b866f2f71a28d7251569020f0ff82ee5fdbbb",
-            "name": "wpr",
-            "trust_remote_code": True,
+            "path": "mteb/XGlueWPRReranking",
+            "revision": "d10af93643bb45ce0a9d736f2a482515f3d9e8b1",
         },
         type="Reranking",
         category="t2t",
@@ -107,39 +102,3 @@ class XGlueWPRReranking(AbsTaskReranking):
         sample_creation="found",
         bibtex_citation=_CITATION,
     )
-
-    def load_data(self) -> None:
-        def _aggregate_texts(group, neg_label):
-            return pd.Series(
-                {
-                    "positive": group[group["relavance_label"] != neg_label][
-                        "text"
-                    ].tolist(),
-                    "negative": group[group["relavance_label"] == neg_label][
-                        "text"
-                    ].tolist(),
-                }
-            )
-
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            ds = {}
-            for eval_split in self.metadata.eval_splits:
-                ds[eval_split] = datasets.load_dataset(
-                    split=f"{eval_split}.{lang}", **self.metadata.dataset
-                ).map(lambda x: {"text": x["web_page_title"] + x["web_page_snippet"]})
-
-                neg_label = ds[eval_split].features["relavance_label"]._str2int["Bad"]
-
-                grouped_df = (
-                    ds[eval_split]
-                    .to_pandas()
-                    .groupby("query")
-                    .apply(_aggregate_texts, neg_label=neg_label)
-                    .reset_index()
-                )
-
-                ds[eval_split] = datasets.Dataset.from_pandas(grouped_df)
-
-            self.dataset[lang] = datasets.DatasetDict(ds)
-        self.transform_old_dataset_format(self.dataset)

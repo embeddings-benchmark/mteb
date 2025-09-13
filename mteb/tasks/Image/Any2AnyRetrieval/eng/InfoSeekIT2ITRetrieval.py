@@ -10,9 +10,8 @@ class InfoSeekIT2ITRetrieval(AbsTaskRetrieval):
         description="Retrieve source text and image information to answer questions about images.",
         reference="https://aclanthology.org/2023.emnlp-main.925",
         dataset={
-            "path": "MRBench/mbeir_infoseek_task8",
-            "revision": "78ee7f7708aac75d3afac5dcab1c9e03cb62664c",
-            "trust_remote_code": True,
+            "path": "mteb/InfoSeekIT2ITRetrieval",
+            "revision": "3baeebfd742e4130d2a75a842740ebb31ea4e6e9",
         },
         type="Any2AnyRetrieval",
         category="it2it",

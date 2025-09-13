@@ -11,9 +11,8 @@ class YahooAnswersTopicsClassification(AbsTaskAnyClassification):
         description="Dataset composed of questions and answers from Yahoo Answers, categorized into topics.",
         reference="https://huggingface.co/datasets/yahoo_answers_topics",
         dataset={
-            "path": "community-datasets/yahoo_answers_topics",
-            "revision": "78fccffa043240c80e17a6b1da724f5a1057e8e5",
-            "trust_remote_code": True,
+            "path": "mteb/YahooAnswersTopicsClassification",
+            "revision": "900312fb5123b383a5c974c15fc1fbb9c3cd22af",
         },
         type="Classification",
         category="t2c",
@@ -44,19 +43,6 @@ class YahooAnswersTopicsClassification(AbsTaskAnyClassification):
     )
 
     samples_per_label = 32
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.remove_columns(
-            ["id", "question_title", "question_content"]
-        )
-
-        self.dataset = self.dataset.rename_columns(
-            {"topic": "label", "best_answer": "text"}
-        )
-
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train", "test"]
-        )
 
 
 class YahooAnswersTopicsClassificationV2(AbsTaskAnyClassification):

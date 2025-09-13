@@ -11,9 +11,8 @@ class SIQA(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SIQA.",
         reference="https://leaderboard.allenai.org/socialiqa/submissions/get-started",
         dataset={
-            "path": "RAR-b/siqa",
-            "revision": "4ed8415e9dc24060deefc84be59e2db0aacbadcc",
-            "trust_remote_code": True,
+            "path": "mteb/SIQA",
+            "revision": "59898732ccfb72afca329ce110d6799676ef0f84",
         },
         type="Retrieval",
         category="t2t",

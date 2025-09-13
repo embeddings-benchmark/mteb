@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -11,9 +9,8 @@ class FaithDialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FaithDial",
         dataset={
-            "path": "McGill-NLP/FaithDial",
-            "revision": "7a414e80725eac766f2602676dc8b39f80b061e4",
-            "trust_remote_code": True,
+            "path": "mteb/FaithDial",
+            "revision": "303f0593746993a53c0c2ec976fb576369f6c9f3",
         },
         reference="https://mcgill-nlp.github.io/FaithDial",
         description=(
@@ -50,36 +47,3 @@ class FaithDialRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    # TODO: Will be removed if curated and added to mteb HF
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        for split in self.metadata.eval_splits:
-            corpus, queries, qrels = self._load_data_for_split(split)
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
-
-        self.data_loaded = True
-
-    def _load_data_for_split(self, split):
-        ds = load_dataset(split=split, **self.metadata.dataset)
-        queries, corpus, qrels = {}, {}, {}
-        for i, sample in enumerate(ds):
-            # document is added to corpus for all samples
-            doc_id = "doc:" + str(i)
-            corpus[doc_id] = {
-                "title": "",  # title is not available
-                "text": sample["knowledge"],
-            }
-            if "Edification" in sample["VRM"]:
-                query_id = "query:" + str(i)
-                query = sample["history"]
-                queries[query_id] = query
-                qrels[query_id] = {doc_id: 1}
-
-        return corpus, queries, qrels

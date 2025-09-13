@@ -790,9 +790,8 @@ class DigikalamagClassification(AbsTaskAnyClassification):
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
         reference="https://hooshvare.github.io/docs/datasets/tc",
         dataset={
-            "path": "PNLPhub/DigiMag",
-            "revision": "969b335c9f50eda5c384460be4eb2b55505c2c53",
-            "trust_remote_code": True,
+            "path": "mteb/DigikalamagClassification",
+            "revision": "1425e8f2c0e68c32dbabfabe818fcc73e24079bb",
         },
         type="Classification",
         category="t2c",
@@ -810,6 +809,3 @@ class DigikalamagClassification(AbsTaskAnyClassification):
         bibtex_citation=""" """,
     )
     samples_per_label = 32
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("content", "text")

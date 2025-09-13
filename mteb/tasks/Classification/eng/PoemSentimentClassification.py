@@ -11,8 +11,8 @@ class PoemSentimentClassification(AbsTaskAnyClassification):
         description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.",
         reference="https://arxiv.org/abs/2011.02686",
         dataset={
-            "path": "google-research-datasets/poem_sentiment",
-            "revision": "329d529d875a00c47ec71954a1a96ae167584770",
+            "path": "mteb/PoemSentimentClassification",
+            "revision": "84af4753ebb04ca836fb54ce89a339839b03b748",
             "trust_remote_code": True,
         },
         type="Classification",

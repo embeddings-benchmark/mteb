@@ -34,7 +34,6 @@ def _load_miracl_data(
     langs: list,
     splits: str,
     revision: str | None = None,
-    trust_remote_code: bool = False,
 ):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
@@ -49,7 +48,6 @@ def _load_miracl_data(
             path,
             corpus_identifier,
             revision=revision,
-            trust_remote_code=trust_remote_code,
         )
 
         images_identifier = f"images-{lang}"
@@ -57,7 +55,6 @@ def _load_miracl_data(
             path,
             images_identifier,
             revision=revision,
-            trust_remote_code=trust_remote_code,
         )
 
         # For text data, it would look like this, just use _id column
@@ -85,7 +82,6 @@ def _load_miracl_data(
             path,
             queries_identifier,
             revision=revision,
-            trust_remote_code=trust_remote_code,
         )
         queries_data = queries_data.map(
             lambda x: {
@@ -104,7 +100,6 @@ def _load_miracl_data(
             path,
             qrels_identifier,
             revision=revision,
-            trust_remote_code=trust_remote_code,
         )
         relevant_docs[lang][split] = {}
         for row in qrels_data[split]:

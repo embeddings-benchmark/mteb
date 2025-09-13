@@ -8,9 +8,8 @@ class IndoNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="indonli",
         dataset={
-            "path": "afaji/indonli",
-            "revision": "3c976110fc13596004dc36279fc4c453ff2c18aa",
-            "trust_remote_code": True,
+            "path": "mteb/indonli",
+            "revision": "cb76e5ca05b56d4f1e0ecaee4d03c1167f162ea6",
         },
         description="IndoNLI is the first human-elicited Natural Language Inference (NLI) dataset for Indonesian. IndoNLI is annotated by both crowd workers and experts.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",
@@ -40,22 +39,4 @@ class IndoNLI(AbsTaskPairClassification):
   year = {2021},
 }
 """,
-        # after removing neutral
     )
-
-    def dataset_transform(self):
-        _dataset = {}
-        for split in self.metadata.eval_splits:
-            # keep labels 0=entailment and 2=contradiction, and map them as 1 and 0 for binary classification
-            hf_dataset = self.dataset[split].filter(lambda x: x["label"] in [0, 2])
-            hf_dataset = hf_dataset.map(
-                lambda example: {"label": 0 if example["label"] == 2 else 1}
-            )
-            _dataset[split] = [
-                {
-                    "sentence1": hf_dataset["premise"],
-                    "sentence2": hf_dataset["hypothesis"],
-                    "labels": hf_dataset["label"],
-                }
-            ]
-        self.dataset = _dataset

@@ -17,9 +17,8 @@ class KorHateClassification(AbsTaskAnyClassification):
         consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.
         """,
         dataset={
-            "path": "inmoonlight/kor_hate",
-            "revision": "bd1a7370caf712125fac1fda375834ca8ddefaca",
-            "trust_remote_code": True,
+            "path": "mteb/KorHateClassification",
+            "revision": "a4e70398c3689a5f55cd1f4a447d8d2da0a7dd1e",
         },
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -16,9 +14,8 @@ class BSARDRetrieval(AbsTaskRetrieval):
         description="The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native dataset for studying legal information retrieval. BSARD consists of more than 22,600 statutory articles from Belgian law and about 1,100 legal questions posed by Belgian citizens and labeled by experienced jurists with relevant articles from the corpus.",
         reference="https://huggingface.co/datasets/maastrichtlawtech/bsard",
         dataset={
-            "path": "maastrichtlawtech/bsard",
-            "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
-            "trust_remote_code": True,
+            "path": "mteb/BSARDRetrieval",
+            "revision": "8c492add6a14ac188f2debdaf6cbdfb406fd6be3",
         },
         type="Retrieval",
         category="t2t",
@@ -49,43 +46,6 @@ class BSARDRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-        # fetch both subsets of the dataset, only test split
-        corpus_raw = datasets.load_dataset(
-            name="corpus",
-            split="corpus",
-            **self.metadata.dataset,
-        )
-        queries_raw = datasets.load_dataset(
-            name="questions",
-            split=self.metadata.eval_splits[0],
-            **self.metadata.dataset,
-        )
-
-        self.queries = {
-            self.metadata.eval_splits[0]: {
-                str(q["id"]): (q["question"] + " " + q["extra_description"]).strip()
-                for q in queries_raw
-            }
-        }
-
-        self.corpus = {
-            self.metadata.eval_splits[0]: {
-                str(d["id"]): {"text": d["article"]} for d in corpus_raw
-            }
-        }
-
-        self.relevant_docs = {self.metadata.eval_splits[0]: {}}
-        for q in queries_raw:
-            for doc_id in q["article_ids"]:
-                self.relevant_docs[self.metadata.eval_splits[0]][str(q["id"])] = {
-                    str(doc_id): 1
-                }
-
-        self.data_loaded = True
-
 
 class BSARDRetrievalv2(AbsTaskRetrieval):
     ignore_identical_ids = True
@@ -95,9 +55,8 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
         description="BSARD is a French native dataset for legal information retrieval. BSARDRetrieval.v2 covers multi-article queries, fixing issues (#2906) with the previous data loading. ",
         reference="https://huggingface.co/datasets/maastrichtlawtech/bsard",
         dataset={
-            "path": "maastrichtlawtech/bsard",
-            "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
-            "trust_remote_code": True,
+            "path": "mteb/BSARDRetrieval.v2",
+            "revision": "e4b6c883c5bb602e1ac46d2939484ff40b1545f4",
         },
         type="Retrieval",
         category="t2c",
@@ -127,40 +86,3 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-        # fetch both subsets of the dataset, only test split
-        corpus_raw = datasets.load_dataset(
-            name="corpus",
-            split="corpus",
-            **self.metadata.dataset,
-        )
-        queries_raw = datasets.load_dataset(
-            name="questions",
-            split=self.metadata.eval_splits[0],
-            **self.metadata.dataset,
-        )
-
-        split = self.metadata.eval_splits[0]
-
-        self.queries = {
-            split: {
-                str(q["id"]): (q["question"] + " " + q["extra_description"]).strip()
-                for q in queries_raw
-            }
-        }
-
-        self.corpus = {
-            split: {str(d["id"]): {"text": d["article"]} for d in corpus_raw}
-        }
-
-        self.relevant_docs = {split: {}}
-        for q in queries_raw:
-            qid = str(q["id"])
-            self.relevant_docs[split][qid] = {}
-            for doc_id in q["article_ids"]:
-                self.relevant_docs[split][qid][str(doc_id)] = 1
-
-        self.data_loaded = True

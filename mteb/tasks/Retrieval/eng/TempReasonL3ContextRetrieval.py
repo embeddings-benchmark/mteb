@@ -11,9 +11,8 @@ class TempReasonL3Context(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l3-context.",
         reference="https://github.com/DAMO-NLP-SG/TempReason",
         dataset={
-            "path": "RAR-b/TempReason-l3-context",
-            "revision": "3c42539652de3d787cecfb897d3b20905e5c7250",
-            "trust_remote_code": True,
+            "path": "mteb/TempReasonL3Context",
+            "revision": "2c341c955bf2dc4f229c54b5b2cb9c5f1409ffd7",
         },
         type="Retrieval",
         category="t2t",

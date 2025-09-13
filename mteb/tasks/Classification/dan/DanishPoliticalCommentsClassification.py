@@ -9,9 +9,8 @@ class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification",
         dataset={
-            "path": "community-datasets/danish_political_comments",
-            "revision": "edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
-            "trust_remote_code": True,
+            "path": "mteb/DanishPoliticalCommentsClassification",
+            "revision": "d743dcd5abb03d5ab357757a0e83522fc6696fcd",
         },
         description="A dataset of Danish political comments rated for sentiment",
         reference="https://huggingface.co/datasets/danish_political_comments",
@@ -43,13 +42,6 @@ class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
     )
 
     samples_per_label = 16
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sentence", "text")
-        self.dataset = self.dataset.rename_column("target", "label")
-
-        # create train and test splits
-        self.dataset = self.dataset["train"].train_test_split(0.2, seed=self.seed)
 
 
 class DanishPoliticalCommentsClassificationV2(AbsTaskAnyClassification):

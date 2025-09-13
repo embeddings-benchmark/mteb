@@ -1,25 +1,16 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-
-CORPUS_HF_NAME, CORPUS_HF_VERSION, CORPUS_HF_SPLIT = (
-    "McGill-NLP/TopiOCQA-wiki-corpus",
-    "50ae3b82713b1a935190def03ce7e7e75a318636",
-    "train",
-)
 
 
 class TopiOCQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TopiOCQA",
         dataset={
-            "path": "McGill-NLP/TopiOCQA",
-            "revision": "66cd1dbf5577c653ecb99b385200f08e15e12f30",
-            "trust_remote_code": True,
+            "path": "mteb/TopiOCQA",
+            "revision": "53887a22a3e277dc96ed42854f562308699dba20",
         },
         reference="https://mcgill-nlp.github.io/topiocqa",
         description=(
@@ -52,50 +43,6 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    # TODO: Will be removed if curated and added to mteb HF
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata.dataset["path"]
-        for split in self.metadata.eval_splits:
-            corpus, queries, qrels = self._load_data_for_split(dataset_path, split)
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
-
-        self.data_loaded = True
-
-    def _load_data_for_split(self, dataset_path, split):
-        revision = self.metadata.dataset.get("revision", None)
-        ds = load_dataset(
-            dataset_path,
-            split=split,
-            revision=revision,
-            trust_remote_code=self.metadata.dataset["trust_remote_code"],
-        )
-        queries, corpus, qrels = {}, {}, {}
-        for sample in ds:
-            query_id = f"{sample['Conversation_no']}-{sample['Turn_no']}"
-            query = sample["Context"] + [sample["Question"]]
-            doc_id = sample["Gold_passage"]["id"]
-            queries[query_id] = query
-            qrels[query_id] = {doc_id: 1}
-
-        corpus_ds = load_dataset(
-            CORPUS_HF_NAME, revision=CORPUS_HF_VERSION, split=CORPUS_HF_SPLIT
-        )
-        for doc in corpus_ds:
-            doc_id = doc["id"]
-            corpus[doc_id] = {
-                "title": "; ".join([doc["title"], doc["sub_title"]]),
-                "text": doc["contents"],
-            }
-
-        return corpus, queries, qrels
-
 
 class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -103,7 +50,6 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         dataset={
             "path": "mteb/TopiOCQA_validation_top_250_only_w_correct-v2",
             "revision": "b4cc09fb8bb3a9e0ce0f94dc69c96397a2a47c18",
-            "trust_remote_code": True,
         },
         reference="https://mcgill-nlp.github.io/topiocqa",
         description=(

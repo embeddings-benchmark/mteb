@@ -11,9 +11,8 @@ class RARbCode(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on RAR-b code-pooled dataset.",
         reference="https://arxiv.org/abs/2404.06347",
         dataset={
-            "path": "RAR-b/humanevalpack-mbpp-pooled",
-            "revision": "25f7d11a7ac12dcbb8d3836eb2de682b98c825e4",
-            "trust_remote_code": True,
+            "path": "mteb/RARbCode",
+            "revision": "ed0a01c3e4d39ec17badb87405e595322f8f2b86",
         },
         type="Retrieval",
         category="t2t",

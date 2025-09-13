@@ -57,7 +57,6 @@ def _load_xm3600_data(path: str, langs: list, splits: list[str], revision: str =
             path,
             split=lang,
             revision=revision,
-            # trust_remote_code=True,
         )
         lang_corpus = lang_data.map(
             lambda x: {

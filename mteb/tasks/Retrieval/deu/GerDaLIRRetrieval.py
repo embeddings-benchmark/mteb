@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -14,9 +12,8 @@ class GerDaLIR(AbsTaskRetrieval):
         description="GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform.",
         reference="https://github.com/lavis-nlp/GerDaLIR",
         dataset={
-            "path": "jinaai/ger_da_lir",
-            "revision": "0bb47f1d73827e96964edb84dfe552f62f4fd5eb",
-            "trust_remote_code": True,
+            "path": "mteb/GerDaLIRSmall",
+            "revision": "b199f38071bc06a2cb86c4c10d57ecee6c46056a",
         },
         type="Retrieval",
         category="t2t",
@@ -47,36 +44,3 @@ Krechel, Dirk},
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        query_rows = datasets.load_dataset(
-            name="queries",
-            split=self._EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-        corpus_rows = datasets.load_dataset(
-            name="corpus",
-            split=self._EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-        qrels_rows = datasets.load_dataset(
-            name="qrels",
-            split=self._EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-
-        self.queries = {
-            self._EVAL_SPLIT: {row["_id"]: row["text"] for row in query_rows}
-        }
-        self.corpus = {self._EVAL_SPLIT: {row["_id"]: row for row in corpus_rows}}
-        self.relevant_docs = {
-            self._EVAL_SPLIT: {
-                row["_id"]: dict.fromkeys(row["text"].split(" "), 1)
-                for row in qrels_rows
-            }
-        }
-
-        self.data_loaded = True

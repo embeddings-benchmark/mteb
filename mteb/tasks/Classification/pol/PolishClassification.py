@@ -335,9 +335,8 @@ class PacClassification(AbsTaskAnyClassification):
         description="Polish Paraphrase Corpus",
         reference="https://arxiv.org/pdf/2211.13112.pdf",
         dataset={
-            "path": "laugustyniak/abusive-clauses-pl",
-            "revision": "fc69d1c153a8ccdcf1eef52f4e2a27f88782f543",
-            "trust_remote_code": True,
+            "path": "mteb/PAC",
+            "revision": "d09e1c9f0f04f7f52f5cbfb74fa6c793c4eb84da",
         },
         type="Classification",
         category="t2c",

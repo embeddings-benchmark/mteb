@@ -17,8 +17,8 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         """,
         reference="https://paperswithcode.com/dataset/told-br",
         dataset={
-            "path": "mteb/told-br",
-            "revision": "f333c1fcfa3ab43f008a327c8bd0140441354d34",
+            "path": "mteb/BrazilianToxicTweetsClassification",
+            "revision": "d7af1f3c9ff00fbb4e1e40021788a32d78a936bd",
         },
         type="MultilabelClassification",
         category="t2c",
@@ -51,27 +51,3 @@ New Dataset and Multilingual Analysis},
 }
 """,
     )
-
-    def dataset_transform(self):
-        cols_ = ["homophobia", "obscene", "insult", "racism", "misogyny", "xenophobia"]
-        n_size = len(self.dataset["train"])
-        labels = [[] for _ in range(n_size)]
-        for c in cols_:
-            col_list = self.dataset["train"][c]
-            for i in range(n_size):
-                if col_list[i] > 0:
-                    labels[i].append(c)
-        self.dataset = self.dataset["train"].add_column("label", labels)
-        del labels
-        self.dataset = self.dataset.remove_columns(cols_)
-        self.dataset = self.dataset.train_test_split(
-            train_size=len(self.dataset) // 2,
-            test_size=len(self.dataset) // 2,
-            seed=self.seed,
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"], n_samples=8192
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
-        )

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -30,82 +28,14 @@ _LANGUAGES = {
 }
 
 
-def _load_miracl_data(
-    path: str,
-    langs: list,
-    splits: str,
-    revision: str | None = None,
-    trust_remote_code: bool = False,
-):
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
-
-    split = _EVAL_SPLIT
-
-    for lang in langs:
-        # Load corpus data (Can be several millions for languages)
-        corpus_identifier = f"corpus-{lang}"
-        corpus_data = datasets.load_dataset(
-            path,
-            corpus_identifier,
-            revision=revision,
-            trust_remote_code=trust_remote_code,
-        )
-        corpus[lang][split] = {}
-        for row in corpus_data["corpus"]:
-            docid = row["docid"]
-            doc_title = row["title"]
-            doc_text = row["text"]
-            corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
-
-        # Load queries data
-        queries_identifier = f"queries-{lang}"
-        queries_data = datasets.load_dataset(
-            path,
-            queries_identifier,
-            revision=revision,
-            trust_remote_code=trust_remote_code,
-        )
-        queries[lang][split] = {}
-        for row in queries_data["queries"]:
-            query_id = row["query_id"]
-            query_text = row["query"]
-            queries[lang][split][query_id] = query_text
-
-        # Load relevant documents data
-        qrels_identifier = f"{lang}"
-        qrels_data = datasets.load_dataset(
-            path,
-            qrels_identifier,
-            revision=revision,
-            trust_remote_code=trust_remote_code,
-        )
-        relevant_docs[lang][split] = {}
-        for row in qrels_data[split]:
-            query_id = row["query_id"]
-            doc_id = row["docid"]
-            score = row["score"]
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = score
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
-
-
 class MIRACLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLRetrieval",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="http://miracl.ai",
         dataset={
-            "path": "miracl/mmteb-miracl",
-            "revision": "main",
-            "trust_remote_code": True,
+            "path": "mteb/MIRACLRetrieval",
+            "revision": "9c09abc13478308c27598f350e31d8f06b9b5481",
         },
         type="Retrieval",
         category="t2t",
@@ -141,150 +71,6 @@ class MIRACLRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.metadata.dataset["path"],
-            revision=self.metadata.dataset["revision"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            trust_remote_code=self.metadata.dataset["trust_remote_code"],
-        )
-
-        self.data_loaded = True
-
-
-def _load_miracl_data_hard_negatives(
-    path: str,
-    langs: list,
-    splits: str,
-    revision: str | None = None,
-    trust_remote_code: bool = False,
-) -> tuple:
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
-
-    split = _EVAL_SPLIT
-
-    for lang in langs:
-        # subsampled langs: th,en,de,fr,es,ru,ja,fa,ar,fi,ko,id,te,hi,zh
-        if lang in [
-            "th",
-            "en",
-            "de",
-            "fr",
-            "es",
-            "ru",
-            "ja",
-            "fa",
-            "ar",
-            "fi",
-            "ko",
-            "id",
-            "te",
-            "hi",
-            "zh",
-        ]:
-            # load the hard negatives miracle dataset
-            # Load corpus data
-            print(f"Loading data for {lang}")
-            corpus_identifier = f"corpus-{lang}"
-            corpus_data = datasets.load_dataset(
-                path,
-                corpus_identifier,
-                revision=revision,
-                trust_remote_code=trust_remote_code,
-            )
-            corpus[lang][split] = {}
-            for row in corpus_data["corpus"]:
-                docid = row["_id"]
-                doc_title = row["title"]
-                doc_text = row["text"]
-                corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
-
-            # Load queries data
-            queries_identifier = f"queries-{lang}"
-            queries_data = datasets.load_dataset(
-                path,
-                queries_identifier,
-                revision=revision,
-                trust_remote_code=trust_remote_code,
-            )
-            queries[lang][split] = {}
-            for row in queries_data["queries"]:
-                query_id = row["_id"]
-                query_text = row["text"]
-                queries[lang][split][query_id] = query_text
-
-            # Load relevant documents data
-            qrels_identifier = f"{lang}"
-            qrels_data = datasets.load_dataset(
-                path,
-                qrels_identifier,
-                revision=revision,
-                trust_remote_code=trust_remote_code,
-            )
-            relevant_docs[lang][split] = {}
-            for row in qrels_data[split]:
-                query_id = row["query-id"]
-                doc_id = row["corpus-id"]
-                score = row["score"]
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
-                relevant_docs[lang][split][query_id][doc_id] = score
-
-        else:
-            corpus_identifier = f"corpus-{lang}"
-            corpus_data = datasets.load_dataset(
-                "miracl/mmteb-miracl",
-                corpus_identifier,
-                trust_remote_code=trust_remote_code,
-            )
-            corpus[lang][split] = {}
-            for row in corpus_data["corpus"]:
-                docid = row["docid"]
-                doc_title = row["title"]
-                doc_text = row["text"]
-                corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
-
-            # Load queries data
-            queries_identifier = f"queries-{lang}"
-            queries_data = datasets.load_dataset(
-                "miracl/mmteb-miracl",
-                queries_identifier,
-                trust_remote_code=trust_remote_code,
-            )
-            queries[lang][split] = {}
-            for row in queries_data["queries"]:
-                query_id = row["query_id"]
-                query_text = row["query"]
-                queries[lang][split][query_id] = query_text
-
-            # Load relevant documents data
-            qrels_identifier = f"{lang}"
-            qrels_data = datasets.load_dataset(
-                "miracl/mmteb-miracl",
-                qrels_identifier,
-                trust_remote_code=trust_remote_code,
-            )
-            relevant_docs[lang][split] = {}
-            for row in qrels_data[split]:
-                query_id = row["query_id"]
-                doc_id = row["docid"]
-                score = row["score"]
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
-                relevant_docs[lang][split][query_id][doc_id] = score
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
-
 
 class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -292,9 +78,8 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="http://miracl.ai",
         dataset={
-            "path": "mteb/miracl-hard-negatives",
-            "revision": "95c8db7d4a6e9c1d8a60601afd63d553ae20a2eb",
-            "trust_remote_code": True,
+            "path": "mteb/MIRACLRetrievalHardNegatives",
+            "revision": "mteb/MIRACLRetrievalHardNegatives",
         },
         type="Retrieval",
         category="t2t",
@@ -327,19 +112,3 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
 """,
         adapted_from=["MIRACLRetrieval"],
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = (
-            _load_miracl_data_hard_negatives(
-                path=self.metadata.dataset["path"],
-                langs=self.hf_subsets,
-                splits=self.metadata.eval_splits,
-                revision=self.metadata.dataset["revision"],
-                trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
-            )
-        )
-
-        self.data_loaded = True

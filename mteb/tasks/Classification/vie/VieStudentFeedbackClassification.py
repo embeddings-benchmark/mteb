@@ -13,9 +13,8 @@ class VieStudentFeedbackClassification(AbsTaskAnyClassification):
         description="A Vietnamese dataset for classification of student feedback",
         reference="https://ieeexplore.ieee.org/document/8573337",
         dataset={
-            "path": "uitnlp/vietnamese_students_feedback",
-            "revision": "7b56c6cb1c9c8523249f407044c838660df3811a",
-            "trust_remote_code": True,
+            "path": "mteb/VieStudentFeedbackClassification",
+            "revision": "389b7da68152996da2dd2beaf9877bf4abcb2440",
         },
         type="Classification",
         category="t2c",
@@ -43,14 +42,6 @@ class VieStudentFeedbackClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"sentence": "text", "sentiment": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class VieStudentFeedbackClassificationV2(AbsTaskAnyClassification):

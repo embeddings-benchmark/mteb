@@ -554,7 +554,7 @@ class AbsTaskRetrieval(AbsTask):
         self.convert_v1_dataset_format_to_v2()
 
         def _push_section(
-            data: dict[str, dict[Any, Any]],
+            data: dict[str, dict[str, Dataset | dict]],
             subset_item: str,
             hf_subset_name: str,
             converter: Callable[[Any, Any], dict[str, Any]] | None = None,
@@ -572,7 +572,7 @@ class AbsTaskRetrieval(AbsTask):
                 # skip empty instructions and top ranked
                 if subset_item not in data[split] or data[split][subset_item] is None:
                     continue
-                if isinstance(sections[split], Dataset):
+                if isinstance(data[split][subset_item], Dataset):
                     sections[split] = data[split][subset_item]
                 elif converter is not None:
                     sections[split] = Dataset.from_list(

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -19,9 +17,8 @@ class JaCWIRRetrieval(AbsTaskRetrieval):
 and that data is used as a positive example for the question text.""",
         reference="https://huggingface.co/datasets/hotchpotch/JaCWIR",
         dataset={
-            "path": "sbintuitions/JMTEB",
-            "revision": "b194332dfb8476c7bdd0aaf80e2c4f2a0b4274c2",
-            "trust_remote_code": True,
+            "path": "mteb/JaCWIRRetrieval",
+            "revision": "abf6d5fb6759ad516f998bd887b75420d595672e",
         },
         type="Retrieval",
         category="t2t",
@@ -44,37 +41,3 @@ and that data is used as a positive example for the question text.""",
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        query_list = datasets.load_dataset(
-            name="jacwir-retrieval-query",
-            split=_EVAL_SPLIT,
-            **self.metadata.dataset,
-        )
-
-        queries = {}
-        qrels = {}
-        for row_id, row in enumerate(query_list):
-            queries[str(row_id)] = row["query"]
-            # Handle relevant_docs which should be a list
-            relevant_docs = row["relevant_docs"]
-            if not isinstance(relevant_docs, list):
-                relevant_docs = [relevant_docs]
-            qrels[str(row_id)] = {str(doc_id): 1 for doc_id in relevant_docs}
-
-        corpus_list = datasets.load_dataset(
-            name="jacwir-retrieval-corpus",
-            split="corpus",
-            **self.metadata.dataset,
-        )
-
-        corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
-
-        self.corpus = {_EVAL_SPLIT: corpus}
-        self.queries = {_EVAL_SPLIT: queries}
-        self.relevant_docs = {_EVAL_SPLIT: qrels}
-
-        self.data_loaded = True
