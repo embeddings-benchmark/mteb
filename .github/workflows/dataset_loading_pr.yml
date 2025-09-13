@@ -27,7 +27,7 @@ jobs:
       env:
         HF_TOKEN: ${{ secrets.MTEB_PRIVATE }}
       run: |
-        hf auth login --add-to-git-credential --token "$HF_TOKEN"
+        hf auth login --add-to-git-credential  --token "$HF_TOKEN"
 
     - name: Run dataset loading tests
       env:
