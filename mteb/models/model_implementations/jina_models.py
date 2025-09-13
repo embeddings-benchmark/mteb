@@ -6,7 +6,6 @@ from typing import Any
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from transformers import AutoModel
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
@@ -248,6 +247,7 @@ class JinaV4Wrapper(AbsEncoder):
         import flash_attn  # noqa: F401
         import peft  # noqa: F401
         import transformers  # noqa: F401
+        from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
             model,

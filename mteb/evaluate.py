@@ -233,7 +233,7 @@ def evaluate(
         task = cast(AbsTaskAggregate, tasks)
         results = evaluate(
             model,
-            task.metadata.tasks,
+            task.metadata.task_list,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,

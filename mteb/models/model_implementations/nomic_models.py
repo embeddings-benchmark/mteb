@@ -5,7 +5,6 @@ from typing import Any
 
 import torch
 import torch.nn.functional as F
-import transformers
 from packaging.version import Version
 from torch.utils.data import DataLoader
 
@@ -29,6 +28,8 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
+        import transformers
+
         self.model_name = model_name
         if model_name == "nomic-ai/modernbert-embed-base" and (
             Version(transformers.__version__).release

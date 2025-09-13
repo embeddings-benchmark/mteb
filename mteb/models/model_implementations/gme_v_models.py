@@ -8,7 +8,6 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
-from transformers import AutoModelForVision2Seq, AutoProcessor
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -137,6 +136,8 @@ class GmeQwen2VL(AbsEncoder):
         max_length=1800,
         **kwargs,
     ) -> None:
+        from transformers import AutoModelForVision2Seq, AutoProcessor
+
         model_name = model_path or model_name
         base = AutoModelForVision2Seq.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.float16, **kwargs

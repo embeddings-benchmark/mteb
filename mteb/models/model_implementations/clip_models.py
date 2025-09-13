@@ -5,7 +5,6 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoModel, AutoProcessor
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -21,6 +20,8 @@ class CLIPModel(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        from transformers import AutoModel, AutoProcessor
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(
