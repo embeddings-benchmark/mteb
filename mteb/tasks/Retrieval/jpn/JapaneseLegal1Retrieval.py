@@ -12,6 +12,7 @@ class JapaneseLegal1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/JapaneseLegal1Retrieval",
             "revision": "28f069180322c6abd8bacc683e263c0b3e6fd37e",  # Updated with latest sample commit 28f06918
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

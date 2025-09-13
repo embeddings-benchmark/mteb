@@ -12,6 +12,7 @@ class EnglishFinance4Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/EnglishFinance4Retrieval",
             "revision": "332f8ca9566c25ead7dfdbb87100db0654a0ff07",  # Updated with latest sample commit 332f8ca9
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

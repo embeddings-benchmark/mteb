@@ -12,6 +12,7 @@ class German1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/German1Retrieval",
             "revision": "b7144e57d31cd8eb73c523a43c6833d31ee765aa",  # Updated with latest sample commit b7144e57
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

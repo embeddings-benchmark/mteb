@@ -12,6 +12,7 @@ class GermanHealthcare1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/GermanHealthcare1Retrieval",
             "revision": "d2a28b15a2fc87b36c5ec8bf6a321bc4882ee96e",  # Updated with latest sample commit d2a28b15
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

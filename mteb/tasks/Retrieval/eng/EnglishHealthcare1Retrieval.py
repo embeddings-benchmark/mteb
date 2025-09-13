@@ -12,6 +12,7 @@ class EnglishHealthcare1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/EnglishHealthcare1Retrieval",
             "revision": "b53788f68f96a5943d37acf13b81dc1a622f01e4",  # Updated with latest sample commit b53788f6
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

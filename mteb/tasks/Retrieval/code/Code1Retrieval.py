@@ -12,6 +12,7 @@ class Code1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/Code1Retrieval",
             "revision": "90dd4fca74415023f2c9b944b2553b630a337666",  # Updated with latest sample commit 90dd4fca
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

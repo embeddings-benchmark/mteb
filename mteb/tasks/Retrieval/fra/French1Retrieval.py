@@ -12,6 +12,7 @@ class French1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/French1Retrieval",
             "revision": "7368ec05665acd3edc8decb1e4067a77e29a16d9",  # Updated with latest sample commit 7368ec05
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

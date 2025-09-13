@@ -12,6 +12,7 @@ class FrenchLegal1Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "mteb-private/FrenchLegal1Retrieval",
             "revision": "44c4be8bfc12406025bf12295cd260c5ed189848",  # Updated with latest sample commit 44c4be8b
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
