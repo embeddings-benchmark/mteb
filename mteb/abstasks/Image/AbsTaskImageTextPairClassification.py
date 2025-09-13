@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any
 
 from datasets import Dataset
@@ -8,14 +9,14 @@ from datasets import Dataset
 from mteb._evaluators import ImageTextPairClassificationEvaluator
 from mteb.models.models_protocols import Encoder
 from mteb.types import ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
 
+from ...types.statistics import SplitDescriptiveStatistics
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class ImageTextPairClassificationDescriptiveStatistics(DescriptiveStatistics):
+class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for ImageTextPairClassification
 
     Attributes:
@@ -107,15 +108,16 @@ class AbsTaskImageTextPairClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: Dataset,
+        data_split: Dataset,
         *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
+        prediction_folder: Path | None = None,
+        **kwargs: Any,
     ) -> ScoresDict:
         evaluator = ImageTextPairClassificationEvaluator(
-            dataset,
+            data_split,
             images_column_names=self.images_column_names,
             texts_column_names=self.texts_column_names,
             task_metadata=self.metadata,

@@ -20,6 +20,7 @@ from mteb.create_dataloaders import (
 from mteb.models import (
     CrossEncoderProtocol,
     Encoder,
+    MTEBModels,
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
     SearchProtocol,
@@ -32,9 +33,9 @@ from mteb.types import (
     ScoresDict,
 )
 from mteb.types.statistics import (
-    DescriptiveStatistics,
     ImageStatistics,
     RelevantDocsStatistics,
+    SplitDescriptiveStatistics,
     TextStatistics,
     TopRankedStatistics,
 )
@@ -55,7 +56,7 @@ from .retrieval_dataset_loaders import (
 logger = logging.getLogger(__name__)
 
 
-class RetrievalDescriptiveStatistics(DescriptiveStatistics):
+class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
@@ -295,7 +296,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
@@ -333,7 +334,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: MTEBModels,
         data_split: RetrievalSplitData,
         encode_kwargs: dict[str, Any],
         hf_split: str,
@@ -387,7 +388,6 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
-            **kwargs,
         )
         end_time = time()
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
@@ -500,7 +500,12 @@ class AbsTaskRetrieval(AbsTask):
         num_documents = len(corpus)
         num_queries = len(queries)
 
-        queries_modalities, corpus_modalities = self.metadata.category.split("2")
+        if self.metadata.category is None:
+            queries_modalities = "t"
+            corpus_modalities = "t"
+        else:
+            queries_modalities, corpus_modalities = self.metadata.category.split("2")
+
         number_of_characters = 0
 
         documents_text_statistics = None
@@ -554,7 +559,7 @@ class AbsTaskRetrieval(AbsTask):
         self.convert_v1_dataset_format_to_v2()
 
         def _push_section(
-            data: dict[str, dict[Any, Any]],
+            data: dict[str, RetrievalSplitData],
             subset_item: str,
             hf_subset_name: str,
             converter: Callable[[Any, Any], dict[str, Any]] | None = None,

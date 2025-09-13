@@ -28,7 +28,7 @@ class ClusteringEvaluator(Evaluator):
         hf_subset: str,
         clustering_batch_size: int = 500,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.dataset = dataset
         self.clustering_batch_size = clustering_batch_size
@@ -59,7 +59,7 @@ class ClusteringEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         v_measure_only: bool = False,
-    ):
+    ) -> dict[str, float]:
         data_loader = self.create_dataloader(batch_size=encode_kwargs["batch_size"])
 
         embeddings = model.encode(

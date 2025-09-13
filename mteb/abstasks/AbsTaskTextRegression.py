@@ -21,14 +21,19 @@ from mteb.abstasks._statistics_calculation import (
 from mteb.load_results.task_results import ScoresDict
 from mteb.models import MTEBModels
 from mteb.types import HFSubset
-from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
+from mteb.types.statistics import (
+    ScoreStatistics,
+    SplitDescriptiveStatistics,
+    TextStatistics,
+)
 
+from .. import Encoder
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class RegressionDescriptiveStatistics(DescriptiveStatistics):
+class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Regression
 
     Attributes:
@@ -71,16 +76,17 @@ class AbsTaskTextRegression(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: MTEBModels,
-        dataset: DatasetDict,
+        model: Encoder,
+        data_split: DatasetDict,
+        *,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[self.train_split]
-        eval_split = dataset[hf_split]
+        train_split = data_split[self.train_split]
+        eval_split = data_split[hf_split]
 
         scores_list, test_cache = [], None
         for i in range(self.n_experiments):

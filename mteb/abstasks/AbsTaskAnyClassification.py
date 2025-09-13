@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -9,12 +10,12 @@ from datasets import Dataset, DatasetDict
 from PIL import ImageFile
 from sklearn.linear_model import LogisticRegression
 
-from mteb.models import Encoder
+from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
-    DescriptiveStatistics,
     ImageStatistics,
     LabelStatistics,
+    SplitDescriptiveStatistics,
     TextStatistics,
 )
 
@@ -33,7 +34,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)
 
 
-class ClassificationDescriptiveStatistics(DescriptiveStatistics):
+class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Classification
 
     Attributes:
@@ -83,13 +84,19 @@ class AbsTaskAnyClassification(AbsTask):
 
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
+        if not isinstance(model, Encoder):
+            raise TypeError(
+                f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "
+                "Please use a Encoder model instead."
+            )
+
         if not self.data_loaded:
             self.load_data()
 
@@ -124,14 +131,16 @@ class AbsTaskAnyClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict,
+        data_split: DatasetDict,
+        *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
+        prediction_folder: Path | None = None,
+        **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[self.train_split]
-        eval_split = dataset[hf_split]
+        train_split = data_split[self.train_split]
+        eval_split = data_split[hf_split]
         params = {"k": self.k}
         params.update(kwargs)
 
@@ -192,7 +201,7 @@ class AbsTaskAnyClassification(AbsTask):
         rng_state = np.random.RandomState(self.seed)
         rng_state.shuffle(idxs)
 
-        label_counter = defaultdict(int)
+        label_counter: dict[str, int] = defaultdict(int)
         sampled_idxs = []
 
         for i in idxs:

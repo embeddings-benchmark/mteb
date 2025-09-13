@@ -4,6 +4,7 @@ import itertools
 import logging
 import random
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -14,8 +15,12 @@ from sklearn.metrics.cluster import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb.models import Encoder
-from mteb.types import HFSubset
-from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
+from mteb.types import HFSubset, ScoresDict
+from mteb.types.statistics import (
+    LabelStatistics,
+    SplitDescriptiveStatistics,
+    TextStatistics,
+)
 
 from ._statistics_calculation import (
     calculate_label_statistics,
@@ -82,7 +87,7 @@ def evaluate_clustering_bootstrapped(
     return v_measures
 
 
-class ClusteringFastDescriptiveStatistics(DescriptiveStatistics):
+class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for ClusteringFast
 
     Attributes:
@@ -131,13 +136,14 @@ class AbsTaskClusteringFast(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: Dataset,
+        data_split: Dataset,
         *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
-    ) -> dict[str, float | dict[str, list[float]]]:
+    ) -> ScoresDict:
         if (
             self.max_document_to_embed is not None
             and self.max_fraction_of_documents_to_embed is not None
@@ -150,20 +156,20 @@ class AbsTaskClusteringFast(AbsTask):
             self.max_document_to_embed is None
             and self.max_fraction_of_documents_to_embed is None
         ):
-            downsampled_dataset = dataset
+            downsampled_dataset = data_split
         else:
             if self.max_fraction_of_documents_to_embed is not None:
                 max_documents_to_embed = int(
-                    self.max_fraction_of_documents_to_embed * len(dataset)
+                    self.max_fraction_of_documents_to_embed * len(data_split)
                 )
             else:
                 max_documents_to_embed = self.max_document_to_embed
 
-            max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
+            max_documents_to_embed = min(len(data_split), max_documents_to_embed)  # type: ignore
             example_indices = self.rng_state.sample(
-                range(len(dataset)), k=max_documents_to_embed
+                range(len(data_split)), k=max_documents_to_embed
             )
-            downsampled_dataset = dataset.select(example_indices)  # type: ignore
+            downsampled_dataset = data_split.select(example_indices)  # type: ignore
 
         downsampled_dataset = downsampled_dataset.rename_column(
             original_column_name="sentences", new_column_name="text"

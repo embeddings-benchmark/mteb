@@ -17,7 +17,7 @@ from .rerankers_custom import RerankerWrapper
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str = None, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str, **kwargs) -> None:
         super().__init__(model_name_or_path, **kwargs)
 
         self.model = AutoModelForSequenceClassification.from_pretrained(
