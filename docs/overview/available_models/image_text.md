@@ -4,6 +4,264 @@
 
 - **Number of models:** 42 
 
+## Instruction Model
+
+####  [`Alibaba-NLP/gme-Qwen2-VL-2B-Instruct`](https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 1.5K | 2.2B | 8.2 GB | 2024-12-24 | cmn-Hans, eng-Latn |
+
+
+####  [`Alibaba-NLP/gme-Qwen2-VL-7B-Instruct`](https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 3.6K | 8.3B | 30.9 GB | 2024-12-24 | cmn-Hans, eng-Latn |
+
+
+####  [`TIGER-Lab/VLM2Vec-Full`](https://huggingface.co/TIGER-Lab/VLM2Vec-Full)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 131.1K | 3.1K | 4.2B | 7.7 GB | 2024-10-08 | eng-Latn |
+
+
+####  [`TIGER-Lab/VLM2Vec-LoRA`](https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 131.1K | 3.1K | not specified | not specified | 2024-10-08 | eng-Latn |
+
+
+####  [`ibm-granite/granite-vision-3.3-2b-embedding`](https://huggingface.co/ibm-granite/granite-vision-3.3-2b-embedding)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 128.0K | 128 | 3.0B | 11.1 GB | 2025-06-11 | eng-Latn |
+
+
+####  [`intfloat/mmE5-mllama-11b-instruct`](https://huggingface.co/intfloat/mmE5-mllama-11b-instruct)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 128.0K | 4.1K | 10.6B | 19.8 GB | 2025-02-12 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{chen2025mmE5,
+      title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
+      author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
+      journal={arXiv preprint arXiv:2502.08468},
+      year={2025}
+    }
+    
+    ```
+    
+
+
+
+####  [`jinaai/jina-clip-v1`](https://huggingface.co/jinaai/jina-clip-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | 223.0M | 849.0 MB | 2024-05-30 | eng-Latn |
+
+
+####  [`jinaai/jina-embeddings-v4`](https://huggingface.co/jinaai/jina-embeddings-v4)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 2.0K | 3.8B | 7.3 GB | 2025-06-24 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+####  [`microsoft/LLM2CLIP-Openai-B-16`](https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| not specified | 1.3K | 361.0M | not specified | 2024-11-07 | eng-Latn |
+
+
+####  [`microsoft/LLM2CLIP-Openai-L-14-224`](https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| not specified | 1.3K | 578.0M | not specified | 2024-11-07 | eng-Latn |
+
+
+####  [`microsoft/LLM2CLIP-Openai-L-14-336`](https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| not specified | 1.3K | 579.0M | not specified | 2024-11-07 | eng-Latn |
+
+
+####  [`nomic-ai/colnomic-embed-multimodal-3b`](https://huggingface.co/nomic-ai/colnomic-embed-multimodal-3b)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 128.0K | 128 | 3.0B | 7.0 GB | 2025-03-31 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+####  [`nomic-ai/colnomic-embed-multimodal-7b`](https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 128.0K | 128 | 7.0B | 14.1 GB | 2025-03-31 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+####  [`nomic-ai/nomic-embed-vision-v1.5`](https://huggingface.co/nomic-ai/nomic-embed-vision-v1.5)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 768 | 92.9M | 355.0 MB | 2024-06-08 | eng-Latn |
+
+
+####  [`nvidia/llama-nemoretriever-colembed-1b-v1`](https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1)
+
+ **License:** https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 2.0K | 2.4B | 9.0 GB | 2025-06-27 | eng-Latn |
+
+
+####  [`nvidia/llama-nemoretriever-colembed-3b-v1`](https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1)
+
+ **License:** https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 3.1K | 4.4B | 16.4 GB | 2025-06-27 | eng-Latn |
+
+
+####  [`royokong/e5-v`](https://huggingface.co/royokong/e5-v)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 8.4B | 15.6 GB | 2024-07-17 | eng-Latn |
+
+
+####  [`vidore/colSmol-256M`](https://huggingface.co/vidore/colSmol-256M)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 128 | 256.0M | 800.0 MB | 2025-01-22 | eng-Latn |
+
+
+####  [`vidore/colSmol-500M`](https://huggingface.co/vidore/colSmol-500M)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 128 | 500.0M | 1.2 GB | 2025-01-22 | eng-Latn |
+
+
+####  [`vidore/colpali-v1.1`](https://huggingface.co/vidore/colpali-v1.1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.4K | 128 | 2.9B | 4.6 GB | 2024-08-21 | eng-Latn |
+
+
+####  [`vidore/colpali-v1.2`](https://huggingface.co/vidore/colpali-v1.2)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.4K | 128 | 2.9B | 4.6 GB | 2024-08-26 | eng-Latn |
+
+
+####  [`vidore/colpali-v1.3`](https://huggingface.co/vidore/colpali-v1.3)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.4K | 128 | 2.9B | 4.6 GB | 2024-11-01 | eng-Latn |
+
+
+####  [`vidore/colqwen2-v1.0`](https://huggingface.co/vidore/colqwen2-v1.0)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 128 | 2.2B | 7.0 GB | 2025-11-03 | eng-Latn |
+
+
+####  [`vidore/colqwen2.5-v0.2`](https://huggingface.co/vidore/colqwen2.5-v0.2)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 128.0K | 128 | 3.0B | 7.0 GB | 2025-01-31 | eng-Latn |
+
 ## Non-instruction Model
 
 ####  [`BAAI/bge-visualized-base`](https://huggingface.co/BAAI/bge-visualized)

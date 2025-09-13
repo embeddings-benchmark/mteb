@@ -4,6 +4,2052 @@
 
 - **Number of models:** 204 
 
+## Instruction Model
+
+####  [`Alibaba-NLP/gte-Qwen1.5-7B-instruct`](https://huggingface.co/Alibaba-NLP/gte-Qwen1.5-7B-instruct)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.7B | 28.8 GB | 2024-04-20 | eng-Latn |
+
+
+####  [`Alibaba-NLP/gte-Qwen2-1.5B-instruct`](https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 9.0K | 1.8B | 6.6 GB | 2024-07-29 | eng-Latn |
+
+
+####  [`Alibaba-NLP/gte-Qwen2-7B-instruct`](https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 3.6K | 7.6B | 28.4 GB | 2024-06-15 | not specified |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{li2023towards,
+      title={Towards general text embeddings with multi-stage contrastive learning},
+      author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+      journal={arXiv preprint arXiv:2308.03281},
+      year={2023}
+    }
+    
+    ```
+    
+
+
+
+####  [`BAAI/bge-base-en`](https://huggingface.co/BAAI/bge-base-en)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 390.0 MB | 2023-08-05 | eng-Latn |
+
+
+####  [`BAAI/bge-base-en-v1.5`](https://huggingface.co/BAAI/bge-base-en-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 390.0 MB | 2023-09-11 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{bge_embedding,
+          title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+          author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+          year={2023},
+          eprint={2309.07597},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    ```
+    
+
+
+
+####  [`BAAI/bge-base-zh`](https://huggingface.co/BAAI/bge-base-zh)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 390.0 MB | 2023-08-05 | zho-Hans |
+
+
+####  [`BAAI/bge-base-zh-v1.5`](https://huggingface.co/BAAI/bge-base-zh-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 416.0 MB | 2023-09-11 | zho-Hans |
+
+
+####  [`BAAI/bge-large-en`](https://huggingface.co/BAAI/bge-large-en)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2023-08-05 | eng-Latn |
+
+
+####  [`BAAI/bge-large-en-v1.5`](https://huggingface.co/BAAI/bge-large-en-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2023-09-12 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{bge_embedding,
+          title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+          author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+          year={2023},
+          eprint={2309.07597},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    ```
+    
+
+
+
+####  [`BAAI/bge-large-zh`](https://huggingface.co/BAAI/bge-large-zh)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2023-08-02 | zho-Hans |
+
+
+####  [`BAAI/bge-large-zh-v1.5`](https://huggingface.co/BAAI/bge-large-zh-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2023-09-12 | zho-Hans |
+
+
+####  [`BAAI/bge-small-en`](https://huggingface.co/BAAI/bge-small-en)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 512 | 33.4M | 127.0 MB | 2023-08-05 | eng-Latn |
+
+
+####  [`BAAI/bge-small-en-v1.5`](https://huggingface.co/BAAI/bge-small-en-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 512 | 33.4M | 127.0 MB | 2023-09-12 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{bge_embedding,
+          title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+          author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+          year={2023},
+          eprint={2309.07597},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    ```
+    
+
+
+
+####  [`BAAI/bge-small-zh`](https://huggingface.co/BAAI/bge-small-zh)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 512 | 33.4M | 127.0 MB | 2023-08-05 | zho-Hans |
+
+
+####  [`BAAI/bge-small-zh-v1.5`](https://huggingface.co/BAAI/bge-small-zh-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 512 | 33.4M | 91.0 MB | 2023-09-12 | zho-Hans |
+
+
+####  [`BeastyZ/e5-R-mistral-7b`](https://huggingface.co/BeastyZ/e5-R-mistral-7b)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.2B | 27.0 GB | 2024-06-28 | eng-Latn |
+
+
+####  [`ByteDance-Seed/Seed1.5-Embedding`](https://seed1-5-embedding.github.io/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 2.0K | not specified | not specified | 2025-04-25 | eng-Latn, zho-Hans |
+
+
+####  [`Bytedance/Seed1.6-embedding`](https://seed1-6-embedding.github.io/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 2.0K | not specified | not specified | 2025-06-18 | eng-Latn, zho-Hans |
+
+
+####  [`Cohere/Cohere-embed-english-light-v3.0`](https://cohere.com/blog/introducing-embed-v3)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | not specified | not specified | 2023-11-02 | eng-Latn |
+
+
+####  [`Cohere/Cohere-embed-english-v3.0`](https://cohere.com/blog/introducing-embed-v3)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | not specified | not specified | 2023-11-02 | eng-Latn |
+
+
+####  [`Cohere/Cohere-embed-multilingual-light-v3.0`](https://cohere.com/blog/introducing-embed-v3)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | not specified | not specified | 2023-11-02 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (109) |
+
+
+####  [`Cohere/Cohere-embed-multilingual-v3.0`](https://cohere.com/blog/introducing-embed-v3)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| not specified | 512 | not specified | not specified | 2023-11-02 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (109) |
+
+
+####  [`GeoGPT-Research-Project/GeoEmbedding`](https://huggingface.co/GeoGPT-Research-Project/GeoEmbedding)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.2B | 27.0 GB | 2025-04-22 | eng-Latn |
+
+
+####  [`GritLM/GritLM-7B`](https://huggingface.co/GritLM/GritLM-7B)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 4.1K | 7.2B | 13.5 GB | 2024-02-15 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{muennighoff2024generative,
+          title={Generative Representational Instruction Tuning},
+          author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
+          year={2024},
+          eprint={2402.09906},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    
+    ```
+    
+
+
+
+####  [`GritLM/GritLM-8x7B`](https://huggingface.co/GritLM/GritLM-8x7B)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 4.1K | 57.9B | 87.0 GB | 2024-02-15 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{muennighoff2024generative,
+          title={Generative Representational Instruction Tuning},
+          author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
+          year={2024},
+          eprint={2402.09906},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    
+    ```
+    
+
+
+
+####  [`HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1`](https://huggingface.co/HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 896 | 494.0M | 1.8 GB | 2024-10-23 | eng-Latn, zho-Hans |
+
+
+####  [`HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5`](https://huggingface.co/HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 896 | 494.0M | 1.8 GB | 2024-12-26 | eng-Latn, zho-Hans |
+
+
+####  [`HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2`](https://huggingface.co/HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 896 | 494.0M | 942.0 MB | 2025-06-25 | eng-Latn, zho-Hans |
+
+
+####  [`Kingsoft-LLM/QZhou-Embedding`](https://huggingface.co/Kingsoft-LLM/QZhou-Embedding)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 3.6K | 7.1B | 28.4 GB | 2025-08-24 | eng-Latn, zho-Hans |
+
+
+####  [`Linq-AI-Research/Linq-Embed-Mistral`](https://huggingface.co/Linq-AI-Research/Linq-Embed-Mistral)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 13.2 GB | 2024-05-29 | eng-Latn |
+
+
+####  [`McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised`](https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse`](https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised`](https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 7.5B | 28.0 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse`](https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 7.5B | 28.0 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised`](https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse`](https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised`](https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse`](https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2024-04-09 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{behnamghader2024llm2veclargelanguagemodels,
+          title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+          author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+          year={2024},
+          eprint={2404.05961},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2404.05961},
+    }
+    ```
+    
+
+
+
+####  [`MongoDB/mdbr-leaf-ir`](https://huggingface.co/MongoDB/mdbr-leaf-ir)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 22.9M | 86.0 MB | 2025-08-27 | eng-Latn |
+
+
+####  [`MongoDB/mdbr-leaf-mt`](https://huggingface.co/MongoDB/mdbr-leaf-mt)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 23.0M | 86.0 MB | 2025-08-27 | eng-Latn |
+
+
+####  [`NovaSearch/jasper_en_vision_language_v1`](https://huggingface.co/infgrad/jasper_en_vision_language_v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 131.1K | 9.0K | 2.0B | 3.7 GB | 2024-12-11 | eng-Latn |
+
+
+####  [`NovaSearch/stella_en_1.5B_v5`](https://huggingface.co/NovaSearch/stella_en_1.5B_v5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 131.1K | 9.0K | 1.5B | 5.7 GB | 2024-07-12 | eng-Latn |
+
+
+####  [`NovaSearch/stella_en_400M_v5`](https://huggingface.co/NovaSearch/stella_en_400M_v5)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 435.0M | 1.6 GB | 2024-07-12 | eng-Latn |
+
+
+####  [`Qwen/Qwen3-Embedding-0.6B`](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 1.0K | 595.8M | 2.2 GB | 2025-06-05 | afr-Latn, ara-Arab, aze-Latn, bel-Cyrl, ben-Beng, ... (71) |
+
+
+####  [`Qwen/Qwen3-Embedding-4B`](https://huggingface.co/Qwen/Qwen3-Embedding-4B)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 2.6K | 4.0B | 15.0 GB | 2025-06-05 | afr-Latn, ara-Arab, aze-Latn, bel-Cyrl, ben-Beng, ... (71) |
+
+
+####  [`Qwen/Qwen3-Embedding-8B`](https://huggingface.co/Qwen/Qwen3-Embedding-8B)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.6B | 28.2 GB | 2025-06-05 | afr-Latn, ara-Arab, aze-Latn, bel-Cyrl, ben-Beng, ... (71) |
+
+
+####  [`Sailesh97/Hinvec`](https://huggingface.co/Sailesh97/Hinvec)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 2.0K | 939.6M | 3.6 GB | 2025-06-19 | eng-Latn, hin-Deva |
+
+
+####  [`Salesforce/SFR-Embedding-2_R`](https://huggingface.co/Salesforce/SFR-Embedding-2_R)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 13.2 GB | 2024-06-14 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{SFR-embedding-2,
+          title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
+          author={Rui Meng*, Ye Liu*, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
+          year={2024},
+          url={https://huggingface.co/Salesforce/SFR-Embedding-2_R}
+        }
+        
+    ```
+    
+
+
+
+####  [`Salesforce/SFR-Embedding-Code-2B_R`](https://huggingface.co/Salesforce/SFR-Embedding-Code-2B_R)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 2.3K | 2.6B | 4.9 GB | 2025-01-17 | eng-Latn |
+
+
+####  [`Salesforce/SFR-Embedding-Mistral`](https://huggingface.co/Salesforce/SFR-Embedding-Mistral)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 13.2 GB | 2024-01-24 | eng-Latn |
+
+
+####  [`SamilPwC-AXNode-GenAI/PwC-Embedding_expr`](https://huggingface.co/SamilPwC-AXNode-GenAI/PwC-Embedding_expr)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 514.0 | 1.0K | 560.0M | 2.1 GB | 2025-08-12 | kor-Hang |
+
+
+####  [`Snowflake/snowflake-arctic-embed-l`](https://huggingface.co/Snowflake/snowflake-arctic-embed-l)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2024-04-12 | eng-Latn |
+
+
+####  [`Snowflake/snowflake-arctic-embed-l-v2.0`](https://huggingface.co/Snowflake/snowflake-arctic-embed-l-v2.0)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 1.0K | 568.0M | 2.1 GB | 2024-12-04 | afr-Latn, ara-Arab, aze-Latn, bel-Cyrl, ben-Beng, ... (74) |
+
+
+####  [`Snowflake/snowflake-arctic-embed-m`](https://huggingface.co/Snowflake/snowflake-arctic-embed-m)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 415.0 MB | 2024-04-12 | eng-Latn |
+
+
+####  [`Snowflake/snowflake-arctic-embed-m-long`](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-long)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 768 | 137.0M | 522.0 MB | 2024-04-12 | eng-Latn |
+
+
+####  [`Snowflake/snowflake-arctic-embed-m-v1.5`](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 415.0 MB | 2024-07-08 | eng-Latn |
+
+
+####  [`Snowflake/snowflake-arctic-embed-m-v2.0`](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v2.0)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | 305.0M | 1.1 GB | 2024-12-04 | afr-Latn, ara-Arab, aze-Latn, bel-Cyrl, ben-Beng, ... (74) |
+
+
+####  [`Snowflake/snowflake-arctic-embed-s`](https://huggingface.co/Snowflake/snowflake-arctic-embed-s)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | 32.2M | 127.0 MB | 2024-04-12 | eng-Latn |
+
+
+####  [`Snowflake/snowflake-arctic-embed-xs`](https://huggingface.co/Snowflake/snowflake-arctic-embed-xs)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | 22.6M | 86.0 MB | 2024-07-08 | eng-Latn |
+
+
+####  [`TencentBAC/Conan-embedding-v2`](https://huggingface.co/TencentBAC/Conan-embedding-v2)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 3.6K | not specified | not specified | 2025-04-10 | eng-Latn, zho-Hans |
+
+
+####  [`VPLabs/SearchMap_Preview`](https://huggingface.co/VPLabs/SearchMap_Preview)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 435.0M | 1.6 GB | 2025-03-05 | eng-Latn |
+
+
+####  [`WhereIsAI/UAE-Large-V1`](https://huggingface.co/WhereIsAI/UAE-Large-V1)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2023-12-04 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @article{li2023angle,
+          title={AnglE-optimized Text Embeddings},
+          author={Li, Xianming and Li, Jing},
+          journal={arXiv preprint arXiv:2309.12871},
+          year={2023}
+        }
+        
+    ```
+    
+
+
+
+####  [`Youtu-RAG/CoDi-Embedding-V1`](https://huggingface.co/Youtu-RAG/CoDi-Embedding-V1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 2.3K | 2.7B | not specified | 2025-08-20 | zho-Hans |
+
+
+####  [`ai-forever/FRIDA`](https://huggingface.co/ai-forever/FRIDA)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.5K | 823.0M | 3.1 GB | 2024-12-29 | rus-Cyrl |
+
+
+####  [`ai-forever/ru-en-RoSBERTa`](https://huggingface.co/ai-forever/ru-en-RoSBERTa)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 404.0M | 1.5 GB | 2024-07-29 | rus-Cyrl |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+          title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
+          author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+          year={2024},
+          eprint={2408.12503},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2408.12503},
+        }
+        
+    ```
+    
+
+
+
+####  [`ai-sage/Giga-Embeddings-instruct`](https://huggingface.co/ai-sage/Giga-Embeddings-instruct)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 2.0K | 2.5B | 9.4 GB | 2024-12-13 | eng-Latn, rus-Cyrl |
+
+
+####  [`annamodels/LGAI-Embedding-Preview`](https://huggingface.co/annamodels/LGAI-Embedding-Preview)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2025-06-11 | eng-Latn |
+
+
+####  [`bchoiced/CHAIN19`](https://huggingface.co/bchoiced/CHAIN19)
+
+ **License:** cc-by-sa-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 26.5 GB | 2025-05-07 | eng-Latn |
+
+
+####  [`bedrock/cohere-embed-english-v3`](https://cohere.com/blog/introducing-embed-v3)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | not specified | not specified | 2023-11-02 | eng-Latn |
+
+
+####  [`bedrock/cohere-embed-multilingual-v3`](https://cohere.com/blog/introducing-embed-v3)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | not specified | not specified | 2023-11-02 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (109) |
+
+
+####  [`castorini/repllama-v1-7b-lora-passage`](https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 4.1K | 7.0M | 27.0 MB | 2023-10-11 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{rankllama,
+          title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+          author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
+          year={2023},
+          journal={arXiv:2310.08319},
+    }
+    
+    ```
+    
+
+
+
+####  [`deepvk/USER-base`](https://huggingface.co/deepvk/USER-base)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 427.0M | 473.0 MB | 2024-06-10 | rus-Cyrl |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{deepvk2024user,
+            title={USER: Universal Sentence Encoder for Russian},
+            author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
+            url={https://huggingface.co/datasets/deepvk/USER-base},
+            publisher={Hugging Face}
+            year={2024},
+        }
+        
+    ```
+    
+
+
+
+####  [`deepvk/USER2-base`](https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | 149.0M | 568.0 MB | 2025-04-19 | rus-Cyrl |
+
+
+####  [`deepvk/USER2-small`](https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 384 | 34.4M | 131.0 MB | 2025-04-19 | rus-Cyrl |
+
+
+####  [`google/gemini-embedding-001`](https://ai.google.dev/gemini-api/docs/embeddings)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 3.1K | not specified | not specified | 2025-03-07 | arb-Arab, ben-Beng, deu-Latn, eng-Latn, fin-Latn, ... (19) |
+
+
+####  [`google/text-embedding-004`](https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 768 | not specified | not specified | 2024-05-14 | eng-Latn |
+
+
+####  [`google/text-embedding-005`](https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 768 | not specified | not specified | 2024-11-18 | eng-Latn |
+
+
+####  [`google/text-multilingual-embedding-002`](https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 768 | not specified | not specified | 2024-05-14 | arb-Arab, ben-Beng, deu-Latn, eng-Latn, fin-Latn, ... (19) |
+
+
+####  [`infly/inf-retriever-v1`](https://huggingface.co/infly/inf-retriever-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 3.6K | 7.1B | 13.2 GB | 2024-12-24 | eng-Latn, zho-Hans |
+
+
+####  [`infly/inf-retriever-v1-1.5b`](https://huggingface.co/infly/inf-retriever-v1-1.5b)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 1.5K | 1.5B | 2.9 GB | 2025-02-08 | eng-Latn, zho-Hans |
+
+
+####  [`intfloat/e5-base`](https://huggingface.co/intfloat/e5-base)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 418.0 MB | 2022-12-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/e5-base-v2`](https://huggingface.co/intfloat/e5-base-v2)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 418.0 MB | 2024-02-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/e5-large`](https://huggingface.co/intfloat/e5-large)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 1.2 GB | 2022-12-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/e5-large-v2`](https://huggingface.co/intfloat/e5-large-v2)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 514.0 | 1.0K | 335.0M | 1.2 GB | 2024-02-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/e5-mistral-7b-instruct`](https://huggingface.co/intfloat/e5-mistral-7b-instruct)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 13.2 GB | 2024-02-08 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @article{wang2023improving,
+          title={Improving Text Embeddings with Large Language Models},
+          author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+          journal={arXiv preprint arXiv:2401.00368},
+          year={2023}
+        }
+    
+        @article{wang2022text,
+          title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+          author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+          journal={arXiv preprint arXiv:2212.03533},
+          year={2022}
+        }
+        
+    ```
+    
+
+
+
+####  [`intfloat/e5-small`](https://huggingface.co/intfloat/e5-small)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | 33.0M | 127.0 MB | 2024-02-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/e5-small-v2`](https://huggingface.co/intfloat/e5-small-v2)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | 33.0M | 127.0 MB | 2024-02-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/multilingual-e5-base`](https://huggingface.co/intfloat/multilingual-e5-base)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 514.0 | 768 | 278.0M | 1.0 GB | 2024-02-08 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2024multilingual,
+      title={Multilingual E5 Text Embeddings: A Technical Report},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2402.05672},
+      year={2024}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/multilingual-e5-large`](https://huggingface.co/intfloat/multilingual-e5-large)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 514.0 | 1.0K | 560.0M | 2.1 GB | 2024-02-08 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2024multilingual,
+      title={Multilingual E5 Text Embeddings: A Technical Report},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2402.05672},
+      year={2024}
+    }
+    
+    ```
+    
+
+
+
+####  [`intfloat/multilingual-e5-large-instruct`](https://huggingface.co/intfloat/multilingual-e5-large-instruct)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 514.0 | 1.0K | 560.0M | 1.0 GB | 2024-02-08 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{wang2024multilingual,
+          title={Multilingual E5 Text Embeddings: A Technical Report},
+          author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+          journal={arXiv preprint arXiv:2402.05672},
+          year={2024}
+        }
+    ```
+    
+
+
+
+####  [`intfloat/multilingual-e5-small`](https://huggingface.co/intfloat/multilingual-e5-small)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | 118.0M | 449.0 MB | 2024-02-08 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{wang2024multilingual,
+      title={Multilingual E5 Text Embeddings: A Technical Report},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2402.05672},
+      year={2024}
+    }
+    
+    ```
+    
+
+
+
+####  [`jinaai/jina-embeddings-v3`](https://huggingface.co/jinaai/jina-embeddings-v3)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 1.0K | 572.0M | 1.1 GB | 2024-09-18 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
+          title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA},
+          author={Saba Sturua and Isabelle Mohr and Mohammad Kalim Akram and Michael Günther and Bo Wang and Markus Krimmel and Feng Wang and Georgios Mastrapas and Andreas Koukounas and Andreas Koukounas and Nan Wang and Han Xiao},
+          year={2024},
+          eprint={2409.10173},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={https://arxiv.org/abs/2409.10173},
+        }
+        
+    ```
+    
+
+
+
+####  [`jxm/cde-small-v1`](https://huggingface.co/jxm/cde-small-v1)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 281.0M | 1.0 GB | 2024-09-24 | eng-Latn |
+
+
+####  [`jxm/cde-small-v2`](https://huggingface.co/jxm/cde-small-v1)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 306.0M | 1.1 GB | 2025-01-13 | eng-Latn |
+
+
+####  [`llamaindex/vdr-2b-multi-v1`](https://huggingface.co/llamaindex/vdr-2b-multi-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 1.5K | 2.0B | 4.1 GB | 2024-01-08 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+####  [`manveertamber/cadet-embed-base-v1`](https://huggingface.co/manveertamber/cadet-embed-base-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 109.0M | 418.0 MB | 2025-05-11 | eng-Latn |
+
+
+####  [`mixedbread-ai/mxbai-embed-2d-large-v1`](https://huggingface.co/mixedbread-ai/mxbai-embed-2d-large-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 335.0M | not specified | 2024-03-04 | eng-Latn |
+
+
+####  [`mixedbread-ai/mxbai-embed-large-v1`](https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 1.0K | 335.0M | 639.0 MB | 2024-03-07 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+        @online{emb2024mxbai,
+          title={Open Source Strikes Bread - New Fluffy Embeddings Model},
+          author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
+          year={2024},
+          url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
+        }
+    
+        @article{li2023angle,
+          title={AnglE-optimized Text Embeddings},
+          author={Li, Xianming and Li, Jing},
+          journal={arXiv preprint arXiv:2309.12871},
+          year={2023}
+        }
+        
+    ```
+    
+
+
+
+####  [`mixedbread-ai/mxbai-embed-xsmall-v1`](https://huggingface.co/mixedbread-ai/mxbai-embed-xsmall-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 384 | 24.1M | not specified | 2024-08-13 | eng-Latn |
+
+
+####  [`nomic-ai/modernbert-embed-base`](https://huggingface.co/nomic-ai/modernbert-embed-base)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | 149.0M | 568.0 MB | 2024-12-29 | eng-Latn |
+
+
+####  [`nomic-ai/nomic-embed-text-v1`](https://huggingface.co/nomic-ai/nomic-embed-text-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | not specified | 522.0 MB | 2024-01-31 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{nussbaum2024nomic,
+          title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
+          author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
+          year={2024},
+          eprint={2402.01613},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    
+    ```
+    
+
+
+
+####  [`nomic-ai/nomic-embed-text-v1-ablated`](https://huggingface.co/nomic-ai/nomic-embed-text-v1-ablated)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | not specified | not specified | 2024-01-15 | eng-Latn |
+
+
+####  [`nomic-ai/nomic-embed-text-v1-unsupervised`](https://huggingface.co/nomic-ai/nomic-embed-text-v1-unsupervised)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | not specified | not specified | 2024-01-15 | eng-Latn |
+
+
+####  [`nomic-ai/nomic-embed-text-v1.5`](https://huggingface.co/nomic-ai/nomic-embed-text-v1.5)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 768 | 137.0M | 522.0 MB | 2024-02-10 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{nussbaum2024nomic,
+          title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
+          author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
+          year={2024},
+          eprint={2402.01613},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    
+    ```
+    
+
+
+
+####  [`nvidia/NV-Embed-v1`](https://huggingface.co/nvidia/NV-Embed-v1)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.8B | 29.2 GB | 2024-09-13 | eng-Latn |
+
+
+####  [`nvidia/NV-Embed-v2`](https://huggingface.co/nvidia/NV-Embed-v2)
+
+ **License:** cc-by-nc-4.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.8B | 14.6 GB | 2024-09-09 | eng-Latn |
+
+
+####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v1`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 30.5K | 133.0M | 507.0 MB | 2024-03-07 | eng-Latn |
+
+
+####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v2-distill)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 30.5K | 67.0M | 267.0 MB | 2024-07-17 | eng-Latn |
+
+
+####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v2-mini)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 30.5K | 22.7M | 86.0 MB | 2024-07-18 | eng-Latn |
+
+
+####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 30.5K | 67.0M | 267.0 MB | 2025-03-28 | eng-Latn |
+
+
+####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v3-gte)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 30.5K | 137.4M | 549.0 MB | 2025-06-18 | eng-Latn |
+
+
+####  [`samaya-ai/RepLLaMA-reproduced`](https://huggingface.co/samaya-ai/RepLLaMA-reproduced)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 4.1K | 7.0M | 27.0 MB | 2024-09-15 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{rankllama,
+          title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+          author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
+          year={2023},
+          journal={arXiv:2310.08319},
+    }
+    
+    ```
+    
+
+
+
+####  [`samaya-ai/promptriever-llama2-7b-v1`](https://huggingface.co/samaya-ai/promptriever-llama2-7b-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 4.1K | 7.0B | 27.0 MB | 2024-09-15 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{weller2024promptriever,
+          title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
+          author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
+          year={2024},
+          eprint={2409.11136},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2409.11136},
+    }
+    
+    ```
+    
+
+
+
+####  [`samaya-ai/promptriever-llama3.1-8b-instruct-v1`](https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-instruct-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 8.0B | 31.0 MB | 2024-09-15 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{weller2024promptriever,
+          title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
+          author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
+          year={2024},
+          eprint={2409.11136},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2409.11136},
+    }
+    
+    ```
+    
+
+
+
+####  [`samaya-ai/promptriever-llama3.1-8b-v1`](https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 8.2K | 4.1K | 8.0B | 31.0 MB | 2024-09-15 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{weller2024promptriever,
+          title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
+          author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
+          year={2024},
+          eprint={2409.11136},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2409.11136},
+    }
+    
+    ```
+    
+
+
+
+####  [`samaya-ai/promptriever-mistral-v0.1-7b-v1`](https://huggingface.co/samaya-ai/promptriever-mistral-v0.1-7b-v1)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.1K | 4.1K | 7.0B | 27.0 MB | 2024-09-15 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{weller2024promptriever,
+          title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
+          author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
+          year={2024},
+          eprint={2409.11136},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2409.11136},
+    }
+    
+    ```
+    
+
+
+
+####  [`sergeyzh/BERTA`](https://huggingface.co/sergeyzh/BERTA)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 512.0 | 768 | 128.0M | 489.0 MB | 2025-03-10 | rus-Cyrl |
+
+
+####  [`sergeyzh/rubert-mini-frida`](https://huggingface.co/sergeyzh/rubert-mini-frida)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 2.0K | 312 | 32.3M | 123.0 MB | 2025-03-02 | rus-Cyrl |
+
+
+####  [`voyageai/voyage-2`](https://blog.voyageai.com/2023/10/29/voyage-embeddings/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 4.0K | 1.0K | not specified | not specified | 2023-10-29 | not specified |
+
+
+####  [`voyageai/voyage-3`](https://blog.voyageai.com/2024/09/18/voyage-3/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 1.0K | not specified | not specified | 2024-09-18 | not specified |
+
+
+####  [`voyageai/voyage-3-lite`](https://blog.voyageai.com/2024/09/18/voyage-3/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 512 | not specified | not specified | 2024-09-18 | not specified |
+
+
+####  [`voyageai/voyage-3-m-exp`](https://huggingface.co/voyageai/voyage-3-m-exp)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 2.0K | 6.9B | not specified | 2025-01-08 | eng-Latn |
+
+
+####  [`voyageai/voyage-3.5`](https://docs.voyageai.com/docs/embeddings)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 1.0K | not specified | not specified | 2025-01-21 | not specified |
+
+
+####  [`voyageai/voyage-code-2`](https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.0K | 1.5K | not specified | not specified | 2024-01-23 | not specified |
+
+
+####  [`voyageai/voyage-code-3`](https://blog.voyageai.com/2024/12/04/voyage-code-3/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 1.0K | not specified | not specified | 2024-12-04 | not specified |
+
+
+####  [`voyageai/voyage-finance-2`](https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 1.0K | not specified | not specified | 2024-05-30 | not specified |
+
+
+####  [`voyageai/voyage-large-2`](https://blog.voyageai.com/2023/10/29/voyage-embeddings/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.0K | 1.5K | not specified | not specified | 2023-10-29 | not specified |
+
+
+####  [`voyageai/voyage-large-2-instruct`](https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.0K | 1.0K | not specified | not specified | 2024-05-05 | not specified |
+
+
+####  [`voyageai/voyage-law-2`](https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 16.0K | 1.0K | not specified | not specified | 2024-04-15 | not specified |
+
+
+####  [`voyageai/voyage-multilingual-2`](https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/)
+
+ **License:** not specified 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.0K | 1.0K | not specified | not specified | 2024-06-10 | not specified |
+
+
+####  [`yibinlei/LENS-d4000`](https://huggingface.co/yibinlei/LENS-d4000)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.0K | 7.1B | 26.5 GB | 2025-01-17 | not specified |
+
+
+####  [`yibinlei/LENS-d8000`](https://huggingface.co/yibinlei/LENS-d8000)
+
+ **License:** apache-2.0 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 8.0K | 7.1B | 26.5 GB | 2025-01-17 | not specified |
+
+
+####  [`zeta-alpha-ai/Zeta-Alpha-E5-Mistral`](https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral)
+
+ **License:** mit 
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.1B | 13.2 GB | 2024-08-30 | eng-Latn |
+
 ## Non-instruction Model
 
 ####  [`AITeamVN/Vietnamese_Embedding`](https://huggingface.co/AITeamVN/Vietnamese_Embedding)

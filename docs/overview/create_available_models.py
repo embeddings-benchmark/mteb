@@ -156,13 +156,14 @@ def main(folder: Path) -> None:
             ].append(meta)
 
     for model_modalities, model_dict in model_mod2models.items():
+        md = ""
         for instruction, metas in model_dict.items():
+            _model_entries = ""
             if not metas:
                 continue
-            _model_entries = ""
             for meta in sorted(metas, key=lambda m: m.name):
                 _model_entries += format_model_entry(meta) + "\n"
-            md = h2_header.format(
+            md += h2_header.format(
                 instruction_based=instruction,
                 models_md=_model_entries.strip(),
             )
