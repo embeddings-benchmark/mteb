@@ -36,7 +36,7 @@ class SummarizationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **kwargs,
-    ):
+    ) -> None:
         """Summarization Evaluator
 
         Args:
@@ -63,7 +63,7 @@ class SummarizationEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
-    ):
+    ) -> dict[str, float]:
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []
@@ -196,7 +196,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         hf_split: str | None = None,
         hf_subset: str | None = None,
         **kwargs,
-    ):
+    ) -> None:
         # human_summaries shape: (None, num_human_summaries)
         # machine_summaries shape: (None, num_machine_summaries)
         # gold scores shape: (None, num_machine_summaries)
@@ -220,7 +220,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
-    ):
+    ) -> dict[str, float]:
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []

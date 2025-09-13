@@ -52,7 +52,7 @@ class LinearRegressionEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.regressor = regressor
 
-    def __call__(
+    def __call__(  # type: ignore[override]
         self,
         model: Encoder,
         *,

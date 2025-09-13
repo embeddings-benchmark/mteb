@@ -30,7 +30,7 @@ class BitextMiningEvaluator(Evaluator):
         hf_subset: str,
         pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.pairs = pair_columns
         self.n = len(sentences)
@@ -45,11 +45,15 @@ class BitextMiningEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+    ) -> dict[str, float]:
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
         return scores
 
-    def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any]):
+    def compute_metrics(
+        self, model: Encoder, encode_kwargs: dict[str, Any]
+    ) -> dict[str, float]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [

@@ -49,7 +49,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.sentences1 = sentences1
         self.sentences2 = sentences2
@@ -67,7 +67,7 @@ class PairClassificationEvaluator(Evaluator):
         self,
         model: Encoder,
         encode_kwargs: dict[str, Any],
-    ):
+    ) -> dict[str, float]:
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
 
         # Main score is the max of Average Precision (AP)
@@ -83,7 +83,7 @@ class PairClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **encode_kwargs: Any,
-    ):
+    ) -> np.ndarray:
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
         for text in all_texts:
             text_hash = hash(text)
@@ -110,7 +110,7 @@ class PairClassificationEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
-    ):
+    ) -> dict[str, float]:
         all_sentences = self.sentences1 + self.sentences2
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
@@ -215,7 +215,9 @@ class PairClassificationEvaluator(Evaluator):
         }
 
     @staticmethod
-    def find_best_acc_and_threshold(scores, labels, high_score_more_similar: bool):
+    def find_best_acc_and_threshold(
+        scores: np.ndarray, labels: np.ndarray, high_score_more_similar: bool
+    ) -> tuple[float, float]:
         assert len(scores) == len(labels)
         rows = list(zip(scores, labels))
 
@@ -242,7 +244,9 @@ class PairClassificationEvaluator(Evaluator):
         return max_acc, best_threshold
 
     @staticmethod
-    def find_best_f1_and_threshold(scores, labels, high_score_more_similar: bool):
+    def find_best_f1_and_threshold(
+        scores, labels, high_score_more_similar: bool
+    ) -> tuple[float, float, float, float]:
         assert len(scores) == len(labels)
 
         scores = np.asarray(scores)
@@ -278,7 +282,7 @@ class PairClassificationEvaluator(Evaluator):
         return best_f1, best_precision, best_recall, threshold
 
     @staticmethod
-    def ap_score(scores, labels, high_score_more_similar: bool):
+    def ap_score(scores, labels, high_score_more_similar: bool) -> float:
         return average_precision_score(
             labels, scores * (1 if high_score_more_similar else -1)
         )

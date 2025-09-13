@@ -8,9 +8,9 @@ from datasets import Dataset
 from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
-    DescriptiveStatistics,
     ImageStatistics,
     LabelStatistics,
+    SplitDescriptiveStatistics,
     TextStatistics,
 )
 
@@ -25,7 +25,7 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-class ZeroShotClassificationDescriptiveStatistics(DescriptiveStatistics):
+class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for ZeroShotClassification
 
     Attributes:
@@ -59,12 +59,6 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
 
     input_column_name: str = "image"
     label_column_name: str = "label"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
@@ -106,7 +100,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: Dataset,
+        data_split: Dataset,
         *,
         hf_split: str,
         hf_subset: str,
@@ -115,7 +109,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
     ) -> ScoresDict:
         candidate_labels = self.get_candidate_labels()
         evaluator = ZeroShotClassificationEvaluator(
-            dataset,
+            data_split,
             self.input_column_name,
             self.label_column_name,
             candidate_labels,

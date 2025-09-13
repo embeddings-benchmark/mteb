@@ -111,13 +111,13 @@ class ClassificationEvaluator(Evaluator):
             )
         return scores
 
-    def __call__(
+    def __call__(  # type: ignore[override]
         self,
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
-    ) -> tuple[dict[str, float], Any]:
+    ) -> tuple[dict[str, float], np.ndarray | None]:
         dataloader_train, dataloader_test = self.create_dataloaders(
             batch_size=encode_kwargs["batch_size"]
         )

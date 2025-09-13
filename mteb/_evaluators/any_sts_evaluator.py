@@ -31,7 +31,7 @@ class AnySTSEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.first_column = create_dataloader(
             dataset,
@@ -53,7 +53,7 @@ class AnySTSEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
-    ):
+    ) -> dict[str, float]:
         embeddings1 = model.encode(
             self.first_column,
             task_metadata=self.task_metadata,

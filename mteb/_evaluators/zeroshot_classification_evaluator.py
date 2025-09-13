@@ -31,7 +31,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
 
         self.dataset = dataset
@@ -42,7 +42,9 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+    ) -> dict[str, float]:
         if "image" in self.task_metadata.modalities:
             dataloader = create_image_dataloader(
                 self.dataset,

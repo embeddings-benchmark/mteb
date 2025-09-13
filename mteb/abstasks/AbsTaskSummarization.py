@@ -9,7 +9,11 @@ from datasets import Dataset
 from mteb._evaluators import SummarizationEvaluator
 from mteb.models import Encoder
 from mteb.types import ScoresDict
-from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
+from mteb.types.statistics import (
+    ScoreStatistics,
+    SplitDescriptiveStatistics,
+    TextStatistics,
+)
 
 from ._statistics_calculation import (
     calculate_score_statistics,
@@ -20,7 +24,7 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-class SummarizationDescriptiveStatistics(DescriptiveStatistics):
+class SummarizationDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Summarization
 
     Attributes:
