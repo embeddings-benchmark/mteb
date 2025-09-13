@@ -5,9 +5,9 @@ from __future__ import annotations
 import difflib
 import logging
 from collections import Counter, defaultdict
+from typing import Any
 
 import pandas as pd
-from traitlets import Any
 
 from mteb.abstasks import (
     AbsTask,
