@@ -1,4 +1,3 @@
-# creates the documentation on pushes it to the gh-pages branch
 name: Documentation
 
 on:
