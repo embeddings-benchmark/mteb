@@ -11,8 +11,7 @@ class EnglishHealthcare1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/EnglishHealthcare1Retrieval-sample",
         dataset={
             "path": "mteb-private/EnglishHealthcare1Retrieval",
-            "revision": "b53788f68f96a5943d37acf13b81dc1a622f01e4",  # Updated with latest sample commit b53788f6
-            "trust_remote_code": True,
+            "revision": "393c24e85114d44c43259fb2d1c5639c5d09809d",  # Updated with latest commit 393c24e8
         },
         type="Retrieval",
         category="s2p",

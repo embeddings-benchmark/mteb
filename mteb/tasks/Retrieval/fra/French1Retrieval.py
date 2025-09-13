@@ -11,8 +11,7 @@ class French1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/French1Retrieval-sample",
         dataset={
             "path": "mteb-private/French1Retrieval",
-            "revision": "7368ec05665acd3edc8decb1e4067a77e29a16d9",  # Updated with latest sample commit 7368ec05
-            "trust_remote_code": True,
+            "revision": "c5c5a44f75dff57be44e5623e817239b050bf0f2",  # Updated with latest commit c5c5a44f
         },
         type="Retrieval",
         category="s2p",

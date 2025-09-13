@@ -11,8 +11,7 @@ class JapaneseLegal1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/JapaneseLegal1Retrieval-sample",
         dataset={
             "path": "mteb-private/JapaneseLegal1Retrieval",
-            "revision": "28f069180322c6abd8bacc683e263c0b3e6fd37e",  # Updated with latest sample commit 28f06918
-            "trust_remote_code": True,
+            "revision": "d653557fe66bb6af2b0e2adfc371a24554cf11ce",  # Updated with latest commit d653557f
         },
         type="Retrieval",
         category="s2p",

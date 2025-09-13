@@ -11,8 +11,7 @@ class Code1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/Code1Retrieval-sample",
         dataset={
             "path": "mteb-private/Code1Retrieval",
-            "revision": "90dd4fca74415023f2c9b944b2553b630a337666",  # Updated with latest sample commit 90dd4fca
-            "trust_remote_code": True,
+            "revision": "94d25599a7e0221484f31749448e5ea217484e41",  # Updated with latest commit 94d25599
         },
         type="Retrieval",
         category="s2p",
