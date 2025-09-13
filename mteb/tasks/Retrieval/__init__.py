@@ -15,6 +15,7 @@ from .code.CosQARetrieval import *
 from .code.DS1000Retrieval import *
 from .code.FreshStackRetrieval import *
 from .code.HumanEvalRetrieval import *
+from .code.JapaneseCode1Retrieval import *
 from .code.MBPPRetrieval import *
 from .code.StackOverflowQARetrieval import *
 from .code.SyntheticText2SqlRetrieval import *

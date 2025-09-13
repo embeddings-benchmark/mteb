@@ -6,6 +6,7 @@ from mteb.overview import get_task, get_tasks
 
 # List of accepted private tasks - update this list as needed
 ACCEPTED_PRIVATE_TASKS = [
+    "JapaneseCode1Retrieval",
     # Add task names here that are allowed to be private
     # Example: "SomePrivateTask"
 ]
@@ -31,6 +32,6 @@ def test_private_tasks_fail_unless_accepted():
 def test_accepted_private_task_exist(task_name: str):
     """Test that all tasks in ACCEPTED_PRIVATE_TASKS actually exist and are private."""
     task = get_task(task_name)
-    assert task.metadata.is_public == (
+    assert task.metadata.is_public is False, (
         f"Task '{task_name}' is in ACCEPTED_PRIVATE_TASKS but is not private (is_public={task.metadata.is_public})"
     )
