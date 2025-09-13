@@ -8,7 +8,6 @@ import torch
 import torch.nn.functional as F
 import tqdm
 from torch.utils.data import DataLoader
-from transformers import AutoModel, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -34,6 +33,8 @@ class RepLLaMAModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
+        from transformers import AutoModel, AutoTokenizer
+
         requires_package(
             self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
         )

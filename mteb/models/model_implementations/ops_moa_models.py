@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
@@ -9,7 +8,10 @@ from mteb.models.model_meta import ModelMeta
 
 class OPSWrapper(AbsEncoder):
     def __init__(self, model_name: str, revision: str):
+        from sentence_transformers import SentenceTransformer
+
         super().__init__()
+
         self.model = SentenceTransformer(
             model_name, revision=revision, trust_remote_code=True
         )

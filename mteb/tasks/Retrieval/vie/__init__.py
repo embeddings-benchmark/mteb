@@ -6,7 +6,7 @@ from .CQADupstackAndroidVNRetrieval import CQADupstackAndroidVN
 from .CQADupstackGisVNRetrieval import CQADupstackGisVN
 from .CQADupstackMathematicaVNRetrieval import CQADupstackMathematicaVN
 from .CQADupstackPhysicsVNRetrieval import CQADupstackPhysicsVN
-from .CQADupstackProgrammersVNRetrieval import CQADupstackProgrammersRetrieval
+from .CQADupstackProgrammersVNRetrieval import CQADupstackProgrammersRetrievalVN
 from .CQADupstackStatsVNRetrieval import CQADupstackStatsVN
 from .CQADupstackTexVNRetrieval import CQADupstackTexVN
 from .CQADupstackUnixVNRetrieval import CQADupstackUnixVN
@@ -34,7 +34,7 @@ __all__ = [
     "CQADupstackGisVN",
     "CQADupstackMathematicaVN",
     "CQADupstackPhysicsVN",
-    "CQADupstackProgrammersRetrieval",
+    "CQADupstackProgrammersRetrievalVN",
     "CQADupstackStatsVN",
     "CQADupstackTexVN",
     "CQADupstackUnixVN",

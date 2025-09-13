@@ -8,9 +8,8 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import sklearn
-import sklearn.cluster
 from datasets import Dataset, DatasetDict
+from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
 from torch.utils.data import DataLoader
 
@@ -68,7 +67,7 @@ def evaluate_clustering_bootstrapped(
         )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
-        clustering_model = sklearn.cluster.MiniBatchKMeans(
+        clustering_model = MiniBatchKMeans(
             n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",

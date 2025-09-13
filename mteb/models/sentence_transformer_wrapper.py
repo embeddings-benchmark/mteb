@@ -4,27 +4,23 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import sentence_transformers
 import torch
 from packaging.version import Version
-from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
 
+from mteb.models import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
     from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
-
-HAS_QUERY_ENCODE = (
-    Version(sentence_transformers.__version__).release
-    >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
-)
 
 
 def sentence_transformers_loader(
@@ -36,6 +32,8 @@ def sentence_transformers_loader(
 
 
 class SentenceTransformerEncoderWrapper(AbsEncoder):
+    mteb_model_meta: ModelMeta
+
     def __init__(
         self,
         model: str | SentenceTransformer,
@@ -54,19 +52,20 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
+        from sentence_transformers import SentenceTransformer
+
         if isinstance(model, str):
             self.model = SentenceTransformer(model, revision=revision, **kwargs)
-            from mteb.models.get_model_meta import (
-                _model_meta_from_sentence_transformers,
-            )
-
-            self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
         else:
             self.model = model
+        from mteb.models.get_model_meta import (
+            _model_meta_from_sentence_transformers,
+        )
 
-        if (
-            built_in_prompts := getattr(self.model, "prompts", None)
-        ) and not model_prompts:
+        self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
+
+        built_in_prompts = getattr(self.model, "prompts", None)
+        if built_in_prompts and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
             logger.warning(f"Model prompts will be overwritten with {model_prompts}")
@@ -130,6 +129,13 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
+        from sentence_transformers import __version__ as st_version
+
+        HAS_QUERY_ENCODE = (
+            Version(st_version).release
+            >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+        )
+
         _inputs = [text for batch in inputs for text in batch["text"]]
 
         prompt = None
@@ -245,13 +251,16 @@ class CrossEncoderWrapper:
         revision: str | None = None,
         **kwargs,
     ) -> None:
+        from sentence_transformers import CrossEncoder
+
+        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
+
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, **kwargs)
-            from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 
-            self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
 
     def predict(
         self,
