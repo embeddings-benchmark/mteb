@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, Required
 
 from huggingface_hub import (
     DatasetCard,
@@ -197,8 +197,8 @@ class MetadataDatasetDict(TypedDict, total=False):
         trust_remote_code: Whether to trust the remote code.
     """
 
-    path: str
-    revision: str
+    path: Required[str]
+    revision: Required[str]
     name: str
     split: str
     trust_remote_code: bool
