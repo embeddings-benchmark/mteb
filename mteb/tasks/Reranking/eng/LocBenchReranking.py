@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
-class SWEbenchLiteReranking(AbsTaskReranking):
+class LocBenchReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="LocBenchRR",
         description="Software Issue Localization.",
