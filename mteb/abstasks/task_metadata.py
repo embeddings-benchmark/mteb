@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Any, Required
+from typing import Any
 
 from huggingface_hub import (
     DatasetCard,
@@ -17,7 +17,7 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Literal, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 import mteb
 from mteb.languages import check_language_code
