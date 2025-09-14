@@ -7,6 +7,9 @@ from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
 from .eng.WebLINXCandidatesReranking import *
+from .eng.SWEbenchLiteReranking import *
+from .eng.SWEbenchVerifiedReranking import *
+from .eng.LocBenchReranking import *
 from .fra.AlloprofReranking import *
 from .fra.SyntecReranking import *
 from .jpn.JaCWIRReranking import *
