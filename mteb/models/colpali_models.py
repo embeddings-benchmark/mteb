@@ -131,7 +131,7 @@ class ColPaliEngineWrapper:
         return scores.softmax(dim=-1)
 
     def similarity(self, a, b):
-        return self.processor.score(a, b, **self.processor_kwargs)
+        return self.processor.score(a, b)
 
 
 class ColPaliWrapper(ColPaliEngineWrapper):
