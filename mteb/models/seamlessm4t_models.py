@@ -79,35 +79,22 @@ class SeamlessM4TWrapper(Wrapper):
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        
-        audio = audio.squeeze()
-        
-        # If audio is empty after squeeze, create a minimal valid tensor
-        if audio.numel() == 0:
-            # Return a very short silence instead of empty tensor
-            audio = torch.zeros(160)  # 0.01 seconds at 16kHz
-            
-        return audio
+        return audio.squeeze()
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
-        try:
-            waveform, sample_rate = torchaudio.load(path)
-            if sample_rate != self.sampling_rate:
-                resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
-                waveform = resampler(waveform)
-            
-            waveform = waveform.squeeze()
-            
-            # If loaded audio is empty, create minimal valid tensor
-            if waveform.numel() == 0:
-                print(f"Warning: Empty audio file {path}, using silence")
-                waveform = torch.zeros(160)  # 0.01 seconds at 16kHz
-                
-            return waveform
-            
-        except Exception as e:
-            print(f"Warning: Failed to load audio file {path}: {e}, using silence")
-            return torch.zeros(160)  # 0.01 seconds at 16kHz
+        waveform, sample_rate = torchaudio.load(path)
+        if sample_rate != self.sampling_rate:
+            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
+            waveform = resampler(waveform)
+        return waveform.squeeze()
+
+    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
+        max_length = max(audio.shape[0] for audio in batch)
+        padded_batch = [
+            torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
+            for audio in batch
+        ]
+        return torch.stack(padded_batch)
 
     def get_audio_embeddings(
         self,
@@ -128,39 +115,11 @@ class SeamlessM4TWrapper(Wrapper):
                 disable=not show_progress_bar,
             ):
                 batch = processed_audio[i : i + batch_size]
+                batch_tensor = self._pad_audio_batch(batch)
 
-                # Filter and validate audio tensors before processing
-                batch_inputs = []
-                valid_indices = []
-                
-                for idx, audio_tensor in enumerate(batch):
-                    # Check if tensor is empty or has no data
-                    if audio_tensor.numel() == 0 or audio_tensor.shape[0] == 0:
-                        # Skip empty tensors - don't add to batch_inputs
-                        print(f"Warning: Skipping empty audio tensor at index {idx}")
-                        continue
-                    
-                    audio_np = (
-                        audio_tensor.numpy()
-                        if isinstance(audio_tensor, torch.Tensor)
-                        else audio_tensor
-                    )
-                    
-                    # Double-check numpy array is not empty
-                    if audio_np.size == 0:
-                        print(f"Warning: Skipping empty numpy array at index {idx}")
-                        continue
-                        
-                    batch_inputs.append(audio_np)
-                    valid_indices.append(idx)
-
-                # Skip this batch if no valid audio
-                if not batch_inputs:
-                    print(f"Warning: Batch {i//batch_size + 1} has no valid audio, skipping")
-                    continue
-
+                # Process audio through the model's encoder
                 inputs = self.processor(
-                    audios=batch_inputs,  # Only valid, non-empty arrays
+                    audios=batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
@@ -172,17 +131,13 @@ class SeamlessM4TWrapper(Wrapper):
                 outputs = self.model.speech_encoder(
                     inputs.input_features,
                     attention_mask=inputs.attention_mask,
-                    output_hidden_states=True,
+                    output_hidden_states=False,
                 )
 
                 # Use last hidden state for embeddings
                 last_hidden_state = outputs.last_hidden_state
                 embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
-
-                # Clear GPU cache to prevent memory issues (like BirdCLEF OOM)
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
