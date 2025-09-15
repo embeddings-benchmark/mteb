@@ -79,16 +79,35 @@ class SeamlessM4TWrapper(Wrapper):
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze()
+        
+        audio = audio.squeeze()
+        
+        # If audio is empty after squeeze, create a minimal valid tensor
+        if audio.numel() == 0:
+            # Return a very short silence instead of empty tensor
+            audio = torch.zeros(160)  # 0.01 seconds at 16kHz
+            
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
-        waveform, sample_rate = torchaudio.load(path)
-        if sample_rate != self.sampling_rate:
-            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
-            waveform = resampler(waveform)
-        return waveform.squeeze()
-
-    # Remove the problematic _pad_audio_batch method - we'll use processor padding instead
+        try:
+            waveform, sample_rate = torchaudio.load(path)
+            if sample_rate != self.sampling_rate:
+                resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
+                waveform = resampler(waveform)
+            
+            waveform = waveform.squeeze()
+            
+            # If loaded audio is empty, create minimal valid tensor
+            if waveform.numel() == 0:
+                print(f"Warning: Empty audio file {path}, using silence")
+                waveform = torch.zeros(160)  # 0.01 seconds at 16kHz
+                
+            return waveform
+            
+        except Exception as e:
+            print(f"Warning: Failed to load audio file {path}: {e}, using silence")
+            return torch.zeros(160)  # 0.01 seconds at 16kHz
 
     def get_audio_embeddings(
         self,
@@ -110,24 +129,43 @@ class SeamlessM4TWrapper(Wrapper):
             ):
                 batch = processed_audio[i : i + batch_size]
 
-                # AST-style processing: convert each audio to numpy individually
+                # Filter and validate audio tensors before processing
                 batch_inputs = []
-                for audio_tensor in batch:
+                valid_indices = []
+                
+                for idx, audio_tensor in enumerate(batch):
+                    # Check if tensor is empty or has no data
+                    if audio_tensor.numel() == 0 or audio_tensor.shape[0] == 0:
+                        # Skip empty tensors - don't add to batch_inputs
+                        print(f"Warning: Skipping empty audio tensor at index {idx}")
+                        continue
+                    
                     audio_np = (
                         audio_tensor.numpy()
                         if isinstance(audio_tensor, torch.Tensor)
                         else audio_tensor
                     )
+                    
+                    # Double-check numpy array is not empty
+                    if audio_np.size == 0:
+                        print(f"Warning: Skipping empty numpy array at index {idx}")
+                        continue
+                        
                     batch_inputs.append(audio_np)
+                    valid_indices.append(idx)
 
-                # Let the processor handle padding and validation (like AST)
+                # Skip this batch if no valid audio
+                if not batch_inputs:
+                    print(f"Warning: Batch {i//batch_size + 1} has no valid audio, skipping")
+                    continue
+
                 inputs = self.processor(
-                    audios=batch_inputs,  # List of individual arrays, not pre-stacked tensor
+                    audios=batch_inputs,  # Only valid, non-empty arrays
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
                     truncation=True,
-                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),  # Configurable max length
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 ).to(self.device)
 
                 # Get encodings through the encoder
