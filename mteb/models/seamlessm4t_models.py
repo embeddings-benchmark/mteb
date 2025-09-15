@@ -127,22 +127,19 @@ class SeamlessM4TWrapper(Wrapper):
                     max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 ).to(self.device)
 
-                # Get encodings through the encoder
                 outputs = self.model.speech_encoder(
                     inputs.input_features,
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=False,
                 )
 
-                # Use last hidden state for embeddings
                 last_hidden_state = outputs.last_hidden_state
-                embeddings = torch.mean(last_hidden_state, dim=1)
-                all_embeddings.append(embeddings.cpu())
+                embeddings = last_hidden_state.mean(dim=1).cpu()
+                all_embeddings.append(embeddings)
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            # Return empty tensor with correct embedding dimension (like AST)
             return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
