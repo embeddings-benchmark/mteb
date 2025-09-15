@@ -21,7 +21,7 @@ class SeamlessM4TWrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        max_audio_length_seconds: float = 30.0, 
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -122,22 +122,22 @@ class SeamlessM4TWrapper(Wrapper):
                 batch = processed_audio[i : i + batch_size]
                 # batch_tensor = self._pad_audio_batch(batch)
 
+                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+                truncated_audio = []
+                for w in batch:
+                    audio_np = w.cpu().numpy()
+                    if len(audio_np) > max_samples:
+                        audio_np = audio_np[:max_samples]
+                    truncated_audio.append(audio_np)
+
                 inputs = self.processor(
-                    audios=[w.cpu().numpy() for w in batch],
+                    audios=truncated_audio,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
                     truncation=True,
-                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 )
 
-                # DEBUG: Check what the processor is creating
-                print(f"DEBUG: Input features shape: {inputs.input_features.shape}")
-                if hasattr(inputs, 'attention_mask'):
-                    print(f"DEBUG: Attention mask shape: {inputs.attention_mask.shape}")
-                print(f"DEBUG: GPU memory before model: {torch.cuda.memory_allocated() / 1e9:.2f} GB")
-
-                # Move only input_features to device (like Qwen2Audio)
                 input_features = inputs.input_features.to(self.device)
                 attention_mask = inputs.attention_mask.to(self.device) if hasattr(inputs, 'attention_mask') else None
 
@@ -171,7 +171,7 @@ seamless_m4t_v2_large = ModelMeta(
     loader=partial(
         SeamlessM4TWrapper,
         model_name="facebook/seamless-m4t-v2-large",
-        max_audio_length_seconds=30.0,  # Configurable like AST
+        max_audio_length_seconds=5.0,  # Conservative default for memory efficiency
     ),
     name="facebook/seamless-m4t-v2-large",
     languages=[
