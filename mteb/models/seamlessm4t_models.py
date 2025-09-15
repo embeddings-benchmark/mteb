@@ -21,7 +21,7 @@ class SeamlessM4TWrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0, 
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -31,9 +31,9 @@ class SeamlessM4TWrapper(Wrapper):
         self.model = SeamlessM4Tv2Model.from_pretrained(model_name)
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
-        
+
         self.speech_encoder = self.model.speech_encoder
-        
+
         self.model = self.model.to(device)
         self.speech_encoder = self.speech_encoder.to(device)
 
@@ -139,7 +139,11 @@ class SeamlessM4TWrapper(Wrapper):
                 )
 
                 input_features = inputs.input_features.to(self.device)
-                attention_mask = inputs.attention_mask.to(self.device) if hasattr(inputs, 'attention_mask') else None
+                attention_mask = (
+                    inputs.attention_mask.to(self.device)
+                    if hasattr(inputs, "attention_mask")
+                    else None
+                )
 
                 outputs = self.speech_encoder(
                     input_features,
