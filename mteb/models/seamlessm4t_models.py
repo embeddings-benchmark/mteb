@@ -31,6 +31,8 @@ class SeamlessM4TWrapper(Wrapper):
         self.model = SeamlessM4Tv2Model.from_pretrained(model_name).to(device)
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        
+        self.speech_encoder = self.model.speech_encoder
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -115,11 +117,11 @@ class SeamlessM4TWrapper(Wrapper):
                 disable=not show_progress_bar,
             ):
                 batch = processed_audio[i : i + batch_size]
-                batch_tensor = self._pad_audio_batch(batch)
+                # batch_tensor = self._pad_audio_batch(batch)
 
                 # Process audio through the model's encoder
                 inputs = self.processor(
-                    audios=batch_tensor.cpu().numpy(),
+                    audios=[w.cpu().numpy() for w in batch],
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
