@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -79,15 +79,21 @@ class Wav2Vec2AudioWrapper(Wrapper):
     def __init__(
         self,
         model_name: str = "facebook/wav2vec2-base",
+        model_revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
+        self.model_revision = model_revision
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
-        self.model = Wav2Vec2ForCTC.from_pretrained(model_name).to(self.device)
-        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
+        self.model = Wav2Vec2Model.from_pretrained(
+            model_name, revision=model_revision
+        ).to(self.device)
+        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
+            model_name, revision=model_revision
+        )
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
@@ -147,7 +153,8 @@ class Wav2Vec2AudioWrapper(Wrapper):
         return waveform.squeeze()
 
     def _pad_audio_batch(self, batch):
-        max_length = max(audio.shape[0] for audio in batch)  # Find longest audio
+        batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
+        max_length = max(audio.shape[0] for audio in batch)
         padded_batch = [
             torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
             for audio in batch
@@ -174,27 +181,44 @@ class Wav2Vec2AudioWrapper(Wrapper):
             ):
                 batch = processed_audio[i : i + batch_size]
 
+                # Pre-process audio like other working models
+                batch_tensor = self._pad_audio_batch(batch)
+
+                if batch_tensor.ndim == 1:
+                    batch_tensor = batch_tensor.unsqueeze(0)
+                elif batch_tensor.ndim > 2:
+                    batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
+
                 inputs = self.feature_extractor(
-                    [b.numpy() if isinstance(b, torch.Tensor) else b for b in batch],
+                    batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding=True,
+                    padding="longest",
                     truncation=True,
                     max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                     return_attention_mask=True,
                 ).to(self.device)
 
                 outputs = self.model(
-                    inputs.input_values.squeeze(0),
-                    attention_mask=inputs.attention_mask.squeeze(0).unsqueeze(-1),
+                    inputs.input_values,
+                    attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
-                last_hidden_state = outputs.hidden_states[-1]
-                embeddings = torch.mean(last_hidden_state, dim=1)
+                last_hidden_state = outputs.last_hidden_state
+                
+                # Apply attention mask to exclude padding from mean pooling
+                attention_mask = inputs.attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
+                masked_embeddings = last_hidden_state * attention_mask
+                mask_sum = attention_mask.sum(dim=1)
+                embeddings = masked_embeddings.sum(dim=1) / mask_sum.clamp(min=1e-9)
+                
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
         self,
