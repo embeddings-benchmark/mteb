@@ -135,7 +135,6 @@ class SeamlessM4TWrapper(Wrapper):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
-                    truncation=True,
                 )
 
                 input_features = inputs.input_features.to(self.device)
