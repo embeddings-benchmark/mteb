@@ -138,6 +138,7 @@ DATASET_TASKS = {
         "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم موضوع استخراج شده ی متن اول است ؟",
         3,
     ),
+    "WebFAQRetrieval": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", 3),
 }
 
 # Add all retrieval datasets with the same instruction and task ID
@@ -174,12 +175,10 @@ RETRIEVAL_DATASETS = [
     "MSMARCO-FaHardNegatives",
     "NQ-FaHardNegatives",
     "FEVER-FaHardNegatives",
-    "WebFAQRetrieval",
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023RetrievalHardNegatives",
     "ArguAna-Fa.v2",
     "FiQA2018-Fa.v2",
-    "QuoraRetrieval-Fa.v2",
     "SCIDOCS-Fa.v2",
     "SciFact-Fa.v2",
     "TRECCOVID-Fa.v2",
