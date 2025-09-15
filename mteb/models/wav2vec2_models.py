@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model, Wav2Vec2ForCTC
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -79,21 +79,24 @@ class Wav2Vec2AudioWrapper(Wrapper):
     def __init__(
         self,
         model_name: str = "facebook/wav2vec2-base",
-        model_revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
-        self.model_revision = model_revision
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
-        self.model = Wav2Vec2Model.from_pretrained(
-            model_name, revision=model_revision
-        ).to(self.device)
-        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            model_name, revision=model_revision
-        )
+        
+        # Try to load base model first, fallback to CTC if needed
+        try:
+            self.model = Wav2Vec2Model.from_pretrained(model_name).to(self.device)
+            self.is_ctc_model = False
+        except Exception:
+            # Fallback to CTC model for models that don't have base versions
+            self.model = Wav2Vec2ForCTC.from_pretrained(model_name).to(self.device)
+            self.is_ctc_model = True
+            
+        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
@@ -205,15 +208,35 @@ class Wav2Vec2AudioWrapper(Wrapper):
                     output_hidden_states=True,
                 )
 
-                last_hidden_state = outputs.last_hidden_state
-                
-                # Apply attention mask to exclude padding from mean pooling
-                attention_mask = inputs.attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
-                masked_embeddings = last_hidden_state * attention_mask
-                mask_sum = attention_mask.sum(dim=1)
-                embeddings = masked_embeddings.sum(dim=1) / mask_sum.clamp(min=1e-9)
-                
+                last_hidden_state = (
+                    outputs.hidden_states[-1] if self.is_ctc_model else outputs.last_hidden_state
+                )
+
+                # last_hidden_state: [B, hidden_seq_len, hidden_size]
+                batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
+                device = last_hidden_state.device
+
+                #    inputs.attention_mask is per-sample mask over input_values
+                input_lengths = inputs.attention_mask.sum(dim=1).cpu().numpy().astype(int)  # shape (B,)
+
+                hidden_lengths = [self.model._get_feat_extract_output_lengths(l) for l in input_lengths]
+                hidden_lengths = torch.tensor(hidden_lengths, device=device, dtype=torch.long)  # (B,)
+
+                # clamp to be safe
+                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+
+                # build mask vectorized: seq_range shape [1, hidden_seq_len]
+                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)  # [1, hidden_seq_len]
+                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(last_hidden_state.dtype)  # [B, hidden_seq_len]
+
+                # apply masked mean pooling
+                hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)  # [B, hidden_seq_len, 1]
+                masked_embeddings = last_hidden_state * hidden_attention_mask  # [B, hidden_seq_len, hidden_size]
+                valid_tokens = hidden_attention_mask.sum(dim=1)  # [B, 1]
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)  # [B, hidden_size]
+
                 all_embeddings.append(embeddings.cpu())
+
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
