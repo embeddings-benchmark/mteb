@@ -21,10 +21,12 @@ class SeamlessM4TWrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = SeamlessM4Tv2Model.from_pretrained(model_name).to(device)
         self.processor = AutoProcessor.from_pretrained(model_name)
@@ -86,13 +88,7 @@ class SeamlessM4TWrapper(Wrapper):
             waveform = resampler(waveform)
         return waveform.squeeze()
 
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
-        max_length = max(audio.shape[0] for audio in batch)
-        padded_batch = [
-            torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
-            for audio in batch
-        ]
-        return torch.stack(padded_batch)
+    # Remove the problematic _pad_audio_batch method - we'll use processor padding instead
 
     def get_audio_embeddings(
         self,
@@ -113,16 +109,25 @@ class SeamlessM4TWrapper(Wrapper):
                 disable=not show_progress_bar,
             ):
                 batch = processed_audio[i : i + batch_size]
-                batch_tensor = self._pad_audio_batch(batch)
 
-                # Process audio through the model's encoder
+                # AST-style processing: convert each audio to numpy individually
+                batch_inputs = []
+                for audio_tensor in batch:
+                    audio_np = (
+                        audio_tensor.numpy()
+                        if isinstance(audio_tensor, torch.Tensor)
+                        else audio_tensor
+                    )
+                    batch_inputs.append(audio_np)
+
+                # Let the processor handle padding and validation (like AST)
                 inputs = self.processor(
-                    audios=batch_tensor.cpu().numpy(),
+                    audios=batch_inputs,  # List of individual arrays, not pre-stacked tensor
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
                     truncation=True,
-                    max_length=30 * self.sampling_rate,  # 30 seconds max
+                    max_length=int(self.max_audio_length_seconds * self.sampling_rate),  # Configurable max length
                 ).to(self.device)
 
                 # Get encodings through the encoder
@@ -137,7 +142,15 @@ class SeamlessM4TWrapper(Wrapper):
                 embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+                # Clear GPU cache to prevent memory issues (like BirdCLEF OOM)
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            # Return empty tensor with correct embedding dimension (like AST)
+            return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
         self,
@@ -154,6 +167,7 @@ seamless_m4t_v2_large = ModelMeta(
     loader=partial(
         SeamlessM4TWrapper,
         model_name="facebook/seamless-m4t-v2-large",
+        max_audio_length_seconds=30.0,  # Configurable like AST
     ),
     name="facebook/seamless-m4t-v2-large",
     languages=[
