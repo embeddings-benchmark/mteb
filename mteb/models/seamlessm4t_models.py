@@ -122,7 +122,6 @@ class SeamlessM4TWrapper(Wrapper):
                 batch = processed_audio[i : i + batch_size]
                 # batch_tensor = self._pad_audio_batch(batch)
 
-                # Process audio through the processor (Qwen2Audio pattern)
                 inputs = self.processor(
                     audios=[w.cpu().numpy() for w in batch],
                     sampling_rate=self.sampling_rate,
@@ -132,11 +131,16 @@ class SeamlessM4TWrapper(Wrapper):
                     max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 )
 
+                # DEBUG: Check what the processor is creating
+                print(f"DEBUG: Input features shape: {inputs.input_features.shape}")
+                if hasattr(inputs, 'attention_mask'):
+                    print(f"DEBUG: Attention mask shape: {inputs.attention_mask.shape}")
+                print(f"DEBUG: GPU memory before model: {torch.cuda.memory_allocated() / 1e9:.2f} GB")
+
                 # Move only input_features to device (like Qwen2Audio)
                 input_features = inputs.input_features.to(self.device)
                 attention_mask = inputs.attention_mask.to(self.device) if hasattr(inputs, 'attention_mask') else None
 
-                # Use extracted speech encoder with proper device placement
                 outputs = self.speech_encoder(
                     input_features,
                     attention_mask=attention_mask,
@@ -146,16 +150,6 @@ class SeamlessM4TWrapper(Wrapper):
                 last_hidden_state = outputs.last_hidden_state
                 embeddings = last_hidden_state.mean(dim=1).cpu()
                 all_embeddings.append(embeddings)
-
-                # Aggressive memory cleanup
-                del outputs, last_hidden_state, input_features, inputs
-                if attention_mask is not None:
-                    del attention_mask
-                torch.cuda.empty_cache()
-                
-                # Additional garbage collection
-                import gc
-                gc.collect()
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
