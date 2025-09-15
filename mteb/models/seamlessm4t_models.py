@@ -28,11 +28,14 @@ class SeamlessM4TWrapper(Wrapper):
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
-        self.model = SeamlessM4Tv2Model.from_pretrained(model_name).to(device)
+        self.model = SeamlessM4Tv2Model.from_pretrained(model_name)
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
         
         self.speech_encoder = self.model.speech_encoder
+        
+        self.model = self.model.to(device)
+        self.speech_encoder = self.speech_encoder.to(device)
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -119,7 +122,7 @@ class SeamlessM4TWrapper(Wrapper):
                 batch = processed_audio[i : i + batch_size]
                 # batch_tensor = self._pad_audio_batch(batch)
 
-                # Process audio through the model's encoder
+                # Process audio through the processor (Qwen2Audio pattern)
                 inputs = self.processor(
                     audios=[w.cpu().numpy() for w in batch],
                     sampling_rate=self.sampling_rate,
@@ -127,17 +130,32 @@ class SeamlessM4TWrapper(Wrapper):
                     padding=True,
                     truncation=True,
                     max_length=int(self.max_audio_length_seconds * self.sampling_rate),
-                ).to(self.device)
+                )
 
-                outputs = self.model.speech_encoder(
-                    inputs.input_features,
-                    attention_mask=inputs.attention_mask,
+                # Move only input_features to device (like Qwen2Audio)
+                input_features = inputs.input_features.to(self.device)
+                attention_mask = inputs.attention_mask.to(self.device) if hasattr(inputs, 'attention_mask') else None
+
+                # Use extracted speech encoder with proper device placement
+                outputs = self.speech_encoder(
+                    input_features,
+                    attention_mask=attention_mask,
                     output_hidden_states=False,
                 )
 
                 last_hidden_state = outputs.last_hidden_state
                 embeddings = last_hidden_state.mean(dim=1).cpu()
                 all_embeddings.append(embeddings)
+
+                # Aggressive memory cleanup
+                del outputs, last_hidden_state, input_features, inputs
+                if attention_mask is not None:
+                    del attention_mask
+                torch.cuda.empty_cache()
+                
+                # Additional garbage collection
+                import gc
+                gc.collect()
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
