@@ -7,6 +7,18 @@ from mteb.overview import get_task, get_tasks
 # List of accepted private tasks - update this list as needed
 ACCEPTED_PRIVATE_TASKS = [
     "JapaneseCode1Retrieval",
+    "Code1Retrieval",
+    "EnglishFinance1Retrieval",
+    "EnglishFinance2Retrieval",
+    "EnglishFinance3Retrieval",
+    "EnglishFinance4Retrieval",
+    "EnglishHealthcare1Retrieval",
+    "French1Retrieval",
+    "FrenchLegal1Retrieval",
+    "German1Retrieval",
+    "GermanHealthcare1Retrieval",
+    "GermanLegal1Retrieval",
+    "JapaneseLegal1Retrieval",
     # Add task names here that are allowed to be private
     # Example: "SomePrivateTask"
 ]
