@@ -23,7 +23,5 @@ jobs:
           make install-for-tests
 
     - name: Run dataset loading tests
-      env:
-        HF_TOKEN: ${{ secrets.MTEB_PRIVATE }}
       run: |
         make dataset-load-test
