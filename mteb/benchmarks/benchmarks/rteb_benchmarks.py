@@ -33,7 +33,7 @@ RTEB_MAIN = Benchmark(
             "CUREv1",
             # Closed datasets
             "Code1Retrieval",
-            # "JapaneseCode1Retrieval",
+            "JapaneseCode1Retrieval",
             "EnglishFinance1Retrieval",
             "EnglishFinance2Retrieval",
             "EnglishFinance3Retrieval",
@@ -130,7 +130,7 @@ RTEB_JAPANESE = Benchmark(
     tasks=get_tasks(
         tasks=[
             # Closed datasets
-            # "JapaneseCode1Retrieval",
+            "JapaneseCode1Retrieval",
             "JapaneseLegal1Retrieval",
         ],
     ),
@@ -195,7 +195,7 @@ RTEB_CODE = Benchmark(
             "FreshStackRetrieval",
             # Closed datasets
             "Code1Retrieval",
-            # "JapaneseCode1Retrieval",
+            "JapaneseCode1Retrieval",
         ],
     ),
     description="RTEB Code subset containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, SQL retrieval, and multilingual code retrieval. Includes 8 code-related tasks.",
