@@ -5,7 +5,7 @@ import ast
 import logging
 import os
 
-from .extract_model_names import get_changed_files
+from scripts.extract_model_names import get_changed_files
 
 logging.basicConfig(level=logging.INFO)
 
@@ -70,6 +70,13 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
 
 def extract_dataset_from_metadata(call_node: ast.Call) -> tuple[str, str] | None:
     """Extract dataset info from TaskMetadata call."""
+    for keyword in call_node.keywords:
+        if (
+            keyword.arg == "is_public"
+            and isinstance(keyword.value, ast.Constant)
+            and not keyword.value.value
+        ):
+            return None
     for keyword in call_node.keywords:
         if keyword.arg == "dataset" and isinstance(keyword.value, ast.Dict):
             return extract_dataset_from_dict(keyword.value)
