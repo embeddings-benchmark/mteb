@@ -15,7 +15,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class ColBERTModel(AbsEncoder):
+class MultiVectorModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -23,17 +23,7 @@ class ColBERTModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        """Wrapper for ColBERT models.
-
-        Args:
-            model_name: The ColBERT model to load from HuggingFace Hub.
-            revision: The revision of the model to use.
-            model_prompts: A dictionary mapping task names to prompt names.
-                First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
-                then to the composed prompt of task type + prompt type, then to the specific task type prompt,
-                and finally to the specific prompt type.
-            **kwargs: Additional arguments to pass to the model.
-        """
+        """Wrapper for MultiVector/ColBERT models (via PyLate)."""
         requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
         from pylate import models as colbert_model  # type: ignore[import]
 
@@ -65,7 +55,7 @@ class ColBERTModel(AbsEncoder):
             logger.info(
                 f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
-        logger.info(f"Encoding {len(inputs)} sentences.")
+        logger.debug(f"Encoding {len(inputs)} items.")
 
         if "request_qid" in kwargs:
             kwargs.pop("request_qid")
@@ -80,17 +70,14 @@ class ColBERTModel(AbsEncoder):
             **kwargs,
         )
 
-        # encode returns a list of tensors shaped (x, token_dim) where x is the number of tokens in the sentence
-        # we need to pad these tensors to the same length
-        # Tensors have varying lengths; therefore, they need to be padded with zeros to ensure uniformity before being combined
-        # output shape will be (batch_size, len(max(tokens)), embedding_token_dim)
+        # encode returns a list of tensors shaped (x, token_dim), pad to uniform length
         pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
-
         return pred.cpu().numpy()
 
+ 
 
 colbert_v2 = ModelMeta(
-    loader=ColBERTModel,
+    loader=MultiVectorModel,
     name="colbert-ir/colbertv2.0",
     languages=["eng-Latn"],
     open_weights=True,
@@ -100,23 +87,24 @@ colbert_v2 = ModelMeta(
     release_date="2024-09-21",
     n_parameters=int(110 * 1e6),
     memory_usage_mb=418,
-    max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
-    embed_dim=None,  # Bag of Embeddings (128) for each token
+    max_tokens=180,
+    embed_dim=None,
     license="mit",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     framework=["PyLate", "ColBERT"],
+    is_pylate_compatible=True,
     reference="https://huggingface.co/colbert-ir/colbertv2.0",
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
     training_datasets={
-        "MSMARCO",  # dev?
-        "mMARCO-NL",  # translation not trained on
+        "MSMARCO",
+        "mMARCO-NL",
     },
 )
 
 jina_colbert_v2 = ModelMeta(
-    loader=ColBERTModel,
+    loader=MultiVectorModel,
     loader_kwargs=dict(
         query_prefix="[QueryMarker]",
         document_prefix="[DocumentMarker]",
@@ -124,29 +112,29 @@ jina_colbert_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jinaai/jina-colbert-v2",
-    languages=[  # list of languages the model has been evaluated on
-        "ara-Arab",  # Arabic
-        "ben-Beng",  # Bengali
-        "deu-Latn",  # German
-        "spa-Latn",  # Spanish
-        "eng-Latn",  # English
-        "fas-Arab",  # Persian
-        "fin-Latn",  # Finnish
-        "fra-Latn",  # French
-        "hin-Deva",  # Hindi
-        "ind-Latn",  # Indonesian
-        "jpn-Jpan",  # Japanese
-        "kor-Kore",  # Korean
-        "rus-Cyrl",  # Russian
-        "swa-Latn",  # Swahili
-        "tel-Telu",  # Telugu
-        "tha-Thai",  # Thai
-        "yor-Latn",  # Yoruba
-        "zho-Hans",  # Chinese (Simplified)
-        "nld-Latn",  # Dutch
-        "ita-Latn",  # Italian
-        "por-Latn",  # Portuguese
-        "vie-Latn",  # Vietnamese
+    languages=[
+        "ara-Arab",
+        "ben-Beng",
+        "deu-Latn",
+        "spa-Latn",
+        "eng-Latn",
+        "fas-Arab",
+        "fin-Latn",
+        "fra-Latn",
+        "hin-Deva",
+        "ind-Latn",
+        "jpn-Jpan",
+        "kor-Kore",
+        "rus-Cyrl",
+        "swa-Latn",
+        "tel-Telu",
+        "tha-Thai",
+        "yor-Latn",
+        "zho-Hans",
+        "nld-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "vie-Latn",
     ],
     open_weights=True,
     revision="4cf816e5e2b03167b132a3c847a9ecd48ba708e1",
@@ -156,17 +144,18 @@ jina_colbert_v2 = ModelMeta(
     n_parameters=int(559 * 1e6),
     memory_usage_mb=1067,
     max_tokens=8192,
-    embed_dim=None,  # Bag of Embeddings (128) for each token
+    embed_dim=None,
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     framework=["PyLate", "ColBERT"],
+    is_pylate_compatible=True,
     reference="https://huggingface.co/jinaai/jina-colbert-v2",
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
     training_datasets={
         "MSMARCO",
-        "mMARCO-NL",  # translation not trained on
+        "mMARCO-NL",
         "DuRetrieval",
         "MIRACL",
     },
@@ -174,10 +163,10 @@ jina_colbert_v2 = ModelMeta(
 
 
 lightonai__gte_moderncolbert_v1 = ModelMeta(
-    loader=ColBERTModel,
+    loader=MultiVectorModel,
     name="lightonai/GTE-ModernColBERT-v1",
     languages=[
-        "eng-Latn",  # English
+        "eng-Latn",
     ],
     open_weights=True,
     revision="78d50a162b04dfdc45c3af6b4294ba77c24888a3",
@@ -187,16 +176,45 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
     n_parameters=int(149 * 1e6),
     memory_usage_mb=None,
     max_tokens=8192,
-    embed_dim=None,  # Bag of Embeddings (128) for each token
+    embed_dim=None,
     license="apache-2.0",
     similarity_fn_name="MaxSim",
     framework=["PyLate", "ColBERT"],
+    is_pylate_compatible=True,
     reference="https://huggingface.co/lightonai/GTE-ModernColBERT-v1",
     use_instructions=False,
     adapted_from="Alibaba-NLP/gte-modernbert-base",
     superseded_by=None,
     training_datasets={
         "MSMARCO",
-        "mMARCO-NL",  # translation not trained on
+        "mMARCO-NL",
     },
+)
+
+
+# Additional PyLate-compatible ColBERT model(s)
+lightonai__answerai_colbert_small_v1 = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/answerai-colbert-small-v1",
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision=None,
+    public_training_code=None,
+    public_training_data=None,
+    release_date=None,
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT"],
+    reference=None,
+    use_instructions=False,
+    adapted_from=None,
+    superseded_by=None,
+    training_datasets=None,
+    is_pylate_compatible=True,
 )

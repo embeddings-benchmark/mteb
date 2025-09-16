@@ -118,13 +118,14 @@ class ModelMeta(BaseModel):
     superseded_by: str | None = None
     modalities: list[Modalities] = ["text"]
     is_cross_encoder: bool | None = None
+    is_pylate_compatible: bool | None = None
     citation: str | None = None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
     def validate_similarity_fn_name(cls, value):
         """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for
+        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan']
         pylate uses Literal['MaxSim']
         """
         if type(value) is ScoringFunction or value is None:
