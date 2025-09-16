@@ -5,6 +5,7 @@ from functools import partial, wraps
 from typing import Any, Literal
 
 import numpy as np
+from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -114,30 +115,20 @@ class VoyageWrapper(Wrapper):
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
         self.output_dtype = output_dtype
-
-    def _calculate_default_batch_size(self) -> int:
-        """Calculate the default batch size based on total token limit and context length.
-
-        Formula: floor(total_token_limit / context_length)
-        """
-        if self._max_tokens is None:
-            return 32  # fallback to original default
-
-        total_token_limit = VOYAGE_TOTAL_TOKEN_LIMITS.get(self._model_name, 120_000)
-        return max(1, total_token_limit // self._max_tokens)
+        self._max_tokens_per_batch = VOYAGE_TOTAL_TOKEN_LIMITS.get(
+            self._model_name, 120_000
+        )
 
     def encode(
         self,
         sentences: list[str],
         *,
-        batch_size: int | None = None,
+        batch_size: int
+        | None = 1_000,  # https://docs.voyageai.com/reference/embeddings-api
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if batch_size is None:
-            batch_size = self._calculate_default_batch_size()
-
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
 
@@ -155,17 +146,21 @@ class VoyageWrapper(Wrapper):
             self.output_dtype, self.output_dtype
         )
 
+        pbar = tqdm(total=len(sentences), desc="Encoding sentences")
         while index < len(sentences):
             batch, batch_tokens = [], 0
             while (
                 index < len(sentences)
                 and len(batch) < batch_size
-                and batch_tokens < self._max_tpm
+                and batch_tokens < self._max_tokens_per_batch
             ):
                 n_tokens = len(
                     self._client.tokenize([sentences[index]], model=self._model_name)[0]
                 )
-                if batch_tokens + n_tokens > self._max_tpm:
+                if (
+                    batch_tokens + n_tokens > self._max_tokens_per_batch
+                    and len(batch) > 0
+                ):
                     break
                 batch_tokens += n_tokens
                 batch.append(sentences[index])
@@ -179,7 +174,9 @@ class VoyageWrapper(Wrapper):
                     output_dtype=output_dtype,
                 ).embeddings
             )
+            pbar.update(len(batch))
 
+        pbar.close()
         embeddings_array = np.array(embeddings)
 
         if output_dtype == "binary":
