@@ -184,18 +184,11 @@ class Wav2Vec2AudioWrapper(Wrapper):
             ):
                 batch = processed_audio[i : i + batch_size]
 
-                # Pre-process audio like other working models
-                # batch_tensor = self._pad_audio_batch(batch)
-
-                batch_tensor = [b.cpu().numpy() for b in batch]
-
-                if batch_tensor.ndim == 1:
-                    batch_tensor = batch_tensor.unsqueeze(0)
-                elif batch_tensor.ndim > 2:
-                    batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
+                # Let feature extractor handle all padding
+                batch_numpy = [b.cpu().numpy() if isinstance(b, torch.Tensor) else b for b in batch]
 
                 inputs = self.feature_extractor(
-                    batch_tensor.cpu().numpy(),
+                    batch_numpy,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
