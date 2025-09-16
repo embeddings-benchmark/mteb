@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC, Wav2Vec2Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -86,7 +86,16 @@ class Wav2Vec2AudioWrapper(Wrapper):
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
-        self.model = Wav2Vec2ForCTC.from_pretrained(model_name).to(self.device)
+
+        # Try to load base model first, fallback to CTC if needed
+        try:
+            self.model = Wav2Vec2Model.from_pretrained(model_name).to(self.device)
+            self.is_ctc_model = False
+        except Exception:
+            # Fallback to CTC model for models that don't have base versions
+            self.model = Wav2Vec2ForCTC.from_pretrained(model_name).to(self.device)
+            self.is_ctc_model = True
+
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
 
@@ -147,7 +156,8 @@ class Wav2Vec2AudioWrapper(Wrapper):
         return waveform.squeeze()
 
     def _pad_audio_batch(self, batch):
-        max_length = max(audio.shape[0] for audio in batch)  # Find longest audio
+        batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
+        max_length = max(audio.shape[0] for audio in batch)
         padded_batch = [
             torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
             for audio in batch
@@ -174,27 +184,79 @@ class Wav2Vec2AudioWrapper(Wrapper):
             ):
                 batch = processed_audio[i : i + batch_size]
 
+                # Let feature extractor handle all padding
+                batch_numpy = [
+                    b.cpu().numpy() if isinstance(b, torch.Tensor) else b for b in batch
+                ]
+
                 inputs = self.feature_extractor(
-                    [b.numpy() if isinstance(b, torch.Tensor) else b for b in batch],
+                    batch_numpy,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding=True,
+                    padding="longest",
                     truncation=True,
                     max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                     return_attention_mask=True,
                 ).to(self.device)
 
                 outputs = self.model(
-                    inputs.input_values.squeeze(0),
-                    attention_mask=inputs.attention_mask.squeeze(0).unsqueeze(-1),
+                    inputs.input_values,
+                    attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
-                last_hidden_state = outputs.hidden_states[-1]
-                embeddings = torch.mean(last_hidden_state, dim=1)
+                last_hidden_state = (
+                    outputs.hidden_states[-1]
+                    if self.is_ctc_model
+                    else outputs.last_hidden_state
+                )
+
+                # last_hidden_state: [B, hidden_seq_len, hidden_size]
+                batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
+                device = last_hidden_state.device
+
+                # inputs.attention_mask is per-sample mask over input_values
+                input_lengths = (
+                    inputs.attention_mask.sum(dim=1).cpu().numpy().astype(int)
+                )  # shape (B,)
+
+                hidden_lengths = [
+                    self.model._get_feat_extract_output_lengths(l)
+                    for l in input_lengths
+                ]
+                hidden_lengths = torch.tensor(
+                    hidden_lengths, device=device, dtype=torch.long
+                )  # (B,)
+
+                # clamp to be safe
+                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+
+                # build mask vectorized: seq_range shape [1, hidden_seq_len]
+                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(
+                    0
+                )  # [1, hidden_seq_len]
+                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
+                    last_hidden_state.dtype
+                )  # [B, hidden_seq_len]
+
+                # apply masked mean pooling
+                hidden_attention_mask = hidden_attention_mask.unsqueeze(
+                    -1
+                )  # [B, hidden_seq_len, 1]
+                masked_embeddings = (
+                    last_hidden_state * hidden_attention_mask
+                )  # [B, hidden_seq_len, hidden_size]
+                valid_tokens = hidden_attention_mask.sum(dim=1)  # [B, 1]
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(
+                    min=1e-9
+                )  # [B, hidden_size]
+
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
         self,

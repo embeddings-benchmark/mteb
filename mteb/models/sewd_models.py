@@ -114,16 +114,13 @@ class SewDWrapper(Wrapper):
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
 
-                # Pre-process like Wav2Vec2
-                batch_tensor = self._pad_audio_batch(batch)
-
-                if batch_tensor.ndim == 1:
-                    batch_tensor = batch_tensor.unsqueeze(0)
-                elif batch_tensor.ndim > 2:
-                    batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
+                # Let feature extractor handle all padding
+                batch_numpy = [
+                    b.cpu().numpy() if isinstance(b, torch.Tensor) else b for b in batch
+                ]
 
                 inputs = self.feature_extractor(
-                    batch_tensor.cpu().numpy(),
+                    batch_numpy,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
@@ -141,7 +138,29 @@ class SewDWrapper(Wrapper):
 
                 # Get embeddings from last hidden state
                 last_hidden_state = outputs.hidden_states[-1]
-                embeddings = torch.mean(last_hidden_state, dim=1)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
+                device = last_hidden_state.device
+
+                # Calculate proper hidden lengths based on input attention mask
+                input_lengths = inputs.attention_mask.sum(dim=1)
+                downsample_ratio = inputs.input_values.shape[1] / hidden_seq_len
+                hidden_lengths = (input_lengths.float() / downsample_ratio).long()
+                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+
+                # Create attention mask for hidden states
+                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
+                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
+                    last_hidden_state.dtype
+                )
+
+                # Apply masked mean pooling
+                hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                masked_embeddings = last_hidden_state * hidden_attention_mask
+                valid_tokens = hidden_attention_mask.sum(dim=1)
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:

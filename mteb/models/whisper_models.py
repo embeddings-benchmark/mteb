@@ -144,7 +144,54 @@ class WhisperAudioWrapper(Wrapper):
                 layer_idx = min(max(layer_idx, 1), no_hidden_states) - 1
 
                 selected_hidden = hidden_states[layer_idx]
-                embeddings = torch.mean(selected_hidden, dim=1)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                # Whisper uses input_features instead of input_values, but same principle applies
+                if (
+                    hasattr(inputs, "attention_mask")
+                    and inputs.attention_mask is not None
+                ):
+                    batch_size, hidden_seq_len, hidden_size = selected_hidden.shape
+                    device = selected_hidden.device
+
+                    # For Whisper, the attention mask should match the sequence length
+                    # If it doesn't, we need to calculate proper lengths
+                    if inputs.attention_mask.shape[1] != hidden_seq_len:
+                        # Calculate downsample ratio and proper hidden lengths
+                        input_lengths = inputs.attention_mask.sum(dim=1)
+                        downsample_ratio = (
+                            inputs.attention_mask.shape[1] / hidden_seq_len
+                        )
+                        hidden_lengths = (
+                            input_lengths.float() / downsample_ratio
+                        ).long()
+                        hidden_lengths = torch.clamp(
+                            hidden_lengths, min=0, max=hidden_seq_len
+                        )
+
+                        # Create attention mask for hidden states
+                        seq_range = torch.arange(
+                            hidden_seq_len, device=device
+                        ).unsqueeze(0)
+                        hidden_attention_mask = (
+                            seq_range < hidden_lengths.unsqueeze(1)
+                        ).to(selected_hidden.dtype)
+                    else:
+                        # Use the attention mask directly if dimensions match
+                        hidden_attention_mask = inputs.attention_mask.to(
+                            selected_hidden.dtype
+                        )
+
+                    # Apply masked mean pooling
+                    hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                    masked_embeddings = selected_hidden * hidden_attention_mask
+                    valid_tokens = hidden_attention_mask.sum(dim=1)
+                    embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(
+                        min=1e-9
+                    )
+                else:
+                    # Fallback to simple mean pooling if no attention mask
+                    embeddings = torch.mean(selected_hidden, dim=1)
 
                 all_embeddings.append(embeddings.cpu())
 
