@@ -185,7 +185,9 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 batch = processed_audio[i : i + batch_size]
 
                 # Pre-process audio like other working models
-                batch_tensor = self._pad_audio_batch(batch)
+                # batch_tensor = self._pad_audio_batch(batch)
+
+                batch_tensor = [b.cpu().numpy() for b in batch]
 
                 if batch_tensor.ndim == 1:
                     batch_tensor = batch_tensor.unsqueeze(0)
@@ -216,7 +218,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
                 device = last_hidden_state.device
 
-                #    inputs.attention_mask is per-sample mask over input_values
+                # inputs.attention_mask is per-sample mask over input_values
                 input_lengths = inputs.attention_mask.sum(dim=1).cpu().numpy().astype(int)  # shape (B,)
 
                 hidden_lengths = [self.model._get_feat_extract_output_lengths(l) for l in input_lengths]
