@@ -151,8 +151,49 @@ class SeamlessM4TWrapper(Wrapper):
                 )
 
                 last_hidden_state = outputs.last_hidden_state
-                embeddings = last_hidden_state.mean(dim=1).cpu()
-                all_embeddings.append(embeddings)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                if attention_mask is not None:
+                    batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
+                    device = last_hidden_state.device
+
+                    # For SeamlessM4T, check if attention mask matches hidden state length
+                    if attention_mask.shape[1] != hidden_seq_len:
+                        # Calculate downsample ratio and proper hidden lengths
+                        input_lengths = attention_mask.sum(dim=1)
+                        downsample_ratio = attention_mask.shape[1] / hidden_seq_len
+                        hidden_lengths = (
+                            input_lengths.float() / downsample_ratio
+                        ).long()
+                        hidden_lengths = torch.clamp(
+                            hidden_lengths, min=0, max=hidden_seq_len
+                        )
+
+                        # Create attention mask for hidden states
+                        seq_range = torch.arange(
+                            hidden_seq_len, device=device
+                        ).unsqueeze(0)
+                        hidden_attention_mask = (
+                            seq_range < hidden_lengths.unsqueeze(1)
+                        ).to(last_hidden_state.dtype)
+                    else:
+                        # Use the attention mask directly if dimensions match
+                        hidden_attention_mask = attention_mask.to(
+                            last_hidden_state.dtype
+                        )
+
+                    # Apply masked mean pooling
+                    hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                    masked_embeddings = last_hidden_state * hidden_attention_mask
+                    valid_tokens = hidden_attention_mask.sum(dim=1)
+                    embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(
+                        min=1e-9
+                    )
+                else:
+                    # Fallback to simple mean pooling if no attention mask
+                    embeddings = last_hidden_state.mean(dim=1)
+
+                all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
