@@ -1,40 +1,286 @@
 from __future__ import annotations
 
+import heapq
 import logging
+import shutil
+import tempfile
+from pathlib import Path
 from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
 
+from mteb import Encoder
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.create_dataloaders import (
+    create_dataloader,
+)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.requires_package import requires_package
-from mteb.types import Array, BatchedInput, PromptType
+from mteb.types import (
+    Array,
+    BatchedInput,
+    CorpusDatasetType,
+    PromptType,
+    QueryDatasetType,
+    RetrievalOutputType,
+    TopRankedDocumentsType,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class MultiVectorModel(AbsEncoder):
+class PylateSearchEncoder(Encoder):
+    _index_dir: str | None = None
+    _index_name: str | None = None
+    _index_autodelete: bool = True
+    task_corpus: CorpusDatasetType | None = None
+    index_kwargs: dict[str, Any] = {}
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
+    ) -> None:
+        """Index the corpus for retrieval.
+
+        Args:
+            corpus: Corpus dataset to index.
+            task_metadata: Metadata of the task, used to determine how to index the corpus.
+            hf_split: Split of current task, allows to know some additional information about current split.
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+        """
+        from pylate import indexes
+
+        self.task_corpus = corpus
+
+        safe_task = task_metadata.name.replace("/", "__")
+
+        if self._index_dir is None:
+            self._index_dir = tempfile.mkdtemp(
+                prefix=f"mteb-index-{safe_task}-{hf_subset}-{hf_split}"
+            )
+        else:
+            index_dir = Path(self._index_dir)
+            index_dir_items = (
+                len(list(index_dir.iterdir()))
+                if index_dir.exists() and index_dir.is_dir()
+                else 0
+            )
+            if index_dir_items > 0:
+                raise ValueError(
+                    "Index directory is not empty. To have reproducible results, please, use a fresh directory."
+                )
+
+        if self._index_name is None:
+            self._index_name = "index"
+
+        index = indexes.PLAID(
+            index_folder=self._index_dir,
+            index_name=self._index_name,
+            **self.index_kwargs,
+        )
+
+        # Collect all IDs
+        doc_ids = [str(x) for x in corpus["id"]]
+
+        # Encode entire corpus via dataloader batching
+        documents_loader = create_dataloader(
+            corpus,
+            task_metadata,
+            prompt_type=PromptType.document,
+            batch_size=encode_kwargs.get("batch_size", 32),
+        )
+        documents_embeddings = self.encode(
+            documents_loader,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.document,
+            **encode_kwargs,
+        )
+
+        # Add documents to index
+        index.add_documents(
+            documents_ids=doc_ids,
+            documents_embeddings=documents_embeddings,
+        )
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: dict[str, Any],
+        top_ranked: TopRankedDocumentsType | None = None,
+    ) -> RetrievalOutputType:
+        from pylate import indexes, retrieve
+
+        queries_dataloader = create_dataloader(
+            queries,
+            task_metadata,
+            prompt_type=PromptType.query,
+            batch_size=encode_kwargs.get("batch_size", 32),
+        )
+
+        query_embeddings = self.encode(
+            queries_dataloader,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.query,
+            **encode_kwargs,
+        )
+        query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
+
+        if top_ranked is not None:
+            logger.info("Reranking with PyLate...")
+            result_heaps = self._pylate_rerank_documents(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_ranked=top_ranked,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
+            )
+        else:
+            logger.info("Retrieving with MultiVector index...")
+
+            if self._index_dir is None or self._index_name is None:
+                raise ValueError("Index path is not set. Call index() before search().")
+
+            index = indexes.PLAID(
+                index_folder=self._index_dir,
+                index_name=self._index_name,
+                **self.index_kwargs,
+            )
+            retriever = retrieve.ColBERT(index=index)
+            scores = retriever.retrieve(queries_embeddings=query_embeddings, k=top_k)
+
+            # Build heaps in the same structure as dense path for consistency
+            result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+            for q_idx, qid in query_idx_to_id.items():
+                # scores[q_idx] is a list of dicts: {"id": str, "score": float}
+                for item in scores[q_idx]:
+                    heapq.heappush(
+                        result_heaps[qid], (float(item["score"]), str(item["id"]))
+                    )
+
+        results = {qid: {} for qid in query_idx_to_id.values()}
+        for qid in result_heaps:
+            for score, corpus_id in result_heaps[qid]:
+                results[qid][corpus_id] = score
+
+        return results
+
+    def _pylate_rerank_documents(
+        self,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        top_ranked: TopRankedDocumentsType,
+        top_k: int,
+        task_metadata: TaskMetadata,
+        hf_subset: str,
+        hf_split: str,
+        encode_kwargs: dict[str, Any],
+    ) -> dict[str, list[tuple[float, str]]]:
+        """Rerank with PyLate's rank.rerank using per-query candidates.
+
+        Keeps dense rerank untouched by using a PyLate-only path.
+        """
+        from pylate import indexes, rank
+
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before reranking.")
+
+        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+
+        index = indexes.PLAID(
+            index_folder=self._index_dir,
+            index_name=self._index_name,
+            **self.index_kwargs,
+        )
+
+        # Process one query at a time to keep it simple
+        for q_idx, qid in query_idx_to_id.items():
+            if qid not in top_ranked:
+                continue
+            ranked_ids = top_ranked[qid]
+            if not ranked_ids:
+                continue
+
+            documents_embeddings = index.get_documents_embeddings([ranked_ids])
+
+            # Single-query rerank for simplicity
+            q_emb = query_embeddings[q_idx : q_idx + 1]
+            reranked = rank.rerank(
+                documents_ids=[ranked_ids],
+                queries_embeddings=q_emb,
+                documents_embeddings=[documents_embeddings],
+            )
+
+            # Parse PyLate's output
+            for item in reranked[0]:  # list of dicts
+                heapq.heappush(
+                    result_heaps[qid], (float(item["score"]), str(item["id"]))
+                )
+
+            # Keep only top_k
+            if len(result_heaps[qid]) > top_k:
+                result_heaps[qid] = heapq.nlargest(top_k, result_heaps[qid])
+
+        if self._index_autodelete and self._index_dir is not None:
+            try:
+                shutil.rmtree(self._index_dir, ignore_errors=True)
+            finally:
+                self._index_dir = None
+                self._index_name = None
+
+        return result_heaps
+
+
+class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
+    task_corpus: CorpusDatasetType | None = None
+
     def __init__(
         self,
         model_name: str,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        index_dir: str | None = None,
+        index_name: str | None = None,
+        index_autodelete: bool = True,
+        index_kwargs: dict[str, Any] | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for MultiVector/ColBERT models (via PyLate)."""
         requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
-        from pylate import models as colbert_model  # type: ignore[import]
+        from pylate.models import ColBERT  # type: ignore[import]
 
         self.model_name = model_name
-        self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
+        self.model = ColBERT(self.model_name, revision=revision, **kwargs)
         built_in_prompts = getattr(self.model, "prompts", None)
         if built_in_prompts and not model_prompts:
-            model_prompts = built_in_prompts
+            self.model.prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
             logger.info(f"Model.prompts will be overwritten with {model_prompts}")
             self.model.prompts = self.validate_task_to_prompt_name(model_prompts)
+
+        self._index_dir = index_dir
+        self._index_name = index_name
+        self._index_autodelete = index_autodelete
+        self.index_kwargs = index_kwargs or {}
 
     def encode(
         self,
@@ -57,15 +303,12 @@ class MultiVectorModel(AbsEncoder):
             )
         logger.debug(f"Encoding {len(inputs)} items.")
 
-        if "request_qid" in kwargs:
-            kwargs.pop("request_qid")
-
         inputs = [text for batch in inputs for text in batch["text"]]
 
         pred = self.model.encode(
             inputs,
             prompt_name=prompt_name,
-            is_query=True if prompt_type == PromptType.query else False,
+            is_query=prompt_type == PromptType.query,
             convert_to_tensor=True,
             **kwargs,
         )
@@ -74,7 +317,6 @@ class MultiVectorModel(AbsEncoder):
         pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
         return pred.cpu().numpy()
 
- 
 
 colbert_v2 = ModelMeta(
     loader=MultiVectorModel,
@@ -189,32 +431,4 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "MSMARCO",
         "mMARCO-NL",
     },
-)
-
-
-# Additional PyLate-compatible ColBERT model(s)
-lightonai__answerai_colbert_small_v1 = ModelMeta(
-    loader=MultiVectorModel,
-    name="lightonai/answerai-colbert-small-v1",
-    languages=[
-        "eng-Latn",
-    ],
-    open_weights=True,
-    revision=None,
-    public_training_code=None,
-    public_training_data=None,
-    release_date=None,
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    similarity_fn_name=ScoringFunction.MAX_SIM,
-    framework=["PyLate", "ColBERT"],
-    reference=None,
-    use_instructions=False,
-    adapted_from=None,
-    superseded_by=None,
-    training_datasets=None,
-    is_pylate_compatible=True,
 )

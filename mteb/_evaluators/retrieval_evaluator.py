@@ -50,7 +50,6 @@ class RetrievalEvaluator(Evaluator):
         self,
         search_model: SearchProtocol,
         encode_kwargs: dict[str, Any],
-        index_kwargs: dict[str, Any] | None = None,
         **kwargs: Any,
     ) -> RetrievalOutputType:
         search_model.index(
@@ -59,7 +58,6 @@ class RetrievalEvaluator(Evaluator):
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
-            index_kwargs=index_kwargs,
         )
         return search_model.search(
             queries=self.queries,
@@ -68,7 +66,6 @@ class RetrievalEvaluator(Evaluator):
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
-            index_kwargs=index_kwargs,
             top_ranked=self.top_ranked,
         )
 
