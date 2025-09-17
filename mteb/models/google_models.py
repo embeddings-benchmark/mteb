@@ -5,9 +5,11 @@ from typing import Any
 
 import numpy as np
 import tqdm
+from packaging.version import Version
+from transformers import __version__ as transformers_version
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
@@ -238,7 +240,25 @@ google_gemini_embedding_001 = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
 )
 
+
+def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
+    min_transformers_version = "4.56.0"
+
+    if Version(transformers_version) < Version(min_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is lower than the required "
+            f"version {min_transformers_version} to run `{model_name}`"
+        )
+
+    return sentence_transformers_loader(model_name, revision, **kwargs)
+
+
 embedding_gemma_300m = ModelMeta(
+    loader=partial(
+        gemma_embedding_loader,
+        model_name="google/embeddinggemma-300m",
+        revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
+    ),
     name="google/embeddinggemma-300m",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=True,
