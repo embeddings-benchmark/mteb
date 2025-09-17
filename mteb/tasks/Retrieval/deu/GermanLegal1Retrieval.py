@@ -11,7 +11,7 @@ class GermanLegal1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/GermanLegal1Retrieval-sample",
         dataset={
             "path": "mteb-private/GermanLegal1Retrieval",
-            "revision": "65ea369daff680b77f90b560e7e97d2ab4ec5072",  # Updated with latest commit 65ea369d
+            "revision": "65ea369daff680b77f90b560e7e97d2ab4ec5072",
         },
         type="Retrieval",
         category="s2p",

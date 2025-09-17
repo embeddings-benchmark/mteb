@@ -11,7 +11,7 @@ class FrenchLegal1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/FrenchLegal1Retrieval-sample",
         dataset={
             "path": "mteb-private/FrenchLegal1Retrieval",
-            "revision": "6d7308571a1572e22d5c0c1cb87385a7bb6b2c6d",  # Updated with latest commit 6d73085
+            "revision": "6d7308571a1572e22d5c0c1cb87385a7bb6b2c6d",
         },
         type="Retrieval",
         category="s2p",

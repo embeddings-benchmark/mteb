@@ -11,7 +11,7 @@ class EnglishFinance1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/EnglishFinance1Retrieval-sample",
         dataset={
             "path": "mteb-private/EnglishFinance1Retrieval",
-            "revision": "b2816ead5389ee383019bb2e50df9f1aac8229d8",  # Updated with latest commit b2816ead
+            "revision": "b2816ead5389ee383019bb2e50df9f1aac8229d8",
         },
         type="Retrieval",
         category="s2p",

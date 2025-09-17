@@ -11,7 +11,7 @@ class GermanHealthcare1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/GermanHealthcare1Retrieval-sample",
         dataset={
             "path": "mteb-private/GermanHealthcare1Retrieval",
-            "revision": "53e9a6fb88b48b7513e9d2cc2218e3415f4e45f8",  # Updated with latest commit 53e9a6fb
+            "revision": "53e9a6fb88b48b7513e9d2cc2218e3415f4e45f8",
         },
         type="Retrieval",
         category="s2p",

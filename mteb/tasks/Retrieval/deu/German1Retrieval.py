@@ -11,7 +11,7 @@ class German1Retrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mteb-private/German1Retrieval-sample",
         dataset={
             "path": "mteb-private/German1Retrieval",
-            "revision": "d83dd140fc8fdf96372a6e9193cd4fd2d5cb72bd",  # Updated with latest commit d83dd140
+            "revision": "d83dd140fc8fdf96372a6e9193cd4fd2d5cb72bd",
         },
         type="Retrieval",
         category="s2p",
