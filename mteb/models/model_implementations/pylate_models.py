@@ -10,7 +10,6 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 
-from mteb import Encoder
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
     create_dataloader,
@@ -31,7 +30,7 @@ from mteb.types import (
 logger = logging.getLogger(__name__)
 
 
-class PylateSearchEncoder(Encoder):
+class PylateSearchEncoder:
     _index_dir: str | None = None
     _index_name: str | None = None
     _index_autodelete: bool = True
