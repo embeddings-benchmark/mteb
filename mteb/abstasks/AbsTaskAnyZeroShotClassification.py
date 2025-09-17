@@ -60,12 +60,6 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
     input_column_name: str = "image"
     label_column_name: str = "label"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ZeroShotClassificationDescriptiveStatistics:
@@ -114,6 +108,9 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         candidate_labels = self.get_candidate_labels()
+        dataset = dataset.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         evaluator = ZeroShotClassificationEvaluator(
             dataset,
             self.input_column_name,
