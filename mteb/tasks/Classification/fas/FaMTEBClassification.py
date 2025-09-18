@@ -465,6 +465,7 @@ class SynPerTextToneClassification(AbsTaskClassification):
 
 
 class SynPerTextToneClassificationV2(AbsTaskClassification):
+    superseded_by = "SynPerTextToneClassification.v3"
     metadata = TaskMetadata(
         name="SynPerTextToneClassification.v2",
         description="""Persian Text Tone
@@ -473,6 +474,35 @@ class SynPerTextToneClassificationV2(AbsTaskClassification):
         dataset={
             "path": "mteb/syn_per_text_tone",
             "revision": "0ed7459db7e905714dc02cbe25b4eac55e91021e",
+        },
+        type="Classification",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=[],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="LM-generated",
+        dialect=[],
+        sample_creation="LM-generated and verified",
+        bibtex_citation=""" """,
+        adapted_from=["SynPerTextToneClassification"],
+    )
+    samples_per_label = 32
+
+
+class SynPerTextToneClassificationV3(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SynPerTextToneClassification.v3",
+        description="""This version of the Persian text tone classification dataset is an improved version of its predecessors.
+         It excludes several classes identified as having low-quality data, leading to a more reliable benchmark.""",
+        reference="https://mcinext.com/",
+        dataset={
+            "path": "MCINext/synthetic-persian-text-tone-classification-v3",
+            "revision": "ff6d88107a89abeb10aa28751b31d78831d7d503",
         },
         type="Classification",
         category="s2p",
@@ -813,3 +843,137 @@ class DigikalamagClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("content", "text")
+
+
+class FaIntentClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="FaIntentClassification",
+        description="Questions in 4 different categories that a user might ask their voice assistant to do",
+        reference="https://github.com/HalflingWizard/FA-Intent-Classification-and-Slot-Filling",
+        dataset={
+            "path": "MCINext/FaIntent",
+            "revision": "fc380690afbee9dba4dc618ef852285fa26f1d51",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2021-09-01", "2021-12-31"),
+        domains=["Spoken"],
+        task_subtypes=[],
+        license="gpl-3.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("words", "text")
+        self.dataset = self.dataset.rename_column("intent_label", "label")
+
+
+class StyleClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="StyleClassification",
+        description="A dataset containing formal and informal sentences in Persian for style classification.",
+        reference="https://huggingface.co/datasets/MCINext/style-classification",
+        dataset={
+            "path": "MCINext/style-classification",
+            "revision": "41a0848f718a28b9a6333b2be47b6dc93d5c1803",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Spoken"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        mapping = {"formal": 1, "informal": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {"label": mapping[example["label"]]}
+        )
+
+
+class PerShopDomainClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="PerShopDomainClassification",
+        description="PerSHOP - A Persian dataset for shopping dialogue systems modeling",
+        reference="https://github.com/keyvanmahmoudi/PerSHOP",
+        dataset={
+            "path": "MCINext/pershop-classification",
+            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2023-09-01", "2024-01-31"),
+        domains=["Spoken"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=r"""@article{mahmoudi2024pershop,
+  author = {Mahmoudi, Keyvan and Faili, Heshaam},
+  journal = {arXiv preprint arXiv:2401.00811},
+  title = {PerSHOP--A Persian dataset for shopping dialogue systems modeling},
+  year = {2024},
+}""",
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("domain", "label")
+
+
+class PerShopIntentClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="PerShopIntentClassification",
+        description="PerSHOP - A Persian dataset for shopping dialogue systems modeling",
+        reference="https://github.com/keyvanmahmoudi/PerSHOP",
+        dataset={
+            "path": "MCINext/pershop-classification",
+            "revision": "05027cfce1d20ab7c9f4755b064ea6958cdee96e",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="accuracy",
+        date=("2023-09-01", "2024-01-31"),
+        domains=["Spoken"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="created",
+        bibtex_citation=r"""@article{mahmoudi2024pershop,
+  author = {Mahmoudi, Keyvan and Faili, Heshaam},
+  journal = {arXiv preprint arXiv:2401.00811},
+  title = {PerSHOP--A Persian dataset for shopping dialogue systems modeling},
+  year = {2024},
+}""",
+    )
+    samples_per_label = 32
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("Intents & Actions", "label")

@@ -25,10 +25,12 @@ MODEL_API_NAMES = {
 # Dataset task mappings with descriptions and task IDs
 DATASET_TASKS = {
     "PersianTextEmotion": ("دسته بندی , دسته بندی احساس متن", 1),
+    "PersianTextEmotion.v2": ("دسته بندی , دسته بندی احساس متن", 1),
     "PersianFoodSentimentClassification": ("دسته بندی , تحلیل احساس رضایت متن", 1),
     "SentimentDKSF": ("دسته بندی , تحلیل احساس رضایت متن", 1),
     "MassiveIntentClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
     "MassiveScenarioClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "StyleClassification": ("دسته بندی , تشخیص لحن متن", 1),
     "SynPerChatbotConvSAAnger": (
         "دسته بندی , تحلیل احساس عصبانیت کاربر در مکالمه با چت بات",
         1,
@@ -74,6 +76,7 @@ DATASET_TASKS = {
         1,
     ),
     "PersianTextTone": ("دسته بندی , تشخیص لحن متن", 1),
+    "SynPerTextToneClassification.v3": ("دسته بندی , تشخیص لحن متن", 1),
     "SynPerChatbotToneUserClassification": (
         "دسته بندی , تشخیص لحن کاربر در مکالمه با چت بات",
         1,
@@ -94,28 +97,13 @@ DATASET_TASKS = {
         "دسته بندی , تحلیل احساس رضایت کاربر در مکالمه با چت بات",
         1,
     ),
-    "DigimagClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
-    "NLPTwitterAnalysisClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
-    "SIDClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
-    "DeepSentiPers": ("دسته بندی , تحلیل احساس رضایت متن", 1),
     "DigikalamagClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
-    "FarsTail": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 4),
-    "ParsinluEntail": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 4),
-    "ParsinluQueryParaphPC": (
-        "تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟",
-        4,
-    ),
-    "SynPerChatbotRAGFAQPC": (
-        "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم خلاصه ی متن اول است ؟",
-        4,
-    ),
-    "SynPerTextKeywordsPC": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", 4),
-    "SynPerQAPC": ("تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟", 4),
-    "CExaPPC": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 4),
-    "FarsiParaphraseDetection": (
-        "تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟",
-        4,
-    ),
+    "NLPTwitterAnalysisClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "NLPTwitterAnalysisClassification.v2": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "SIDClassification": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "SIDClassification.v2": ("دسته بندی , دسته بندی موضوعی متن", 1),
+    "DeepSentiPers": ("دسته بندی , تحلیل احساس رضایت متن", 1),
+    "DeepSentiPers.v2": ("دسته بندی , تحلیل احساس رضایت متن", 1),
     "Farsick": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 3),
     "Query2Query": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 3),
     "SynPerSTS": ("تشخیص ارتباط , آیا متن دوم شباهت معنایی با متن اول دارد ؟", 3),
@@ -150,14 +138,7 @@ DATASET_TASKS = {
         "تشخیص ارتباط , متن اول مکالمه ی کاربر با چت بات است. آیا متن دوم موضوع استخراج شده ی متن اول است ؟",
         3,
     ),
-    "SynPerChatbotRAGFAQRetrieval": (
-        "تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟",
-        3,
-    ),
-    "PersianWebDocumentRetrieval": (
-        "تشخیص ارتباط , آیا متن دوم به متن اول مرتبط است ؟",
-        3,
-    ),
+    "WebFAQRetrieval": ("تشخیص ارتباط , آیا متن دوم پاسخ متن اول است ؟", 3),
 }
 
 # Add all retrieval datasets with the same instruction and task ID
@@ -189,6 +170,21 @@ RETRIEVAL_DATASETS = [
     "Touche2020-Fa",
     "MIRACLRetrieval",
     "WikipediaRetrievalMultilingual",
+    "MIRACLRetrievalHardNegatives",
+    "HotpotQA-FaHardNegatives",
+    "MSMARCO-FaHardNegatives",
+    "NQ-FaHardNegatives",
+    "FEVER-FaHardNegatives",
+    "NeuCLIR2022RetrievalHardNegatives",
+    "NeuCLIR2023RetrievalHardNegatives",
+    "ArguAna-Fa.v2",
+    "FiQA2018-Fa.v2",
+    "SCIDOCS-Fa.v2",
+    "SciFact-Fa.v2",
+    "TRECCOVID-Fa.v2",
+    "Touche2020-Fa.v2",
+    "PersianWebDocumentRetrieval",
+    "SynPerChatbotRAGFAQRetrieval",
 ]
 
 for dataset in RETRIEVAL_DATASETS:
