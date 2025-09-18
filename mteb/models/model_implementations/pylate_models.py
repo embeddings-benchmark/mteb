@@ -31,6 +31,8 @@ logger = logging.getLogger(__name__)
 
 
 class PylateSearchEncoder:
+    """Mixin class to add PyLate-based indexing and search to an encoder. Implements :class:`SearchProtocol`"""
+
     _index_dir: str | None = None
     _index_name: str | None = None
     _index_autodelete: bool = True
