@@ -46,14 +46,14 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [NanoBEIR](https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6) | NanoBEIR | 13 | Retrieval: 13 | [Academic, Encyclopaedic, Medical, News, Non-fiction, Social, Web, Written] | eng |
 | [R2MED](https://r2med.github.io/) | Reasoning-driven medical retrieval | 8 | Retrieval: 8 | [Medical] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
-| RTEB(Code, beta) | RTEB Code | 6 | Retrieval: 6 | [Programming, Written] | eng,go,javascript,python,sql |
-| RTEB(Health, beta) | RTEB Healthcare | 2 | Retrieval: 2 | [Academic, Medical, Written] | eng,fra,spa |
-| RTEB(Law, beta) | RTEB Legal | 4 | Retrieval: 4 | [Legal, Written] | deu,eng |
-| RTEB(beta) | RTEB Retrieval Embedding Benchmark | 15 | Retrieval: 15 | [Academic, Financial, Legal, Medical, Programming, Written] | deu,eng,fra,go,javascript,python,spa,sql |
-| RTEB(deu, beta) | RTEB German | 1 | Retrieval: 1 | [Legal, Written] | deu |
-| RTEB(eng, beta) | RTEB English | 14 | Retrieval: 14 | [Academic, Financial, Legal, Medical, Programming, Written] | eng,fra,go,javascript,python,spa,sql |
-| RTEB(fin, beta) | RTEB Finance | 3 | Retrieval: 3 | [Financial] | eng |
-| RTEB(fr, beta) | RTEB French | 1 | Retrieval: 1 | [Academic, Medical, Written] | eng,fra |
+| RTEB(Code, beta) | RTEB Code | 8 | Retrieval: 8 | [Programming, Written] | eng,go,javascript,jpn,python,sql |
+| RTEB(Health, beta) | RTEB Healthcare | 4 | Retrieval: 4 | [Academic, Medical, Written] | deu,eng,fra,spa |
+| RTEB(Law, beta) | RTEB Legal | 7 | Retrieval: 7 | [Legal, Written] | deu,eng,fra,jpn |
+| RTEB(beta) | RTEB Retrieval Embedding Benchmark | 28 | Retrieval: 28 | [Academic, Encyclopaedic, Financial, Legal, Medical, Non-fiction, Programming, Written] | deu,eng,fra,go,javascript,jpn,python,spa,sql |
+| RTEB(deu, beta) | RTEB German | 4 | Retrieval: 4 | [Legal, Medical, Non-fiction, Written] | deu |
+| RTEB(eng, beta) | RTEB English | 20 | Retrieval: 20 | [Academic, Financial, Legal, Medical, Non-fiction, Programming, Written] | eng,fra,go,javascript,python,spa,sql |
+| RTEB(fin, beta) | RTEB Finance | 7 | Retrieval: 7 | [Financial, Non-fiction, Written] | eng |
+| RTEB(fr, beta) | RTEB French | 3 | Retrieval: 3 | [Academic, Encyclopaedic, Legal, Medical, Written] | eng,fra |
 | [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
 | [VN-MTEB (vie, v1)](https://arxiv.org/abs/2507.21500) | Vietnamese | 50 | Retrieval: 24, Classification: 12, PairClassification: 3, Clustering: 5, Reranking: 3, STS: 3 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | vie |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
