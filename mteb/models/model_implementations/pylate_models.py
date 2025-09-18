@@ -33,7 +33,8 @@ logger = logging.getLogger(__name__)
 class PylateSearchEncoder:
     """Mixin class to add PyLate-based indexing and search to an encoder. Implements :class:`SearchProtocol`"""
 
-    _index_dir: str | None = None
+    base_index_dir: Path | None = None
+    _index_dir: Path | None = None
     _index_name: str | None = None
     _index_autodelete: bool = True
     task_corpus: CorpusDatasetType | None = None
@@ -57,61 +58,19 @@ class PylateSearchEncoder:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
         """
-        from pylate import indexes
-
         self.task_corpus = corpus
 
         safe_task = task_metadata.name.replace("/", "__")
 
-        if self._index_dir is None:
-            self._index_dir = tempfile.mkdtemp(
-                prefix=f"mteb-index-{safe_task}-{hf_subset}-{hf_split}"
-            )
+        index_dir_name = f"mteb-index-{safe_task}-{hf_subset}-{hf_split}"
+        if self.base_index_dir is None:
+            self._index_dir = Path(tempfile.mkdtemp(prefix=index_dir_name))
         else:
-            index_dir = Path(self._index_dir)
-            index_dir_items = (
-                len(list(index_dir.iterdir()))
-                if index_dir.exists() and index_dir.is_dir()
-                else 0
-            )
-            if index_dir_items > 0:
-                raise ValueError(
-                    "Index directory is not empty. To have reproducible results, please, use a fresh directory."
-                )
+            self._index_dir = self.base_index_dir / index_dir_name
+            self._index_dir.mkdir(parents=True, exist_ok=True)
 
         if self._index_name is None:
             self._index_name = "index"
-
-        index = indexes.PLAID(
-            index_folder=self._index_dir,
-            index_name=self._index_name,
-            **self.index_kwargs,
-        )
-
-        # Collect all IDs
-        doc_ids = [str(x) for x in corpus["id"]]
-
-        # Encode entire corpus via dataloader batching
-        documents_loader = create_dataloader(
-            corpus,
-            task_metadata,
-            prompt_type=PromptType.document,
-            batch_size=encode_kwargs.get("batch_size", 32),
-        )
-        documents_embeddings = self.encode(
-            documents_loader,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=PromptType.document,
-            **encode_kwargs,
-        )
-
-        # Add documents to index
-        index.add_documents(
-            documents_ids=doc_ids,
-            documents_embeddings=documents_embeddings,
-        )
 
     def search(
         self,
@@ -124,8 +83,6 @@ class PylateSearchEncoder:
         encode_kwargs: dict[str, Any],
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
-        from pylate import indexes, retrieve
-
         queries_dataloader = create_dataloader(
             queries,
             task_metadata,
@@ -156,27 +113,15 @@ class PylateSearchEncoder:
                 encode_kwargs=encode_kwargs,
             )
         else:
-            logger.info("Retrieving with MultiVector index...")
-
-            if self._index_dir is None or self._index_name is None:
-                raise ValueError("Index path is not set. Call index() before search().")
-
-            index = indexes.PLAID(
-                index_folder=self._index_dir,
-                index_name=self._index_name,
-                **self.index_kwargs,
+            result_heaps = self._pylate_full_corpus_search(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
             )
-            retriever = retrieve.ColBERT(index=index)
-            scores = retriever.retrieve(queries_embeddings=query_embeddings, k=top_k)
-
-            # Build heaps in the same structure as dense path for consistency
-            result_heaps = {qid: [] for qid in query_idx_to_id.values()}
-            for q_idx, qid in query_idx_to_id.items():
-                # scores[q_idx] is a list of dicts: {"id": str, "score": float}
-                for item in scores[q_idx]:
-                    heapq.heappush(
-                        result_heaps[qid], (float(item["score"]), str(item["id"]))
-                    )
 
         results = {qid: {} for qid in query_idx_to_id.values()}
         for qid in result_heaps:
@@ -184,6 +129,66 @@ class PylateSearchEncoder:
                 results[qid][corpus_id] = score
 
         return results
+
+    def _pylate_full_corpus_search(
+        self,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        task_metadata: TaskMetadata,
+        hf_subset: str,
+        hf_split: str,
+        top_k: int,
+        encode_kwargs: dict[str, Any],
+    ) -> dict[str, list[tuple[float, str]]]:
+        from pylate import indexes, retrieve
+
+        logger.info("Retrieving with MultiVector index...")
+
+        if self._index_dir is None or self._index_name is None:
+            raise ValueError("Index path is not set. Call index() before search().")
+
+        index = indexes.PLAID(
+            index_folder=str(self._index_dir),
+            index_name=self._index_name,
+            **self.index_kwargs,
+        )
+
+        # Collect all IDs
+        doc_ids = [str(x) for x in self.task_corpus["id"]]
+
+        # Encode entire corpus via dataloader batching
+        documents_loader = create_dataloader(
+            self.task_corpus,
+            task_metadata,
+            prompt_type=PromptType.document,
+            batch_size=encode_kwargs.get("batch_size", 32),
+        )
+        documents_embeddings = self.encode(
+            documents_loader,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.document,
+            **encode_kwargs,
+        )
+
+        # Add documents to index
+        index.add_documents(
+            documents_ids=doc_ids,
+            documents_embeddings=documents_embeddings,
+        )
+        retriever = retrieve.ColBERT(index=index)
+        scores = retriever.retrieve(queries_embeddings=query_embeddings, k=top_k)
+
+        # Build heaps in the same structure as dense path for consistency
+        result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+        for q_idx, qid in query_idx_to_id.items():
+            # scores[q_idx] is a list of dicts: {"id": str, "score": float}
+            for item in scores[q_idx]:
+                heapq.heappush(
+                    result_heaps[qid], (float(item["score"]), str(item["id"]))
+                )
+        return result_heaps
 
     def _pylate_rerank_documents(
         self,
@@ -200,17 +205,26 @@ class PylateSearchEncoder:
 
         Keeps dense rerank untouched by using a PyLate-only path.
         """
-        from pylate import indexes, rank
+        from pylate import rank
 
         if self.task_corpus is None:
-            raise ValueError("Corpus must be indexed before reranking.")
+            raise ValueError("Corpus must be set before reranking.")
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
+        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 
-        index = indexes.PLAID(
-            index_folder=self._index_dir,
-            index_name=self._index_name,
-            **self.index_kwargs,
+        all_doc_embeddings = self.encode(
+            create_dataloader(
+                self.task_corpus,
+                task_metadata,
+                prompt_type=PromptType.document,
+                batch_size=encode_kwargs.get("batch_size", 32),
+            ),
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.document,
+            **encode_kwargs,
         )
 
         # Process one query at a time to keep it simple
@@ -221,14 +235,14 @@ class PylateSearchEncoder:
             if not ranked_ids:
                 continue
 
-            documents_embeddings = index.get_documents_embeddings([ranked_ids])
+            doc_indices = torch.tensor([doc_id_to_idx[doc_id] for doc_id in ranked_ids])
+            query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
 
-            # Single-query rerank for simplicity
-            q_emb = query_embeddings[q_idx : q_idx + 1]
+            q_emb = query_embeddings[q_idx]
             reranked = rank.rerank(
                 documents_ids=[ranked_ids],
-                queries_embeddings=q_emb,
-                documents_embeddings=[documents_embeddings],
+                queries_embeddings=[q_emb],
+                documents_embeddings=[query_doc_embeddings],
             )
 
             # Parse PyLate's output
@@ -259,7 +273,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
         model_name: str,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        index_dir: str | None = None,
+        index_dir: str | Path | None = None,
         index_name: str | None = None,
         index_autodelete: bool = True,
         index_kwargs: dict[str, Any] | None = None,
@@ -278,7 +292,7 @@ class MultiVectorModel(AbsEncoder, PylateSearchEncoder):
             logger.info(f"Model.prompts will be overwritten with {model_prompts}")
             self.model.prompts = self.validate_task_to_prompt_name(model_prompts)
 
-        self._index_dir = index_dir
+        self.base_index_dir = Path(index_dir) if index_dir else None
         self._index_name = index_name
         self._index_autodelete = index_autodelete
         self.index_kwargs = index_kwargs or {}
