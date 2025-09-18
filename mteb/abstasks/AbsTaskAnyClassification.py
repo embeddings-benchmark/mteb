@@ -110,7 +110,8 @@ class AbsTaskAnyClassification(AbsTask):
             else:
                 ds = self.dataset[hf_subset]
 
-            ds = ds.select_columns([self.label_column_name, self.input_column_name])
+            if isinstance(ds, (Dataset, DatasetDict)):
+                ds = ds.select_columns([self.label_column_name, self.input_column_name])
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,

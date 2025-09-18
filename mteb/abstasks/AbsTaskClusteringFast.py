@@ -10,12 +10,12 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
-from torch.utils.data import DataLoader
 
 from mteb.models import Encoder
 from mteb.types import HFSubset
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
+from ..create_dataloaders import create_dataloader
 from ._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
@@ -170,7 +170,12 @@ class AbsTaskClusteringFast(AbsTask):
             [self.input_column_name, self.label_column_name]
         )
         embeddings = model.encode(
-            DataLoader(downsampled_dataset),
+            create_dataloader(
+                downsampled_dataset,
+                self.metadata,
+                input_column=self.input_column_name,
+                batch_size=encode_kwargs["batch_size"],
+            ),
             task_metadata=self.metadata,
             hf_subset=hf_subset,
             hf_split=hf_split,
