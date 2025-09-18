@@ -7,8 +7,6 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor
-from transformers.utils.import_utils import is_flash_attn_2_available
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
@@ -26,12 +24,19 @@ class GraniteVisionEmbeddingWrapper:
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        attn_implementation: str | None = None,
         **kwargs,
     ):
+        from transformers import AutoModel, AutoProcessor
+        from transformers.utils.import_utils import is_flash_attn_2_available
+
         requires_image_dependencies()
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model_name = model_name
+
+        if attn_implementation is None and is_flash_attn_2_available():
+            attn_implementation = "flash_attention_2"
 
         # Load model
         self.mdl = AutoModel.from_pretrained(
@@ -157,9 +162,6 @@ granite_vision_embedding = ModelMeta(
     loader=GraniteVisionEmbeddingWrapper,
     loader_kwargs=dict(
         torch_dtype=torch.float16,
-        attn_implementation="flash_attention_2"
-        if is_flash_attn_2_available()
-        else None,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
     languages=["eng-Latn"],

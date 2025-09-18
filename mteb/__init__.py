@@ -13,7 +13,7 @@ from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 from mteb.results import BenchmarkResults, TaskResult
 
 from .benchmarks.benchmark import Benchmark
-from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
+from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
@@ -29,7 +29,6 @@ __all__ = [
     "get_benchmark",
     "get_benchmarks",
     "BenchmarkResults",
-    "BENCHMARK_REGISTRY",
     "MTEB",
     "TaskResult",
     "TaskMetadata",

@@ -5,18 +5,12 @@ from collections.abc import Iterable
 from copy import deepcopy
 from pathlib import Path
 from time import time
-from typing import Any, cast
-
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from typing import TYPE_CHECKING, Any, cast
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
-from mteb.models.get_model_meta import (
-    _model_meta_from_cross_encoder,
-    _model_meta_from_sentence_transformers,
-)
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
@@ -29,6 +23,10 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.types import HFSubset, SplitName
+from mteb.types._metadata import ModelName, Revision
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -61,30 +59,41 @@ empty_model_meta = ModelMeta(
 )
 
 
-# TODO: seems like we could avoid this by making the wrapper first
-def _get_model_meta(model: Encoder | SentenceTransformer | CrossEncoder) -> ModelMeta:
-    meta: ModelMeta | None = None
-    if hasattr(model, "mteb_model_meta"):
-        meta = model.mteb_model_meta  # type: ignore
-
-    if meta is None:
-        if isinstance(model, CrossEncoder):
-            meta = _model_meta_from_cross_encoder(model)
-        elif isinstance(model, SentenceTransformer):
-            meta = _model_meta_from_sentence_transformers(model)
-        else:
-            meta = empty_model_meta
-
-    # create a copy of the meta to avoid modifying the original object
-    meta = deepcopy(meta)
-    meta.revision = meta.revision or "no_revision_available"
-    meta.name = meta.name or "no_model_name_available"
-
+def create_empty_model_meta() -> ModelMeta:
+    meta = deepcopy(empty_model_meta)
+    meta.revision = "no_revision_available"
+    meta.name = "no_model_name_available"
     return meta
 
 
+def _sanitize_model(
+    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
+) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
+    if isinstance(model, SentenceTransformer):
+        _mdl = SentenceTransformerEncoderWrapper(model)
+        meta = _mdl.mteb_model_meta
+        _mdl = cast(Encoder, _mdl)
+        model = _mdl
+    elif isinstance(model, CrossEncoder):
+        _mdl = CrossEncoderWrapper(model)
+        _mdl = cast(CrossEncoderProtocol, _mdl)
+        meta = _mdl.mteb_model_meta
+        model = _mdl
+    elif hasattr(model, "mteb_model_meta"):
+        meta = model.mteb_model_meta  # type: ignore[attr-defined]
+    else:
+        meta = create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+
+    model_name = cast(str, meta.name)
+    model_revision = cast(str, meta.revision)
+
+    return model, meta, model_name, model_revision
+
+
 def _evaluate_task(
-    model: Encoder,
+    model: MTEBModels,
     task: AbsTask,
     *,
     splits: dict[SplitName, list[HFSubset]],
@@ -223,7 +232,7 @@ def evaluate(
         task = cast(AbsTaskAggregate, tasks)
         results = evaluate(
             model,
-            task.metadata.tasks,
+            task.metadata.task_list,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -262,17 +271,7 @@ def evaluate(
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
-    meta = _get_model_meta(model) if not isinstance(model, ModelMeta) else model
-    model_name = cast(str, meta.name)
-    model_revision = cast(str, meta.revision)
-    if isinstance(model, SentenceTransformer):
-        model = SentenceTransformerEncoderWrapper(model)
-        model.mteb_model_meta = meta
-        model = cast(Encoder, model)
-    elif isinstance(model, CrossEncoder):
-        model = CrossEncoderWrapper(model)
-        model.mteb_model_meta = meta
-        model = cast(CrossEncoderProtocol, model)
+    model, meta, model_name, model_revision = _sanitize_model(model)
 
     existing_results = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:

@@ -1,17 +1,7 @@
 from __future__ import annotations
 
-from typing import Annotated
-
-from pydantic import AnyUrl, BeforeValidator, TypeAdapter
-
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
-
-http_url_adapter = TypeAdapter(AnyUrl)
-UrlString = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
-
 
 MMTEB_CITATION = """@article{enevoldsen2025mmtebmassivemultilingualtext,
   author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -194,43 +184,45 @@ MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
     display_name="Russian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
-    tasks=get_tasks(
-        languages=["rus"],
-        tasks=[
-            # Classification
-            "GeoreviewClassification",
-            "HeadlineClassification",
-            "InappropriatenessClassification",
-            "KinopoiskClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "RuReviewsClassification",
-            "RuSciBenchGRNTIClassification",
-            "RuSciBenchOECDClassification",
-            # Clustering
-            "GeoreviewClusteringP2P",
-            "RuSciBenchGRNTIClusteringP2P",
-            "RuSciBenchOECDClusteringP2P",
-            # MultiLabelClassification
-            "CEDRClassification",
-            "SensitiveTopicsClassification",
-            # PairClassification
-            "TERRa",
-            # Reranking
-            "MIRACLReranking",
-            "RuBQReranking",
-            # Retrieval
-            "MIRACLRetrieval",
-            "RiaNewsRetrieval",
-            "RuBQRetrieval",
-            # STS
-            "RUParaPhraserSTS",
-            "STS22",
-        ],
-    )
-    + get_tasks(
-        tasks=["RuSTSBenchmarkSTS"],
-        eval_splits=["test"],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["rus"],
+            tasks=[
+                # Classification
+                "GeoreviewClassification",
+                "HeadlineClassification",
+                "InappropriatenessClassification",
+                "KinopoiskClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "RuReviewsClassification",
+                "RuSciBenchGRNTIClassification",
+                "RuSciBenchOECDClassification",
+                # Clustering
+                "GeoreviewClusteringP2P",
+                "RuSciBenchGRNTIClusteringP2P",
+                "RuSciBenchOECDClusteringP2P",
+                # MultiLabelClassification
+                "CEDRClassification",
+                "SensitiveTopicsClassification",
+                # PairClassification
+                "TERRa",
+                # Reranking
+                "MIRACLReranking",
+                "RuBQReranking",
+                # Retrieval
+                "MIRACLRetrieval",
+                "RiaNewsRetrieval",
+                "RuBQRetrieval",
+                # STS
+                "RUParaPhraserSTS",
+                "STS22",
+            ],
+        )
+        + get_tasks(
+            tasks=["RuSTSBenchmarkSTS"],
+            eval_splits=["test"],
+        )
     ),
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
@@ -1262,25 +1254,27 @@ CODE_RAG = Benchmark(
 
 BEIR = Benchmark(
     name="BEIR",
-    tasks=get_tasks(
-        tasks=[
-            "TRECCOVID",
-            "NFCorpus",
-            "NQ",
-            "HotpotQA",
-            "FiQA2018",
-            "ArguAna",
-            "Touche2020",
-            "CQADupstackRetrieval",
-            "QuoraRetrieval",
-            "DBPedia",
-            "SCIDOCS",
-            "FEVER",
-            "ClimateFEVER",
-            "SciFact",
-        ],
-    )
-    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "TRECCOVID",
+                "NFCorpus",
+                "NQ",
+                "HotpotQA",
+                "FiQA2018",
+                "ArguAna",
+                "Touche2020",
+                "CQADupstackRetrieval",
+                "QuoraRetrieval",
+                "DBPedia",
+                "SCIDOCS",
+                "FEVER",
+                "ClimateFEVER",
+                "SciFact",
+            ],
+        )
+        + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
+    ),
     description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""

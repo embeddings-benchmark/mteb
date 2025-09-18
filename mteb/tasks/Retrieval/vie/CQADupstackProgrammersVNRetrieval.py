@@ -4,7 +4,7 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CQADupstackProgrammersRetrieval(AbsTaskRetrieval):
+class CQADupstackProgrammersRetrievalVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackProgrammers-VN",
         description="""A translated dataset from CQADupStack: A Benchmark Data Set for Community Question-Answering Research

@@ -5,7 +5,6 @@ from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
-from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
@@ -50,6 +49,11 @@ class MonoT5Reranker(RerankerWrapper):
         **kwargs,
     ):
         super().__init__(model_name_or_path, **kwargs)
+        from transformers import (
+            AutoModelForSeq2SeqLM,
+            AutoTokenizer,
+        )
+
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model_args = {}
@@ -155,6 +159,8 @@ class LlamaReranker(RerankerWrapper):
     def __init__(
         self, model_name_or_path: str, is_classification: bool = False, **kwargs
     ):
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
         if "torch_compile" in kwargs:
             del kwargs["torch_compile"]
         super().__init__(model_name_or_path, **kwargs)

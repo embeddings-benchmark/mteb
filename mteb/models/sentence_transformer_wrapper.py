@@ -3,27 +3,24 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import sentence_transformers
+import numpy as np
 import torch
 from packaging.version import Version
-from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
 
+from mteb.models import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder, SentenceTransformer
+
     from mteb.abstasks.task_metadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
-
-HAS_QUERY_ENCODE = (
-    Version(sentence_transformers.__version__).release
-    >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
-)
 
 
 def sentence_transformers_loader(
@@ -35,6 +32,8 @@ def sentence_transformers_loader(
 
 
 class SentenceTransformerEncoderWrapper(AbsEncoder):
+    mteb_model_meta: ModelMeta
+
     def __init__(
         self,
         model: str | SentenceTransformer,
@@ -53,22 +52,25 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
+        from sentence_transformers import SentenceTransformer
+
         if isinstance(model, str):
             self.model = SentenceTransformer(model, revision=revision, **kwargs)
-            from mteb.models.get_model_meta import (
-                _model_meta_from_sentence_transformers,
-            )
-
-            self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
         else:
             self.model = model
+        from mteb.models.get_model_meta import (
+            _model_meta_from_sentence_transformers,
+        )
 
-        if (
-            built_in_prompts := getattr(self.model, "prompts", None)
-        ) and not model_prompts:
+        self.mteb_model_meta = _model_meta_from_sentence_transformers(self.model)
+
+        built_in_prompts = getattr(self.model, "prompts", None)
+        if built_in_prompts and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
-            logger.warning(f"Model prompts will be overwritten with {model_prompts}")
+            logger.warning(
+                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            )
             self.model.prompts = model_prompts
 
         self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
@@ -129,6 +131,13 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
+        from sentence_transformers import __version__ as st_version
+
+        HAS_QUERY_ENCODE = (
+            Version(st_version).release
+            >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+        )
+
         _inputs = [text for batch in inputs for text in batch["text"]]
 
         prompt = None
@@ -167,6 +176,76 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         return embeddings
 
 
+class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: The sentences to encode.
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+            prompt_type: The name type of prompt. (query or passage)
+            hf_split: Split of current task
+            hf_subset: Subset of current task
+            **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type (query or passage)
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type (query or passage)
+                4. Specific task type prompt
+                5. Specific prompt type (query or passage)
+
+
+        Returns:
+            The encoded sentences.
+        """
+        prompt = None
+        prompt_name = None
+        if self.model_prompts is not None:
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+            prompt = self.model_prompts.get(prompt_name, None)
+        if prompt_name:
+            logger.info(
+                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+            )
+
+        all_embeddings = []
+        for batch in inputs:
+            batch_column = list(batch.keys())[0]
+            batched_input = [dict() for _ in range(len(batch[batch_column]))]
+
+            # transform from {"text": [text1, text2], "image": [image1, image2]} to
+            # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
+            for key, values in batch.items():
+                for i, value in enumerate(values):
+                    batched_input[i][key] = value
+
+            embeddings = self.model.encode(
+                batched_input,
+                prompt=prompt,
+                **kwargs,
+            )
+            if isinstance(embeddings, torch.Tensor):
+                # ensure everything is on CPU and is float
+                embeddings = embeddings.cpu().detach().float()
+            all_embeddings.append(embeddings)
+        return np.stack(all_embeddings)
+
+
 class CrossEncoderWrapper:
     def __init__(
         self,
@@ -174,13 +253,16 @@ class CrossEncoderWrapper:
         revision: str | None = None,
         **kwargs,
     ) -> None:
+        from sentence_transformers import CrossEncoder
+
+        from mteb.models.get_model_meta import _model_meta_from_cross_encoder
+
         if isinstance(model, CrossEncoder):
             self.model = model
         elif isinstance(model, str):
             self.model = CrossEncoder(model, revision=revision, **kwargs)
-            from mteb.models.get_model_meta import _model_meta_from_cross_encoder
 
-            self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
+        self.mteb_model_meta = _model_meta_from_cross_encoder(self.model)
 
     def predict(
         self,

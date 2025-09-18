@@ -5,6 +5,7 @@ from __future__ import annotations
 import difflib
 import logging
 from collections import Counter, defaultdict
+from typing import Any
 
 import pandas as pd
 
@@ -189,23 +190,36 @@ class MTEBTasks(tuple):
         return Counter(langs)
 
     def to_markdown(
-        self, properties: list[str] = ["type", "license", "languages", "modalities"]
+        self,
+        properties: list[str] = ["type", "license", "languages", "modalities"],
+        limit_n_entries: int | None = 3,
     ) -> str:
         """Generate markdown table with tasks summary
 
         Args:
             properties: list of metadata to summarize from a Task class.
+            limit_n_entries: Limit the number of entries for cell values, e.g. number of languages and domains. Will use "..." to indicate that
+                there are more entries.
 
         Returns:
             string with a markdown table.
         """
-        markdown_table = "| Task" + "".join([f"| {p} " for p in properties]) + "|\n"
-        _head_sep = "| ---" * len(properties) + " |\n"
+
+        def _limit_entries_in_cell_inner(cell: Any):
+            if isinstance(cell, (list, set)):
+                return self._limit_entries_in_cell(cell, limit_n_entries)
+            return cell
+
+        markdown_table = "| Task" + "".join([f"| {p}  " for p in properties]) + "|\n"
+        _head_sep = "| ---" * (len(properties) + 1) + " |\n"
         markdown_table += _head_sep
         for task in self:
-            markdown_table += f"| {task.metadata.name}"
+            markdown_table += f"| {task.metadata.name} "
             markdown_table += "".join(
-                [f"| {self._extract_property_from_task(task, p)}" for p in properties]
+                [
+                    f"| {_limit_entries_in_cell_inner(self._extract_property_from_task(task, p))} "
+                    for p in properties
+                ]
             )
             markdown_table += " |\n"
         return markdown_table
@@ -235,6 +249,17 @@ class MTEBTasks(tuple):
                 {p: self._extract_property_from_task(task, p) for p in properties}
             )
         return pd.DataFrame(data)
+
+    @staticmethod
+    def _limit_entries_in_cell(
+        cell: list | set, limit_n_entries: int | None = 3
+    ) -> str:
+        if limit_n_entries and len(cell) > limit_n_entries:
+            ending = "]" if isinstance(cell, list) else "}"
+            cell = sorted(cell)
+            return str(cell[:limit_n_entries])[:-1] + ", ..." + ending
+        else:
+            return str(cell)
 
     def to_latex(
         self,
@@ -273,11 +298,7 @@ class MTEBTasks(tuple):
                 if isinstance(df[col].iloc[0], (list, set)):
                     _col = []
                     for val in df[col]:
-                        if val is not None and len(val) > limit_n_entries:
-                            ending = "]" if isinstance(val, list) else "}"
-                            str_col = str(val[:limit_n_entries])[:-1] + ", ..." + ending
-                        else:
-                            str_col = str(val)
+                        str_col = self._limit_entries_in_cell(val, limit_n_entries)
 
                         # escape } and { characters
                         str_col = str_col.replace("{", "\\{").replace("}", "\\}")
