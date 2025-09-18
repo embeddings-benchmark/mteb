@@ -40,17 +40,20 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
 
 ACKNOWLEDGEMENT = """
 <div style="border-top: 1px solid #ddd; margin-top: 30px; padding-top: 10px; font-size: 0.85em; color: #666;">
-  <p><strong>Acknowledgment:</strong> We thank <a href="https://cloud.google.com/">Google</a>, <a href="https://www.servicenow.com/">ServiceNow</a>, <a href="https://contextual.ai/">Contextual AI</a> and <a href="https://huggingface.co/">Hugging Face</a> for their generous sponsorship. If you'd like to sponsor us, please get in <a href="mailto:n.muennighoff@gmail.com">touch</a>.</p>
+  <p><strong>Acknowledgment:</strong> We thank <a href="https://cloud.google.com/">Google</a>, <a href="https://contextual.ai/">Contextual AI</a>, <a href="https://www.laude.org/">Laude Institute</a>, <a href="https://www.servicenow.com/">ServiceNow</a> and <a href="https://huggingface.co/">Hugging Face</a> for their generous sponsorship. If you'd like to sponsor us, please get in <a href="mailto:n.muennighoff@gmail.com">touch</a>.</p>
   
 <div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
     <a href="https://cloud.google.com/">
         <img src="https://img.icons8.com/?size=512&id=17949&format=png" width="60" height="55" style="padding: 10px;">
     </a>
-    <a href="https://www.servicenow.com/">
-        <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
-    </a>
     <a href="https://contextual.ai/">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://www.laude.org/">
+        <img src="https://media.licdn.com/dms/image/v2/D4E0BAQEf_yGxYWCZPQ/company-logo_200_200/B4EZd7LecEHcAI-/0/1750118302768/laude_institute_logo?e=2147483647&v=beta&t=HqOMQxuGeHVjZsPIZ0vJXHpR3ZBH9OVo2aYK-f9ovio" width="60" height="55" style="padding: 10px;">
+    </a>    
+    <a href="https://www.servicenow.com/">
+        <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
     </a>
     <a href="https://huggingface.co">
         <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/hf_logo.png" width="60" height="55" style="padding: 10px;">
