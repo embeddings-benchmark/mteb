@@ -79,6 +79,8 @@ class AbsTaskAnySTS(AbsTask):
         **kwargs: Any,
     ) -> ScoresDict:
         normalized_scores = list(map(self.normalize, data_split["score"]))
+        data_split = data_split.select_columns(list(self.column_names))
+
         evaluator = AnySTSEvaluator(
             data_split,
             self.column_names,

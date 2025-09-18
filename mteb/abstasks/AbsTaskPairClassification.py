@@ -57,6 +57,9 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
+    sentence1_column_name: str = "sentence1"
+    sentence2_column_name: str = "sentence2"
+    label_column_name: str = "labels"
 
     def _evaluate_subset(
         self,
@@ -73,9 +76,9 @@ class AbsTaskPairClassification(AbsTask):
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
         evaluator = PairClassificationEvaluator(
-            data_split["sentence1"],
-            data_split["sentence2"],
-            data_split["labels"],
+            data_split[self.sentence1_column_name],
+            data_split[self.sentence2_column_name],
+            data_split[self.label_column_name],
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -106,17 +109,19 @@ class AbsTaskPairClassification(AbsTask):
             dataset = dataset[0]
 
         sentence1 = (
-            dataset["sentence1"][0]
-            if len(dataset["sentence1"]) == 1
-            else dataset["sentence1"]
+            dataset[self.sentence1_column_name][0]
+            if len(dataset[self.sentence1_column_name]) == 1
+            else dataset[self.sentence1_column_name]
         )
         sentence2 = (
-            dataset["sentence2"][0]
-            if len(dataset["sentence2"]) == 1
-            else dataset["sentence2"]
+            dataset[self.sentence2_column_name][0]
+            if len(dataset[self.sentence2_column_name]) == 1
+            else dataset[self.sentence2_column_name]
         )
         labels = (
-            dataset["labels"][0] if len(dataset["labels"]) == 1 else dataset["labels"]
+            dataset[self.label_column_name][0]
+            if len(dataset[self.label_column_name]) == 1
+            else dataset[self.label_column_name]
         )
 
         text1_statistics = calculate_text_statistics(sentence1)
@@ -144,4 +149,11 @@ class AbsTaskPairClassification(AbsTask):
             for split in self.dataset:
                 if len(self.dataset[split]) == 1:
                     self.dataset[split] = self.dataset[split][0]
-        self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "labels"])
+        self._upload_dataset_to_hub(
+            repo_name,
+            [
+                self.sentence1_column_name,
+                self.sentence2_column_name,
+                self.label_column_name,
+            ],
+        )

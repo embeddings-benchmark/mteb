@@ -81,6 +81,10 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
+        if isinstance(data_split, DatasetDict):
+            data_split = data_split.select_columns(
+                [self.input_column_name, self.label_column_name]
+            )
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 

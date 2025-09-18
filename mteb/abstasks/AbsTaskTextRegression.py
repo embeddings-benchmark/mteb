@@ -227,29 +227,35 @@ class AbsTaskTextRegression(AbsTask):
     ) -> RegressionDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            texts = self.dataset[hf_subset][split]["text"]
-            values = self.dataset[hf_subset][split]["value"]
-            if split != "train":
-                train_text = self.dataset[hf_subset]["train"]["text"]
+            texts = self.dataset[hf_subset][split][self.input_column_name]
+            values = self.dataset[hf_subset][split][self.label_column_name]
+            if split != self.train_split:
+                train_text = self.dataset[hf_subset][self.train_split][
+                    self.input_column_name
+                ]
         elif compute_overall:
             texts = []
             values = []
             for lang_subset in self.metadata.eval_langs:
-                texts.extend(self.dataset[lang_subset][split]["text"])
-                values.extend(self.dataset[lang_subset][split]["value"])
+                texts.extend(self.dataset[lang_subset][split][self.input_column_name])
+                values.extend(self.dataset[lang_subset][split][self.label_column_name])
                 if split != "train":
-                    train_text.extend(self.dataset[lang_subset]["train"]["text"])
+                    train_text.extend(
+                        self.dataset[lang_subset][self.train_split][
+                            self.input_column_name
+                        ]
+                    )
         else:
-            texts = self.dataset[split]["text"]
-            values = self.dataset[split]["value"]
+            texts = self.dataset[split][self.input_column_name]
+            values = self.dataset[split][self.label_column_name]
             if split != "train":
-                train_text = self.dataset["train"]["text"]
+                train_text = self.dataset[self.train_split][self.input_column_name]
 
         text_lengths = [len(t) for t in texts]
         total_text_length = sum(text_lengths)
 
         num_texts_in_train_val = (
-            len(set(texts) & set(train_text)) if split != "train" else None
+            len(set(texts) & set(train_text)) if split != self.train_split else None
         )
 
         return RegressionDescriptiveStatistics(

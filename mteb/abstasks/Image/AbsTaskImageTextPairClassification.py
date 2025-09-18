@@ -116,6 +116,14 @@ class AbsTaskImageTextPairClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
+        select_columns = []
+        for columns in (self.images_column_names, self.texts_column_names):
+            if isinstance(columns, str):
+                select_columns.append(columns)
+            else:
+                select_columns.extend(columns)
+
+        data_split = data_split.select_columns(select_columns)
         evaluator = ImageTextPairClassificationEvaluator(
             data_split,
             images_column_names=self.images_column_names,
