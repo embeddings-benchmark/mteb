@@ -76,8 +76,8 @@ class AbsTaskAnyClustering(AbsTask):
         ):
             v_measures = []
             for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
-                clustering_dataset = Dataset.from_dict(cluster_set).rename_column(
-                    original_column_name="sentences", new_column_name="text"
+                clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
+                    [self.input_column_name, self.label_column_name]
                 )
                 evaluator = self.evaluator(
                     clustering_dataset,
@@ -103,6 +103,9 @@ class AbsTaskAnyClustering(AbsTask):
             self._add_main_score(scores)
             return scores
 
+        dataset = dataset.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         evaluator = self.evaluator(
             dataset,
             input_column_name=self.input_column_name,

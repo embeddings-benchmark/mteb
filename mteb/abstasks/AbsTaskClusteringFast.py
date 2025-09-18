@@ -10,12 +10,12 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
-from torch.utils.data import DataLoader
 
 from mteb.models import Encoder
 from mteb.types import HFSubset
 from mteb.types.statistics import DescriptiveStatistics, LabelStatistics, TextStatistics
 
+from ..create_dataloaders import create_dataloader
 from ._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
@@ -126,6 +126,8 @@ class AbsTaskClusteringFast(AbsTask):
     k_mean_batch_size: int = 512
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
+    input_column_name: str = "sentences"
+    label_column_name: str = "labels"
 
     def _evaluate_subset(
         self,
@@ -164,11 +166,16 @@ class AbsTaskClusteringFast(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
-        downsampled_dataset = downsampled_dataset.rename_column(
-            original_column_name="sentences", new_column_name="text"
+        downsampled_dataset = downsampled_dataset.select_columns(
+            [self.input_column_name, self.label_column_name]
         )
         embeddings = model.encode(
-            DataLoader(downsampled_dataset),
+            create_dataloader(
+                downsampled_dataset,
+                self.metadata,
+                input_column=self.input_column_name,
+                batch_size=encode_kwargs["batch_size"],
+            ),
             task_metadata=self.metadata,
             hf_subset=hf_subset,
             hf_split=hf_split,
@@ -176,7 +183,7 @@ class AbsTaskClusteringFast(AbsTask):
         )
 
         labels = []
-        for label in downsampled_dataset["labels"]:
+        for label in downsampled_dataset[self.label_column_name]:
             if not isinstance(label, list):
                 label = [label]
             labels.append(label)
@@ -194,29 +201,27 @@ class AbsTaskClusteringFast(AbsTask):
 
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
-        scores = {
+        return {
             "v_measures": all_v_scores,
             "v_measure": float(mean_v_measure),
             "v_measure_std": v_std,
         }
-        self._add_main_score(scores)
-        return scores
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
         if hf_subset:
-            sentences = self.dataset[hf_subset][split]["sentences"]
-            labels = self.dataset[hf_subset][split]["labels"]
+            sentences = self.dataset[hf_subset][split][self.input_column_name]
+            labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             sentences = []
             labels = []
             for hf_subset in self.metadata.eval_langs:
-                sentences.extend(self.dataset[hf_subset][split]["sentences"])
-                labels.extend(self.dataset[hf_subset][split]["labels"])
+                sentences.extend(self.dataset[hf_subset][split][self.input_column_name])
+                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
-            sentences = self.dataset[split]["sentences"]
-            labels = self.dataset[split]["labels"]
+            sentences = self.dataset[split][self.input_column_name]
+            labels = self.dataset[split][self.label_column_name]
 
         return ClusteringFastDescriptiveStatistics(
             num_samples=len(sentences),
@@ -225,11 +230,17 @@ class AbsTaskClusteringFast(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self._upload_dataset_to_hub(repo_name, ["sentences", "labels"])
+        self._upload_dataset_to_hub(
+            repo_name, [self.input_column_name, self.label_column_name]
+        )
 
 
 def convert_to_fast(
-    dataset: DatasetDict, seed: int, max_size: int = 100_000
+    dataset: DatasetDict,
+    input_column_name: str,
+    label_column_name: str,
+    seed: int,
+    max_size: int = 100_000,
 ) -> DatasetDict:
     """Converts a clustering dataset to a fast version. This concats the cluster into two columns, sentences and labels.
     It additionally downsamples the dataset to max_size.
@@ -242,10 +253,12 @@ def convert_to_fast(
         labels = []
         sentences = []
         n_clusters = len(dataset[split])
-        all_labels_set = set(itertools.chain.from_iterable(dataset[split]["labels"]))
+        all_labels_set = set(
+            itertools.chain.from_iterable(dataset[split][label_column_name])
+        )
         for i in range(n_clusters):
-            lab = dataset[split]["labels"][i]
-            sents = dataset[split]["sentences"][i]
+            lab = dataset[split][label_column_name][i]
+            sents = dataset[split][input_column_name][i]
 
             # check that it is the same distribution
             row_label_set = set(lab)
@@ -259,7 +272,9 @@ def convert_to_fast(
                     sentences.append(s)
                     sent_set.add(s)  # ensuring no duplicates
 
-        ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
+        ds[split] = Dataset.from_dict(
+            {input_column_name: sentences, label_column_name: labels}
+        )
 
         if len(ds[split]) > max_size:
             idxs = rng_state.sample(range(len(ds[split])), max_size)
@@ -268,17 +283,20 @@ def convert_to_fast(
     return DatasetDict(ds)
 
 
-def check_label_distribution(ds: DatasetDict) -> None:
+def check_label_distribution(
+    ds: DatasetDict,
+    label_column_name: str = "labels",
+) -> None:
     """For older clustering dataset versions.
     ds is a DatasetDict at the split level
     """
     n_clusters = len(ds)
     if n_clusters > 50:
         return
-    all_labels_set = set(itertools.chain.from_iterable(ds["labels"]))
+    all_labels_set = set(itertools.chain.from_iterable(ds[label_column_name]))
 
     for i in range(n_clusters):
-        lab = ds["labels"][i]
+        lab = ds[label_column_name][i]
 
         # check that it is the same distribution
         row_label_set = set(lab)
