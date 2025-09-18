@@ -1,11 +1,12 @@
-from datasets import load_dataset
+from __future__ import annotations
+
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GqnliTask(AbsTaskPairClassification):
+class GqnliPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="gqnli",
+        name="GqnliPairClassification",
         description=(
             "Natural Language Inference on GQNLI: "
             "predict the relation between two sentences "
@@ -14,7 +15,7 @@ class GqnliTask(AbsTaskPairClassification):
         reference="https://huggingface.co/datasets/maximoss/gqnli-fr",
         dataset={
             "path": "maximoss/gqnli-fr",
-            "revision": "3089f0b591628692e7c4d4122804f6995380bdad"
+            "revision": "3089f0b591628692e7c4d4122804f6995380bdad",
         },
         type="PairClassification",
         category="s2s",
@@ -66,7 +67,7 @@ class GqnliTask(AbsTaskPairClassification):
                     {
                         "sentence1": hf_dataset["premise"],
                         "sentence2": hf_dataset["hypothesis"],
-                        "labels":    hf_dataset["label"],
+                        "labels": hf_dataset["label"],
                     }
                 ]
         self.dataset = _dataset

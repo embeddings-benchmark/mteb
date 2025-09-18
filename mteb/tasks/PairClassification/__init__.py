@@ -14,6 +14,7 @@ from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
 from .fas.FaMTEBPairClassification import *
 from .fas.FarsTail import *
+from .fra.gqnli_pairclassification import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
 from .ita.DisCoTexPairClassification import *
@@ -29,4 +30,3 @@ from .por.Assin2RTE import *
 from .por.SickBrPC import *
 from .rus.TERRa import *
 from .zho.CMTEBPairClassification import *
-from .fra.gqnli import *
