@@ -285,7 +285,7 @@ def convert_to_fast(
 
 def check_label_distribution(
     ds: DatasetDict,
-    label_column_name: str,
+    label_column_name: str = "labels",
 ) -> None:
     """For older clustering dataset versions.
     ds is a DatasetDict at the split level
