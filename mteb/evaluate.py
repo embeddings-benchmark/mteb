@@ -11,8 +11,6 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
-from mteb.load_results.benchmark_results import ModelResult
-from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
@@ -23,6 +21,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.results import ModelResult, TaskResult
 from mteb.types import HFSubset, SplitName
 from mteb.types._metadata import ModelName, Revision
 

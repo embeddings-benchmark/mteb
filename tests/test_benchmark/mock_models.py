@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import Any, Literal
 
 import numpy as np
@@ -12,7 +13,6 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.load_results.task_results import Namespace
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
@@ -171,7 +171,7 @@ class MockMocoEncoder(AbsMockEncoder):
 class MockSentenceTransformer(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
-    model_card_data = Namespace(
+    model_card_data = SimpleNamespace(
         model_name="mock/MockSentenceTransformer",
         base_model_revision="1.0.0",
     )
