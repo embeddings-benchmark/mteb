@@ -14,7 +14,7 @@ from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
 from .fas.FaMTEBPairClassification import *
 from .fas.FarsTail import *
-from .fra.FraCaS import *
+from .fra.fracas_pairclassification import *
 
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
