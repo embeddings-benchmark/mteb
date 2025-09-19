@@ -11,9 +11,8 @@ class RARbMath(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on RAR-b math-pooled dataset.",
         reference="https://arxiv.org/abs/2404.06347",
         dataset={
-            "path": "RAR-b/math-pooled",
-            "revision": "2393603c0221ff52f448d12dd75f0856103c6cca",
-            "trust_remote_code": True,
+            "path": "mteb/RARbMath",
+            "revision": "cc879a9719a10f4a80677ac26798cfd701cf94b7",
         },
         type="Retrieval",
         category="t2t",

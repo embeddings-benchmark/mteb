@@ -49,9 +49,8 @@ class DBPediaPLHardNegatives(AbsTaskRetrieval):
         description="DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
-            "path": "mteb/DBPedia_PL_test_top_250_only_w_correct-v2",
-            "revision": "bebc2b5c8f73cd6ba9d2a4664d5f3769e6ad557a",
-            "trust_remote_code": True,
+            "path": "mteb/DBPedia-PLHardNegatives",
+            "revision": "ec0b954f7f7365a11ab2b920ff37cc2c3b79fce3",
         },
         type="Retrieval",
         category="t2t",

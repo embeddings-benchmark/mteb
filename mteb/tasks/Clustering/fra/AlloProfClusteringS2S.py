@@ -6,7 +6,6 @@ import numpy as np
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
-    check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -75,10 +74,8 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
         description="Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
         dataset={
-            "path": "lyon-nlp/alloprof",
-            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
-            "name": "documents",
-            "trust_remote_code": True,
+            "path": "mteb/AlloProfClusteringS2S.v2",
+            "revision": "c802b993cf2a8dcaeadb6f9cc8ccd364e251feaa",
         },
         type="Clustering",
         category="t2c",
@@ -108,21 +105,3 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
 """,
         adapted_from=["AlloProfClusteringS2S"],
     )
-
-    def dataset_transform(self):
-        self.dataset["test"] = (
-            self.dataset["documents"]
-            .rename_columns({"title": "sentences", "topic": "labels"})
-            .select_columns(["sentences", "labels"])
-        )
-        self.dataset.pop("documents")
-        unique_labels = list(set(self.dataset["test"]["labels"]))
-        unique_labels.sort()
-        self.dataset["test"] = self.dataset["test"].cast(
-            datasets.Features(
-                sentences=datasets.Value("string"),
-                labels=datasets.ClassLabel(names=unique_labels),
-            )
-        )
-        for split in self.metadata.eval_splits:
-            check_label_distribution(self.dataset[split])

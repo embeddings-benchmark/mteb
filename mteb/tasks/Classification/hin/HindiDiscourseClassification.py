@@ -9,9 +9,8 @@ class HindiDiscourseClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HindiDiscourseClassification",
         dataset={
-            "path": "midas/hindi_discourse",
-            "revision": "218ce687943a0da435d6d62751a4ab216be6cd40",
-            "trust_remote_code": True,
+            "path": "mteb/HindiDiscourseClassification",
+            "revision": "6f183d3e509464fd9d92516d4eff91e11b8ec622",
         },
         description="A Hindi Discourse dataset in Hindi with values for coherence.",
         reference="https://aclanthology.org/2020.lrec-1.149/",
@@ -53,14 +52,6 @@ Stent, Amanda},
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"Sentence": "text", "Discourse Mode": "label"}
-        ).remove_columns(["Story_no"])
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class HindiDiscourseClassificationV2(AbsTaskAnyClassification):

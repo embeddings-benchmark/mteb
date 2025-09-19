@@ -17,9 +17,8 @@ class MTOPIntentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MTOPIntentClassification",
         dataset={
-            "path": "mteb/mtop_intent",
-            "revision": "ae001d0e6b1228650b7bd1c2c65fb50ad11a8aba",
-            "trust_remote_code": True,
+            "path": "mteb/MTOPIntentClassification",
+            "revision": "2992d820f31312593c49a4890430aadadb0f0039",
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",

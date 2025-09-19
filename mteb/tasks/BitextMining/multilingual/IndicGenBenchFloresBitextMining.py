@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
+from collections import defaultdict
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -100,9 +101,8 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={
-            "path": "google/IndicGenBench_flores_in",
-            "revision": "f8650438298df086750ff4973661bb58a201a5ee",
-            "trust_remote_code": True,
+            "path": "mteb/IndicGenBenchFloresBitextMining",
+            "revision": "5022383d84885bd17cc33fcc54b8efc0ff7f52a0",
         },
         description="Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google",
         reference="https://github.com/google-research-datasets/indic-gen-bench/",
@@ -131,39 +131,23 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
+    def load_data(self) -> None:
         if self.data_loaded:
             return
 
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            langs = lang.split("-")
-            source_lang = langs[0]
-            target_lang = langs[1]
-            if source_lang == "eng":
-                coded_target_language = _CODE_MAPPING[target_lang]
-                language = f"en_{coded_target_language}"
-
-            else:
-                coded_source_language = _CODE_MAPPING[source_lang]
-                language = f"{coded_source_language}_en"
-
-            self.dataset[lang] = datasets.load_dataset(
-                **self.metadata.dataset,
-                field="examples",
-                data_files={
-                    "validation": f"flores_{language}_dev.json",
-                    "test": f"flores_{language}_test.json",
-                },
+        dataset = datasets.load_dataset(
+            **self.metadata.dataset,
+            split=self.metadata.eval_splits[0],
+        )
+        self.dataset = defaultdict(dict)
+        for lang in self.metadata.eval_langs:
+            first_lang, second_lang = lang.split("-")
+            ds = Dataset.from_dict(
+                {
+                    "sentence1": dataset[first_lang],
+                    "sentence2": dataset[second_lang],
+                }
             )
+            self.dataset[lang][self.metadata.eval_splits[0]] = ds
 
-        self.dataset_transform()
         self.data_loaded = True
-
-    def dataset_transform(self) -> None:
-        for lang in self.hf_subsets:
-            for split in _SPLIT:
-                self.dataset[lang][split] = self.dataset[lang][split].rename_columns(
-                    {"source": "sentence1", "target": "sentence2"}
-                )

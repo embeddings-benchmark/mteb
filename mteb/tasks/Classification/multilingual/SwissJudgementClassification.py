@@ -10,9 +10,8 @@ class SwissJudgementClassification(AbsTaskAnyClassification):
         description="Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)",
         reference="https://aclanthology.org/2021.nllp-1.3/",
         dataset={
-            "path": "rcds/swiss_judgment_prediction",
-            "revision": "29806f87bba4f23d0707d3b6d9ea5432afefbe2f",
-            "trust_remote_code": True,
+            "path": "mteb/SwissJudgementClassification",
+            "revision": "2541705ce837c495e85aa3c44b41a92fa4bd12a8",
         },
         type="Classification",
         category="t2c",
@@ -44,17 +43,3 @@ class SwissJudgementClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        for lang in self.hf_subsets:
-            dataset = self.dataset[lang]["test"]
-            dataset_dict = {"test": dataset}
-
-            subsampled_dataset_dict = self.stratified_subsampling(
-                dataset_dict=dataset_dict,
-                seed=42,
-                splits=["test"],
-                label="label",
-            )
-
-            self.dataset[lang]["test"] = subsampled_dataset_dict["test"]

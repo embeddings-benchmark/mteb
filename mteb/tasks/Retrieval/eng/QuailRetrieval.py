@@ -11,9 +11,8 @@ class Quail(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on Quail.",
         reference="https://text-machine.cs.uml.edu/lab2/projects/quail/",
         dataset={
-            "path": "RAR-b/quail",
-            "revision": "1851bc536f8bdab29e03e29191c4586b1d8d7c5a",
-            "trust_remote_code": True,
+            "path": "mteb/Quail",
+            "revision": "516ac28de67229da337281f702310a08c9fe0a03",
         },
         type="Retrieval",
         category="t2t",

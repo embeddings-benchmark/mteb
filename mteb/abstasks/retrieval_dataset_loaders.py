@@ -155,6 +155,7 @@ class RetrievalDatasetLoader:
                 )
 
         qrels_ds = self.load_dataset_split(config)
+        qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"])
 
         qrels_ds = qrels_ds.cast(
             Features(

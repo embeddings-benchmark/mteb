@@ -11,9 +11,8 @@ class JavaneseIMDBClassification(AbsTaskAnyClassification):
         description="Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.",
         reference="https://github.com/w11wo/nlp-datasets#javanese-imdb",
         dataset={
-            "path": "w11wo/imdb-javanese",
-            "revision": "11bef3dfce0ce107eb5e276373dcd28759ce85ee",
-            "trust_remote_code": True,
+            "path": "mteb/JavaneseIMDBClassification",
+            "revision": "6bf102a9551cc100314a97a470f07b6e43f3f346",
         },
         type="Classification",
         category="t2c",
@@ -39,11 +38,6 @@ class JavaneseIMDBClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class JavaneseIMDBClassificationV2(AbsTaskAnyClassification):

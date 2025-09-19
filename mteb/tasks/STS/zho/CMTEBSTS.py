@@ -137,8 +137,8 @@ class PAWSX(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="PAWSX",
         dataset={
-            "path": "C-MTEB/PAWSX",
-            "revision": "9c6a90e430ac22b5779fb019a23e820b11a8b5e1",
+            "path": "mteb/PAWSX",
+            "revision": "bd129d4230ee0551b5469c566bced8da75abae0a",
         },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
