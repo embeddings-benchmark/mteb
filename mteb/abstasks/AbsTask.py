@@ -23,8 +23,8 @@ from mteb.models import (
     SearchProtocol,
 )
 from mteb.set_seed import set_seed
-from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types import HFSubset, Modalities, ScoresDict
+from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -191,8 +191,9 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: MTEBModels,
+        model: Encoder,
         data_split: Dataset,
+        *,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
@@ -336,7 +337,7 @@ class AbsTask(ABC):
 
     def calculate_descriptive_statistics(
         self, overwrite_results: bool = False
-    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+    ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset."""
         from mteb.abstasks import AbsTaskAnyClassification
 
@@ -347,7 +348,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        descriptive_stats = {}
+        descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
         if isinstance(self, AbsTaskAnyClassification):
@@ -387,7 +388,7 @@ class AbsTask(ABC):
 
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False
-    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+    ) -> dict[str, DescriptiveStatistics]:
         return self.calculate_descriptive_statistics(
             overwrite_results=overwrite_results
         )
@@ -395,7 +396,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> DescriptiveStatistics:
+    ) -> SplitDescriptiveStatistics:
         raise NotImplementedError
 
     @property
@@ -578,7 +579,7 @@ class AbsTask(ABC):
         return self.metadata.eval_splits
 
     @property
-    def modalities(self) -> list[str]:
+    def modalities(self) -> list[Modalities]:
         """Returns the modalities of the task."""
         return self.metadata.modalities
 

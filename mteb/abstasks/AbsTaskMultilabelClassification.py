@@ -3,15 +3,17 @@ from __future__ import annotations
 import itertools
 import logging
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import numpy as np
-from datasets import Dataset, DatasetDict
+from datasets import DatasetDict
 from sklearn.base import clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
+from typing_extensions import override
 
 from mteb.models import Encoder
 from mteb.types import ScoresDict
@@ -67,22 +69,24 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     input_column_name: str = "text"
     label_column_name: str = "label"
 
+    @override
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict | Dataset,
+        data_split: DatasetDict,
         *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
-        if isinstance(dataset, (Dataset, DatasetDict)):
-            dataset = dataset.select_columns(
+        if isinstance(data_split, DatasetDict):
+            data_split = data_split.select_columns(
                 [self.input_column_name, self.label_column_name]
             )
-        train_split = dataset[self.train_split]
-        eval_split = dataset[hf_split]
+        train_split = data_split[self.train_split]
+        eval_split = data_split[hf_split]
 
         scores = []
         # Bootstrap sample indices from training set for each experiment

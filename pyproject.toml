@@ -107,12 +107,27 @@ docs = [
     "mkdocs-bibtex>=2.16.2",
     "mkdocs-exclude>=1.0.2",
     "mkdocs-include-dir-to-nav>=1.2.0",
-    "tabulate>=0.9.0"
+    "tabulate>=0.9.0",
+]
+typing = [
+    "mypy>=1.18.1",
+    "types-cachetools>=6.2.0.20250827",
+    "types-pysocks>=1.7.1.20250828",
+    "types-pyyaml>=6.0.12.20250822",
+    "types-requests>=2.32.4.20250913",
+    "types-simplejson>=3.20.0.20250822",
+    "types-tqdm>=4.67.0.20250809",
+    "types-tensorflow>=2.18.0.20250809",
+    # stubs require python >=3.10
+    # "pandas-stubs>=2.3.2.250827",
+    # "scipy-stubs>=1.15.3.0",
 ]
 dev = [
     {include-group = "lint"},
     {include-group = "test"},
+    {include-group = "typing"},
 ]
+
 
 [tool.coverage.report]
 omit = ["tests/*", "mteb/tasks/**/*", "scripts"]
@@ -262,3 +277,29 @@ conflicts = [
     [{ extra = "colpali-engine" }, { extra = "pylate" }],
     [{ extra = "colpali-engine" }, { extra = "llm2vec" }]
 ]
+
+[tool.mypy]
+plugins = ['pydantic.mypy']
+
+[[tool.mypy.overrides]]
+# these modules not typed and don't have stubs
+module = [
+    "datasets",
+    "sklearn",
+    "sklearn.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# don't typecheck these modules (too many issues)
+module = [
+    "mteb.models.model_implementations.*",
+    "mteb.tasks.*",
+    "mteb.leaderboard.*",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+# mypy can't resolve dataset dict
+module = ["mteb.abstasks.*"]
+disable_error_code = ["index"]

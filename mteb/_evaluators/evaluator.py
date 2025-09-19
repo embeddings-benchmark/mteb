@@ -12,12 +12,14 @@ class Evaluator(ABC):
     Extend this class and implement __call__ for custom evaluators.
     """
 
-    def __init__(self, seed: int = 42, **kwargs: Any):
+    def __init__(self, seed: int = 42, **kwargs: Any) -> None:
         self.seed = seed
         self.rng_state, self.np_rng = set_seed(seed)
 
     @abstractmethod
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+    ) -> dict[str, float]:
         """This is called during training to evaluate the model.
         It returns scores.
 
