@@ -4,7 +4,6 @@ import logging
 from typing import Any, Callable
 
 import torch
-from sentence_transformers import SentenceTransformer
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -112,6 +111,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
             **kwargs: Kwargs for Sentence Transformer model.
         """
+        from sentence_transformers import SentenceTransformer
+
         if (
             isinstance(instruction_template, str)
             and "{instruction}" not in instruction_template

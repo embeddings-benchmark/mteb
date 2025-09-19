@@ -7,7 +7,6 @@ import torch.nn.functional as F
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,6 +25,8 @@ class NomicVisionModel(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
+
         requires_package(self, "einops", model_name, "pip install 'mteb[nomic]'")
 
         self.vision_model_name = model_name

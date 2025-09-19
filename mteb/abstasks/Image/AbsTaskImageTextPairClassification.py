@@ -114,6 +114,14 @@ class AbsTaskImageTextPairClassification(AbsTask):
         encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
+        select_columns = []
+        for columns in (self.images_column_names, self.texts_column_names):
+            if isinstance(columns, str):
+                select_columns.append(columns)
+            else:
+                select_columns.extend(columns)
+
+        dataset = dataset.select_columns(select_columns)
         evaluator = ImageTextPairClassificationEvaluator(
             dataset,
             images_column_names=self.images_column_names,

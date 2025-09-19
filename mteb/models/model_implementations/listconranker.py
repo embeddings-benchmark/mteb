@@ -4,10 +4,6 @@ from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
-from transformers import (
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-)
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.model_meta import ModelMeta
@@ -17,7 +13,9 @@ from .rerankers_custom import RerankerWrapper
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str = None, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str | None = None, **kwargs) -> None:
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
         super().__init__(model_name_or_path, **kwargs)
 
         self.model = AutoModelForSequenceClassification.from_pretrained(

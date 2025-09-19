@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import Encoder
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -234,6 +235,10 @@ class CachedEmbeddingWrapper(AbsEncoder):
             raise ValueError("Model must have an 'encode' method.")
         self.cache_dict: dict[str, _VectorCacheMap] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta | None:
+        return self._model.mteb_model_meta
 
     def encode(
         self,

@@ -6,7 +6,6 @@ import torch
 from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import BlipForImageTextRetrieval, BlipProcessor
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -22,6 +21,8 @@ class BLIPModel(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        from transformers import BlipForImageTextRetrieval, BlipProcessor
+
         self.model_name = model_name
         self.device = device
         self.model = BlipForImageTextRetrieval.from_pretrained(

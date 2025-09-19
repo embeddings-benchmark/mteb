@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import sentence_transformers
 import torch
 from torch.utils.data import DataLoader
 
@@ -48,6 +47,8 @@ class SparseEncoderWrapper(AbsEncoder):
         torch_dtype: torch.dtype = torch.float16,
         **kwargs,
     ):
+        import sentence_transformers
+
         if sentence_transformers.__version__ < "5.0.0":
             raise ImportError(
                 "sentence-transformers version must be >= 5.0.0 to load sparse encoder"

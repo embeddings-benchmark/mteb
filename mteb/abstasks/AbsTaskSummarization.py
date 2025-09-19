@@ -60,6 +60,10 @@ class AbsTaskSummarization(AbsTask):
     )
     # SummEval has DeprecatedSummarizationEvaluator
     evaluator = SummarizationEvaluator
+    text_column_name: str = "text"
+    human_summaries_column_name: str = "human_summaries"
+    machine_summaries_column_name: str = "machine_summaries"
+    relevancy_column_name: str = "relevance"
 
     def _evaluate_subset(
         self,
@@ -73,30 +77,32 @@ class AbsTaskSummarization(AbsTask):
     ) -> ScoresDict:
         normalized_scores = [
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
-            for x in data_split["relevance"]
+            for x in data_split[self.relevancy_column_name]
         ]
         evaluator = self.evaluator(
-            machine_summaries=data_split["machine_summaries"],
-            human_summaries=data_split["human_summaries"],
-            texts=data_split["text"],
+            machine_summaries=data_split[self.machine_summaries_column_name],
+            human_summaries=data_split[self.human_summaries_column_name],
+            texts=data_split[self.text_column_name],
             gold_scores=normalized_scores,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
-        self._add_main_score(scores)
-        return scores
+        return evaluator(model, encode_kwargs=encode_kwargs)
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:
-            text = self.dataset[hf_subset][split]["text"]
-            human_summaries = self.dataset[hf_subset][split]["human_summaries"]
-            machine_summaries = self.dataset[hf_subset][split]["machine_summaries"]
-            relevance = self.dataset[hf_subset][split]["relevance"]
+            text = self.dataset[hf_subset][split][self.text_column_name]
+            human_summaries = self.dataset[hf_subset][split][
+                self.human_summaries_column_name
+            ]
+            machine_summaries = self.dataset[hf_subset][split][
+                self.machine_summaries_column_name
+            ]
+            relevance = self.dataset[hf_subset][split][self.relevancy_column_name]
         elif compute_overall:
             text = []
             human_summaries = []
@@ -104,19 +110,21 @@ class AbsTaskSummarization(AbsTask):
             relevance = []
 
             for hf_subset in self.metadata.eval_langs:
-                text.extend(self.dataset[hf_subset][split]["text"])
+                text.extend(self.dataset[hf_subset][split][self.text_column_name])
                 human_summaries.extend(
-                    self.dataset[hf_subset][split]["human_summaries"]
+                    self.dataset[hf_subset][split][self.human_summaries_column_name]
                 )
                 machine_summaries.extend(
-                    self.dataset[hf_subset][split]["machine_summaries"]
+                    self.dataset[hf_subset][split][self.machine_summaries_column_name]
                 )
-                relevance.extend(self.dataset[hf_subset][split]["relevance"])
+                relevance.extend(
+                    self.dataset[hf_subset][split][self.relevancy_column_name]
+                )
         else:
-            text = self.dataset[split]["text"]
-            human_summaries = self.dataset[split]["human_summaries"]
-            machine_summaries = self.dataset[split]["machine_summaries"]
-            relevance = self.dataset[split]["relevance"]
+            text = self.dataset[split][self.text_column_name]
+            human_summaries = self.dataset[split][self.human_summaries_column_name]
+            machine_summaries = self.dataset[split][self.machine_summaries_column_name]
+            relevance = self.dataset[split][self.relevancy_column_name]
 
         all_human_summaries = []
         for s in human_summaries:

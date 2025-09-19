@@ -26,8 +26,30 @@ theme:
     - navigation.indexes
     - toc.follow
   palette:
-    primary: white
-    accent: light blue
+    # System preference (auto)
+    - media: "(prefers-color-scheme)"
+      scheme: default
+      primary: white
+      accent: light blue
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
 
 markdown_extensions:
   - admonition
@@ -47,7 +69,7 @@ copyright: This text is freely available under a Creative Commons Attribution 4.
 
 nav:
   - Get Started:
-      - Overview: index.md
+      - index.md
       - whats_new.md
       - Installation: installation.md
       - Usage:
@@ -58,10 +80,14 @@ nav:
         - Loading Results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
         - Running the Leaderboard: usage/leaderboard.md
-  # - Overview: # <-- TODO: find a better word
-  #     - Benchmarks: benchmarks.md
-  #     - Tasks: tasks.md
-  #     - Models: models.md
+  - Overview: 
+      - overview/index.md
+      - Benchmarks:
+        - Available Benchmarks: overview/available_benchmarks.md
+      - Tasks: 
+        - Available Tasks: overview/available_tasks
+      - Models: 
+        - Available Models: overview/available_models
   # - Contribute: # TODO: Add contributions
   #     - Adding a Model: adding_a_model.md
   #     - Adding a Benchmark: adding_a_leaderboard_tab.md
@@ -72,10 +98,12 @@ nav:
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
+      - Results: api/results.md
       - Additional Types: api/types.md
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 plugins:
+  - include_dir_to_nav
   - search
   - exclude:
       glob:

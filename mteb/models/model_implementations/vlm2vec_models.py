@@ -6,7 +6,6 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -41,6 +40,7 @@ class VLM2VecWrapper(AbsEncoder):
 
         requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
         from peft import LoraConfig, PeftModel  # noqa
+        from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
         self.pooling = "last"
         self.normalize = True

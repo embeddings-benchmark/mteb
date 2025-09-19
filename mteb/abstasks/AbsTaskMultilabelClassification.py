@@ -77,6 +77,10 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> ScoresDict:
+        if isinstance(dataset, (Dataset, DatasetDict)):
+            dataset = dataset.select_columns(
+                [self.input_column_name, self.label_column_name]
+            )
         train_split = dataset[self.train_split]
         eval_split = dataset[hf_split]
 

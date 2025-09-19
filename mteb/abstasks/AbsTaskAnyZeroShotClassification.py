@@ -108,6 +108,9 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         candidate_labels = self.get_candidate_labels()
+        dataset = dataset.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         evaluator = ZeroShotClassificationEvaluator(
             dataset,
             self.input_column_name,
