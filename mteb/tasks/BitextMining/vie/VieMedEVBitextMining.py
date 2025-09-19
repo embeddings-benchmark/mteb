@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-import random
-
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -14,9 +10,8 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="VieMedEVBitextMining",
         dataset={
-            "path": "nhuvo/MedEV",
-            "revision": "d03c69413bc53d1cea5a5375b3a953c4fee35ecd",
-            "trust_remote_code": True,
+            "path": "mteb/VieMedEVBitextMining",
+            "revision": "56e8a74cdafa10aaceb9fec8272c209b800165de",
         },
         description="A high-quality Vietnamese-English parallel data from the medical domain for machine translation",
         reference="https://aclanthology.org/2015.iwslt-evaluation.11/",
@@ -42,36 +37,3 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def dataset_transform(self):
-        # Convert to standard format
-        ds = {}
-        seed = 42
-        random.seed(seed)
-        # Get all texts
-        all_texts = self.dataset["test"]["text"]
-
-        # Determine the midpoint of the list
-        mid_index = len(all_texts) // 2
-        # Pairs are in two halves
-        en_sentences = all_texts[:mid_index]
-        vie_sentences = all_texts[mid_index:]
-        assert len(en_sentences) == len(vie_sentences), (
-            "The split does not result in equal halves."
-        )
-
-        # Downsample
-        indices = list(range(len(en_sentences)))
-        random.shuffle(indices)
-        sample_indices = indices[:TEST_SAMPLES]
-        en_sentences = [en_sentences[i] for i in sample_indices]
-        vie_sentences = [vie_sentences[i] for i in sample_indices]
-        assert len(en_sentences) == len(vie_sentences) == TEST_SAMPLES, (
-            f"Exceeded {TEST_SAMPLES} samples for 'test' split."
-        )
-
-        # Return dataset
-        ds["test"] = datasets.Dataset.from_dict(
-            {"sentence1": vie_sentences, "sentence2": en_sentences}
-        )
-        self.dataset = datasets.DatasetDict(ds)

@@ -123,6 +123,17 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         )
         return evaluator(model, encode_kwargs=encode_kwargs)
 
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(
+            repo_name,
+            [
+                self.input_column_name,
+                self.label_column_name,
+            ],
+        )
+        labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
+        labels_dataset.push_to_hub(repo_name, config_name="labels")
+
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         raise NotImplementedError("This method should be overridden by subclasses")

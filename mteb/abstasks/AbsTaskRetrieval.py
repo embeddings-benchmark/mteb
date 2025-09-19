@@ -577,7 +577,7 @@ class AbsTaskRetrieval(AbsTask):
                 # skip empty instructions and top ranked
                 if subset_item not in data[split] or data[split][subset_item] is None:
                     continue
-                if isinstance(sections[split], Dataset):
+                if isinstance(data[split][subset_item], Dataset):
                     sections[split] = data[split][subset_item]
                 elif converter is not None:
                     sections[split] = Dataset.from_list(

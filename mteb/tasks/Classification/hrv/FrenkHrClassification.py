@@ -10,9 +10,8 @@ class FrenkHrClassification(AbsTaskAnyClassification):
         name="FrenkHrClassification",
         description="Croatian subset of the FRENK dataset",
         dataset={
-            "path": "classla/FRENK-hate-hr",
-            "revision": "e7fc9f3d8d6c5640a26679d8a50b1666b02cc41f",
-            "trust_remote_code": True,
+            "path": "mteb/FrenkHrClassification",
+            "revision": "eb5117a28f51d6a4e613590174c39b530e275e53",
         },
         reference="https://arxiv.org/abs/1906.02045",
         type="Classification",

@@ -18,10 +18,9 @@ from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from mteb.load_results.task_results import ScoresDict
 from mteb.models import MTEBModels
 from mteb.models.models_protocols import Encoder
-from mteb.types import HFSubset
+from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,

@@ -11,9 +11,8 @@ class Moroco(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Moroco",
         dataset={
-            "path": "universityofbucharest/moroco",
-            "revision": "d64d9b8cd876056a5c24552afe3caf7e6fd26c8e",
-            "trust_remote_code": True,
+            "path": "mteb/Moroco",
+            "revision": "42c54720ccd5397ed3eede28b2c5ada63a977bf7",
         },
         description="The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldavian and Romanian samples of text collected from the news domain. The samples belong to one of the following six topics: (0) culture, (1) finance, (2) politics, (3) science, (4) sports, (5) tech",
         reference="https://huggingface.co/datasets/moroco",
@@ -43,14 +42,6 @@ class Moroco(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"sample": "text", "category": "label"}
-        ).remove_columns(["id"])
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class MorocoV2(AbsTaskAnyClassification):

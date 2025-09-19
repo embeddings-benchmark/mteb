@@ -11,10 +11,8 @@ class FinParaSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="FinParaSTS",
         dataset={
-            "path": "TurkuNLP/turku_paraphrase_corpus",
-            "revision": "e4428e399de70a21b8857464e76f0fe859cabe05",
-            "name": "plain",
-            "trust_remote_code": True,
+            "path": "mteb/FinParaSTS",
+            "revision": "16d3834e2eb7f9faedbae0cf25df4b0962c97e71",
         },
         description="Finnish paraphrase-based semantic similarity corpus",
         reference="https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus",
@@ -59,12 +57,3 @@ Tarkka, Otto},
 
     min_score = 2
     max_score = 4
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.shuffle(seed=self.seed)
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].select(range(N_SAMPLES))
-        rename_dict = {"text1": "sentence1", "text2": "sentence2", "label": "score"}
-        self.dataset = self.dataset.rename_columns(rename_dict)
-        self.dataset = self.dataset.select_columns(list(rename_dict.values()))
-        self.dataset = self.dataset.map(lambda x: {"score": int(x["score"][0])})

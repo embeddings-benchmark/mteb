@@ -27,7 +27,6 @@ def _load_code_search_code_retrieval(
             path,
             name=f"{lang}-qrels",
             revision=revision,
-            trust_remote_code=True,
         )[split]
 
         for row in qrels_data:
@@ -42,7 +41,6 @@ def _load_code_search_code_retrieval(
             path,
             name=f"{lang}-corpus",
             revision=revision,
-            trust_remote_code=True,
         )["corpus"]
 
         for row in corpus_data:
@@ -55,7 +53,6 @@ def _load_code_search_code_retrieval(
             path,
             name=f"{lang}-queries",
             revision=revision,
-            trust_remote_code=True,
         )["queries"].filter(lambda x: x["partition"] == "test")
 
         for row in queries_data:

@@ -15,9 +15,8 @@ class TweetTopicSingleClassification(AbsTaskAnyClassification):
         usernames, we replace its display name (or account name) with symbols {@}.
         """,
         dataset={
-            "path": "cardiffnlp/tweet_topic_single",
-            "revision": "87b7a0d1c402dbb481db649569c556d9aa27ac05",
-            "trust_remote_code": True,
+            "path": "mteb/TweetTopicSingleClassification",
+            "revision": "b4280e921a2760ce34d2dd80a9e5dc8bcbf61785",
         },
         reference="https://arxiv.org/abs/2209.09824",
         type="Classification",

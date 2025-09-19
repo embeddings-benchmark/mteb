@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -16,52 +12,14 @@ _LANGUAGES = {
 }
 
 
-def load_neuclir_data(
-    path: str,
-    langs: list,
-    eval_splits: list,
-    revision: str | None = None,
-):
-    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
-
-    for lang in langs:
-        lang_corpus = datasets.load_dataset(path, f"corpus-{lang}", revision=revision)[
-            "corpus"
-        ]
-        lang_queries = datasets.load_dataset(
-            path, f"queries-{lang}", revision=revision
-        )["queries"]
-        lang_qrels = datasets.load_dataset(path, f"{lang}", revision=revision)["test"]
-        corpus[lang] = {
-            "test": {
-                str(e["_id"]): {"text": e["text"], "title": e["title"]}
-                for e in lang_corpus
-            }
-        }
-        queries[lang] = {"test": {str(e["_id"]): e["text"] for e in lang_queries}}
-        relevant_docs[lang]["test"] = defaultdict(dict)
-        for item in lang_qrels:
-            relevant_docs[lang]["test"][str(item["query-id"])].update(
-                {str(item["corpus-id"]): item["score"]}
-            )
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
-
-
 class NeuCLIR2022Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NeuCLIR2022Retrieval",
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/neuclir-2022",
-            "revision": "920fc15b81e2324e52163904be663f340235cdea",
-            "trust_remote_code": True,
+            "path": "mteb/NeuCLIR2022Retrieval",
+            "revision": "95cad8671c1c31908766a689755c307f4770411f",
         },
         type="Retrieval",
         category="t2t",
@@ -86,82 +44,6 @@ class NeuCLIR2022Retrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_neuclir_data(
-            path=self.metadata.dataset["path"],
-            langs=self.metadata.eval_langs,
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
-
-def load_neuclir_data_hard_negatives(
-    path: str,
-    langs: list,
-    eval_splits: list,
-    revision: str | None = None,
-):
-    split = "test"
-    corpus = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    queries = {lang: dict.fromkeys(eval_splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(eval_splits) for lang in langs}
-
-    for lang in langs:
-        corpus_identifier = f"corpus-{lang}"
-        corpus_data = datasets.load_dataset(
-            path,
-            corpus_identifier,
-            revision=revision,
-            trust_remote_code=True,
-        )
-        corpus[lang][split] = {}
-        for row in corpus_data["corpus"]:
-            docid = row["_id"]
-            doc_title = row["title"]
-            doc_text = row["text"]
-            corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
-
-        # Load queries data
-        queries_identifier = f"queries-{lang}"
-        queries_data = datasets.load_dataset(
-            path,
-            queries_identifier,
-            revision=revision,
-            trust_remote_code=True,
-        )
-        queries[lang][split] = {}
-        for row in queries_data["queries"]:
-            query_id = row["_id"]
-            query_text = row["text"]
-            queries[lang][split][query_id] = query_text
-
-        # Load relevant documents data
-        qrels_identifier = f"{lang}"
-        qrels_data = datasets.load_dataset(
-            path,
-            qrels_identifier,
-            revision=revision,
-            trust_remote_code=True,
-        )
-        relevant_docs[lang][split] = {}
-        for row in qrels_data[split]:
-            query_id = row["query-id"]
-            doc_id = row["corpus-id"]
-            score = row["score"]
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = score
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
-
 
 class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -169,9 +51,8 @@ class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
         description="The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/neuclir-2022-hard-negatives",
-            "revision": "35dd709a0d846ae987541cf8ca978562636260f0",
-            "trust_remote_code": True,
+            "path": "mteb/NeuCLIR2022RetrievalHardNegatives",
+            "revision": "cc5a0360c8bdf1e4afa19d2ea8ec111c0ca96335",
         },
         type="Retrieval",
         category="t2t",
@@ -196,17 +77,3 @@ class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
 """,
         adapted_from=["NeuCLIR2022Retrieval"],
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = (
-            load_neuclir_data_hard_negatives(
-                path=self.metadata.dataset["path"],
-                langs=self.metadata.eval_langs,
-                eval_splits=self.metadata.eval_splits,
-                revision=self.metadata.dataset["revision"],
-            )
-        )
-        self.data_loaded = True

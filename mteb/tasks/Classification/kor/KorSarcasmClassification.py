@@ -18,8 +18,8 @@ class KorSarcasmClassification(AbsTaskAnyClassification):
         hashtag, urls and mentions of the user to preserve anonymity.
         """,
         dataset={
-            "path": "SpellOnYou/kor_sarcasm",
-            "revision": "3d96e36e10a88d5b7a3f617cf8362d997504494b",
+            "path": "mteb/KorSarcasmClassification",
+            "revision": "6701f384372c04aa8c64b10582e72eb84135a1d4",
         },
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
@@ -46,12 +46,6 @@ class KorSarcasmClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"tokens": "text"})
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
 
 
 class KorSarcasmClassificationV2(AbsTaskAnyClassification):

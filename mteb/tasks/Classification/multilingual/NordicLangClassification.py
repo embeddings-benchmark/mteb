@@ -10,10 +10,8 @@ class NordicLangClassification(AbsTaskAnyClassification):
         description="A dataset for Nordic language identification.",
         reference="https://aclanthology.org/2021.vardial-1.8/",
         dataset={
-            "path": "strombergnlp/nordic_langid",
-            "revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
-            "name": "10k",
-            "trust_remote_code": True,
+            "path": "mteb/NordicLangClassification",
+            "revision": "425d7e9de276902b73d5359ecd4811f3b80cc7c0",
         },
         type="Classification",
         category="t2c",
@@ -60,8 +58,3 @@ Jauhiainen, Tommi},
     )
 
     samples_per_label = 32
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"sentence": "text", "language": "label"}
-        )

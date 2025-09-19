@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
+from collections import defaultdict
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -235,13 +236,11 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining):
-    parallel_subsets = True
     metadata = TaskMetadata(
         name="FloresBitextMining",
         dataset={
-            "path": "mteb/flores",
-            "revision": "e6b647fcb6299a2f686f742f4d4c023e553ea67e",
-            "trust_remote_code": True,
+            "path": "mteb/FloresBitextMining",
+            "revision": "2144d16cc15edd22d4a9237d12bff5f31f5c07fc",
         },
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
         reference="https://huggingface.co/datasets/facebook/flores",
@@ -269,9 +268,23 @@ class FloresBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
+    def load_data(self) -> None:
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
+
+        dataset = datasets.load_dataset(
+            **self.metadata.dataset,
+            split=self.metadata.eval_splits[0],
+        )
+        self.dataset = defaultdict(dict)
+        for lang in self.metadata.eval_langs:
+            first_lang, second_lang = lang.split("-")
+            ds = Dataset.from_dict(
+                {
+                    "sentence1": dataset[first_lang],
+                    "sentence2": dataset[second_lang],
+                }
+            )
+            self.dataset[lang][self.metadata.eval_splits[0]] = ds
+
         self.data_loaded = True

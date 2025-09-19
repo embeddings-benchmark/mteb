@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,9 +8,8 @@ class DiaBLaBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
         dataset={
-            "path": "rbawden/DiaBLa",
-            "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
-            "trust_remote_code": True,
+            "path": "mteb/DiaBlaBitextMining",
+            "revision": "c458e9bf4306d6380604462926a38c34861b4d3b",
         },
         description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
         reference="https://inria.hal.science/hal-03021633",
@@ -42,32 +39,3 @@ class DiaBLaBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        """Load dataset from HuggingFace hub and convert it to the standard format."""
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(**self.metadata.dataset)
-
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self):
-        def create_columns(row):
-            """Put all French texts in column 'sentence1' and English texts in 'sentence2' column"""
-            row["orig_lang"] = row["utterance_meta"]["lang"]
-            row["sentence1"] = (
-                row["orig"] if row["orig_lang"] == "french" else row["ref"]
-            )
-            row["sentence2"] = (
-                row["orig"] if not row["orig_lang"] == "french" else row["ref"]
-            )
-            return row
-
-        # Convert to standard format
-        for lang in self.hf_subsets:
-            self.dataset[lang] = self.dataset[lang].map(create_columns)

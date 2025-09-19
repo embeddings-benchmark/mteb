@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
+from mteb.results.task_result import TaskResult
+
 from .AbsTask import AbsTask
 from .aggregate_task_metadata import AggregateTaskMetadata
 
@@ -51,7 +53,7 @@ class AbsTaskAggregate(AbsTask):
             for task_res in task_results:
                 for langs in eval_langs:
                     main_scores.append(
-                        task_res.get_score_fast(
+                        task_res._get_score_fast(
                             languages=[lang.split("-")[0] for lang in langs],
                             splits=self.metadata.eval_splits,
                             subsets=subsets,
@@ -70,10 +72,6 @@ class AbsTaskAggregate(AbsTask):
         """Combined the task results for using `task_results_to_scores`. Do not redefine this function if you want to implement a custom aggregation.
         Instead redefin `task_results_to_scores`.
         """
-        from mteb.load_results.task_results import (
-            TaskResult,  # to prevent circular imports, # TODO: can potentially likely be out of function in in v2.0.0
-        )
-
         eval_times = [tr.evaluation_time for tr in task_results if tr.evaluation_time]
         if len(eval_times) != len(task_results):
             logger.info(

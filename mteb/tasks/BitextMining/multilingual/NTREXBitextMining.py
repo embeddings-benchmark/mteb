@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
+from collections import defaultdict
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -245,13 +246,11 @@ _EVAL_LANGS = extend_lang_pairs()
 
 
 class NTREXBitextMining(AbsTaskBitextMining):
-    parallel_subsets = True
     metadata = TaskMetadata(
         name="NTREXBitextMining",
         dataset={
-            "path": "mteb/NTREX",
-            "revision": "ed9a4403ed4adbfaf4aab56d5b2709e9f6c3ba33",
-            "trust_remote_code": True,
+            "path": "mteb/NTREXBitextMining",
+            "revision": "66b8b27efc99658903127730575e9fa0cb9f075c",
         },
         description="NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.",
         reference="https://huggingface.co/datasets/davidstap/NTREX",
@@ -284,9 +283,23 @@ class NTREXBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
+    def load_data(self) -> None:
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
+
+        dataset = datasets.load_dataset(
+            **self.metadata.dataset,
+            split=self.metadata.eval_splits[0],
+        )
+        self.dataset = defaultdict(dict)
+        for lang in self.metadata.eval_langs:
+            first_lang, second_lang = lang.split("-")
+            ds = Dataset.from_dict(
+                {
+                    "sentence1": dataset[first_lang],
+                    "sentence2": dataset[second_lang],
+                }
+            )
+            self.dataset[lang][self.metadata.eval_splits[0]] = ds
+
         self.data_loaded = True

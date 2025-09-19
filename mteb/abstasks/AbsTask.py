@@ -314,7 +314,7 @@ class AbsTask(ABC):
         self.dataset_transform()
         self.data_loaded = True
 
-    def fast_load(self, **kwargs: Any) -> None:
+    def fast_load(self) -> None:
         """**Deprecated**. Load all subsets at once, then group by language. Using fast loading has two requirements:
 
         - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair
@@ -547,22 +547,16 @@ class AbsTask(ABC):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         raise NotImplementedError
 
-    def push_dataset_to_hub(self, repo_name: str, reupload: bool = False) -> None:
+    def push_dataset_to_hub(self, repo_name: str) -> None:
         """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
-            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Examples:
             >>> import mteb
             >>> task = mteb.get_task("Caltech101")
             >>> repo_name = f"myorg/{task.metadata.name}"
-            >>> task.load_data() # ensure that the dataset can load
-            >>>
-            >>> # Create the repo on HuggingFace Hub if it does not exist
-            >>> from huggingface_hub import create_repo
-            >>> create_repo(repo_name, repo_type="dataset")
             >>> # Push the dataset to the Hub
             >>> task.push_dataset_to_hub(repo_name)
         """

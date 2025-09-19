@@ -8,7 +8,7 @@ import pandas as pd
 
 import mteb
 from mteb.leaderboard.table import create_tables
-from mteb.load_results import load_results
+from mteb.results import load_results
 
 logging.basicConfig(level=logging.INFO)
 
@@ -61,7 +61,7 @@ def load_leaderboard(
     ).join_revisions()
 
     # Convert scores into long format
-    scores_long = benchmark_results_filtered.get_scores(format="long")
+    scores_long = benchmark_results_filtered._get_scores(format="long")
 
     # Convert scores into leaderboard tables
     summary_gr_df, per_task_gr_df = create_tables(scores_long=scores_long)

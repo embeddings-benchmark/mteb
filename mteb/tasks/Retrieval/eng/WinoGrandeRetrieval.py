@@ -11,9 +11,8 @@ class WinoGrande(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on winogrande.",
         reference="https://winogrande.allenai.org/",
         dataset={
-            "path": "RAR-b/winogrande",
-            "revision": "f74c094f321077cf909ddfb8bccc1b5912a4ac28",
-            "trust_remote_code": True,
+            "path": "mteb/WinoGrande",
+            "revision": "770abbd7f77affc005f9734996e795925cbc0f65",
         },
         type="Retrieval",
         category="t2t",

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
@@ -11,9 +9,8 @@ class XStance(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XStance",
         dataset={
-            "path": "ZurichNLP/x_stance",
-            "revision": "810604b9ad3aafdc6144597fdaa40f21a6f5f3de",
-            "trust_remote_code": True,
+            "path": "mteb/XStance",
+            "revision": "33c45c244e7c974f0c206372285a37e3f000f65a",
         },
         description="A Multilingual Multi-Target Dataset for Stance Detection in French, German, and Italian.",
         reference="https://github.com/ZurichNLP/xstance",
@@ -45,71 +42,4 @@ class XStance(AbsTaskPairClassification):
   year = {2020},
 }
 """,
-        # length of`sent1` + `sent2`
     )
-
-    def load_data(self) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        max_n_samples = 2048
-        self.dataset = {}
-        path = self.metadata.dataset["path"]
-        revision = self.metadata.dataset["revision"]
-        raw_dataset = load_dataset(
-            path,
-            revision=revision,
-            trust_remote_code=self.metadata.dataset["trust_remote_code"],
-        )
-
-        def convert_example(example):
-            return {
-                "sentence1": example["question"],
-                "sentence2": example["comment"],
-                "labels": 1 if example["label"] == "FAVOR" else 0,
-            }
-
-        for lang in self.metadata.eval_langs:
-            self.dataset[lang] = {}
-            for split in self.metadata.eval_splits:
-                # filter by language
-                self.dataset[lang][split] = raw_dataset[split].filter(
-                    lambda row: row["language"] == lang
-                )
-
-                # reduce samples
-                if len(self.dataset[lang][split]) > max_n_samples:
-                    # only de + fr are larger than 2048 samples
-                    self.dataset[lang][split] = self.dataset[lang][split].select(
-                        range(max_n_samples)
-                    )
-
-                # convert examples
-                self.dataset[lang][split] = (
-                    self.dataset[lang][split]
-                    .map(
-                        convert_example,
-                        remove_columns=self.dataset[lang][split].column_names,
-                    )
-                    .to_dict()
-                )
-
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self):
-        """Transform dataset into sentence-pair format"""
-        _dataset = {}
-
-        for lang in self.metadata.eval_langs:
-            _dataset[lang] = {}
-            for split in self.metadata.eval_splits:
-                _dataset[lang][split] = [
-                    {
-                        "sentence1": self.dataset[lang][split]["sentence1"],
-                        "sentence2": self.dataset[lang][split]["sentence2"],
-                        "labels": self.dataset[lang][split]["labels"],
-                    }
-                ]
-        self.dataset = _dataset
