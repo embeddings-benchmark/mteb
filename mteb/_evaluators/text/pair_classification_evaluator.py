@@ -111,7 +111,7 @@ class PairClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
     ) -> dict[str, float]:
-        all_sentences = self.sentences1 + self.sentences2
+        all_sentences = self.sentences1[:] + self.sentences2[:]
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
             all_sentences,

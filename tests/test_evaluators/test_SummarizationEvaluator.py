@@ -99,14 +99,6 @@ def test_empty_scores_handling(model, mock_task):
     """Test that the evaluator handles cases where some samples have equal scores."""
     test_data = mock_task.dataset["test"]
 
-    # Create a case where some gold scores are identical
-    modified_gold_scores = test_data["relevance"].copy()
-    if len(modified_gold_scores) > 0 and len(modified_gold_scores[0]) > 1:
-        # Make all scores in the first sample identical
-        modified_gold_scores[0] = [modified_gold_scores[0][0]] * len(
-            modified_gold_scores[0]
-        )
-
     evaluator = SummarizationEvaluator(
         human_summaries=test_data["human_summaries"],
         machine_summaries=test_data["machine_summaries"],

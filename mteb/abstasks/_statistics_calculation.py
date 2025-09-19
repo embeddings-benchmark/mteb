@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import hashlib
 from collections import Counter
-from typing import Any
+
+from PIL import Image
 
 from mteb.types import TopRankedDocumentsType
 from mteb.types.statistics import (
@@ -35,7 +37,7 @@ def calculate_text_statistics(texts: list[str]) -> TextStatistics:
     )
 
 
-def calculate_image_statistics(images: list[Any]) -> ImageStatistics:
+def calculate_image_statistics(images: list[Image.Image]) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
     Args:
@@ -45,10 +47,16 @@ def calculate_image_statistics(images: list[Any]) -> ImageStatistics:
         ImageStatistics: A dictionary containing the descriptive statistics.
     """
     img_widths, img_heights = [], []
+    seen_hashes: set[str] = set()
+
     for img in images:
         width, height = img.size  # type: ignore
         img_heights.append(height)
         img_widths.append(width)
+
+        img_bytes = img.tobytes()
+        img_hash = hashlib.md5(img_bytes).hexdigest()
+        seen_hashes.add(img_hash)
 
     return ImageStatistics(
         min_image_width=min(img_widths),
@@ -58,7 +66,7 @@ def calculate_image_statistics(images: list[Any]) -> ImageStatistics:
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
         # some image types (PngImageFile) may be unhashable
-        unique_images=len({id(img) for img in images}),
+        unique_images=len(seen_hashes),
     )
 
 
