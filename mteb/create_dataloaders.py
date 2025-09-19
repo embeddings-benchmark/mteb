@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 import torch
 from datasets import Dataset
@@ -21,19 +21,23 @@ logger = logging.getLogger(__name__)
 
 
 def create_dataloader_from_texts(
-    text: list[str], **dataloader_kwargs
+    text: list[str],
+    batch_size: int = 32,
 ) -> DataLoader[TextInput]:
     """Create a dataloader from a list of text.
 
     Args:
         text: A list of text to create a dataloader from.
-        dataloader_kwargs: Additional arguments to pass to the dataloader.
+        batch_size: Batch size for the dataloader.
 
     Returns:
         A dataloader with the text.
     """
     dataset = Dataset.from_dict({"text": text})
-    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
+    return torch.utils.data.DataLoader(
+        dataset,
+        batch_size=batch_size,
+    )
 
 
 def corpus_to_dict(
@@ -56,19 +60,23 @@ def corpus_to_dict(
 
 
 def create_dataloader_for_retrieval_corpus(
-    dataset: Dataset, **dataloader_kwargs
+    dataset: Dataset,
+    batch_size: int = 32,
 ) -> DataLoader[CorpusInput]:
     """Create a dataloader from a corpus.
 
     Args:
         dataset: Corpus
-        dataloader_kwargs: Additional arguments to pass to the dataloader.
+        batch_size: Batch size for the dataloader.
 
     Returns:
         A dataloader with the corpus.
     """
     new_ds = dataset.map(corpus_to_dict, desc="Converting corpus dict")
-    return torch.utils.data.DataLoader(new_ds, **dataloader_kwargs)
+    return torch.utils.data.DataLoader(
+        new_ds,
+        batch_size=batch_size,
+    )
 
 
 def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
@@ -83,13 +91,13 @@ def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]
 
 def create_text_dataloader_for_queries(
     queries: QueryDatasetType,
-    **dataloader_kwargs,
+    batch_size: int = 32,
 ) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
     Args:
         queries: A list of queries.
-        dataloader_kwargs: Additional arguments to pass to the dataloader.
+        batch_size: Batch size for the dataloader.
 
     Returns:
         A dataloader with the queries.
@@ -97,7 +105,10 @@ def create_text_dataloader_for_queries(
     queries = queries.map(
         combine_queries_with_instruction_text, desc="Processing queries for dataloading"
     )
-    return torch.utils.data.DataLoader(queries, **dataloader_kwargs)
+    return torch.utils.data.DataLoader(
+        queries,
+        batch_size=batch_size,
+    )
 
 
 def convert_conv_history_to_query(
@@ -106,6 +117,7 @@ def convert_conv_history_to_query(
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
+        conversation = cast(list[str], conversation)
         conv_str = "; ".join(conversation)
         current_conversation = [
             ConversationTurn(role="user", content=message) for message in conversation
@@ -155,13 +167,13 @@ def convert_conv_history_to_query(
 
 def create_dataloader_for_queries_conversation(
     queries: QueryDatasetType,
-    **dataloader_kwargs,
+    batch_size: int = 32,
 ) -> DataLoader[QueryInput]:
     """Create a dataloader from a list of queries.
 
     Args:
         queries: A list of queries.
-        dataloader_kwargs: Additional arguments to pass to the dataloader.
+        batch_size: Batch size for the dataloader.
 
     Returns:
         A dataloader with the queries.
@@ -171,7 +183,7 @@ def create_dataloader_for_queries_conversation(
             convert_conv_history_to_query, desc="Converting conversations to queries"
         ),
         collate_fn=custom_collate_fn,
-        **dataloader_kwargs,
+        batch_size=batch_size,
     )
 
 
@@ -258,16 +270,16 @@ def create_image_dataloader(
 
 def create_text_queries_dataloader(
     dataset: Dataset,
-    **dataloader_kwargs: dict[str, Any],
+    batch_size: int = 32,
 ) -> DataLoader[BatchedInput]:
     if not isinstance(dataset["text"][0], list):
         return create_text_dataloader_for_queries(
             dataset,
-            **dataloader_kwargs,
+            batch_size=batch_size,
         )
     return create_dataloader_for_queries_conversation(
         dataset,
-        **dataloader_kwargs,
+        batch_size=batch_size,
     )
 
 
@@ -275,14 +287,19 @@ def create_queries_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     input_column: str | None = None,
-    **dataloader_kwargs: dict[str, Any],
+    batch_size: int = 32,
 ) -> DataLoader[BatchedInput]:
     queries_type, _ = task_metadata.category.split("2")
     if queries_type == "t":  # text only
-        return create_text_queries_dataloader(dataset, **dataloader_kwargs)
+        return create_text_queries_dataloader(
+            dataset,
+            batch_size=batch_size,
+        )
     if "i" in queries_type:  # contains image
         return create_image_dataloader(
-            dataset, image_column_name="image", **dataloader_kwargs
+            dataset,
+            image_column_name="image",
+            batch_size=batch_size,
         )
     raise ValueError(f"Can't handle queries type {queries_type}")
 
@@ -291,14 +308,22 @@ def create_document_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     input_column: str | None = None,
-    **dataloader_kwargs: dict[str, Any],
+    batch_size: int = 32,
 ) -> DataLoader[BatchedInput]:
-    _, document_type = task_metadata.category.split("2")
+    if task_metadata.category is None:
+        document_type = "t"
+    else:
+        _, document_type = task_metadata.category.split("2")
     if document_type == "t":  # text only
-        return create_dataloader_for_retrieval_corpus(dataset, **dataloader_kwargs)
+        return create_dataloader_for_retrieval_corpus(
+            dataset,
+            batch_size=batch_size,
+        )
     if "i" in document_type:  # contains image
         return create_image_dataloader(
-            dataset, image_column_name="image", **dataloader_kwargs
+            dataset,
+            image_column_name="image",
+            batch_size=batch_size,
         )
     raise ValueError(f"Can't handle queries type {document_type}")
 
@@ -308,35 +333,34 @@ def create_dataloader(
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None = None,
     input_column: str | None = None,
-    **dataloader_kwargs: dict[str, Any],
+    batch_size: int = 32,
+    **kwargs: dict[str, Any],
 ) -> DataLoader[BatchedInput]:
     if prompt_type == PromptType.query:
         return create_queries_dataloader(
             dataset,
             task_metadata,
+            batch_size=batch_size,
             input_column=input_column,
-            **dataloader_kwargs,
         )
     if prompt_type == PromptType.document:
         return create_document_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,
-            **dataloader_kwargs,
+            batch_size=batch_size,
         )
 
     if "image" in task_metadata.modalities:
         return create_image_dataloader(
             dataset,
             image_column_name=input_column,
-            **dataloader_kwargs,
         )
     if "text" in task_metadata.modalities and input_column is not None:
         return create_dataloader_from_texts(
             dataset[input_column],
-            **dataloader_kwargs,
         )
     return DataLoader(
         dataset,
-        **dataloader_kwargs,
+        batch_size=batch_size,
     )

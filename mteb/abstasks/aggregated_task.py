@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -13,7 +14,8 @@ from .aggregate_task_metadata import AggregateTaskMetadata
 if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
-    from mteb.models.models_protocols import Encoder
+    from mteb.load_results.task_results import TaskResult
+    from mteb.models.models_protocols import MTEBModels
     from mteb.types import HFSubset, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics
 
@@ -27,6 +29,7 @@ class AbsTaskAggregate(AbsTask):
     _eval_splits: list[str] | None = None
 
     def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)
         self.tasks = self.metadata.tasks
         self.taskname_to_task = {task.metadata.name: task for task in self.tasks}
 
@@ -120,11 +123,12 @@ class AbsTaskAggregate(AbsTask):
 
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         # TODO: If we refactor the runner to at least have a subfunction mteb.run_task(model, task) we could use that here
@@ -134,7 +138,7 @@ class AbsTaskAggregate(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: MTEBModels,
         data_split: DatasetDict | Dataset,
         encode_kwargs: dict[str, Any],
         **kwargs: Any,

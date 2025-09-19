@@ -17,7 +17,7 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Literal, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 import mteb
 from mteb.languages import check_language_code
@@ -198,8 +198,8 @@ class MetadataDatasetDict(TypedDict, total=False):
          because datasets `v4` doesn't support this. This parameter is left for compatibility with forks/external usage.
     """
 
-    path: str
-    revision: str
+    path: Required[str]
+    revision: Required[str]
     name: str
     split: str
     trust_remote_code: bool
@@ -266,25 +266,7 @@ class TaskMetadata(BaseModel):
     adapted_from: list[str] | None = None
 
     def _validate_metadata(self) -> None:
-        self._dataset_path_is_specified(self.dataset)
-        self._dataset_revision_is_specified(self.dataset)
         self._eval_langs_are_valid(self.eval_langs)
-
-    @field_validator("dataset")
-    @classmethod
-    def _check_dataset_path_is_specified(
-        cls, dataset: dict[str, Any]
-    ) -> dict[str, Any]:
-        cls._dataset_path_is_specified(dataset)
-        return dataset
-
-    @field_validator("dataset")
-    @classmethod
-    def _check_dataset_revision_is_specified(
-        cls, dataset: dict[str, Any]
-    ) -> dict[str, Any]:
-        cls._dataset_revision_is_specified(dataset)
-        return dataset
 
     @field_validator("prompt")
     @classmethod
@@ -298,27 +280,6 @@ class TaskMetadata(BaseModel):
                         "The prompt dictionary should only contain the keys 'query' and 'passage'."
                     )
         return prompt
-
-    @staticmethod
-    def _dataset_path_is_specified(dataset: dict[str, Any]) -> None:
-        """This method checks that the dataset path is specified."""
-        if "path" not in dataset or dataset["path"] is None:
-            raise ValueError(
-                "You must specify the path to the dataset in the dataset dictionary. "
-                + "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
-            )
-
-    @staticmethod
-    def _dataset_revision_is_specified(dataset: dict[str, Any]) -> None:
-        if "revision" not in dataset:
-            raise ValueError(
-                "You must explicitly specify a revision for the dataset (either a SHA or None)."
-            )
-        if dataset["revision"] is None:
-            logger.warning(
-                "Revision missing for the dataset %s. It is encourage to specify a dataset revision for reproducability.",
-                dataset["path"],
-            )
 
     def _eval_langs_are_valid(self, eval_langs: Languages) -> None:
         """This method checks that the eval_langs are specified as a list of languages."""
@@ -451,7 +412,7 @@ class TaskMetadata(BaseModel):
     def _create_dataset_card_data(
         self,
         existing_dataset_card_data: DatasetCardData | None = None,
-    ) -> tuple[DatasetCardData, dict[str, str]]:
+    ) -> tuple[DatasetCardData, dict[str, Any]]:
         """Create a DatasetCardData object from the task metadata.
 
         Args:
@@ -501,12 +462,12 @@ class TaskMetadata(BaseModel):
         if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
             dataset_type.extend(["image-to-text", "text-to-image"])
 
+        languages: list[str] = []
         if self.is_multilingual:
-            languages: list[str] = []
             for val in list(self.eval_langs.values()):
                 languages.extend(val)
         else:
-            languages: list[str] = self.eval_langs
+            languages = self.eval_langs
         # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
         # or a special value like "code", "multilingual".
         readme_langs = []
@@ -529,11 +490,7 @@ class TaskMetadata(BaseModel):
             ]
             source_datasets.append(self.dataset["path"])
         else:
-            source_datasets = (
-                None
-                if not TaskMetadata.push_dataset_card_to_hub
-                else [self.dataset["path"]]
-            )
+            source_datasets = None if not self.dataset else [self.dataset["path"]]
 
         tags = ["mteb"] + self.modalities
 

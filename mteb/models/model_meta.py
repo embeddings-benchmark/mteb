@@ -216,7 +216,7 @@ class ModelMeta(BaseModel):
         intersection = training_datasets & benchmark_datasets
         return len(intersection) == 0
 
-    def get_training_datasets(self) -> dict[str, list[str]] | None:
+    def get_training_datasets(self) -> set[str] | None:
         """Returns all training datasets of the model including similar tasks."""
         import mteb
 

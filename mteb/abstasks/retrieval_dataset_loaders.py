@@ -168,7 +168,7 @@ class RetrievalDatasetLoader:
         )
 
         # filter queries with no qrels
-        qrels_dict = defaultdict(dict)
+        qrels_dict: dict[str, dict[str, int]] = defaultdict(dict)
 
         def qrels_dict_init(row):
             qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])

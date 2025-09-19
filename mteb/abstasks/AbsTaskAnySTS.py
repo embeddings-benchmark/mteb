@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 from datasets import Dataset
 
@@ -9,9 +9,9 @@ from mteb._evaluators import AnySTSEvaluator
 from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
-    DescriptiveStatistics,
     ImageStatistics,
     ScoreStatistics,
+    SplitDescriptiveStatistics,
     TextStatistics,
 )
 
@@ -25,7 +25,7 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-class AnySTSDescriptiveStatistics(DescriptiveStatistics):
+class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for STS
 
     Attributes:
@@ -97,6 +97,8 @@ class AbsTaskAnySTS(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> AnySTSDescriptiveStatistics:
         first_column, second_column = self.column_names
+        self.dataset = cast(dict[str, dict[str, Dataset]], self.dataset)
+
         if hf_subset:
             sentence1 = self.dataset[hf_subset][split][first_column]
             sentence2 = self.dataset[hf_subset][split][second_column]

@@ -7,9 +7,9 @@ from typing import Any
 from datasets import Dataset, DatasetDict
 
 from mteb._evaluators import BitextMiningEvaluator
-from mteb.models import Encoder
+from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics, TextStatistics
+from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
 
 from ._statistics_calculation import calculate_text_statistics
 from .AbsTask import AbsTask
@@ -17,7 +17,7 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-class BitextDescriptiveStatistics(DescriptiveStatistics):
+class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Bitext
 
     Attributes:
@@ -52,7 +52,7 @@ class AbsTaskBitextMining(AbsTask):
 
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,

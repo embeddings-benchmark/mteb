@@ -1,12 +1,18 @@
 from __future__ import annotations
 
-from typing import TypedDict
+from typing_extensions import NotRequired, TypedDict
+
+from mteb.types import HFSubset
 
 
-class DescriptiveStatistics(TypedDict):
+class SplitDescriptiveStatistics(TypedDict):
+    pass
+
+
+class DescriptiveStatistics(TypedDict, SplitDescriptiveStatistics):
     """Class for descriptive statistics."""
 
-    pass
+    hf_subset_descriptive_stats: NotRequired[dict[HFSubset, SplitDescriptiveStatistics]]
 
 
 class TextStatistics(TypedDict):
