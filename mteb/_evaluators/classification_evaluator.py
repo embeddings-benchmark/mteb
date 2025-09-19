@@ -117,7 +117,19 @@ class ClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
-    ) -> tuple[dict[str, float], np.ndarray | None]:
+    ) -> tuple[dict[str, float], np.ndarray]:
+        """Classification evaluation by training a sklearn classifier on the
+        embeddings of the training set and evaluating on the embeddings of the test set.
+
+        Args:
+            model: Encoder
+            encode_kwargs: encode kwargs
+            test_cache: embeddings of the test set, if already computed
+
+        Returns:
+            Tuple of scores and test embeddings
+
+        """
         dataloader_train, dataloader_test = self.create_dataloaders(
             batch_size=encode_kwargs["batch_size"]
         )

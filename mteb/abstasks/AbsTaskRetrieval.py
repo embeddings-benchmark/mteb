@@ -5,7 +5,7 @@ import logging
 from collections import defaultdict
 from pathlib import Path
 from time import time
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
@@ -560,7 +560,7 @@ class AbsTaskRetrieval(AbsTask):
 
         def _push_section(
             data: dict[str, RetrievalSplitData],
-            subset_item: str,
+            subset_item: Literal["corpus", "queries", "relevant_docs", "top_ranked"],
             hf_subset_name: str,
             converter: Callable[[Any, Any], dict[str, Any]] | None = None,
         ) -> None:

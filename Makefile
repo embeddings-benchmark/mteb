@@ -80,3 +80,8 @@ format-citations:
 check: ## Run code quality tools.
 	@echo "--- 🧹 Running code quality tools ---"
 	@pre-commit run -a
+
+.PHONY: typecheck
+typecheck:
+	@echo "--- 🔍 Running type checks ---"
+	mypy mteb
