@@ -160,7 +160,7 @@ def filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
     return [t for t in tasks if not t.is_aggregate]
 
 
-class MTEBTasks(tuple):
+class MTEBTasks(tuple[AbsTask]):
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
