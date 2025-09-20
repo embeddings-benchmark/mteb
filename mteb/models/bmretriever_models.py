@@ -35,7 +35,7 @@ def instruction_template(
     return (
         f"{instruction}\nQuery: "
         if (prompt_type is None or prompt_type == PromptType.query) and instruction
-        else "Represent this passage\npassage:"
+        else "Represent this passage\npassage: "
     )
 
 
