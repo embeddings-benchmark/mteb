@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 from huggingface_hub import EvalResult, ModelCard, ModelCardData, repo_exists
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
+
+logger = logging.getLogger(__name__)
 
 
 def generate_model_card(
@@ -73,6 +76,11 @@ def generate_model_card(
             card_data=existing_model_card_data
         )
 
-    if push_to_hub and repo_exists(existing_model_card_id_or_path):
-        existing_model_card.push_to_hub(existing_model_card_id_or_path, token=token)
+    if push_to_hub:
+        if repo_exists(existing_model_card_id_or_path):
+            existing_model_card.push_to_hub(existing_model_card_id_or_path, token=token)
+        else:
+            logger.warning(
+                f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
+            )
     existing_model_card.save(output_path)
