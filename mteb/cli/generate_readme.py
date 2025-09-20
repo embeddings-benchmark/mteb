@@ -144,7 +144,7 @@ def _merge_yamls(
     if not existing_readme.name.lower().endswith(".md"):
         raise ValueError("Readme file should be markdown and end with '.md'")
 
-    with open(existing_readme) as f:
+    with existing_readme.open() as f:
         existing_file = f.read()
 
     existing_yaml_dict, readme_end = _extract_yaml_and_content(existing_file)

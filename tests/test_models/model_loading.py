@@ -95,7 +95,7 @@ if __name__ == "__main__":
     elif args.model_name_file:
         all_model_names = []
         if Path(args.model_name_file).exists():
-            with open(args.model_name_file) as f:
+            with args.model_name_file.open() as f:
                 all_model_names = f.read().strip().split()
         else:
             logging.warning(

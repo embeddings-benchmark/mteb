@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
     AbsTaskAnyZeroShotClassification,
@@ -48,8 +48,8 @@ class Imagenet1kZeroShotClassification(AbsTaskAnyZeroShotClassification):
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:
-        path = os.path.dirname(__file__)
-        with open(os.path.join(path, "templates/Imagenet1k_labels.txt")) as f:
+        path = Path(__file__).parent / "templates" / "Imagenet1k_labels.txt"
+        with path.open() as f:
             labels = f.readlines()
 
         return [f"a photo of {c}." for c in labels]

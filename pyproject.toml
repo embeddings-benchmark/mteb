@@ -161,7 +161,6 @@ namespaces = false
 "mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
-
 target-version = "py39"
 
 
@@ -193,9 +192,8 @@ select = [
     # would exclude:
     # "N806", # probably not worth it
     # "N812" # disallows: import torch.nn.functional as F which is standard
-
+    "PTH",
 ]
-
 
 ignore = [
     "E501",   # line too long
@@ -212,6 +210,9 @@ ignore = [
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*" = ["PTH"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
