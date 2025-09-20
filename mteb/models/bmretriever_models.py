@@ -234,7 +234,6 @@ BMRetriever_7B = ModelMeta(
         model_name_or_path="BMRetriever/BMRetriever-7B",
         instruction_template=instruction_template,
         torch_dtype=torch.float32,
-        trust_remote_code=True,
     ),
     name="BMRetriever/BMRetriever-7B",
     languages=["eng-Latn"],
