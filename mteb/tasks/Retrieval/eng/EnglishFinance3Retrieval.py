@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EnglishFinance3Retrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class EnglishFinance3Retrieval(AbsTaskRetrieval):
             "revision": "5ed0bc0fffa309e99400ea800397931749d12cd2",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

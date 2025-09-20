@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class French1Retrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class French1Retrieval(AbsTaskRetrieval):
             "revision": "c5c5a44f75dff57be44e5623e817239b050bf0f2",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],

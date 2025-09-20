@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .JaCWIRRetrieval import JaCWIRRetrieval
 from .JaGovFaqsRetrieval import JaGovFaqsRetrieval
+from .JapaneseLegal1Retrieval import JapaneseLegal1Retrieval
 from .JaqketRetrieval import JaqketRetrieval
 from .JaQuADRetrieval import JaQuADRetrieval
 from .NLPJournalAbsArticleRetrieval import (
@@ -34,4 +35,5 @@ __all__ = [
     "NLPJournalTitleAbsRetrievalV2",
     "NLPJournalTitleIntroRetrieval",
     "NLPJournalTitleIntroRetrievalV2",
+    "JapaneseLegal1Retrieval",
 ]

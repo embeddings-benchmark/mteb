@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class German1Retrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class German1Retrieval(AbsTaskRetrieval):
             "revision": "d83dd140fc8fdf96372a6e9193cd4fd2d5cb72bd",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

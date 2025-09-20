@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 
 TaskSubtype = Literal[
     "Article retrieval",
+    "Patent retrieval",
     "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -174,16 +175,15 @@ AnnotatorType = Literal[
 """The type of the annotators. Is often important for understanding the quality of a dataset."""
 
 
-class PromptDict(TypedDict, total=False):
-    """A dictionary containing the prompt used for the task.
+PromptDict = TypedDict(
+    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
+)
+"""A dictionary containing the prompt used for the task.
 
-    Attributes:
-        query: The prompt used for the queries in the task.
-        document: The prompt used for the documents in the task.
-    """
-
-    query: str
-    document: str
+Args:
+    query: The prompt used for the queries in the task.
+    document: The prompt used for the passages in the task.
+"""
 
 
 class MetadataDatasetDict(TypedDict, total=False):
@@ -235,6 +235,7 @@ class TaskMetadata(BaseModel):
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
+        is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -264,6 +265,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SampleCreationMethod | None = None
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
+    is_public: bool = True
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)

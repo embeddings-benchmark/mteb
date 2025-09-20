@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Code1Retrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class Code1Retrieval(AbsTaskRetrieval):
             "revision": "94d25599a7e0221484f31749448e5ea217484e41",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

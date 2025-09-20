@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GermanHealthcare1Retrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class GermanHealthcare1Retrieval(AbsTaskRetrieval):
             "revision": "53e9a6fb88b48b7513e9d2cc2218e3415f4e45f8",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

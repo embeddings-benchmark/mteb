@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class JapaneseLegal1Retrieval(AbsTaskRetrieval):
@@ -14,7 +14,7 @@ class JapaneseLegal1Retrieval(AbsTaskRetrieval):
             "revision": "d653557fe66bb6af2b0e2adfc371a24554cf11ce",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
