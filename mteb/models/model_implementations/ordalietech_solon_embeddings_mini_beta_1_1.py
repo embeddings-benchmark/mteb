@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, sentence_transformers_loader
 
 solon_embeddings_1_1 = ModelMeta(
     name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
@@ -26,11 +24,9 @@ solon_embeddings_1_1 = ModelMeta(
         "https://huggingface.co/datasets/OrdalieTech/wiki_fr; "
         "private LLM-synthetic (train)"
     ),
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="OrdalieTech/Solon-embeddings-mini-beta-1.1",
-        revision="8e4ea66eb7eb6109b47b7d97d7556f154d9aec4a",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
-    training_datasets={},  # No mteb dataset
+    training_datasets=set(),  # No mteb dataset
 )

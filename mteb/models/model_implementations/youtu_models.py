@@ -4,16 +4,15 @@ import json
 import logging
 import os
 import time
-from functools import partial
 from typing import Any
 
 import numpy as np
 import tqdm
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models import ModelMeta
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
+from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -107,7 +106,7 @@ training_data = {
 }
 
 
-class YoutuEmbeddingWrapper(Wrapper):
+class YoutuEmbeddingWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -149,7 +148,7 @@ class YoutuEmbeddingWrapper(Wrapper):
         default_instruction = (
             "Given a search query, retrieve web passages that answer the question"
         )
-        if prompt_type == PromptType("query") or prompt_type is None:
+        if prompt_type == PromptType.query or prompt_type is None:
             instruction = youtu_instruction.get(task_name, default_instruction)
             if isinstance(instruction, dict):
                 instruction = instruction[prompt_type]
@@ -222,7 +221,7 @@ Youtu_Embedding_V1 = ModelMeta(
     languages=["zho-Hans"],
     revision="1",
     release_date="2025-09-02",
-    loader=partial(YoutuEmbeddingWrapper, model_name="youtu-embedding-v1"),
+    loader=YoutuEmbeddingWrapper,
     open_weights=False,
     n_parameters=None,
     memory_usage_mb=None,
