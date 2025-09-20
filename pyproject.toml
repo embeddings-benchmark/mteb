@@ -159,7 +159,8 @@ namespaces = false
 
 [tool.setuptools.package-data]
 "mteb" = [
-    "*/*.json",  # for desritive_stats and languages
+    "languages/*.json",  # for languages
+    "descriptive_stats/*/*.json",  # for descriptive_stats image
     "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
 ]
 "mteb.abstasks" = ["dataset_card_template.md"]
