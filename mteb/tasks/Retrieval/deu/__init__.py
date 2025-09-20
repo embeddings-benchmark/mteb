@@ -13,11 +13,11 @@ from .LegalQuADRetrieval import LegalQuAD
 __all__ = [
     "GerDaLIR",
     "GerDaLIRSmall",
+    "German1Retrieval",
     "GermanDPR",
     "GermanGovServiceRetrieval",
+    "GermanHealthcare1Retrieval",
+    "GermanLegal1Retrieval",
     "GermanQuADRetrieval",
     "LegalQuAD",
-    "GermanLegal1Retrieval",
-    "German1Retrieval",
-    "GermanHealthcare1Retrieval",
 ]

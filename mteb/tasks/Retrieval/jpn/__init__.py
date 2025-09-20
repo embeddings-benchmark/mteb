@@ -26,6 +26,7 @@ __all__ = [
     "JaCWIRRetrieval",
     "JaGovFaqsRetrieval",
     "JaQuADRetrieval",
+    "JapaneseLegal1Retrieval",
     "JaqketRetrieval",
     "NLPJournalAbsArticleRetrieval",
     "NLPJournalAbsArticleRetrievalV2",
@@ -35,5 +36,4 @@ __all__ = [
     "NLPJournalTitleAbsRetrievalV2",
     "NLPJournalTitleIntroRetrieval",
     "NLPJournalTitleIntroRetrievalV2",
-    "JapaneseLegal1Retrieval",
 ]

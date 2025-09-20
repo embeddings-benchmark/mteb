@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
@@ -22,7 +22,7 @@ _SHARED_METADATA = dict(
     reference=REFERENCE,
     type="Retrieval",
     modalities=["text"],
-    category="p2p",
+    category="t2t",
     task_subtypes=["Article retrieval", "Patent retrieval"],
     eval_splits=["train"],
     eval_langs=["eng-Latn"],

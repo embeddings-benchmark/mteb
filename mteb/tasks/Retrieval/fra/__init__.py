@@ -12,7 +12,7 @@ __all__ = [
     "BSARDRetrieval",
     "BSARDRetrievalv2",
     "FQuADRetrieval",
-    "SyntecRetrieval",
-    "FrenchLegal1Retrieval",
     "French1Retrieval",
+    "FrenchLegal1Retrieval",
+    "SyntecRetrieval",
 ]

@@ -29,6 +29,7 @@ from .WikiSQLRetrieval import WikiSQLRetrieval
 __all__ = [
     "AppsRetrieval",
     "COIRCodeSearchNetRetrieval",
+    "Code1Retrieval",
     "CodeEditSearchRetrieval",
     "CodeFeedbackMT",
     "CodeFeedbackST",
@@ -44,10 +45,9 @@ __all__ = [
     "DS1000Retrieval",
     "FreshStackRetrieval",
     "HumanEvalRetrieval",
+    "JapaneseCode1Retrieval",
     "MBPPRetrieval",
     "StackOverflowQARetrieval",
     "SyntheticText2SQLRetrieval",
     "WikiSQLRetrieval",
-    "JapaneseCode1Retrieval",
-    "Code1Retrieval",
 ]
