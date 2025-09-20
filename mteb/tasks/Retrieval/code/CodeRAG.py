@@ -250,18 +250,6 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         split = self.metadata.eval_splits[0]
         ds: datasets.Dataset = self.dataset[split]  # type: ignore
         ds = ds.shuffle(seed=42)
-        empty_dataset = Dataset.from_dict({})
-
-        new_ds = {
-            "default": {
-                "train": RetrievalSplitData(
-                    queries=empty_dataset,
-                    corpus=empty_dataset,
-                    relevant_docs={},
-                    top_ranked=None,
-                )
-            }
-        }
 
         corpus = []
         queries = []
@@ -294,4 +282,13 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
             relevant_docs[query_id] = {doc_id: 1}
             idx += 1
 
-        self.dataset = new_ds
+        self.dataset = {
+            "default": {
+                "train": RetrievalSplitData(
+                    queries=Dataset.from_list(queries),
+                    corpus=Dataset.from_list(corpus),
+                    relevant_docs={},
+                    top_ranked=None,
+                )
+            }
+        }
