@@ -83,9 +83,14 @@ class _DAPFAMMixin:
 
         self.corpus = {
             "train": {
-                r["relevant_id"]: "\n".join(
-                    str(r[f]) for f in self.corpus_fields if r.get(f)
-                )
+                r["relevant_id"]: {
+                    "title": r["title_en"],
+                    "text": "\n".join(
+                        str(r[f])
+                        for f in self.corpus_fields
+                        if r.get(f) and f != "title_en"
+                    ),
+                }
                 for r in ds_c
             }
         }
