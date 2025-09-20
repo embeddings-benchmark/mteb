@@ -158,7 +158,10 @@ include = ["mteb", "mteb.*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"mteb.descriptive_stats" = ["*"]
+"mteb" = [
+    "*/*.json",  # for desritive_stats and languages
+    "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
+]
 "mteb.abstasks" = ["dataset_card_template.md"]
 "mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
