@@ -17,6 +17,17 @@ def generate_model_card(
     token: str | None = None,
     push_to_hub: bool = False,
 ) -> None:
+    """Generate or update a model card with evaluation results from MTEB.
+
+    Args:
+        model_name: Name of the model.
+        tasks: List of tasks to generate results for.
+        existing_model_card_id_or_path: Path or ID of an existing model card to update.
+        results_cache: Instance of ResultCache to load results from.
+        output_path: Path to save the generated model card.
+        token: Optional token for pushing to Hugging Face Hub.
+        push_to_hub: Whether to push the updated model card to the Hub if it exists there.
+    """
     existing_model_card: ModelCard | None = None
     if existing_model_card_id_or_path:
         existing_model_card = ModelCard.load(existing_model_card_id_or_path)
