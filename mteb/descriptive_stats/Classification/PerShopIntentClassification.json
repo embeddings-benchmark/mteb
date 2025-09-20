@@ -1,0 +1,93 @@
+{
+    "test": {
+        "num_samples": 1171,
+        "number_texts_intersect_with_train": 565,
+        "text_statistics": {
+            "total_text_length": 82003,
+            "min_text_length": 10,
+            "average_text_length": 70.02818104184458,
+            "max_text_length": 188,
+            "unique_texts": 982
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "Ask_product": {
+                    "count": 277
+                },
+                "Ask_slot": {
+                    "count": 294
+                },
+                "Add_product": {
+                    "count": 272
+                },
+                "Purchase": {
+                    "count": 239
+                },
+                "Inform": {
+                    "count": 78
+                },
+                "User_ask": {
+                    "count": 8
+                },
+                "SuperProduct_ask": {
+                    "count": 3
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 9364,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 660476,
+            "min_text_length": 7,
+            "average_text_length": 70.5335326783426,
+            "max_text_length": 289,
+            "unique_texts": 4714
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 10,
+            "labels": {
+                "Purchase": {
+                    "count": 2126
+                },
+                "Ask_slot": {
+                    "count": 2080
+                },
+                "Add_product": {
+                    "count": 2203
+                },
+                "Inform": {
+                    "count": 513
+                },
+                "Ask_product": {
+                    "count": 2350
+                },
+                "User_ask": {
+                    "count": 57
+                },
+                "SuperProduct_ask": {
+                    "count": 17
+                },
+                "Prev_inform": {
+                    "count": 9
+                },
+                "Ask_detail": {
+                    "count": 5
+                },
+                "Don\u2019t_care": {
+                    "count": 4
+                }
+            }
+        }
+    }
+}

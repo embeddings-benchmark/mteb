@@ -7,6 +7,16 @@ import gradio as gr
 import mteb
 from mteb import Benchmark
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
+from mteb.benchmarks.benchmarks.rteb_benchmarks import (
+    RTEB_CODE,
+    RTEB_ENGLISH,
+    RTEB_FINANCE,
+    RTEB_FRENCH,
+    RTEB_GERMAN,
+    RTEB_HEALTHCARE,
+    RTEB_LEGAL,
+    RTEB_MAIN,
+)
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
@@ -65,11 +75,15 @@ BENCHMARK_ENTRIES = [
                         "MTEB(kor, v1)",
                         "MTEB(pol, v1)",
                         "MTEB(rus, v1)",
-                        "MTEB(fas, v1)",
+                        "MTEB(fas, v2)",
                         "VN-MTEB (vie, v1)",
                     ]
                 )
-                + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
+                + [
+                    MenuEntry(
+                        "Other", mteb.get_benchmarks(["MTEB(eng, v1)", "MTEB(fas, v1)"])
+                    )
+                ],
             ),
             MenuEntry(
                 "Miscellaneous",  # All of these are retrieval benchmarks
@@ -91,6 +105,29 @@ BENCHMARK_ENTRIES = [
             ),
         ],
     ),
+]
+
+RTEB_BENCHMARK_ENTRIES = [
+    MenuEntry(
+        name="RTEB (Retrieval)",
+        description=None,
+        open=False,
+        benchmarks=[
+            RTEB_MAIN,
+            MenuEntry(
+                "Domain-Specific",
+                description=None,
+                open=False,
+                benchmarks=[RTEB_FINANCE, RTEB_LEGAL, RTEB_CODE, RTEB_HEALTHCARE],
+            ),
+            MenuEntry(
+                "Language-specific",
+                description=None,
+                open=False,
+                benchmarks=[RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN],
+            ),
+        ],
+    )
 ]
 
 

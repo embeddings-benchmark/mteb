@@ -6,6 +6,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ArguAnaFa(AbsTaskRetrieval):
+    superseded_by = "ArguAna-Fa.v2"
     ignore_identical_ids = True
     metadata = TaskMetadata(
         name="ArguAna-Fa",
@@ -22,6 +23,34 @@ class ArguAnaFa(AbsTaskRetrieval):
         eval_langs=["fas-Arab"],
         main_score="ndcg_at_10",
         date=("2024-09-01", "2024-12-31"),
+        domains=["Blog"],
+        task_subtypes=["Article retrieval"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["ArguAna"],
+    )
+
+
+class ArguAnaFaV2(AbsTaskRetrieval):
+    ignore_identical_ids = True
+    metadata = TaskMetadata(
+        name="ArguAna-Fa.v2",
+        description="ArguAna-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/arguana-fa-v2",
+        dataset={
+            "path": "MCINext/arguana-fa-v2",
+            "revision": "3c742a98c0c17f7041acf0895680e0ec0000786f",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
         domains=["Blog"],
         task_subtypes=["Article retrieval"],
         license="not specified",
@@ -412,8 +441,8 @@ class DBPediaFa(AbsTaskRetrieval):
 
 
 class FiQA2018Fa(AbsTaskRetrieval):
+    superseded_by = "FiQA2018-Fa.v2"
     ignore_identical_ids = True
-
     metadata = TaskMetadata(
         name="FiQA2018-Fa",
         description="FiQA2018-Fa",
@@ -429,6 +458,35 @@ class FiQA2018Fa(AbsTaskRetrieval):
         eval_langs=["fas-Arab"],
         main_score="ndcg_at_10",
         date=("2024-09-01", "2024-12-31"),
+        domains=["Web"],
+        task_subtypes=["Article retrieval"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["FiQA2018"],
+    )
+
+
+class FiQA2018FaV2(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
+    metadata = TaskMetadata(
+        name="FiQA2018-Fa.v2",
+        description="FiQA2018-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/fiqa-fa-v2",
+        dataset={
+            "path": "MCINext/fiqa-fa-v2",
+            "revision": "3443316360bb14c1ef68f609d6fe8f89b117977d",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
         domains=["Web"],
         task_subtypes=["Article retrieval"],
         license="not specified",
@@ -551,6 +609,7 @@ class NQFa(AbsTaskRetrieval):
 
 
 class QuoraRetrievalFa(AbsTaskRetrieval):
+    superseded_by = "QuoraRetrieval-Fa.v2"
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
@@ -579,7 +638,37 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
     )
 
 
+class QuoraRetrievalFaV2(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
+    metadata = TaskMetadata(
+        name="QuoraRetrieval-Fa.v2",
+        description="QuoraRetrieval-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/quora-fa-v2",
+        dataset={
+            "path": "MCINext/quora-fa-v2",
+            "revision": "4541104f8c0e1f3932838c99197fc4ce47843267",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["QuoraRetrieval"],
+    )
+
+
 class SCIDOCSFa(AbsTaskRetrieval):
+    superseded_by = "SCIDOCS-Fa.v2"
     metadata = TaskMetadata(
         name="SCIDOCS-Fa",
         description="SCIDOCS-Fa",
@@ -606,7 +695,35 @@ class SCIDOCSFa(AbsTaskRetrieval):
     )
 
 
+class SCIDOCSFaV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SCIDOCS-Fa.v2",
+        description="SCIDOCS-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/scidocs-fa-v2",
+        dataset={
+            "path": "MCINext/scidocs-fa-v2",
+            "revision": "930aea79c05ad5c889399c41132229c1047c8c93",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
+        domains=["Academic"],
+        task_subtypes=["Article retrieval"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["SCIDOCS"],
+    )
+
+
 class SciFactFa(AbsTaskRetrieval):
+    superseded_by = "SciFact-Fa.v2"
     metadata = TaskMetadata(
         name="SciFact-Fa",
         description="SciFact-Fa",
@@ -633,7 +750,35 @@ class SciFactFa(AbsTaskRetrieval):
     )
 
 
+class SciFactFaV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SciFact-Fa.v2",
+        description="SciFact-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/scifact-fa-v2",
+        dataset={
+            "path": "MCINext/scifact-fa-v2",
+            "revision": "75937d5e71adf8040e511fab41e06bc88825a52b",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
+        domains=["Academic"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["SciFact"],
+    )
+
+
 class TRECCOVIDFa(AbsTaskRetrieval):
+    superseded_by = "TRECCOVID-Fa.v2"
     metadata = TaskMetadata(
         name="TRECCOVID-Fa",
         description="TRECCOVID-Fa",
@@ -660,7 +805,35 @@ class TRECCOVIDFa(AbsTaskRetrieval):
     )
 
 
+class TRECCOVIDFaV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="TRECCOVID-Fa.v2",
+        description="TRECCOVID-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/trec-covid-fa-v2",
+        dataset={
+            "path": "MCINext/trec-covid-fa-v2",
+            "revision": "2290ff195683a996a0d3e17455ce6149d4cc7b58",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
+        domains=["Medical"],
+        task_subtypes=["Article retrieval"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["TRECCOVID"],
+    )
+
+
 class Touche2020Fa(AbsTaskRetrieval):
+    superseded_by = "Touche2020-Fa.v2"
     metadata = TaskMetadata(
         name="Touche2020-Fa",
         description="Touche2020-Fa",
@@ -684,4 +857,143 @@ class Touche2020Fa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["Touche2020"],
+    )
+
+
+class Touche2020FaV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Touche2020-Fa.v2",
+        description="Touche2020-Fa.v2",
+        reference="https://huggingface.co/datasets/MCINext/touche2020-fa-v2",
+        dataset={
+            "path": "MCINext/webis-touche2020-v3-fa",
+            "revision": "b94a6fb6715c0aa4154c898ad2cebddd6f70c42c",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2025-07-01", "2025-07-31"),
+        domains=["Spoken"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["Touche2020"],
+    )
+
+
+class HotpotQAFaHardNegatives(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="HotpotQA-FaHardNegatives",
+        description="HotpotQA-FaHardNegatives",
+        reference="https://huggingface.co/datasets/MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2",
+        dataset={
+            "path": "MCINext/HotpotQA_FA_test_top_250_only_w_correct-v2",
+            "revision": "42a3220e6adc48e678a6f4bbe49f226ca7d0ed83",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["HotpotQA"],
+    )
+
+
+class MSMARCOFaHardNegatives(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
+    metadata = TaskMetadata(
+        name="MSMARCO-FaHardNegatives",
+        description="MSMARCO-FaHardNegatives",
+        reference="https://huggingface.co/datasets/MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2",
+        dataset={
+            "path": "MCINext/MSMARCO_FA_test_top_250_only_w_correct-v2",
+            "revision": "1c67fef70e75a14e416a5da6e38d0b913f9fcc62",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["MSMARCO"],
+    )
+
+
+class NQFaHardNegatives(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="NQ-FaHardNegatives",
+        description="NQ-FaHardNegatives",
+        reference="https://huggingface.co/datasets/MCINext/NQ_FA_test_top_250_only_w_correct-v2",
+        dataset={
+            "path": "MCINext/NQ_FA_test_top_250_only_w_correct-v2",
+            "revision": "69bb4efac89a25da5e70d15793c4ec1498dbe06f",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["NQ"],
+    )
+
+
+class FEVERFaHardNegatives(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
+    metadata = TaskMetadata(
+        name="FEVER-FaHardNegatives",
+        description="FEVER-FaHardNegatives",
+        reference="https://huggingface.co/datasets/MCINext/FEVER_FA_test_top_250_only_w_correct-v2",
+        dataset={
+            "path": "MCINext/FEVER_FA_test_top_250_only_w_correct-v2",
+            "revision": "6eeb028da2a2c8f888e633a878310bf14ce33e09",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["fas-Arab"],
+        main_score="ndcg_at_10",
+        date=("2024-09-01", "2024-12-31"),
+        domains=["Encyclopaedic", "Written"],
+        task_subtypes=["Claim verification"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=""" """,
+        adapted_from=["FEVER"],
     )

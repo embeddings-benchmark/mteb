@@ -35,7 +35,32 @@ from .CQADupstackTexRetrieval import CQADupstackTexRetrieval
 from .CQADupstackUnixRetrieval import CQADupstackUnixRetrieval
 from .CQADupstackWebmastersRetrieval import CQADupstackWebmastersRetrieval
 from .CQADupstackWordpressRetrieval import CQADupstackWordpressRetrieval
+from .DAPFAMPatentRetrieval import (
+    DAPFAMAllTitlAbsClmToFullTextRetrieval,
+    DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval,
+    DAPFAMAllTitlAbsClmToTitlAbsRetrieval,
+    DAPFAMAllTitlAbsToFullTextRetrieval,
+    DAPFAMAllTitlAbsToTitlAbsClmRetrieval,
+    DAPFAMAllTitlAbsToTitlAbsRetrieval,
+    DAPFAMInTitlAbsClmToFullTextRetrieval,
+    DAPFAMInTitlAbsClmToTitlAbsClmRetrieval,
+    DAPFAMInTitlAbsClmToTitlAbsRetrieval,
+    DAPFAMInTitlAbsToFullTextRetrieval,
+    DAPFAMInTitlAbsToTitlAbsClmRetrieval,
+    DAPFAMInTitlAbsToTitlAbsRetrieval,
+    DAPFAMOutTitlAbsClmToFullTextRetrieval,
+    DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval,
+    DAPFAMOutTitlAbsClmToTitlAbsRetrieval,
+    DAPFAMOutTitlAbsToFullTextRetrieval,
+    DAPFAMOutTitlAbsToTitlAbsClmRetrieval,
+    DAPFAMOutTitlAbsToTitlAbsRetrieval,
+)
 from .DBPediaRetrieval import DBPedia, DBPediaHardNegatives
+from .EnglishFinance1Retrieval import EnglishFinance1Retrieval
+from .EnglishFinance2Retrieval import EnglishFinance2Retrieval
+from .EnglishFinance3Retrieval import EnglishFinance3Retrieval
+from .EnglishFinance4Retrieval import EnglishFinance4Retrieval
+from .EnglishHealthcare1Retrieval import EnglishHealthcare1Retrieval
 from .FaithDialRetrieval import FaithDialRetrieval
 from .FeedbackQARetrieval import FeedbackQARetrieval
 from .FEVERRetrieval import FEVER, FEVERHardNegatives
@@ -145,8 +170,31 @@ __all__ = [
     "ClimateFEVER",
     "ClimateFEVERHardNegatives",
     "ClimateFEVERRetrievalv2",
+    "DAPFAMAllTitlAbsClmToFullTextRetrieval",
+    "DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval",
+    "DAPFAMAllTitlAbsClmToTitlAbsRetrieval",
+    "DAPFAMAllTitlAbsToFullTextRetrieval",
+    "DAPFAMAllTitlAbsToTitlAbsClmRetrieval",
+    "DAPFAMAllTitlAbsToTitlAbsRetrieval",
+    "DAPFAMInTitlAbsClmToFullTextRetrieval",
+    "DAPFAMInTitlAbsClmToTitlAbsClmRetrieval",
+    "DAPFAMInTitlAbsClmToTitlAbsRetrieval",
+    "DAPFAMInTitlAbsToFullTextRetrieval",
+    "DAPFAMInTitlAbsToTitlAbsClmRetrieval",
+    "DAPFAMInTitlAbsToTitlAbsRetrieval",
+    "DAPFAMOutTitlAbsClmToFullTextRetrieval",
+    "DAPFAMOutTitlAbsClmToTitlAbsClmRetrieval",
+    "DAPFAMOutTitlAbsClmToTitlAbsRetrieval",
+    "DAPFAMOutTitlAbsToFullTextRetrieval",
+    "DAPFAMOutTitlAbsToTitlAbsClmRetrieval",
+    "DAPFAMOutTitlAbsToTitlAbsRetrieval",
     "DBPedia",
     "DBPediaHardNegatives",
+    "EnglishFinance1Retrieval",
+    "EnglishFinance2Retrieval",
+    "EnglishFinance3Retrieval",
+    "EnglishFinance4Retrieval",
+    "EnglishHealthcare1Retrieval",
     "FEVER",
     "FEVERHardNegatives",
     "FaithDialRetrieval",
@@ -166,11 +214,11 @@ __all__ = [
     "LEMBQMSumRetrieval",
     "LEMBSummScreenFDRetrieval",
     "LEMBWikimQARetrieval",
+    "LIMITRetrieval",
+    "LIMITSmallRetrieval",
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
-    "LIMITRetrieval",
-    "LIMITSmallRetrieval",
     "LitSearchRetrieval",
     "LoTTERetrieval",
     "MLQuestionsRetrieval",
