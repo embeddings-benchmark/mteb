@@ -89,20 +89,20 @@ youtu_instruction = {
 
 
 training_data = {
-    "T2Retrieval": ["train"],
-    "DuRetrieval": ["train"],
-    "T2Reranking": ["train"],
-    "MMarcoReranking": ["train"],
-    "CmedqaRetrieval": ["train"],
-    "CMedQAv1-reranking": ["train"],
-    "CMedQAv2-reranking": ["train"],
-    "BQ": ["train"],
-    "LCQMC": ["train"],
-    "PAWSX": ["train"],
-    "STS-B": ["train"],
-    "AFQMC": ["train"],
-    "Cmnli": ["train"],
-    "Ocnli": ["train"],
+    "T2Retrieval",
+    "DuRetrieval",
+    "T2Reranking",
+    "MMarcoReranking",
+    "CmedqaRetrieval",
+    "CMedQAv1-reranking",
+    "CMedQAv2-reranking",
+    "BQ",
+    "LCQMC",
+    "PAWSX",
+    "STS-B",
+    "AFQMC",
+    "Cmnli",
+    "Ocnli",
 }
 
 
