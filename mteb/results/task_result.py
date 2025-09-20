@@ -15,8 +15,8 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._languages import LanguageScripts
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
     HFSubset,
@@ -363,10 +363,10 @@ class TaskResult(BaseModel):
 
     @classmethod
     def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
-        from mteb.overview import TASKS_REGISTRY
+        from mteb.overview import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
-        lower_case_registry = {k.lower(): v for k, v in TASKS_REGISTRY.items()}
+        lower_case_registry = {k.lower(): v for k, v in _TASKS_REGISTRY.items()}
 
         scores = {**data}
 
@@ -402,7 +402,9 @@ class TaskResult(BaseModel):
         else:
             if task_name in renamed_tasks:
                 task_name = renamed_tasks[task_name]
-            task = TASKS_REGISTRY.get(task_name, lower_case_registry[task_name.lower()])
+            task = _TASKS_REGISTRY.get(
+                task_name, lower_case_registry[task_name.lower()]
+            )
 
         # make sure that main score exists
         main_score = task.metadata.main_score

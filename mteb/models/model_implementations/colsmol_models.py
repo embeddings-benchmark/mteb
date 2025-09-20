@@ -4,10 +4,10 @@ import logging
 
 import torch
 
-from mteb.models.model_meta import ModelMeta
-from mteb.requires_package import (
+from mteb._requires_package import (
     requires_package,
 )
+from mteb.models.model_meta import ModelMeta
 
 from .colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
 

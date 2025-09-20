@@ -14,8 +14,8 @@ import tqdm
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from mteb._languages import LanguageScripts
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
     Encoder,

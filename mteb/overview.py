@@ -5,20 +5,21 @@ from __future__ import annotations
 import difflib
 import logging
 from collections import Counter, defaultdict
+from collections.abc import Sequence
 from typing import Any
 
 import pandas as pd
 
+from mteb._languages import (
+    ISO_TO_LANGUAGE,
+    ISO_TO_SCRIPT,
+)
 from mteb.abstasks import (
     AbsTask,
     AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
-from mteb.languages import (
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-)
 from mteb.tasks import *  # import all tasks
 from mteb.types import Modalities
 
@@ -28,7 +29,7 @@ logger = logging.getLogger(__name__)
 # Create task registry
 
 
-def create_task_list() -> list[type[AbsTask]]:
+def _create_task_list() -> list[type[AbsTask]]:
     # reranking subclasses retrieval to share methods, but is an abstract task
     tasks_categories_cls = list(AbsTask.__subclasses__()) + [
         AbsTaskMultilabelClassification,
@@ -45,8 +46,8 @@ def create_task_list() -> list[type[AbsTask]]:
     return tasks
 
 
-def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
-    tasks = create_task_list()
+def _create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
+    tasks = _create_task_list()
     metadata_names = {}
     for cls in tasks:
         if cls.metadata.name in metadata_names:
@@ -59,13 +60,13 @@ def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     return metadata_names
 
 
-def create_similar_tasks() -> dict[str, list[str]]:
+def _create_similar_tasks() -> dict[str, list[str]]:
     """Create a dictionary of similar tasks.
 
     Returns:
         Dict with key is parent task and value is list of similar tasks.
     """
-    tasks = create_task_list()
+    tasks = _create_task_list()
     similar_tasks = defaultdict(list)
     for task in tasks:
         if task.metadata.adapted_from:
@@ -74,43 +75,43 @@ def create_similar_tasks() -> dict[str, list[str]]:
     return similar_tasks
 
 
-TASKS_REGISTRY = create_name_to_task_mapping()
-SIMILAR_TASKS = create_similar_tasks()
+_TASKS_REGISTRY = _create_name_to_task_mapping()
+_SIMILAR_TASKS = _create_similar_tasks()
 
 
-def check_is_valid_script(script: str) -> None:
+def _check_is_valid_script(script: str) -> None:
     if script not in ISO_TO_SCRIPT:
         raise ValueError(
             f"Invalid script code: '{script}', you can see valid ISO 15924 codes using `from mteb.languages import ISO_TO_SCRIPT`."
         )
 
 
-def check_is_valid_language(lang: str) -> None:
+def _check_is_valid_language(lang: str) -> None:
     if lang not in ISO_TO_LANGUAGE:
         raise ValueError(
             f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.languages import ISO_TO_LANGUAGE`."
         )
 
 
-def filter_superseded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
+def _filter_superseded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
     return [t for t in tasks if t.superseded_by is None]
 
 
-def filter_tasks_by_languages(
+def _filter_tasks_by_languages(
     tasks: list[AbsTask], languages: list[str]
 ) -> list[AbsTask]:
-    [check_is_valid_language(lang) for lang in languages]
+    [_check_is_valid_language(lang) for lang in languages]
     langs_to_keep = set(languages)
     return [t for t in tasks if langs_to_keep.intersection(t.metadata.languages)]
 
 
-def filter_tasks_by_script(tasks: list[AbsTask], script: list[str]) -> list[AbsTask]:
-    [check_is_valid_script(s) for s in script]
+def _filter_tasks_by_script(tasks: list[AbsTask], script: list[str]) -> list[AbsTask]:
+    [_check_is_valid_script(s) for s in script]
     script_to_keep = set(script)
     return [t for t in tasks if script_to_keep.intersection(t.metadata.scripts)]
 
 
-def filter_tasks_by_domains(
+def _filter_tasks_by_domains(
     tasks: list[AbsTask], domains: list[TaskDomain]
 ) -> list[AbsTask]:
     domains_to_keep = set(domains)
@@ -125,21 +126,21 @@ def filter_tasks_by_domains(
     ]
 
 
-def filter_tasks_by_task_types(
+def _filter_tasks_by_task_types(
     tasks: list[AbsTask], task_types: list[TaskType]
 ) -> list[AbsTask]:
     _task_types = set(task_types)
     return [t for t in tasks if t.metadata.type in _task_types]
 
 
-def filter_task_by_categories(
+def _filter_task_by_categories(
     tasks: list[AbsTask], categories: list[TaskCategory]
 ) -> list[AbsTask]:
     _categories = set(categories)
     return [t for t in tasks if t.metadata.category in _categories]
 
 
-def filter_tasks_by_modalities(
+def _filter_tasks_by_modalities(
     tasks: list[AbsTask],
     modalities: list[Modalities],
     exclude_modality_filter: bool = False,
@@ -151,13 +152,23 @@ def filter_tasks_by_modalities(
         return [t for t in tasks if _modalities.intersection(t.modalities)]
 
 
-def filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
+def _filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
     """Returns input tasks that are *not* aggregate.
 
     Args:
         tasks: A list of tasks to filter.
     """
     return [t for t in tasks if not t.is_aggregate]
+
+
+_DEFAULT_PROPRIETIES = (
+    "name",
+    "type",
+    "languages",
+    "domains",
+    "license",
+    "modalities",
+)
 
 
 class MTEBTasks(tuple):
@@ -191,7 +202,7 @@ class MTEBTasks(tuple):
 
     def to_markdown(
         self,
-        properties: list[str] = ["type", "license", "languages", "modalities"],
+        properties: Sequence[str] = _DEFAULT_PROPRIETIES,
         limit_n_entries: int | None = 3,
     ) -> str:
         """Generate markdown table with tasks summary
@@ -226,14 +237,7 @@ class MTEBTasks(tuple):
 
     def to_dataframe(
         self,
-        properties: list[str] = [
-            "name",
-            "type",
-            "languages",
-            "domains",
-            "license",
-            "modalities",
-        ],
+        properties: Sequence[str] = _DEFAULT_PROPRIETIES,
     ) -> pd.DataFrame:
         """Generate pandas DataFrame with tasks summary
 
@@ -263,15 +267,8 @@ class MTEBTasks(tuple):
 
     def to_latex(
         self,
-        properties: list[str] = [
-            "name",
-            "type",
-            "languages",
-            "domains",
-            "license",
-            "modalities",
-        ],
-        group_indices: list[str] | None = ["type", "name"],
+        properties: Sequence[str] = _DEFAULT_PROPRIETIES,
+        group_indices: Sequence[str] | None = ("type", "name"),
         include_citation_in_name: bool = True,
         limit_n_entries: int | None = 3,
     ) -> str:
@@ -375,30 +372,30 @@ def get_tasks(
 
     _tasks = [
         cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-        for cls in create_task_list()
+        for cls in _create_task_list()
     ]
 
     if languages:
-        _tasks = filter_tasks_by_languages(_tasks, languages)
+        _tasks = _filter_tasks_by_languages(_tasks, languages)
     if script:
-        _tasks = filter_tasks_by_script(_tasks, script)
+        _tasks = _filter_tasks_by_script(_tasks, script)
     if domains:
-        _tasks = filter_tasks_by_domains(_tasks, domains)
+        _tasks = _filter_tasks_by_domains(_tasks, domains)
     if task_types:
-        _tasks = filter_tasks_by_task_types(_tasks, task_types)
+        _tasks = _filter_tasks_by_task_types(_tasks, task_types)
     if categories:
         logger.warning(
             "`s2p`, `p2p`, and `s2s` will be removed and replaced by `t2t` in v2.0.0."
         )
-        _tasks = filter_task_by_categories(_tasks, categories)
+        _tasks = _filter_task_by_categories(_tasks, categories)
     if exclude_superseded:
-        _tasks = filter_superseded_datasets(_tasks)
+        _tasks = _filter_superseded_datasets(_tasks)
     if modalities:
-        _tasks = filter_tasks_by_modalities(
+        _tasks = _filter_tasks_by_modalities(
             _tasks, modalities, exclusive_modality_filter
         )
     if exclude_aggregate:
-        _tasks = filter_aggregate_tasks(_tasks)
+        _tasks = _filter_aggregate_tasks(_tasks)
 
     return MTEBTasks(_tasks)
 
@@ -445,8 +442,8 @@ def get_task(
             f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
         )
 
-    if task_name not in TASKS_REGISTRY:
-        close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
+    if task_name not in _TASKS_REGISTRY:
+        close_matches = difflib.get_close_matches(task_name, _TASKS_REGISTRY.keys())
         if close_matches:
             suggestion = f"KeyError: '{task_name}' not found. Did you mean: '{close_matches[0]}'?"
         else:
@@ -454,7 +451,7 @@ def get_task(
                 f"KeyError: '{task_name}' not found and no similar keys were found."
             )
         raise KeyError(suggestion)
-    task = TASKS_REGISTRY[task_name]()
+    task = _TASKS_REGISTRY[task_name]()
     if eval_splits:
         task.filter_eval_splits(eval_splits=eval_splits)
     if modalities:

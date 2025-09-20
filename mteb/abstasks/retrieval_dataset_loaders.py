@@ -57,6 +57,18 @@ class RetrievalDatasetLoader:
         split: str = "test",
         config: str | None = None,
     ):
+        """Initializes the dataloader with the specified parameters.
+
+        Args:
+            hf_repo: The HuggingFace repository name or path.
+            revision: The specific revision of the dataset to use.
+            trust_remote_code: Passes the `trust_remote_code` argument to `load_dataset`.
+            split: The dataset split to load (e.g., "train", "validation", "test").
+            config: The specific configuration of the dataset to use. If None, the default configuration is used.
+
+        Warning: Deprecated
+            trust_remote_code is deprecated and will be removed in future versions. Please ensure that the datasets you are using do not require remote code execution.
+        """
         self.revision = revision
         self.hf_repo = hf_repo
         self.trust_remote_code = trust_remote_code
@@ -65,6 +77,11 @@ class RetrievalDatasetLoader:
         self.dataset_configs = get_dataset_config_names(self.hf_repo, self.revision)
 
     def load(self) -> RetrievalSplitData:
+        """Loads the dataset split for the specified configuration.
+
+        Returns:
+            A dictionary containing the corpus, queries, relevant documents, instructions (if applicable), and top-ranked documents (if applicable).
+        """
         top_ranked = None
 
         qrels = self._load_qrels()
@@ -80,7 +97,7 @@ class RetrievalDatasetLoader:
 
         if any(c.endswith("instruction") for c in self.dataset_configs):
             instructions = self._load_instructions()
-            queries = combine_queries_with_instructions_datasets(queries, instructions)
+            queries = _combine_queries_with_instructions_datasets(queries, instructions)
 
         return RetrievalSplitData(
             corpus=corpus,
@@ -89,7 +106,7 @@ class RetrievalDatasetLoader:
             top_ranked=top_ranked,
         )
 
-    def get_split(self, config: str) -> str:
+    def _get_split(self, config: str) -> str:
         splits = get_dataset_split_names(
             self.hf_repo,
             revision=self.revision,
@@ -103,11 +120,11 @@ class RetrievalDatasetLoader:
             f"Split {self.split} not found in {splits}. Please specify a valid split."
         )
 
-    def load_dataset_split(self, config: str) -> Dataset:
+    def _load_dataset_split(self, config: str) -> Dataset:
         return load_dataset(
             self.hf_repo,
             config,
-            split=self.get_split(config),
+            split=self._get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
@@ -116,7 +133,7 @@ class RetrievalDatasetLoader:
         logger.info("Loading Corpus...")
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
-        corpus_ds = self.load_dataset_split(config)
+        corpus_ds = self._load_dataset_split(config)
         if "_id" in corpus_ds.column_names:
             corpus_ds = corpus_ds.cast_column("_id", Value("string")).rename_column(
                 "_id", "id"
@@ -131,7 +148,7 @@ class RetrievalDatasetLoader:
         config = f"{self.config}-queries" if self.config is not None else "queries"
         if "query" in self.dataset_configs:
             config = "query"
-        queries_ds = self.load_dataset_split(config)
+        queries_ds = self._load_dataset_split(config)
         if "_id" in queries_ds.column_names:
             queries_ds = queries_ds.cast_column("_id", Value("string")).rename_column(
                 "_id", "id"
@@ -154,7 +171,7 @@ class RetrievalDatasetLoader:
                     "No qrels or default config found. Please specify a valid config or ensure the dataset has qrels."
                 )
 
-        qrels_ds = self.load_dataset_split(config)
+        qrels_ds = self._load_dataset_split(config)
         qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"])
 
         qrels_ds = qrels_ds.cast(
@@ -183,7 +200,7 @@ class RetrievalDatasetLoader:
         config = (
             f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
         )
-        top_ranked_ds = self.load_dataset_split(config)
+        top_ranked_ds = self._load_dataset_split(config)
         top_ranked_ds = top_ranked_ds.cast(
             Features(
                 {
@@ -203,7 +220,7 @@ class RetrievalDatasetLoader:
         config = (
             f"{self.config}-instruction" if self.config is not None else "instruction"
         )
-        instructions_ds = self.load_dataset_split(config)
+        instructions_ds = self._load_dataset_split(config)
         instructions_ds = instructions_ds.cast(
             Features(
                 {
@@ -215,7 +232,7 @@ class RetrievalDatasetLoader:
         return instructions_ds
 
 
-def combine_queries_with_instructions_datasets(
+def _combine_queries_with_instructions_datasets(
     queries_dataset: QueryDatasetType,
     instruction_dataset: InstructionDatasetType | dict[str, str],
 ) -> Dataset:
@@ -226,8 +243,8 @@ def combine_queries_with_instructions_datasets(
     else:
         instruction_to_query_idx = instruction_dataset
 
-    def add_instruction_to_query(row: dict[str, str]) -> dict[str, str]:
+    def _add_instruction_to_query(row: dict[str, str]) -> dict[str, str]:
         row["instruction"] = instruction_to_query_idx[row["id"]]
         return row
 
-    return queries_dataset.map(add_instruction_to_query)
+    return queries_dataset.map(_add_instruction_to_query)

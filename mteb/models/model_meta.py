@@ -14,8 +14,8 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
+from mteb._languages import check_language_code
 from mteb.abstasks import AbsTask
-from mteb.languages import check_language_code
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 from .models_protocols import Encoder, MTEBModels
@@ -301,7 +301,7 @@ class ModelMeta(BaseModel):
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     """Recursively collect all similar tasks for a given dataset."""
-    from ..overview import SIMILAR_TASKS
+    from ..overview import _SIMILAR_TASKS
 
     if dataset in visited:
         return set()
@@ -310,13 +310,13 @@ def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     similar = set()
 
     # Check if dataset is a key in SIMILAR_TASKS
-    if dataset in SIMILAR_TASKS:
-        for similar_task in SIMILAR_TASKS[dataset]:
+    if dataset in _SIMILAR_TASKS:
+        for similar_task in _SIMILAR_TASKS[dataset]:
             similar.add(similar_task)
             similar.update(collect_similar_tasks(similar_task, visited))
 
     # Check if dataset appears as a value in SIMILAR_TASKS
-    for parent, children in SIMILAR_TASKS.items():
+    for parent, children in _SIMILAR_TASKS.items():
         if dataset in children:
             similar.add(parent)
             similar.update(collect_similar_tasks(parent, visited))
