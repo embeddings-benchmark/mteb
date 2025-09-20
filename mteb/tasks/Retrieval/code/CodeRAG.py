@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 import datasets
+from datasets import Dataset
+from tqdm.auto import tqdm
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -242,31 +247,51 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.queries = Dict[query_id, str] #id => query
         self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
         """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
         split = self.metadata.eval_splits[0]
         ds: datasets.Dataset = self.dataset[split]  # type: ignore
         ds = ds.shuffle(seed=42)
+        empty_dataset = Dataset.from_dict({})
 
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
+        new_ds = {
+            "default": {
+                "train": RetrievalSplitData(
+                    queries=empty_dataset,
+                    corpus=empty_dataset,
+                    relevant_docs={},
+                    top_ranked=None,
+                )
+            }
+        }
+
+        corpus = []
+        queries = []
+        relevant_docs = defaultdict(dict)
 
         texts = ds["text"]
-        id = 0
-        for text in texts:
+        idx = 0
+        for text in tqdm(texts, desc=f"Generating dataset for {self.metadata.name}"):
             # in code-rag-bench,
             # text = query + "\n" + doc
             query, doc = split_by_first_newline(text)
 
-            query_id = str(id)
-            doc_id = f"doc_{id}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
+            query_id = str(idx)
+            doc_id = f"doc_{idx}"
+            queries.append(
+                {
+                    "id": query_id,
+                    "query": query,
+                }
+            )
+            corpus.append(
+                {
+                    "id": doc_id,
+                    "title": "",
+                    "text": doc,
+                }
+            )
 
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches
-            id += 1
+            # only one correct matches
+            relevant_docs[query_id] = {doc_id: 1}
+            idx += 1
+
+        self.dataset = new_ds
