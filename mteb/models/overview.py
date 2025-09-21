@@ -439,26 +439,4 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
         )
     return meta
 
-# SOFIA Embedding Model
-from mteb.model_meta import ModelMeta
-
-sofia_meta = ModelMeta(
-    name="MaliosDark/sofia-embedding-v1",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="8dfaf9f573cff22bafb5a9b8d3dd66565553b5b9",
-    release_date="2025-09-21",
-    n_parameters=110_000_000,
-    memory_usage_mb=382,
-    embed_dim=1024,
-    license="apache-2.0",
-    max_tokens=384,
-    reference="https://huggingface.co/MaliosDark/sofia-embedding-v1",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={"sentence-transformers/stsb": ["train"], "paws": ["labeled_final"], "banking77": ["train"]},
-)
 
