@@ -18,6 +18,7 @@ def generate_model_card(
     existing_model_card_id_or_path: str | Path | None = None,
     results_cache: ResultCache = ResultCache(),
     output_path: Path = Path("model_card.md"),
+    add_table_to_model_card: bool = False,
     models_to_compare: list[str] | None = None,
     token: str | None = None,
     push_to_hub: bool = False,
@@ -31,6 +32,8 @@ def generate_model_card(
         results_cache: Instance of ResultCache to load results from.
         output_path: Path to save the generated model card.
         models_to_compare: List of models to add to results table.
+        add_table_to_model_card: Whether to add a results table to the model card. There will be a table with model
+         (with `models_to_compare` if provided) and tasks.
         token: Optional token for pushing to Hugging Face Hub.
         push_to_hub: Whether to push the updated model card to the Hub if it exists there.
     """
@@ -82,9 +85,10 @@ def generate_model_card(
             [model_name, *models_to_compare], tasks, only_main_score=True
         )
 
-    existing_model_card = _add_table_to_model_card(
-        benchmark_results, existing_model_card
-    )
+    if add_table_to_model_card:
+        existing_model_card = _add_table_to_model_card(
+            benchmark_results, existing_model_card
+        )
 
     if push_to_hub:
         if repo_exists(existing_model_card_id_or_path):
