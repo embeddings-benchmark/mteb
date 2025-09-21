@@ -467,12 +467,3 @@ We sampled each dataset given a weighted probability which configuration is deta
 | [SQuAD2.0](https://rajpurkar.github.io/SQuAD-explorer/) | [paper](https://aclanthology.org/P18-2124.pdf) | 87,599 |
 | [TriviaQA](https://huggingface.co/datasets/trivia_qa) | - | 73,346 |
 | **Total** | | **1,170,060,424** |
-
-
-
-# MTEB results
-| task_name            |   all-MiniLM-L6-v2 |
-|:---------------------|-------------------:|
-| BSARDRetrieval       |           0        |
-| BornholmBitextMining |           0.296813 |
-| STS22                |           0.408369 |
