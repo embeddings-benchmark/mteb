@@ -83,63 +83,18 @@ class AbsTaskAudioClustering(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
-        # Filter out empty audio samples before embedding to maintain alignment with labels
-        valid_indices = []
-        valid_audio = []
-        valid_labels = []
-        
-        for i, audio_sample in enumerate(downsampled_dataset[self.audio_column_name]):
-            is_valid = False
-            
-            # Check if audio sample is empty
-            if isinstance(audio_sample, dict) and "array" in audio_sample:
-                audio_array = audio_sample["array"]
-                # More thorough empty check
-                if (hasattr(audio_array, '__len__') and 
-                    len(audio_array) > 0 and 
-                    not (hasattr(audio_array, 'sum') and audio_array.sum() == 0 and len(audio_array) < 100)):
-                    is_valid = True
-                else:
-                    logger.warning(f"Skipping empty/invalid audio sample at index {i}: shape={getattr(audio_array, 'shape', 'unknown')}")
-            elif isinstance(audio_sample, (list, tuple, np.ndarray)) and len(audio_sample) > 0:
-                is_valid = True
-            elif isinstance(audio_sample, str):  # File path
-                # For file paths, we'll assume valid here and let model handle loading errors
-                # In a production system, you might want to pre-validate file existence
-                is_valid = True
-            else:
-                logger.warning(f"Skipping unknown audio format at index {i}: type={type(audio_sample)}")
-            
-            if is_valid:
-                valid_indices.append(i)
-                valid_audio.append(audio_sample)
-                label = downsampled_dataset[self.label_column_name][i]
-                if not isinstance(label, list):
-                    label = [label]
-                valid_labels.append(label)
-        
-        if not valid_audio:
-            logger.error("No valid audio samples found in dataset")
-            return {"v_measure": 0.0, "v_measure_std": 0.0, "v_measures": {}}
-        
-        logger.info(f"Processing {len(valid_audio)} valid audio samples out of {len(downsampled_dataset)}")
-        
-        # Log label distribution for debugging
-        label_counts = {}
-        for label_list in valid_labels:
-            label = label_list[0] if isinstance(label_list, list) else label_list
-            label_counts[label] = label_counts.get(label, 0) + 1
-        
-        logger.info(f"Label distribution after filtering: {label_counts}")
-        
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
         embeddings = model.get_audio_embeddings(
-            valid_audio,
+            downsampled_dataset[self.audio_column_name],  # type: ignore
             batch_size=encode_kwargs["batch_size"],
         )
 
-        labels = valid_labels
+        labels = []
+        for label in downsampled_dataset[self.label_column_name]:
+            if not isinstance(label, list):
+                label = [label]
+            labels.append(label)
 
         all_v_scores = evaluate_clustering_bootstrapped(
             embeddings,
