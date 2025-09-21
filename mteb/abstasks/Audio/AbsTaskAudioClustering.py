@@ -124,51 +124,13 @@ class AbsTaskAudioClustering(AbsTask):
         
         logger.info(f"Processing {len(valid_audio)} valid audio samples out of {len(downsampled_dataset)}")
         
-        # Check for class imbalance caused by filtering and rebalance if needed
+        # Log label distribution for debugging
         label_counts = {}
         for label_list in valid_labels:
             label = label_list[0] if isinstance(label_list, list) else label_list
             label_counts[label] = label_counts.get(label, 0) + 1
         
         logger.info(f"Label distribution after filtering: {label_counts}")
-        
-        # If there's significant imbalance, subsample to balance classes
-        if len(label_counts) > 1:
-            min_count = min(label_counts.values())
-            max_count = max(label_counts.values())
-            imbalance_ratio = max_count / min_count
-            
-            if imbalance_ratio > 1.5:  # If imbalance is significant
-                logger.info(f"Detected class imbalance (ratio: {imbalance_ratio:.2f}), rebalancing...")
-                
-                # Group samples by label
-                label_groups = {}
-                for i, label_list in enumerate(valid_labels):
-                    label = label_list[0] if isinstance(label_list, list) else label_list
-                    if label not in label_groups:
-                        label_groups[label] = []
-                    label_groups[label].append(i)
-                
-                # Subsample each class to the minimum count
-                balanced_indices = []
-                for label, indices in label_groups.items():
-                    if len(indices) > min_count:
-                        # Randomly subsample
-                        import random
-                        random.seed(self.seed)
-                        sampled_indices = random.sample(indices, min_count)
-                        balanced_indices.extend(sampled_indices)
-                    else:
-                        balanced_indices.extend(indices)
-                
-                # Reorder samples
-                balanced_audio = [valid_audio[i] for i in balanced_indices]
-                balanced_labels = [valid_labels[i] for i in balanced_indices]
-                
-                valid_audio = balanced_audio
-                valid_labels = balanced_labels
-                
-                logger.info(f"Rebalanced to {len(valid_audio)} samples with equal class distribution")
         
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
