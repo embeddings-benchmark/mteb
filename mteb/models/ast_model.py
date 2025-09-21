@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterable
 from functools import partial
 from typing import Any
@@ -14,6 +15,8 @@ from transformers import ASTFeatureExtractor, ASTModel
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+
+logger = logging.getLogger(__name__)
 
 
 class ASTWrapper(Wrapper):
@@ -48,9 +51,12 @@ class ASTWrapper(Wrapper):
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
             for audio, _ in batch:
-                waveforms.append(self._convert_audio_from_numpy(audio))
+                converted = self._convert_audio_from_numpy(audio)
+                if converted is not None:
+                    waveforms.append(converted)
         else:
             for item in batch:
+                converted = None
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
@@ -64,27 +70,49 @@ class ASTWrapper(Wrapper):
                                 item["sampling_rate"], self.sampling_rate
                             )
                             audio = resampler(audio)
-                        waveforms.append(self._convert_audio_from_numpy(audio))
+                        converted = self._convert_audio_from_numpy(audio)
                     elif "path" in item:
-                        waveforms.append(self._load_audio_file(item["path"]))
+                        converted = self._load_audio_file(item["path"])
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio_from_numpy(item))
+                    converted = self._convert_audio_from_numpy(item)
                 elif isinstance(item, str):
-                    waveforms.append(self._load_audio_file(item))
+                    converted = self._load_audio_file(item)
+                
+                if converted is not None:
+                    waveforms.append(converted)
 
         return waveforms
 
-    def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
+    def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor | None:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        return audio.squeeze()
+        audio = audio.squeeze()
+        
+        # Validate audio is not empty
+        if audio.numel() == 0:
+            logger.warning("Skipping empty audio tensor during processing")
+            return None
+            
+        return audio
 
-    def _load_audio_file(self, path: str) -> torch.Tensor:
-        waveform, sample_rate = torchaudio.load(path)
+    def _load_audio_file(self, path: str) -> torch.Tensor | None:
+        try:
+            waveform, sample_rate = torchaudio.load(path)
+        except Exception as e:
+            logger.warning(f"Failed to load audio file {path}: {e}")
+            return None
+            
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+        waveform = waveform.squeeze()
+        
+        # Validate audio is not empty
+        if waveform.numel() == 0:
+            logger.warning(f"Skipping empty audio file: {path}")
+            return None
+            
+        return waveform
 
     def get_audio_embeddings(
         self,
@@ -109,12 +137,21 @@ class ASTWrapper(Wrapper):
                 # AST processes raw waveforms directly through its feature extractor
                 batch_inputs = []
                 for audio_tensor in batch:
+                    # Skip empty audio tensors (already logged in _convert_audio_from_numpy)
+                    if audio_tensor.numel() == 0:
+                        continue
+                    
                     audio_np = (
                         audio_tensor.numpy()
                         if isinstance(audio_tensor, torch.Tensor)
                         else audio_tensor
                     )
                     batch_inputs.append(audio_np)
+
+                # Skip batch if no valid audio samples
+                if not batch_inputs:
+                    logger.warning("Skipping batch with no valid audio samples")
+                    continue
 
                 inputs = self.feature_extractor(
                     batch_inputs,

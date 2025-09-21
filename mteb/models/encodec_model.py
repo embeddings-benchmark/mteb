@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterable
 from functools import partial
 from typing import Any
@@ -14,6 +15,8 @@ from transformers import AutoProcessor, EncodecModel
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+
+logger = logging.getLogger(__name__)
 
 
 class EncodecWrapper(Wrapper):
@@ -50,9 +53,12 @@ class EncodecWrapper(Wrapper):
 
         if isinstance(batch, tuple):
             for audio, _ in batch:
-                waveforms.append(self._convert_audio(audio))
+                converted = self._convert_audio(audio)
+                if converted is not None:
+                    waveforms.append(converted)
         else:
             for item in batch:
+                converted = None
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
@@ -66,17 +72,20 @@ class EncodecWrapper(Wrapper):
                                 item["sampling_rate"], self.sampling_rate
                             )
                             audio = resampler(audio)
-                        waveforms.append(self._convert_audio(audio))
+                        converted = self._convert_audio(audio)
                     elif "path" in item:
-                        waveforms.append(self._load_audio_file(item["path"]))
+                        converted = self._load_audio_file(item["path"])
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio(item))
+                    converted = self._convert_audio(item)
                 elif isinstance(item, str):
-                    waveforms.append(self._load_audio_file(item))
+                    converted = self._load_audio_file(item)
+                
+                if converted is not None:
+                    waveforms.append(converted)
 
         return waveforms
 
-    def _convert_audio(self, audio: AudioData) -> torch.Tensor:
+    def _convert_audio(self, audio: AudioData) -> torch.Tensor | None:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
 
@@ -87,10 +96,21 @@ class EncodecWrapper(Wrapper):
         if audio.dim() > 1 and audio.shape[0] > 1:  # If multi-channel
             audio = torch.mean(audio, dim=0, keepdim=True)  # Convert to mono
 
-        return audio.squeeze()
+        audio = audio.squeeze()
+        
+        # Validate audio is not empty
+        if audio.numel() == 0:
+            logger.warning("Skipping empty audio tensor during processing")
+            return None
+            
+        return audio
 
-    def _load_audio_file(self, path: str) -> torch.Tensor:
-        waveform, sample_rate = torchaudio.load(path)
+    def _load_audio_file(self, path: str) -> torch.Tensor | None:
+        try:
+            waveform, sample_rate = torchaudio.load(path)
+        except Exception as e:
+            logger.warning(f"Failed to load audio file {path}: {e}")
+            return None
 
         # Convert to mono if needed
         if waveform.shape[0] > 1:  # If multi-channel
@@ -99,7 +119,15 @@ class EncodecWrapper(Wrapper):
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+            
+        waveform = waveform.squeeze()
+        
+        # Validate audio is not empty
+        if waveform.numel() == 0:
+            logger.warning(f"Skipping empty audio file: {path}")
+            return None
+            
+        return waveform
 
     def get_audio_embeddings(
         self,
@@ -123,7 +151,18 @@ class EncodecWrapper(Wrapper):
 
                 # Process audio through EnCodec's processor
                 max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-                batch_np = [audio[:max_samples].cpu().numpy() for audio in batch]
+                batch_np = []
+                for audio in batch:
+                    # Skip empty audio tensors (already logged in _convert_audio)
+                    if audio.numel() == 0:
+                        continue
+                    audio_np = audio[:max_samples].cpu().numpy()
+                    batch_np.append(audio_np)
+
+                # Skip batch if no valid audio samples
+                if not batch_np:
+                    logger.warning("Skipping batch with no valid audio samples")
+                    continue
 
                 inputs = self.processor(
                     raw_audio=batch_np,
