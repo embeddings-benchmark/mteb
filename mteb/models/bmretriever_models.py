@@ -3,30 +3,13 @@ from __future__ import annotations
 from functools import partial
 from typing import Any, Callable
 
-import numpy as np
 import torch
-from torch import Tensor
-from tqdm import tqdm
-from transformers import AutoModel, AutoTokenizer
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.models import Pooling, Transformer
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
-
-
-def last_token_pool(last_hidden_states: Tensor, attention_mask: Tensor) -> Tensor:
-    """Helper function to perform last token pooling."""
-    last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
-    left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
-    if left_padding:
-        embedding = last_hidden[:, -1]
-    else:
-        sequence_lengths = attention_mask.sum(dim=1) - 1
-        batch_size = last_hidden.shape[0]
-        embedding = last_hidden[
-            torch.arange(batch_size, device=last_hidden.device), sequence_lengths
-        ]
-    return embedding
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 
 def instruction_template(
@@ -39,120 +22,63 @@ def instruction_template(
     )
 
 
-class BMRetrieverWrapper(Wrapper):
-    """Wrapper for the BMRetriever models."""
-
+class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
     def __init__(
         self,
-        model_name_or_path: str,
-        instruction_template: Callable[[str, PromptType | None], str],
-        trust_remote_code: bool,
-        torch_dtype: torch.dtype,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-        self.model = AutoModel.from_pretrained(
-            model_name_or_path,
-            torch_dtype=kwargs.get("torch_dtype", torch.float32),
-            trust_remote_code=kwargs.get("trust_remote_code", True),
-        ).eval()
-
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-            self.tokenizer.padding_side = "left"
-
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
-
-        self.instruction_template = instruction_template
-
-    @torch.no_grad()
-    def encode(
-        self,
-        sentences: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        model_name: str,
+        instruction_template: Callable[[str, PromptType | None], str] | None = None,
+        max_seq_length: int | None = None,
+        apply_instruction_to_passages: bool = True,
+        padding_side: str | None = None,
+        add_eos_token: bool = False,
+        prompts_dict: dict[str, str] | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        all_embeddings = []
+    ):
+        self.model_name = model_name
+        self.instruction_template = instruction_template
+        self.apply_instruction_to_passages = apply_instruction_to_passages
+        self.add_eos_token = add_eos_token
+        self.prompts_dict = prompts_dict
 
-        instruction = self.get_task_instruction(task_name, prompt_type)
-        instruction = self.format_instruction(instruction, prompt_type)
-        prompted_sentences = [f"{instruction}{sentence}" for sentence in sentences]
+        transformer = Transformer(
+            model_name,
+            max_seq_length=max_seq_length,
+            **kwargs,
+        )
+        pooling = Pooling(
+            transformer.get_word_embedding_dimension(), pooling_mode="lasttoken"
+        )
+        self.model = SentenceTransformer(modules=[transformer, pooling])
 
-        max_length = 512
-        eos_token = self.tokenizer.eos_token or ""
+        if max_seq_length is not None:
+            self.model.max_seq_length = max_seq_length
 
-        for i in tqdm(
-            range(0, len(prompted_sentences), batch_size),
-            desc=f"Encoding {'Queries' if prompt_type == PromptType.query else 'Passages'}...",
-        ):
-            batch_texts = prompted_sentences[i : i + batch_size]
-
-            if eos_token:
-                batch_texts = [text + eos_token for text in batch_texts]
-
-                batch_dict = self.tokenizer(
-                    batch_texts,
-                    max_length=max_length - 1,  # for EOS token
-                    return_token_type_ids=False,
-                    return_attention_mask=False,
-                    padding=False,
-                    truncation=True,
-                )
-                batch_dict["input_ids"] = [
-                    ids + [self.tokenizer.eos_token_id]
-                    for ids in batch_dict["input_ids"]
-                ]
-
-                batch_dict = self.tokenizer.pad(
-                    batch_dict,
-                    padding=True,
-                    pad_to_multiple_of=8,
-                    return_attention_mask=True,
-                    return_tensors="pt",
-                )
-
-            batch_dict = {k: v.to(self.device) for k, v in batch_dict.items()}
-            outputs = self.model(**batch_dict)
-            embeddings = last_token_pool(
-                outputs.last_hidden_state, batch_dict["attention_mask"]
-            )
-            all_embeddings.append(embeddings.cpu().numpy())
-
-        return np.concatenate(all_embeddings, axis=0)
+        if padding_side is not None:
+            self.model.tokenizer.padding_side = padding_side
 
 
-# Sources summarized from the paper's Table 8
 BMRETRIEVER_TRAINING_DATA = {
-    "PubMed": ["train"],  # https://huggingface.co/datasets/MedRAG/pubmed
-    "raw_arxiv": ["train"],  # https://huggingface.co/datasets/mteb/raw_arxiv
-    "medical_meadow_cord19": [
-        "train"
-    ],  # https://huggingface.co/datasets/medalpa/medical_meadow_cord19
-    "textbooks": ["train"],  # https://huggingface.co/datasets/MedRAG/textbooks
-    "statpearls": ["train"],  # https://huggingface.co/datasets/MedRAG/statpearls
-    "LitCovid_BioCreative": [
-        "train"
-    ],  # https://huggingface.co/datasets/KushT/LitCovid_BioCreative
-    "S2ORC": ["train"],  # https://github.com/allenai/s2orc
-    "MSMARCO": [
-        "train"
-    ],  # https://huggingface.co/datasets/tevatro/msmarco-passage-corpus
-    "BMRetriever/biomed_retrieval_dataset": [
-        "train"
-    ],  # https://huggingface.co/datasets/BMRetriever/biomed_retrieval_dataset
+    "MedRAG/pubmed": ["train"],
+    "mteb/raw_arxiv": ["train"],
+    "medalpa/medical_meadow_cord19": ["train"],
+    "MedRAG/textbooks": ["train"],
+    "MedRAG/statpearls": ["train"],
+    "KushT/LitCovid_BioCreative": ["train"],
+    "S2ORC": ["train"],
+    "MSMARCO": ["train"],
+    "BMRetriever/biomed_retrieval_dataset": ["train"],
 }
 
 BMRetriever_410M = ModelMeta(
     loader=partial(
         BMRetrieverWrapper,
-        model_name_or_path="BMRetriever/BMRetriever-410M",
+        model_name="BMRetriever/BMRetriever-410M",
         instruction_template=instruction_template,
-        torch_dtype=torch.float32,
+        config_args={"revision": "e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3"},
+        model_args={"torch_dtype": torch.float32},
+        padding_side="left",
+        add_eos_token=True,
+        apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-410M",
     languages=["eng-Latn"],
@@ -165,8 +91,8 @@ BMRetriever_410M = ModelMeta(
     max_tokens=2048,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-410M",
-    similarity_fn_name="dot",
-    framework=["PyTorch"],
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -176,9 +102,13 @@ BMRetriever_410M = ModelMeta(
 BMRetriever_1B = ModelMeta(
     loader=partial(
         BMRetrieverWrapper,
-        model_name_or_path="BMRetriever/BMRetriever-1B",
+        model_name="BMRetriever/BMRetriever-1B",
+        config_args={"revision": "1b758c5f4d3af48ef6035cc4088bdbcd7df43ca6"},
+        model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
-        torch_dtype=torch.float32,
+        padding_side="left",
+        add_eos_token=True,
+        apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-1B",
     languages=["eng-Latn"],
@@ -191,8 +121,8 @@ BMRetriever_1B = ModelMeta(
     max_tokens=2048,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-1B",
-    similarity_fn_name="dot",
-    framework=["PyTorch"],
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -202,9 +132,13 @@ BMRetriever_1B = ModelMeta(
 BMRetriever_2B = ModelMeta(
     loader=partial(
         BMRetrieverWrapper,
-        model_name_or_path="BMRetriever/BMRetriever-2B",
-        torch_dtype=torch.float32,
+        model_name="BMRetriever/BMRetriever-2B",
+        config_args={"revision": "718179afd57926369c347f46eee616db81084941"},
+        model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
+        padding_side="left",
+        add_eos_token=True,
+        apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-2B",
     languages=["eng-Latn"],
@@ -217,8 +151,8 @@ BMRetriever_2B = ModelMeta(
     max_tokens=8192,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-2B",
-    similarity_fn_name="dot",
-    framework=["PyTorch"],
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
@@ -228,9 +162,13 @@ BMRetriever_2B = ModelMeta(
 BMRetriever_7B = ModelMeta(
     loader=partial(
         BMRetrieverWrapper,
-        model_name_or_path="BMRetriever/BMRetriever-7B",
+        model_name="BMRetriever/BMRetriever-7B",
+        config_args={"revision": "e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3"},
+        model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
-        torch_dtype=torch.float32,
+        padding_side="left",
+        add_eos_token=True,
+        apply_instruction_to_passages=True,
     ),
     name="BMRetriever/BMRetriever-7B",
     languages=["eng-Latn"],
@@ -243,8 +181,8 @@ BMRetriever_7B = ModelMeta(
     max_tokens=32768,
     license="mit",
     reference="https://huggingface.co/BMRetriever/BMRetriever-7B",
-    similarity_fn_name="dot",
-    framework=["PyTorch"],
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
