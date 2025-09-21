@@ -89,20 +89,28 @@ class AbsTaskAudioClustering(AbsTask):
         valid_labels = []
         
         for i, audio_sample in enumerate(downsampled_dataset[self.audio_column_name]):
+            is_valid = False
+            
             # Check if audio sample is empty
             if isinstance(audio_sample, dict) and "array" in audio_sample:
                 audio_array = audio_sample["array"]
-                if hasattr(audio_array, '__len__') and len(audio_array) > 0:
-                    valid_indices.append(i)
-                    valid_audio.append(audio_sample)
-                    label = downsampled_dataset[self.label_column_name][i]
-                    if not isinstance(label, list):
-                        label = [label]
-                    valid_labels.append(label)
+                # More thorough empty check
+                if (hasattr(audio_array, '__len__') and 
+                    len(audio_array) > 0 and 
+                    not (hasattr(audio_array, 'sum') and audio_array.sum() == 0 and len(audio_array) < 100)):
+                    is_valid = True
                 else:
-                    logger.warning(f"Skipping empty audio sample at index {i}")
+                    logger.warning(f"Skipping empty/invalid audio sample at index {i}: shape={getattr(audio_array, 'shape', 'unknown')}")
+            elif isinstance(audio_sample, (list, tuple, np.ndarray)) and len(audio_sample) > 0:
+                is_valid = True
+            elif isinstance(audio_sample, str):  # File path
+                # For file paths, we'll assume valid here and let model handle loading errors
+                # In a production system, you might want to pre-validate file existence
+                is_valid = True
             else:
-                # For other audio formats, assume valid for now
+                logger.warning(f"Skipping unknown audio format at index {i}: type={type(audio_sample)}")
+            
+            if is_valid:
                 valid_indices.append(i)
                 valid_audio.append(audio_sample)
                 label = downsampled_dataset[self.label_column_name][i]
@@ -115,6 +123,52 @@ class AbsTaskAudioClustering(AbsTask):
             return {"v_measure": 0.0, "v_measure_std": 0.0, "v_measures": {}}
         
         logger.info(f"Processing {len(valid_audio)} valid audio samples out of {len(downsampled_dataset)}")
+        
+        # Check for class imbalance caused by filtering and rebalance if needed
+        label_counts = {}
+        for label_list in valid_labels:
+            label = label_list[0] if isinstance(label_list, list) else label_list
+            label_counts[label] = label_counts.get(label, 0) + 1
+        
+        logger.info(f"Label distribution after filtering: {label_counts}")
+        
+        # If there's significant imbalance, subsample to balance classes
+        if len(label_counts) > 1:
+            min_count = min(label_counts.values())
+            max_count = max(label_counts.values())
+            imbalance_ratio = max_count / min_count
+            
+            if imbalance_ratio > 1.5:  # If imbalance is significant
+                logger.info(f"Detected class imbalance (ratio: {imbalance_ratio:.2f}), rebalancing...")
+                
+                # Group samples by label
+                label_groups = {}
+                for i, label_list in enumerate(valid_labels):
+                    label = label_list[0] if isinstance(label_list, list) else label_list
+                    if label not in label_groups:
+                        label_groups[label] = []
+                    label_groups[label].append(i)
+                
+                # Subsample each class to the minimum count
+                balanced_indices = []
+                for label, indices in label_groups.items():
+                    if len(indices) > min_count:
+                        # Randomly subsample
+                        import random
+                        random.seed(self.seed)
+                        sampled_indices = random.sample(indices, min_count)
+                        balanced_indices.extend(sampled_indices)
+                    else:
+                        balanced_indices.extend(indices)
+                
+                # Reorder samples
+                balanced_audio = [valid_audio[i] for i in balanced_indices]
+                balanced_labels = [valid_labels[i] for i in balanced_indices]
+                
+                valid_audio = balanced_audio
+                valid_labels = balanced_labels
+                
+                logger.info(f"Rebalanced to {len(valid_audio)} samples with equal class distribution")
         
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32

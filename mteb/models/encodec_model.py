@@ -66,10 +66,10 @@ class EncodecWrapper(Wrapper):
                         )
                         # Check for empty audio before resampling
                         if audio.numel() == 0:
-                            logger.warning("Empty audio array from dataset - should have been filtered at task level")
-                            # Create minimal silence to avoid resampling errors
-                            min_samples = int(0.1 * item.get("sampling_rate", self.sampling_rate))
-                            audio = torch.zeros(min_samples, dtype=torch.float32)
+                            raise ValueError(
+                                f"Empty audio array from dataset at sampling_rate={item.get('sampling_rate', 'unknown')} - "
+                                "this should have been filtered at task level to avoid creating fake embeddings."
+                            )
                         
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
@@ -101,10 +101,10 @@ class EncodecWrapper(Wrapper):
         
         # Validate audio is not empty (should be filtered at task level now)
         if audio.numel() == 0:
-            logger.warning("Empty audio tensor encountered - this should have been filtered at task level")
-            # Return minimal silence to avoid crashes
-            min_samples = int(0.1 * self.sampling_rate)
-            audio = torch.zeros(min_samples, dtype=torch.float32)
+            raise ValueError(
+                "Empty audio tensor encountered in model - this indicates a bug in task-level filtering. "
+                "Empty audio should be filtered out before reaching the model to avoid creating fake embeddings."
+            )
             
         return audio
 
@@ -112,10 +112,7 @@ class EncodecWrapper(Wrapper):
         try:
             waveform, sample_rate = torchaudio.load(path)
         except Exception as e:
-            logger.warning(f"Failed to load audio file {path}: {e}")
-            # Return minimal silence to avoid crashes
-            min_samples = int(0.1 * self.sampling_rate)
-            return torch.zeros(min_samples, dtype=torch.float32)
+            raise ValueError(f"Failed to load audio file {path}: {e} - corrupted files should be filtered at task level")
 
         # Convert to mono if needed
         if waveform.shape[0] > 1:  # If multi-channel
@@ -129,10 +126,7 @@ class EncodecWrapper(Wrapper):
         
         # Validate audio is not empty
         if waveform.numel() == 0:
-            logger.warning(f"Empty audio file: {path}")
-            # Return minimal silence to avoid crashes
-            min_samples = int(0.1 * self.sampling_rate)
-            waveform = torch.zeros(min_samples, dtype=torch.float32)
+            raise ValueError(f"Empty audio file: {path} - this should have been filtered at task level")
             
         return waveform
 
