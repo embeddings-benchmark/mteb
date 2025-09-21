@@ -83,18 +83,47 @@ class AbsTaskAudioClustering(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
+        # Filter out empty audio samples before embedding to maintain alignment with labels
+        valid_indices = []
+        valid_audio = []
+        valid_labels = []
+        
+        for i, audio_sample in enumerate(downsampled_dataset[self.audio_column_name]):
+            # Check if audio sample is empty
+            if isinstance(audio_sample, dict) and "array" in audio_sample:
+                audio_array = audio_sample["array"]
+                if hasattr(audio_array, '__len__') and len(audio_array) > 0:
+                    valid_indices.append(i)
+                    valid_audio.append(audio_sample)
+                    label = downsampled_dataset[self.label_column_name][i]
+                    if not isinstance(label, list):
+                        label = [label]
+                    valid_labels.append(label)
+                else:
+                    logger.warning(f"Skipping empty audio sample at index {i}")
+            else:
+                # For other audio formats, assume valid for now
+                valid_indices.append(i)
+                valid_audio.append(audio_sample)
+                label = downsampled_dataset[self.label_column_name][i]
+                if not isinstance(label, list):
+                    label = [label]
+                valid_labels.append(label)
+        
+        if not valid_audio:
+            logger.error("No valid audio samples found in dataset")
+            return {"v_measure": 0.0, "v_measure_std": 0.0, "v_measures": {}}
+        
+        logger.info(f"Processing {len(valid_audio)} valid audio samples out of {len(downsampled_dataset)}")
+        
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
         embeddings = model.get_audio_embeddings(
-            downsampled_dataset[self.audio_column_name],  # type: ignore
+            valid_audio,
             batch_size=encode_kwargs["batch_size"],
         )
 
-        labels = []
-        for label in downsampled_dataset[self.label_column_name]:
-            if not isinstance(label, list):
-                label = [label]
-            labels.append(label)
+        labels = valid_labels
 
         all_v_scores = evaluate_clustering_bootstrapped(
             embeddings,

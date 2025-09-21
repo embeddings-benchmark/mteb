@@ -51,12 +51,9 @@ class ASTWrapper(Wrapper):
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
             for audio, _ in batch:
-                converted = self._convert_audio_from_numpy(audio)
-                if converted is not None:
-                    waveforms.append(converted)
+                waveforms.append(self._convert_audio_from_numpy(audio))
         else:
             for item in batch:
-                converted = None
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
@@ -65,42 +62,50 @@ class ASTWrapper(Wrapper):
                             if isinstance(audio, np.ndarray)
                             else audio.float()
                         )
+                        # Check for empty audio before resampling
+                        if audio.numel() == 0:
+                            logger.warning("Empty audio array from dataset - should have been filtered at task level")
+                            # Create minimal silence to avoid resampling errors
+                            min_samples = int(0.1 * item.get("sampling_rate", self.sampling_rate))
+                            audio = torch.zeros(min_samples, dtype=torch.float32)
+                        
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
                             )
                             audio = resampler(audio)
-                        converted = self._convert_audio_from_numpy(audio)
+                        waveforms.append(self._convert_audio_from_numpy(audio))
                     elif "path" in item:
-                        converted = self._load_audio_file(item["path"])
+                        waveforms.append(self._load_audio_file(item["path"]))
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    converted = self._convert_audio_from_numpy(item)
+                    waveforms.append(self._convert_audio_from_numpy(item))
                 elif isinstance(item, str):
-                    converted = self._load_audio_file(item)
-                
-                if converted is not None:
-                    waveforms.append(converted)
+                    waveforms.append(self._load_audio_file(item))
 
         return waveforms
 
-    def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor | None:
+    def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         audio = audio.squeeze()
         
-        # Validate audio is not empty
+        # Validate audio is not empty (should be filtered at task level now)
         if audio.numel() == 0:
-            logger.warning("Skipping empty audio tensor during processing")
-            return None
+            logger.warning("Empty audio tensor encountered - this should have been filtered at task level")
+            # Return minimal silence to avoid crashes
+            min_samples = int(0.1 * self.sampling_rate)
+            audio = torch.zeros(min_samples, dtype=torch.float32)
             
         return audio
 
-    def _load_audio_file(self, path: str) -> torch.Tensor | None:
+    def _load_audio_file(self, path: str) -> torch.Tensor:
         try:
             waveform, sample_rate = torchaudio.load(path)
         except Exception as e:
             logger.warning(f"Failed to load audio file {path}: {e}")
-            return None
+            # Return minimal silence to avoid crashes
+            min_samples = int(0.1 * self.sampling_rate)
+            return torch.zeros(min_samples, dtype=torch.float32)
             
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
@@ -109,8 +114,10 @@ class ASTWrapper(Wrapper):
         
         # Validate audio is not empty
         if waveform.numel() == 0:
-            logger.warning(f"Skipping empty audio file: {path}")
-            return None
+            logger.warning(f"Empty audio file: {path}")
+            # Return minimal silence to avoid crashes
+            min_samples = int(0.1 * self.sampling_rate)
+            waveform = torch.zeros(min_samples, dtype=torch.float32)
             
         return waveform
 
@@ -137,21 +144,12 @@ class ASTWrapper(Wrapper):
                 # AST processes raw waveforms directly through its feature extractor
                 batch_inputs = []
                 for audio_tensor in batch:
-                    # Skip empty audio tensors (already logged in _convert_audio_from_numpy)
-                    if audio_tensor.numel() == 0:
-                        continue
-                    
                     audio_np = (
                         audio_tensor.numpy()
                         if isinstance(audio_tensor, torch.Tensor)
                         else audio_tensor
                     )
                     batch_inputs.append(audio_np)
-
-                # Skip batch if no valid audio samples
-                if not batch_inputs:
-                    logger.warning("Skipping batch with no valid audio samples")
-                    continue
 
                 inputs = self.feature_extractor(
                     batch_inputs,
