@@ -35,38 +35,6 @@ model-index:
 - name: sentence-transformers/all-MiniLM-L6-v2
   results:
   - task:
-      type: text-retrieval
-      name: Retrieval
-    dataset:
-      name: BSARDRetrieval (default)
-      type: mteb/BSARDRetrieval
-      config: default
-      split: test
-      revision: 8c492add6a14ac188f2debdaf6cbdfb406fd6be3
-    metrics:
-    - type: recall_at_100
-      value: 0.0
-      name: recall_at_100
-    source:
-      url: https://github.com/embeddings-benchmark/mteb/
-      name: MTEB
-  - task:
-      type: translation
-      name: BitextMining
-    dataset:
-      name: BornholmBitextMining (default)
-      type: mteb/BornholmBitextMining
-      config: default
-      split: test
-      revision: 5b02048bd75e79275aa91a1fce6cdfd3f4a391cb
-    metrics:
-    - type: f1
-      value: 0.2968132161955691
-      name: f1
-    source:
-      url: https://github.com/embeddings-benchmark/mteb/
-      name: MTEB
-  - task:
       type: sentence-similarity
       name: STS
     dataset:
@@ -354,6 +322,38 @@ model-index:
     source:
       url: https://github.com/embeddings-benchmark/mteb/
       name: MTEB
+  - task:
+      type: text-retrieval
+      name: Retrieval
+    dataset:
+      name: BSARDRetrieval (default)
+      type: mteb/BSARDRetrieval
+      config: default
+      split: test
+      revision: 8c492add6a14ac188f2debdaf6cbdfb406fd6be3
+    metrics:
+    - type: recall_at_100
+      value: 0.0
+      name: recall_at_100
+    source:
+      url: https://github.com/embeddings-benchmark/mteb/
+      name: MTEB
+  - task:
+      type: translation
+      name: BitextMining
+    dataset:
+      name: BornholmBitextMining (default)
+      type: mteb/BornholmBitextMining
+      config: default
+      split: test
+      revision: 5b02048bd75e79275aa91a1fce6cdfd3f4a391cb
+    metrics:
+    - type: f1
+      value: 0.2968132161955691
+      name: f1
+    source:
+      url: https://github.com/embeddings-benchmark/mteb/
+      name: MTEB
 ---
 
 
@@ -499,3 +499,12 @@ We sampled each dataset given a weighted probability which configuration is deta
 | [SQuAD2.0](https://rajpurkar.github.io/SQuAD-explorer/) | [paper](https://aclanthology.org/P18-2124.pdf) | 87,599 |
 | [TriviaQA](https://huggingface.co/datasets/trivia_qa) | - | 73,346 |
 | **Total** | | **1,170,060,424** |
+
+
+
+# MTEB results
+| task_name            |   all-MiniLM-L6-v2 |
+|:---------------------|-------------------:|
+| BSARDRetrieval       |           0        |
+| BornholmBitextMining |           0.296813 |
+| STS22                |           0.408369 |

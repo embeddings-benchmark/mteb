@@ -3,8 +3,9 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from huggingface_hub import EvalResult, ModelCard, ModelCardData, repo_exists
+from huggingface_hub import ModelCard, ModelCardData, repo_exists
 
+from mteb import BenchmarkResults
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
 
@@ -17,6 +18,7 @@ def generate_model_card(
     existing_model_card_id_or_path: str | Path | None = None,
     results_cache: ResultCache = ResultCache(),
     output_path: Path = Path("model_card.md"),
+    models_to_compare: list[str] | None = None,
     token: str | None = None,
     push_to_hub: bool = False,
 ) -> None:
@@ -28,6 +30,7 @@ def generate_model_card(
         existing_model_card_id_or_path: Path or ID of an existing model card to update.
         results_cache: Instance of ResultCache to load results from.
         output_path: Path to save the generated model card.
+        models_to_compare: List of models to add to results table.
         token: Optional token for pushing to Hugging Face Hub.
         push_to_hub: Whether to push the updated model card to the Hub if it exists there.
     """
@@ -51,18 +54,16 @@ def generate_model_card(
         existing_model_card_data.model_name = (
             existing_model_card_data.model_name or model_name
         )
-        existing_model_card_data.eval_results = eval_results
     else:
-
-        def _eval_result_key(result: EvalResult) -> str:
-            return result.dataset_name + result.dataset_revision + result.dataset_config
-
         unique_eval_results = {
-            _eval_result_key(eval_result): eval_result
+            eval_result.unique_identifier: eval_result
             for eval_result in existing_model_card_data.eval_results + eval_results
         }
+        eval_results = list(unique_eval_results.values())
 
-        existing_model_card_data.eval_results = list(unique_eval_results.values())
+    existing_model_card_data.eval_results = sorted(
+        eval_results, key=lambda x: x.unique_identifier
+    )
 
     if existing_model_card_data.tags is None:
         existing_model_card_data.tags = ["mteb"]
@@ -76,6 +77,15 @@ def generate_model_card(
             card_data=existing_model_card_data
         )
 
+    if models_to_compare:
+        benchmark_results = results_cache.load_results(
+            [model_name, *models_to_compare], tasks, only_main_score=True
+        )
+
+    existing_model_card = _add_table_to_model_card(
+        benchmark_results, existing_model_card
+    )
+
     if push_to_hub:
         if repo_exists(existing_model_card_id_or_path):
             existing_model_card.push_to_hub(existing_model_card_id_or_path, token=token)
@@ -84,3 +94,17 @@ def generate_model_card(
                 f"Repository {existing_model_card_id_or_path} does not exist on the Hub. Skipping push to hub."
             )
     existing_model_card.save(output_path)
+
+
+def _add_table_to_model_card(
+    results: BenchmarkResults, model_card: ModelCard
+) -> ModelCard:
+    original_content = model_card.content
+    results_df = results.to_dataframe()
+    results_df = results_df.set_index("task_name")
+    mteb_content = f"""
+# MTEB results
+{results_df.to_markdown()}
+"""
+    model_card.content = original_content + "\n\n" + mteb_content
+    return model_card
