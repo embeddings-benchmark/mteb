@@ -5,7 +5,7 @@ from typing import Literal, Union
 
 from ._result import HFSubset
 
-## LANGUAGE TYPES ##
+# LANGUAGE TYPES
 ISOLanguageScript = str
 """A string representing the language and script. Language is denoted as a 3-letter [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) language code and the script is denoted by a 4-letter [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924) script code (e.g. "eng-Latn")."""
 
@@ -18,7 +18,7 @@ ISOScript = str
 Languages = Union[list[ISOLanguageScript], Mapping[HFSubset, list[ISOLanguageScript]]]
 """A list of languages or a mapping from HFSubset to a list of languages. E.g. ["eng-Latn", "deu-Latn"] or {"en-de": ["eng-Latn", "deu-Latn"], "fr-it": ["fra-Latn", "ita-Latn"]}."""
 
-## LICENSE TYPES ##
+# LICENSE TYPES
 Licenses = (
     Literal[  # we use lowercase for the licenses similar to the huggingface datasets
         "not specified",  # or none found
@@ -49,18 +49,19 @@ Licenses = (
         "mpl-2.0",
         "msr-la-nc",
         "multiple",
+        "gemma",
     ]
 )
 """The different licenses that a dataset or model can have. This list can be extended as needed."""
 
-## MODEL TYPES ##
+# MODEL TYPES
 ModelName = str
 """The name of a model, typically as found on HuggingFace e.g. `sentence-transformers/all-MiniLM-L6-v2`."""
 Revision = str
 """The revision of a model, typically a git commit hash. For APIs this can be a version string e.g. `1`."""
 
 
-## MODALITY TYPES ##
+# MODALITY TYPES
 Modalities = Literal[
     "text",
     "image",

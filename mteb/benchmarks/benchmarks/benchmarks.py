@@ -1379,7 +1379,7 @@ C_MTEB = Benchmark(
 
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
-    display_name="Farsi",
+    display_name="Farsi Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1454,6 +1454,87 @@ FA_MTEB = Benchmark(
         ],
     ),
     description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
+    contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+)
+
+FA_MTEB_2 = Benchmark(
+    name="MTEB(fas, v2)",
+    display_name="Farsi",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
+    tasks=get_tasks(
+        languages=["fas"],
+        tasks=[
+            # Classification
+            "PersianFoodSentimentClassification",
+            "SynPerChatbotConvSAClassification",
+            "SynPerChatbotConvSAToneChatbotClassification",
+            "SynPerChatbotConvSAToneUserClassification",
+            "SynPerChatbotSatisfactionLevelClassification",
+            "SynPerTextToneClassification.v3",
+            "SIDClassification.v2",
+            "DeepSentiPers.v2",
+            "PersianTextEmotion.v2",
+            "NLPTwitterAnalysisClassification.v2",
+            "DigikalamagClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "StyleClassification",
+            "PerShopDomainClassification",
+            "PerShopIntentClassification",
+            # Clustering
+            "BeytooteClustering",
+            "DigikalamagClustering",
+            "HamshahriClustring",
+            "NLPTwitterAnalysisClustering",
+            "SIDClustring",
+            # PairClassification
+            "FarsTail",
+            "SynPerChatbotRAGFAQPC",
+            "FarsiParaphraseDetection",
+            "SynPerTextKeywordsPC",
+            "SynPerQAPC",
+            "ParsinluEntail",
+            "ParsinluQueryParaphPC",
+            # Reranking
+            "MIRACLReranking",
+            "WikipediaRerankingMultilingual",
+            # Retrieval
+            "SynPerQARetrieval",
+            "SynPerChatbotRAGFAQRetrieval",
+            "PersianWebDocumentRetrieval",
+            "WikipediaRetrievalMultilingual",
+            "MIRACLRetrievalHardNegatives",
+            "HotpotQA-FaHardNegatives",
+            "MSMARCO-FaHardNegatives",
+            "NQ-FaHardNegatives",
+            "ArguAna-Fa.v2",
+            "FiQA2018-Fa.v2",
+            "QuoraRetrieval-Fa.v2",
+            "SCIDOCS-Fa.v2",
+            "SciFact-Fa.v2",
+            "TRECCOVID-Fa.v2",
+            "FEVER-FaHardNegatives",
+            "NeuCLIR2023RetrievalHardNegatives",
+            "WebFAQRetrieval",
+            # STS
+            "Farsick",
+            "SynPerSTS",
+            # SummaryRetrieval
+            "SAMSumFa",
+            "SynPerChatbotSumSRetrieval",
+            "SynPerChatbotRAGSumSRetrieval",
+        ],
+    ),
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark. For more details on the improvements, see the main PR comment: [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157).",
     reference="https://arxiv.org/abs/2502.11571",
     citation=r"""
 @article{zinvandi2025famteb,

@@ -4,9 +4,12 @@ from typing import Any
 
 import numpy as np
 import tqdm
+from packaging.version import Version
 from torch.utils.data import DataLoader
+from transformers import __version__ as transformers_version
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import sentence_transformers_loader
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.requires_package import requires_package
@@ -241,4 +244,38 @@ google_gemini_embedding_001 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+)
+
+
+def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
+    min_transformers_version = "4.56.0"
+
+    if Version(transformers_version) < Version(min_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is lower than the required "
+            f"version {min_transformers_version} to run `{model_name}`"
+        )
+
+    return sentence_transformers_loader(model_name, revision, **kwargs)
+
+
+embedding_gemma_300m = ModelMeta(
+    loader=gemma_embedding_loader,
+    name="google/embeddinggemma-300m",
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    open_weights=True,
+    revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
+    release_date="2025-09-04",
+    n_parameters=307_581_696,
+    embed_dim=768,
+    max_tokens=2048,
+    license="gemma",
+    reference="https://ai.google.dev/gemma/docs/embeddinggemma/model_card",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+    similarity_fn_name="cosine",
+    memory_usage_mb=578,
 )
