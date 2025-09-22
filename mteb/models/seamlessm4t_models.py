@@ -21,14 +21,21 @@ class SeamlessM4TWrapper(Wrapper):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_seconds = max_audio_length_seconds
 
-        self.model = SeamlessM4Tv2Model.from_pretrained(model_name).to(device)
+        self.model = SeamlessM4Tv2Model.from_pretrained(model_name)
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
+
+        self.speech_encoder = self.model.speech_encoder
+
+        self.model = self.model.to(device)
+        self.speech_encoder = self.speech_encoder.to(device)
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -54,11 +61,12 @@ class SeamlessM4TWrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            audio = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            audio = torch.tensor(audio).float()
+                        else:
+                            audio = audio.float()
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
@@ -113,31 +121,85 @@ class SeamlessM4TWrapper(Wrapper):
                 disable=not show_progress_bar,
             ):
                 batch = processed_audio[i : i + batch_size]
-                batch_tensor = self._pad_audio_batch(batch)
+                # batch_tensor = self._pad_audio_batch(batch)
 
-                # Process audio through the model's encoder
+                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+                truncated_audio = []
+                for w in batch:
+                    audio_np = w.cpu().numpy()
+                    if len(audio_np) > max_samples:
+                        audio_np = audio_np[:max_samples]
+                    truncated_audio.append(audio_np)
+
                 inputs = self.processor(
-                    audios=batch_tensor.cpu().numpy(),
+                    audios=truncated_audio,
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding=True,
-                    truncation=True,
-                    max_length=30 * self.sampling_rate,  # 30 seconds max
-                ).to(self.device)
-
-                # Get encodings through the encoder
-                outputs = self.model.speech_encoder(
-                    inputs.input_features,
-                    attention_mask=inputs.attention_mask,
-                    output_hidden_states=True,
                 )
 
-                # Use last hidden state for embeddings
+                input_features = inputs.input_features.to(self.device)
+                attention_mask = (
+                    inputs.attention_mask.to(self.device)
+                    if hasattr(inputs, "attention_mask")
+                    else None
+                )
+
+                outputs = self.speech_encoder(
+                    input_features,
+                    attention_mask=attention_mask,
+                    output_hidden_states=False,
+                )
+
                 last_hidden_state = outputs.last_hidden_state
-                embeddings = torch.mean(last_hidden_state, dim=1)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                if attention_mask is not None:
+                    batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
+                    device = last_hidden_state.device
+
+                    # For SeamlessM4T, check if attention mask matches hidden state length
+                    if attention_mask.shape[1] != hidden_seq_len:
+                        # Calculate downsample ratio and proper hidden lengths
+                        input_lengths = attention_mask.sum(dim=1)
+                        downsample_ratio = attention_mask.shape[1] / hidden_seq_len
+                        hidden_lengths = (
+                            input_lengths.float() / downsample_ratio
+                        ).long()
+                        hidden_lengths = torch.clamp(
+                            hidden_lengths, min=0, max=hidden_seq_len
+                        )
+
+                        # Create attention mask for hidden states
+                        seq_range = torch.arange(
+                            hidden_seq_len, device=device
+                        ).unsqueeze(0)
+                        hidden_attention_mask = (
+                            seq_range < hidden_lengths.unsqueeze(1)
+                        ).to(last_hidden_state.dtype)
+                    else:
+                        # Use the attention mask directly if dimensions match
+                        hidden_attention_mask = attention_mask.to(
+                            last_hidden_state.dtype
+                        )
+
+                    # Apply masked mean pooling
+                    hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                    masked_embeddings = last_hidden_state * hidden_attention_mask
+                    valid_tokens = hidden_attention_mask.sum(dim=1)
+                    embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(
+                        min=1e-9
+                    )
+                else:
+                    # Fallback to simple mean pooling if no attention mask
+                    embeddings = last_hidden_state.mean(dim=1)
+
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
         self,
@@ -154,6 +216,7 @@ seamless_m4t_v2_large = ModelMeta(
     loader=partial(
         SeamlessM4TWrapper,
         model_name="facebook/seamless-m4t-v2-large",
+        max_audio_length_seconds=5.0,  # Conservative default for memory efficiency
     ),
     name="facebook/seamless-m4t-v2-large",
     languages=[

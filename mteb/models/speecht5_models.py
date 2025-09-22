@@ -158,7 +158,28 @@ class SpeechT5Wrapper(Wrapper):
                     attention_mask=inputs.attention_mask,
                 )
                 last_hidden = outputs.last_hidden_state
-                embeddings = torch.mean(last_hidden, dim=1)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                batch_size, hidden_seq_len, hidden_size = last_hidden.shape
+                device = last_hidden.device
+
+                # Calculate proper hidden lengths based on input attention mask
+                input_lengths = inputs.attention_mask.sum(dim=1)
+                downsample_ratio = inputs.input_values.shape[1] / hidden_seq_len
+                hidden_lengths = (input_lengths.float() / downsample_ratio).long()
+                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+
+                # Create attention mask for hidden states
+                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
+                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
+                    last_hidden.dtype
+                )
+
+                # Apply masked mean pooling
+                hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                masked_embeddings = last_hidden * hidden_attention_mask
+                valid_tokens = hidden_attention_mask.sum(dim=1)
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
                 all_embeddings.append(embeddings.cpu())
 
@@ -197,7 +218,15 @@ class SpeechT5Wrapper(Wrapper):
                 )
 
                 last_hidden = outputs.last_hidden_state
-                embeddings = torch.mean(last_hidden, dim=1)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                attention_mask = (
+                    inputs["attention_mask"].unsqueeze(-1).to(last_hidden.dtype)
+                )
+                masked_embeddings = last_hidden * attention_mask
+                valid_tokens = attention_mask.sum(dim=1)
+                embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:

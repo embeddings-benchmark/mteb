@@ -117,11 +117,12 @@ class MCTCTWrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            audio = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            audio = torch.tensor(audio).float()
+                        else:
+                            audio = audio.float()
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
@@ -202,8 +203,30 @@ class MCTCTWrapper(Wrapper):
 
                 # Get embeddings from the final layer hidden states
                 last_hidden = outputs.hidden_states[-1]
-                emb = last_hidden.mean(dim=1).cpu()
-                all_embeddings.append(emb)
+
+                # Apply attention-masked pooling to exclude padding tokens
+                batch_size, hidden_seq_len, hidden_size = last_hidden.shape
+                device = last_hidden.device
+
+                # Calculate proper hidden lengths based on input attention mask
+                input_lengths = inputs.attention_mask.sum(dim=1)
+                downsample_ratio = inputs.attention_mask.shape[1] / hidden_seq_len
+                hidden_lengths = (input_lengths.float() / downsample_ratio).long()
+                hidden_lengths = torch.clamp(hidden_lengths, min=0, max=hidden_seq_len)
+
+                # Create attention mask for hidden states
+                seq_range = torch.arange(hidden_seq_len, device=device).unsqueeze(0)
+                hidden_attention_mask = (seq_range < hidden_lengths.unsqueeze(1)).to(
+                    last_hidden.dtype
+                )
+
+                # Apply masked mean pooling
+                hidden_attention_mask = hidden_attention_mask.unsqueeze(-1)
+                masked_embeddings = last_hidden * hidden_attention_mask
+                valid_tokens = hidden_attention_mask.sum(dim=1)
+                emb = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
+
+                all_embeddings.append(emb.cpu())
 
         return torch.cat(all_embeddings, dim=0)
 
