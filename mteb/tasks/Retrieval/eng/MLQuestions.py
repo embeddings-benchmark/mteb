@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+from pathlib import Path
 
 from huggingface_hub import snapshot_download
 
@@ -80,8 +81,9 @@ Reddy, Siva},
     def _load_data_for_split(self, download_dir, split):
         queries, corpus, qrels = {}, {}, {}
 
-        dataset_path = f"{download_dir}/{split}.csv"
-        with open(dataset_path) as csvfile:
+        download_dir = Path(download_dir)
+        dataset_path = download_dir / f"{split}.csv"
+        with dataset_path.open() as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 query_id = f"Q{str(i)}"
@@ -91,8 +93,8 @@ Reddy, Siva},
                 qrels[query_id] = {f"C{doc_id}": 1}
 
         # Same corpus for all splits
-        corpus_path = f"{download_dir}/test_passages.csv"
-        with open(corpus_path) as csvfile:
+        corpus_path = download_dir / "test_passages.csv"
+        with corpus_path.open() as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 doc_id = f"C{str(i)}"

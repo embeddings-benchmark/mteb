@@ -73,7 +73,7 @@ class MTEB:
             self.benchmarks = tasks
             self.tasks = list(chain.from_iterable(self.tasks))
 
-        self.err_logs_path = err_logs_path
+        self.err_logs_path = Path(err_logs_path)
         self.last_evaluated_splits = {}
 
     @property
@@ -541,7 +541,7 @@ class MTEB:
                 logger.error(
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
-                with open(self.err_logs_path, "a") as f_out:
+                with self.err_logs_path.open("a") as f_out:
                     f_out.write(f"{datetime.now()} >>> {task.metadata.name}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")

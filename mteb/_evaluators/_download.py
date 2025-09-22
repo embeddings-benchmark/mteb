@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import requests
 import tqdm
 
@@ -9,7 +11,7 @@ def download(url: str, fname: str):
     resp = requests.get(url, stream=True)
     total = int(resp.headers.get("content-length", 0))
     with (
-        open(fname, "wb") as file,
+        Path(fname).open("wb") as file,
         tqdm.tqdm(
             desc=fname,
             total=total,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
     AbsTaskAnyZeroShotClassification,
@@ -60,8 +60,8 @@ and Fichtinger, Gabor},
     label_column_name = "cls"
 
     def get_candidate_labels(self) -> list[str]:
-        path = os.path.dirname(__file__)
-        with open(os.path.join(path, "templates/PatchCamelyon_labels.txt")) as f:
+        path = Path(__file__).parent / "templates" / "PatchCamelyon_labels.txt"
+        with path.open() as f:
             labels = f.readlines()
 
         return [f"histopathology image of {c}" for c in labels]

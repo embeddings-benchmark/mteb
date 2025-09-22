@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
     AbsTaskAnyZeroShotClassification,
@@ -47,8 +47,8 @@ class Country211ZeroShotClassification(AbsTaskAnyZeroShotClassification):
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:
-        path = os.path.dirname(__file__)
-        with open(os.path.join(path, "templates/Country211_labels.txt")) as f:
+        path = Path(__file__).parent / "templates" / "Country211_labels.txt"
+        with path.open() as f:
             labels = f.readlines()
 
         return [f"a photo showing the country of {c}." for c in labels]
