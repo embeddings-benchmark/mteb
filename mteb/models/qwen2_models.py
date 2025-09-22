@@ -60,11 +60,12 @@ class Qwen2AudioWrapper(Wrapper):
                     if "array" in item:
                         arr = item["array"]
                         sr = item.get("sampling_rate", None)
-                        tensor = (
-                            torch.from_numpy(arr).float()
-                            if isinstance(arr, np.ndarray)
-                            else arr.float()
-                        )
+                        if isinstance(arr, np.ndarray):
+                            tensor = torch.from_numpy(arr).float()
+                        elif isinstance(arr, list):
+                            tensor = torch.tensor(arr).float()
+                        else:
+                            tensor = arr.float()
                         if sr and sr != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 sr, self.sampling_rate

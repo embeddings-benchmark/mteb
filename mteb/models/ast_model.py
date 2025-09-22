@@ -57,11 +57,12 @@ class ASTWrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            audio = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            audio = torch.tensor(audio).float()
+                        else:
+                            audio = audio.float()
                         # Check for empty audio before resampling
                         if audio.numel() == 0:
                             logger.warning(
