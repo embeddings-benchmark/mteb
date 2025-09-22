@@ -64,13 +64,19 @@ class ASTWrapper(Wrapper):
                         )
                         # Check for empty audio before resampling
                         if audio.numel() == 0:
-                            logger.warning("Empty audio array from dataset - creating null audio marker")
+                            logger.warning(
+                                "Empty audio array from dataset - creating null audio marker"
+                            )
                             # Create special marker audio to maintain alignment
                             sr = item.get("sampling_rate", self.sampling_rate)
                             # Need at least 400 samples for AST feature extraction
-                            min_samples = max(500, int(0.1 * sr))  # At least 500 samples or 100ms
-                            audio = torch.full((min_samples,), -999.0, dtype=torch.float32)
-                        
+                            min_samples = max(
+                                500, int(0.1 * sr)
+                            )  # At least 500 samples or 100ms
+                            audio = torch.full(
+                                (min_samples,), -999.0, dtype=torch.float32
+                            )
+
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
@@ -90,39 +96,47 @@ class ASTWrapper(Wrapper):
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         audio = audio.squeeze()
-        
+
         # Handle empty audio by returning a special marker
         if audio.numel() == 0:
-            logger.warning("Empty audio tensor encountered - will create null embedding")
+            logger.warning(
+                "Empty audio tensor encountered - will create null embedding"
+            )
             # Return a special tensor that we can identify later
             # Need at least 400 samples for AST feature extraction (window size requirement)
-            min_samples = max(500, int(0.1 * self.sampling_rate))  # At least 500 samples or 100ms
-            audio = torch.full((min_samples,), -999.0, dtype=torch.float32)  # Special marker value
-            
+            min_samples = max(
+                500, int(0.1 * self.sampling_rate)
+            )  # At least 500 samples or 100ms
+            audio = torch.full(
+                (min_samples,), -999.0, dtype=torch.float32
+            )  # Special marker value
+
         return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         try:
             waveform, sample_rate = torchaudio.load(path)
         except Exception as e:
-            logger.warning(f"Failed to load audio file {path}: {e} - creating null audio marker")
+            logger.warning(
+                f"Failed to load audio file {path}: {e} - creating null audio marker"
+            )
             # Create special marker audio to maintain alignment
             # Need at least 400 samples for AST feature extraction
             min_samples = max(500, int(0.1 * self.sampling_rate))
             return torch.full((min_samples,), -999.0, dtype=torch.float32)
-            
+
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
         waveform = waveform.squeeze()
-        
+
         # Handle empty audio files
         if waveform.numel() == 0:
             logger.warning(f"Empty audio file: {path} - creating null audio marker")
             # Need at least 400 samples for AST feature extraction
             min_samples = max(500, int(0.1 * self.sampling_rate))
             waveform = torch.full((min_samples,), -999.0, dtype=torch.float32)
-            
+
         return waveform
 
     def get_audio_embeddings(
@@ -148,20 +162,22 @@ class ASTWrapper(Wrapper):
                 # AST processes raw waveforms directly through its feature extractor
                 batch_inputs = []
                 null_indices = []  # Track which samples are null markers
-                
+
                 for idx, audio_tensor in enumerate(batch):
                     audio_np = (
                         audio_tensor.numpy()
                         if isinstance(audio_tensor, torch.Tensor)
                         else audio_tensor
                     )
-                    
+
                     # Check if this is a null marker (all values are -999.0)
                     if len(audio_np) > 0 and np.all(np.abs(audio_np + 999.0) < 1e-6):
                         null_indices.append(idx)
                         # Replace with minimal silence for processing
-                        audio_np = np.zeros_like(audio_np) + 1e-6  # Very quiet but not zero
-                    
+                        audio_np = (
+                            np.zeros_like(audio_np) + 1e-6
+                        )  # Very quiet but not zero
+
                     batch_inputs.append(audio_np)
 
                 inputs = self.feature_extractor(
@@ -176,14 +192,16 @@ class ASTWrapper(Wrapper):
 
                 # AST's pooled output is the [CLS] token embedding
                 embeddings = outputs.pooler_output
-                
+
                 # Replace null marker embeddings with special null embeddings
                 if null_indices:
                     for idx in null_indices:
                         # Create a null embedding (all zeros)
                         embeddings[idx] = torch.zeros_like(embeddings[idx])
-                        logger.debug(f"Created null embedding for empty audio at batch index {idx}")
-                
+                        logger.debug(
+                            f"Created null embedding for empty audio at batch index {idx}"
+                        )
+
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:

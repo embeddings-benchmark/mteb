@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from collections.abc import Iterable
 from functools import partial
 from typing import Any
@@ -248,25 +247,35 @@ class Wav2Vec2AudioWrapper(Wrapper):
                     last_hidden_state * hidden_attention_mask
                 )  # [B, hidden_seq_len, hidden_size]
                 valid_tokens = hidden_attention_mask.sum(dim=1)  # [B, 1]
-                
+
                 # Safer division to avoid NaN
                 sum_embeddings = masked_embeddings.sum(dim=1)  # [B, hidden_size]
-                
+
                 # Check for NaN in the sum and replace with zeros
-                nan_mask = torch.isnan(sum_embeddings).any(dim=1, keepdim=True)  # [B, 1]
-                sum_embeddings = torch.where(nan_mask.expand_as(sum_embeddings), 
-                                           torch.zeros_like(sum_embeddings), 
-                                           sum_embeddings)
-                
-                valid_tokens_safe = torch.where(valid_tokens > 0, valid_tokens, torch.ones_like(valid_tokens))
+                nan_mask = torch.isnan(sum_embeddings).any(
+                    dim=1, keepdim=True
+                )  # [B, 1]
+                sum_embeddings = torch.where(
+                    nan_mask.expand_as(sum_embeddings),
+                    torch.zeros_like(sum_embeddings),
+                    sum_embeddings,
+                )
+
+                valid_tokens_safe = torch.where(
+                    valid_tokens > 0, valid_tokens, torch.ones_like(valid_tokens)
+                )
                 embeddings = sum_embeddings / valid_tokens_safe  # [B, hidden_size]
-                
+
                 # Zero out embeddings where we had no valid tokens
                 zero_mask = (valid_tokens <= 0).expand_as(embeddings)
-                embeddings = torch.where(zero_mask, torch.zeros_like(embeddings), embeddings)
-                
+                embeddings = torch.where(
+                    zero_mask, torch.zeros_like(embeddings), embeddings
+                )
+
                 # Final NaN check and replacement
-                embeddings = torch.where(torch.isnan(embeddings), torch.zeros_like(embeddings), embeddings)
+                embeddings = torch.where(
+                    torch.isnan(embeddings), torch.zeros_like(embeddings), embeddings
+                )
 
                 all_embeddings.append(embeddings.cpu())
 
