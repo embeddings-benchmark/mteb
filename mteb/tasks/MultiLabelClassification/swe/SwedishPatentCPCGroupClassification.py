@@ -18,8 +18,8 @@ class SwedishPatentCPCGroupClassification(AbsTaskMultilabelClassification):
         eval_langs=["swe-Latn"],
         main_score="accuracy",
         dataset={
-            "path": "atheer2104/swedish-patent-cpc-group",
-            "revision": "a898492d9f808ddc63862e49db4fa969ed8497f1",
+            "path": "atheer2104/swedish-patent-cpc-group-new",
+            "revision": "d1980d69e2fcf11e912025ba6bb1e3afe6b9168a",
         },
         date=("1885-01-01", "1972-01-01"),
         domains=["Legal", "Government"],
@@ -47,4 +47,8 @@ class SwedishPatentCPCGroupClassification(AbsTaskMultilabelClassification):
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"], n_samples=8192
+        )
+
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
         )
