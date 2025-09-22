@@ -21,6 +21,7 @@ from mteb.models import (
     blip2_models,
     blip_models,
     bm25,
+    bmretriever_models,
     cadet_models,
     cde_models,
     clip_models,
@@ -75,6 +76,7 @@ from mteb.models import (
     openclip_models,
     opensearch_neural_sparse_models,
     ops_moa_models,
+    ordalietech_solon_embeddings_mini_beta_1_1,
     piccolo_models,
     promptriever_models,
     qodo_models,
@@ -106,6 +108,7 @@ from mteb.models import (
     voyage_models,
     voyage_v,
     xyz_models,
+    youtu_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -119,6 +122,7 @@ model_modules = [
     blip2_models,
     blip_models,
     bm25,
+    bmretriever_models,
     cadet_models,
     clip_models,
     codesage_models,
@@ -164,6 +168,7 @@ model_modules = [
     openclip_models,
     opensearch_neural_sparse_models,
     ops_moa_models,
+    ordalietech_solon_embeddings_mini_beta_1_1,
     piccolo_models,
     gme_v_models,
     promptriever_models,
@@ -205,6 +210,7 @@ model_modules = [
     mcinext_models,
     vi_vn_models,
     codi_models,
+    youtu_models,
 ]
 MODEL_REGISTRY = {}
 
