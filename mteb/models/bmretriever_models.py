@@ -57,25 +57,20 @@ class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
             self.model.tokenizer.padding_side = padding_side
 
 
+# https://huggingface.co/datasets/BMRetriever/biomed_retrieval_dataset
 BMRETRIEVER_TRAINING_DATA = {
-    "MedRAG/pubmed": ["train"],
-    "mteb/raw_arxiv": ["train"],
-    "medalpa/medical_meadow_cord19": ["train"],
-    "MedRAG/textbooks": ["train"],
-    "MedRAG/statpearls": ["train"],
-    "KushT/LitCovid_BioCreative": ["train"],
-    "S2ORC": ["train"],
+    "FEVER": ["train"],
     "MSMARCO": ["train"],
-    "BMRetriever/biomed_retrieval_dataset": ["train"],
+    "NQ": ["train"],
 }
 
 BMRetriever_410M = ModelMeta(
     loader=partial(
         BMRetrieverWrapper,
         model_name="BMRetriever/BMRetriever-410M",
-        instruction_template=instruction_template,
         config_args={"revision": "e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3"},
         model_args={"torch_dtype": torch.float32},
+        instruction_template=instruction_template,
         padding_side="left",
         add_eos_token=True,
         apply_instruction_to_passages=True,
