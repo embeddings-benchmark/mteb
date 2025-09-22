@@ -108,7 +108,6 @@ docs = [
     "mkdocs-exclude>=1.0.2",
     "mkdocs-include-dir-to-nav>=1.2.0",
     "tabulate>=0.9.0",
-    "tabulate>=0.9.0",
 ]
 typing = [
     "mypy>=1.18.1",
