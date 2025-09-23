@@ -123,8 +123,10 @@ This ensure that the implementation does not break if a package is updated.
 As it is an optional dependency, you can't use top-level dependencies, but will instead have to use import inside the wrapper scope:
 
 In the [voyage_models.py](../mteb/models/voyage_models.py) file, we have added the following code:
+
 ```python
-from mteb.requires_package import requires_package
+from mteb._requires_package import requires_package
+
 
 class VoyageWrapper(Wrapper):
     def __init__(...) -> None:

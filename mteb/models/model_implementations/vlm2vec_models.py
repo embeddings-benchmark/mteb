@@ -7,14 +7,14 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.requires_package import (
+from mteb._requires_package import (
     requires_image_dependencies,
     requires_package,
     suggest_package,
 )
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)

@@ -9,9 +9,9 @@ from typing import Any
 import numpy as np
 import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.requires_package import requires_package
 from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 @lru_cache
-def build_registry() -> dict[str, Benchmark]:
+def _build_registry() -> dict[str, Benchmark]:
     import mteb.benchmarks.benchmarks as benchmark_module
 
     benchmark_registry = {
@@ -22,7 +22,7 @@ def build_registry() -> dict[str, Benchmark]:
     return benchmark_registry
 
 
-def get_previous_benchmark_names() -> dict[str, str]:
+def _get_previous_benchmark_names() -> dict[str, str]:
     from .benchmarks import (
         BRIGHT_LONG,
         C_MTEB,
@@ -45,7 +45,7 @@ def get_previous_benchmark_names() -> dict[str, str]:
         MTEB_multilingual_v2,
     )
 
-    PREVIOUS_BENCHMARK_NAMES = {
+    previous_benchmark_names = {
         "MTEB(eng)": MTEB_EN.name,
         "MTEB(eng, classic)": MTEB_ENG_CLASSIC.name,
         "MTEB(rus)": MTEB_MAIN_RU.name,
@@ -66,7 +66,7 @@ def get_previous_benchmark_names() -> dict[str, str]:
         "FaMTEB(fas, beta)": FA_MTEB.name,
         "BRIGHT(long)": BRIGHT_LONG.name,
     }
-    return PREVIOUS_BENCHMARK_NAMES
+    return previous_benchmark_names
 
 
 def get_benchmark(
@@ -77,14 +77,14 @@ def get_benchmark(
     Args:
         benchmark_name: The name of the benchmark to retrieve.
     """
-    PREVIOUS_BENCHMARK_NAMES = get_previous_benchmark_names()
-    benchmark_registry = build_registry()
-    if benchmark_name in PREVIOUS_BENCHMARK_NAMES:
+    previous_benchmark_names = _get_previous_benchmark_names()
+    benchmark_registry = _build_registry()
+    if benchmark_name in previous_benchmark_names:
         warnings.warn(
-            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead.",
+            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{previous_benchmark_names[benchmark_name]}' instead.",
             DeprecationWarning,
         )
-        benchmark_name = PREVIOUS_BENCHMARK_NAMES[benchmark_name]
+        benchmark_name = previous_benchmark_names[benchmark_name]
     if benchmark_name not in benchmark_registry:
         close_matches = difflib.get_close_matches(
             benchmark_name, benchmark_registry.keys()
@@ -106,7 +106,7 @@ def get_benchmarks(
         names: A list of benchmark names to retrieve. If None, all benchmarks are returned.
         display_on_leaderboard: If specified, filters benchmarks by whether they are displayed on the leaderboard.
     """
-    benchmark_registry = build_registry()
+    benchmark_registry = _build_registry()
 
     if names is None:
         names = list(benchmark_registry.keys())

@@ -8,11 +8,11 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.model_meta import ModelMeta
-from mteb.requires_package import (
+from mteb._requires_package import (
     requires_image_dependencies,
 )
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)

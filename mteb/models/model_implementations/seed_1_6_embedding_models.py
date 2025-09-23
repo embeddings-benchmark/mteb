@@ -13,12 +13,12 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_meta import ModelMeta
-from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
