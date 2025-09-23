@@ -35,7 +35,7 @@ LICENSES = (  # this list can be extended as needed
         "cc-by-nd-2.1-jp",
         "cc0-1.0",
         "bsd-3-clause",
-        "gemma"
+        "gemma",
         "gpl-3.0",
         "lgpl",
         "lgpl-3.0",
