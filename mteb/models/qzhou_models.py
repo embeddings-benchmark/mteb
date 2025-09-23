@@ -106,14 +106,6 @@ QZhou_Han = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets={
-        **bge_m3_training_data,
-        **bge_chinese_training_data,
-        **bge_full_data,
-        **E5_MISTRAL_TRAINING_DATA,
         **qzhou_han_training_data,
-        # Not in MTEB:
-        # "Shitao/MLDR": ["train"],
-        # "FreedomIntelligence/Huatuo26M-Lite": ["train"],
-        # "infgrad/retrieval_data_llm": ["train"],
     },
 )
