@@ -42,6 +42,13 @@ qzhou_training_data = {
     "TweetSentimentExtractionClassification": ["train"],
 }
 
+qzhou_han_training_data = {
+    "LCQMC": ["train"],
+    "PAWSX": ["train"],
+    "TNews": ["train"],
+    "Waimai": ["train"]
+}
+
 QZhou_Embedding = ModelMeta(
     loader=partial(
         InstructSentenceTransformerWrapper,
@@ -72,6 +79,43 @@ QZhou_Embedding = ModelMeta(
         **bge_full_data,
         **E5_MISTRAL_TRAINING_DATA,
         **qzhou_training_data,
+        # Not in MTEB:
+        # "Shitao/MLDR": ["train"],
+        # "FreedomIntelligence/Huatuo26M-Lite": ["train"],
+        # "infgrad/retrieval_data_llm": ["train"],
+    },
+)
+
+QZhou_Han = ModelMeta(
+    loader=partial(
+        InstructSentenceTransformerWrapper,
+        model_name="Kingsoft-LLM/QZhou-Han",
+        revision="???",
+        instruction_template=instruction_template,
+        apply_instruction_to_passages=False,
+    ),
+    name="Kingsoft-LLM/QZhou-Han",
+    languages=["zho-Hans"],
+    open_weights=True,
+    revision="???",
+    release_date="2025-09-??",
+    n_parameters=???,
+    memory_usage_mb=???,
+    embed_dim=1792,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Kingsoft-LLM/QZhou-Han",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    training_datasets={
+        **bge_m3_training_data,
+        **bge_chinese_training_data,
+        **bge_full_data,
+        **E5_MISTRAL_TRAINING_DATA,
+        **qzhou_han_training_data,
         # Not in MTEB:
         # "Shitao/MLDR": ["train"],
         # "FreedomIntelligence/Huatuo26M-Lite": ["train"],
