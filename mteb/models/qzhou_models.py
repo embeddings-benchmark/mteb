@@ -44,9 +44,7 @@ qzhou_training_data = {
 
 qzhou_han_training_data = {
     "LCQMC": ["train"],
-    "PAWSX": ["train"],
-    "TNews": ["train"],
-    "Waimai": ["train"]
+    "PAWSX": ["train"]
 }
 
 QZhou_Embedding = ModelMeta(
@@ -90,17 +88,17 @@ QZhou_Han = ModelMeta(
     loader=partial(
         InstructSentenceTransformerWrapper,
         model_name="Kingsoft-LLM/QZhou-Han",
-        revision="???",
+        revision="0321ccb126413d1e49c5ce908e802b63d35f18e2",
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
     ),
     name="Kingsoft-LLM/QZhou-Han",
     languages=["zho-Hans"],
     open_weights=True,
-    revision="???",
-    release_date="2025-09-??",
-    n_parameters=???,
-    memory_usage_mb=???,
+    revision="0321ccb126413d1e49c5ce908e802b63d35f18e2",
+    release_date="2025-09-24",
+    n_parameters=7_575_747_328,
+    memory_usage_mb=29431,
     embed_dim=1792,
     license="apache-2.0",
     max_tokens=8192,
