@@ -150,6 +150,9 @@ class PylateSearchEncoder:
         index = indexes.PLAID(
             index_folder=str(self._index_dir),
             index_name=self._index_name,
+            # disable triton kernel for reproducibility
+            # https://github.com/embeddings-benchmark/mteb/pull/3183#issuecomment-3311029707
+            use_triton=False,
             **self.index_kwargs,
         )
 
