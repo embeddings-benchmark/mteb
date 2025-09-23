@@ -16,64 +16,151 @@ from mteb.models.nomic_models import (
 
 GIGA_task_prompts = {
     "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise",
-    "STS22": "Retrieve semantically similar text",
     "RuSTSBenchmarkSTS": "Retrieve semantically similar text",
     "RUParaPhraserSTS": "Retrieve semantically similar text",
-    
     "CEDRClassification": "Дан комментарий, определи выраженную в нем эмоцию (радость, грусть, удивление, страх, гнев или нейтрально)",
     "GeoreviewClassification": "Classify the organization rating based on the reviews",
     "GeoreviewClusteringP2P": "Классифицируй рейтинг организации на основе отзыва",
     "HeadlineClassification": "Классифицируй тему данного новостного заголовка",
     "InappropriatenessClassification": "Классифицируй данный комментарий как токсичный или не токсичный",
     "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text",
-    "MassiveIntentClassification": "Given a user utterance as query, find the user intents",
-    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios",
     "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment",
     "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts",
     "RuSciBenchGRNTIClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации",
     "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts",
     "RuSciBenchOECDClusteringP2P": "Классифицируй категорию научной статьи основываясь на аннотации",
     "SensitiveTopicsClassification": "Классифицируй чувствительную тему по запросу",
-
-    "RuBQRetrieval": {"query": "Given a question, retrieve Wikipedia passages that answer the question", "document": ""},
-    "RuBQReranking": {"query": "Given a question, retrieve Wikipedia passages that answer the question", "document": ""},
-    "RiaNewsRetrieval": {"query": "Given a news title, retrieve relevant news article", "document": ""},
-    "MIRACLReranking": {"query": "Given a question, retrieve Wikipedia passages that answer the question", "document": ""},
-    "MIRACLRetrieval": {"query": "Given a question, retrieve Wikipedia passages that answer the question", "document": ""},
-    
+    "RuBQRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
+    "RuBQReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
+    "RiaNewsRetrieval": {
+        "query": "Given a news title, retrieve relevant news article",
+        "document": "",
+    },
+    "MIRACLReranking": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
+    "MIRACLRetrieval": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
     "ArguAna": "Given a search query, retrieve passages that answer the question",
-
-    "CQADupstackAndroidRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackEnglishRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
+    "CQADupstackAndroidRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackEnglishRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
     "CQADupstackGamingRetrieval": "Given a search query, retrieve passages that answer the question",
-    "CQADupstackGisRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackMathematicaRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackPhysicsRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackProgrammersRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackStatsRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackTexRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
+    "CQADupstackGisRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackMathematicaRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackPhysicsRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackProgrammersRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackStatsRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackTexRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
     "CQADupstackUnixRetrieval": "Given a search query, retrieve passages that answer the question",
-    "CQADupstackWebmastersRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-    "CQADupstackWordpressRetrieval": {"query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question", "document": ""},
-
-    "ClimateFEVER": {"query": "Given a claim about climate change, retrieve documents that support or refute the claim", "document": ""},
-    "ClimateFEVERHardNegatives": {"query": "Given a search query, retrieve passages that answer the question", "document": ""},
-    "DBPedia": {"query": "Given a query, retrieve relevant entity descriptions from DBPedia", "document": ""},
-    "FEVER": {"query": "Given a claim, retrieve documents that support or refute the claim", "document": ""},
-    "FEVERHardNegatives": {"query": "Given a search query, retrieve passages that answer the question", "document": ""},
-    "FiQA2018": {"query": "Given a web search query, retrieve relevant passages that answer the query", "document": ""},
-    "HotpotQA": {"query": "Given a multi-hop question, retrieve documents that can help answer the question", "document": ""},
-    "HotpotQAHardNegatives": {"query": "Given a search query, retrieve passages that answer the question", "document": ""},
-    "MSMARCO": {"query": "Given a web search query, retrieve relevant passages that answer the query", "document": ""},
-    "NFdocument": {"query": "Given a question, retrieve relevant documents that best answer the question", "document": ""},
-    "NQ": {"query": "Given a question, retrieve Wikipedia passages that answer the question", "document": ""},
-    "QuoraRetrieval": {"query": "Given a question, retrieve questions that are semantically equivalent to the given question", "document": ""},
-    "SCIDOCS": {"query": "Given a search query, retrieve passages that answer the question", "document": ""},
-    "SciFact": {"query": "Given a scientific claim, retrieve documents that support or refute the claim", "document": ""},
-    "TRECCOVID": {"query": "Given a search query, retrieve passages that answer the question", "document": ""},
-    "Touche2020": {"query": "Given a question, retrieve detailed and persuasive arguments that answer the question", "document": ""},
-    "Touche2020Retrieval.v3":  {"query": "Given a search query, retrieve passages that answer the question", "document": ""},
-
+    "CQADupstackWebmastersRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "CQADupstackWordpressRetrieval": {
+        "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
+        "document": "",
+    },
+    "ClimateFEVER": {
+        "query": "Given a claim about climate change, retrieve documents that support or refute the claim",
+        "document": "",
+    },
+    "ClimateFEVERHardNegatives": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "",
+    },
+    "DBPedia": {
+        "query": "Given a query, retrieve relevant entity descriptions from DBPedia",
+        "document": "",
+    },
+    "FEVER": {
+        "query": "Given a claim, retrieve documents that support or refute the claim",
+        "document": "",
+    },
+    "FEVERHardNegatives": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "",
+    },
+    "FiQA2018": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "",
+    },
+    "HotpotQA": {
+        "query": "Given a multi-hop question, retrieve documents that can help answer the question",
+        "document": "",
+    },
+    "HotpotQAHardNegatives": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "",
+    },
+    "MSMARCO": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "",
+    },
+    "NFdocument": {
+        "query": "Given a question, retrieve relevant documents that best answer the question",
+        "document": "",
+    },
+    "NQ": {
+        "query": "Given a question, retrieve Wikipedia passages that answer the question",
+        "document": "",
+    },
+    "QuoraRetrieval": {
+        "query": "Given a question, retrieve questions that are semantically equivalent to the given question",
+        "document": "",
+    },
+    "SCIDOCS": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "",
+    },
+    "SciFact": {
+        "query": "Given a scientific claim, retrieve documents that support or refute the claim",
+        "document": "",
+    },
+    "TRECCOVID": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "",
+    },
+    "Touche2020": {
+        "query": "Given a question, retrieve detailed and persuasive arguments that answer the question",
+        "document": "",
+    },
+    "Touche2020Retrieval.v3": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "",
+    },
     "BIOSSES": "Retrieve semantically similar text",
     "SICK-R": "Retrieve semantically similar text",
     "STS12": "Retrieve semantically similar text",
@@ -87,7 +174,6 @@ GIGA_task_prompts = {
     "STSBenchmark": "Retrieve semantically similar text",
     "SummEval": "Given a news summary, retrieve other semantically similar summaries",
     "SummEvalSummarization.v2": "Given a news summary, retrieve other semantically similar summaries",
-
     "AmazonCounterfactualClassification": "Classify a given Amazon customer review text as either counterfactual or not-counterfactual",
     "AmazonPolarityClassification": "Classify Amazon reviews into positive or negative sentiment",
     "AmazonReviewsClassification": "Classify the given Amazon review into its appropriate rating category",
@@ -103,31 +189,29 @@ GIGA_task_prompts = {
     "ArxivClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
     "ArxivClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
     "ArXivHierarchicalClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
-	"ArXivHierarchicalClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
+    "ArXivHierarchicalClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
     "BiorxivClusteringP2P": "Identify the main category of Biorxiv papers based on the titles and abstracts",
     "BiorxivClusteringS2S": "Identify the main category of Biorxiv papers based on the titles",
     "BiorxivClusteringP2P.v2": "Identify the main category of Biorxiv papers based on the titles and abstracts",
     "MedrxivClusteringP2P": "Identify the main category of Medrxiv papers based on the titles and abstract",
     "MedrxivClusteringS2S": "Identify the main category of Medrxiv papers based on the titles",
     "MedrxivClusteringP2P.v2": "Identify the main category of Medrxiv papers based on the titles and abstract",
-	"MedrxivClusteringS2S.v2": "Identify the main category of Medrxiv papers based on the titles",
+    "MedrxivClusteringS2S.v2": "Identify the main category of Medrxiv papers based on the titles",
     "RedditClustering": "Identify the topic or theme of Reddit posts based on the titles",
     "RedditClusteringP2P": "Identify the topic or theme of Reddit posts based on the titles and posts",
     "StackExchangeClustering": "Identify the topic or theme of StackExchange posts based on the titles",
     "StackExchangeClusteringP2P": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
     "StackExchangeClustering.v2": "Identify the topic or theme of StackExchange posts based on the titles",
-	"StackExchangeClusteringP2P.v2": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
+    "StackExchangeClusteringP2P.v2": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
     "TwentyNewsgroupsClustering": "Identify the topic or theme of the given news articles",
     "TwentyNewsgroupsClustering.v2": "Identify the topic or theme of the given news articles",
-
     "AskUbuntuDupQuestions": "Retrieve duplicate questions from AskUbuntu forum",
     "MindSmallReranking": "Given a search query, retrieve passages that answer the question",
     "SciDocsRR": "Given a title of a scientific paper, retrieve the titles of other relevant papers",
     "StackOverflowDupQuestions": "Retrieve duplicate questions from StackOverflow forum",
-
     "SprintDuplicateQuestions": "Retrieve duplicate questions from Sprint forum",
     "TwitterSemEval2015": "Retrieve tweets that are semantically similar to the given tweet",
-    "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet"
+    "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet",
 }
 
 rubert_tiny = ModelMeta(
