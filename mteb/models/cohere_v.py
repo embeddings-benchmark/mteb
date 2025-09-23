@@ -5,7 +5,7 @@ import io
 import os
 import time
 from functools import partial
-from typing import Any
+from typing import Any, Literal, get_args
 
 import torch
 from PIL import Image
@@ -155,6 +155,13 @@ all_languages = [
     "zul-Latn",
 ]
 
+EMBEDDING_TYPE = Literal[
+    "float",
+    "int8",
+    "uint8",
+    "binary",
+]
+
 
 def cohere_v_loader(**kwargs):
     model_name = kwargs.get("model_name", "Cohere")
@@ -167,7 +174,7 @@ def cohere_v_loader(**kwargs):
         def __init__(
             self,
             model_name: str,
-            embedding_type: str = "float",
+            embedding_type: EMBEDDING_TYPE = "float",
             output_dimension: int | None = None,
             **kwargs: Any,
         ):
@@ -181,6 +188,7 @@ def cohere_v_loader(**kwargs):
             from torchvision import transforms
 
             self.model_name = model_name
+            assert embedding_type in get_args(EMBEDDING_TYPE)
             self.embedding_type = embedding_type
             self.output_dimension = output_dimension
             api_key = os.getenv("COHERE_API_KEY")
@@ -222,8 +230,9 @@ def cohere_v_loader(**kwargs):
                 elif self.embedding_type == "binary":
                     embeddings = response.embeddings.binary
                 else:
-                    # Fallback for unknown types
-                    embeddings = response.embeddings.float
+                    raise ValueError(
+                        f"Embedding type {self.embedding_type} not allowed"
+                    )
                 all_text_embeddings.append(torch.tensor(embeddings))
 
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -282,8 +291,9 @@ def cohere_v_loader(**kwargs):
                         elif self.embedding_type == "binary":
                             embeddings = response.embeddings.binary
                         else:
-                            # Fallback for unknown types
-                            embeddings = response.embeddings.float
+                            raise ValueError(
+                                f"Embedding type {self.embedding_type} not allowed"
+                            )
                         all_image_embeddings.append(torch.tensor(embeddings))
                         time.sleep(1.5)
             else:
@@ -454,7 +464,7 @@ cohere_embed_v4_multimodal = ModelMeta(
 
 cohere_embed_v4_multimodal_binary = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-v4.0", embedding_type="binary"),
-    name="Cohere/Cohere-embed-v4.0 (embedding_type=binary)",
+    name="Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",
@@ -477,7 +487,7 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
 
 cohere_embed_v4_multimodal_int8 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-v4.0", embedding_type="int8"),
-    name="Cohere/Cohere-embed-v4.0 (embedding_type=int8)",
+    name="Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
     languages=all_languages,
     revision="1",
     release_date="2024-12-01",

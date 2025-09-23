@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
+from typing import Any, Literal, get_args
 
 import numpy as np
 import torch
@@ -123,6 +123,13 @@ supported_languages = [
     "zul-Latn",
 ]
 
+EMBEDDING_TYPE = Literal[
+    "float",
+    "int8",
+    "uint8",
+    "binary",
+]
+
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
 class CohereTextEmbeddingModel(Wrapper):
@@ -131,13 +138,14 @@ class CohereTextEmbeddingModel(Wrapper):
         model_name: str,
         sep: str = " ",
         model_prompts: dict[str, str] | None = None,
-        embedding_type: str = "float",
+        embedding_type: EMBEDDING_TYPE = "float",
         output_dimension: int | None = None,
         **kwargs,
     ) -> None:
         self.model_name = model_name
         self.sep = sep
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+        assert embedding_type in get_args(EMBEDDING_TYPE)
         self.embedding_type = embedding_type
         self.output_dimension = output_dimension
 
@@ -191,8 +199,7 @@ class CohereTextEmbeddingModel(Wrapper):
             elif self.embedding_type == "binary":
                 embeddings = response.embeddings.binary
             else:
-                # Fallback for unknown types
-                embeddings = response.embeddings.float
+                raise ValueError(f"Embedding type {self.embedding_type} not allowed")
             all_embeddings.extend(torch.tensor(embeddings).numpy())
 
         embeddings_array = np.array(all_embeddings)
