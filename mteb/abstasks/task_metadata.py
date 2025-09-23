@@ -20,7 +20,7 @@ from pydantic import (
 from typing_extensions import Literal, Required, TypedDict
 
 import mteb
-from mteb._languages import check_language_code
+from mteb.languages import check_language_code
 from mteb.types import (
     HFSubset,
     ISOLanguageScript,

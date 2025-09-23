@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from mteb._cli import main
+from mteb.cli import main
 
 main()

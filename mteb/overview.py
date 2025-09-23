@@ -10,16 +10,16 @@ from typing import Any
 
 import pandas as pd
 
-from mteb._languages import (
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-)
 from mteb.abstasks import (
     AbsTask,
     AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
+from mteb.languages import (
+    ISO_TO_LANGUAGE,
+    ISO_TO_SCRIPT,
+)
 from mteb.tasks import *  # import all tasks
 from mteb.types import Modalities
 

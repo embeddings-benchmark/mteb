@@ -14,8 +14,8 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from mteb._languages import check_language_code
 from mteb.abstasks import AbsTask
+from mteb.languages import check_language_code
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
 from .models_protocols import Encoder, MTEBModels

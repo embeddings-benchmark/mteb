@@ -225,7 +225,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.set_defaults(func=run)
 
 
-def _create_meta(args: argparse.Namespace) -> None:
+def create_meta(args: argparse.Namespace) -> None:
     results_folder = Path(args.results_folder)
     output_path = Path(args.output_path)
     overwrite = args.overwrite
@@ -272,7 +272,7 @@ def _add_create_meta_parser(subparsers) -> None:
         help="Merge results with existing README.md",
     )
 
-    parser.set_defaults(func=_create_meta)
+    parser.set_defaults(func=create_meta)
 
 
 def build_cli() -> argparse.ArgumentParser:

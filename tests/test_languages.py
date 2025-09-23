@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from attr import dataclass
 
-from mteb._languages import LanguageScripts
+from mteb.languages import LanguageScripts
 
 
 @dataclass

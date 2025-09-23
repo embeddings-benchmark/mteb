@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb._cli.build_cli import _create_meta, run
+from mteb.cli.build_cli import create_meta, run
 
 
 def test_available_tasks():
@@ -94,7 +94,7 @@ def test_create_meta():
         from_existing=None,
     )
 
-    _create_meta(args)
+    create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 
@@ -148,7 +148,7 @@ def test_create_meta_from_existing(
         from_existing=str(existing_readme),
     )
 
-    _create_meta(args)
+    create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 

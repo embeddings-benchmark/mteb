@@ -15,8 +15,8 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb._languages import LanguageScripts
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import (
     HFSubset,

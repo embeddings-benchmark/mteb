@@ -7,8 +7,8 @@ from typing import get_args
 import polars as pl
 
 import mteb
-from mteb._languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE, PROGRAMMING_LANGS
 from mteb.abstasks.task_metadata import TaskType
+from mteb.languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE, PROGRAMMING_LANGS
 
 
 def author_from_bibtex(bibtex: str | None) -> str:

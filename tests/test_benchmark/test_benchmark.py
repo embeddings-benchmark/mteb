@@ -13,9 +13,9 @@ from torch.utils.data import DataLoader
 
 import mteb
 import mteb.overview
-from mteb._cli.generate_readme import generate_readme
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.cli.generate_readme import generate_readme
 from mteb.MTEB import logger
 from mteb.types import Array, BatchedInput, PromptType
 
