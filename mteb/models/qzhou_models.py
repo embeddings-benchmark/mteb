@@ -42,10 +42,7 @@ qzhou_training_data = {
     "TweetSentimentExtractionClassification": ["train"],
 }
 
-qzhou_han_training_data = {
-    "LCQMC": ["train"],
-    "PAWSX": ["train"]
-}
+qzhou_han_training_data = {"LCQMC": ["train"], "PAWSX": ["train"]}
 
 QZhou_Embedding = ModelMeta(
     loader=partial(
