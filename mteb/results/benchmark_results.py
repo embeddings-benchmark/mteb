@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from pathlib import Path
 from typing import Any, Callable, Literal
 
@@ -350,10 +350,10 @@ class BenchmarkResults(BaseModel):
             format=format,
         )
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[ModelResult]:
         return iter(self.model_results)
 
-    def __getitem__(self, index) -> ModelResult:
+    def __getitem__(self, index: int) -> ModelResult:
         return self.model_results[index]
 
     def to_dict(self) -> dict:

@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 import numpy as np
+from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
@@ -747,3 +748,33 @@ class TaskResult(BaseModel):
                     missing_splits[splits] = missing_subsets
 
         return missing_splits
+
+    def get_hf_eval_results(self) -> list[EvalResult]:
+        """Create HF evaluation results objects from TaskResult objects.
+
+        Returns:
+            List of EvalResult objects for each split and subset.
+        """
+        task_metadata = self.task.metadata
+        task_type = task_metadata._hf_task_type()[0]
+        results = []
+        for split, scores in self.scores.items():
+            for subset_results in scores:
+                subset = subset_results.get("hf_subset", "default")
+                results.append(
+                    EvalResult(
+                        task_type=task_type,
+                        task_name=task_metadata.type,
+                        dataset_type=task_metadata.dataset["path"],
+                        dataset_name=f"{task_metadata.name} ({subset})",
+                        dataset_config=subset,
+                        dataset_split=split,
+                        dataset_revision=task_metadata.dataset["revision"],
+                        metric_type=task_metadata.main_score,
+                        metric_name=task_metadata.main_score,
+                        metric_value=subset_results["main_score"],
+                        source_name="MTEB",
+                        source_url="https://github.com/embeddings-benchmark/mteb/",
+                    )
+                )
+        return results

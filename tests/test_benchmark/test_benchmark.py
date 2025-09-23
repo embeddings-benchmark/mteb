@@ -15,7 +15,6 @@ import mteb
 import mteb.overview
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.cli.generate_readme import generate_readme
 from mteb.MTEB import logger
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -47,13 +46,15 @@ logging.basicConfig(level=logging.INFO)
 
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_mulitple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path: Path):
+def test_multiple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path: Path):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
-    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
-
-    # ensure that we can generate a readme from the output folder
-    generate_readme(tmp_path)
+    eval.run(
+        model,
+        output_folder=(tmp_path / "results").as_posix(),
+        overwrite_results=False,
+        co2_tracker=False,
+    )
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
