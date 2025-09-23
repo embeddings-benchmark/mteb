@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -16,7 +18,7 @@ _CITATION = """
 
 
 class LIMITRetrieval(AbsTaskRetrieval):
-    k_values: list[int] = [1, 2, 3, 5, 10, 20, 100, 1000]
+    k_values: Sequence[int] = (1, 2, 3, 5, 10, 20, 100, 1000)
     metadata = TaskMetadata(
         name="LIMITRetrieval",
         description="A simple retrieval task designed to test all combinations of top-2 documents. This version includes all 50k docs.",
@@ -43,7 +45,7 @@ class LIMITRetrieval(AbsTaskRetrieval):
 
 
 class LIMITSmallRetrieval(AbsTaskRetrieval):
-    k_values: list[int] = [1, 2, 3, 5, 10, 20, 100, 1000]
+    k_values: Sequence[int] = (1, 2, 3, 5, 10, 20, 100, 1000)
     metadata = TaskMetadata(
         name="LIMITSmallRetrieval",
         description="A simple retrieval task designed to test all combinations of top-2 documents. This version only includes the 46 documents that are relevant to the 1000 queries.",

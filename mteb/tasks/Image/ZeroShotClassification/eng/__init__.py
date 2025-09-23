@@ -24,10 +24,10 @@ from .SUN397 import SUN397ZeroShotClassification
 from .UCF101 import UCF101ZeroShotClassification
 
 __all__ = [
-    "BirdsnapZeroShotClassification",
-    "CIFAR100ZeroShotClassification",
-    "CIFAR10ZeroShotClassification",
     "CLEVR",
+    "BirdsnapZeroShotClassification",
+    "CIFAR10ZeroShotClassification",
+    "CIFAR100ZeroShotClassification",
     "CLEVRCount",
     "Caltech101ZeroShotClassification",
     "Country211ZeroShotClassification",
