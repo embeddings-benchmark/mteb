@@ -242,7 +242,7 @@ google_gemini_embedding_001 = ModelMeta(
 
 embedding_gemma_300m = ModelMeta(
     loader=partial(
-        gemma_embedding_loader,
+        GoogleTextEmbeddingModel,
         model_name="google/embeddinggemma-300m",
         revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
     ),
