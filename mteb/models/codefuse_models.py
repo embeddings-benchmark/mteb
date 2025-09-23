@@ -6,8 +6,7 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
-
-training_datasets={
+training_datasets = {
     "MSMARCO": ["train"],
     "ArguAna": ["train"],
     "SNLI": ["train"],
@@ -16,7 +15,6 @@ training_datasets={
     "PAQ": ["train"],
     "SQuAD": ["train"],
     "StackExchange": ["train"],
-    "MSMARCO": ["train"],
     "NQ": ["train"],
     "HotpotQA": ["train"],
     "FEVER": ["train"],
@@ -69,47 +67,47 @@ training_datasets={
 }
 
 prompts_dict = {
-    'AmazonCounterfactualClassification': "Classify a given Amazon customer review text as either counterfactual or not counterfactual.",
-    'Banking77Classification': "Given an online banking query, find the corresponding intents.",
-    'ImdbClassification': "Classify the sentiment expressed in the given movie review text from the IMDB dataset.",
-    'MTOPDomainClassification': "Classify the intent domain of the given utterance in task-oriented conversation.",
-    'MassiveIntentClassification': "Given a user utterance as query, find the user intents.",
-    'MassiveScenarioClassification': "Given a user utterance as query, find the user scenarios.",
-    'ToxicConversationsClassification': "Classify the given comments as either toxic or not toxic.",
-    'TweetSentimentExtractionClassification': "Classify the sentiment of a given tweet as either positive, negative, or neutral",
-    'ArXivHierarchicalClusteringP2P': "Identify the main and secondary category of arXiv papers based on the titles and abstracts.",
-    'ArXivHierarchicalClusteringS2S': "Identify the main and secondary category of arXiv papers based on the titles.",
-    'BiorxivClusteringP2P.v2': "Identify the main category of bioRxiv papers based on the titles and abstracts.",
-    'MedrxivClusteringP2P.v2': "Identify the main category of medRxiv papers based on the titles and abstracts.",
-    'MedrxivClusteringS2S.v2': "Identify the main category of medRxiv papers based on the titles.",
-    'StackExchangeClustering.v2': "Identify the topic or theme of StackExchange posts based on the titles.",
-    'StackExchangeClusteringP2P.v2': "Identify the topic or theme of StackExchange posts based on the given paragraphs.",
-    'TwentyNewsgroupsClustering.v2': "Identify the topic or theme of the given news articles.",
-    'SprintDuplicateQuestions': "Retrieve duplicate questions from Sprint forum.",
-    'TwitterSemEval2015': "Retrieve tweets that are semantically similar to the given tweet.",
-    'TwitterURLCorpus': "Retrieve tweets that are semantically similar to the given tweet.",
-    'AskUbuntuDupQuestions': "Retrieve duplicate questions from AskUbuntu forum.",
-    'MindSmallReranking': "Retrieve relevant news articles based on user browsing history.",
-    'ArguAna': "Given a claim, find documents that refute the claim.",
-    'CQADupstackGamingRetrieval': "Given a question, retrieve questions that are semantically equivalent.",
-    'CQADupstackUnixRetrieval': "Given a question, retrieve questions that are semantically equivalent.",
-    'ClimateFEVERHardNegatives': "Given a claim about climate change, retrieve documents that support or refute the claim.",
-    'FEVERHardNegatives': "Given a claim, retrieve documents that support or refute the claim.",
-    'FiQA2018': "Given a financial question, retrieve passages that answer the question.",
-    'HotpotQAHardNegatives': "Given a multi-hop question, retrieve passages that answer the question.",
-    'SCIDOCS': "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper.",
-    'TRECCOVID': "Given a query on COVID-19, retrieve documents that answer the query.",
-    'Touche2020Retrieval.v3': "Given a question, retrieve passages that answer the question.",
-    'BIOSSES': "Retrieve semantically similar text.",
-    'SICK-R': "Retrieve semantically similar text.",
-    'STS12': "Retrieve semantically similar text.",
-    'STS13': "Retrieve semantically similar text.",
-    'STS14': "Retrieve semantically similar text.",
-    'STS15': "Retrieve semantically similar text.",
-    'STS17': "Retrieve semantically similar text.",
-    'STS22.v2': "Retrieve semantically similar text.",
-    'STSBenchmark': "Retrieve semantically similar text.",
-    'SummEvalSummarization.v2': "Given a news summary, retrieve other semantically similar summaries.",
+    "AmazonCounterfactualClassification": "Classify a given Amazon customer review text as either counterfactual or not counterfactual.",
+    "Banking77Classification": "Given an online banking query, find the corresponding intents.",
+    "ImdbClassification": "Classify the sentiment expressed in the given movie review text from the IMDB dataset.",
+    "MTOPDomainClassification": "Classify the intent domain of the given utterance in task-oriented conversation.",
+    "MassiveIntentClassification": "Given a user utterance as query, find the user intents.",
+    "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios.",
+    "ToxicConversationsClassification": "Classify the given comments as either toxic or not toxic.",
+    "TweetSentimentExtractionClassification": "Classify the sentiment of a given tweet as either positive, negative, or neutral",
+    "ArXivHierarchicalClusteringP2P": "Identify the main and secondary category of arXiv papers based on the titles and abstracts.",
+    "ArXivHierarchicalClusteringS2S": "Identify the main and secondary category of arXiv papers based on the titles.",
+    "BiorxivClusteringP2P.v2": "Identify the main category of bioRxiv papers based on the titles and abstracts.",
+    "MedrxivClusteringP2P.v2": "Identify the main category of medRxiv papers based on the titles and abstracts.",
+    "MedrxivClusteringS2S.v2": "Identify the main category of medRxiv papers based on the titles.",
+    "StackExchangeClustering.v2": "Identify the topic or theme of StackExchange posts based on the titles.",
+    "StackExchangeClusteringP2P.v2": "Identify the topic or theme of StackExchange posts based on the given paragraphs.",
+    "TwentyNewsgroupsClustering.v2": "Identify the topic or theme of the given news articles.",
+    "SprintDuplicateQuestions": "Retrieve duplicate questions from Sprint forum.",
+    "TwitterSemEval2015": "Retrieve tweets that are semantically similar to the given tweet.",
+    "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet.",
+    "AskUbuntuDupQuestions": "Retrieve duplicate questions from AskUbuntu forum.",
+    "MindSmallReranking": "Retrieve relevant news articles based on user browsing history.",
+    "ArguAna": "Given a claim, find documents that refute the claim.",
+    "CQADupstackGamingRetrieval": "Given a question, retrieve questions that are semantically equivalent.",
+    "CQADupstackUnixRetrieval": "Given a question, retrieve questions that are semantically equivalent.",
+    "ClimateFEVERHardNegatives": "Given a claim about climate change, retrieve documents that support or refute the claim.",
+    "FEVERHardNegatives": "Given a claim, retrieve documents that support or refute the claim.",
+    "FiQA2018": "Given a financial question, retrieve passages that answer the question.",
+    "HotpotQAHardNegatives": "Given a multi-hop question, retrieve passages that answer the question.",
+    "SCIDOCS": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper.",
+    "TRECCOVID": "Given a query on COVID-19, retrieve documents that answer the query.",
+    "Touche2020Retrieval.v3": "Given a question, retrieve passages that answer the question.",
+    "BIOSSES": "Retrieve semantically similar text.",
+    "SICK-R": "Retrieve semantically similar text.",
+    "STS12": "Retrieve semantically similar text.",
+    "STS13": "Retrieve semantically similar text.",
+    "STS14": "Retrieve semantically similar text.",
+    "STS15": "Retrieve semantically similar text.",
+    "STS17": "Retrieve semantically similar text.",
+    "STS22.v2": "Retrieve semantically similar text.",
+    "STSBenchmark": "Retrieve semantically similar text.",
+    "SummEvalSummarization.v2": "Given a news summary, retrieve other semantically similar summaries.",
 }
 
 
@@ -124,7 +122,6 @@ def instruction_template(
         else:
             instruction = instruction[prompt_type]
     return f"Instruct: {instruction}\nQuery: "
-
 
 
 F2LLM_0B6 = ModelMeta(
