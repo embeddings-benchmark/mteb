@@ -41,7 +41,7 @@ MODEL_PROMPTS = {
     "Clustering": "CLUSTERING",
     "STS": "SEMANTIC_SIMILARITY",
     PromptType.query.value: "RETRIEVAL_QUERY",
-    PromptType.document.value: "RETRIEVAL_DOCUMENT",
+    PromptType.passage.value: "RETRIEVAL_DOCUMENT",
 }
 
 GECKO_TRAINING_DATA = {
