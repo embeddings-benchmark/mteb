@@ -4,18 +4,8 @@ from functools import partial
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
-
-
-from collections.abc import Sequence
-from typing import Any, Callable
-
-import numpy as np
-import torch
-from sentence_transformers import SentenceTransformer
-
-from mteb.encoder_interface import PromptType
-from mteb.models.wrapper import Wrapper
 
 training_datasets={
     "MSMARCO": ["train"],
@@ -78,7 +68,7 @@ training_datasets={
     "TwentyNewsgroupsClustering": ["train"],
 }
 
-INSTRUCTIONS = {
+prompts_dict = {
     'AmazonCounterfactualClassification': "Classify a given Amazon customer review text as either counterfactual or not counterfactual.",
     'Banking77Classification': "Given an online banking query, find the corresponding intents.",
     'ImdbClassification': "Classify the sentiment expressed in the given movie review text from the IMDB dataset.",
@@ -122,100 +112,6 @@ INSTRUCTIONS = {
     'SummEvalSummarization.v2': "Given a news summary, retrieve other semantically similar summaries.",
 }
 
-def apply_instruct(instruct):
-    return f"Instruct: {instruct}\nQuery: "
-
-
-class InstructSentenceTransformerWrapper(Wrapper):
-    def __init__(
-        self,
-        model_name: str,
-        revision: str,
-        instruction_template: str | Callable[[str], str] | None = None,
-        max_seq_length: int | None = None,
-        apply_instruction_to_passages: bool = True,
-        padding_side: str | None = None,
-        add_eos_token: bool = False,
-        prompts_dict: dict[str, str] | None = None,
-        **kwargs: Any,
-    ):
-        """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
-        Applied for models like NV-Embed, gte-Qwen, e5-mistral, etc.
-
-        Arguments:
-            model_name: Model name of the sentence transformers model.
-            revision: Revision of the sentence transformers model.
-            instruction_template: Model template. Should contain the string '{instruction}'.
-            max_seq_length: Maximum sequence length. If None, the maximum sequence length will be read from the model config.
-            apply_instruction_to_passages: Whether to apply the instruction template to the passages.
-            padding_side: Padding side. If None, the padding side will be read from the model config.
-            add_eos_token: Whether to add the eos token to each input example.
-            prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
-            **kwargs: Kwargs for Sentence Transformer model.
-        """
-        if (
-            isinstance(instruction_template, str)
-            and "{instruction}" not in instruction_template
-        ):
-            raise ValueError(
-                "Instruction template must contain the string '{instruction}'."
-            )
-        if instruction_template is None:
-            print(
-                "No instruction template provided. Instructions will be used as-is."
-            )
-
-        self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.instruction_template = instruction_template
-        self.apply_instruction_to_passages = apply_instruction_to_passages
-        self.add_eos_token = add_eos_token
-        self.prompts_dict = prompts_dict
-        if max_seq_length is not None:
-            self.model.max_seq_length = max_seq_length
-        if padding_side is not None:
-            self.model.tokenizer.padding_side = padding_side
-
-    def encode(
-        self,
-        sentences: Sequence[str],
-        *,
-        task_name: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        if self.add_eos_token:
-            sentences = [
-                example + self.model.tokenizer.eos_token for example in sentences
-            ]
-
-        instruction = apply_instruct(INSTRUCTIONS[task_name]) if task_name in INSTRUCTIONS else self.get_task_instruction(task_name, prompt_type, self.prompts_dict)
-
-        # to passage prompts won't be applied to passages
-        if (
-            not self.apply_instruction_to_passages
-            and prompt_type == PromptType.document
-        ):
-            instruction = None
-            print(
-                f"No instruction used, because prompt type = {prompt_type.document}"
-            )
-
-        if instruction:
-            print(f"Using instruction: '{instruction}' for task: '{task_name}'")
-
-        embeddings = self.model.encode(
-            sentences,
-            prompt=instruction,
-            **kwargs,
-        )
-
-        if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
-        return embeddings
-
-
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -237,6 +133,7 @@ F2LLM_0B6 = ModelMeta(
         model_name="codefuse-ai/F2LLM-0.6B",
         revision="36416618b83d4bd84a8ca30c2ee01ed518f9f2e7",
         instruction_template=instruction_template,
+        prompts_dict=prompts_dict,
         apply_instruction_to_passages=False,
         add_eos_token=True,
         max_seq_length=8192,
@@ -255,7 +152,7 @@ F2LLM_0B6 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,
+    public_training_code="https://github.com/codefuse-ai/F2LLM",
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
 )
@@ -266,6 +163,7 @@ F2LLM_1B7 = ModelMeta(
         model_name="codefuse-ai/F2LLM-1.7B",
         revision="fdce0e09655f42cea26f7f66f5a70cd4507ea45c",
         instruction_template=instruction_template,
+        prompts_dict=prompts_dict,
         apply_instruction_to_passages=False,
         add_eos_token=True,
         max_seq_length=8192,
@@ -284,7 +182,7 @@ F2LLM_1B7 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,
+    public_training_code="https://github.com/codefuse-ai/F2LLM",
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
 )
@@ -295,6 +193,7 @@ F2LLM_4B = ModelMeta(
         model_name="codefuse-ai/F2LLM-4B",
         revision="9fe95901ed2b6b59dd7673d6e93c9d76766a1e25",
         instruction_template=instruction_template,
+        prompts_dict=prompts_dict,
         apply_instruction_to_passages=False,
         add_eos_token=True,
         max_seq_length=8192,
@@ -313,7 +212,7 @@ F2LLM_4B = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,
+    public_training_code="https://github.com/codefuse-ai/F2LLM",
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
 )
