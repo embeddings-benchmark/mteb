@@ -9,12 +9,12 @@ from unittest.mock import patch
 import numpy as np
 import pytest
 import torch
-from sentence_transformers import SentenceTransformer
 
 import mteb
 import mteb.overview
 from mteb.create_meta import generate_readme
 from mteb.evaluation.MTEB import logger
+from mteb.models.wrapper import Wrapper
 
 from .mock_models import (
     MockCLIPEncoder,
@@ -113,9 +113,9 @@ def test_prompt_name_passed_to_all_encodes(
             assert prompt_name == _task_name
             return np.zeros((len(sentences), 10))
 
-    class EncoderWithoutInstructions(SentenceTransformer):
+    class EncoderWithoutInstructions(MockSentenceTransformer):
         def encode(self, sentences, **kwargs):
-            assert kwargs["prompt_name"] is None
+            assert kwargs["prompt"] is None
             return super().encode(sentences, **kwargs)
 
     if isinstance(task_name, mteb.AbsTask):
@@ -137,7 +137,7 @@ def test_prompt_name_passed_to_all_encodes(
         overwrite_results=True,
     )
     # Test that the task_name is not passed down to the encoder
-    model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
+    model = EncoderWithoutInstructions()
     assert model.prompts == {}, "The encoder should not have any prompts"
     eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
@@ -302,6 +302,14 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     )
 
 
+@pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-document"])
+def test_prompt_name_split_correctly(task_name: str, tmp_path: Path):
+    """Test that the task name is split correctly into task name and prompt type
+    for tasks with multiple `-` in their names.
+    """
+    Wrapper.validate_task_to_prompt_name({task_name: task_name})
+
+
 @pytest.mark.parametrize(
     "task",
     [
@@ -323,12 +331,12 @@ def test_model_query_passage_prompts_task_type(
     task_name = task.metadata.name if is_task_name else task.metadata.type
 
     def check_prompt(prompt_name, is_query):
-        prompt_type = "query" if is_query else "passage"
+        prompt_type = "query" if is_query else "document"
         assert prompt_name == f"{task_name}-{prompt_type}"
 
     prompt_list = {
         f"{task_name}-query": "query",
-        f"{task_name}-passage": "passage",
+        f"{task_name}-document": "document",
     }
 
     class MockEncoderWithPrompts(mteb.Encoder):

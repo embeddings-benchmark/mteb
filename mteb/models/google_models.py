@@ -5,9 +5,11 @@ from typing import Any
 
 import numpy as np
 import tqdm
+from packaging.version import Version
+from transformers import __version__ as transformers_version
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
@@ -39,7 +41,7 @@ MODEL_PROMPTS = {
     "Clustering": "CLUSTERING",
     "STS": "SEMANTIC_SIMILARITY",
     PromptType.query.value: "RETRIEVAL_QUERY",
-    PromptType.passage.value: "RETRIEVAL_DOCUMENT",
+    PromptType.document.value: "RETRIEVAL_DOCUMENT",
 }
 
 GECKO_TRAINING_DATA = {
@@ -60,9 +62,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
     def _embed(
         self,
@@ -231,11 +231,49 @@ google_gemini_embedding_001 = ModelMeta(
     max_tokens=2048,
     embed_dim=3072,
     license=None,
-    reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
+    reference="https://ai.google.dev/gemini-api/docs/embeddings",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
     training_datasets=GECKO_TRAINING_DATA,
+)
+
+
+def gemma_embedding_loader(model_name: str, revision: str, **kwargs):
+    min_transformers_version = "4.56.0"
+
+    if Version(transformers_version) < Version(min_transformers_version):
+        raise RuntimeError(
+            f"transformers version {transformers_version} is lower than the required "
+            f"version {min_transformers_version} to run `{model_name}`"
+        )
+
+    return sentence_transformers_loader(model_name, revision, **kwargs)
+
+
+embedding_gemma_300m = ModelMeta(
+    loader=partial(
+        gemma_embedding_loader,
+        model_name="google/embeddinggemma-300m",
+        revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
+    ),
+    name="google/embeddinggemma-300m",
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    open_weights=True,
+    revision="64614b0b8b64f0c6c1e52b07e4e9a4e8fe4d2da2",
+    release_date="2025-09-04",
+    n_parameters=307_581_696,
+    embed_dim=768,
+    max_tokens=2048,
+    license="gemma",
+    reference="https://ai.google.dev/gemma/docs/embeddinggemma/model_card",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+    similarity_fn_name="cosine",
+    memory_usage_mb=578,
 )

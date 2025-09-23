@@ -231,7 +231,7 @@ user_base_ru = ModelMeta(
         sentence_transformers_loader,
         model_name="deepvk/USER-base",
         revision="436a489a2087d61aa670b3496a9915f84e46c861",
-        model_prompts={"query": "query: ", "passage": "passage: "},
+        model_prompts={"query": "query: ", "document": "passage: "},
     ),
     name="deepvk/USER-base",
     languages=["rus-Cyrl"],
@@ -506,11 +506,11 @@ rosberta_prompts = {
     "PairClassification": "classification: ",
     "Reranking": "classification: ",
     f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    f"Reranking-{PromptType.document.value}": "search_document: ",
     "STS": "classification: ",
     "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
     # Override some prompts for ruMTEB tasks
     "HeadlineClassification": "clustering: ",
     "InappropriatenessClassification": "clustering: ",
@@ -572,11 +572,11 @@ frida_prompts = {
     "PairClassification": "paraphrase: ",
     "Reranking": "paraphrase: ",
     f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    f"Reranking-{PromptType.document.value}": "search_document: ",
     "STS": "paraphrase: ",
     "Summarization": "categorize: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
     # Override some prompts for ruMTEB tasks
     "CEDRClassification": "categorize_sentiment: ",
     "GeoreviewClassification": "categorize_sentiment: ",
@@ -705,7 +705,7 @@ frida = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
         model_name="ai-sage/Giga-Embeddings-instruct",
         revision="f9e86fc90402013ed9d1dd6078946680902d94fc",
@@ -713,6 +713,8 @@ giga_embeddings = ModelMeta(
         instruction_template="Instruct: {instruct}\nQuery: ",
         max_seq_length=4096,
         apply_instruction_to_passages=False,
+        prompts_dict=GIGA_task_prompts,
+        trust_remote_code=True,
         model_kwargs={
             "torch_dtype": torch.bfloat16,
         },
@@ -825,11 +827,11 @@ user2_prompts = {
     "PairClassification": "classification: ",
     "Reranking": "classification: ",
     f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    f"Reranking-{PromptType.document.value}": "search_document: ",
     "STS": "classification: ",
     "Summarization": "clustering: ",
     PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
+    PromptType.document.value: "search_document: ",
 }
 user2_small = ModelMeta(
     loader=partial(

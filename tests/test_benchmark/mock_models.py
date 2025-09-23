@@ -20,11 +20,14 @@ from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
 class MockNumpyEncoder(mteb.Encoder):
-    def __init__(self):
-        pass
+    def __init__(self, seed: int | None = None):
+        if seed is not None:
+            self.rng = np.random.default_rng(seed)
+        else:
+            self.rng = np.random.default_rng()
 
     def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return np.random.rand(len(sentences), 10)
+        return self.rng.random((len(sentences), 10))
 
 
 class MockTorchEncoder(mteb.Encoder):
@@ -133,6 +136,8 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # by default, in SentenceTransformer, prompts are `{"query": "", "document": ""}`
+        self.prompts = {}
 
     def encode(
         self,
@@ -166,7 +171,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
             model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
             revision: The revision of the model to use.
             model_prompts: A dictionary mapping task names to prompt names.
-                First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
+                First priority is given to the composed prompt of task name + prompt type (query or document), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
