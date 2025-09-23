@@ -175,6 +175,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         if idxs is None:
             idxs = np.arange(len(y))
         self.np_rng.shuffle(idxs)
+        idxs = idxs.tolist()
         label_counter = defaultdict(int)
         for i in idxs:
             if any((label_counter[label] < samples_per_label) for label in y[i]):

@@ -46,6 +46,7 @@ def test_model_similar_tasks(training_datasets):
             "NanoTouche2020Retrieval",
             "Touche2020",
             "Touche2020-Fa",
+            "Touche2020-Fa.v2",
             "Touche2020-NL",
             "Touche2020-VN",
             "Touche2020-PL",
