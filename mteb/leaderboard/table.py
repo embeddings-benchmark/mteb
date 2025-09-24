@@ -349,7 +349,7 @@ def create_tables(
 def _prepare_data(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[pd.DataFrame, list[str]] | None:
-    """Prepare raw dataframe and filter invalid models.
+    """Prepare raw dataframe and filter models without any scores.
 
     Returns:
         per_task dataframe, models_to_remove
