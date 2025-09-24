@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 def _load_data(
     path: str,
     splits: list[str],
-    revision: str = None,
+    revision: str | None = None,
     subtask: str = "Count",
 ):
     corpus = {}

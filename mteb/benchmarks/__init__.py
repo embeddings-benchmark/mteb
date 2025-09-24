@@ -8,7 +8,7 @@ from mteb.benchmarks.get_benchmark import (
 
 __all__ = [
     "Benchmark",
-    "get_benchmarks",
-    "get_benchmark",
     "Benchmark",
+    "get_benchmark",
+    "get_benchmarks",
 ]

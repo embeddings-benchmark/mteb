@@ -7,8 +7,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AROVisualAttribution(AbsTaskImageTextPairClassification):
-    images_column_names = ["image"]
-    texts_column_names = ["true_caption", "false_caption"]
+    images_column_names = ("image",)
+    texts_column_names = ("true_caption", "false_caption")
 
     metadata = TaskMetadata(
         name="AROVisualAttribution",

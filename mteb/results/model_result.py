@@ -197,7 +197,7 @@ class ModelResult(BaseModel):
                             getter=getter,  # type: ignore
                             scripts=scripts,
                         )
-                    entry = dict(  # noqa
+                    entry = dict(
                         model_name=self.model_name,
                         model_revision=self.model_revision,
                         task_name=task_res.task_name,

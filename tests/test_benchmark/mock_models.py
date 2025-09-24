@@ -74,7 +74,7 @@ class MockNumpyEncoder(AbsMockEncoder):
     ) -> Array:
         n = 0
         for batch in inputs:
-            batch_column = list(batch.keys())[0]
+            batch_column = next(iter(batch.keys()))
             n += len(batch[batch_column])
         return np.random.rand(n, 10)  # type: ignore # noqa: NPY002
 
@@ -217,7 +217,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
-        device: str = None,
+        device: str | None = None,
         normalize_embeddings: bool = False,
         **kwargs,
     ) -> list[Tensor] | np.ndarray | Tensor:

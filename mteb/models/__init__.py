@@ -10,14 +10,14 @@ from .sentence_transformer_wrapper import (
 )
 
 __all__ = [
-    "Encoder",
-    "SentenceTransformerEncoderWrapper",
-    "SearchEncoderWrapper",
-    "SearchCrossEncoderWrapper",
-    "SearchProtocol",
     "CrossEncoderProtocol",
+    "CrossEncoderWrapper",
+    "Encoder",
     "MTEBModels",
     "ModelMeta",
+    "SearchCrossEncoderWrapper",
+    "SearchEncoderWrapper",
+    "SearchProtocol",
+    "SentenceTransformerEncoderWrapper",
     "sentence_transformers_loader",
-    "CrossEncoderWrapper",
 ]

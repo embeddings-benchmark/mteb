@@ -75,7 +75,7 @@ def test_select_tasks(
 
 
 def test_to_dataframe(
-    model_result: ModelResult,  # noqa: F811
+    model_result: ModelResult,
 ) -> None:
     mr = model_result
     required_columns = [

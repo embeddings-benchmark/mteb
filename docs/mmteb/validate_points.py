@@ -22,7 +22,7 @@ commit_exceptions = {
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    GitHub: constr(min_length=1)  # noqa
+    GitHub: constr(min_length=1)
     new_dataset: Optional[conint(ge=1)] = Field(alias="New dataset", default=None)  # noqa
     new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)  # noqa
     dataset_annotations: Optional[conint(ge=1)] = Field(  # noqa

@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import Any
 
-from pydantic import ConfigDict, model_validator
+from pydantic import ConfigDict, Field, model_validator
 
 from mteb.types import (
     HFSubset,
@@ -18,6 +17,7 @@ from mteb.types import (
 from .AbsTask import AbsTask
 from .task_metadata import (
     AnnotatorType,
+    MetadataDatasetDict,
     SampleCreationMethod,
     TaskDomain,
     TaskMetadata,
@@ -46,16 +46,16 @@ class AggregateTaskMetadata(TaskMetadata):
 
     name: str
     description: str
-    dataset: dict[str, Any] = {
-        "path": "aggregate tasks do not have a path",  # just a place holder
-        "revision": "1",
-    }
+    dataset: MetadataDatasetDict = MetadataDatasetDict(
+        path="aggregate tasks do not have a path",  # just a place holder
+        revision="1",
+    )
 
     tasks: list[AbsTask]
     main_score: str
     type: TaskType
     eval_splits: list[str]
-    eval_langs: Languages = []
+    eval_langs: Languages = Field(default_factory=list)
     prompt: None = None
     reference: str | None = None
     bibtex_citation: str | None = None

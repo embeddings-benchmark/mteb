@@ -28,6 +28,11 @@ from .Touche2020NLRetrieval import Touche2020NL
 from .TRECCOVIDNLRetrieval import TRECCOVIDNL
 
 __all__ = [
+    "FEVERNL",
+    "MMMARCONL",
+    "NQNL",
+    "SCIDOCSNL",
+    "TRECCOVIDNL",
     "ArguAnaNL",
     "CQADupstackAndroidNLRetrieval",
     "CQADupstackEnglishNLRetrieval",
@@ -43,15 +48,10 @@ __all__ = [
     "CQADupstackWordpressNLRetrieval",
     "ClimateFEVERNL",
     "DBPediaNL",
-    "FEVERNL",
     "FiQA2018NL",
     "HotpotQANL",
-    "MMMARCONL",
     "NFCorpusNL",
-    "NQNL",
     "QuoraNLRetrieval",
-    "SCIDOCSNL",
     "SciFactNL",
-    "TRECCOVIDNL",
     "Touche2020NL",
 ]

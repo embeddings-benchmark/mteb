@@ -12,7 +12,7 @@ def instruction_template(
         return ""
     if isinstance(instruction, dict):
         if prompt_type is None:
-            instruction = list(instruction.values())[0]  # TODO
+            instruction = next(iter(instruction.values()))  # TODO
         else:
             instruction = instruction[prompt_type]
     return f"Instruct: {instruction}\nQuery:"

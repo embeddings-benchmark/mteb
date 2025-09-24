@@ -9,12 +9,12 @@ from .XNLI import XNLI, XNLIV2
 from .XStance import XStance
 
 __all__ = [
+    "RTE3",
+    "XNLI",
+    "XNLIV2",
     "IndicXnliPairClassification",
     "OpusparcusPC",
     "PawsXPairClassification",
     "PubChemWikiPairClassification",
-    "RTE3",
-    "XNLI",
-    "XNLIV2",
     "XStance",
 ]

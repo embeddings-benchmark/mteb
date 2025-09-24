@@ -7,8 +7,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Winoground(AbsTaskImageTextPairClassification):
-    images_column_names = ["image_0", "image_1"]
-    texts_column_names = ["caption_0", "caption_1"]
+    images_column_names = ("image_0", "image_1")
+    texts_column_names = ("caption_0", "caption_1")
 
     metadata = TaskMetadata(
         name="Winoground",

@@ -160,7 +160,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     )
     fig.add_annotation(x=1e9, y=10, text="Model size:")
     fig.update_layout(
-        coloraxis_colorbar=dict(  # noqa
+        coloraxis_colorbar=dict(
             title="Max Tokens",
             tickvals=[2, 3, 4, 5],
             ticktext=[
@@ -170,7 +170,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
                 "100K",
             ],
         ),
-        hoverlabel=dict(  # noqa
+        hoverlabel=dict(
             bgcolor="white",
             font_size=16,
         ),
@@ -179,8 +179,8 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         textposition="top center",
     )
     fig.update_layout(
-        font=dict(size=16, color="black"),  # noqa
-        margin=dict(b=20, t=10, l=20, r=10),  # noqa
+        font=dict(size=16, color="black"),
+        margin=dict(b=20, t=10, l=20, r=10),
     )
     return fig
 
@@ -240,7 +240,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             )
         )
     fig.update_layout(
-        font=dict(size=13, color="black"),  # noqa
+        font=dict(size=13, color="black"),
         template="plotly_white",
         polar=dict(
             radialaxis=dict(

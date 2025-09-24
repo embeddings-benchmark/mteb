@@ -199,9 +199,30 @@ select = [
     # would exclude:
     # "N806", # probably not worth it
     # "N812" # disallows: import torch.nn.functional as F which is standard
-
+    "RUF009",  # function-call-in-dataclass-default-argument
+    "RUF008",  # mutable-dataclass-default
+    "RUF013",  # implicit-optional
+    "RUF012",  # mutable-class-default
+    "RUF015",  # unnecessary-iterable-allocation-for-first-element
+    "RUF016",  # invalid-index-type
+    "RUF017",  # quadratic-list-summation
+    "RUF018",  # assignment-in-assert
+    "RUF019",  # unnecessary-key-check
+    "RUF020",  # never-union
+    "RUF021",  # parenthesize-chained-operators
+    "RUF022",  # unsorted-dunder-all
+    "RUF024",  # mutable-fromkeys-value
+    "RUF026",  # default-factory-kwarg
+    "RUF033",  # post-init-default
+    "RUF034",  # useless-if-else
+    "RUF041",  # unnecessary-nested-literal
+    "RUF040",  # invalid-assert-message-literal-argument
+    "RUF046",  # unnecessary-cast-to-int
+    "RUF051",  # if-key-in-dict-del
+    "RUF100",  # unused-noqa
+    "RUF101",  # redirected-noqa
+    "RUF200",  # invalid-pyproject-toml
 ]
-
 
 ignore = [
     "E501",   # line too long
@@ -218,6 +239,9 @@ ignore = [
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["RUF012"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false

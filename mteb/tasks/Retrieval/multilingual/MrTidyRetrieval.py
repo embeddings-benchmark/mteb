@@ -25,7 +25,9 @@ _EVAL_SPLIT = "test"
 logger = logging.getLogger(__name__)
 
 
-def _load_data_retrieval(path: str, langs: list, splits: str, revision: str = None):
+def _load_data_retrieval(
+    path: str, langs: list, splits: str, revision: str | None = None
+):
     corpus = {lang: {split: {} for split in splits} for lang in langs}
     queries = {lang: {split: {} for split in splits} for lang in langs}
     relevant_docs = {lang: {split: {} for split in splits} for lang in langs}

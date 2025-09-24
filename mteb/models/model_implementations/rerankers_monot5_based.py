@@ -64,7 +64,7 @@ class MonoT5Reranker(RerankerWrapper):
         )
         logger.info(f"Using model {model_name_or_path}")
 
-        if "torch_compile" in kwargs and kwargs["torch_compile"]:
+        if kwargs.get("torch_compile"):
             self.torch_compile = kwargs["torch_compile"]
             self.model = torch.compile(self.model)
         else:
@@ -161,8 +161,7 @@ class LlamaReranker(RerankerWrapper):
     ):
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        if "torch_compile" in kwargs:
-            del kwargs["torch_compile"]
+        kwargs.pop("torch_compile", None)
         super().__init__(model_name_or_path, **kwargs)
 
         if "chat" in model_name_or_path:

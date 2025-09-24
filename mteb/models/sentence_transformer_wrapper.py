@@ -225,7 +225,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
         all_embeddings = []
         for batch in inputs:
-            batch_column = list(batch.keys())[0]
+            batch_column = next(iter(batch.keys()))
             batched_input = [dict() for _ in range(len(batch[batch_column]))]
 
             # transform from {"text": [text1, text2], "image": [image1, image2]} to

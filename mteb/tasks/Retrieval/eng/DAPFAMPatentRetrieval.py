@@ -58,8 +58,8 @@ _CORPUS_FIELDS = {
 class _DAPFAMMixin:
     # class-level attributes are filled in each concrete subclass
     domain_filter: str | None = None
-    query_fields: list[str] = []
-    corpus_fields: list[str] = []
+    query_fields: list[str] = []  # noqa: RUF012
+    corpus_fields: list[str] = []  # noqa: RUF012
 
     def load_data(self, **kwargs) -> tuple[dict, dict, dict]:
         ds_c = load_dataset(

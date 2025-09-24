@@ -421,7 +421,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 gr.Markdown(FAQ)
 
         with gr.Tab("Performance per Model Size") as plot_tab:
-            plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
+            plot = gr.Plot(performance_size_plot, inputs=[summary_table])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all tasks in the benchmark*"
             )
@@ -430,7 +430,7 @@ def get_leaderboard_app() -> gr.Blocks:
             )
 
         with gr.Tab("Performance per Task Type") as radar_plot_tab:
-            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
+            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
             )

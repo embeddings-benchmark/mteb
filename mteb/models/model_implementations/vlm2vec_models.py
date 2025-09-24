@@ -39,7 +39,7 @@ class VLM2VecWrapper(AbsEncoder):
             import flash_attn  # noqa
 
         requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
-        from peft import LoraConfig, PeftModel  # noqa
+        from peft import LoraConfig, PeftModel
         from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
         self.pooling = "last"

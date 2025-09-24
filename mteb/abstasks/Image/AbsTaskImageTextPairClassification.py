@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -52,8 +53,8 @@ class AbsTaskImageTextPairClassification(AbsTask):
     """
 
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
-    images_column_names: str | list[str] = "image"
-    texts_column_names: str | list[str] = "caption"
+    images_column_names: str | Sequence[str] = "image"
+    texts_column_names: str | Sequence[str] = "caption"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
