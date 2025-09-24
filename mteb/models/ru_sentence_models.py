@@ -792,7 +792,7 @@ giga_embeddings = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
         model_name="ai-sage/Giga-Embeddings-instruct",
-        revision="f9e86fc90402013ed9d1dd6078946680902d94fc",
+        revision="0ad5b29bfecd806cecc9d66b927d828a736594dc",
         trust_remote_code=True,
         instruction_template="Instruct: {instruction}\nQuery: ",
         max_seq_length=4096,
@@ -805,7 +805,7 @@ giga_embeddings = ModelMeta(
     name="ai-sage/Giga-Embeddings-instruct",
     languages=["eng-Latn", "rus-Cyrl"],
     open_weights=True,
-    revision="f9e86fc90402013ed9d1dd6078946680902d94fc",
+    revision="0ad5b29bfecd806cecc9d66b927d828a736594dc",
     release_date="2025-09-23",
     n_parameters=3_227_176_961,
     memory_usage_mb=12865,
