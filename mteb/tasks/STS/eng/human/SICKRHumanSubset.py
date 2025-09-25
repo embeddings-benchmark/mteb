@@ -10,7 +10,7 @@ class SICKRHumanSubset(AbsTaskSTS):
         name="SICK-RHumanSubset",
         dataset={
             "path": "mteb/mteb-human-sickr-sts",
-            "revision": "cf7172d4b730a743570f25291d04abeee086c824",  
+            "revision": "cf7172d4b730a743570f25291d04abeee086c824",
         },
         description="Human evaluation subset of Semantic Textual Similarity SICK-R dataset",
         reference="https://aclanthology.org/L14-1314/",

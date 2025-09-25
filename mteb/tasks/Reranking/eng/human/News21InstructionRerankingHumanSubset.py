@@ -12,7 +12,7 @@ class News21InstructionRerankingHumanSubset(AbsTaskReranking):
         reference="https://trec.nist.gov/data/news2021.html",
         dataset={
             "path": "mteb/mteb-human-news21-reranking",
-            "revision": "22208ecbb54618adb1592fd2ba7cdd92d643d9de", 
+            "revision": "22208ecbb54618adb1592fd2ba7cdd92d643d9de",
         },
         type="Reranking",
         category="s2s",

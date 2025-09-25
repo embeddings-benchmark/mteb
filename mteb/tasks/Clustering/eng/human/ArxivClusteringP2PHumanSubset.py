@@ -11,7 +11,7 @@ class ArxivClusteringP2PHumanSubset(AbsTaskClustering):
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
             "path": "mteb/mteb-human-arxiv-clustering",
-            "revision": "6d2f0e9d4f4a51cb54332acaef10478928f0fed8", 
+            "revision": "6d2f0e9d4f4a51cb54332acaef10478928f0fed8",
         },
         type="Clustering",
         category="p2p",

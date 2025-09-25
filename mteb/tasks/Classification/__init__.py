@@ -29,6 +29,9 @@ from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.FrenkEnClassification import *
+from .eng.human.EmotionClassificationHumanSubset import *
+from .eng.human.ToxicConversationsClassificationHumanSubset import *
+from .eng.human.TweetSentimentExtractionClassificationHumanSubset import *
 from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
@@ -57,9 +60,6 @@ from .eng.WikipediaSolidStateColloidalClassification import *
 from .eng.WikipediaTheoreticalAppliedClassification import *
 from .eng.YahooAnswersTopicsClassification import *
 from .eng.YelpReviewFullClassification import *
-from .eng.human.EmotionClassificationHumanSubset import *
-from .eng.human.TweetSentimentExtractionClassificationHumanSubset import *
-from .eng.human.ToxicConversationsClassificationHumanSubset import *
 from .est.estonian_valence import *
 from .fas.FaMTEBClassification import *
 from .fas.PersianFoodSentimentClassification import *
@@ -98,6 +98,7 @@ from .multilingual.AmazonReviewsClassification import *
 from .multilingual.CataloniaTweetClassification import *
 from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
+from .multilingual.human.MultilingualSentimentClassificationHumanSubset import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicNLPNewsClassification import *
 from .multilingual.IndicSentimentClassification import *
@@ -123,7 +124,6 @@ from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
 from .multilingual.TurkicClassification import *
 from .multilingual.TweetSentimentClassification import *
-from .multilingual.human.MultilingualSentimentClassificationHumanSubset import *
 from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *

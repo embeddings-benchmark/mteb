@@ -11,7 +11,7 @@ class RedditClusteringP2PHumanSubset(AbsTaskClustering):
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
             "path": "mteb/mteb-human-reddit-clustering",
-            "revision": "b38bea0ed72e69047a725a96b8022ff2f036bbde", 
+            "revision": "b38bea0ed72e69047a725a96b8022ff2f036bbde",
         },
         type="Clustering",
         category="p2p",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from datasets import load_dataset, DatasetDict
+from datasets import DatasetDict, load_dataset
+
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -12,7 +13,7 @@ class EmotionClassificationHumanSubset(AbsTaskClassification):
         reference="https://www.aclweb.org/anthology/D18-1404",
         dataset={
             "path": "mteb/mteb-human-emotion-classification",
-            "revision": "97b95feb5922dbcde62c7f12704b104e70ab9772",  
+            "revision": "97b95feb5922dbcde62c7f12704b104e70ab9772",
         },
         type="Classification",
         category="s2s",
@@ -65,15 +66,14 @@ Tsujii, Jun{'}ichi},
             self.metadata_dict["dataset"]["path"],
             revision=self.metadata_dict["dataset"]["revision"],
         )
-        
+
         # Load full original training data
         original_dataset = load_dataset(
             "mteb/emotion",
             revision="4f58c6b202a23cf9a4da393831edf4f9183cad37",
         )
-        
+
         # Combine: original train + human test
-        self.dataset = DatasetDict({
-            "train": original_dataset["train"],
-            "test": human_dataset["test"]
-        })
+        self.dataset = DatasetDict(
+            {"train": original_dataset["train"], "test": human_dataset["test"]}
+        )

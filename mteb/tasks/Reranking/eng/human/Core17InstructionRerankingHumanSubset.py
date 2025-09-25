@@ -12,7 +12,7 @@ class Core17InstructionRerankingHumanSubset(AbsTaskReranking):
         reference="https://trec.nist.gov/data/core2017.html",
         dataset={
             "path": "mteb/mteb-human-core17-reranking",
-            "revision": "e2b1a26cb5277a040d7f96a79fef0cf00afe9ffe", 
+            "revision": "e2b1a26cb5277a040d7f96a79fef0cf00afe9ffe",
         },
         type="Reranking",
         category="s2s",

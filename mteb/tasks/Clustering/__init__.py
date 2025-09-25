@@ -13,6 +13,9 @@ from .eng.BiorxivClusteringS2S import *
 from .eng.BuiltBenchClusteringP2P import *
 from .eng.BuiltBenchClusteringS2S import *
 from .eng.ClusTrecCovid import *
+from .eng.human.ArxivClusteringP2PHumanSubset import *
+from .eng.human.RedditClusteringP2PHumanSubset import *
+from .eng.human.WikiCitiesClusteringHumanSubset import *
 from .eng.MedrxivClusteringP2P import *
 from .eng.MedrxivClusteringS2S import *
 from .eng.RedditClustering import *
@@ -23,9 +26,6 @@ from .eng.TwentyNewsgroupsClustering import *
 from .eng.WikiCitiesClustering import *
 from .eng.WikipediaChemistrySpecialtiesClustering import *
 from .eng.WikipediaChemistryTopicsClustering import *
-from .eng.human.WikiCitiesClusteringHumanSubset import *
-from .eng.human.ArxivClusteringP2PHumanSubset import *
-from .eng.human.RedditClusteringP2PHumanSubset import *
 from .fas.FaMTEBClustering import *
 from .fra.AlloProfClusteringP2P import *
 from .fra.AlloProfClusteringS2S import *
@@ -34,6 +34,7 @@ from .jpn.LivedoorNewsClustering import *
 from .jpn.MewsC16JaClustering import *
 from .kor.KlueMrcDomainClustering import *
 from .kor.KlueYnatMrcCategoryClustering import *
+from .multilingual.human.SIB200ClusteringS2SHumanSubset import *
 from .multilingual.IndicReviewsClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *
@@ -41,7 +42,6 @@ from .multilingual.MLSUMClusteringP2P import *
 from .multilingual.MLSUMClusteringS2S import *
 from .multilingual.SIB200ClusteringS2S import *
 from .multilingual.WikiClusteringP2P import *
-from .multilingual.human.SIB200ClusteringS2SHumanSubset import *
 from .nob.snl_clustering import *
 from .nob.SNLHierarchicalClustering import *
 from .nob.vg_clustering import *

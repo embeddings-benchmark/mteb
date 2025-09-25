@@ -12,7 +12,7 @@ class WikiCitiesClusteringHumanSubset(AbsTaskClustering):
         reference="https://huggingface.co/datasets/wikipedia",
         dataset={
             "path": "mteb/mteb-human-wikicities-clustering",
-            "revision": "5c46af681d2dfa6d3ee373b7ccb4f153e1b72792",  
+            "revision": "5c46af681d2dfa6d3ee373b7ccb4f153e1b72792",
         },
         type="Clustering",
         category="p2p",

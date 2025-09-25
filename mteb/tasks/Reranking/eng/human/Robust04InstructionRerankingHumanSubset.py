@@ -12,7 +12,7 @@ class Robust04InstructionRerankingHumanSubset(AbsTaskReranking):
         reference="https://trec.nist.gov/data/robust/04.guidelines.html",
         dataset={
             "path": "mteb/mteb-human-robust04-reranking",
-            "revision": "77756407fed441d7be778b7464c34ccf4700af2e", 
+            "revision": "77756407fed441d7be778b7464c34ccf4700af2e",
         },
         type="Reranking",
         category="s2s",

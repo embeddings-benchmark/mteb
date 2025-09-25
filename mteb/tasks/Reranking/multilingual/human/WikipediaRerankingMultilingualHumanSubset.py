@@ -20,7 +20,7 @@ class WikipediaRerankingMultilingualHumanSubset(AbsTaskReranking, MultilingualTa
         reference="https://github.com/ellamind/wikipedia-2023-11-reranking-multilingual",
         dataset={
             "path": "mteb/mteb-human-wiki-reranking",
-            "revision": "bdbce1ba2d0e58e88d1d13c54a555154adc5c165", 
+            "revision": "bdbce1ba2d0e58e88d1d13c54a555154adc5c165",
         },
         type="Reranking",
         category="s2s",
@@ -45,4 +45,3 @@ class WikipediaRerankingMultilingualHumanSubset(AbsTaskReranking, MultilingualTa
 """,
         prompt="Given a query, rerank the Wikipedia passages by their relevance to the query",
     )
-

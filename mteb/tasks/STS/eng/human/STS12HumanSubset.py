@@ -10,7 +10,7 @@ class STS12HumanSubset(AbsTaskSTS):
         name="STS12HumanSubset",
         dataset={
             "path": "mteb/mteb-human-sts12-sts",
-            "revision": "76cbf76792ec03cb1f76dc6ada05abcb23c82c0c",  
+            "revision": "76cbf76792ec03cb1f76dc6ada05abcb23c82c0c",
         },
         description="Human evaluation subset of SemEval-2012 Task 6.",
         reference="https://www.aclweb.org/anthology/S12-1051.pdf",

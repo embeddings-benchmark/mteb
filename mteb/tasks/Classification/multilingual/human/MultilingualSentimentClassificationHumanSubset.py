@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from datasets import load_dataset, DatasetDict
+from datasets import DatasetDict, load_dataset
+
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -8,18 +9,20 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 _LANGUAGES = {
     "eng": ["eng-Latn"],
     "ara": ["ara-Arab"],
-    "nor": ["nor-Latn"], 
+    "nor": ["nor-Latn"],
     "rus": ["rus-Cyrl"],
 }
 
 
-class MultilingualSentimentClassificationHumanSubset(AbsTaskClassification, MultilingualTask):
+class MultilingualSentimentClassificationHumanSubset(
+    AbsTaskClassification, MultilingualTask
+):
     fast_loading = True
     metadata = TaskMetadata(
         name="MultilingualSentimentClassificationHumanSubset",
         dataset={
             "path": "mteb/mteb-human-multilingual-sentiment-classification",
-            "revision": "fb04d201d89e700f004e5efdb61d9a27e53b728b", 
+            "revision": "fb04d201d89e700f004e5efdb61d9a27e53b728b",
         },
         description="""Human evaluation subset of Sentiment classification dataset with binary
                        (positive vs negative sentiment) labels. Includes 4 languages.
@@ -72,29 +75,28 @@ Vylomova, Ekaterina},
             self.metadata_dict["dataset"]["path"],
             revision=self.metadata_dict["dataset"]["revision"],
         )
-        
+
         # Load full original training data (unified with lang column)
         original_dataset = load_dataset("mteb/multilingual-sentiment-classification")
-        
+
         # Both datasets have unified structure with lang column
         # Split by language to create individual configs
         combined_dataset = {}
-        
+
         # Filter training data by language
         train_data = original_dataset["train"]
         test_data = human_dataset["test"]
-        
+
         # Create individual language configs
         for lang in ["eng", "ara", "nor", "rus"]:
             # Filter train data for this language
             train_lang_data = train_data.filter(lambda x: x["lang"] == lang)
-            # Filter test data for this language  
+            # Filter test data for this language
             test_lang_data = test_data.filter(lambda x: x["lang"] == lang)
-            
+
             if len(test_lang_data) > 0:  # Only create config if we have test data
-                combined_dataset[lang] = DatasetDict({
-                    "train": train_lang_data,
-                    "test": test_lang_data
-                })
-        
+                combined_dataset[lang] = DatasetDict(
+                    {"train": train_lang_data, "test": test_lang_data}
+                )
+
         self.dataset = combined_dataset

@@ -21,7 +21,7 @@ class SIB200ClusteringS2SHumanSubset(AbsTaskClustering, MultilingualTask):
         reference="https://github.com/dadelani/sib-200",
         dataset={
             "path": "mteb/mteb-human-sib200-clustering",
-            "revision": "d41717b1b94c0155f5ae7f84034e01af61be455e", 
+            "revision": "d41717b1b94c0155f5ae7f84034e01af61be455e",
         },
         type="Clustering",
         category="s2s",
@@ -56,4 +56,3 @@ class SIB200ClusteringS2SHumanSubset(AbsTaskClustering, MultilingualTask):
 """,
         prompt="Identify the news category that articles belong to based on their content",
     )
-

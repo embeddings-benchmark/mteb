@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from .STSBenchmarkHumanSubset import STSBenchmarkHumanSubset
 from .SICKRHumanSubset import SICKRHumanSubset
 from .STS12HumanSubset import STS12HumanSubset
+from .STSBenchmarkHumanSubset import STSBenchmarkHumanSubset
 
 __all__ = [
     "STSBenchmarkHumanSubset",
-    "SICKRHumanSubset", 
+    "SICKRHumanSubset",
     "STS12HumanSubset",
 ]

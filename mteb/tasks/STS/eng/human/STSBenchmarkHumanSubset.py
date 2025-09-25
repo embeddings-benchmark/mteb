@@ -10,7 +10,7 @@ class STSBenchmarkHumanSubset(AbsTaskSTS):
         name="STSBenchmarkHumanSubset",
         dataset={
             "path": "mteb/mteb-human-stsbenchmark-sts",
-            "revision": "cb05d5409f802e68d6ed39615ed67f7dc2235ac5", 
+            "revision": "cb05d5409f802e68d6ed39615ed67f7dc2235ac5",
         },
         description="Human evaluation subset of Semantic Textual Similarity Benchmark (STSbenchmark) dataset.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",

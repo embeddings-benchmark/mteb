@@ -4,11 +4,9 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
-
 _LANGUAGES = {
     "en": ["eng-Latn"],
-    "ar": ["ara-Arab"], 
+    "ar": ["ara-Arab"],
     "fr": ["fra-Latn"],
     "ru": ["rus-Cyrl"],
 }
@@ -20,7 +18,7 @@ class STS22HumanSubset(AbsTaskSTS, MultilingualTask):
         name="STS22HumanSubset",
         dataset={
             "path": "mteb/mteb-human-sts22-sts",
-            "revision": "ab40ed76c4283318b7b146aff31f8cdefd6ebae0", 
+            "revision": "ab40ed76c4283318b7b146aff31f8cdefd6ebae0",
         },
         description="Human evaluation subset of SemEval 2022 Task 8: Multilingual News Article Similarity",
         reference="https://competitions.codalab.org/competitions/33835",
@@ -75,4 +73,3 @@ Ratan, Shyam},
         metadata_dict["min_score"] = 1
         metadata_dict["max_score"] = 4
         return metadata_dict
-
