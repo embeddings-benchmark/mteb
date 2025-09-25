@@ -88,17 +88,9 @@ BENCHMARK_ENTRIES = [
                 "Miscellaneous",  # All of these are retrieval benchmarks
                 mteb.get_benchmarks(
                     [
-                        "BEIR",
                         "BEIR-NL",
-                        "NanoBEIR",
-                        "BRIGHT",
-                        "BRIGHT (long)",
                         "BuiltBench(eng)",
-                        "CoIR",
-                        "FollowIR",
-                        "LongEmbed",
                         "MINERSBitextMining",
-                        "RAR-b",
                     ]
                 ),
             ),
@@ -108,7 +100,7 @@ BENCHMARK_ENTRIES = [
 
 RTEB_BENCHMARK_ENTRIES = [
     MenuEntry(
-        name="RTEB (Retrieval)",
+        name="Retrieval",
         description=None,
         open=False,
         benchmarks=[
@@ -124,6 +116,21 @@ RTEB_BENCHMARK_ENTRIES = [
                 description=None,
                 open=False,
                 benchmarks=[RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN],
+            ),
+            MenuEntry(
+                "Miscellaneous",
+                mteb.get_benchmarks(
+                    [
+                        "BEIR",
+                        "NanoBEIR",
+                        "BRIGHT",
+                        "BRIGHT (long)",
+                        "CoIR",
+                        "FollowIR",
+                        "LongEmbed",
+                        "RAR-b",
+                    ]
+                ),
             ),
         ],
     )
