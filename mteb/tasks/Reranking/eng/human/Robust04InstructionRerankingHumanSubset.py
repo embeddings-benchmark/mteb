@@ -29,10 +29,10 @@ class Robust04InstructionRerankingHumanSubset(AbsTaskReranking):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{voorhees2005trec,
-  title={TREC 2004 Robust Retrieval Track Overview},
-  author={Voorhees, Ellen M},
-  booktitle={TREC},
-  year={2005}
+  author = {Voorhees, Ellen M},
+  booktitle = {TREC},
+  title = {TREC 2004 Robust Retrieval Track Overview},
+  year = {2005},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",

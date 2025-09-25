@@ -29,10 +29,10 @@ class Core17InstructionRerankingHumanSubset(AbsTaskReranking):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{allan2017trec,
-  title={TREC 2017 Common Core Track Overview},
-  author={Allan, James and Harman, Donna and Kanoulas, Evangelos and Li, Dan and Van Gysel, Christophe and Voorhees, Ellen M},
-  booktitle={TREC},
-  year={2017}
+  author = {Allan, James and Harman, Donna and Kanoulas, Evangelos and Li, Dan and Van Gysel, Christophe and Voorhees, Ellen M},
+  booktitle = {TREC},
+  title = {TREC 2017 Common Core Track Overview},
+  year = {2017},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",

@@ -29,10 +29,10 @@ class News21InstructionRerankingHumanSubset(AbsTaskReranking):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{soboroff2021trec,
-  title={TREC 2021 News Track Overview},
-  author={Soboroff, Ian and Macdonald, Craig and McCreadie, Richard},
-  booktitle={TREC},
-  year={2021}
+  author = {Soboroff, Ian and Macdonald, Craig and McCreadie, Richard},
+  booktitle = {TREC},
+  title = {TREC 2021 News Track Overview},
+  year = {2021},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",
