@@ -50,7 +50,10 @@ GIGA_task_prompts = {
         "query": "Given a question, retrieve Wikipedia passages that answer the question",
         "document": "",
     },
-    "ArguAna": "Given a search query, retrieve passages that answer the question",
+    "ArguAna": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "Given a search query, retrieve passages that answer the question",
+    },
     "CQADupstackAndroidRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
         "document": "",
@@ -59,7 +62,10 @@ GIGA_task_prompts = {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
         "document": "",
     },
-    "CQADupstackGamingRetrieval": "Given a search query, retrieve passages that answer the question",
+    "CQADupstackGamingRetrieval": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "Given a search query, retrieve passages that answer the question",
+    },
     "CQADupstackGisRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
         "document": "",
@@ -84,7 +90,10 @@ GIGA_task_prompts = {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
         "document": "",
     },
-    "CQADupstackUnixRetrieval": "Given a search query, retrieve passages that answer the question",
+    "CQADupstackUnixRetrieval": {
+        "query": "Given a search query, retrieve passages that answer the question",
+        "document": "Given a search query, retrieve passages that answer the question",
+    },
     "CQADupstackWebmastersRetrieval": {
         "query": "Given a question, retrieve detailed question descriptions from Stackexchange that are duplicates to the given question",
         "document": "",
@@ -205,7 +214,10 @@ GIGA_task_prompts = {
     "StackExchangeClusteringP2P.v2": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
     "TwentyNewsgroupsClustering": "Identify the topic or theme of the given news articles",
     "TwentyNewsgroupsClustering.v2": "Identify the topic or theme of the given news articles",
-    "AskUbuntuDupQuestions": "Retrieve duplicate questions from AskUbuntu forum",
+    "AskUbuntuDupQuestions": {
+        "query": "Retrieve duplicate questions from AskUbuntu forum",
+        "document": "Retrieve duplicate questions from AskUbuntu forum",
+    },
     "MindSmallReranking": "Given a search query, retrieve passages that answer the question",
     "SciDocsRR": "Given a title of a scientific paper, retrieve the titles of other relevant papers",
     "StackOverflowDupQuestions": "Retrieve duplicate questions from StackOverflow forum",
@@ -796,7 +808,7 @@ giga_embeddings = ModelMeta(
         trust_remote_code=True,
         instruction_template="Instruct: {instruction}\nQuery: ",
         max_seq_length=4096,
-        apply_instruction_to_passages=False,
+        apply_instruction_to_passages=True,
         prompts_dict=GIGA_task_prompts,
         model_kwargs={
             "torch_dtype": torch.bfloat16,
