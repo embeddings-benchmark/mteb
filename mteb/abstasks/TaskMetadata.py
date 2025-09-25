@@ -21,7 +21,7 @@ from ..languages import (
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
-    "Accent identification",
+    "Patent retrieval",
     "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -135,6 +135,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "machine-translated and LM verified",
     "rendered",
     "multiple",
 ]
@@ -166,22 +167,19 @@ MAEB_TASK_TYPE = (
 )
 
 _TASK_TYPE = (
-    (
-        "BitextMining",
-        "Classification",
-        "MultilabelClassification",
-        "Clustering",
-        "PairClassification",
-        "Reranking",
-        "Retrieval",
-        "STS",
-        "Summarization",
-        "InstructionRetrieval",
-        "Speed",
-    )
-    + MIEB_TASK_TYPE
-    + MAEB_TASK_TYPE
-)
+    "BitextMining",
+    "Classification",
+    "Clustering",
+    "InstructionRetrieval",
+    "MultilabelClassification",
+    "PairClassification",
+    "Regression",
+    "Reranking",
+    "Retrieval",
+    "Speed",
+    "STS",
+    "Summarization",
+) + MIEB_TASK_TYPE
 
 TASK_TYPE = Literal[_TASK_TYPE]
 
@@ -231,25 +229,21 @@ METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
-class PromptDict(TypedDict, total=False):
-    """A dictionary containing the prompt used for the task.
+PromptDict = TypedDict(
+    "PromptDict", {prompt_type.value: str for prompt_type in PromptType}, total=False
+)
+"""A dictionary containing the prompt used for the task.
 
-    Args:
-        query: The prompt used for the queries in the task.
-        passage: The prompt used for the passages in the task.
-    """
-
-    query: str
-    passage: str
+Args:
+    query: The prompt used for the queries in the task.
+    document: The prompt used for the passages in the task.
+"""
 
 
 class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics."""
 
     pass
-
-
-METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
 logger = logging.getLogger(__name__)
@@ -285,6 +279,7 @@ class TaskMetadata(BaseModel):
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
+        is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
     """
 
     dataset: dict[str, Any]
@@ -312,6 +307,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
     adapted_from: list[str] | None = None
+    is_public: bool = True
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -319,6 +315,7 @@ class TaskMetadata(BaseModel):
         self.eval_langs_are_valid(self.eval_langs)
 
     @field_validator("dataset")
+    @classmethod
     def _check_dataset_path_is_specified(
         cls, dataset: dict[str, Any]
     ) -> dict[str, Any]:
@@ -326,6 +323,7 @@ class TaskMetadata(BaseModel):
         return dataset
 
     @field_validator("dataset")
+    @classmethod
     def _check_dataset_revision_is_specified(
         cls, dataset: dict[str, Any]
     ) -> dict[str, Any]:
@@ -333,6 +331,7 @@ class TaskMetadata(BaseModel):
         return dataset
 
     @field_validator("prompt")
+    @classmethod
     def _check_prompt_is_valid(
         cls, prompt: str | PromptDict | None
     ) -> str | PromptDict | None:
@@ -340,7 +339,7 @@ class TaskMetadata(BaseModel):
             for key in prompt:
                 if key not in [e.value for e in PromptType]:
                     raise ValueError(
-                        "The prompt dictionary should only contain the keys 'query' and 'passage'."
+                        "The prompt dictionary should only contain the keys 'query' and 'document'."
                     )
         return prompt
 
@@ -415,7 +414,7 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name not in ["prompt", "adapted_from"]
+            if field_name not in ["prompt", "adapted_from", "is_public"]
         )
 
     @property

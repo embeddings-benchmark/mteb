@@ -5,6 +5,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class RuSciBenchOECDClassification(AbsTaskClassification):
+    superseded_by = "RuSciBenchOECDClassification.v2"
+
     metadata = TaskMetadata(
         name="RuSciBenchOECDClassification",
         dataset={

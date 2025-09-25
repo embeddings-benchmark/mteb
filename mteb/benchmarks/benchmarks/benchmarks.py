@@ -250,6 +250,45 @@ MTEB_MAIN_RU = Benchmark(
 """,
 )
 
+
+RU_SCI_BENCH = Benchmark(
+    name="RuSciBench",
+    tasks=get_tasks(
+        tasks=[
+            # BitextMining
+            "RuSciBenchBitextMining",
+            # Classification
+            "RuSciBenchCoreRiscClassification",
+            "RuSciBenchGRNTIClassification.v2",
+            "RuSciBenchOECDClassification.v2",
+            "RuSciBenchPubTypeClassification",
+            # Retrieval
+            "RuSciBenchCiteRetrieval",
+            "RuSciBenchCociteRetrieval",
+            # Regression
+            "RuSciBenchCitedCountRegression",
+            "RuSciBenchYearPublRegression",
+        ],
+    ),
+    description="RuSciBench is a benchmark designed for evaluating sentence encoders and language models on scientific texts in both Russian and English. The data is sourced from eLibrary (www.elibrary.ru), Russia's largest electronic library of scientific publications. This benchmark facilitates the evaluation and comparison of models on various research-related tasks.",
+    reference="https://link.springer.com/article/10.1134/S1064562424602191",
+    citation=r"""
+@article{vatolin2024ruscibench,
+  author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
+  doi = {10.1134/S1064562424602191},
+  issn = {1531-8362},
+  journal = {Doklady Mathematics},
+  month = {12},
+  number = {1},
+  pages = {S251--S260},
+  title = {RuSciBench: Open Benchmark for Russian and English Scientific Document Representations},
+  url = {https://doi.org/10.1134/S1064562424602191},
+  volume = {110},
+  year = {2024},
+}
+""",
+)
+
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     name="FollowIR",
     display_name="Instruction Following",
@@ -816,7 +855,7 @@ mteb_multilingual_tasks = get_tasks(
     ],
 )
 
-MTEB_multilingual = Benchmark(
+MTEB_multilingual_v1 = Benchmark(
     name="MTEB(Multilingual, v1)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -830,7 +869,7 @@ MTEB_multilingual = Benchmark(
 )
 
 
-MTEB_multilingual = Benchmark(
+MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -1322,7 +1361,7 @@ C_MTEB = Benchmark(
 
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
-    display_name="Farsi",
+    display_name="Farsi Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1397,6 +1436,87 @@ FA_MTEB = Benchmark(
         ],
     ),
     description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
+    contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+)
+
+FA_MTEB_2 = Benchmark(
+    name="MTEB(fas, v2)",
+    display_name="Farsi",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
+    tasks=get_tasks(
+        languages=["fas"],
+        tasks=[
+            # Classification
+            "PersianFoodSentimentClassification",
+            "SynPerChatbotConvSAClassification",
+            "SynPerChatbotConvSAToneChatbotClassification",
+            "SynPerChatbotConvSAToneUserClassification",
+            "SynPerChatbotSatisfactionLevelClassification",
+            "SynPerTextToneClassification.v3",
+            "SIDClassification.v2",
+            "DeepSentiPers.v2",
+            "PersianTextEmotion.v2",
+            "NLPTwitterAnalysisClassification.v2",
+            "DigikalamagClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "StyleClassification",
+            "PerShopDomainClassification",
+            "PerShopIntentClassification",
+            # Clustering
+            "BeytooteClustering",
+            "DigikalamagClustering",
+            "HamshahriClustring",
+            "NLPTwitterAnalysisClustering",
+            "SIDClustring",
+            # PairClassification
+            "FarsTail",
+            "SynPerChatbotRAGFAQPC",
+            "FarsiParaphraseDetection",
+            "SynPerTextKeywordsPC",
+            "SynPerQAPC",
+            "ParsinluEntail",
+            "ParsinluQueryParaphPC",
+            # Reranking
+            "MIRACLReranking",
+            "WikipediaRerankingMultilingual",
+            # Retrieval
+            "SynPerQARetrieval",
+            "SynPerChatbotRAGFAQRetrieval",
+            "PersianWebDocumentRetrieval",
+            "WikipediaRetrievalMultilingual",
+            "MIRACLRetrievalHardNegatives",
+            "HotpotQA-FaHardNegatives",
+            "MSMARCO-FaHardNegatives",
+            "NQ-FaHardNegatives",
+            "ArguAna-Fa.v2",
+            "FiQA2018-Fa.v2",
+            "QuoraRetrieval-Fa.v2",
+            "SCIDOCS-Fa.v2",
+            "SciFact-Fa.v2",
+            "TRECCOVID-Fa.v2",
+            "FEVER-FaHardNegatives",
+            "NeuCLIR2023RetrievalHardNegatives",
+            "WebFAQRetrieval",
+            # STS
+            "Farsick",
+            "SynPerSTS",
+            # SummaryRetrieval
+            "SAMSumFa",
+            "SynPerChatbotSumSRetrieval",
+            "SynPerChatbotRAGSumSRetrieval",
+        ],
+    ),
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark. For more details on the improvements, see the main PR comment: [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157).",
     reference="https://arxiv.org/abs/2502.11571",
     citation=r"""
 @article{zinvandi2025famteb,
@@ -2028,4 +2148,150 @@ R2MED = Benchmark(
   year = {2025},
 }
 """,
+)
+
+
+VN_MTEB = Benchmark(
+    name="VN-MTEB (vie, v1)",
+    display_name="Vietnamese",
+    icon="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/vn.svg",
+    tasks=get_tasks(
+        languages=["vie"],
+        exclusive_language_filter=True,
+        tasks=[
+            # Retrieval
+            "ArguAna-VN",
+            "SciFact-VN",
+            "ClimateFEVER-VN",
+            "FEVER-VN",
+            "DBPedia-VN",
+            "NQ-VN",
+            "HotpotQA-VN",
+            "MSMARCO-VN",
+            "TRECCOVID-VN",
+            "FiQA2018-VN",
+            "NFCorpus-VN",
+            "SCIDOCS-VN",
+            "Touche2020-VN",
+            "Quora-VN",
+            "CQADupstackAndroid-VN",
+            "CQADupstackGis-VN",
+            "CQADupstackMathematica-VN",
+            "CQADupstackPhysics-VN",
+            "CQADupstackProgrammers-VN",
+            "CQADupstackStats-VN",
+            "CQADupstackTex-VN",
+            "CQADupstackUnix-VN",
+            "CQADupstackWebmasters-VN",
+            "CQADupstackWordpress-VN",
+            # Classification
+            "Banking77VNClassification",
+            "EmotionVNClassification",
+            "AmazonCounterfactualVNClassification",
+            "MTOPDomainVNClassification",
+            "TweetSentimentExtractionVNClassification",
+            "ToxicConversationsVNClassification",
+            "ImdbVNClassification",
+            "MTOPIntentVNClassification",
+            "MassiveScenarioVNClassification",
+            "MassiveIntentVNClassification",
+            "AmazonReviewsVNClassification",
+            "AmazonPolarityVNClassification",
+            # Pair Classification
+            "SprintDuplicateQuestions-VN",
+            "TwitterSemEval2015-VN",
+            "TwitterURLCorpus-VN",
+            # Clustering
+            "TwentyNewsgroupsClustering-VN",
+            "RedditClusteringP2P-VN",
+            "StackExchangeClusteringP2P-VN",
+            "StackExchangeClustering-VN",
+            "RedditClustering-VN",
+            # Reranking
+            "SciDocsRR-VN",
+            "AskUbuntuDupQuestions-VN",
+            "StackOverflowDupQuestions-VN",
+            # STS
+            "BIOSSES-VN",
+            "SICK-R-VN",
+            "STSBenchmark-VN",
+        ],
+    ),
+    description="A benchmark for text-embedding performance in Vietnamese.",
+    reference="https://arxiv.org/abs/2507.21500",
+    citation=r"""
+@misc{pham2025vnmtebvietnamesemassivetext,
+  archiveprefix = {arXiv},
+  author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
+  eprint = {2507.21500},
+  primaryclass = {cs.CL},
+  title = {VN-MTEB: Vietnamese Massive Text Embedding Benchmark},
+  url = {https://arxiv.org/abs/2507.21500},
+  year = {2025},
+}
+""",
+    contacts=["BaoLocPham"],
+)
+
+JINA_VDR = Benchmark(
+    name="JinaVDR",
+    display_name="Jina Visual Document Retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "JinaVDRMedicalPrescriptionsRetrieval",
+            "JinaVDRStanfordSlideRetrieval",
+            "JinaVDRDonutVQAISynHMPRetrieval",
+            "JinaVDRTableVQARetrieval",
+            "JinaVDRChartQARetrieval",
+            "JinaVDRTQARetrieval",
+            "JinaVDROpenAINewsRetrieval",
+            "JinaVDREuropeanaDeNewsRetrieval",
+            "JinaVDREuropeanaEsNewsRetrieval",
+            "JinaVDREuropeanaItScansRetrieval",
+            "JinaVDREuropeanaNlLegalRetrieval",
+            "JinaVDRHindiGovVQARetrieval",
+            "JinaVDRAutomobileCatelogRetrieval",
+            "JinaVDRBeveragesCatalogueRetrieval",
+            "JinaVDRRamensBenchmarkRetrieval",
+            "JinaVDRJDocQARetrieval",
+            "JinaVDRHungarianDocQARetrieval",
+            "JinaVDRArabicChartQARetrieval",
+            "JinaVDRArabicInfographicsVQARetrieval",
+            "JinaVDROWIDChartsRetrieval",
+            "JinaVDRMPMQARetrieval",
+            "JinaVDRJina2024YearlyBookRetrieval",
+            "JinaVDRWikimediaCommonsMapsRetrieval",
+            "JinaVDRPlotQARetrieval",
+            "JinaVDRMMTabRetrieval",
+            "JinaVDRCharXivOCRRetrieval",
+            "JinaVDRStudentEnrollmentSyntheticRetrieval",
+            "JinaVDRGitHubReadmeRetrieval",
+            "JinaVDRTweetStockSyntheticsRetrieval",
+            "JinaVDRAirbnbSyntheticRetrieval",
+            "JinaVDRShanghaiMasterPlanRetrieval",
+            "JinaVDRWikimediaCommonsDocumentsRetrieval",
+            "JinaVDREuropeanaFrNewsRetrieval",
+            "JinaVDRDocQAHealthcareIndustryRetrieval",
+            "JinaVDRDocQAAI",
+            "JinaVDRShiftProjectRetrieval",
+            "JinaVDRTatQARetrieval",
+            "JinaVDRInfovqaRetrieval",
+            "JinaVDRDocVQARetrieval",
+            "JinaVDRDocQAGovReportRetrieval",
+            "JinaVDRTabFQuadRetrieval",
+            "JinaVDRDocQAEnergyRetrieval",
+            "JinaVDRArxivQARetrieval",
+        ],
+    ),
+    description="Multilingual, domain-diverse and layout-rich document retrieval benchmark.",
+    reference="https://arxiv.org/abs/2506.18902",
+    citation=r"""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+  archiveprefix = {arXiv},
+  author = {Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+  eprint = {2506.18902},
+  primaryclass = {cs.AI},
+  title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+  url = {https://arxiv.org/abs/2506.18902},
+  year = {2025},
+}""",
 )

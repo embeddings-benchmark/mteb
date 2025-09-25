@@ -54,4 +54,9 @@ from .rus.RuSciBenchOECDClusteringP2P import *
 from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *
+from .vie.RedditClusteringP2PVN import *
+from .vie.RedditClusteringVN import *
+from .vie.StackExchangeClusteringP2PVN import *
+from .vie.StackExchangeClusteringVN import *
+from .vie.TwentyNewsgroupsClusteringVN import *
 from .zho.CMTEBClustering import *

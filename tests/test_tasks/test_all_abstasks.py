@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from unittest.mock import Mock, patch
 
 import huggingface_hub
@@ -42,7 +43,7 @@ datasets_not_available = [
 ]
 
 
-dataset_revisions = list(
+_original_dataset_revisions = list(
     {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
         (t.metadata.dataset["path"], t.metadata.dataset["revision"])
         for t in mteb.get_tasks(exclude_superseded=False)
@@ -51,6 +52,15 @@ dataset_revisions = list(
         and t.metadata.name not in ALL_MOCK_TASKS
     }
 )
+
+custom_revisions = os.getenv("CUSTOM_DATASET_REVISIONS")
+if custom_revisions:
+    # Parse comma-separated list of "path:revision" pairs
+    dataset_revisions = [
+        tuple(pair.split(":", 1)) for pair in custom_revisions.split(",") if ":" in pair
+    ]
+else:
+    dataset_revisions = _original_dataset_revisions
 
 
 @pytest.mark.parametrize("task", tasks)
@@ -81,8 +91,8 @@ def test_load_data(
 
 @pytest.mark.test_datasets
 @pytest.mark.flaky(
-    reruns=3,
-    reruns_delay=5,
+    reruns=5,
+    reruns_delay=12,
     only_rerun=["AssertionError"],
     reason="May fail due to network issues",
 )

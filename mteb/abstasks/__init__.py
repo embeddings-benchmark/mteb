@@ -13,9 +13,7 @@ from .AbsTaskRetrieval import *
 from .AbsTaskSpeedTask import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
-from .Audio.AbsTaskAudioClassification import *
-from .Audio.AbsTaskAudioClustering import *
-from .Audio.AbsTaskAudioPairClassification import *
+from .AbsTaskTextRegression import *
 from .Image.AbsTaskAny2AnyMultiChoice import *
 from .Image.AbsTaskAny2AnyRetrieval import *
 from .Image.AbsTaskImageClassification import *
