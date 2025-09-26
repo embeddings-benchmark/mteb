@@ -346,8 +346,6 @@ def create_tables(
     return summary_table, per_task_table
 
 
-
-
 def apply_summary_styling(
     joint_table: pd.DataFrame, score_columns: list[str], column_types: list[str]
 ) -> gr.DataFrame:
@@ -436,48 +434,52 @@ def apply_per_task_styling(per_task: pd.DataFrame) -> gr.DataFrame:
     )
 
 
-def apply_summary_styling_from_benchmark(benchmark_instance, benchmark_results) -> gr.DataFrame:
+def apply_summary_styling_from_benchmark(
+    benchmark_instance, benchmark_results
+) -> gr.DataFrame:
     """Apply styling to summary table created by the benchmark instance's _create_summary_table method.
-    
+
     This supports polymorphism - different benchmark classes can have different table generation logic.
-    
+
     Args:
         benchmark_instance: The benchmark instance (could be Benchmark, RTEBBenchmark, etc.)
         benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
-        
+
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
     # Use the instance method to support polymorphism
     summary_df = benchmark_instance._create_summary_table(benchmark_results)
-    
+
     # If it's a no-results DataFrame, return it as-is
     if "No results" in summary_df.columns:
         return gr.DataFrame(summary_df)
-    
+
     # Apply the styling
     return _apply_summary_table_styling(summary_df)
 
 
-def apply_per_task_styling_from_benchmark(benchmark_instance, benchmark_results) -> gr.DataFrame:
+def apply_per_task_styling_from_benchmark(
+    benchmark_instance, benchmark_results
+) -> gr.DataFrame:
     """Apply styling to per-task table created by the benchmark instance's _create_per_task_table method.
-    
+
     This supports polymorphism - different benchmark classes can have different table generation logic.
-    
+
     Args:
         benchmark_instance: The benchmark instance (could be Benchmark, RTEBBenchmark, etc.)
         benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
-        
+
     Returns:
         Styled gr.DataFrame ready for display in the leaderboard
     """
     # Use the instance method to support polymorphism
     per_task_df = benchmark_instance._create_per_task_table(benchmark_results)
-    
+
     # If it's a no-results DataFrame, return it as-is
     if "No results" in per_task_df.columns:
         return gr.DataFrame(per_task_df)
-    
+
     # Apply the styling
     return _apply_per_task_table_styling(per_task_df)
 
@@ -492,18 +494,21 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Max Tokens",
         "Memory Usage (MB)",
     ]
-    
+
     gradient_columns = [
         col for col in joint_table.columns if col not in excluded_columns
     ]
     light_green_cmap = create_light_green_cmap()
 
     # Determine score columns (before formatting)
-    score_columns = [col for col in joint_table.columns 
-                    if col not in excluded_columns + ["Zero-shot"]]
+    score_columns = [
+        col
+        for col in joint_table.columns
+        if col not in excluded_columns + ["Zero-shot"]
+    ]
 
     numeric_data = joint_table.copy()
-    
+
     # Format data for display
     joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
@@ -543,7 +548,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     # setting model name column to markdown
     if len(column_types) > 1:
         column_types[1] = "markdown"
-        
+
     column_widths = get_column_widths(joint_table_style.data)
     if len(column_widths) > 0:
         column_widths[0] = "100px"
@@ -580,5 +585,3 @@ def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
         show_copy_button=True,
         show_search="filter",
     )
-
-
