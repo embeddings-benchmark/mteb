@@ -200,5 +200,5 @@ class Wrapper:
     ) -> str:
         instruction = self.get_instruction(task_name, prompt_type, prompts_dict)
         if self.instruction_template:
-            return self.format_instruction(instruction)
+            return self.format_instruction(instruction, prompt_type)
         return instruction
