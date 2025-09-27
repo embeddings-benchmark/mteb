@@ -66,6 +66,7 @@ Vylomova, Ekaterina},
   year = {2023},
 }
 """,
+        adapted_from=["MultilingualSentimentClassification"],
     )
 
     def load_data(self, **kwargs):

@@ -37,4 +37,5 @@ class ArxivClusteringP2PHumanSubset(AbsTaskClustering):
 }
 """,
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
+        adapted_from=["ArxivClusteringP2P"],
     )

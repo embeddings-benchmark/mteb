@@ -33,4 +33,5 @@ class WikiCitiesClusteringHumanSubset(AbsTaskClustering):
   url = {https://dumps.wikimedia.org},
 }
 """,
+        adapted_from=["WikiCitiesClustering"],
     )

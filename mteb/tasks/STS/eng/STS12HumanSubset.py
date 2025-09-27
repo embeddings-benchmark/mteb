@@ -41,6 +41,7 @@ class STS12HumanSubset(AbsTaskSTS):
   year = {2012},
 }
 """,
+        adapted_from="STS12",
     )
 
     @property

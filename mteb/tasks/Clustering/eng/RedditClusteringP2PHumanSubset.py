@@ -42,4 +42,5 @@ Iryna Gurevych},
 }
 """,
         prompt="Identify the topic or theme of Reddit posts based on the titles and posts",
+        adapted_from=["RedditClusteringP2P"],
     )

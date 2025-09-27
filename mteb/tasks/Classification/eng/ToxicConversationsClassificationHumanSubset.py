@@ -41,6 +41,7 @@ class ToxicConversationsClassificationHumanSubset(AbsTaskClassification):
 }
 """,
         prompt="Classify the given comments as either toxic or not toxic",
+        adapted_from=["ToxicConversationsClassification"],
     )
 
     samples_per_label = 16

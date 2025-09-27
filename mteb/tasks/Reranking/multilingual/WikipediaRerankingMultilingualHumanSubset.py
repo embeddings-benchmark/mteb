@@ -44,4 +44,5 @@ class WikipediaRerankingMultilingualHumanSubset(AbsTaskReranking, MultilingualTa
 }
 """,
         prompt="Given a query, rerank the Wikipedia passages by their relevance to the query",
+        adapted_from=["WikipediaRerankingMultilingual"],
     )

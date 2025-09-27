@@ -55,4 +55,5 @@ Klakow, Dietrich},
 }
 """,
         prompt="Identify the news category that articles belong to based on their content",
+        adapted_from=["SIB200ClusteringS2S"],
     )

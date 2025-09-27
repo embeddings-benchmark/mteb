@@ -35,4 +35,5 @@ class News21InstructionRerankingHumanSubset(AbsTaskReranking):
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",
+        adapted_from=["News21InstructionRetrieval"],
     )

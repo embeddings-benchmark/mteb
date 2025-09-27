@@ -35,4 +35,5 @@ class Robust04InstructionRerankingHumanSubset(AbsTaskReranking):
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",
+        adapted_from=["Robust04InstructionRetrieval"],
     )

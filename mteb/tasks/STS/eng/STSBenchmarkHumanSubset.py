@@ -34,6 +34,7 @@ class STSBenchmarkHumanSubset(AbsTaskSTS):
   year = {2021},
 }
 """,
+        adapted_from="STSBenchmark",
     )
 
     @property

@@ -65,6 +65,7 @@ Ratan, Shyam},
   year = {2022},
 }
 """,
+        adapted_from="STS22",
     )
 
     @property

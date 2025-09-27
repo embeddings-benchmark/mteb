@@ -27,12 +27,15 @@ class Core17InstructionRerankingHumanSubset(AbsTaskReranking):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{allan2017trec,
-  author = {Allan, James and Harman, Donna and Kanoulas, Evangelos and Li, Dan and Van Gysel, Christophe and Voorhees, Ellen M},
-  booktitle = {TREC},
-  title = {TREC 2017 Common Core Track Overview},
-  year = {2017},
+@misc{weller2024followir,
+  archiveprefix = {arXiv},
+  author = {Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
+  eprint = {2403.15246},
+  primaryclass = {cs.IR},
+  title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+  year = {2024},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",
+        adapted_from=["Core17InstructionRetrieval"],
     )
