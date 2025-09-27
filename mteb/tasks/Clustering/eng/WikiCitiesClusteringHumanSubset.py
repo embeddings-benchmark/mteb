@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class WikiCitiesClusteringHumanSubset(AbsTaskClustering):
