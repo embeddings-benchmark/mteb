@@ -27,6 +27,7 @@ from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
 from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
+from .eng.EmotionClassificationHumanSubset import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.FrenkEnClassification import *
 from .eng.ImdbClassification import *
@@ -38,7 +39,9 @@ from .eng.SDSEyeProtectionClassification import *
 from .eng.SDSGlovesClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
+from .eng.ToxicConversationsClassificationHumanSubset import *
 from .eng.TweetSentimentExtractionClassification import *
+from .eng.TweetSentimentExtractionClassificationHumanSubset import *
 from .eng.TweetTopicSingleClassification import *
 from .eng.WikipediaBiolumNeurochemClassification import *
 from .eng.WikipediaBioMetChemClassification import *
@@ -106,6 +109,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
+from .multilingual.MultilingualSentimentClassificationHumanSubset import *
 from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.NusaParagraphEmotionClassification import *

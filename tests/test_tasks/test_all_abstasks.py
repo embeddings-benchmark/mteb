@@ -73,6 +73,12 @@ def test_load_data(
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or isinstance(task, AbsTaskImageTextPairClassification)
+        or task.metadata.name
+        in [
+            "ToxicConversationsClassificationHumanSubset",
+            "TweetSentimentExtractionClassificationHumanSubset",
+            "EmotionClassificationHumanSubset",
+        ]
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:

@@ -5,6 +5,7 @@ from .deu.BlurbsClusteringS2S import *
 from .deu.TenKGnadClusteringP2P import *
 from .deu.TenKGnadClusteringS2S import *
 from .eng.ArxivClusteringP2P import *
+from .eng.ArxivClusteringP2PHumanSubset import *
 from .eng.ArxivClusteringS2S import *
 from .eng.ArXivHierarchicalClustering import *
 from .eng.BigPatentClustering import *
@@ -17,10 +18,12 @@ from .eng.MedrxivClusteringP2P import *
 from .eng.MedrxivClusteringS2S import *
 from .eng.RedditClustering import *
 from .eng.RedditClusteringP2P import *
+from .eng.RedditClusteringP2PHumanSubset import *
 from .eng.StackExchangeClustering import *
 from .eng.StackExchangeClusteringP2P import *
 from .eng.TwentyNewsgroupsClustering import *
 from .eng.WikiCitiesClustering import *
+from .eng.WikiCitiesClusteringHumanSubset import *
 from .eng.WikipediaChemistrySpecialtiesClustering import *
 from .eng.WikipediaChemistryTopicsClustering import *
 from .fas.FaMTEBClustering import *
@@ -37,6 +40,7 @@ from .multilingual.MasakhaNEWSClusteringS2S import *
 from .multilingual.MLSUMClusteringP2P import *
 from .multilingual.MLSUMClusteringS2S import *
 from .multilingual.SIB200ClusteringS2S import *
+from .multilingual.SIB200ClusteringS2SHumanSubset import *
 from .multilingual.WikiClusteringP2P import *
 from .nob.snl_clustering import *
 from .nob.SNLHierarchicalClustering import *
