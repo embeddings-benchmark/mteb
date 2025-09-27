@@ -2295,3 +2295,36 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
+
+
+HUME = Benchmark(
+    name="HUME",
+    display_name="Human Benckmark",
+    display_on_leaderboard=True,
+    # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
+    tasks=get_tasks(
+        tasks=[
+            "EmotionClassificationHumanSubset",
+            "ToxicConversationsClassificationHumanSubset",
+            "TweetSentimentExtractionClassificationHumanSubset",
+            "MultilingualSentimentClassificationHumanSubset",
+            "ArxivClusteringP2PHumanSubset",
+            "RedditClusteringP2PHumanSubset",
+            "WikiCitiesClusteringHumanSubset",
+            "SIB200ClusteringS2SHumanSubset",
+            "Core17InstructionRerankingHumanSubset",
+            "News21InstructionRerankingHumanSubset",
+            "Robust04InstructionRerankingHumanSubset",
+            "WikipediaRerankingMultilingualHumanSubset",
+            "SICK-RHumanSubset",
+            "STS12HumanSubset",
+            "STSBenchmarkHumanSubset",
+            "STS22HumanSubset",
+        ],
+        languages=["eng-Latn", "ara-Arab", "rus-Cyrl", "dan-Latn", "nob-Latn"],
+    ),
+    description="The HUME benchmark is designed to evaluate the performance of text embedding models in capturing various human attributes and social dimensions in text data.",
+    reference="TBD",
+    citation="TBD",
+    contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
+)
