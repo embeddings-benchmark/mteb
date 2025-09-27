@@ -2324,6 +2324,6 @@ HUME = Benchmark(
     ),
     description="The HUME benchmark is designed to evaluate the performance of text embedding models in capturing various human attributes and social dimensions in text data.",
     reference="TBD",
-    citation="TBD",
+    citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
