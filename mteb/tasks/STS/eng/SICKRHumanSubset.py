@@ -54,7 +54,7 @@ Piperidis, Stelios},
   year = {2014},
 }
 """,
-        adapted_from="SICK-R",
+        adapted_from=["SICK-R"],
     )
 
     @property
