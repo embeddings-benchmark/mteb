@@ -25,7 +25,10 @@ from mteb.leaderboard.benchmark_selector import (
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
-from mteb.leaderboard.table import create_tables
+from mteb.leaderboard.table import (
+    apply_per_task_styling_from_benchmark,
+    apply_summary_styling_from_benchmark,
+)
 from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
@@ -236,10 +239,21 @@ def get_leaderboard_app() -> gr.Blocks:
         max_model_size=MAX_MODEL_SIZE,
         zero_shot_setting="allow_all",
     )
+    default_filtered_scores = [
+        entry for entry in default_scores if entry["model_name"] in filtered_models
+    ]
 
-    summary_table, per_task_table = create_tables(
-        [entry for entry in default_scores if entry["model_name"] in filtered_models]
+    # Filter BenchmarkResults based on default filtered models (as required by Kenneth)
+    filtered_model_names = [entry["model_name"] for entry in default_filtered_scores]
+    filtered_benchmark_results = default_results.select_models(filtered_model_names)
+
+    summary_table = apply_summary_styling_from_benchmark(
+        default_benchmark, filtered_benchmark_results
     )
+    per_task_table = apply_per_task_styling_from_benchmark(
+        default_benchmark, filtered_benchmark_results
+    )
+
     lang_select = gr.Dropdown(
         LANGUAGE,
         value=sorted(default_results.languages),
@@ -774,19 +788,43 @@ def get_leaderboard_app() -> gr.Blocks:
             tasks = set(tasks)
             benchmark = mteb.get_benchmark(benchmark_name)
             benchmark_tasks = {task.metadata.name for task in benchmark.tasks}
-            if (benchmark_tasks != tasks) or (models_to_keep is not None):
-                filtered_scores = []
-                for entry in scores:
-                    if entry["task_name"] not in tasks:
-                        continue
-                    if (models_to_keep is not None) and (
-                        entry["model_name"] not in models_to_keep
-                    ):
-                        continue
-                    filtered_scores.append(entry)
-            else:
-                filtered_scores = scores
-            summary, per_task = create_tables(filtered_scores)
+
+            # Extract filtered model and task names from scores (respects UI filters)
+            filtered_model_names = set()
+            filtered_task_names = set()
+
+            for entry in scores:
+                if entry["task_name"] not in tasks:
+                    continue
+                if (models_to_keep is not None) and (
+                    entry["model_name"] not in models_to_keep
+                ):
+                    continue
+                filtered_model_names.add(entry["model_name"])
+                filtered_task_names.add(entry["task_name"])
+
+            # Create filtered BenchmarkResults as required by Kenneth
+            benchmark_results = all_benchmark_results[benchmark_name]
+            filtered_benchmark_results = benchmark_results
+
+            # Apply task filtering if needed
+            if filtered_task_names != benchmark_tasks:
+                filtered_benchmark_results = filtered_benchmark_results.filter_tasks(
+                    task_names=list(filtered_task_names)
+                )
+
+            # Apply model filtering if needed
+            if filtered_model_names:
+                filtered_benchmark_results = filtered_benchmark_results.select_models(
+                    list(filtered_model_names)
+                )
+
+            summary = apply_summary_styling_from_benchmark(
+                benchmark, filtered_benchmark_results
+            )
+            per_task = apply_per_task_styling_from_benchmark(
+                benchmark, filtered_benchmark_results
+            )
             elapsed = time.time() - start_time
             logger.debug(f"update_tables callback: {elapsed}s")
             return summary, per_task
