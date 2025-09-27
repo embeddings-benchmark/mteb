@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
 from typing import Any, Callable
 
-import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Pooling, Transformer
@@ -39,66 +37,26 @@ class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
         self.model_name = model_name
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages
-        self.add_eos_token = add_eos_token
         self.prompts_dict = prompts_dict
+
+        tokenizer_params = {}
+        if add_eos_token:
+            tokenizer_params["add_eos_token"] = add_eos_token
+        if max_seq_length is not None:
+            tokenizer_params["model_max_length"] = max_seq_length
+        if padding_side is not None:
+            tokenizer_params["padding_side"] = padding_side
+
+        kwargs.setdefault("tokenizer_args", {}).update(tokenizer_params)
 
         transformer = Transformer(
             model_name,
-            max_seq_length=max_seq_length,
             **kwargs,
         )
         pooling = Pooling(
             transformer.get_word_embedding_dimension(), pooling_mode="lasttoken"
         )
         self.model = SentenceTransformer(modules=[transformer, pooling])
-
-        if max_seq_length is not None:
-            self.model.max_seq_length = max_seq_length
-
-        if padding_side is not None:
-            self.model.tokenizer.padding_side = padding_side
-
-    def encode(
-        self,
-        sentences: Sequence[str],
-        *,
-        task_name: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        instruction = self.get_task_instruction(
-            task_name, prompt_type, self.prompts_dict
-        )
-        # to passage prompts won't be applied to passages
-        if (
-            not self.apply_instruction_to_passages
-            and prompt_type == PromptType.document
-        ):
-            instruction = None
-
-        if instruction:
-            sentences = [instruction + sentence for sentence in sentences]
-
-        if self.add_eos_token:
-            batch_tokens = self.model.tokenizer(
-                sentences, truncation=True, max_length=self.model.max_seq_length - 1
-            )
-            decoded_sentences = self.model.tokenizer.batch_decode(
-                batch_tokens["input_ids"], skip_special_tokens=True
-            )
-            sentences = [
-                sentence + self.model.tokenizer.eos_token
-                for sentence in decoded_sentences
-            ]
-
-        embeddings = self.model.encode(
-            sentences,
-            **kwargs,
-        )
-
-        if isinstance(embeddings, torch.Tensor):
-            embeddings = embeddings.cpu().detach().float().numpy()
-        return embeddings
 
 
 # https://huggingface.co/datasets/BMRetriever/biomed_retrieval_dataset
