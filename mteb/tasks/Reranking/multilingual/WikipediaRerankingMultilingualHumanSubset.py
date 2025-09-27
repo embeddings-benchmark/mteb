@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
