@@ -344,14 +344,5 @@ class Benchmark:
     def _create_per_task_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create per-task table from BenchmarkResults.
-
-        This method can be overridden by subclasses to provide custom table generation logic.
-
-        Args:
-            benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
-
-        Returns:
-            DataFrame with per-task scores, ready for styling in the leaderboard
-        """
+        """Create per-task table. Called by the leaderboard app."""
         return _create_per_task_table_from_benchmark_results(benchmark_results)
