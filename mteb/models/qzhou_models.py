@@ -81,7 +81,7 @@ QZhou_Embedding = ModelMeta(
     },
 )
 
-QZhou-Embedding-Zh = ModelMeta(
+QZhou_Embedding_Zh = ModelMeta(
     loader=partial(
         InstructSentenceTransformerWrapper,
         model_name="Kingsoft-LLM/QZhou-Embedding-Zh",
