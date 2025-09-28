@@ -2,16 +2,13 @@ import math
 import re
 from collections import defaultdict
 
-from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 
-from mteb.models.overview import get_model_meta
 from mteb.overview import get_task, get_tasks
 
-if TYPE_CHECKING:
-    from mteb.load_results.benchmark_results import BenchmarkResults
+from mteb.load_results.benchmark_results import BenchmarkResults
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:
@@ -56,6 +53,8 @@ def _format_max_tokens(max_tokens: float | None) -> str:
 
 def _failsafe_get_model_meta(model_name):
     try:
+        from mteb.models.overview import get_model_meta
+
         return get_model_meta(model_name)
     except Exception:
         return None
