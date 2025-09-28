@@ -42,7 +42,7 @@ qzhou_training_data = {
     "TweetSentimentExtractionClassification": ["train"],
 }
 
-qzhou_han_training_data = {"LCQMC": ["train"], "PAWSX": ["train"]}
+qzhou_zh_training_data = {"LCQMC": ["train"], "PAWSX": ["train"]}
 
 QZhou_Embedding = ModelMeta(
     loader=partial(
@@ -81,31 +81,31 @@ QZhou_Embedding = ModelMeta(
     },
 )
 
-QZhou_Han = ModelMeta(
+QZhou-Embedding-Zh = ModelMeta(
     loader=partial(
         InstructSentenceTransformerWrapper,
-        model_name="Kingsoft-LLM/QZhou-Han",
+        model_name="Kingsoft-LLM/QZhou-Embedding-Zh",
         revision="0321ccb126413d1e49c5ce908e802b63d35f18e2",
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
     ),
-    name="Kingsoft-LLM/QZhou-Han",
+    name="Kingsoft-LLM/QZhou-Embedding-Zh",
     languages=["zho-Hans"],
     open_weights=True,
     revision="0321ccb126413d1e49c5ce908e802b63d35f18e2",
-    release_date="2025-09-24",
+    release_date="2025-09-28",
     n_parameters=7_575_747_328,
     memory_usage_mb=29431,
     embed_dim=1792,
     license="apache-2.0",
     max_tokens=8192,
-    reference="https://huggingface.co/Kingsoft-LLM/QZhou-Han",
+    reference="http://huggingface.co/Kingsoft-LLM/QZhou-Embedding-Zh",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    public_training_data=None,
     training_datasets={
-        **qzhou_han_training_data,
+        **qzhou_zh_training_data,
     },
 )
