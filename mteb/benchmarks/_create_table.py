@@ -1,14 +1,14 @@
+from __future__ import annotations
+
 import math
 import re
 from collections import defaultdict
 
-
 import numpy as np
 import pandas as pd
 
-from mteb.overview import get_task, get_tasks
-
 from mteb.load_results.benchmark_results import BenchmarkResults
+from mteb.overview import get_task, get_tasks
 
 
 def _borda_count(scores: pd.Series) -> pd.Series:

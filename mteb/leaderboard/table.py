@@ -1,18 +1,11 @@
 from __future__ import annotations
 
-import math
-import re
-from collections import defaultdict
-
 import gradio as gr
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
-
-from mteb.models.overview import get_model_meta
-from mteb.overview import get_task, get_tasks
 
 
 def format_scores(score: float) -> float:

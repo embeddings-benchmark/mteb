@@ -8,8 +8,8 @@ import pandas as pd
 
 import mteb
 from mteb.leaderboard.table import (
-    apply_summary_styling_from_benchmark,
     apply_per_task_styling_from_benchmark,
+    apply_summary_styling_from_benchmark,
 )
 from mteb.load_results import load_results
 
@@ -62,9 +62,6 @@ def load_leaderboard(
     benchmark_results_filtered = benchmark.load_results(
         base_results=benchmark_results
     ).join_revisions()
-
-    # Convert scores into long format
-    scores_long = benchmark_results_filtered.get_scores(format="long")
 
     # Convert scores into leaderboard tables
     loaded_benchmark = mteb.get_benchmark(benchmark.name)
