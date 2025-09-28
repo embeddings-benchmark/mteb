@@ -2295,3 +2295,26 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
+
+REAL_MM_RAG = Benchmark(
+    name="REAL_MM_RAG",
+    display_name="IBM Visual Document Retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "RealMMRagFinReportRetrieval",
+            "RealMMRagFinSlidesRetrieval",
+            "RealMMRagTechReportRetrieval",
+            "RealMMRagTechSlidesRetrieval",
+        ],
+    ),
+    description="Realistic and multi-modal document retrieval benchmark.",
+    reference="https://arxiv.org/abs/2502.12342",
+    citation=r"""
+@article{wasserman2025real,
+  title={REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  author={Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal={arXiv preprint arXiv:2502.12342},
+  year={2025}
+}
+""",
+)
