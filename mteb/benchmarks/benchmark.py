@@ -329,16 +329,8 @@ class Benchmark:
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table from BenchmarkResults.
+        """Create summary table. Called by the leaderboard app."""
 
-        This method can be overridden by subclasses to provide custom table generation logic.
-
-        Args:
-            benchmark_results: BenchmarkResults object containing model results (may be pre-filtered)
-
-        Returns:
-            DataFrame with model summaries, ready for styling in the leaderboard
-        """
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
     def _create_per_task_table(
