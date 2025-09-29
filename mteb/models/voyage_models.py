@@ -205,6 +205,33 @@ model_prompts = {
     PromptType.document.value: "document",
 }
 
+voyage_3_large = ModelMeta(
+    name="voyageai/voyage-3-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    revision="1",
+    release_date="2025-01-07",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        VoyageWrapper,
+        model_name="voyage-3-large",
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2025/01/07/voyage-3-large/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
+
 voyage_3_5 = ModelMeta(
     name="voyageai/voyage-3.5",
     revision="1",
