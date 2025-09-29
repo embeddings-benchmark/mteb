@@ -137,7 +137,7 @@ class RealMMRagFinSlidesRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_FinSlides_BEIR",
-            "revision": "main",
+            "revision": "41167605aed3ab0ff342ac8f318163c6e59b8b31",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -194,7 +194,7 @@ class RealMMRagTechReportRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_TechReport_BEIR",
-            "revision": "main",
+            "revision": "13642f1f8d39e032757f4d0ee73814452fc76d17",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -251,7 +251,7 @@ class RealMMRagTechSlidesRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_TechSlides_BEIR",
-            "revision": "main",
+            "revision": "614ad5cac2edd86756045f04075d335a3825a692",
         },
         type="DocumentUnderstanding",
         category="t2i",
