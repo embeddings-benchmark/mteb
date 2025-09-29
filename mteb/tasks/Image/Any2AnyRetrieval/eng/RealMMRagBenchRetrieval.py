@@ -11,7 +11,7 @@ def _load_data(
     splits: str,
     cache_dir: str | None = None,
     revision: str | None = None,
-    text_col: str | "query" = "query",
+    text_col: str = "query",
 ):
     corpus = {}
     queries = {}
