@@ -24,7 +24,7 @@ def instruction_template(
         return ""
     if isinstance(instruction, dict):
         if prompt_type is None:
-            instruction = list(instruction.values())[0]
+            instruction = next(iter(instruction.values()))
         else:
             instruction = instruction[prompt_type]
     return INSTRUCTION.format(instruction=instruction)

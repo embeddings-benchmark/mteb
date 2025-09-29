@@ -10,12 +10,12 @@ from .STS16STS import STS16STS
 from .STSBenchmarkSTS import STSBenchmarkSTS
 
 __all__ = [
-    "BiossesSTS",
     "STS12STS",
     "STS13STS",
     "STS14STS",
     "STS15STS",
     "STS16STS",
+    "BiossesSTS",
     "STSBenchmarkSTS",
     "SickrSTS",
 ]

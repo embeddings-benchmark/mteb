@@ -17,7 +17,9 @@ _LANGS = {
 }
 
 
-def _load_statcan_data(path: str, langs: list, splits: str, revision: str = None):
+def _load_statcan_data(
+    path: str, langs: list, splits: str, revision: str | None = None
+):
     queries = {lang: {split: {} for split in splits} for lang in langs}
     corpus = {lang: {split: {} for split in splits} for lang in langs}
     relevant_docs = {lang: {split: {} for split in splits} for lang in langs}
