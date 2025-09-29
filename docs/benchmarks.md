@@ -50,7 +50,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | RTEB(Code, beta) | RTEB Code | 8 | Retrieval: 8 | [Programming, Written] | eng,go,javascript,jpn,python,sql |
 | RTEB(Health, beta) | RTEB Healthcare | 4 | Retrieval: 4 | [Academic, Medical, Written] | deu,eng,fra,spa |
 | RTEB(Law, beta) | RTEB Legal | 7 | Retrieval: 7 | [Legal, Written] | deu,eng,fra,jpn |
-| RTEB(beta) | RTEB Retrieval Embedding Benchmark | 28 | Retrieval: 28 | [Academic, Encyclopaedic, Financial, Legal, Medical, Non-fiction, Programming, Written] | deu,eng,fra,go,javascript,jpn,python,spa,sql |
+| RTEB(beta) | RTEB Retrieval Embedding Benchmark | 29 | Retrieval: 29 | [Academic, Encyclopaedic, Financial, Legal, Medical, Non-fiction, Programming, Written] | ara,ben,deu,eng,fas,fin,fra,go,hin,ind,javascript,jpn,kor,python,rus,spa,sql,swa,tel,tha,yor,zho |
 | RTEB(deu, beta) | RTEB German | 4 | Retrieval: 4 | [Legal, Medical, Non-fiction, Written] | deu |
 | RTEB(eng, beta) | RTEB English | 20 | Retrieval: 20 | [Academic, Financial, Legal, Medical, Non-fiction, Programming, Written] | eng,fra,go,javascript,python,spa,sql |
 | RTEB(fin, beta) | RTEB Finance | 7 | Retrieval: 7 | [Financial, Non-fiction, Written] | eng |
