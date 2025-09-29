@@ -30,13 +30,13 @@ class LocBenchReranking(AbsTaskReranking):
         prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
         bibtex_citation=r"""
 @misc{chen2025locagentgraphguidedllmagents,
-      title={LocAgent: Graph-Guided LLM Agents for Code Localization}, 
-      author={Zhaoling Chen and Xiangru Tang and Gangda Deng and Fang Wu and Jialong Wu and Zhiwei Jiang and Viktor Prasanna and Arman Cohan and Xingyao Wang},
-      year={2025},
-      eprint={2503.09089},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2503.09089}, 
+  archiveprefix = {arXiv},
+  author = {Zhaoling Chen and Xiangru Tang and Gangda Deng and Fang Wu and Jialong Wu and Zhiwei Jiang and Viktor Prasanna and Arman Cohan and Xingyao Wang},
+  eprint = {2503.09089},
+  primaryclass = {cs.SE},
+  title = {LocAgent: Graph-Guided LLM Agents for Code Localization},
+  url = {https://arxiv.org/abs/2503.09089},
+  year = {2025},
 }
 """
     )

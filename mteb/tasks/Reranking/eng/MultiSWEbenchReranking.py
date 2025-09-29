@@ -30,13 +30,13 @@ class MultiSWEbenchReranking(AbsTaskReranking):
         prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
         bibtex_citation=r"""
 @misc{zan2025multiswebench,
-      title={Multi-SWE-bench: A Multilingual Benchmark for Issue Resolving}, 
-      author={Daoguang Zan and Zhirong Huang and Wei Liu and Hanwu Chen and Linhao Zhang and Shulin Xin and Lu Chen and Qi Liu and Xiaojian Zhong and Aoyan Li and Siyao Liu and Yongsheng Xiao and Liangqiang Chen and Yuyu Zhang and Jing Su and Tianyu Liu and Rui Long and Kai Shen and Liang Xiang},
-      year={2025},
-      eprint={2504.02605},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2504.02605},
+  archiveprefix = {arXiv},
+  author = {Daoguang Zan and Zhirong Huang and Wei Liu and Hanwu Chen and Linhao Zhang and Shulin Xin and Lu Chen and Qi Liu and Xiaojian Zhong and Aoyan Li and Siyao Liu and Yongsheng Xiao and Liangqiang Chen and Yuyu Zhang and Jing Su and Tianyu Liu and Rui Long and Kai Shen and Liang Xiang},
+  eprint = {2504.02605},
+  primaryclass = {cs.SE},
+  title = {Multi-SWE-bench: A Multilingual Benchmark for Issue Resolving},
+  url = {https://arxiv.org/abs/2504.02605},
+  year = {2025},
 }
 """
     )

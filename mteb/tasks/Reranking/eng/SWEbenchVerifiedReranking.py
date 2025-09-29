@@ -27,13 +27,13 @@ class SWEbenchVerifiedReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        prompt="Instruct: Given a github issue, identify the code that needs to be changed to fix the issue. Query: ",
+        prompt={"query": "Instruct: Given a github issue, identify the code that needs to be changed to fix the issue. Query: "},
         bibtex_citation=r"""
-        @misc{openai2024swebenchverified,
-              title={Introducing swe-bench verified}, 
-              author={OpenAI},
-              year={2024},
-              url={https://openai.com/index/introducing-swe-bench-verified/}, 
-        }
-  """
+@misc{openai2024swebenchverified,
+  author = {OpenAI},
+  title = {Introducing swe-bench verified},
+  url = {https://openai.com/index/introducing-swe-bench-verified/},
+  year = {2024},
+}
+"""
     )

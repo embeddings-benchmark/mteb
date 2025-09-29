@@ -30,13 +30,13 @@ class SWEbenchLiteReranking(AbsTaskReranking):
         prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
         bibtex_citation=r"""
 @misc{jimenez2024swebenchlanguagemodelsresolve,
-      title={SWE-bench: Can Language Models Resolve Real-World GitHub Issues?}, 
-      author={Carlos E. Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik Narasimhan},
-      year={2024},
-      eprint={2310.06770},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2310.06770}, 
+  archiveprefix = {arXiv},
+  author = {Carlos E. Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik Narasimhan},
+  eprint = {2310.06770},
+  primaryclass = {cs.CL},
+  title = {SWE-bench: Can Language Models Resolve Real-World GitHub Issues?},
+  url = {https://arxiv.org/abs/2310.06770},
+  year = {2024},
 }
 """
     )

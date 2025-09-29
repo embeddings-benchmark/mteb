@@ -30,13 +30,13 @@ class SWEPolyBenchReranking(AbsTaskReranking):
         prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
         bibtex_citation=r"""
 @misc{yang2025swesmith,
-  title={SWE-smith: Scaling Data for Software Engineering Agents}, 
-  author={John Yang and Kilian Lieret and Carlos E. Jimenez and Alexander Wettig and Kabir Khandpur and Yanzhe Zhang and Binyuan Hui and Ofir Press and Ludwig Schmidt and Diyi Yang},
-  year={2025},
-  eprint={2504.21798},
-  archivePrefix={arXiv},
-  primaryClass={cs.SE},
-  url={https://arxiv.org/abs/2504.21798}, 
+  archiveprefix = {arXiv},
+  author = {John Yang and Kilian Lieret and Carlos E. Jimenez and Alexander Wettig and Kabir Khandpur and Yanzhe Zhang and Binyuan Hui and Ofir Press and Ludwig Schmidt and Diyi Yang},
+  eprint = {2504.21798},
+  primaryclass = {cs.SE},
+  title = {SWE-smith: Scaling Data for Software Engineering Agents},
+  url = {https://arxiv.org/abs/2504.21798},
+  year = {2025},
 }
 """
     )
