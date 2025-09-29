@@ -27,7 +27,7 @@ class SWEbenchVerifiedReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        prompt={"query": "Instruct: Given a github issue, identify the code that needs to be changed to fix the issue. Query: "},
+        prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
         bibtex_citation=r"""
 @misc{openai2024swebenchverified,
   author = {OpenAI},
