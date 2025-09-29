@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import torch
@@ -15,10 +16,9 @@ from mteb.types import Array, BatchedInput, PromptType
 
 def evaclip_loader(model_name, **kwargs):
     try:
-        import os
         import sys
 
-        sys.path.insert(0, os.path.join(os.getcwd(), "EVA/EVA-CLIP/rei"))
+        sys.path.insert(0, str(Path.cwd() / "EVA" / "EVA-CLIP" / "rei"))
 
         from eva_clip import create_model_and_transforms, get_tokenizer
     except ImportError:

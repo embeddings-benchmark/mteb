@@ -167,7 +167,6 @@ namespaces = false
 "mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
-
 target-version = "py39"
 
 
@@ -222,6 +221,7 @@ select = [
     "RUF100",  # unused-noqa
     "RUF101",  # redirected-noqa
     "RUF200",  # invalid-pyproject-toml
+    "PTH",     # use pathlib
 ]
 
 ignore = [
@@ -241,6 +241,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
+"scripts/*" = ["PTH"]
 "tests/*" = ["RUF012"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
