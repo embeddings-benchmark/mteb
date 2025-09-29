@@ -20,7 +20,7 @@ def _load_vdr_multilingual_data(
     path: str,
     langs: list,
     split: str,
-    revision: str = None,
+    revision: str | None = None,
 ):
     """Load data from the VDR Multilingual dataset."""
     corpus_dict = {}

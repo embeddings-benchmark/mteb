@@ -67,13 +67,13 @@ from .WebQAT2ITRetrieval import WebQAT2ITRetrieval
 from .WebQAT2TRetrieval import WebQAT2TRetrieval
 
 __all__ = [
+    "CUB200I2I",
+    "FORBI2I",
     "BLINKIT2IRetrieval",
     "BLINKIT2TRetrieval",
     "CIRRIT2IRetrieval",
-    "CUB200I2I",
     "EDIST2ITRetrieval",
     "EncyclopediaVQAIT2ITRetrieval",
-    "FORBI2I",
     "Fashion200kI2TRetrieval",
     "Fashion200kT2IRetrieval",
     "FashionIQIT2IRetrieval",

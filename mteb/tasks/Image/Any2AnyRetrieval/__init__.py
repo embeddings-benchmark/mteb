@@ -117,13 +117,13 @@ from .multilingual import (
 )
 
 __all__ = [
+    "CUB200I2I",
+    "FORBI2I",
     "BLINKIT2IRetrieval",
     "BLINKIT2TRetrieval",
     "CIRRIT2IRetrieval",
-    "CUB200I2I",
     "EDIST2ITRetrieval",
     "EncyclopediaVQAIT2ITRetrieval",
-    "FORBI2I",
     "Fashion200kI2TRetrieval",
     "Fashion200kT2IRetrieval",
     "FashionIQIT2IRetrieval",

@@ -624,7 +624,7 @@ def get_transform_statements(file_path: Path, class_name: str) -> list[ast.stmt]
     return []
 
 
-def load_dataset(file_path: Path, class_name: str) -> DatasetDict:  # noqa: F811
+def load_dataset(file_path: Path, class_name: str) -> DatasetDict:
     original = file_path.read_text()
     lines = original.splitlines(keepends=True)
     filtered: list[str] = []
@@ -649,7 +649,7 @@ def load_dataset(file_path: Path, class_name: str) -> DatasetDict:  # noqa: F811
     spec = importlib.util.spec_from_file_location("task_module", str(file_path))
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    TaskClass = getattr(module, class_name)  # noqa
+    TaskClass = getattr(module, class_name)
     task = TaskClass()
     task.load_data()
     ds = task.dataset

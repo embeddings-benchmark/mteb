@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 import numpy as np
 import tqdm
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class OpenAIModel(AbsEncoder):
-    default_embed_dims = {
+    default_embed_dims: ClassVar[dict[str, int]] = {
         "text-embedding-3-small": 1536,
         "text-embedding-3-large": 3072,
         "text-embedding-ada-002": 1536,

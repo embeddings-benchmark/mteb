@@ -9,8 +9,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SugarCrepe(AbsTaskImageTextPairClassification):
-    images_column_names = ["images"]
-    texts_column_names = ["caption", "negative_caption"]
+    images_column_names = ("images",)
+    texts_column_names = ("caption", "negative_caption")
 
     metadata = TaskMetadata(
         name="SugarCrepe",

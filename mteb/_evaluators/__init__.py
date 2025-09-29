@@ -18,16 +18,16 @@ from .text.summarization_evaluator import (
 from .zeroshot_classification_evaluator import ZeroShotClassificationEvaluator
 
 __all__ = [
-    "Evaluator",
     "AnySTSEvaluator",
-    "SummarizationEvaluator",
-    "DeprecatedSummarizationEvaluator",
-    "RetrievalEvaluator",
-    "ClusteringEvaluator",
     "BitextMiningEvaluator",
-    "PairClassificationEvaluator",
-    "ImageTextPairClassificationEvaluator",
-    "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",
+    "ClusteringEvaluator",
+    "DeprecatedSummarizationEvaluator",
+    "Evaluator",
+    "ImageTextPairClassificationEvaluator",
     "LinearRegressionEvaluator",
+    "PairClassificationEvaluator",
+    "RetrievalEvaluator",
+    "SummarizationEvaluator",
+    "ZeroShotClassificationEvaluator",
 ]

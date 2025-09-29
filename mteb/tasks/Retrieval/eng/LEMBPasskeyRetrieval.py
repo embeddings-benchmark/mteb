@@ -8,17 +8,6 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class LEMBPasskeyRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLIT = [
-        "test_256",
-        "test_512",
-        "test_1024",
-        "test_2048",
-        "test_4096",
-        "test_8192",
-        "test_16384",
-        "test_32768",
-    ]
-
     metadata = TaskMetadata(
         name="LEMBPasskeyRetrieval",
         dataset={
@@ -31,7 +20,16 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=_EVAL_SPLIT,
+        eval_splits=[
+            "test_256",
+            "test_512",
+            "test_1024",
+            "test_2048",
+            "test_4096",
+            "test_8192",
+            "test_16384",
+            "test_32768",
+        ],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_1",
         date=("2000-01-01", "2023-12-31"),
@@ -59,7 +57,7 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
         self.queries = {}
         self.relevant_docs = {}
 
-        for split in self._EVAL_SPLIT:
+        for split in self.metadata.eval_splits:
             context_length = int(split.split("_")[1])
             query_list = datasets.load_dataset(**self.metadata.dataset)[
                 "queries"

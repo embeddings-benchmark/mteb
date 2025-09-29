@@ -10,8 +10,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ImageCoDe(AbsTaskImageTextPairClassification):
-    texts_column_names = ["text"]
-    images_column_names = [
+    texts_column_names = ("text",)
+    images_column_names = (
         "correct_image",
         "false_image_1",
         "false_image_2",
@@ -22,7 +22,7 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
         "false_image_7",
         "false_image_8",
         "false_image_9",
-    ]
+    )
 
     metadata = TaskMetadata(
         name="ImageCoDe",

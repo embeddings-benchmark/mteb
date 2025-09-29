@@ -7,7 +7,7 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def _load_data(path: str, splits: str, revision: str = None):
+def _load_data(path: str, splits: str, revision: str | None = None):
     corpus = {}
     queries = {}
     relevant_docs = {}
