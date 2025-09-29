@@ -8,10 +8,10 @@ import numpy as np
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 VOYAGE_TRAINING_DATA = set(

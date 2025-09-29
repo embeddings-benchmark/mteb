@@ -59,7 +59,7 @@ empty_model_meta = ModelMeta(
 )
 
 
-def create_empty_model_meta() -> ModelMeta:
+def _create_empty_model_meta() -> ModelMeta:
     meta = deepcopy(empty_model_meta)
     meta.revision = "no_revision_available"
     meta.name = "no_model_name_available"
@@ -84,7 +84,7 @@ def _sanitize_model(
     elif hasattr(model, "mteb_model_meta"):
         meta = model.mteb_model_meta  # type: ignore[attr-defined]
     else:
-        meta = create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+        meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)

@@ -10,12 +10,12 @@ from PIL.Image import Image
 from torch.utils.data import DataLoader
 
 from mteb._evaluators.evaluator import Evaluator
+from mteb._requires_package import requires_image_dependencies
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
     transform_image_to_rgb,
 )
 from mteb.models.models_protocols import Encoder
-from mteb.requires_package import requires_image_dependencies
 
 logger = logging.getLogger(__name__)
 

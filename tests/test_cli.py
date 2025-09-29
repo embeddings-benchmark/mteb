@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb.cli import create_meta, run
+from mteb.cli.build_cli import create_meta, run
 
 
 def test_available_tasks():
