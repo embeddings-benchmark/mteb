@@ -50,7 +50,7 @@ BENCHMARK_ENTRIES = [
                 ),
             ),
             MenuEntry(
-                "Domain -Specific",
+                "Domain-Specific ",
                 mteb.get_benchmarks(
                     [
                         "MTEB(Code, v1)",
