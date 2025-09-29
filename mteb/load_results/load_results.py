@@ -58,7 +58,7 @@ def download_of_results(
             f"No results repository found in {results_directory}, cloning it from {results_repo}"
         )
         subprocess.run(
-            ["git", "clone", results_repo],
+            ["git", "clone", results_repo, "-b", "add_human_results"],
             cwd=cache_directory,
         )
 
