@@ -10,8 +10,8 @@ class HUMEToxicConversationsClassification(AbsTaskClassification):
         description="Human evaluation subset of Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
         reference="https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
         dataset={
-            "path": "mteb/mteb-human-toxicity-classification",
-            "revision": "3db547359a8e0d077f0c9df3f50e11ede67501b7",
+            "path": "mteb/HUMEToxicConversationsClassification",
+            "revision": "4c128c30566ffc7b01c7c3a367da20f36fc08ef8",
         },
         type="Classification",
         category="s2s",
