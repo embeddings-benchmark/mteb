@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.49"
+version = "1.38.56"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -26,7 +26,7 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
-    "datasets>=2.19.0, <4.0.0",
+    "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
     "scikit-learn>=1.4.0",
@@ -86,6 +86,7 @@ nomic = ["einops>=0.8.1"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
 colpali_engine = ["colpali_engine>=0.3.12"]
 xet = ["huggingface_hub>=0.32.0"]
+youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 
 [dependency-groups]
 lint = [
@@ -99,6 +100,7 @@ test = [
     "pytest-coverage>=0.0",
     "pytest-rerunfailures>=15.0,<16.0",
     "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+    "GitPython>=3.0.0",
 ]
 docs = [
     "mkdocs>=1.6.1",
@@ -156,7 +158,11 @@ include = ["mteb", "mteb.*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"*" = ["*.json"]
+"mteb" = [
+    "languages/*.json",  # for languages
+    "descriptive_stats/*/*.json",  # for descriptive_stats image
+    "descriptive_stats/Image/*/*.json",  # for descriptive_stats image
+]
 "mteb.abstasks" = ["dataset_card_template.md"]
 "mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
@@ -276,7 +282,8 @@ conflicts = [
     # conflicting versions of transformers:
     [{ extra = "llm2vec" }, { extra = "pylate" }],
     [{ extra = "colpali-engine" }, { extra = "pylate" }],
-    [{ extra = "colpali-engine" }, { extra = "llm2vec" }]
+    [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
+    [{ extra = "jina-v4" }, { extra = "llm2vec" }],
 ]
 
 [tool.mypy]

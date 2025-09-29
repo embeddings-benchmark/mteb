@@ -9,12 +9,6 @@ from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockClassificationTask
 
 
-def is_binary_classification(y_train: list[int], y_test: list[int]) -> bool:
-    """Check if the classification task is binary based on the labels."""
-    all_labels = set(y_train + y_test)
-    return len(all_labels) == 2
-
-
 # Fixtures
 @pytest.fixture
 def model():
@@ -57,13 +51,8 @@ def test_output_structure(model, mock_task):
     assert "f1" in scores
     assert "f1_weighted" in scores
 
-    # Check binary-specific metrics (MockClassificationTask is binary)
-    is_binary = is_binary_classification(train_data["label"], test_data["label"])
-    if is_binary:
-        assert "ap" in scores
-        assert "ap_weighted" in scores
-    else:
-        assert "ap" not in scores
+    assert "ap" in scores
+    assert "ap_weighted" in scores
 
 
 def test_expected_scores(model, mock_task):
