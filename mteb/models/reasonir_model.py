@@ -36,6 +36,7 @@ ReasonIR_8B = ModelMeta(
         model_name="ReasonIR/ReasonIR-8B",
         revision="c3d0690370ff4a8c3d3882d8dfa85c43650034fa",
         instruction_template=instruction_template,
+        trust_remote_code=True,
     ),
     name="ReasonIR/ReasonIR-8B",
     languages=["eng-Latn"],
