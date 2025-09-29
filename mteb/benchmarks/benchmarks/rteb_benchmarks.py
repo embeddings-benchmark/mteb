@@ -12,7 +12,7 @@ RTEB_CITATION = r"""@article{rteb2024,
 
 RTEB_MAIN = Benchmark(
     name="RTEB(beta)",
-    display_name="RTEB Retrieval Embedding Benchmark",
+    display_name="Retrieval Embedding Benchmark",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-search.svg",
     tasks=get_tasks(
         tasks=[
@@ -54,7 +54,7 @@ RTEB_MAIN = Benchmark(
 
 RTEB_ENGLISH = Benchmark(
     name="RTEB(eng, beta)",
-    display_name="English ",
+    display_name="English Retrieval",
     icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
     tasks=get_tasks(
         tasks=[
@@ -89,7 +89,7 @@ RTEB_ENGLISH = Benchmark(
 
 RTEB_FRENCH = Benchmark(
     name="RTEB(fr, beta)",
-    display_name="French ",
+    display_name="French Retrieval",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
     tasks=get_tasks(
         tasks=[
@@ -107,7 +107,7 @@ RTEB_FRENCH = Benchmark(
 
 RTEB_GERMAN = Benchmark(
     name="RTEB(deu, beta)",
-    display_name="German ",
+    display_name="German Retrieval",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
     tasks=get_tasks(
         tasks=[
@@ -141,7 +141,7 @@ RTEB_JAPANESE = Benchmark(
 
 RTEB_FINANCE = Benchmark(
     name="RTEB(fin, beta)",
-    display_name="Finance ",
+    display_name="Finance Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-price-tag.svg",
     tasks=get_tasks(
         tasks=[
@@ -162,7 +162,7 @@ RTEB_FINANCE = Benchmark(
 
 RTEB_LEGAL = Benchmark(
     name="RTEB(Law, beta)",
-    display_name="Legal ",
+    display_name="Legal  Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
     tasks=get_tasks(
         tasks=[
@@ -183,7 +183,7 @@ RTEB_LEGAL = Benchmark(
 
 RTEB_CODE = Benchmark(
     name="RTEB(Code, beta)",
-    display_name="Code ",
+    display_name="Code Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
         tasks=[
@@ -205,7 +205,7 @@ RTEB_CODE = Benchmark(
 
 RTEB_HEALTHCARE = Benchmark(
     name="RTEB(Health, beta)",
-    display_name="Healthcare ",
+    display_name="Healthcare Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",
     tasks=get_tasks(
         tasks=[
