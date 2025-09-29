@@ -27,7 +27,7 @@ class LocBenchReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        prompt="Instruct: Given a github issue, identify the code that needs to be changed to fix the issue. Query: ",
+        prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
         bibtex_citation=r"""
 @misc{chen2025locagentgraphguidedllmagents,
       title={LocAgent: Graph-Guided LLM Agents for Code Localization}, 

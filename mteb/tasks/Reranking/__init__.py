@@ -9,6 +9,9 @@ from .eng.StackOverflowDupQuestions import *
 from .eng.WebLINXCandidatesReranking import *
 from .eng.SWEbenchLiteReranking import *
 from .eng.SWEbenchVerifiedReranking import *
+from .eng.SWEbenchMultilingualReranking import *
+from .eng.MultiSWEbenchReranking import *
+from .eng.SWEPolyBenchReranking import *
 from .eng.LocBenchReranking import *
 from .fra.AlloprofReranking import *
 from .fra.SyntecReranking import *
