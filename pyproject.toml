@@ -70,7 +70,7 @@ jina-v4 = ["peft>=0.15.2", "transformers>=4.52.0", "torchvision>=0.22.1"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
-pylate = ["pylate>=1.2.0"] # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6)
+pylate = ["pylate>=1.3.1"]  # Required for sentence-transformers 5.0.0 compatibility (otherwise 1.1.6)
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
@@ -198,7 +198,30 @@ select = [
     # would exclude:
     # "N806", # probably not worth it
     # "N812" # disallows: import torch.nn.functional as F which is standard
-    "PTH",
+    "RUF009",  # function-call-in-dataclass-default-argument
+    "RUF008",  # mutable-dataclass-default
+    "RUF013",  # implicit-optional
+    "RUF012",  # mutable-class-default
+    "RUF015",  # unnecessary-iterable-allocation-for-first-element
+    "RUF016",  # invalid-index-type
+    "RUF017",  # quadratic-list-summation
+    "RUF018",  # assignment-in-assert
+    "RUF019",  # unnecessary-key-check
+    "RUF020",  # never-union
+    "RUF021",  # parenthesize-chained-operators
+    "RUF022",  # unsorted-dunder-all
+    "RUF024",  # mutable-fromkeys-value
+    "RUF026",  # default-factory-kwarg
+    "RUF033",  # post-init-default
+    "RUF034",  # useless-if-else
+    "RUF041",  # unnecessary-nested-literal
+    "RUF040",  # invalid-assert-message-literal-argument
+    "RUF046",  # unnecessary-cast-to-int
+    "RUF051",  # if-key-in-dict-del
+    "RUF100",  # unused-noqa
+    "RUF101",  # redirected-noqa
+    "RUF200",  # invalid-pyproject-toml
+    "PTH",     # use pathlib
 ]
 
 ignore = [
@@ -219,6 +242,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["PTH"]
+"tests/*" = ["RUF012"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false

@@ -145,7 +145,7 @@ def get_model_meta(
             "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
         try:
-            meta = model_meta_from_hf_hub(model_name)
+            meta = _model_meta_from_hf_hub(model_name)
             meta.revision = revision
             return meta
         except RepositoryNotFoundError:
@@ -169,7 +169,7 @@ def get_model_meta(
     raise KeyError(not_found_msg + suggestion)
 
 
-def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
+def _model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     card = ModelCard.load(model_name)
     card_data = card.data.to_dict()
     frameworks = ["PyTorch"]

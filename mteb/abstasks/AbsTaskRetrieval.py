@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 from time import time
 from typing import Any, Callable, Literal
@@ -50,7 +51,7 @@ from .AbsTask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     RetrievalSplitData,
-    combine_queries_with_instructions_datasets,
+    _combine_queries_with_instructions_datasets,
 )
 
 logger = logging.getLogger(__name__)
@@ -134,7 +135,7 @@ class AbsTaskRetrieval(AbsTask):
 
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
-    k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000]
+    k_values: Sequence[int] = (1, 3, 5, 10, 20, 100, 1000)
     top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
     cross_encoder_top_k: int = 100
@@ -198,7 +199,7 @@ class AbsTaskRetrieval(AbsTask):
                     if hasattr(self, "instructions"):
                         instructions = self.instructions[subset][split]
                         self.dataset[subset][split]["queries"] = (
-                            combine_queries_with_instructions_datasets(
+                            _combine_queries_with_instructions_datasets(
                                 self.dataset[subset][split]["queries"],
                                 instructions,
                             )
@@ -243,7 +244,7 @@ class AbsTaskRetrieval(AbsTask):
                 if hasattr(self, "instructions"):
                     instructions = self.instructions[split]
                     self.dataset[subset][split]["queries"] = (
-                        combine_queries_with_instructions_datasets(
+                        _combine_queries_with_instructions_datasets(
                             self.dataset[subset][split]["queries"],
                             instructions,
                         )
@@ -476,7 +477,9 @@ class AbsTaskRetrieval(AbsTask):
                     corpus = concatenate_datasets([corpus, split_data["corpus"]])
 
                 relevant_docs.update(
-                    process_relevant_docs(split_data["relevant_docs"], hf_subset, split)
+                    _process_relevant_docs(
+                        split_data["relevant_docs"], hf_subset, split
+                    )
                 )
 
                 if "top_ranked" in split_data and split_data["top_ranked"] is not None:
@@ -678,7 +681,7 @@ class AbsTaskRetrieval(AbsTask):
         return self
 
 
-def process_relevant_docs(
+def _process_relevant_docs(
     collection: dict[str, dict[str, float]],
     hf_subset: str,
     split: str,

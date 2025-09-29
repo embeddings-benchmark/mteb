@@ -20,7 +20,7 @@ _LANGUAGES = {
 }
 
 
-def _load_wit_data(path: str, langs: list, splits: str, revision: str = None):
+def _load_wit_data(path: str, langs: list, splits: str, revision: str | None = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}

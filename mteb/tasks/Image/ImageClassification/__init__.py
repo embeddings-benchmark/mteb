@@ -26,8 +26,8 @@ from .eng import (
 
 __all__ = [
     "BirdsnapClassification",
-    "CIFAR100Classification",
     "CIFAR10Classification",
+    "CIFAR100Classification",
     "Caltech101Classification",
     "Country211Classification",
     "DTDClassification",

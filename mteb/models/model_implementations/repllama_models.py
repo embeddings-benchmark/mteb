@@ -9,6 +9,7 @@ import torch.nn.functional as F
 import tqdm
 from torch.utils.data import DataLoader
 
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import (
@@ -16,7 +17,6 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.models_protocols import Encoder
-from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)

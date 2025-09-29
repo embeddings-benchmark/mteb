@@ -14,7 +14,7 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.overview import TASKS_REGISTRY, get_tasks
+from mteb.overview import _TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import (
     MOCK_MIEB_TASK_GRID_AS_STRING,
@@ -104,7 +104,7 @@ def test_superseded_dataset_exists():
     tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
-            assert task.superseded_by in TASKS_REGISTRY, (
+            assert task.superseded_by in _TASKS_REGISTRY, (
                 f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
             )
 

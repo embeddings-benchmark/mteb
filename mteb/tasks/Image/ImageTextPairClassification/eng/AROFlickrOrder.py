@@ -7,14 +7,14 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AROFlickrOrder(AbsTaskImageTextPairClassification):
-    images_column_names = ["images"]
-    texts_column_names = [
+    images_column_names = ("images",)
+    texts_column_names = (
         "correct_caption",
         "hard_text_1",
         "hard_text_2",
         "hard_text_3",
         "hard_text_4",
-    ]
+    )
 
     metadata = TaskMetadata(
         name="AROFlickrOrder",

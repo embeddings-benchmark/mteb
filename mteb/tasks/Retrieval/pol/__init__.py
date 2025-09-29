@@ -29,6 +29,10 @@ from .Touche2020PLRetrieval import Touche2020PL
 from .TRECCOVIDPLRetrieval import TRECCOVIDPL
 
 __all__ = [
+    "MSMARCOPL",
+    "NQPL",
+    "SCIDOCSPL",
+    "TRECCOVIDPL",
     "ArguAnaPL",
     "CQADupstackAndroidRetrievalPL",
     "CQADupstackEnglishRetrievalPL",
@@ -47,16 +51,12 @@ __all__ = [
     "FiQAPLRetrieval",
     "HotpotQAPL",
     "HotpotQAPLHardNegatives",
-    "MSMARCOPL",
     "MSMARCOPLHardNegatives",
     "NFCorpusPL",
-    "NQPL",
     "NQPLHardNegatives",
     "PUGGRetrieval",
     "QuoraPLRetrieval",
     "QuoraPLRetrievalHardNegatives",
-    "SCIDOCSPL",
     "SciFactPL",
-    "TRECCOVIDPL",
     "Touche2020PL",
 ]

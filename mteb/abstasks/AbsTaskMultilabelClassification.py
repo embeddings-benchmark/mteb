@@ -25,7 +25,7 @@ from .AbsTaskAnyClassification import AbsTaskAnyClassification
 logger = logging.getLogger(__name__)
 
 
-def evaluate_classifier(
+def _evaluate_classifier(
     embeddings_train: np.ndarray,
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
@@ -155,7 +155,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
-            scores_exp = evaluate_classifier(
+            scores_exp = _evaluate_classifier(
                 X_train, y_train, X_test, y_test, self.evaluator
             )
             scores.append(scores_exp)

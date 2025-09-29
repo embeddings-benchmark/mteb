@@ -55,7 +55,7 @@ class Benchmark:
         return self.tasks[index]
 
     def load_results(
-        self, base_results: None | BenchmarkResults = None
+        self, base_results: BenchmarkResults | None = None
     ) -> BenchmarkResults:
         if not hasattr(self, "results_cache"):
             self.results_cache = {}
