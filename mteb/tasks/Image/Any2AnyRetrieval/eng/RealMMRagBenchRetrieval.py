@@ -17,7 +17,6 @@ def _load_data(
     queries = {}
     relevant_docs = {}
 
-
     for split in splits:
         query_ds = load_dataset(
             path,
@@ -129,6 +128,7 @@ class RealMMRagFinReportRetrieval(AbsTaskAny2AnyRetrieval):
         )
 
         self.data_loaded = True
+
 
 class RealMMRagFinSlidesRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
@@ -299,5 +299,3 @@ class RealMMRagTechSlidesRetrieval(AbsTaskAny2AnyRetrieval):
             revision=self.metadata_dict["dataset"]["revision"],
         )
         self.data_loaded = True
-
-
