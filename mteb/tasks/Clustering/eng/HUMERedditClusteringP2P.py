@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RedditClusteringP2PHumanSubset(AbsTaskClustering):
+class HUMERedditClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
-        name="RedditClusteringP2PHumanSubset",
+        name="HUMERedditClusteringP2P",
         description="Human evaluation subset of Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={

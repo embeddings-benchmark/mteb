@@ -3,10 +3,10 @@ from __future__ import annotations
 from .ara.NamaaMrTydiReranking import *
 from .eng.AskUbuntuDupQuestions import *
 from .eng.BuiltBenchReranking import *
-from .eng.Core17InstructionRerankingHumanSubset import *
+from .eng.HUMECore17InstructionReranking import *
+from .eng.HUMENews21InstructionReranking import *
+from .eng.HUMERobust04InstructionReranking import *
 from .eng.MindSmallReranking import *
-from .eng.News21InstructionRerankingHumanSubset import *
-from .eng.Robust04InstructionRerankingHumanSubset import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
 from .eng.WebLINXCandidatesReranking import *
@@ -16,9 +16,9 @@ from .jpn.JaCWIRReranking import *
 from .jpn.JQaRAReranking import *
 from .jpn.MMarcoReranking import *
 from .multilingual.ESCIReranking import *
+from .multilingual.HUMEWikipediaRerankingMultilingual import *
 from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
-from .multilingual.WikipediaRerankingMultilingualHumanSubset import *
 from .multilingual.XGlueWPRReranking import *
 from .rus.RuBQReranking import *
 from .vie.AskUbuntuDupQuestionsVN import *

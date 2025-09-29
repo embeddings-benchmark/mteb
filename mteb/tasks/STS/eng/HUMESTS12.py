@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class STS12HumanSubset(AbsTaskSTS):
+class HUMESTS12(AbsTaskSTS):
     metadata = TaskMetadata(
-        name="STS12HumanSubset",
+        name="HUMESTS12",
         dataset={
             "path": "mteb/mteb-human-sts12-sts",
             "revision": "76cbf76792ec03cb1f76dc6ada05abcb23c82c0c",

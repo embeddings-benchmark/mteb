@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ArxivClusteringP2PHumanSubset(AbsTaskClustering):
+class HUMEArxivClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
-        name="ArxivClusteringP2PHumanSubset",
+        name="HUMEArxivClusteringP2P",
         description="Human evaluation subset of Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={

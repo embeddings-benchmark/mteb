@@ -4,11 +4,11 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Core17InstructionRerankingHumanSubset(AbsTaskReranking):
+class HUMECore17InstructionReranking(AbsTaskReranking):
     metadata = TaskMetadata(
-        name="Core17InstructionRerankingHumanSubset",
+        name="HUMECore17InstructionReranking",
         description="Human evaluation subset of Core17 instruction retrieval dataset for reranking evaluation.",
-        reference="https://trec.nist.gov/data/core2017.html",
+        reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "mteb/mteb-human-core17-reranking",
             "revision": "e2b1a26cb5277a040d7f96a79fef0cf00afe9ffe",

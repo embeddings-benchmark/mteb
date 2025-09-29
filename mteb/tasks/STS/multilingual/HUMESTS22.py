@@ -12,10 +12,10 @@ _LANGUAGES = {
 }
 
 
-class STS22HumanSubset(AbsTaskSTS, MultilingualTask):
+class HUMESTS22(AbsTaskSTS, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
-        name="STS22HumanSubset",
+        name="HUMESTS22",
         dataset={
             "path": "mteb/mteb-human-sts22-sts",
             "revision": "ab40ed76c4283318b7b146aff31f8cdefd6ebae0",

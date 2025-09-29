@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SICKRHumanSubset(AbsTaskSTS):
+class HUMESICKR(AbsTaskSTS):
     metadata = TaskMetadata(
-        name="SICK-RHumanSubset",
+        name="HUMESICK-R",
         dataset={
             "path": "mteb/mteb-human-sickr-sts",
             "revision": "cf7172d4b730a743570f25291d04abeee086c824",

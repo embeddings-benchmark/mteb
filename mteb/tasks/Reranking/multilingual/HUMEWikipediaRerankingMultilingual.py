@@ -12,10 +12,10 @@ _LANGUAGES = {
 }
 
 
-class WikipediaRerankingMultilingualHumanSubset(AbsTaskReranking, MultilingualTask):
+class HUMEWikipediaRerankingMultilingual(AbsTaskReranking, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
-        name="WikipediaRerankingMultilingualHumanSubset",
+        name="HUMEWikipediaRerankingMultilingual",
         description="Human evaluation subset of Wikipedia reranking dataset across multiple languages.",
         reference="https://github.com/ellamind/wikipedia-2023-11-reranking-multilingual",
         dataset={

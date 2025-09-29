@@ -4,14 +4,14 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Robust04InstructionRerankingHumanSubset(AbsTaskReranking):
+class HUMENews21InstructionReranking(AbsTaskReranking):
     metadata = TaskMetadata(
-        name="Robust04InstructionRerankingHumanSubset",
-        description="Human evaluation subset of Robust04 instruction retrieval dataset for reranking evaluation.",
-        reference="https://trec.nist.gov/data/robust/04.guidelines.html",
+        name="HUMENews21InstructionReranking",
+        description="Human evaluation subset of News21 instruction retrieval dataset for reranking evaluation.",
+        reference="https://trec.nist.gov/data/news2021.html",
         dataset={
-            "path": "mteb/mteb-human-robust04-reranking",
-            "revision": "77756407fed441d7be778b7464c34ccf4700af2e",
+            "path": "mteb/mteb-human-news21-reranking",
+            "revision": "22208ecbb54618adb1592fd2ba7cdd92d643d9de",
         },
         type="Reranking",
         category="s2s",
@@ -19,7 +19,7 @@ class Robust04InstructionRerankingHumanSubset(AbsTaskReranking):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map",
-        date=("2004-01-01", "2004-12-31"),
+        date=("2021-01-01", "2021-12-31"),
         domains=["News", "Written"],
         task_subtypes=[],
         license="not specified",
@@ -27,13 +27,13 @@ class Robust04InstructionRerankingHumanSubset(AbsTaskReranking):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{voorhees2005trec,
-  author = {Voorhees, Ellen M},
+@inproceedings{soboroff2021trec,
+  author = {Soboroff, Ian and Macdonald, Craig and McCreadie, Richard},
   booktitle = {TREC},
-  title = {TREC 2004 Robust Retrieval Track Overview},
-  year = {2005},
+  title = {TREC 2021 News Track Overview},
+  year = {2021},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",
-        adapted_from=["Robust04InstructionRetrieval"],
+        adapted_from=["News21InstructionRetrieval"],
     )

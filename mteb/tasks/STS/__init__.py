@@ -2,15 +2,15 @@ from __future__ import annotations
 
 from .deu.GermanSTSBenchmarkSTS import *
 from .eng.BiossesSTS import *
-from .eng.SICKRHumanSubset import *
+from .eng.HUMESICKR import *
+from .eng.HUMESTS12 import *
+from .eng.HUMESTSBenchmark import *
 from .eng.SickrSTS import *
-from .eng.STS12HumanSubset import *
 from .eng.STS12STS import *
 from .eng.STS13STS import *
 from .eng.STS14STS import *
 from .eng.STS15STS import *
 from .eng.STS16STS import *
-from .eng.STSBenchmarkHumanSubset import *
 from .eng.STSBenchmarkSTS import *
 from .fao.FaroeseSTS import *
 from .fas.FaMTEBSTS import *
@@ -20,11 +20,11 @@ from .jpn.JSICK import *
 from .jpn.JSTS import *
 from .kor.KlueSTS import *
 from .kor.KorSTS import *
+from .multilingual.HUMESTS22 import *
 from .multilingual.IndicCrosslingualSTS import *
 from .multilingual.SemRel24STS import *
 from .multilingual.STS17CrosslingualSTS import *
 from .multilingual.STS22CrosslingualSTS import *
-from .multilingual.STS22HumanSubset import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
 from .por.Assin2STS import *

@@ -13,10 +13,10 @@ _LANGUAGES = {
 }
 
 
-class SIB200ClusteringS2SHumanSubset(AbsTaskClustering, MultilingualTask):
+class HUMESIB200ClusteringS2S(AbsTaskClustering, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
-        name="SIB200ClusteringS2SHumanSubset",
+        name="HUMESIB200ClusteringS2S",
         description="Human evaluation subset of Clustering of news article headlines from SIB-200. Clustering of 10 sets, each with 8 categories and 10 texts per category.",
         reference="https://github.com/dadelani/sib-200",
         dataset={
