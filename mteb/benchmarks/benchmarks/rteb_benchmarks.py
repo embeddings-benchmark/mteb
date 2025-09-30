@@ -31,9 +31,24 @@ RTEB_MAIN = Benchmark(
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
             "CUREv1",
+            "MIRACLRetrievalHardNegatives",
+            # Closed datasets
+            "Code1Retrieval",
+            "JapaneseCode1Retrieval",
+            "EnglishFinance1Retrieval",
+            "EnglishFinance2Retrieval",
+            "EnglishFinance3Retrieval",
+            "EnglishFinance4Retrieval",
+            "EnglishHealthcare1Retrieval",
+            "French1Retrieval",
+            "FrenchLegal1Retrieval",
+            "German1Retrieval",
+            "GermanHealthcare1Retrieval",
+            "GermanLegal1Retrieval",
+            "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 15 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts.",
+    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 29 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across English, French, German, and Japanese languages.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -58,10 +73,17 @@ RTEB_ENGLISH = Benchmark(
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
             "CUREv1",
+            # Closed datasets
+            "Code1Retrieval",
+            "EnglishFinance1Retrieval",
+            "EnglishFinance2Retrieval",
+            "EnglishFinance3Retrieval",
+            "EnglishFinance4Retrieval",
+            "EnglishHealthcare1Retrieval",
         ],
         languages=["eng"],
     ),
-    description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains.",
+    description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains. Includes 20 diverse tasks covering specialized domains.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -73,10 +95,13 @@ RTEB_FRENCH = Benchmark(
     tasks=get_tasks(
         tasks=[
             "CUREv1",
+            # Closed datasets
+            "French1Retrieval",
+            "FrenchLegal1Retrieval",
         ],
         languages=["fra"],
     ),
-    description="RTEB French subset containing retrieval tasks in French across multiple domains.",
+    description="RTEB French subset containing retrieval tasks in French across legal and general knowledge domains. Includes 3 diverse multilingual tasks.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -88,9 +113,13 @@ RTEB_GERMAN = Benchmark(
     tasks=get_tasks(
         tasks=[
             "LegalQuAD",
+            # Closed datasets
+            "German1Retrieval",
+            "GermanHealthcare1Retrieval",
+            "GermanLegal1Retrieval",
         ],
     ),
-    description="RTEB German subset containing retrieval tasks in German, focusing on legal domain.",
+    description="RTEB German subset containing retrieval tasks in German across legal, healthcare, and business domains. Includes 4 diverse tasks.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -101,10 +130,12 @@ RTEB_JAPANESE = Benchmark(
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
         tasks=[
-            # Japanese tasks would go here when available
+            # Closed datasets
+            "JapaneseCode1Retrieval",
+            "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB Japanese subset containing retrieval tasks in Japanese across multiple domains.",
+    description="RTEB Japanese subset containing retrieval tasks in Japanese across legal and code domains. Includes 2 diverse multilingual tasks.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -118,9 +149,14 @@ RTEB_FINANCE = Benchmark(
             "FinanceBenchRetrieval",
             "HC3FinanceRetrieval",
             "FinQARetrieval",
+            # Closed datasets
+            "EnglishFinance1Retrieval",
+            "EnglishFinance2Retrieval",
+            "EnglishFinance3Retrieval",
+            "EnglishFinance4Retrieval",
         ],
     ),
-    description="RTEB Finance subset containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, and financial document retrieval.",
+    description="RTEB Finance subset containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, financial document retrieval, and corporate governance. Includes 7 specialized finance tasks.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -135,9 +171,13 @@ RTEB_LEGAL = Benchmark(
             "AILAStatutes",
             "LegalSummarization",
             "LegalQuAD",
+            # Closed datasets
+            "FrenchLegal1Retrieval",
+            "GermanLegal1Retrieval",
+            "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB Legal subset containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and legal Q&A.",
+    description="RTEB Legal subset containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and multilingual legal Q&A. Includes 7 legal tasks across English, French, German, and Japanese.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -154,9 +194,12 @@ RTEB_CODE = Benchmark(
             "MBPPRetrieval",
             "WikiSQLRetrieval",
             "FreshStackRetrieval",
+            # Closed datasets
+            "Code1Retrieval",
+            "JapaneseCode1Retrieval",
         ],
     ),
-    description="RTEB Code subset containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, and SQL retrieval.",
+    description="RTEB Code subset containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, SQL retrieval, and multilingual code retrieval. Includes 8 code-related tasks.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -169,9 +212,12 @@ RTEB_HEALTHCARE = Benchmark(
         tasks=[
             "ChatDoctorRetrieval",
             "CUREv1",
+            # Closed datasets
+            "EnglishHealthcare1Retrieval",
+            "GermanHealthcare1Retrieval",
         ],
     ),
-    description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, and cross-lingual medical retrieval.",
+    description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, cross-lingual medical retrieval, and multilingual medical consultation. Includes 4 healthcare tasks.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )

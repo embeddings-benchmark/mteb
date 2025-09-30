@@ -5,6 +5,7 @@ from functools import partial, wraps
 from typing import Any, Literal
 
 import numpy as np
+from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -14,6 +15,12 @@ from mteb.requires_package import requires_package
 VOYAGE_TRAINING_DATA = {
     # Self-reported (message from VoyageAI member)
     # synthetic data
+}
+
+# The missing values are translated to themselves
+VOYAGE_DTYPE_TRANSLATION = {
+    "float32": "float",
+    "bf16": "float",
 }
 
 # Total token limits per model based on VoyageAI documentation
@@ -95,6 +102,7 @@ class VoyageWrapper(Wrapper):
         max_tpm: int = 1_000_000,
         max_tokens: int | None = None,
         model_prompts: dict[str, str] | None = None,
+        output_dtype: str | None = None,
         **kwargs,
     ) -> None:
         requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
@@ -106,30 +114,21 @@ class VoyageWrapper(Wrapper):
         self._max_tpm = max_tpm
         self._max_tokens = max_tokens
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
-
-    def _calculate_default_batch_size(self) -> int:
-        """Calculate the default batch size based on total token limit and context length.
-
-        Formula: floor(total_token_limit / context_length)
-        """
-        if self._max_tokens is None:
-            return 32  # fallback to original default
-
-        total_token_limit = VOYAGE_TOTAL_TOKEN_LIMITS.get(self._model_name, 120_000)
-        return max(1, total_token_limit // self._max_tokens)
+        self.output_dtype = output_dtype
+        self._max_tokens_per_batch = VOYAGE_TOTAL_TOKEN_LIMITS.get(
+            self._model_name, 120_000
+        )
 
     def encode(
         self,
         sentences: list[str],
         *,
-        batch_size: int | None = None,
+        batch_size: int
+        | None = 1_000,  # https://docs.voyageai.com/reference/embeddings-api
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if batch_size is None:
-            batch_size = self._calculate_default_batch_size()
-
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
 
@@ -143,17 +142,25 @@ class VoyageWrapper(Wrapper):
     ) -> np.ndarray:
         embeddings, index = [], 0
 
+        output_dtype = VOYAGE_DTYPE_TRANSLATION.get(
+            self.output_dtype, self.output_dtype
+        )
+
+        pbar = tqdm(total=len(sentences), desc="Encoding sentences")
         while index < len(sentences):
             batch, batch_tokens = [], 0
             while (
                 index < len(sentences)
                 and len(batch) < batch_size
-                and batch_tokens < self._max_tpm
+                and batch_tokens < self._max_tokens_per_batch
             ):
                 n_tokens = len(
                     self._client.tokenize([sentences[index]], model=self._model_name)[0]
                 )
-                if batch_tokens + n_tokens > self._max_tpm:
+                if (
+                    batch_tokens + n_tokens > self._max_tokens_per_batch
+                    and len(batch) > 0
+                ):
                     break
                 batch_tokens += n_tokens
                 batch.append(sentences[index])
@@ -164,16 +171,66 @@ class VoyageWrapper(Wrapper):
                     texts=batch,
                     model=self._model_name,
                     input_type=input_type,
+                    output_dtype=output_dtype,
                 ).embeddings
             )
+            pbar.update(len(batch))
 
-        return np.array(embeddings)
+        pbar.close()
+        embeddings_array = np.array(embeddings)
+
+        if output_dtype == "binary":
+            # Unpack bit-packed embeddings: each byte contains 8 embedding values
+            unpacked_embeddings = []
+            for embedding in embeddings_array:
+                # Convert bytes to bits and unpack
+                unpacked = []
+                for byte_val in embedding:
+                    # Extract 8 bits from each byte (LSB first)
+                    for bit_pos in range(8):
+                        bit_val = (byte_val >> bit_pos) & 1
+                        # Convert 0/1 to -1/1 for binary (signed)
+                        unpacked.append(1.0 if bit_val else -1.0)
+                unpacked_embeddings.append(unpacked)
+            embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
+        elif output_dtype != "float":
+            # Convert int8/uint8 embeddings to float32
+            embeddings_array = embeddings_array.astype(np.float32)
+
+        return embeddings_array
 
 
 model_prompts = {
     PromptType.query.value: "query",
     PromptType.document.value: "document",
 }
+
+voyage_3_large = ModelMeta(
+    name="voyageai/voyage-3-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    revision="1",
+    release_date="2025-01-07",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        VoyageWrapper,
+        model_name="voyage-3-large",
+        max_tokens=32000,
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2025/01/07/voyage-3-large/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
 
 voyage_3_5 = ModelMeta(
     name="voyageai/voyage-3.5",
@@ -199,6 +256,60 @@ voyage_3_5 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
+)
+
+voyage_3_5_int8 = ModelMeta(
+    name="voyageai/voyage-3.5 (output_dtype=int8)",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+        output_dtype="int8",
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    adapted_from="voyageai/voyage-3.5",
+)
+
+voyage_3_5_binary = ModelMeta(
+    name="voyageai/voyage-3.5 (output_dtype=binary)",
+    revision="1",
+    release_date="2025-01-21",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3.5",
+        model_prompts=model_prompts,
+        output_dtype="binary",
+    ),
+    max_tokens=32000,
+    embed_dim=1024,  # Same as original after unpacking from bits
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://docs.voyageai.com/docs/flexible-dimensions-and-quantization",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    adapted_from="voyageai/voyage-3.5",
 )
 
 voyage_large_2_instruct = ModelMeta(

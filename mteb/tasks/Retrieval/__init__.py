@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara.SadeemQuestionRetrieval import *
 from .code.AppsRetrieval import *
+from .code.Code1Retrieval import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeFeedbackMTRetrieval import *
 from .code.CodeFeedbackSTRetrieval import *
@@ -15,6 +16,7 @@ from .code.CosQARetrieval import *
 from .code.DS1000Retrieval import *
 from .code.FreshStackRetrieval import *
 from .code.HumanEvalRetrieval import *
+from .code.JapaneseCode1Retrieval import *
 from .code.MBPPRetrieval import *
 from .code.StackOverflowQARetrieval import *
 from .code.SyntheticText2SqlRetrieval import *
@@ -24,8 +26,11 @@ from .dan.TV2Nordretrieval import *
 from .dan.TwitterHjerneRetrieval import *
 from .deu.GerDaLIRRetrieval import *
 from .deu.GerDaLIRSmallRetrieval import *
+from .deu.German1Retrieval import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanGovServiceRetrieval import *
+from .deu.GermanHealthcare1Retrieval import *
+from .deu.GermanLegal1Retrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *
 from .ell.GreekCivicsQA import *
@@ -55,7 +60,13 @@ from .eng.CQADupstackTexRetrieval import *
 from .eng.CQADupstackUnixRetrieval import *
 from .eng.CQADupstackWebmastersRetrieval import *
 from .eng.CQADupstackWordpressRetrieval import *
+from .eng.DAPFAMPatentRetrieval import *
 from .eng.DBPediaRetrieval import *
+from .eng.EnglishFinance1Retrieval import *
+from .eng.EnglishFinance2Retrieval import *
+from .eng.EnglishFinance3Retrieval import *
+from .eng.EnglishFinance4Retrieval import *
+from .eng.EnglishHealthcare1Retrieval import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
@@ -124,10 +135,13 @@ from .fas.FaMTEBRetrieval import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.FQuADRetrieval import *
+from .fra.French1Retrieval import *
+from .fra.FrenchLegal1Retrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
 from .jpn.JaCWIRRetrieval import *
 from .jpn.JaGovFaqsRetrieval import *
+from .jpn.JapaneseLegal1Retrieval import *
 from .jpn.JaqketRetrieval import *
 from .jpn.JaQuADRetrieval import *
 from .jpn.NLPJournalAbsArticleRetrieval import *

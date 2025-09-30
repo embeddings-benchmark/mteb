@@ -118,16 +118,22 @@ class InstructSentenceTransformerWrapper(Wrapper):
                 "No instruction template provided. Instructions will be used as-is."
             )
 
+        tokenizer_params = {}
+        if add_eos_token:
+            tokenizer_params["add_eos_token"] = add_eos_token
+        if max_seq_length is not None:
+            # https://github.com/UKPLab/sentence-transformers/blob/7341bf155b4349b88690b78c84beb5aa658c439f/sentence_transformers/models/Transformer.py#L115
+            tokenizer_params["model_max_length"] = max_seq_length
+        if padding_side is not None:
+            tokenizer_params["padding_side"] = padding_side
+
+        kwargs.setdefault("tokenizer_kwargs", {}).update(tokenizer_params)
+
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages
-        self.add_eos_token = add_eos_token
         self.prompts_dict = prompts_dict
-        if max_seq_length is not None:
-            self.model.max_seq_length = max_seq_length
-        if padding_side is not None:
-            self.model.tokenizer.padding_side = padding_side
 
     def encode(
         self,
@@ -137,15 +143,9 @@ class InstructSentenceTransformerWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if self.add_eos_token:
-            sentences = [
-                example + self.model.tokenizer.eos_token for example in sentences
-            ]
-
         instruction = self.get_task_instruction(
             task_name, prompt_type, self.prompts_dict
         )
-
         # to passage prompts won't be applied to passages
         if (
             not self.apply_instruction_to_passages
