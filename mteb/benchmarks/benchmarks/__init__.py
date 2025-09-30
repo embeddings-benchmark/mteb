@@ -14,6 +14,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     FA_MTEB,
     FA_MTEB_2,
     JINA_VDR,
+    REAL_MM_RAG,
     LONG_EMBED,
     MIEB_ENG,
     MIEB_IMG,
@@ -112,4 +113,5 @@ __all__ = [
     "RTEB_ENGLISH",
     "RTEB_FRENCH",
     "RTEB_GERMAN",
+    "REAL_MM_RAG",
 ]
