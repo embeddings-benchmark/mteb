@@ -129,7 +129,7 @@ class ModelResult(BaseModel):
                 if not any(modality in task_modalities for modality in modalities):
                     continue
             if (privacy is not None) and (
-                task_result.is_public != (privacy == "public")
+                task_result.task_is_public != (privacy == "public")
             ):
                 continue
             new_task_results.append(task_result)

@@ -146,7 +146,6 @@ class TaskResult(BaseModel):
     scores: dict[Split, list[ScoresDict]]
     evaluation_time: float | None
     kg_co2_emissions: float | None = None
-    is_public: bool = True
 
     @classmethod
     def from_task_results(
@@ -234,7 +233,7 @@ class TaskResult(BaseModel):
 
     @property
     def task_is_public(self) -> bool:
-        return self.task.metadata.is_public
+        return getattr(self.task.metadata, "is_public", True)
 
     def to_dict(self) -> dict:
         return self.model_dump()
