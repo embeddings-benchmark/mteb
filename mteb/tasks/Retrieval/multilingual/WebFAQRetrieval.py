@@ -40,7 +40,7 @@ _LANGUAGES = {
     "mar": ["mar-Deva"],
     "msa": ["msa-Latn"],
     "nld": ["nld-Latn"],
-    "nor": ["nor-Latn"],
+    "nor": ["nor-Latn", "nob-Latn", "nno-Latn"],
     "pol": ["pol-Latn"],
     "por": ["por-Latn"],
     "ron": ["ron-Latn"],
