@@ -1,7 +1,7 @@
 # RTEB Benchmarks - Retrieval Embedding Benchmark
 from __future__ import annotations
 
-from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.overview import get_tasks
 
 RTEB_CITATION = r"""@article{rteb2024,
@@ -10,7 +10,7 @@ RTEB_CITATION = r"""@article{rteb2024,
   year = {2024},
 }"""
 
-RTEB_MAIN = Benchmark(
+RTEB_MAIN = RtebBenchmark(
     name="RTEB(beta)",
     display_name="RTEB Retrieval Embedding Benchmark",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-search.svg",
@@ -53,7 +53,7 @@ RTEB_MAIN = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_ENGLISH = Benchmark(
+RTEB_ENGLISH = RtebBenchmark(
     name="RTEB(eng, beta)",
     display_name="RTEB English",
     icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
@@ -88,7 +88,7 @@ RTEB_ENGLISH = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_FRENCH = Benchmark(
+RTEB_FRENCH = RtebBenchmark(
     name="RTEB(fr, beta)",
     display_name="RTEB French",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
@@ -106,7 +106,7 @@ RTEB_FRENCH = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_GERMAN = Benchmark(
+RTEB_GERMAN = RtebBenchmark(
     name="RTEB(deu, beta)",
     display_name="RTEB German",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
@@ -124,7 +124,7 @@ RTEB_GERMAN = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_JAPANESE = Benchmark(
+RTEB_JAPANESE = RtebBenchmark(
     name="RTEB(jpn, beta)",
     display_name="RTEB Japanese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
@@ -140,7 +140,7 @@ RTEB_JAPANESE = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_FINANCE = Benchmark(
+RTEB_FINANCE = RtebBenchmark(
     name="RTEB(fin, beta)",
     display_name="RTEB Finance",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-price-tag.svg",
@@ -161,7 +161,7 @@ RTEB_FINANCE = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_LEGAL = Benchmark(
+RTEB_LEGAL = RtebBenchmark(
     name="RTEB(Law, beta)",
     display_name="RTEB Legal",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
@@ -182,7 +182,7 @@ RTEB_LEGAL = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_CODE = Benchmark(
+RTEB_CODE = RtebBenchmark(
     name="RTEB(Code, beta)",
     display_name="RTEB Code",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
@@ -204,7 +204,7 @@ RTEB_CODE = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_HEALTHCARE = Benchmark(
+RTEB_HEALTHCARE = RtebBenchmark(
     name="RTEB(Health, beta)",
     display_name="RTEB Healthcare",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",
