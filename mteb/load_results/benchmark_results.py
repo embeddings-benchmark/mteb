@@ -107,6 +107,7 @@ class ModelResult(BaseModel):
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
         modalities: list[MODALITIES] | None = None,
+        privacy: Literal["public", "private"] | None = None,
     ) -> ModelResult:
         # TODO: v2 see filter_tasks in BenchmarkResults - but can be moved to a private function or removed
         new_task_results = []
@@ -127,6 +128,10 @@ class ModelResult(BaseModel):
                 task_modalities = getattr(task_result, "modalities", [])
                 if not any(modality in task_modalities for modality in modalities):
                     continue
+            if (privacy is not None) and (
+                task_result.task_is_public != (privacy == "public")
+            ):
+                continue
             new_task_results.append(task_result)
         return type(self).model_construct(
             model_name=self.model_name,
@@ -395,6 +400,7 @@ class BenchmarkResults(BaseModel):
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,  # type: ignore
         modalities: list[MODALITIES] | None = None,
+        privacy: Literal["public", "private"] | None = None,
     ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
@@ -404,6 +410,7 @@ class BenchmarkResults(BaseModel):
                 domains=domains,
                 task_types=task_types,
                 modalities=modalities,
+                privacy=privacy,
             )
             for res in self.model_results
         ]

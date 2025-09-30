@@ -37,24 +37,26 @@ class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
         self.model_name = model_name
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages
-        self.add_eos_token = add_eos_token
         self.prompts_dict = prompts_dict
+
+        tokenizer_params = {}
+        if add_eos_token:
+            tokenizer_params["add_eos_token"] = add_eos_token
+        if max_seq_length is not None:
+            tokenizer_params["model_max_length"] = max_seq_length
+        if padding_side is not None:
+            tokenizer_params["padding_side"] = padding_side
+
+        kwargs.setdefault("tokenizer_args", {}).update(tokenizer_params)
 
         transformer = Transformer(
             model_name,
-            max_seq_length=max_seq_length,
             **kwargs,
         )
         pooling = Pooling(
             transformer.get_word_embedding_dimension(), pooling_mode="lasttoken"
         )
         self.model = SentenceTransformer(modules=[transformer, pooling])
-
-        if max_seq_length is not None:
-            self.model.max_seq_length = max_seq_length
-
-        if padding_side is not None:
-            self.model.tokenizer.padding_side = padding_side
 
 
 # https://huggingface.co/datasets/BMRetriever/biomed_retrieval_dataset
@@ -158,7 +160,7 @@ BMRetriever_7B = ModelMeta(
     loader=partial(
         BMRetrieverWrapper,
         model_name="BMRetriever/BMRetriever-7B",
-        config_args={"revision": "e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3"},
+        config_args={"revision": "13e6adb9273c5f254e037987d6b44e9e4b005b9a"},
         model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
         padding_side="left",
@@ -168,7 +170,7 @@ BMRetriever_7B = ModelMeta(
     name="BMRetriever/BMRetriever-7B",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3",
+    revision="13e6adb9273c5f254e037987d6b44e9e4b005b9a",
     release_date="2024-04-29",
     embed_dim=4096,
     n_parameters=7_110_660_096,

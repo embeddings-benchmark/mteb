@@ -4,8 +4,14 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Annotated
 
+import pandas as pd
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
+from mteb.benchmarks._create_table import (
+    _create_per_task_table_from_benchmark_results,
+    _create_summary_table_from_benchmark_results,
+    _create_summary_table_mean_public_private,
+)
 from mteb.load_results.load_results import load_results
 
 if TYPE_CHECKING:
@@ -72,3 +78,23 @@ class Benchmark:
         results = base_results.select_tasks(self.tasks)
         self.results_cache[base_results] = results
         return results
+
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_from_benchmark_results(benchmark_results)
+
+    def _create_per_task_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create per-task table. Called by the leaderboard app."""
+        return _create_per_task_table_from_benchmark_results(benchmark_results)
+
+
+class RtebBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_public_private(benchmark_results)

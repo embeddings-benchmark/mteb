@@ -889,6 +889,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SwahiliNewsClassification.v2](https://huggingface.co/datasets/Mollel/SwahiliNewsClassification) (Davis et al., 2020) | ['swa'] | Classification | s2s | [News, Written] | None | None |
 | [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) (Berdi{\v{c, 2023) | ['swe'] | Retrieval | s2s | [Government, Non-fiction, Written] | None | None |
 | [SweRecClassification.v2](https://aclanthology.org/2023.nodalida-1.20/) (Nielsen et al., 2023) | ['swe'] | Classification | s2s | [Reviews, Written] | None | None |
+| [SwedishPatentCPCGroupClassification](https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-368254) (Salim et al., 2025) | ['swe'] | MultilabelClassification | s2s | [Government, Legal] | None | None |
+| [SwedishPatentCPCSubclassClassification](https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-368254) (Salim et al., 2025) | ['swe'] | MultilabelClassification | s2s | [Government, Legal] | None | None |
 | [SwedishSentimentClassification.v2](https://huggingface.co/datasets/swedish_reviews) | ['swe'] | Classification | s2s | [Reviews, Written] | None | None |
 | [SwednClusteringP2P](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | p2p | [News, Non-fiction, Written] | None | None |
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction, Written] | None | None |
@@ -1937,7 +1939,7 @@ The following tables give you an overview of the tasks in MTEB.
 | suz | Sunwar | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | svk | Slovakian Sign Language | Sign Language | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swa | Swahili (macrolanguage) | Atlantic-Congo | 0 | 1 | 0 | 1 | 7 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 17 |
-| swe | Swedish | Indo-European | 0 | 1 | 0 | 6 | 9 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
+| swe | Swedish | Indo-European | 0 | 1 | 0 | 6 | 9 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 30 |
 | swg | Swabian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swh | Swahili (individual language) | Atlantic-Congo | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | swp | Suau | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -2138,7 +2140,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1496 | 872 | 321 | 7 | 137 | 22 | 5 | 0 | 3 | 29 | 96 | 4 | 68 | 702 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1496 | 872 | 321 | 7 | 137 | 22 | 5 | 0 | 3 | 31 | 96 | 4 | 68 | 702 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 

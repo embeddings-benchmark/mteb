@@ -1,7 +1,7 @@
 # RTEB Benchmarks - Retrieval Embedding Benchmark
 from __future__ import annotations
 
-from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.overview import get_tasks
 
 RTEB_CITATION = r"""@article{rteb2024,
@@ -10,7 +10,7 @@ RTEB_CITATION = r"""@article{rteb2024,
   year = {2024},
 }"""
 
-RTEB_MAIN = Benchmark(
+RTEB_MAIN = RtebBenchmark(
     name="RTEB(beta)",
     display_name="Multilingual Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-search.svg",
@@ -31,6 +31,7 @@ RTEB_MAIN = Benchmark(
             "FreshStackRetrieval",
             "ChatDoctorRetrieval",
             "CUREv1",
+            "MIRACLRetrievalHardNegatives",
             # Closed datasets
             "Code1Retrieval",
             "JapaneseCode1Retrieval",
@@ -47,12 +48,12 @@ RTEB_MAIN = Benchmark(
             "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 28 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across English, French, German, and Japanese languages.",
+    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 29 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across English, French, German, and Japanese languages.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
 
-RTEB_ENGLISH = Benchmark(
+RTEB_ENGLISH = RtebBenchmark(
     name="RTEB(eng, beta)",
     display_name="English Retrieval",
     icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
@@ -87,7 +88,7 @@ RTEB_ENGLISH = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_FRENCH = Benchmark(
+RTEB_FRENCH = RtebBenchmark(
     name="RTEB(fr, beta)",
     display_name="French Retrieval",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
@@ -105,7 +106,7 @@ RTEB_FRENCH = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_GERMAN = Benchmark(
+RTEB_GERMAN = RtebBenchmark(
     name="RTEB(deu, beta)",
     display_name="German Retrieval",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
@@ -123,7 +124,7 @@ RTEB_GERMAN = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_JAPANESE = Benchmark(
+RTEB_JAPANESE = RtebBenchmark(
     name="RTEB(jpn, beta)",
     display_name="Japanese ",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
@@ -139,7 +140,7 @@ RTEB_JAPANESE = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_FINANCE = Benchmark(
+RTEB_FINANCE = RtebBenchmark(
     name="RTEB(fin, beta)",
     display_name="Finance Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-price-tag.svg",
@@ -160,7 +161,7 @@ RTEB_FINANCE = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_LEGAL = Benchmark(
+RTEB_LEGAL = RtebBenchmark(
     name="RTEB(Law, beta)",
     display_name="Legal  Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
@@ -181,7 +182,7 @@ RTEB_LEGAL = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_CODE = Benchmark(
+RTEB_CODE = RtebBenchmark(
     name="RTEB(Code, beta)",
     display_name="Code Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
@@ -203,7 +204,7 @@ RTEB_CODE = Benchmark(
     contacts=["fzowl"],
 )
 
-RTEB_HEALTHCARE = Benchmark(
+RTEB_HEALTHCARE = RtebBenchmark(
     name="RTEB(Health, beta)",
     display_name="Healthcare Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",

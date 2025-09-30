@@ -7,7 +7,10 @@ import os
 import pandas as pd
 
 import mteb
-from mteb.leaderboard.table import create_tables
+from mteb.leaderboard.table import (
+    apply_per_task_styling_from_benchmark,
+    apply_summary_styling_from_benchmark,
+)
 from mteb.load_results import load_results
 
 logging.basicConfig(level=logging.INFO)
@@ -60,11 +63,14 @@ def load_leaderboard(
         base_results=benchmark_results
     ).join_revisions()
 
-    # Convert scores into long format
-    scores_long = benchmark_results_filtered.get_scores(format="long")
-
     # Convert scores into leaderboard tables
-    summary_gr_df, per_task_gr_df = create_tables(scores_long=scores_long)
+    loaded_benchmark = mteb.get_benchmark(benchmark.name)
+    summary_gr_df = apply_summary_styling_from_benchmark(
+        loaded_benchmark, benchmark_results_filtered
+    )
+    per_task_gr_df = apply_per_task_styling_from_benchmark(
+        loaded_benchmark, benchmark_results_filtered
+    )
 
     # Convert Gradio DataFrames to Pandas
     summary_df = pd.DataFrame(
