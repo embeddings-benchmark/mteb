@@ -167,8 +167,6 @@ class TaskResult(BaseModel):
                     "languages": eval_langs,
                 }
                 flat_scores[split].append(_scores)
-        # AttributeError: 'Namespace' object has no attribute 'is_public'
-        is_public = getattr(task_meta, "is_public", True)
 
         return TaskResult(
             dataset_revision=task.metadata.revision,
@@ -177,7 +175,6 @@ class TaskResult(BaseModel):
             scores=flat_scores,
             evaluation_time=evaluation_time,
             kg_co2_emissions=kg_co2_emissions,
-            is_pubic=is_public,
         )
 
     @field_validator("scores")
