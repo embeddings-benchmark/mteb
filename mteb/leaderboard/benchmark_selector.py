@@ -29,7 +29,7 @@ class MenuEntry:
     open: bool = False
 
 
-BENCHMARK_ENTRIES = [
+GP_BENCHMARK_ENTRIES = [
     MenuEntry(
         name="General Purpose",
         description="",
@@ -95,7 +95,7 @@ BENCHMARK_ENTRIES = [
     ),
 ]
 
-RTEB_BENCHMARK_ENTRIES = [
+R_BENCHMARK_ENTRIES = [
     MenuEntry(
         name="Retrieval",
         description=None,
@@ -252,5 +252,5 @@ def _render_benchmark_item(
 
 if __name__ == "__main__":
     with gr.Blocks() as b:
-        selector = make_selector(BENCHMARK_ENTRIES)
+        selector = make_selector(GP_BENCHMARK_ENTRIES)
     b.launch()
