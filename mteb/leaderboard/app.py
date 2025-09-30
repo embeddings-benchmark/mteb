@@ -123,6 +123,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "reference",
             "main_score",
             "modalities",
+            "is_public",
         ]
     )
     df["languages"] = df["languages"].map(format_list)
@@ -138,6 +139,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "domains": "Domains",
             "main_score": "Metric",
             "modalities": "Modality",
+            "is_public": "Public",
         }
     )
     df = df.drop(columns="reference")
