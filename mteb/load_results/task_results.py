@@ -228,10 +228,6 @@ class TaskResult(BaseModel):
     def task_type(self) -> str:
         return self.task.metadata.type
 
-    @property
-    def task_is_public(self) -> bool:
-        return getattr(self.task.metadata, "is_public", True)
-
     def to_dict(self) -> dict:
         return self.model_dump()
 

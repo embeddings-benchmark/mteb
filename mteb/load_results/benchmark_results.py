@@ -107,30 +107,28 @@ class ModelResult(BaseModel):
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
         modalities: list[MODALITIES] | None = None,
-        privacy: Literal["public", "private"] | None = None,
+        is_public: bool | None = None,
     ) -> ModelResult:
         # TODO: v2 see filter_tasks in BenchmarkResults - but can be moved to a private function or removed
         new_task_results = []
         for task_result in self.task_results:
-            if (task_names is not None) and (task_result.task_name not in task_names):
+            task_meta = task_result.task.metadata
+            if (task_names is not None) and (task_meta.name not in task_names):
                 continue
             if languages is not None:
-                task_languages = task_result.languages
+                task_languages = task_meta.languages
                 if not any(lang in task_languages for lang in languages):
                     continue
             if domains is not None:
-                task_domains = task_result.domains
+                task_domains = task_meta.domains if task_meta.domains else []
                 if not any(domain in task_domains for domain in domains):
                     continue
-            if (task_types is not None) and (task_result.task_type not in task_types):
+            if (task_types is not None) and (task_meta.type not in task_types):
                 continue
             if modalities is not None:
-                task_modalities = getattr(task_result, "modalities", [])
-                if not any(modality in task_modalities for modality in modalities):
+                if not any(modality in  task_meta.modalities for modality in modalities):
                     continue
-            if (privacy is not None) and (
-                task_result.task_is_public != (privacy == "public")
-            ):
+            if (is_public is not None) and (task_meta.is_public is is_public):
                 continue
             new_task_results.append(task_result)
         return type(self).model_construct(
@@ -410,7 +408,7 @@ class BenchmarkResults(BaseModel):
                 domains=domains,
                 task_types=task_types,
                 modalities=modalities,
-                privacy=privacy,
+                is_public=privacy,
             )
             for res in self.model_results
         ]
