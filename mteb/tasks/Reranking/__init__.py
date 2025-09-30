@@ -3,9 +3,15 @@ from __future__ import annotations
 from .ara.NamaaMrTydiReranking import *
 from .eng.AskUbuntuDupQuestions import *
 from .eng.BuiltBenchReranking import *
+from .eng.LocBenchReranking import *
 from .eng.MindSmallReranking import *
+from .eng.MultiSWEbenchReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
+from .eng.SWEbenchLiteReranking import *
+from .eng.SWEbenchMultilingualReranking import *
+from .eng.SWEbenchVerifiedReranking import *
+from .eng.SWEPolyBenchReranking import *
 from .eng.WebLINXCandidatesReranking import *
 from .fra.AlloprofReranking import *
 from .fra.SyntecReranking import *
