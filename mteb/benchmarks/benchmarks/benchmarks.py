@@ -445,6 +445,7 @@ SEB = Benchmark(
 CoIR = Benchmark(
     name="CoIR",
     display_name="Code Information Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
         tasks=[
             "AppsRetrieval",
@@ -476,7 +477,7 @@ CoIR = Benchmark(
 
 RAR_b = Benchmark(
     name="RAR-b",
-    display_name="Reasoning retrieval",
+    display_name="Reasoning as retrieval",
     tasks=get_tasks(
         tasks=[
             "ARCChallenge",
@@ -1163,6 +1164,7 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
+    display_name="Reasoning Retrieval",
     tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
@@ -1238,6 +1240,8 @@ CODE_RAG = Benchmark(
 
 BEIR = Benchmark(
     name="BEIR",
+    display_name="BEIR",
+    icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
     tasks=get_tasks(
         tasks=[
             "TRECCOVID",
@@ -1578,6 +1582,8 @@ CHEMTEB = Benchmark(
 
 BEIR_NL = Benchmark(
     name="BEIR-NL",
+    display_name="BEIR-NL",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
     tasks=get_tasks(
         tasks=[
             "ArguAna-NL",

@@ -12,7 +12,7 @@ RTEB_CITATION = r"""@article{rteb2024,
 
 RTEB_MAIN = Benchmark(
     name="RTEB(beta)",
-    display_name="Retrieval Embedding Benchmark",
+    display_name="Multilingual Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-search.svg",
     tasks=get_tasks(
         tasks=[

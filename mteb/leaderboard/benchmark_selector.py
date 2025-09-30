@@ -44,8 +44,6 @@ BENCHMARK_ENTRIES = [
                         "MIEB(eng)",
                         "MIEB(lite)",
                         "MIEB(Img)",
-                        "VisualDocumentRetrieval",
-                        "JinaVDR",
                     ]
                 ),
             ),
@@ -88,7 +86,6 @@ BENCHMARK_ENTRIES = [
                 "Miscellaneous",  # All of these are retrieval benchmarks
                 mteb.get_benchmarks(
                     [
-                        "BEIR-NL",
                         "BuiltBench(eng)",
                         "MINERSBitextMining",
                     ]
@@ -105,29 +102,48 @@ RTEB_BENCHMARK_ENTRIES = [
         open=False,
         benchmarks=[
             RTEB_MAIN,
+            RTEB_ENGLISH,
+            MenuEntry(
+                "Image",
+                description=None,
+                open=False,
+                benchmarks=[
+                    mteb.get_benchmark("VisualDocumentRetrieval"),
+                    mteb.get_benchmark("JinaVDR"),
+                ],
+            ),
             MenuEntry(
                 "Domain-Specific",
                 description=None,
                 open=False,
-                benchmarks=[RTEB_FINANCE, RTEB_LEGAL, RTEB_CODE, RTEB_HEALTHCARE],
+                benchmarks=[
+                    RTEB_FINANCE,
+                    RTEB_LEGAL,
+                    RTEB_CODE,
+                    mteb.get_benchmark("CoIR"),
+                    RTEB_HEALTHCARE,
+                    mteb.get_benchmark("FollowIR"),
+                    mteb.get_benchmark("LongEmbed"),
+                    mteb.get_benchmark("BRIGHT"),
+                ],
             ),
             MenuEntry(
                 "Language-specific",
                 description=None,
                 open=False,
-                benchmarks=[RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN],
+                benchmarks=[
+                    RTEB_FRENCH,
+                    RTEB_GERMAN,
+                    mteb.get_benchmark("BEIR"),
+                    mteb.get_benchmark("BEIR-NL"),
+                ],
             ),
             MenuEntry(
                 "Miscellaneous",
                 mteb.get_benchmarks(
                     [
-                        "BEIR",
                         "NanoBEIR",
-                        "BRIGHT",
                         "BRIGHT (long)",
-                        "CoIR",
-                        "FollowIR",
-                        "LongEmbed",
                         "RAR-b",
                     ]
                 ),
