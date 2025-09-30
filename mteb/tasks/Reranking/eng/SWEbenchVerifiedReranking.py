@@ -27,7 +27,9 @@ class SWEbenchVerifiedReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
+        prompt={
+            "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
+        },
         bibtex_citation=r"""
 @misc{openai2024swebenchverified,
   author = {OpenAI},
@@ -35,5 +37,5 @@ class SWEbenchVerifiedReranking(AbsTaskReranking):
   url = {https://openai.com/index/introducing-swe-bench-verified/},
   year = {2024},
 }
-"""
+""",
     )

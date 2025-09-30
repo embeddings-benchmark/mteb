@@ -163,7 +163,9 @@ class RerankingEvaluator(Evaluator):
                 all_recall_scores=all_recall_scores,
                 all_conf_scores=all_conf_scores,
             )
-        scores = self._collect_results(all_mrr_scores, all_ap_scores, all_recall_scores, all_conf_scores)
+        scores = self._collect_results(
+            all_mrr_scores, all_ap_scores, all_recall_scores, all_conf_scores
+        )
         return scores
 
     def _encode_candidates_batched(
@@ -266,7 +268,9 @@ class RerankingEvaluator(Evaluator):
                 model,
             )
 
-    def _collect_results(self, all_mrr_scores, all_ap_scores, all_recall_scores, all_conf_scores):
+    def _collect_results(
+        self, all_mrr_scores, all_ap_scores, all_recall_scores, all_conf_scores
+    ):
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
         mean_recall = np.mean(all_recall_scores)
@@ -274,9 +278,20 @@ class RerankingEvaluator(Evaluator):
         # Compute nAUCs
         naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
         naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
-        naucs_recall = self.nAUC_scores(all_conf_scores, all_recall_scores, f"recall_at_{self.mrr_at_k}")
+        naucs_recall = self.nAUC_scores(
+            all_conf_scores, all_recall_scores, f"recall_at_{self.mrr_at_k}"
+        )
 
-        return {**{"map": mean_ap, "mrr": mean_mrr, f"recall_at_{self.mrr_at_k}": mean_recall}, **naucs_map, **naucs_mrr, **naucs_recall}
+        return {
+            **{
+                "map": mean_ap,
+                "mrr": mean_mrr,
+                f"recall_at_{self.mrr_at_k}": mean_recall,
+            },
+            **naucs_map,
+            **naucs_mrr,
+            **naucs_recall,
+        }
 
     def _encode_candidates_miracl(
         self,
@@ -602,7 +617,7 @@ class RerankingEvaluator(Evaluator):
         total_relevant = sum(is_relevant)
         if total_relevant == 0:
             return 0.0
-        
+
         relevant_retrieved = 0
         for rank, index in enumerate(pred_ranking[:k]):
             if is_relevant[index]:

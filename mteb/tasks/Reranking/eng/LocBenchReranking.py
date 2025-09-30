@@ -27,7 +27,9 @@ class LocBenchReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
+        prompt={
+            "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
+        },
         bibtex_citation=r"""
 @misc{chen2025locagentgraphguidedllmagents,
   archiveprefix = {arXiv},
@@ -38,6 +40,5 @@ class LocBenchReranking(AbsTaskReranking):
   url = {https://arxiv.org/abs/2503.09089},
   year = {2025},
 }
-"""
+""",
     )
-

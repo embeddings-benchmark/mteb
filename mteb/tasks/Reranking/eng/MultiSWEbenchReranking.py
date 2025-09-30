@@ -20,14 +20,16 @@ class MultiSWEbenchReranking(AbsTaskReranking):
         eval_splits=["train"],
         eval_langs=["eng-Latn", "python-Code"],
         main_score="recall_at_10",
-        date=("2023-10-10", "2023-10-10"), 
+        date=("2023-10-10", "2023-10-10"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
         license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        prompt={"query": "Given a github issue, identify the code that needs to be changed to fix the issue."},
+        prompt={
+            "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
+        },
         bibtex_citation=r"""
 @misc{zan2025multiswebench,
   archiveprefix = {arXiv},
@@ -38,5 +40,5 @@ class MultiSWEbenchReranking(AbsTaskReranking):
   url = {https://arxiv.org/abs/2504.02605},
   year = {2025},
 }
-"""
+""",
     )
