@@ -48,7 +48,7 @@ RTEB_MAIN = RtebBenchmark(
             "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 29 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across English, French, German, and Japanese languages.",
+    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 29 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across mutliple languages.",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )

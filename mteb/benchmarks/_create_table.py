@@ -270,6 +270,7 @@ def _create_summary_table_mean_public_private(
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
     """
+    print("all tasks:", benchmark_results.task_names)
     data = benchmark_results.to_dataframe(format="long")
 
     if data.empty:
@@ -277,10 +278,13 @@ def _create_summary_table_mean_public_private(
             {"No results": ["You can try relaxing your criteria"]}
         )
         return no_results_frame
-    public_task_name = benchmark_results.filter_tasks(privacy="public").task_names
-    private_task_name = benchmark_results.filter_tasks(privacy="private").task_names
+    public_task_name = benchmark_results.filter_tasks(is_public=True).task_names
+    print("Public tasks:", public_task_name)
+    private_task_name = benchmark_results.filter_tasks(is_public=False).task_names
+    print("Private tasks:", private_task_name)
     # Convert to DataFrame and pivot
     per_task = data.pivot(index="model_name", columns="task_name", values="score")
+    print(per_task.columns)
 
     # Remove models with no scores
     to_remove = per_task.isna().all(axis="columns")

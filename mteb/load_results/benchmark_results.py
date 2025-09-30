@@ -126,7 +126,7 @@ class ModelResult(BaseModel):
             if (task_types is not None) and (task_meta.type not in task_types):
                 continue
             if modalities is not None:
-                if not any(modality in  task_meta.modalities for modality in modalities):
+                if not any(modality in task_meta.modalities for modality in modalities):
                     continue
             if (is_public is not None) and (task_meta.is_public is is_public):
                 continue
@@ -398,7 +398,7 @@ class BenchmarkResults(BaseModel):
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,  # type: ignore
         modalities: list[MODALITIES] | None = None,
-        privacy: Literal["public", "private"] | None = None,
+        is_public: bool | None = None,
     ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
@@ -408,7 +408,7 @@ class BenchmarkResults(BaseModel):
                 domains=domains,
                 task_types=task_types,
                 modalities=modalities,
-                is_public=privacy,
+                is_public=is_public,
             )
             for res in self.model_results
         ]
