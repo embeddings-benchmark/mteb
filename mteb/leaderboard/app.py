@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import argparse
 import itertools
 import json
 import logging
@@ -19,9 +18,9 @@ import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.custom_validators import MODALITIES
 from mteb.leaderboard.benchmark_selector import (
-    BENCHMARK_ENTRIES,
     DEFAULT_BENCHMARK_NAME,
-    RTEB_BENCHMARK_ENTRIES,
+    GP_BENCHMARK_ENTRIES,
+    R_BENCHMARK_ENTRIES,
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
@@ -123,6 +122,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "reference",
             "main_score",
             "modalities",
+            "is_public",
         ]
     )
     df["languages"] = df["languages"].map(format_list)
@@ -138,6 +138,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "domains": "Domains",
             "main_score": "Metric",
             "modalities": "Modality",
+            "is_public": "Public",
         }
     )
     df = df.drop(columns="reference")
@@ -195,23 +196,7 @@ def filter_models(
     return list(models_to_keep)
 
 
-def get_startup_arguments():
-    parser = argparse.ArgumentParser()
-
-    # Add a Boolean flag parameter
-    parser.add_argument(
-        "--show_rteb",
-        action="store_true",
-        help="If set, display RTEB results; otherwise show default results.",
-    )
-
-    return parser.parse_args()
-
-
 def get_leaderboard_app() -> gr.Blocks:
-    args = get_startup_arguments()
-    show_rteb = args.show_rteb
-
     logger.info("Loading all benchmark results")
     all_results = load_results()
 
@@ -309,12 +294,10 @@ def get_leaderboard_app() -> gr.Blocks:
             visible=True,
             width="18%",
         ):
-            if show_rteb:
-                benchmark_select, column = make_selector(
-                    BENCHMARK_ENTRIES + RTEB_BENCHMARK_ENTRIES
-                )
-            else:
-                benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
+            benchmark_select, column = make_selector(
+                GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
+            )
+
         gr.Markdown(
             """
         ## Embedding Leaderboard
