@@ -11,10 +11,10 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Why do you want this model to be evaluated?
-      description: Please provide a brief explanation of why you think this model should be evaluated in MTEB. This helps us prioritize requests.
+      label: What do you want it to be evaluated on?
+      description: Please specify the tasks or benchmarks you would like this model to be evaluated on.
     validations:
-      required: False
+      required: True
   - type: dropdown
     id: contribute
     attributes:
