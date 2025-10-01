@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class RerankingEvaluator(Evaluator):
     """This class evaluates a SentenceTransformer model for the task of re-ranking.
     Given a query and a list of documents, it computes the score [query, doc_i] for all possible
-    documents and sorts them in decreasing order. Then, MRR@10 and MAP is compute to measure the quality of the ranking.
+    documents and sorts them in decreasing order. Then, MRR@k, MAP, and Recall@k are computed to measure the quality of the ranking.
     :param samples: Must be a list and each element is of the form:
         - {'query': '', 'positive': [], 'negative': []}. Query is the search query, positive is a list of positive
         (relevant) documents, negative is a list of negative (irrelevant) documents.
@@ -143,6 +143,7 @@ class RerankingEvaluator(Evaluator):
     def _encode_candidates(self, model: Encoder, batched: bool, all_query_embs=None):
         all_mrr_scores = []
         all_ap_scores = []
+        all_recall_scores = []
         all_conf_scores = []
         logger.info("Encoding candidates...")
         if batched:
@@ -151,6 +152,7 @@ class RerankingEvaluator(Evaluator):
                 all_query_embs=all_query_embs,
                 all_mrr_scores=all_mrr_scores,
                 all_ap_scores=all_ap_scores,
+                all_recall_scores=all_recall_scores,
                 all_conf_scores=all_conf_scores,
             )
         else:
@@ -158,9 +160,12 @@ class RerankingEvaluator(Evaluator):
                 model=model,
                 all_mrr_scores=all_mrr_scores,
                 all_ap_scores=all_ap_scores,
+                all_recall_scores=all_recall_scores,
                 all_conf_scores=all_conf_scores,
             )
-        scores = self._collect_results(all_mrr_scores, all_ap_scores, all_conf_scores)
+        scores = self._collect_results(
+            all_mrr_scores, all_ap_scores, all_recall_scores, all_conf_scores
+        )
         return scores
 
     def _encode_candidates_batched(
@@ -169,6 +174,7 @@ class RerankingEvaluator(Evaluator):
         model: Encoder,
         all_mrr_scores,
         all_ap_scores,
+        all_recall_scores,
         all_conf_scores,
     ):
         all_docs = []
@@ -208,6 +214,7 @@ class RerankingEvaluator(Evaluator):
                 is_relevant,
                 all_mrr_scores,
                 all_ap_scores,
+                all_recall_scores,
                 all_conf_scores,
                 model,
             )
@@ -217,6 +224,7 @@ class RerankingEvaluator(Evaluator):
         model: Encoder,
         all_mrr_scores,
         all_ap_scores,
+        all_recall_scores,
         all_conf_scores,
     ):
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
@@ -255,19 +263,35 @@ class RerankingEvaluator(Evaluator):
                 is_relevant,
                 all_mrr_scores,
                 all_ap_scores,
+                all_recall_scores,
                 all_conf_scores,
                 model,
             )
 
-    def _collect_results(self, all_mrr_scores, all_ap_scores, all_conf_scores):
+    def _collect_results(
+        self, all_mrr_scores, all_ap_scores, all_recall_scores, all_conf_scores
+    ):
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
+        mean_recall = np.mean(all_recall_scores)
 
         # Compute nAUCs
         naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
         naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+        naucs_recall = self.nAUC_scores(
+            all_conf_scores, all_recall_scores, f"recall_at_{self.mrr_at_k}"
+        )
 
-        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
+        return {
+            **{
+                "map": mean_ap,
+                "mrr": mean_mrr,
+                f"recall_at_{self.mrr_at_k}": mean_recall,
+            },
+            **naucs_map,
+            **naucs_mrr,
+            **naucs_recall,
+        }
 
     def _encode_candidates_miracl(
         self,
@@ -408,6 +432,7 @@ class RerankingEvaluator(Evaluator):
         is_relevant,
         all_mrr_scores,
         all_ap_scores,
+        all_recall_scores,
         all_conf_scores,
         model: Encoder,
     ):
@@ -417,6 +442,7 @@ class RerankingEvaluator(Evaluator):
 
         all_mrr_scores.append(scores["mrr"])
         all_ap_scores.append(scores["ap"])
+        all_recall_scores.append(scores["recall"])
         all_conf_scores.append(conf_scores)
 
     @staticmethod
@@ -483,11 +509,13 @@ class RerankingEvaluator(Evaluator):
             scores:
                 - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
                 - `ap`: Average Precision
+                - `recall`: Recall @ `self.mrr_at_k`
         """
         pred_scores_argsort = torch.argsort(-sim_scores)  # Sort in decreasing order
         mrr = self.mrr_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
         ap = self.ap_score(is_relevant, sim_scores.cpu().tolist())
-        return {"mrr": mrr, "ap": ap}
+        recall = self.recall_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
+        return {"mrr": mrr, "ap": ap, "recall": recall}
 
     @staticmethod
     def conf_scores(sim_scores: torch.Tensor) -> dict[str, float]:
@@ -570,3 +598,29 @@ class RerankingEvaluator(Evaluator):
         # ap = np.mean([np.mean(preds[: k + 1]) for k in range(len(preds)) if preds[k]])
         ap = average_precision_score(is_relevant, pred_scores)
         return ap
+
+    @staticmethod
+    def recall_at_k_score(
+        is_relevant: list[bool], pred_ranking: list[int], k: int
+    ) -> float:
+        """Computes Recall@k score
+
+        Args:
+            is_relevant: True if the document is relevant
+            pred_ranking: Indices of the documents sorted in decreasing order
+                of the similarity score
+            k: Top-k documents to consider
+
+        Returns:
+            The Recall@k score
+        """
+        total_relevant = sum(is_relevant)
+        if total_relevant == 0:
+            return 0.0
+
+        relevant_retrieved = 0
+        for rank, index in enumerate(pred_ranking[:k]):
+            if is_relevant[index]:
+                relevant_retrieved += 1
+
+        return relevant_retrieved / total_relevant

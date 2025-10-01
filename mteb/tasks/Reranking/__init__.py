@@ -6,9 +6,15 @@ from .eng.BuiltBenchReranking import *
 from .eng.HUMECore17InstructionReranking import *
 from .eng.HUMENews21InstructionReranking import *
 from .eng.HUMERobust04InstructionReranking import *
+from .eng.LocBenchReranking import *
 from .eng.MindSmallReranking import *
+from .eng.MultiSWEbenchReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
+from .eng.SWEbenchLiteReranking import *
+from .eng.SWEbenchMultilingualReranking import *
+from .eng.SWEbenchVerifiedReranking import *
+from .eng.SWEPolyBenchReranking import *
 from .eng.WebLINXCandidatesReranking import *
 from .fra.AlloprofReranking import *
 from .fra.SyntecReranking import *

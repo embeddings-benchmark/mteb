@@ -5,7 +5,7 @@ import io
 import os
 import time
 from functools import partial
-from typing import Any
+from typing import Any, Literal, get_args
 
 import torch
 from PIL import Image
@@ -15,6 +15,33 @@ from tqdm import tqdm
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_image_dependencies, requires_package
+
+
+def _post_process_embeddings(
+    embeddings_array: torch.Tensor, embedding_type: str
+) -> torch.Tensor:
+    """Post-process embeddings based on type (similar to voyage_models.py)"""
+    if embedding_type == "binary":
+        # Unpack bit-packed embeddings: each byte contains 8 embedding values
+        unpacked_embeddings = []
+        for embedding in embeddings_array:
+            # Convert bytes to bits and unpack
+            unpacked = []
+            for byte_val in embedding:
+                # Extract 8 bits from each byte (LSB first)
+                for bit_pos in range(8):
+                    bit_val = (byte_val >> bit_pos) & 1
+                    # Convert 0/1 to -1/1 for binary (signed)
+                    unpacked.append(1.0 if bit_val else -1.0)
+            unpacked_embeddings.append(unpacked)
+        return torch.tensor(unpacked_embeddings, dtype=torch.float32)
+    elif embedding_type in ["int8", "uint8"]:
+        # Convert int8/uint8 embeddings to float32
+        return embeddings_array.float()
+    else:
+        # For float and other types, return as-is
+        return embeddings_array
+
 
 all_languages = [
     "afr-Latn",
@@ -128,6 +155,13 @@ all_languages = [
     "zul-Latn",
 ]
 
+EMBEDDING_TYPE = Literal[
+    "float",
+    "int8",
+    "uint8",
+    "binary",
+]
+
 
 def cohere_v_loader(**kwargs):
     model_name = kwargs.get("model_name", "Cohere")
@@ -140,6 +174,8 @@ def cohere_v_loader(**kwargs):
         def __init__(
             self,
             model_name: str,
+            embedding_type: EMBEDDING_TYPE = "float",
+            output_dimension: int | None = None,
             **kwargs: Any,
         ):
             """Wrapper for Cohere multimodal embedding model,
@@ -152,6 +188,9 @@ def cohere_v_loader(**kwargs):
             from torchvision import transforms
 
             self.model_name = model_name
+            assert embedding_type in get_args(EMBEDDING_TYPE)
+            self.embedding_type = embedding_type
+            self.output_dimension = output_dimension
             api_key = os.getenv("COHERE_API_KEY")
             self.client = cohere.ClientV2(api_key)
             self.image_format = "JPEG"
@@ -170,14 +209,39 @@ def cohere_v_loader(**kwargs):
 
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
-                response = self.client.embed(
-                    texts=batch_texts,
-                    model=self.model_name,
-                    input_type="search_document",
-                )
-                all_text_embeddings.append(torch.tensor(response.embeddings.float))
+                embed_kwargs = {
+                    "texts": batch_texts,
+                    "model": self.model_name,
+                    "input_type": "search_document",
+                    "embedding_types": [self.embedding_type],
+                }
+                if self.output_dimension is not None:
+                    embed_kwargs["output_dimension"] = self.output_dimension
+
+                response = self.client.embed(**embed_kwargs)
+
+                # Get embeddings based on requested type
+                if self.embedding_type == "float":
+                    embeddings = response.embeddings.float
+                elif self.embedding_type == "int8":
+                    embeddings = response.embeddings.int8
+                elif self.embedding_type == "uint8":
+                    embeddings = response.embeddings.uint8
+                elif self.embedding_type == "binary":
+                    embeddings = response.embeddings.binary
+                else:
+                    raise ValueError(
+                        f"Embedding type {self.embedding_type} not allowed"
+                    )
+                all_text_embeddings.append(torch.tensor(embeddings))
 
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
+
+            # Post-process embeddings based on type
+            all_text_embeddings = _post_process_embeddings(
+                all_text_embeddings, self.embedding_type
+            )
+
             return all_text_embeddings
 
         def get_image_embeddings(
@@ -206,15 +270,31 @@ def cohere_v_loader(**kwargs):
                         image_base64 = (
                             f"data:{content_type};base64,{stringified_buffer}"
                         )
-                        response = self.client.embed(
-                            model=self.model_name,
-                            input_type="image",
-                            embedding_types=["float"],
-                            images=[image_base64],
-                        )
-                        all_image_embeddings.append(
-                            torch.tensor(response.embeddings.float)
-                        )
+                        embed_kwargs = {
+                            "model": self.model_name,
+                            "input_type": "image",
+                            "embedding_types": [self.embedding_type],
+                            "images": [image_base64],
+                        }
+                        if self.output_dimension is not None:
+                            embed_kwargs["output_dimension"] = self.output_dimension
+
+                        response = self.client.embed(**embed_kwargs)
+
+                        # Get embeddings based on requested type
+                        if self.embedding_type == "float":
+                            embeddings = response.embeddings.float
+                        elif self.embedding_type == "int8":
+                            embeddings = response.embeddings.int8
+                        elif self.embedding_type == "uint8":
+                            embeddings = response.embeddings.uint8
+                        elif self.embedding_type == "binary":
+                            embeddings = response.embeddings.binary
+                        else:
+                            raise ValueError(
+                                f"Embedding type {self.embedding_type} not allowed"
+                            )
+                        all_image_embeddings.append(torch.tensor(embeddings))
                         time.sleep(1.5)
             else:
                 for i in tqdm(range(0, len(images), batch_size)):
@@ -231,17 +311,38 @@ def cohere_v_loader(**kwargs):
                         image_base64 = (
                             f"data:{content_type};base64,{stringified_buffer}"
                         )
-                        response = self.client.embed(
-                            model=self.model_name,
-                            input_type="image",
-                            embedding_types=["float"],
-                            images=[image_base64],
-                        )
-                        all_image_embeddings.append(
-                            torch.tensor(response.embeddings.float)
-                        )
+                        embed_kwargs = {
+                            "model": self.model_name,
+                            "input_type": "image",
+                            "embedding_types": [self.embedding_type],
+                            "images": [image_base64],
+                        }
+                        if self.output_dimension is not None:
+                            embed_kwargs["output_dimension"] = self.output_dimension
+
+                        response = self.client.embed(**embed_kwargs)
+
+                        # Get embeddings based on requested type
+                        if self.embedding_type == "float":
+                            embeddings = response.embeddings.float
+                        elif self.embedding_type == "int8":
+                            embeddings = response.embeddings.int8
+                        elif self.embedding_type == "uint8":
+                            embeddings = response.embeddings.uint8
+                        elif self.embedding_type == "binary":
+                            embeddings = response.embeddings.binary
+                        else:
+                            # Fallback for unknown types
+                            embeddings = response.embeddings.float
+                        all_image_embeddings.append(torch.tensor(embeddings))
                         time.sleep(1.5)
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
+
+            # Post-process embeddings based on type
+            all_image_embeddings = _post_process_embeddings(
+                all_image_embeddings, self.embedding_type
+            )
+
             return all_image_embeddings
 
         def calculate_probs(self, text_embeddings, image_embeddings):
@@ -359,4 +460,50 @@ cohere_embed_v4_multimodal = ModelMeta(
     reference="https://docs.cohere.com/docs/cohere-embed",
     use_instructions=False,
     training_datasets=None,
+)
+
+cohere_embed_v4_multimodal_binary = ModelMeta(
+    loader=partial(cohere_v_loader, model_name="embed-v4.0", embedding_type="binary"),
+    name="Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
+    languages=all_languages,
+    revision="1",
+    release_date="2024-12-01",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=128000,
+    embed_dim=1536,
+    license=None,
+    similarity_fn_name="cosine",
+    framework=[],
+    modalities=["image", "text"],
+    open_weights=False,
+    public_training_code=None,
+    public_training_data=None,
+    reference="https://docs.cohere.com/docs/embeddings",
+    use_instructions=False,
+    training_datasets=None,
+    adapted_from="Cohere/Cohere-embed-v4.0",
+)
+
+cohere_embed_v4_multimodal_int8 = ModelMeta(
+    loader=partial(cohere_v_loader, model_name="embed-v4.0", embedding_type="int8"),
+    name="Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
+    languages=all_languages,
+    revision="1",
+    release_date="2024-12-01",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=128000,
+    embed_dim=1536,
+    license=None,
+    similarity_fn_name="cosine",
+    framework=[],
+    modalities=["image", "text"],
+    open_weights=False,
+    public_training_code=None,
+    public_training_data=None,
+    reference="https://docs.cohere.com/docs/embeddings",
+    use_instructions=False,
+    training_datasets=None,
+    adapted_from="Cohere/Cohere-embed-v4.0",
 )
