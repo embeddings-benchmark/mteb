@@ -4,10 +4,10 @@ from __future__ import annotations
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.overview import get_tasks
 
-RTEB_CITATION = r"""@article{rteb2024,
-  author = {RTEB Authors},
-  title = {RTEB: Retrieval Embedding Benchmark for Multi-Domain Text Retrieval},
-  year = {2024},
+RTEB_CITATION = r"""@article{rteb2025,
+  author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+  title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+  year = {2025},
 }"""
 
 RTEB_MAIN = RtebBenchmark(
@@ -48,7 +48,7 @@ RTEB_MAIN = RtebBenchmark(
             "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB (Retrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains 29 diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across mutliple languages.",
+    description="RTEB (ReTrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across multiple languages. The dataset includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -83,7 +83,7 @@ RTEB_ENGLISH = RtebBenchmark(
         ],
         languages=["eng"],
     ),
-    description="RTEB English subset containing retrieval tasks in English across legal, finance, code, and healthcare domains. Includes 20 diverse tasks covering specialized domains.",
+    description="RTEB English is a subset of RTEB containing retrieval tasks in English across legal, finance, code, and healthcare domains. Includes diverse tasks covering specialized domains such as healthcare and finance. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -101,7 +101,7 @@ RTEB_FRENCH = RtebBenchmark(
         ],
         languages=["fra"],
     ),
-    description="RTEB French subset containing retrieval tasks in French across legal and general knowledge domains. Includes 3 diverse multilingual tasks.",
+    description="RTEB French is a subset of RTEB containing retrieval tasks in French across legal and general knowledge domains. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -119,7 +119,7 @@ RTEB_GERMAN = RtebBenchmark(
             "GermanLegal1Retrieval",
         ],
     ),
-    description="RTEB German subset containing retrieval tasks in German across legal, healthcare, and business domains. Includes 4 diverse tasks.",
+    description="RTEB German is a subset of RTEB containing retrieval tasks in German across legal, healthcare, and business domains. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -135,7 +135,7 @@ RTEB_JAPANESE = RtebBenchmark(
             "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB Japanese subset containing retrieval tasks in Japanese across legal and code domains. Includes 2 diverse multilingual tasks.",
+    description="RTEB Japanese is a subset of RTEB  containing retrieval tasks in Japanese across legal and code domains. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -156,7 +156,7 @@ RTEB_FINANCE = RtebBenchmark(
             "EnglishFinance4Retrieval",
         ],
     ),
-    description="RTEB Finance subset containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, financial document retrieval, and corporate governance. Includes 7 specialized finance tasks.",
+    description="RTEB Finance is a subset of RTEB  containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, financial document retrieval, and corporate governance. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -177,7 +177,7 @@ RTEB_LEGAL = RtebBenchmark(
             "JapaneseLegal1Retrieval",
         ],
     ),
-    description="RTEB Legal subset containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and multilingual legal Q&A. Includes 7 legal tasks across English, French, German, and Japanese.",
+    description="RTEB Legal is a subset of RTEB containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and multilingual legal Q&A. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -199,7 +199,7 @@ RTEB_CODE = RtebBenchmark(
             "JapaneseCode1Retrieval",
         ],
     ),
-    description="RTEB Code subset containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, SQL retrieval, and multilingual code retrieval. Includes 8 code-related tasks.",
+    description="RTEB Code is a subset of RTEB containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, SQL retrieval, and multilingual code retrieval. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
@@ -217,7 +217,7 @@ RTEB_HEALTHCARE = RtebBenchmark(
             "GermanHealthcare1Retrieval",
         ],
     ),
-    description="RTEB Healthcare subset containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, cross-lingual medical retrieval, and multilingual medical consultation. Includes 4 healthcare tasks.",
+    description="RTEB Healthcare is a subset of RTEB containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, cross-lingual medical retrieval, and multilingual medical consultation. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).",
     citation=RTEB_CITATION,
     contacts=["fzowl"],
 )
