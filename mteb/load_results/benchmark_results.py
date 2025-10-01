@@ -128,7 +128,7 @@ class ModelResult(BaseModel):
             if modalities is not None:
                 if not any(modality in task_meta.modalities for modality in modalities):
                     continue
-            if (is_public is not None) and (task_meta.is_public is is_public):
+            if (is_public is not None) and (task_meta.is_public is not is_public):
                 continue
             new_task_results.append(task_result)
         return type(self).model_construct(
