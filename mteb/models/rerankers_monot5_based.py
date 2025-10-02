@@ -708,6 +708,8 @@ mt5_languages = [
     "mon-Cyrl",
     "nep-Deva",
     "nor-Latn",
+    "nno-Latn",
+    "nob-Latn",
     "pus-Arab",
     "fas-Arab",
     "pol-Latn",

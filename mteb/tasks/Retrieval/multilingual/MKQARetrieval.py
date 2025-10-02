@@ -6,37 +6,34 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGUAGE_MAPPING = {
-    "ar": "ara-Arab",
-    "da": "dan-Latn",
-    "de": "deu-Latn",
-    "en": "eng-Latn",
-    "es": "spa-Latn",
-    "fi": "fin-Latn",
-    "fr": "fra-Latn",
-    "he": "heb-Hebr",
-    "hu": "hun-Latn",
-    "it": "ita-Latn",
-    "ja": "jpn-Jpan",
-    "ko": "kor-Kore",
-    "km": "khm-Khmr",
-    "ms": "msa-Latn",
-    "nl": "nld-Latn",
-    "no": "nor-Latn",
-    "pl": "pol-Latn",
-    "pt": "por-Latn",
-    "ru": "rus-Cyrl",
-    "sv": "swe-Latn",
-    "th": "tha-Thai",
-    "tr": "tur-Latn",
-    "vi": "vie-Latn",
-    "zh_cn": "zho-Hans",
-    "zh_hk": "zho-Hant",
-    "zh_tw": "zho-Hant",
+_EVAL_LANGS = {
+    "ar": ["ara-Arab"],
+    "da": ["dan-Latn"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+    "fi": ["fin-Latn"],
+    "fr": ["fra-Latn"],
+    "he": ["heb-Hebr"],
+    "hu": ["hun-Latn"],
+    "it": ["ita-Latn"],
+    "ja": ["jpn-Jpan"],
+    "ko": ["kor-Kore"],
+    "km": ["khm-Khmr"],
+    "ms": ["msa-Latn"],
+    "nl": ["nld-Latn"],
+    "no": ["nor-Latn", "nno-Latn", "nob-Latn"],
+    "pl": ["pol-Latn"],
+    "pt": ["por-Latn"],
+    "ru": ["rus-Cyrl"],
+    "sv": ["swe-Latn"],
+    "th": ["tha-Thai"],
+    "tr": ["tur-Latn"],
+    "vi": ["vie-Latn"],
+    "zh_cn": ["zho-Hans"],
+    "zh_hk": ["zho-Hant"],
+    "zh_tw": ["zho-Hant"],
 }
-
-
-_EVAL_LANGS = {k: [v] for k, v in _LANGUAGE_MAPPING.items()}
 
 
 class MKQARetrieval(AbsTaskRetrieval, MultilingualTask):
