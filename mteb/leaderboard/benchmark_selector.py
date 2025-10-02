@@ -35,7 +35,7 @@ BENCHMARK_ENTRIES = [
         description="",
         open=False,
         benchmarks=mteb.get_benchmarks(
-            ["MTEB(Multilingual, v2)", "MTEB(eng, v2)", "HUME(Multilingual, v1)"]
+            ["MTEB(Multilingual, v2)", "MTEB(eng, v2)", "HUME(v1)"]
         )
         + [
             MenuEntry(
