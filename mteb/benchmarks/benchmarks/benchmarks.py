@@ -2298,7 +2298,7 @@ JINA_VDR = Benchmark(
 
 
 HUME = Benchmark(
-    name="HUME(Multilingual, v1)",
+    name="HUME(v1)",
     display_name="Human Benchmark",
     # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
     tasks=get_tasks(
