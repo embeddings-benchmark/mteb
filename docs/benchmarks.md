@@ -18,6 +18,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [CodeRAG](https://arxiv.org/abs/2406.14497) | CodeRAG | 4 | Reranking: 4 | [Programming] | python |
 | [Encodechka](https://github.com/avidale/encodechka) | Encodechka | 7 | STS: 2, Classification: 4, PairClassification: 1 | [Fiction, Government, News, Non-fiction, Social, Web, Written] | rus |
 | [FollowIR](https://arxiv.org/abs/2403.15246) | Instruction Following | 3 | InstructionRetrieval: 3 | [News, Written] | eng |
+| [HUME(v1)](Coming soon (in review)) | Human Benchmark | 16 | Classification: 4, Clustering: 4, Reranking: 4, STS: 4 | [Academic, Blog, Encyclopaedic, News, Reviews, Social, Web, Written] | ara,dan,eng,nob,rus |
 | [JinaVDR](https://arxiv.org/abs/2506.18902) | Jina Visual Document Retrieval | 43 | DocumentUnderstanding: 43 | [Academic, Engineering, Government, Legal, Medical, News, Social, Web] | ara,ben,deu,eng,fra,hin,hun,ind,ita,jpn,kor,mya,nld,por,rus,spa,tha,urd,vie,zho |
 | [LongEmbed](https://arxiv.org/abs/2404.12096v2) | Long-context Retrieval | 6 | Retrieval: 6 | [Academic, Blog, Encyclopaedic, Fiction, Non-fiction, Spoken, Written] | eng |
 | [MIEB(Img)](https://arxiv.org/abs/2504.10471) | Image only | 49 | Any2AnyRetrieval: 15, ImageClassification: 22, ImageClustering: 5, VisualSTS(eng): 5, VisualSTS(multi): 2 | [Blog, Encyclopaedic, Medical, News, Non-fiction, Reviews, Scene, Social, Spoken, Web, Written] | ara,cmn,deu,eng,fra,ita,kor,nld,pol,por,rus,spa,tur |

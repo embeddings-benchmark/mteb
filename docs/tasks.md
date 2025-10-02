@@ -383,6 +383,22 @@ The following tables give you an overview of the tasks in MTEB.
 | [GujaratiNewsClassification.v2](https://github.com/goru001/nlp-for-gujarati) | ['guj'] | Classification | s2s | [News, Written] | None | None |
 | [HALClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) (Mathieu Ciancone, 2024) | ['fra'] | Clustering | s2s | [Academic, Written] | None | None |
 | [HC3FinanceRetrieval](https://huggingface.co/datasets/embedding-benchmark/HC3Finance) (Guo et al., 2023) | ['eng'] | Retrieval | s2p | [Financial] | {'test': 2400} | {'test': {'number_of_characters': 200000, 'num_samples': 2400, 'num_queries': 1200, 'num_documents': 1200, 'min_document_length': 50, 'average_document_length': 166.67, 'max_document_length': 500, 'unique_documents': 1200, 'min_query_length': 3, 'average_query_length': 3.0, 'max_query_length': 3, 'unique_queries': 1200, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1200}} |
+| [HUMEArxivClusteringP2P](https://www.kaggle.com/Cornell-University/arxiv) (arXiv.org submitters, 2024) | ['eng'] | Clustering | p2p | [Academic, Written] | None | None |
+| [HUMECore17InstructionReranking](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | Reranking | s2s | [News, Written] | None | None |
+| [HUMEEmotionClassification](https://www.aclweb.org/anthology/D18-1404) (Saravia et al., 2018) | ['eng'] | Classification | s2s | [Social, Written] | None | None |
+| [HUMEMultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) (Mollanorozy et al., 2023) | ['ara', 'eng', 'nor', 'rus'] | Classification | s2s | [Reviews, Written] | None | None |
+| [HUMENews21InstructionReranking](https://trec.nist.gov/data/news2021.html) (Soboroff et al., 2021) | ['eng'] | Reranking | s2s | [News, Written] | None | None |
+| [HUMERedditClusteringP2P](https://arxiv.org/abs/2104.07081) (Gregor Geigle and Nils Reimers and Andreas R{\"u, 2021) | ['eng'] | Clustering | p2p | [Social, Web, Written] | None | None |
+| [HUMERobust04InstructionReranking](https://trec.nist.gov/data/robust/04.guidelines.html) (Voorhees et al., 2005) | ['eng'] | Reranking | s2s | [News, Written] | None | None |
+| [HUMESIB200ClusteringS2S](https://github.com/dadelani/sib-200) (Adelani et al., 2023) | ['ara', 'dan', 'eng', 'fra', 'rus'] | Clustering | s2s | [News, Written] | None | None |
+| [HUMESICK-R](https://aclanthology.org/L14-1314/) (Marelli et al., 2014) | ['eng'] | STS | s2s | [Web, Written] | None | None |
+| [HUMESTS12](https://www.aclweb.org/anthology/S12-1051.pdf) (Agirre et al., 2012) | ['eng'] | STS | s2s | [Encyclopaedic, News, Written] | None | None |
+| [HUMESTS22](https://competitions.codalab.org/competitions/33835) (Chen et al., 2022) | ['ara', 'eng', 'fra', 'rus'] | STS | p2p | [News, Written] | None | None |
+| [HUMESTSBenchmark](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['eng'] | STS | s2s | [Blog, News, Written] | None | None |
+| [HUMEToxicConversationsClassification](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview) (cjadams, 2019) | ['eng'] | Classification | s2s | [Social, Written] | None | None |
+| [HUMETweetSentimentExtractionClassification](https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview) (Maggie et al., 2020) | ['eng'] | Classification | s2s | [Social, Written] | None | None |
+| [HUMEWikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p | [Encyclopaedic, Written] | None | None |
+| [HUMEWikipediaRerankingMultilingual](https://github.com/ellamind/wikipedia-2023-11-reranking-multilingual) (Ellamind, 2023) | ['dan', 'eng', 'nob'] | Reranking | s2s | [Encyclopaedic, Written] | None | None |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) (Ehsan Kamalloo, 2023) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [HamshahriClustring](https://github.com/mallahyari/Farsi-datasets) | ['fas'] | Clustering | p2p | [News] | None | None |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) (Fortuna et al., 2019) | ['por'] | Classification | s2s | [Social, Written] | None | None |
@@ -1156,7 +1172,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | Apurinã | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | apw | Western Apache | Athabaskan-Eyak-Tlingit | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | apz | Safeyoka | Angan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ara | Arabic | Unclassified | 0 | 2 | 0 | 4 | 12 | 0 | 0 | 7 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 2 | 11 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 44 |
+| ara | Arabic | Unclassified | 0 | 2 | 0 | 4 | 13 | 1 | 0 | 7 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 2 | 11 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 47 |
 | arb | Standard Arabic | Afro-Asiatic | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
 | are | Western Arrarnta | Pama-Nyungan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | arl | Arabela | Zaparoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1343,7 +1359,7 @@ The following tables give you an overview of the tasks in MTEB.
 | daa | Dangaléat | Afro-Asiatic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dad | Marik | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dah | Gwahatike | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dan | Danish | Indo-European | 0 | 2 | 0 | 8 | 11 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 1 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 33 |
+| dan | Danish | Indo-European | 0 | 2 | 0 | 8 | 11 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 2 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 35 |
 | ded | Dedua | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | deu | German | Indo-European | 0 | 2 | 0 | 8 | 14 | 7 | 0 | 9 | 0 | 0 | 0 | 0 | 1 | 7 | 0 | 3 | 21 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 80 |
 | dgc | Casiguran Dumagat Agta | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1373,7 +1389,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 21 | 165 | 21 | 7 | 44 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 16 | 155 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 583 |
+| eng | English | Indo-European | 0 | 3 | 49 | 21 | 169 | 25 | 7 | 44 | 22 | 5 | 0 | 3 | 1 | 13 | 2 | 20 | 155 | 17 | 2 | 1 | 6 | 7 | 3 | 24 | 599 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1394,7 +1410,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fin | Finnish | Uralic | 0 | 1 | 0 | 5 | 6 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 2 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 26 |
 | fon | Fon | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | for | Fore | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 0 | 1 | 0 | 9 | 13 | 8 | 0 | 9 | 0 | 0 | 0 | 0 | 1 | 6 | 0 | 4 | 18 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 78 |
+| fra | French | Indo-European | 0 | 1 | 0 | 9 | 13 | 9 | 0 | 9 | 0 | 0 | 0 | 0 | 1 | 6 | 0 | 4 | 18 | 5 | 0 | 1 | 0 | 0 | 4 | 0 | 80 |
 | fry | Western Frisian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fuc | Pulaar | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fue | Borgu Fulfulde | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1768,10 +1784,10 @@ The following tables give you an overview of the tasks in MTEB.
 | nno | Norwegian Nynorsk | Unclassified | 0 | 0 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
 | nnq | Ngindo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | noa | Woun Meu | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nob | Norwegian Bokmål | Unclassified | 0 | 0 | 0 | 4 | 8 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 20 |
+| nob | Norwegian Bokmål | Unclassified | 0 | 0 | 0 | 4 | 8 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | noe | Nimadi | Indo-European | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nop | Numanggang | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nor | Norwegian | Indo-European | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| nor | Norwegian | Indo-European | 0 | 1 | 0 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
 | not | Nomatsiguenga | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nou | Ewage-Notu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nov | Novial | Artificial Language | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1881,7 +1897,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | Luguru | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | rug | Roviana | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | run | Rundi | Atlantic-Congo | 0 | 0 | 0 | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| rus | Russian | Indo-European | 0 | 2 | 0 | 8 | 20 | 6 | 0 | 6 | 0 | 0 | 0 | 0 | 2 | 4 | 2 | 2 | 20 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 78 |
+| rus | Russian | Indo-European | 0 | 2 | 0 | 8 | 21 | 7 | 0 | 6 | 0 | 0 | 0 | 0 | 2 | 4 | 2 | 2 | 20 | 5 | 0 | 0 | 0 | 0 | 2 | 0 | 81 |
 | rwo | Rawa | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sab | Buglere | Chibchan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sag | Sango | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
@@ -2146,7 +2162,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1496 | 872 | 321 | 7 | 137 | 22 | 5 | 0 | 3 | 31 | 96 | 4 | 80 | 702 | 91 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1496 | 879 | 329 | 7 | 137 | 22 | 5 | 0 | 3 | 31 | 96 | 4 | 86 | 702 | 98 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
