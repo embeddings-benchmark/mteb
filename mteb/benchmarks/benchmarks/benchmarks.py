@@ -2301,3 +2301,35 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
+
+
+HUME = Benchmark(
+    name="HUME(v1)",
+    display_name="Human Benchmark",
+    # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
+    tasks=get_tasks(
+        tasks=[
+            "HUMEEmotionClassification",
+            "HUMEToxicConversationsClassification",
+            "HUMETweetSentimentExtractionClassification",
+            "HUMEMultilingualSentimentClassification",
+            "HUMEArxivClusteringP2P",
+            "HUMERedditClusteringP2P",
+            "HUMEWikiCitiesClustering",
+            "HUMESIB200ClusteringS2S",
+            "HUMECore17InstructionReranking",
+            "HUMENews21InstructionReranking",
+            "HUMERobust04InstructionReranking",
+            "HUMEWikipediaRerankingMultilingual",
+            "HUMESICK-R",
+            "HUMESTS12",
+            "HUMESTSBenchmark",
+            "HUMESTS22",
+        ],
+        languages=["eng-Latn", "ara-Arab", "rus-Cyrl", "dan-Latn", "nob-Latn"],
+    ),
+    description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
+    reference="Coming soon (in review)",
+    citation=None,
+    contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
+)

@@ -47,9 +47,10 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             "path": "mteb/multilingual-sentiment-classification",
             "revision": "2b9b4d10fc589af67794141fe8cbd3739de1eb33",
         },
-        description="""Sentiment classification dataset with binary
-                       (positive vs negative sentiment) labels. Includes 30 languages and dialects.
-                     """,
+        description=(
+            "Sentiment classification dataset with binary "
+            "(positive vs negative sentiment) labels. Includes 30 languages and dialects."
+        ),
         reference="https://huggingface.co/datasets/mteb/multilingual-sentiment-classification",
         type="Classification",
         category="s2s",

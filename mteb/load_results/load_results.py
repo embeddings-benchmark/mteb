@@ -57,7 +57,10 @@ def download_of_results(
         logger.info(
             f"No results repository found in {results_directory}, cloning it from {results_repo}"
         )
-        subprocess.run(["git", "clone", results_repo], cwd=cache_directory)
+        subprocess.run(
+            ["git", "clone", results_repo],
+            cwd=cache_directory,
+        )
 
     return results_directory
 
