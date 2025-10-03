@@ -444,3 +444,5 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             framework=[],
         )
     return meta
+
+
