@@ -7,7 +7,8 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 
-from mteb.load_results.benchmark_results import BenchmarkResults
+import mteb
+from mteb import BenchmarkResults
 from mteb.overview import get_task, get_tasks
 
 
@@ -49,15 +50,6 @@ def _format_max_tokens(max_tokens: float | None) -> str:
     if max_tokens == np.inf:
         return "Infinite"
     return str(int(max_tokens))
-
-
-def _failsafe_get_model_meta(model_name):
-    try:
-        from mteb.models.overview import get_model_meta
-
-        return get_model_meta(model_name)
-    except Exception:
-        return None
 
 
 def _get_means_per_types(per_task: pd.DataFrame):
@@ -137,7 +129,7 @@ def _create_summary_table_from_benchmark_results(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(_failsafe_get_model_meta)
+    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 
@@ -320,7 +312,7 @@ def _create_summary_table_mean_public_private(
     joint_table = joint_table.reset_index()
 
     # Add model metadata
-    model_metas = joint_table["model_name"].map(_failsafe_get_model_meta)
+    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
     joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
 

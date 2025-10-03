@@ -19,6 +19,17 @@ OLD_FORMAT_RERANKING_TASKS = [
     "AskUbuntuDupQuestions-VN",
     "SciDocsRR-VN",
     "StackOverflowDupQuestions-VN",
+    "HUMECore17InstructionReranking",
+    "HUMENews21InstructionReranking",
+    "HUMERobust04InstructionReranking",
+    "LocBenchReranking",
+    "MultiSWEbenchReranking",
+    "SWEbenchLiteReranking",
+    "SWEbenchMultilingualReranking",
+    "SWEbenchVerifiedReranking",
+    "SWEPolyBenchReranking",
+    "HUMEWikipediaRerankingMultilingual",
+    "WikipediaRerankingMultilingual",
 ]
 
 
