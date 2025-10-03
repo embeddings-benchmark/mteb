@@ -1,18 +1,17 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
-
-class SWEbenchVerifiedReranking(AbsTaskReranking):
+class SWEbenchVerifiedReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SWEbenchVerifiedRR",
         description="Software Issue Localization for SWE-bench Verified",
         reference="https://openai.com/index/introducing-swe-bench-verified/",
         dataset={
-            "path": "tarsur909/mteb-swe-bench-verified-reranking",
-            "revision": "796ae0b4b187e5c0533a12411dee0d8e34eaf0b5",
+            "path": "mteb/SWEbenchVerifiedRR",
+            "revision": "373818dbe743204d007c3c27ca091a3349331afa",
         },
         type="Reranking",
         category="t2t",

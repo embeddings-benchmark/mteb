@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class MultiSWEbenchReranking(AbsTaskReranking):
+class MultiSWEbenchReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultiSWEbenchRR",
         description="Multilingual Software Issue Localization.",
         reference="https://multi-swe-bench.github.io/#/",
         dataset={
-            "path": "tarsur909/mteb-swe-bench-multi-reranking",
-            "revision": "38e01d5155c9f885942ea6d69e6722e74b9d4013",
+            "path": "mteb/MultiSWEbenchRR",
+            "revision": "f80517681e98077bb9b20470ab562bb6e94e7897",
         },
         type="Reranking",
         category="t2t",

@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class SWEPolyBenchReranking(AbsTaskReranking):
+class SWEPolyBenchReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SWEPolyBenchRR",
         description="Multilingual Software Issue Localization.",
         reference="https://amazon-science.github.io/SWE-PolyBench/",
         dataset={
-            "path": "tarsur909/mteb-swe-bench-poly-reranking",
-            "revision": "c55780c9ae37b13e191f62bc522d4194a689ae38",
+            "path": "mteb/SWEPolyBenchRR",
+            "revision": "3b896b59fb5892ab07a34a00917884f8690eaf9c",
         },
         type="Reranking",
         category="t2t",

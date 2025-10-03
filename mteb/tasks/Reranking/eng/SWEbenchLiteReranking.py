@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class SWEbenchLiteReranking(AbsTaskReranking):
+class SWEbenchLiteReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SWEbenchLiteRR",
         description="Software Issue Localization.",
         reference="https://www.swebench.com/",
         dataset={
-            "path": "tarsur909/mteb-swe-bench-lite-reranking",
-            "revision": "9020779825304b569312509a068219d1771bae7d",
+            "path": "mteb/SWEbenchLiteRR",
+            "revision": "b4c41d62898febc41cba927b48709949b7664262",
         },
         type="Reranking",
         category="t2t",

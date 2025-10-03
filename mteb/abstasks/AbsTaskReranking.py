@@ -12,15 +12,7 @@ from .retrieval_dataset_loaders import RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = [
-    "LocBenchRR",
-    "MultiSWEbenchRR",
-    "SWEbenchLiteRR",
-    "SWEbenchMultilingualRR",
-    "SWEbenchVerifiedRR",
-    "SWEPolyBenchRR",
-    "SWEbenchMultilingualRR",
-]
+OLD_FORMAT_RERANKING_TASKS = []
 
 
 class AbsTaskReranking(AbsTaskRetrieval):

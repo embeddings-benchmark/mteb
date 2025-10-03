@@ -11,7 +11,7 @@ class HUMECore17InstructionReranking(AbsTaskReranking):
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "mteb/HUMECore17InstructionReranking",
-            "revision": "mteb/HUMECore17InstructionReranking",
+            "revision": "3a421a4b0596f6424c2a068d6eee99675ca5e43f",
         },
         type="Reranking",
         category="t2t",

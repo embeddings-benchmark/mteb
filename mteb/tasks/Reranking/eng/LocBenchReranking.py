@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class LocBenchReranking(AbsTaskReranking):
+class LocBenchReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LocBenchRR",
         description="Software Issue Localization.",
         reference="https://arxiv.org/abs/2503.09089",
         dataset={
-            "path": "tarsur909/mteb-loc-bench-reranking",
-            "revision": "6741d68550b3793b45b18b6aaf981d00f33971cb",
+            "path": "mteb/LocBenchRR",
+            "revision": "4a1fe7be94481b1e5a47d072782c89b146b4fecf",
         },
         type="Reranking",
         category="t2t",
