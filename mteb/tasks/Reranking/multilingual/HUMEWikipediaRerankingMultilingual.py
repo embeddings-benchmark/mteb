@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
@@ -12,7 +11,7 @@ _LANGUAGES = {
 }
 
 
-class HUMEWikipediaRerankingMultilingual(AbsTaskReranking, MultilingualTask):
+class HUMEWikipediaRerankingMultilingual(AbsTaskReranking):
     fast_loading = True
     metadata = TaskMetadata(
         name="HUMEWikipediaRerankingMultilingual",
@@ -23,7 +22,7 @@ class HUMEWikipediaRerankingMultilingual(AbsTaskReranking, MultilingualTask):
             "revision": "bdbce1ba2d0e58e88d1d13c54a555154adc5c165",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

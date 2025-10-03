@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "eng": ["eng-Latn"],
@@ -12,7 +11,7 @@ _LANGUAGES = {
 }
 
 
-class HUMEMultilingualSentimentClassification(AbsTaskClassification, MultilingualTask):
+class HUMEMultilingualSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HUMEMultilingualSentimentClassification",
         dataset={
@@ -25,7 +24,7 @@ class HUMEMultilingualSentimentClassification(AbsTaskClassification, Multilingua
         ),
         reference="https://huggingface.co/datasets/mteb/multilingual-sentiment-classification",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

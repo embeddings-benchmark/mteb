@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMESICKR(AbsTaskSTS):
+class HUMESICKR(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="HUMESICK-R",
         dataset={
@@ -14,7 +14,7 @@ class HUMESICKR(AbsTaskSTS):
         description="Human evaluation subset of Semantic Textual Similarity SICK-R dataset",
         reference="https://aclanthology.org/L14-1314/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -57,9 +57,5 @@ Piperidis, Stelios},
         adapted_from=["SICK-R"],
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

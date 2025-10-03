@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEToxicConversationsClassification(AbsTaskClassification):
+class HUMEToxicConversationsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HUMEToxicConversationsClassification",
         description="Human evaluation subset of Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
@@ -14,7 +14,7 @@ class HUMEToxicConversationsClassification(AbsTaskClassification):
             "revision": "4c128c30566ffc7b01c7c3a367da20f36fc08ef8",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
-class SWEPolyBenchReranking(AbsTaskReranking):
+class SWEbenchMultilingualRR(AbsTaskReranking):
     metadata = TaskMetadata(
         name="SWEbenchMultilingualRR",
         description="Multilingual Software Issue Localization.",
@@ -15,7 +15,7 @@ class SWEPolyBenchReranking(AbsTaskReranking):
             "revision": "fb24db6aa765413d83044a830606f5ae5996ce7c",
         },
         type="Reranking",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn", "python-Code"],

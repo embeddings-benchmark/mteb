@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMESTSBenchmark(AbsTaskSTS):
+class HUMESTSBenchmark(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="HUMESTSBenchmark",
         dataset={
@@ -14,7 +14,7 @@ class HUMESTSBenchmark(AbsTaskSTS):
         description="Human evaluation subset of Semantic Textual Similarity Benchmark (STSbenchmark) dataset.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -34,12 +34,8 @@ class HUMESTSBenchmark(AbsTaskSTS):
   year = {2021},
 }
 """,
-        adapted_from={"STSBenchmark"},
+        adapted_from=["STSBenchmark"],
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

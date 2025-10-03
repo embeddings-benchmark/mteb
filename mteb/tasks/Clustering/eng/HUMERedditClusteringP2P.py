@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMERedditClusteringP2P(AbsTaskClustering):
+class HUMERedditClusteringP2P(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="HUMERedditClusteringP2P",
         description="Human evaluation subset of Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
@@ -14,7 +14,7 @@ class HUMERedditClusteringP2P(AbsTaskClustering):
             "revision": "b38bea0ed72e69047a725a96b8022ff2f036bbde",
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

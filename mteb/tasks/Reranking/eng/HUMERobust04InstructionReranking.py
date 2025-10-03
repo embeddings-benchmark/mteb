@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class HUMERobust04InstructionReranking(AbsTaskReranking):
@@ -14,7 +14,7 @@ class HUMERobust04InstructionReranking(AbsTaskReranking):
             "revision": "77756407fed441d7be778b7464c34ccf4700af2e",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

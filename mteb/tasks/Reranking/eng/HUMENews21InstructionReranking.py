@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class HUMENews21InstructionReranking(AbsTaskReranking):
@@ -14,7 +14,7 @@ class HUMENews21InstructionReranking(AbsTaskReranking):
             "revision": "22208ecbb54618adb1592fd2ba7cdd92d643d9de",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

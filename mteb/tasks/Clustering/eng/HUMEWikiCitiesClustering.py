@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEWikiCitiesClustering(AbsTaskClustering):
+class HUMEWikiCitiesClustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="HUMEWikiCitiesClustering",
         description="Human evaluation subset of Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.",
@@ -14,7 +14,7 @@ class HUMEWikiCitiesClustering(AbsTaskClustering):
             "revision": "5c46af681d2dfa6d3ee373b7ccb4f153e1b72792",
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

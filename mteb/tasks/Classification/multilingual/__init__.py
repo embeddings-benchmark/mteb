@@ -7,6 +7,9 @@ from .AmazonReviewsClassification import AmazonReviewsClassification
 from .CataloniaTweetClassification import CataloniaTweetClassification
 from .CyrillicTurkicLangClassification import CyrillicTurkicLangClassification
 from .HinDialectClassification import HinDialectClassification
+from .HUMEMultilingualSentimentClassification import (
+    HUMEMultilingualSentimentClassification,
+)
 from .IndicLangClassification import IndicLangClassification
 from .IndicNLPNewsClassification import IndicNLPNewsClassification
 from .IndicSentimentClassification import IndicSentimentClassification
@@ -45,6 +48,7 @@ __all__ = [
     "AmazonReviewsClassification",
     "CataloniaTweetClassification",
     "CyrillicTurkicLangClassification",
+    "HUMEMultilingualSentimentClassification",
     "HinDialectClassification",
     "IndicLangClassification",
     "IndicNLPNewsClassification",

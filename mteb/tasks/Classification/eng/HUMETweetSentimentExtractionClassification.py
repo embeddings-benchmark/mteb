@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMETweetSentimentExtractionClassification(AbsTaskClassification):
+class HUMETweetSentimentExtractionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HUMETweetSentimentExtractionClassification",
         description="Human evaluation subset of Tweet Sentiment Extraction dataset.",
@@ -14,7 +14,7 @@ class HUMETweetSentimentExtractionClassification(AbsTaskClassification):
             "revision": "264bce01a98dfaf3581b53dcaa0fd5e2d44aa589",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

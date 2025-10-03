@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "eng_Latn": ["eng-Latn"],
@@ -13,7 +12,7 @@ _LANGUAGES = {
 }
 
 
-class HUMESIB200ClusteringS2S(AbsTaskClustering, MultilingualTask):
+class HUMESIB200ClusteringS2S(AbsTaskAnyClustering):
     fast_loading = True
     metadata = TaskMetadata(
         name="HUMESIB200ClusteringS2S",
@@ -24,7 +23,7 @@ class HUMESIB200ClusteringS2S(AbsTaskClustering, MultilingualTask):
             "revision": "d41717b1b94c0155f5ae7f84034e01af61be455e",
         },
         type="Clustering",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

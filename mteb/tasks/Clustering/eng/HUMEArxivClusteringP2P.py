@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEArxivClusteringP2P(AbsTaskClustering):
+class HUMEArxivClusteringP2P(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="HUMEArxivClusteringP2P",
         description="Human evaluation subset of Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -14,7 +14,7 @@ class HUMEArxivClusteringP2P(AbsTaskClustering):
             "revision": "6d2f0e9d4f4a51cb54332acaef10478928f0fed8",
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SwedishPatentCPCGroupClassification(AbsTaskMultilabelClassification):
@@ -12,7 +12,7 @@ class SwedishPatentCPCGroupClassification(AbsTaskMultilabelClassification):
         description="""This dataset contains historical Swedish patent documents (1885-1972) classified according to the Cooperative Patent Classification (CPC) system at the group level. Each document can have multiple labels, making this a challenging multi-label classification task with significant class imbalance and data sparsity characteristics. The dataset includes patent claims text extracted from digitally recreated versions of historical Swedish patents, generated using Optical Character Recognition (OCR) from original paper documents. The text quality varies due to OCR limitations, but all CPC labels were manually assigned by patent engineers at PRV (Swedish Patent and Registration Office), ensuring high reliability for machine learning applications.""",
         reference="https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-368254",
         type="MultilabelClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["swe-Latn"],

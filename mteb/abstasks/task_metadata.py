@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -264,7 +265,7 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SampleCreationMethod | None = None
     bibtex_citation: str | None = None
-    adapted_from: list[str] | None = None
+    adapted_from: Sequence[str] | None = None
     is_public: bool = True
 
     def _validate_metadata(self) -> None:

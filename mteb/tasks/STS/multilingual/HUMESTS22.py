@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.MultilingualTask import MultilingualTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -12,7 +11,7 @@ _LANGUAGES = {
 }
 
 
-class HUMESTS22(AbsTaskSTS, MultilingualTask):
+class HUMESTS22(AbsTaskAnySTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="HUMESTS22",
@@ -23,7 +22,7 @@ class HUMESTS22(AbsTaskSTS, MultilingualTask):
         description="Human evaluation subset of SemEval 2022 Task 8: Multilingual News Article Similarity",
         reference="https://competitions.codalab.org/competitions/33835",
         type="STS",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -67,10 +66,5 @@ Ratan, Shyam},
 """,
         adapted_from=["STS22"],
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 1
+    max_score = 4

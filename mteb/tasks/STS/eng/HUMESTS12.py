@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMESTS12(AbsTaskSTS):
+class HUMESTS12(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="HUMESTS12",
         dataset={
@@ -14,7 +14,7 @@ class HUMESTS12(AbsTaskSTS):
         description="Human evaluation subset of SemEval-2012 Task 6.",
         reference="https://www.aclweb.org/anthology/S12-1051.pdf",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -43,10 +43,5 @@ class HUMESTS12(AbsTaskSTS):
 """,
         adapted_from=["STS12"],
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

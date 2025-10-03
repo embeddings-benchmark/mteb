@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
@@ -15,7 +15,7 @@ class SWEPolyBenchReranking(AbsTaskReranking):
             "revision": "c55780c9ae37b13e191f62bc522d4194a689ae38",
         },
         type="Reranking",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn", "python-Code"],
