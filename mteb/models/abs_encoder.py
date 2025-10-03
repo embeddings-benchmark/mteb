@@ -233,7 +233,7 @@ class AbsEncoder(ABC):
     ) -> str:
         instruction = self.get_instruction(task_metadata, prompt_type)
         if self.instruction_template and len(instruction) > 0:
-            return self.format_instruction(instruction)
+            return self.format_instruction(instruction, prompt_type)
         return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
