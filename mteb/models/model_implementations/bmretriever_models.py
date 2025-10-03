@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Callable
 
 import torch
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Pooling, Transformer
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models import ModelMeta
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -22,11 +21,14 @@ def instruction_template(
     )
 
 
-class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
+class BMRetrieverWrapper(InstructSentenceTransformerModel):
     def __init__(
         self,
         model_name: str,
-        instruction_template: Callable[[str, PromptType | None], str] | None = None,
+        revision: str,
+        instruction_template: str
+        | Callable[[str, PromptType | None], str]
+        | None = None,
         max_seq_length: int | None = None,
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
@@ -46,8 +48,8 @@ class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
             tokenizer_params["model_max_length"] = max_seq_length
         if padding_side is not None:
             tokenizer_params["padding_side"] = padding_side
-
         kwargs.setdefault("tokenizer_args", {}).update(tokenizer_params)
+        kwargs.setdefault("config_args", {}).update(revison=revision)
 
         transformer = Transformer(
             model_name,
@@ -61,16 +63,14 @@ class BMRetrieverWrapper(InstructSentenceTransformerWrapper):
 
 # https://huggingface.co/datasets/BMRetriever/biomed_retrieval_dataset
 BMRETRIEVER_TRAINING_DATA = {
-    "FEVER": ["train"],
-    "MSMARCO": ["train"],
-    "NQ": ["train"],
+    "FEVER",
+    "MSMARCO",
+    "NQ",
 }
 
 BMRetriever_410M = ModelMeta(
-    loader=partial(
-        BMRetrieverWrapper,
-        model_name="BMRetriever/BMRetriever-410M",
-        config_args={"revision": "e3569bfbcfe3a1bc48c142e11a7b0f38e86065a3"},
+    loader=BMRetrieverWrapper,
+    loader_kwargs=dict(
         model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
         padding_side="left",
@@ -97,10 +97,8 @@ BMRetriever_410M = ModelMeta(
 )
 
 BMRetriever_1B = ModelMeta(
-    loader=partial(
-        BMRetrieverWrapper,
-        model_name="BMRetriever/BMRetriever-1B",
-        config_args={"revision": "1b758c5f4d3af48ef6035cc4088bdbcd7df43ca6"},
+    loader=BMRetrieverWrapper,
+    loader_kwargs=dict(
         model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
         padding_side="left",
@@ -127,10 +125,8 @@ BMRetriever_1B = ModelMeta(
 )
 
 BMRetriever_2B = ModelMeta(
-    loader=partial(
-        BMRetrieverWrapper,
-        model_name="BMRetriever/BMRetriever-2B",
-        config_args={"revision": "718179afd57926369c347f46eee616db81084941"},
+    loader=BMRetrieverWrapper,
+    loader_kwargs=dict(
         model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
         padding_side="left",
@@ -157,10 +153,8 @@ BMRetriever_2B = ModelMeta(
 )
 
 BMRetriever_7B = ModelMeta(
-    loader=partial(
-        BMRetrieverWrapper,
-        model_name="BMRetriever/BMRetriever-7B",
-        config_args={"revision": "13e6adb9273c5f254e037987d6b44e9e4b005b9a"},
+    loader=BMRetrieverWrapper,
+    loader_kwargs=dict(
         model_args={"torch_dtype": torch.float32},
         instruction_template=instruction_template,
         padding_side="left",

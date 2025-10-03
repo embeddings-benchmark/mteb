@@ -94,7 +94,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name)  # type: ignore
+        return self.model_prompts.get(prompt_name)
 
     @staticmethod
     @overload

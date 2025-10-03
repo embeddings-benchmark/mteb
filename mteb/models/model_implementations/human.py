@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.models import ModelMeta
 
 human = ModelMeta(
     loader=None,

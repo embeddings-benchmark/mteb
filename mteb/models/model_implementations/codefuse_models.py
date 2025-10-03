@@ -1,69 +1,67 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models import ModelMeta
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.types import PromptType
 
 training_datasets = {
-    "MSMARCO": ["train"],
-    "ArguAna": ["train"],
-    "SNLI": ["train"],
-    "MNLI": ["train"],
-    "ANLI": ["train"],
-    "PAQ": ["train"],
-    "SQuAD": ["train"],
-    "StackExchange": ["train"],
-    "NQ": ["train"],
-    "HotpotQA": ["train"],
-    "FEVER": ["train"],
-    "ELI5": ["train"],
-    "FiQA2018": ["train"],
-    "BioASQ": ["train"],
-    "NFCorpus": ["train"],
-    "MIRACLRetrieval": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "SciFact": ["train"],
-    "TriviaQA": ["train"],
-    "COLIEE": ["train"],
-    "PubMedQA": ["train"],
-    "S2ORC": ["train"],
-    "AmazonQA": ["train"],
-    "SPECTER": ["train"],
-    "XSum": ["train"],
-    "CNNDM": ["train"],
-    "SentenceCompression": ["train"],
-    "StackExchangeDupQuestions": ["train"],
-    "QQP": ["train"],
-    "StackOverflowDupQuestions": ["train"],
-    "STS12": ["train"],
-    "STS22": ["train"],
-    "STSBenchmark": ["train"],
-    "AmazonCounterfactualClassification": ["train"],
-    "AmazonPolarityClassification": ["train"],
-    "ImdbClassification": ["train"],
-    "ToxicConversationsClassification": ["train"],
-    "CoLA": ["train"],
-    "AmazonReviewClassification": ["train"],
-    "Banking77Classification": ["train"],
-    "EmotionClassification": ["train"],
-    "MTOPIntentClassification": ["train"],
-    "MTOPDomainClassification": ["train"],
-    "MassiveScenarioClassification": ["train"],
-    "MassiveIntentClassification": ["train"],
-    "TweetSentimentExtractionClassification": ["train"],
-    "ArxivClusteringP2P": ["train"],
-    "ArxivClusteringS2S": ["train"],
-    "BiorxivClusteringP2P": ["train"],
-    "BiorxivClusteringS2S": ["train"],
-    "MedrxivClusteringP2P": ["train"],
-    "MedrxivClusteringS2S": ["train"],
-    "RedditClustering": ["train"],
-    "RedditClusteringP2P": ["train"],
-    "StackExchangeClustering": ["train"],
-    "StackExchangeClusteringP2P": ["train"],
-    "TwentyNewsgroupsClustering": ["train"],
+    "MSMARCO",
+    "ArguAna",
+    "SNLI",
+    "MNLI",
+    "ANLI",
+    "PAQ",
+    "SQuAD",
+    "StackExchange",
+    "NQ",
+    "HotpotQA",
+    "FEVER",
+    "ELI5",
+    "FiQA2018",
+    "BioASQ",
+    "NFCorpus",
+    "MIRACLRetrieval",
+    "MrTidyRetrieval",
+    "SciFact",
+    "TriviaQA",
+    "COLIEE",
+    "PubMedQA",
+    "S2ORC",
+    "AmazonQA",
+    "SPECTER",
+    "XSum",
+    "CNNDM",
+    "SentenceCompression",
+    "StackExchangeDupQuestions",
+    "QQP",
+    "StackOverflowDupQuestions",
+    "STS12",
+    "STS22",
+    "STSBenchmark",
+    "AmazonCounterfactualClassification",
+    "AmazonPolarityClassification",
+    "ImdbClassification",
+    "ToxicConversationsClassification",
+    "CoLA",
+    "AmazonReviewClassification",
+    "Banking77Classification",
+    "EmotionClassification",
+    "MTOPIntentClassification",
+    "MTOPDomainClassification",
+    "MassiveScenarioClassification",
+    "MassiveIntentClassification",
+    "TweetSentimentExtractionClassification",
+    "ArxivClusteringP2P",
+    "ArxivClusteringS2S",
+    "BiorxivClusteringP2P",
+    "BiorxivClusteringS2S",
+    "MedrxivClusteringP2P",
+    "MedrxivClusteringS2S",
+    "RedditClustering",
+    "RedditClusteringP2P",
+    "StackExchangeClustering",
+    "StackExchangeClusteringP2P",
+    "TwentyNewsgroupsClustering",
 }
 
 prompts_dict = {
@@ -125,10 +123,8 @@ def instruction_template(
 
 
 F2LLM_0B6 = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="codefuse-ai/F2LLM-0.6B",
-        revision="36416618b83d4bd84a8ca30c2ee01ed518f9f2e7",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         prompts_dict=prompts_dict,
         apply_instruction_to_passages=False,
@@ -155,10 +151,8 @@ F2LLM_0B6 = ModelMeta(
 )
 
 F2LLM_1B7 = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="codefuse-ai/F2LLM-1.7B",
-        revision="fdce0e09655f42cea26f7f66f5a70cd4507ea45c",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         prompts_dict=prompts_dict,
         apply_instruction_to_passages=False,
@@ -185,10 +179,8 @@ F2LLM_1B7 = ModelMeta(
 )
 
 F2LLM_4B = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="codefuse-ai/F2LLM-4B",
-        revision="9fe95901ed2b6b59dd7673d6e93c9d76766a1e25",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         prompts_dict=prompts_dict,
         apply_instruction_to_passages=False,

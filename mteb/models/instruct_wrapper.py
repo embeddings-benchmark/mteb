@@ -89,7 +89,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        instruction_template: str | Callable[[str, PromptType], str] | None = None,
+        instruction_template: str
+        | Callable[[str, PromptType | None], str]
+        | None = None,
         max_seq_length: int | None = None,
         apply_instruction_to_passages: bool = True,
         padding_side: str | None = None,
