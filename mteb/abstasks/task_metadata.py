@@ -427,11 +427,11 @@ class TaskMetadata(BaseModel):
         if existing_dataset_card_data is None:
             existing_dataset_card_data = DatasetCardData()
 
-        dataset_type = (
+        dataset_type = [
             *self._hf_task_type(),
             *self._hf_task_category(),
             *self._hf_subtypes(),
-        )
+        ]
         languages = self._hf_languages()
 
         multilinguality = "monolingual" if len(languages) == 1 else "multilingual"

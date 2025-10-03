@@ -10,8 +10,8 @@ class HUMENews21InstructionReranking(AbsTaskReranking):
         description="Human evaluation subset of News21 instruction retrieval dataset for reranking evaluation.",
         reference="https://trec.nist.gov/data/news2021.html",
         dataset={
-            "path": "mteb/mteb-human-news21-reranking",
-            "revision": "22208ecbb54618adb1592fd2ba7cdd92d643d9de",
+            "path": "mteb/HUMENews21InstructionReranking",
+            "revision": "be28ab67f72893dd2aeeaef7e2d1c29b44d4495f",
         },
         type="Reranking",
         category="t2t",

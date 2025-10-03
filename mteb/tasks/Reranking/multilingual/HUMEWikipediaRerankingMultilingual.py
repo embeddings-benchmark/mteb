@@ -12,14 +12,13 @@ _LANGUAGES = {
 
 
 class HUMEWikipediaRerankingMultilingual(AbsTaskReranking):
-    fast_loading = True
     metadata = TaskMetadata(
         name="HUMEWikipediaRerankingMultilingual",
         description="Human evaluation subset of Wikipedia reranking dataset across multiple languages.",
         reference="https://github.com/ellamind/wikipedia-2023-11-reranking-multilingual",
         dataset={
-            "path": "mteb/mteb-human-wiki-reranking",
-            "revision": "bdbce1ba2d0e58e88d1d13c54a555154adc5c165",
+            "path": "mteb/HUMEWikipediaRerankingMultilingual",
+            "revision": "dd67517891b669ed96658b4dfea4741f0c10480a",
         },
         type="Reranking",
         category="t2t",

@@ -10,8 +10,8 @@ class HUMECore17InstructionReranking(AbsTaskReranking):
         description="Human evaluation subset of Core17 instruction retrieval dataset for reranking evaluation.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "mteb/mteb-human-core17-reranking",
-            "revision": "e2b1a26cb5277a040d7f96a79fef0cf00afe9ffe",
+            "path": "mteb/HUMECore17InstructionReranking",
+            "revision": "mteb/HUMECore17InstructionReranking",
         },
         type="Reranking",
         category="t2t",

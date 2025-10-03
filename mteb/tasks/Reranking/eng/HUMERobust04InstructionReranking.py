@@ -10,8 +10,8 @@ class HUMERobust04InstructionReranking(AbsTaskReranking):
         description="Human evaluation subset of Robust04 instruction retrieval dataset for reranking evaluation.",
         reference="https://trec.nist.gov/data/robust/04.guidelines.html",
         dataset={
-            "path": "mteb/mteb-human-robust04-reranking",
-            "revision": "77756407fed441d7be778b7464c34ccf4700af2e",
+            "path": "mteb/HUMERobust04InstructionReranking",
+            "revision": "26b83b71e9f8dbd25538a2d6f89a8a1eb856a3eb",
         },
         type="Reranking",
         category="t2t",
