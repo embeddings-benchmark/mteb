@@ -14,6 +14,7 @@ from mteb.benchmarks.benchmarks.rteb_benchmarks import (
     RTEB_FRENCH,
     RTEB_GERMAN,
     RTEB_HEALTHCARE,
+    RTEB_JAPANESE,
     RTEB_LEGAL,
     RTEB_MAIN,
 )
@@ -134,6 +135,7 @@ R_BENCHMARK_ENTRIES = [
                 benchmarks=[
                     RTEB_FRENCH,
                     RTEB_GERMAN,
+                    RTEB_JAPANESE,
                     mteb.get_benchmark("BEIR"),
                     mteb.get_benchmark("BEIR-NL"),
                 ],
