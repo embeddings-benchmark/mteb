@@ -270,7 +270,6 @@ def _create_summary_table_mean_public_private(
     Returns:
         DataFrame with model summaries, ready for styling in the leaderboard
     """
-    print("all tasks:", benchmark_results.task_names)
     data = benchmark_results.to_dataframe(format="long")
 
     if data.empty:
@@ -279,12 +278,9 @@ def _create_summary_table_mean_public_private(
         )
         return no_results_frame
     public_task_name = benchmark_results.filter_tasks(is_public=True).task_names
-    print("Public tasks:", public_task_name)
     private_task_name = benchmark_results.filter_tasks(is_public=False).task_names
-    print("Private tasks:", private_task_name)
     # Convert to DataFrame and pivot
     per_task = data.pivot(index="model_name", columns="task_name", values="score")
-    print(per_task.columns)
 
     # Remove models with no scores
     to_remove = per_task.isna().all(axis="columns")
@@ -347,13 +343,6 @@ def _create_summary_table_mean_public_private(
             lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
         ),
     )
-
-    # Add zero-shot percentage
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
-    joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
-    )
-    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
 
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(

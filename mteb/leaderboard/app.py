@@ -16,6 +16,7 @@ import pandas as pd
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.custom_validators import MODALITIES
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
@@ -194,6 +195,14 @@ def filter_models(
                 continue
         models_to_keep.add(model_meta.name)
     return list(models_to_keep)
+
+
+def should_show_zero_shot_filter(benchmark_name: str) -> bool:
+    benchmark = mteb.get_benchmark(benchmark_name)
+
+    if isinstance(benchmark, RtebBenchmark):
+        return False
+    return True
 
 
 def get_leaderboard_app() -> gr.Blocks:
@@ -479,6 +488,8 @@ def get_leaderboard_app() -> gr.Blocks:
             benchmark_results = all_benchmark_results[benchmark_name]
             scores = benchmark_results.get_scores(format="long")
             logger.debug(f"on_benchmark_select callback: {elapsed}s")
+            show_zero_shot = should_show_zero_shot_filter(benchmark_name)
+
             return (
                 languages,
                 domains,
@@ -486,6 +497,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 modalities,
                 sorted([task.metadata.name for task in benchmark.tasks]),
                 scores,
+                gr.update(visible=show_zero_shot),
             )
 
         benchmark_select.change(
@@ -498,6 +510,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 modality_select,
                 task_select,
                 scores,
+                zero_shot,
             ],
         )
 
@@ -839,6 +852,7 @@ def get_leaderboard_app() -> gr.Blocks:
             bench_modalities,
             bench_tasks,
             bench_scores,
+            zero_shot,
         ) = on_benchmark_select(benchmark.name)
         filtered_models = update_models(
             bench_scores,

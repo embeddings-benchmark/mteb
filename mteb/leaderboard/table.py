@@ -138,7 +138,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     numeric_data = joint_table.copy()
 
     # Format data for display
-    joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
+    if "Zero-shot" in joint_table.columns:
+        joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
 
     joint_table_style = joint_table.style.format(
