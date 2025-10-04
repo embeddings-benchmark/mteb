@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from functools import partial
+import time
+from functools import partial, wraps
 from typing import Any, Literal, get_args
 
 import numpy as np
 import torch
-import tqdm
+from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -130,6 +131,82 @@ EMBEDDING_TYPE = Literal[
     "binary",
 ]
 
+# Cohere API limits
+COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call
+COHERE_MAX_TOKENS_PER_BATCH = 128_000  # Maximum total tokens per API call
+
+# Per-model context lengths (max tokens per individual input)
+COHERE_MODEL_CONTEXT_LENGTHS = {
+    "embed-english-v3.0": 512,
+    "embed-multilingual-v3.0": 512,
+    "embed-english-light-v3.0": 512,
+    "embed-multilingual-light-v3.0": 512,
+    "embed-v4.0": 128_000,
+}
+
+
+def rate_limit(max_rpm: int, interval: int = 60):
+    """Rate limiter decorator to respect requests per minute limit."""
+    request_interval = interval / max_rpm
+    previous_call_ts: float | None = None
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            current_time = time.time()
+            nonlocal previous_call_ts
+            if (
+                previous_call_ts is not None
+                and current_time - previous_call_ts < request_interval
+            ):
+                time.sleep(request_interval - (current_time - previous_call_ts))
+
+            result = func(*args, **kwargs)
+            previous_call_ts = time.time()
+            return result
+
+        return wrapper
+
+    return decorator
+
+
+def retry_with_exponential_backoff(max_retries: int = 5, initial_delay: float = 1.0):
+    """Retry decorator with exponential backoff for handling any errors.
+
+    Retries on any exception with exponential backoff.
+    Rate limit errors (429) wait a minimum of 30 seconds.
+    """
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            import cohere
+
+            for attempt in range(max_retries):
+                try:
+                    return func(*args, **kwargs)
+                except cohere.errors.TooManyRequestsError as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    # For rate limits, wait longer (30s minimum to respect API limits)
+                    delay = max(30, initial_delay * (2**attempt))
+                    print(
+                        f"Cohere rate limit (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
+                    )
+                    time.sleep(delay)
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    delay = initial_delay * (2**attempt)
+                    print(
+                        f"Cohere API error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
+                    )
+                    time.sleep(delay)
+
+        return wrapper
+
+    return decorator
+
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
 class CohereTextEmbeddingModel(Wrapper):
@@ -140,8 +217,12 @@ class CohereTextEmbeddingModel(Wrapper):
         model_prompts: dict[str, str] | None = None,
         embedding_type: EMBEDDING_TYPE = "float",
         output_dimension: int | None = None,
+        max_retries: int = 5,
+        max_rpm: int = 300,
         **kwargs,
     ) -> None:
+        import cohere  # type: ignore
+
         self.model_name = model_name
         self.sep = sep
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -149,45 +230,64 @@ class CohereTextEmbeddingModel(Wrapper):
         self.embedding_type = embedding_type
         self.output_dimension = output_dimension
 
+        # Create Cohere client with retry and rate limiting
+        self._client = cohere.Client()
+        self._embed_func = retry_with_exponential_backoff(max_retries)(
+            rate_limit(max_rpm)(self._client.embed)
+        )
+
     def _embed(
         self,
         sentences: list[str],
         cohere_task_type: str,
         show_progress_bar: bool = False,
-        retries: int = 5,
     ) -> torch.Tensor:
-        import cohere  # type: ignore
-
-        max_batch_size = 256
-
-        batches = [
-            sentences[i : i + max_batch_size]
-            for i in range(0, len(sentences), max_batch_size)
-        ]
-
-        client = cohere.Client()
-
         all_embeddings = []
+        index = 0
 
-        for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
-            while retries > 0:  # Cohere's API is not always reliable
-                try:
-                    embed_kwargs = {
-                        "texts": batch,
-                        "model": self.model_name,
-                        "input_type": cohere_task_type,
-                        "embedding_types": [self.embedding_type],
-                    }
-                    if self.output_dimension is not None:
-                        embed_kwargs["output_dimension"] = self.output_dimension
+        pbar = tqdm(
+            total=len(sentences),
+            desc="Encoding sentences",
+            disable=not show_progress_bar,
+        )
 
-                    response = client.embed(**embed_kwargs)
+        while index < len(sentences):
+            # Build batch respecting both count and token limits
+            batch, batch_tokens = [], 0
+            while (
+                index < len(sentences)
+                and len(batch) < COHERE_MAX_BATCH_SIZE
+                and batch_tokens < COHERE_MAX_TOKENS_PER_BATCH
+            ):
+                # Count tokens for current sentence
+                n_tokens = len(
+                    self._client.tokenize(
+                        text=sentences[index], model=self.model_name
+                    ).tokens
+                )
+
+                # Check if adding this sentence would exceed token limit
+                if (
+                    batch_tokens + n_tokens > COHERE_MAX_TOKENS_PER_BATCH
+                    and len(batch) > 0
+                ):
                     break
-                except Exception as e:
-                    print(f"Retrying... {retries} retries left.")
-                    retries -= 1
-                    if retries == 0:
-                        raise e
+
+                batch_tokens += n_tokens
+                batch.append(sentences[index])
+                index += 1
+
+            # Embed the batch with retry logic handled by client
+            embed_kwargs = {
+                "texts": batch,
+                "model": self.model_name,
+                "input_type": cohere_task_type,
+                "embedding_types": [self.embedding_type],
+            }
+            if self.output_dimension is not None:
+                embed_kwargs["output_dimension"] = self.output_dimension
+
+            response = self._embed_func(**embed_kwargs)
 
             # Get embeddings based on requested type
             if self.embedding_type == "float":
@@ -200,8 +300,11 @@ class CohereTextEmbeddingModel(Wrapper):
                 embeddings = response.embeddings.binary
             else:
                 raise ValueError(f"Embedding type {self.embedding_type} not allowed")
-            all_embeddings.extend(torch.tensor(embeddings).numpy())
 
+            all_embeddings.extend(torch.tensor(embeddings).numpy())
+            pbar.update(len(batch))
+
+        pbar.close()
         embeddings_array = np.array(all_embeddings)
 
         # Post-process embeddings based on type (similar to voyage_models.py)
