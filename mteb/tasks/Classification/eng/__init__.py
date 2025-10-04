@@ -13,6 +13,11 @@ from .FinancialPhrasebankClassification import (
     FinancialPhrasebankClassificationV2,
 )
 from .FrenkEnClassification import FrenkEnClassification, FrenkEnClassificationV2
+from .HUMEEmotionClassification import HUMEEmotionClassification
+from .HUMEToxicConversationsClassification import HUMEToxicConversationsClassification
+from .HUMETweetSentimentExtractionClassification import (
+    HUMETweetSentimentExtractionClassification,
+)
 from .ImdbClassification import ImdbClassification, ImdbClassificationV2
 from .LegalBenchClassification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
@@ -294,6 +299,9 @@ __all__ = [
     "FrenkEnClassification",
     "FrenkEnClassificationV2",
     "FunctionOfDecisionSectionLegalBenchClassification",
+    "HUMEEmotionClassification",
+    "HUMEToxicConversationsClassification",
+    "HUMETweetSentimentExtractionClassification",
     "ImdbClassification",
     "ImdbClassificationV2",
     "InsurancePolicyInterpretationLegalBenchClassification",

@@ -30,9 +30,9 @@ class MenuEntry:
     size: str = "sm"
 
 
-BENCHMARK_ENTRIES = [
+GP_BENCHMARK_ENTRIES = [
     MenuEntry(
-        name="Select Benchmark",
+        name="General Purpose",
         description="",
         open=False,
         benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
@@ -45,13 +45,11 @@ BENCHMARK_ENTRIES = [
                         "MIEB(eng)",
                         "MIEB(lite)",
                         "MIEB(Img)",
-                        "VisualDocumentRetrieval",
-                        "JinaVDR",
                     ]
                 ),
             ),
             MenuEntry(
-                "Domain-Specific",
+                "Domain-Specific ",
                 mteb.get_benchmarks(
                     [
                         "MTEB(Code, v1)",
@@ -89,17 +87,8 @@ BENCHMARK_ENTRIES = [
                 "Miscellaneous",  # All of these are retrieval benchmarks
                 mteb.get_benchmarks(
                     [
-                        "BEIR",
-                        "BEIR-NL",
-                        "NanoBEIR",
-                        "BRIGHT",
-                        "BRIGHT(long)",
                         "BuiltBench(eng)",
-                        "CoIR",
-                        "FollowIR",
-                        "LongEmbed",
                         "MINERSBitextMining",
-                        "RAR-b",
                     ]
                 ),
             ),
@@ -107,24 +96,58 @@ BENCHMARK_ENTRIES = [
     ),
 ]
 
-RTEB_BENCHMARK_ENTRIES = [
+R_BENCHMARK_ENTRIES = [
     MenuEntry(
-        name="RTEB (Retrieval)",
+        name="Retrieval",
         description=None,
         open=False,
         benchmarks=[
             RTEB_MAIN,
+            RTEB_ENGLISH,
+            MenuEntry(
+                "Image",
+                description=None,
+                open=False,
+                benchmarks=[
+                    mteb.get_benchmark("VisualDocumentRetrieval"),
+                    mteb.get_benchmark("JinaVDR"),
+                ],
+            ),
             MenuEntry(
                 "Domain-Specific",
                 description=None,
                 open=False,
-                benchmarks=[RTEB_FINANCE, RTEB_LEGAL, RTEB_CODE, RTEB_HEALTHCARE],
+                benchmarks=[
+                    RTEB_FINANCE,
+                    RTEB_LEGAL,
+                    RTEB_CODE,
+                    mteb.get_benchmark("CoIR"),
+                    RTEB_HEALTHCARE,
+                    mteb.get_benchmark("FollowIR"),
+                    mteb.get_benchmark("LongEmbed"),
+                    mteb.get_benchmark("BRIGHT"),
+                ],
             ),
             MenuEntry(
                 "Language-specific",
                 description=None,
                 open=False,
-                benchmarks=[RTEB_ENGLISH, RTEB_FRENCH, RTEB_GERMAN],
+                benchmarks=[
+                    RTEB_FRENCH,
+                    RTEB_GERMAN,
+                    mteb.get_benchmark("BEIR"),
+                    mteb.get_benchmark("BEIR-NL"),
+                ],
+            ),
+            MenuEntry(
+                "Miscellaneous",
+                mteb.get_benchmarks(
+                    [
+                        "NanoBEIR",
+                        "BRIGHT (long)",
+                        "RAR-b",
+                    ]
+                ),
             ),
         ],
     )
@@ -230,5 +253,5 @@ def _render_benchmark_item(
 
 if __name__ == "__main__":
     with gr.Blocks() as b:
-        selector = make_selector(BENCHMARK_ENTRIES)
+        selector = make_selector(GP_BENCHMARK_ENTRIES)
     b.launch()

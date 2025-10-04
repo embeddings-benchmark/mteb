@@ -12,14 +12,7 @@ from .retrieval_dataset_loaders import RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = [
-    "JQaRAReranking",
-    "JaCWIRReranking",
-    "XGlueWPRReranking",
-    "AskUbuntuDupQuestions-VN",
-    "SciDocsRR-VN",
-    "StackOverflowDupQuestions-VN",
-]
+OLD_FORMAT_RERANKING_TASKS = []
 
 
 class AbsTaskReranking(AbsTaskRetrieval):

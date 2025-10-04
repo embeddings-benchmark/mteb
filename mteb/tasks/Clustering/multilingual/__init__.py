@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .HUMESIB200ClusteringS2S import HUMESIB200ClusteringS2S
 from .IndicReviewsClusteringP2P import IndicReviewsClusteringP2P
 from .MasakhaNEWSClusteringP2P import MasakhaNEWSClusteringP2P
 from .MasakhaNEWSClusteringS2S import MasakhaNEWSClusteringS2S
@@ -9,6 +10,7 @@ from .SIB200ClusteringS2S import SIB200ClusteringFast
 from .WikiClusteringP2P import WikiClusteringFastP2P, WikiClusteringP2P
 
 __all__ = [
+    "HUMESIB200ClusteringS2S",
     "IndicReviewsClusteringP2P",
     "MLSUMClusteringP2P",
     "MLSUMClusteringP2PFast",

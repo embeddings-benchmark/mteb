@@ -60,6 +60,7 @@ class BenchmarkResults(BaseModel):
         domains: list[TaskDomain] | None = None,
         task_types: list[TaskType] | None = None,  # type: ignore
         modalities: list[Modalities] | None = None,
+        is_public: bool | None = None,
     ) -> BenchmarkResults:
         # TODO: Same as filter_models
         model_results = [
@@ -69,6 +70,7 @@ class BenchmarkResults(BaseModel):
                 domains=domains,
                 task_types=task_types,
                 modalities=modalities,
+                is_public=is_public,
             )
             for res in self.model_results
         ]

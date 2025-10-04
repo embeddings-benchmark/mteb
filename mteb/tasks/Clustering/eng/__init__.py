@@ -12,6 +12,9 @@ from .BiorxivClusteringS2S import BiorxivClusteringS2S, BiorxivClusteringS2SFast
 from .BuiltBenchClusteringP2P import BuiltBenchClusteringP2P
 from .BuiltBenchClusteringS2S import BuiltBenchClusteringS2S
 from .ClusTrecCovid import ClusTrecCovid
+from .HUMEArxivClusteringP2P import HUMEArxivClusteringP2P
+from .HUMERedditClusteringP2P import HUMERedditClusteringP2P
+from .HUMEWikiCitiesClustering import HUMEWikiCitiesClustering
 from .MedrxivClusteringP2P import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .MedrxivClusteringS2S import MedrxivClusteringS2S, MedrxivClusteringS2SFast
 from .RedditClustering import RedditClustering, RedditFastClusteringS2S
@@ -49,6 +52,9 @@ __all__ = [
     "BuiltBenchClusteringP2P",
     "BuiltBenchClusteringS2S",
     "ClusTrecCovid",
+    "HUMEArxivClusteringP2P",
+    "HUMERedditClusteringP2P",
+    "HUMEWikiCitiesClustering",
     "MedrxivClusteringP2P",
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",

@@ -21,7 +21,7 @@ To add a new task, you need to implement a new class that inherits from the `Abs
 from mteb import MTEB
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from sentence_transformers import SentenceTransformer
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
 class SciDocsReranking(AbsTaskReranking):
     metadata = TaskMetadata(

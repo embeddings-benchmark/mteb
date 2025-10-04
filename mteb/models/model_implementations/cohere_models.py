@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal, get_args
 
 import numpy as np
 import torch
@@ -83,6 +83,8 @@ supported_languages = [
     "nep-Deva",
     "nld-Latn",
     "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
     "nya-Latn",
     "ori-Orya",
     "pan-Guru",
@@ -124,6 +126,13 @@ supported_languages = [
     "zul-Latn",
 ]
 
+EmbeddingType = Literal[
+    "float",
+    "int8",
+    "uint8",
+    "binary",
+]
+
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
 class CohereTextEmbeddingModel(AbsEncoder):
@@ -133,11 +142,19 @@ class CohereTextEmbeddingModel(AbsEncoder):
         revision: str,
         sep: str = " ",
         model_prompts: dict[str, str] | None = None,
+        embedding_type: EmbeddingType = "float",
+        output_dimension: int | None = None,
         **kwargs,
     ) -> None:
         self.model_name = model_name.lstrip("Cohere/Cohere-")
         self.sep = sep
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+        if embedding_type not in get_args(EmbeddingType):
+            raise ValueError(
+                f"Embedding type {embedding_type} not allowed. Choose from {get_args(EmbeddingType)}"
+            )
+        self.embedding_type = embedding_type
+        self.output_dimension = output_dimension
 
     def _embed(
         self,
@@ -162,11 +179,16 @@ class CohereTextEmbeddingModel(AbsEncoder):
         for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
             while retries > 0:  # Cohere's API is not always reliable
                 try:
-                    response = client.embed(
-                        texts=batch,
-                        model=self.model_name,
-                        input_type=cohere_task_type,
-                    )
+                    embed_kwargs = {
+                        "texts": batch,
+                        "model": self.model_name,
+                        "input_type": cohere_task_type,
+                        "embedding_types": [self.embedding_type],
+                    }
+                    if self.output_dimension is not None:
+                        embed_kwargs["output_dimension"] = self.output_dimension
+
+                    response = client.embed(**embed_kwargs)
                     break
                 except Exception as e:
                     print(f"Retrying... {retries} retries left.")
@@ -174,9 +196,43 @@ class CohereTextEmbeddingModel(AbsEncoder):
                     if retries == 0:
                         raise e
 
-            all_embeddings.extend(torch.tensor(response.embeddings).numpy())
+            # Get embeddings based on requested type
+            if self.embedding_type == "float":
+                embeddings = response.embeddings.float
+            elif self.embedding_type == "int8":
+                embeddings = response.embeddings.int8
+            elif self.embedding_type == "uint8":
+                embeddings = response.embeddings.uint8
+            elif self.embedding_type == "binary":
+                embeddings = response.embeddings.binary
+            else:
+                raise ValueError(f"Embedding type {self.embedding_type} not allowed")
+            all_embeddings.extend(torch.tensor(embeddings).numpy())
 
-        return np.array(all_embeddings)
+        embeddings_array = np.array(all_embeddings)
+
+        # Post-process embeddings based on type (similar to voyage_models.py)
+        primary_embedding_type = self.embedding_type
+
+        if primary_embedding_type == "binary":
+            # Unpack bit-packed embeddings: each byte contains 8 embedding values
+            unpacked_embeddings = []
+            for embedding in embeddings_array:
+                # Convert bytes to bits and unpack
+                unpacked = []
+                for byte_val in embedding:
+                    # Extract 8 bits from each byte (LSB first)
+                    for bit_pos in range(8):
+                        bit_val = (byte_val >> bit_pos) & 1
+                        # Convert 0/1 to -1/1 for binary (signed)
+                        unpacked.append(1.0 if bit_val else -1.0)
+                unpacked_embeddings.append(unpacked)
+            embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
+        elif primary_embedding_type in ["int8", "uint8"]:
+            # Convert int8/uint8 embeddings to float32
+            embeddings_array = embeddings_array.astype(np.float32)
+
+        return embeddings_array
 
     def encode(
         self,
