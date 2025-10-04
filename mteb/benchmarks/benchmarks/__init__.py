@@ -55,6 +55,7 @@ from mteb.benchmarks.benchmarks.rteb_benchmarks import (
     RTEB_FRENCH,
     RTEB_GERMAN,
     RTEB_HEALTHCARE,
+    RTEB_JAPANESE,
     RTEB_LEGAL,
     RTEB_MAIN,
 )
@@ -113,5 +114,6 @@ __all__ = [
     "RTEB_ENGLISH",
     "RTEB_FRENCH",
     "RTEB_GERMAN",
+    "RTEB_JAPANESE",
     "HUME",
 ]
