@@ -372,11 +372,6 @@ def _create_summary_table_mean_public_private(
     # Move borda rank to front
     joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
 
-    # Add zero-shot percentage at the end
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
-    joint_table["Zero-shot"] = model_metas.map(lambda m: m.zero_shot_percentage(tasks))
-    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
-
     return joint_table
 
 
