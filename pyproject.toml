@@ -40,6 +40,7 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
+    "transformers<=4.57.0; python_version == '3.9'",  # https://github.com/huggingface/transformers/issues/41339
 ]
 
 
