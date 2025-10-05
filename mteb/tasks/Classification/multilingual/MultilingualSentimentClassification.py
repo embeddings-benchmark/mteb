@@ -11,7 +11,7 @@ _LANGUAGES = {
     "tha": ["tha-Thai"],
     "tur": ["tur-Latn"],
     "slk": ["slk-Latn"],
-    "nor": ["nor-Latn"],
+    "nor": ["nor-Latn", "nob-Latn", "nno-Latn"],
     "spa": ["spa-Latn"],
     "rus": ["rus-Cyrl"],
     "mlt": ["mlt-Latn"],

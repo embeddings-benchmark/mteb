@@ -7,16 +7,6 @@ import gradio as gr
 import mteb
 from mteb import Benchmark
 from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
-from mteb.benchmarks.benchmarks.rteb_benchmarks import (
-    RTEB_CODE,
-    RTEB_ENGLISH,
-    RTEB_FINANCE,
-    RTEB_FRENCH,
-    RTEB_GERMAN,
-    RTEB_HEALTHCARE,
-    RTEB_LEGAL,
-    RTEB_MAIN,
-)
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
@@ -34,7 +24,9 @@ GP_BENCHMARK_ENTRIES = [
         name="General Purpose",
         description="",
         open=False,
-        benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
+        benchmarks=mteb.get_benchmarks(
+            ["MTEB(Multilingual, v2)", "MTEB(eng, v2)", "HUME(v1)"]
+        )
         + [
             MenuEntry(
                 "Image",
@@ -101,8 +93,8 @@ R_BENCHMARK_ENTRIES = [
         description=None,
         open=False,
         benchmarks=[
-            RTEB_MAIN,
-            RTEB_ENGLISH,
+            mteb.get_benchmark("RTEB(beta)"),
+            mteb.get_benchmark("RTEB(eng, beta)"),
             MenuEntry(
                 "Image",
                 description=None,
@@ -117,11 +109,11 @@ R_BENCHMARK_ENTRIES = [
                 description=None,
                 open=False,
                 benchmarks=[
-                    RTEB_FINANCE,
-                    RTEB_LEGAL,
-                    RTEB_CODE,
+                    mteb.get_benchmark("RTEB(fin, beta)"),
+                    mteb.get_benchmark("RTEB(Law, beta)"),
+                    mteb.get_benchmark("RTEB(Code, beta)"),
                     mteb.get_benchmark("CoIR"),
-                    RTEB_HEALTHCARE,
+                    mteb.get_benchmark("RTEB(Health, beta)"),
                     mteb.get_benchmark("FollowIR"),
                     mteb.get_benchmark("LongEmbed"),
                     mteb.get_benchmark("BRIGHT"),
@@ -132,8 +124,9 @@ R_BENCHMARK_ENTRIES = [
                 description=None,
                 open=False,
                 benchmarks=[
-                    RTEB_FRENCH,
-                    RTEB_GERMAN,
+                    mteb.get_benchmark("RTEB(fra, beta)"),
+                    mteb.get_benchmark("RTEB(deu, beta)"),
+                    mteb.get_benchmark("RTEB(jpn, beta)"),
                     mteb.get_benchmark("BEIR"),
                     mteb.get_benchmark("BEIR-NL"),
                 ],

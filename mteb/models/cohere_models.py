@@ -83,6 +83,8 @@ supported_languages = [
     "nep-Deva",
     "nld-Latn",
     "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
     "nya-Latn",
     "ori-Orya",
     "pan-Guru",

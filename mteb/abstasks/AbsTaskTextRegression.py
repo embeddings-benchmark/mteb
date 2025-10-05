@@ -144,8 +144,8 @@ class AbsTaskTextRegression(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        if "random_state" in self.model.get_params():
-            self.model = self.model.set_params(random_state=self.seed)
+        if "random_state" in self.regressor.get_params():
+            self.regressor = self.regressor.set_params(random_state=self.seed)
 
         scores = {}
         hf_subsets = self.hf_subsets
