@@ -91,7 +91,9 @@ def bm25_loader(**kwargs):
             logger.info(f"Retrieving Results... {len(queries):,} queries")
 
             queries_results, queries_scores = retriever.retrieve(
-                query_token_strs, corpus=corpus_with_ids, k=top_k
+                query_token_strs,
+                corpus=corpus_with_ids,
+                k=min(top_k, len(corpus_with_ids)),
             )
 
             # Iterate over queries
