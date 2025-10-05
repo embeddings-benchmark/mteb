@@ -386,7 +386,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [HUMEArxivClusteringP2P](https://www.kaggle.com/Cornell-University/arxiv) (arXiv.org submitters, 2024) | ['eng'] | Clustering | p2p | [Academic, Written] | None | None |
 | [HUMECore17InstructionReranking](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | Reranking | s2s | [News, Written] | None | None |
 | [HUMEEmotionClassification](https://www.aclweb.org/anthology/D18-1404) (Saravia et al., 2018) | ['eng'] | Classification | s2s | [Social, Written] | None | None |
-| [HUMEMultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) (Mollanorozy et al., 2023) | ['ara', 'eng', 'nor', 'rus'] | Classification | s2s | [Reviews, Written] | None | None |
+| [HUMEMultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) (Mollanorozy et al., 2023) | ['ara', 'eng', 'nob', 'rus'] | Classification | s2s | [Reviews, Written] | None | None |
 | [HUMENews21InstructionReranking](https://trec.nist.gov/data/news2021.html) (Soboroff et al., 2021) | ['eng'] | Reranking | s2s | [News, Written] | None | None |
 | [HUMERedditClusteringP2P](https://arxiv.org/abs/2104.07081) (Gregor Geigle and Nils Reimers and Andreas R{\"u, 2021) | ['eng'] | Clustering | p2p | [Social, Web, Written] | None | None |
 | [HUMERobust04InstructionReranking](https://trec.nist.gov/data/robust/04.guidelines.html) (Voorhees et al., 2005) | ['eng'] | Reranking | s2s | [News, Written] | None | None |
@@ -1784,10 +1784,10 @@ The following tables give you an overview of the tasks in MTEB.
 | nno | Norwegian Nynorsk | Unclassified | 0 | 1 | 0 | 6 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 15 |
 | nnq | Ngindo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | noa | Woun Meu | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nob | Norwegian Bokmål | Unclassified | 0 | 1 | 0 | 6 | 9 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
+| nob | Norwegian Bokmål | Unclassified | 0 | 1 | 0 | 6 | 10 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 29 |
 | noe | Nimadi | Indo-European | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nop | Numanggang | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nor | Norwegian | Indo-European | 0 | 1 | 0 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
+| nor | Norwegian | Indo-European | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
 | not | Nomatsiguenga | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nou | Ewage-Notu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nov | Novial | Artificial Language | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |

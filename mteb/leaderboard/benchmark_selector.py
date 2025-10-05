@@ -24,7 +24,9 @@ GP_BENCHMARK_ENTRIES = [
         name="General Purpose",
         description="",
         open=False,
-        benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
+        benchmarks=mteb.get_benchmarks(
+            ["MTEB(Multilingual, v2)", "MTEB(eng, v2)", "HUME(v1)"]
+        )
         + [
             MenuEntry(
                 "Image",
