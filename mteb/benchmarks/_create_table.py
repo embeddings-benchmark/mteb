@@ -344,13 +344,6 @@ def _create_summary_table_mean_public_private(
         ),
     )
 
-    # Add zero-shot percentage
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
-    joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
-    )
-    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
-
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
