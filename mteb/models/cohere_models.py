@@ -168,11 +168,7 @@ def retry_with_rate_limit(
 
             nonlocal previous_call_ts
 
-            # Use instance attributes if available, otherwise use decorator defaults
-            actual_max_retries = getattr(self, "max_retries", max_retries)
-            actual_max_rpm = getattr(self, "max_rpm", max_rpm)
-
-            request_interval = 60.0 / actual_max_rpm
+            request_interval = 60.0 / max_rpm
 
             # Rate limiting: wait before making request if needed
             current_time = time.time()
@@ -183,26 +179,26 @@ def retry_with_rate_limit(
                 time.sleep(request_interval - (current_time - previous_call_ts))
 
             # Retry logic with exponential backoff
-            for attempt in range(actual_max_retries):
+            for attempt in range(max_retries):
                 try:
                     result = func(self, *args, **kwargs)
                     previous_call_ts = time.time()
                     return result
                 except cohere.errors.TooManyRequestsError as e:
-                    if attempt == actual_max_retries - 1:
+                    if attempt == max_retries - 1:
                         raise
                     # For rate limits, wait longer (30s minimum to respect API limits)
                     delay = max(30, initial_delay * (2**attempt))
                     logger.warning(
-                        f"Cohere rate limit (attempt {attempt + 1}/{actual_max_retries}): {e}. Retrying in {delay}s..."
+                        f"Cohere rate limit (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
                     )
                     time.sleep(delay)
                 except Exception as e:
-                    if attempt == actual_max_retries - 1:
+                    if attempt == max_retries - 1:
                         raise
                     delay = initial_delay * (2**attempt)
                     logger.warning(
-                        f"Cohere API error (attempt {attempt + 1}/{actual_max_retries}): {e}. Retrying in {delay}s..."
+                        f"Cohere API error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
                     )
                     time.sleep(delay)
 
