@@ -6,11 +6,14 @@ This section goes through new features added in v2. Below we give an overview of
 
 - Easier evaluation using `mteb.evaluate`
 - Easier caching and results loading using the `ResultCache`
+- Support for multimodal evaluation
 - New documentation
-- Standardization of file names and typing across the library 
+- Descriptive statistics for all tasks
+- Standardization of file names and typing across the library
+- And much more
 
 What are the reason for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there is multiple import areas to expand in, e.g. [adding new benchamrk for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accecible. 
-We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and the reasoning behind them.
+We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.
 
 
 ### Easier evalation
@@ -58,16 +61,77 @@ results = cache.load_results(models=["sentence-transformers/all-MiniLM-L6-v2", .
 df = results.to_dataframe()
 ```
 
+### Multimodal Input format
+
+Models in mteb who implements the `Encoder` protocol now supports multimodal input With the model protocol roughly looking like so:
+
+```py
+class Encoder(Protocol): # simplified
+    """The interface for an encoder in MTEB."""
+
+    def encode(self, inputs: DataLoader[BatchedInput], ...) -> Array: ...
+```
+
+Not only does this allow more efficient loading using the torch dataloader, but it also allows keys for multiple modalities:
+
+```py
+batch_input: BatchedInput = {
+    text: list[str],
+    images: list[list[images]],
+    audio: list[list[audio]], # upcoming
+    # + optional fields such as document title
+}
+```
+
+Where `text` is a batch of texts and `list[images]` is a batch for that texts. This e.g. allows markdown documents with multiple figures like so: 
+
+> As you see in the following figure [figure 1](image_1) there is a correlation between A and B. This is similarly seen in figure 2 [figure 2](image_2)
+
+However this also allows no text, multi-image inputs (e.g. for PDFs). Overall this greatly expands the possible tasks that can now be evaluated in MTEB.
+To see how to convert a legacy model see the [converting model](#converting-model-to-new-format) section.
+
 <!-- MORE NEW FEATURES -->
 
+### Descriptive Statistics
 
+Descriptive statistics isn't a new thing in MTEB, however, now it is there for every task, to extract it simply run:
+
+```py
+import mteb
+task = mteb.get_task("MIRACLRetrievalHardNegatives")
+
+task.metadata.descriptive_stats
+```
+
+And you will get a highly detailed set of descriptive statistics:
+
+```py
+{'dev': {'num_samples': 2460458,
+  'number_of_characters': 1023437450,
+  'num_documents': 2449382,
+  'min_document_length': 2,
+  'average_document_length': 417.6655323669399,
+  'max_document_length': 48550,
+  'unique_documents': 2449382,
+  'num_queries': 11076,
+  'min_query_length': 5,
+  'average_query_length': 37.46957385337667,
+  'max_query_length': 176,
+  ...
+  'hf_subset_descriptive_stats': {'ar': {'num_samples': 193103,
+    'number_of_characters': 84206668,
+    'num_documents': 192103,
+    'min_document_length': 4, ...
+  }}
+}}
+```
 
 ## Upgrading from v1
 
 This section gives an introduction of how to upgrade from v1 to v2.
 
 
-### Replacing `MTEB`
+### Replacing `mteb.MTEB`
 
 The previous approach to evaluate would require you to first create `MTEB` object and then call `.run` on that object. 
 The `MTEB` object was initially a sort of catch all object intended for both filtering tasks, selecting tasks, evaluating and few other cases.
@@ -109,3 +173,41 @@ cache.download_from_remote() # downloads remote results
 
 results = cache.load_results(models=model_names, tasks=tasks)
 ```
+
+
+### Converting model to new format
+
+As mentioned in [the above section](#multimodal-input-format) MTEB v2, now supports multimodal input as the default. 
+Luckily for you all models implemented in MTEB already supports this new format! However, if you have a local model that you would like to evaluate
+Here is a quick conversion guide. If you previous implementation looks like so:
+
+```py
+# v1.X.X
+class MyDummyEncoder:
+    def __init__(self, **kwargs):
+        self.embed_dim = 10
+
+    def encode(self, sentences: list[str], **kwargs) -> Array:
+        embeddings = np.random.rand(len(sentences), self.embed_dim)
+        return embeddings
+```
+
+You can simply unpack it to its text input like so:
+
+```py
+# v2.0.0
+class MyDummyEncoder:
+    def __init__(self, **kwargs):
+        self.embed_dim = 10
+
+    def encode(self, input: DataLoader[BatchedInput], **kwargs) -> Array:
+        # unpack to v1 format:
+        sentences = [text for batch in inputs for text in batch["text"]]
+        # do as you did beforehand:
+        embeddings = np.random.rand(len(sentences), self.embed_dim)
+        return embeddings
+```
+
+Of course it will be more efficient if work directly with the dataloader.
+
+
