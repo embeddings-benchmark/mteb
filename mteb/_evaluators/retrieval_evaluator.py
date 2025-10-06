@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from typing import Any
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -72,7 +73,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         qrels: RelevantDocumentsType,
         results: dict[str, dict[str, float]],
-        k_values: list[int],
+        k_values: Sequence[int],
         ignore_identical_ids: bool = False,
         skip_first_result: bool = False,
     ) -> RetrievalEvaluationResult:
@@ -89,4 +90,6 @@ class RetrievalEvaluator(Evaluator):
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
-        return calculate_retrieval_scores(results, qrels, k_values, skip_first_result)
+        return calculate_retrieval_scores(
+            results, qrels, list(k_values), skip_first_result
+        )

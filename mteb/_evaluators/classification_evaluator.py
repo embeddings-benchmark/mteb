@@ -5,13 +5,6 @@ from typing import Any, Protocol
 
 import numpy as np
 from datasets import Dataset
-from sklearn.metrics import (
-    accuracy_score,
-    average_precision_score,
-    f1_score,
-    precision_score,
-    recall_score,
-)
 from torch.utils.data import DataLoader
 from typing_extensions import Self
 
@@ -30,7 +23,7 @@ class SklearnClassifierProtocol(Protocol):
     def predict(self, X: np.ndarray) -> np.ndarray: ...  # noqa: N803
     def get_params(self) -> dict[str, Any]: ...
     def set_params(self, **kwargs: dict[str, Any]) -> Self: ...
-    def score(self, X: np.ndarray, y: np.ndarray | list[int]) -> list[int]: ...  # noqa: N803
+    def score(self, X: np.ndarray, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
 
 
 class ClassificationEvaluator(Evaluator):
@@ -88,36 +81,13 @@ class ClassificationEvaluator(Evaluator):
             )
         return dataloader_train, dataloader_test
 
-    def calculate_scores(
-        self,
-        y_test: np.ndarray | list[int],
-        y_pred: np.ndarray,
-    ) -> dict[str, float]:
-        scores = {
-            "accuracy": accuracy_score(y_test, y_pred),
-            "f1": f1_score(y_test, y_pred, average="macro"),
-            "f1_weighted": f1_score(y_test, y_pred, average="weighted"),
-            "precision": precision_score(y_test, y_pred, average="macro"),
-            "precision_weighted": precision_score(y_test, y_pred, average="weighted"),
-            "recall": recall_score(y_test, y_pred, average="macro"),
-            "recall_weighted": recall_score(y_test, y_pred, average="weighted"),
-        }
-
-        # if binary classification
-        if len(np.unique(y_test)) == 2:
-            scores["ap"] = average_precision_score(y_test, y_pred, average="macro")
-            scores["ap_weighted"] = average_precision_score(
-                y_test, y_pred, average="weighted"
-            )
-        return scores
-
     def __call__(  # type: ignore[override]
         self,
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
-    ) -> tuple[dict[str, float], np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Classification evaluation by training a sklearn classifier on the
         embeddings of the training set and evaluating on the embeddings of the test set.
 
@@ -127,7 +97,7 @@ class ClassificationEvaluator(Evaluator):
             test_cache: embeddings of the test set, if already computed
 
         Returns:
-            Tuple of scores and test embeddings
+            Tuple of test predictions and embeddings
 
         """
         dataloader_train, dataloader_test = self.create_dataloaders(
@@ -151,9 +121,7 @@ class ClassificationEvaluator(Evaluator):
             )
         logger.info("Fitting logistic regression classifier...")
         y_train = self.train_dataset[self.label_column_name]
-        y_test = self.eval_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
         logger.info("Evaluating...")
         y_pred = self.classifier.predict(test_cache)
-        scores = self.calculate_scores(y_test, y_pred)
-        return scores, test_cache
+        return y_pred, test_cache
