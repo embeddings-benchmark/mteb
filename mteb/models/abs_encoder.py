@@ -94,7 +94,7 @@ class AbsEncoder(ABC):
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        return self.model_prompts.get(prompt_name)  # type: ignore
+        return self.model_prompts.get(prompt_name)
 
     @staticmethod
     @overload
@@ -233,7 +233,7 @@ class AbsEncoder(ABC):
     ) -> str:
         instruction = self.get_instruction(task_metadata, prompt_type)
         if self.instruction_template and len(instruction) > 0:
-            return self.format_instruction(instruction)
+            return self.format_instruction(instruction, prompt_type)
         return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:

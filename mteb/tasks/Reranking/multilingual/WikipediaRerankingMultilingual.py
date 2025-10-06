@@ -19,7 +19,7 @@ _EVAL_LANGS = {
     "pt": ["por-Latn"],
     "ro": ["ron-Latn"],
     "sr": ["srp-Cyrl"],
-    "no": ["nor-Latn"],
+    "no": ["nor-Latn", "nno-Latn", "nob-Latn"],
     "sv": ["swe-Latn"],
 }
 

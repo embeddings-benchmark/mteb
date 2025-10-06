@@ -1,0 +1,33 @@
+name: 📊 Evaluation Request
+description: Create a request for a model to be evaluated in MTEB
+title: "Evaluate model: {model_id}"
+labels: ["evaluation request"]
+body:
+  - type: input
+    attributes:
+      label: Model link on Hugging Face
+      description: Please provide a link to the model on Hugging Face. If the model is closed-source, please provide a link to the model provider or documentation.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What do you want it to be evaluated on?
+      description: Please specify the tasks or benchmarks you would like this model to be evaluated on.
+    validations:
+      required: True
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Are you interested in contributing to the evaluation of this model?
+      description: By default MTEB maintainters will only handle evaluation on private subsets due to resource constraints. If you are interested in contributing to the evaluation, please let us know. 
+      options:
+        - "Yes"
+        - "No"
+  - type: dropdown
+    id: exists
+    attributes:
+      label: Does this model already exist in MTEB?
+      description: If you are unsure, please check using mteb model registry (e.g. using `mteb.get_model_meta("model_id")`).
+      options:
+        - "Yes"
+        - "No"
