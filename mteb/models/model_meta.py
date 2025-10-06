@@ -232,7 +232,7 @@ class ModelMeta(BaseModel):
                 adapted_training_datasets = adapted_from_model.get_training_datasets()
                 if adapted_training_datasets is not None:
                     training_datasets |= adapted_training_datasets
-            except ValueError as e:
+            except (ValueError, KeyError) as e:
                 logger.warning(f"Could not get source model: {e} in MTEB")
 
         return_dataset = training_datasets.copy()
