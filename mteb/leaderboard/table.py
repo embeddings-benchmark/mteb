@@ -188,7 +188,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         joint_table_style,
         datatype=column_types,
         interactive=False,
-        pinned_columns=3,
+        pinned_columns=2,
         column_widths=column_widths,
         wrap=True,
         show_fullscreen_button=True,
