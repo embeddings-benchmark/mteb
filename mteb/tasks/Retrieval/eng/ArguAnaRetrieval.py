@@ -10,7 +10,7 @@ class ArguAna(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="ArguAna",
-        description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
+        description="ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge",
         reference="http://argumentation.bplaced.net/arguana/data",
         dataset={
             "path": "mteb/arguana",
@@ -22,23 +22,19 @@ class ArguAna(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=["Medical", "Written"],
-        task_subtypes=None,
+        date=["2018-01-01", "2018-07-01"],  # best guess: based on publication date
+        domains=["Social", "Web", "Written"],
+        task_subtypes=["Discourse coherence"],
         license="cc-by-sa-4.0",
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=[],
-        sample_creation=None,
+        sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{boteva2016,
-  author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
-  city = {Padova},
-  country = {Italy},
-  journal = {Proceedings of the 38th European Conference on Information Retrieval},
-  journal-abbrev = {ECIR},
-  title = {A Full-Text Learning to Rank Dataset for Medical Information Retrieval},
-  url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf},
-  year = {2016},
+@inproceedings{wachsmuth2018retrieval,
+  author = {Wachsmuth, Henning and Syed, Shahbaz and Stein, Benno},
+  booktitle = {ACL},
+  title = {Retrieval of the Best Counterargument without Prior Topic Knowledge},
+  year = {2018},
 }
 """,
         prompt={"query": "Given a claim, find documents that refute the claim"},

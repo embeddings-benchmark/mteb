@@ -1,9 +1,17 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+import pandas as pd
+
+from mteb.benchmarks._create_table import (
+    _create_per_task_table_from_benchmark_results,
+    _create_summary_table_from_benchmark_results,
+    _create_summary_table_mean_public_private,
+    _create_summary_table_mean_subset,
+)
 from mteb.load_results import load_results
 from mteb.results import BenchmarkResults
 from mteb.types import StrURL
@@ -45,13 +53,13 @@ class Benchmark:
     icon: str | None = None
     display_name: str | None = None
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[AbsTask]:
         return iter(self.tasks)
 
     def __len__(self) -> int:
         return len(self.tasks)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
     def load_results(
@@ -66,3 +74,31 @@ class Benchmark:
         results = base_results.select_tasks(self.tasks)
         self.results_cache[base_results] = results
         return results
+
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_from_benchmark_results(benchmark_results)
+
+    def _create_per_task_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create per-task table. Called by the leaderboard app."""
+        return _create_per_task_table_from_benchmark_results(benchmark_results)
+
+
+class RtebBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_public_private(benchmark_results)
+
+
+class HUMEBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_subset(benchmark_results)

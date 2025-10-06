@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
 
-MMTEB_CITATION = """@article{enevoldsen2025mmtebmassivemultilingualtext,
+MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
   author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
   doi = {10.48550/arXiv.2502.13595},
   journal = {arXiv preprint arXiv:2502.13595},
@@ -461,6 +461,7 @@ SEB = Benchmark(
 CoIR = Benchmark(
     name="CoIR",
     display_name="Code Information Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
         tasks=[
             "AppsRetrieval",
@@ -492,7 +493,7 @@ CoIR = Benchmark(
 
 RAR_b = Benchmark(
     name="RAR-b",
-    display_name="Reasoning retrieval",
+    display_name="Reasoning as retrieval",
     tasks=get_tasks(
         tasks=[
             "ARCChallenge",
@@ -1179,6 +1180,7 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
+    display_name="Reasoning Retrieval",
     tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
@@ -1254,6 +1256,8 @@ CODE_RAG = Benchmark(
 
 BEIR = Benchmark(
     name="BEIR",
+    display_name="BEIR",
+    icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -1596,6 +1600,8 @@ CHEMTEB = Benchmark(
 
 BEIR_NL = Benchmark(
     name="BEIR-NL",
+    display_name="BEIR-NL",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
     tasks=get_tasks(
         tasks=[
             "ArguAna-NL",
@@ -2023,39 +2029,6 @@ BEIR_PL = Benchmark(
 """,
 )
 
-MTEB_LOTTE = Benchmark(
-    name="LoTTE",
-    tasks=MTEBTasks(get_tasks(tasks=["LoTTE"], eval_splits=["dev"])),
-    description=(
-        "LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models "
-        "on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and "
-        "passages from StackExchange (covering writing, recreation, science, technology, and lifestyle), providing "
-        "a challenging out-of-domain generalization benchmark."
-    ),
-    reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
-    citation=r"""
-@inproceedings{santhanam-etal-2022-colbertv2,
-  address = {Seattle, United States},
-  author = {Santhanam, Keshav  and
-Khattab, Omar  and
-Saad-Falcon, Jon  and
-Potts, Christopher  and
-Zaharia, Matei},
-  booktitle = {Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
-  doi = {10.18653/v1/2022.naacl-main.272},
-  editor = {Carpuat, Marine  and
-de Marneffe, Marie-Catherine  and
-Meza Ruiz, Ivan Vladimir},
-  month = jul,
-  pages = {3715--3734},
-  publisher = {Association for Computational Linguistics},
-  title = {{C}ol{BERT}v2: Effective and Efficient Retrieval via Lightweight Late Interaction},
-  url = {https://aclanthology.org/2022.naacl-main.272/},
-  year = {2022},
-}
-""",
-    contacts=["agu18dec"],
-)
 
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
@@ -2382,4 +2355,42 @@ JINA_VDR = Benchmark(
   url = {https://arxiv.org/abs/2506.18902},
   year = {2025},
 }""",
+)
+
+
+HUME = HUMEBenchmark(
+    name="HUME(v1)",
+    display_name="Human Benchmark",
+    # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
+    tasks=get_tasks(
+        tasks=[
+            "HUMEEmotionClassification",
+            "HUMEToxicConversationsClassification",
+            "HUMETweetSentimentExtractionClassification",
+            "HUMEMultilingualSentimentClassification",
+            "HUMEArxivClusteringP2P",
+            "HUMERedditClusteringP2P",
+            "HUMEWikiCitiesClustering",
+            "HUMESIB200ClusteringS2S",
+            "HUMECore17InstructionReranking",
+            "HUMENews21InstructionReranking",
+            "HUMERobust04InstructionReranking",
+            "HUMEWikipediaRerankingMultilingual",
+            "HUMESICK-R",
+            "HUMESTS12",
+            "HUMESTSBenchmark",
+            "HUMESTS22",
+        ],
+        languages=[
+            "eng-Latn",
+            "ara-Arab",
+            "rus-Cyrl",
+            "dan-Latn",
+            "nob-Latn",
+        ],
+    ),
+    description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
+    reference="Coming soon (in review)",
+    citation=None,
+    contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )

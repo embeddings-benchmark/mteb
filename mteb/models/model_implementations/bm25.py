@@ -91,7 +91,8 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info(f"Retrieving Results... {len(queries):,} queries")
 
             queries_results, queries_scores = self.retriever.retrieve(
-                query_token_strs, k=top_k
+                query_token_strs,
+                k=min(top_k, len(self.corpus_idx_to_id)),
             )
 
             # Iterate over queries
