@@ -4,16 +4,21 @@ import base64
 import io
 import os
 import time
-from functools import partial, wraps
+from functools import partial
 from typing import Any, Literal, get_args
 
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.cohere_models import (
+    COHERE_MAX_BATCH_SIZE,
+    COHERE_MAX_TOKENS_PER_BATCH,
+    retry_with_rate_limit,
+)
 from mteb.requires_package import requires_image_dependencies, requires_package
 
 
@@ -164,82 +169,6 @@ EMBEDDING_TYPE = Literal[
     "binary",
 ]
 
-# Cohere API limits
-COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call
-COHERE_MAX_TOKENS_PER_BATCH = 128_000  # Maximum total tokens per API call
-
-# Per-model context lengths (max tokens per individual input)
-COHERE_MODEL_CONTEXT_LENGTHS = {
-    "embed-english-v3.0": 512,
-    "embed-multilingual-v3.0": 512,
-    "embed-english-light-v3.0": 512,
-    "embed-multilingual-light-v3.0": 512,
-    "embed-v4.0": 128_000,
-}
-
-
-def rate_limit(max_rpm: int, interval: int = 60):
-    """Rate limiter decorator to respect requests per minute limit."""
-    request_interval = interval / max_rpm
-    previous_call_ts: float | None = None
-
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            current_time = time.time()
-            nonlocal previous_call_ts
-            if (
-                previous_call_ts is not None
-                and current_time - previous_call_ts < request_interval
-            ):
-                time.sleep(request_interval - (current_time - previous_call_ts))
-
-            result = func(*args, **kwargs)
-            previous_call_ts = time.time()
-            return result
-
-        return wrapper
-
-    return decorator
-
-
-def retry_with_exponential_backoff(max_retries: int = 5, initial_delay: float = 1.0):
-    """Retry decorator with exponential backoff for handling any errors.
-
-    Retries on any exception with exponential backoff.
-    Rate limit errors (429) wait a minimum of 30 seconds.
-    """
-
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            import cohere
-
-            for attempt in range(max_retries):
-                try:
-                    return func(*args, **kwargs)
-                except cohere.errors.TooManyRequestsError as e:
-                    if attempt == max_retries - 1:
-                        raise
-                    # For rate limits, wait longer (30s minimum to respect API limits)
-                    delay = max(30, initial_delay * (2**attempt))
-                    print(
-                        f"Cohere rate limit (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
-                    )
-                    time.sleep(delay)
-                except Exception as e:
-                    if attempt == max_retries - 1:
-                        raise
-                    delay = initial_delay * (2**attempt)
-                    print(
-                        f"Cohere API error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
-                    )
-                    time.sleep(delay)
-
-        return wrapper
-
-    return decorator
-
 
 def cohere_v_loader(**kwargs):
     model_name = kwargs.get("model_name", "Cohere")
@@ -254,8 +183,6 @@ def cohere_v_loader(**kwargs):
             model_name: str,
             embedding_type: EMBEDDING_TYPE = "float",
             output_dimension: int | None = None,
-            max_retries: int = 5,
-            max_rpm: int = 300,
             **kwargs: Any,
         ):
             """Wrapper for Cohere multimodal embedding model,
@@ -273,13 +200,14 @@ def cohere_v_loader(**kwargs):
             self.output_dimension = output_dimension
             api_key = os.getenv("COHERE_API_KEY")
 
-            # Create Cohere client with retry and rate limiting
             self.client = cohere.ClientV2(api_key)
-            self._embed_func = retry_with_exponential_backoff(max_retries)(
-                rate_limit(max_rpm)(self.client.embed)
-            )
             self.image_format = "JPEG"
             self.transform = transforms.Compose([transforms.PILToTensor()])
+
+        @retry_with_rate_limit(max_retries=5, max_rpm=300)
+        def _embed_func(self, **kwargs):
+            """Call Cohere embed API with retry and rate limiting."""
+            return self.client.embed(**kwargs)
 
         def get_text_embeddings(
             self,

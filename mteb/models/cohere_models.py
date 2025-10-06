@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+import logging
 import time
 from functools import partial, wraps
 from typing import Any, Literal, get_args
 
 import numpy as np
 import torch
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+
+logger = logging.getLogger(__name__)
 
 supported_languages = [
     "afr-Latn",
@@ -137,71 +140,69 @@ EMBEDDING_TYPE = Literal[
 COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call
 COHERE_MAX_TOKENS_PER_BATCH = 128_000  # Maximum total tokens per API call
 
-# Per-model context lengths (max tokens per individual input)
-COHERE_MODEL_CONTEXT_LENGTHS = {
-    "embed-english-v3.0": 512,
-    "embed-multilingual-v3.0": 512,
-    "embed-english-light-v3.0": 512,
-    "embed-multilingual-light-v3.0": 512,
-    "embed-v4.0": 128_000,
-}
 
+def retry_with_rate_limit(
+    max_retries: int = 5,
+    max_rpm: int = 300,
+    initial_delay: float = 1.0,
+):
+    """Combined retry and rate limiting decorator.
 
-def rate_limit(max_rpm: int, interval: int = 60):
-    """Rate limiter decorator to respect requests per minute limit."""
-    request_interval = interval / max_rpm
+    This decorator handles both proactive rate limiting (spacing requests)
+    and reactive retry with exponential backoff for API errors.
+
+    The decorator will use instance attributes (self.max_retries, self.max_rpm)
+    if they exist, otherwise falls back to the decorator parameters.
+
+    Args:
+        max_retries: Default maximum number of retry attempts (default: 5)
+        max_rpm: Default maximum requests per minute for rate limiting (default: 300)
+        initial_delay: Initial delay in seconds for exponential backoff (default: 1.0)
+    """
     previous_call_ts: float | None = None
 
     def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            current_time = time.time()
+        def wrapper(self, *args, **kwargs):
+            import cohere
+
             nonlocal previous_call_ts
+
+            # Use instance attributes if available, otherwise use decorator defaults
+            actual_max_retries = getattr(self, "max_retries", max_retries)
+            actual_max_rpm = getattr(self, "max_rpm", max_rpm)
+
+            request_interval = 60.0 / actual_max_rpm
+
+            # Rate limiting: wait before making request if needed
+            current_time = time.time()
             if (
                 previous_call_ts is not None
                 and current_time - previous_call_ts < request_interval
             ):
                 time.sleep(request_interval - (current_time - previous_call_ts))
 
-            result = func(*args, **kwargs)
-            previous_call_ts = time.time()
-            return result
-
-        return wrapper
-
-    return decorator
-
-
-def retry_with_exponential_backoff(max_retries: int = 5, initial_delay: float = 1.0):
-    """Retry decorator with exponential backoff for handling any errors.
-
-    Retries on any exception with exponential backoff.
-    Rate limit errors (429) wait a minimum of 30 seconds.
-    """
-
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            import cohere
-
-            for attempt in range(max_retries):
+            # Retry logic with exponential backoff
+            for attempt in range(actual_max_retries):
                 try:
-                    return func(*args, **kwargs)
+                    result = func(self, *args, **kwargs)
+                    previous_call_ts = time.time()
+                    return result
                 except cohere.errors.TooManyRequestsError as e:
-                    if attempt == max_retries - 1:
+                    if attempt == actual_max_retries - 1:
                         raise
                     # For rate limits, wait longer (30s minimum to respect API limits)
                     delay = max(30, initial_delay * (2**attempt))
-                    print(
-                        f"Cohere rate limit (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
+                    logger.warning(
+                        f"Cohere rate limit (attempt {attempt + 1}/{actual_max_retries}): {e}. Retrying in {delay}s..."
                     )
                     time.sleep(delay)
                 except Exception as e:
-                    if attempt == max_retries - 1:
+                    if attempt == actual_max_retries - 1:
                         raise
                     delay = initial_delay * (2**attempt)
-                    print(
-                        f"Cohere API error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
+                    logger.warning(
+                        f"Cohere API error (attempt {attempt + 1}/{actual_max_retries}): {e}. Retrying in {delay}s..."
                     )
                     time.sleep(delay)
 
@@ -219,8 +220,6 @@ class CohereTextEmbeddingModel(Wrapper):
         model_prompts: dict[str, str] | None = None,
         embedding_type: EMBEDDING_TYPE = "float",
         output_dimension: int | None = None,
-        max_retries: int = 5,
-        max_rpm: int = 300,
         **kwargs,
     ) -> None:
         import cohere  # type: ignore
@@ -232,11 +231,12 @@ class CohereTextEmbeddingModel(Wrapper):
         self.embedding_type = embedding_type
         self.output_dimension = output_dimension
 
-        # Create Cohere client with retry and rate limiting
         self._client = cohere.Client()
-        self._embed_func = retry_with_exponential_backoff(max_retries)(
-            rate_limit(max_rpm)(self._client.embed)
-        )
+
+    @retry_with_rate_limit(max_retries=5, max_rpm=300)
+    def _embed_func(self, **kwargs):
+        """Call Cohere embed API with retry and rate limiting."""
+        return self._client.embed(**kwargs)
 
     def _embed(
         self,
