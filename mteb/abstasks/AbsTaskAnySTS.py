@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, TypedDict, cast
 
 from datasets import Dataset
 from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb.models import Encoder
-from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
     ScoreStatistics,
@@ -58,7 +57,7 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
     label_statistics: ScoreStatistics
 
 
-class STSMetrics(ScoresDict):
+class STSMetrics(TypedDict):
     """Metrics for STS tasks
 
     Attributes:

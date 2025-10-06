@@ -4,7 +4,7 @@ import itertools
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
 from datasets import DatasetDict
@@ -16,7 +16,6 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from typing_extensions import override
 
 from mteb.models import Encoder
-from mteb.types import ScoresDict
 
 from .._evaluators.classification_evaluator import SklearnClassifierProtocol
 from ..create_dataloaders import create_dataloader
@@ -30,13 +29,13 @@ def _evaluate_classifier(
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
     classifier: SklearnClassifierProtocol,
-) -> np.ndarray:
+) -> tuple[np.ndarray, SklearnClassifierProtocol]:
     classifier: SklearnClassifierProtocol = clone(classifier)
     classifier.fit(embeddings_train, y_train)
-    return classifier.predict(embeddings_test)
+    return classifier.predict(embeddings_test), classifier
 
 
-class MultilabelClassificationMetrics(ScoresDict):
+class MultilabelClassificationMetrics(TypedDict):
     """Scores for multilabel classification tasks.
 
     Attributes:
@@ -164,11 +163,15 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
-            y_pred = _evaluate_classifier(X_train, y_train, X_test, self.evaluator)
+            y_pred, current_classifier = _evaluate_classifier(
+                X_train, y_train, X_test, self.evaluator
+            )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
 
-            scores_exp = self._calculate_scores(y_test, y_pred, X_test)
+            scores_exp = self._calculate_scores(
+                y_test, y_pred, X_test, current_classifier
+            )
             scores.append(scores_exp)
 
         if prediction_folder:
@@ -193,10 +196,11 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         y_test: np.ndarray,
         y_pred: np.ndarray,
         x_test_embedding: np.ndarray,
+        current_classifier: SklearnClassifierProtocol,
     ) -> MultilabelClassificationMetrics:
-        accuracy = self.evaluator.score(x_test_embedding, y_test)
-        if isinstance(self.evaluator, MultiOutputClassifier):
-            predictions = self.evaluator.predict_proba(x_test_embedding)
+        accuracy = current_classifier.score(x_test_embedding, y_test)
+        if isinstance(current_classifier, MultiOutputClassifier):
+            predictions = current_classifier.predict_proba(x_test_embedding)
             all_probs = [emb[:, 1] for emb in predictions]
 
             y_score = np.stack(all_probs, axis=1)  # shape: (n_samples, n_labels)

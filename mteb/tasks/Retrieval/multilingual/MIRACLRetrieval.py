@@ -79,7 +79,7 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
         reference="http://miracl.ai",
         dataset={
             "path": "mteb/MIRACLRetrievalHardNegatives",
-            "revision": "mteb/MIRACLRetrievalHardNegatives",
+            "revision": "d7d94fa4b946cec4a27c84653aa0cf6b33f74a3c",
         },
         type="Retrieval",
         category="t2t",

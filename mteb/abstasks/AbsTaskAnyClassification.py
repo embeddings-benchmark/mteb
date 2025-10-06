@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -61,7 +61,7 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     label_statistics: LabelStatistics
 
 
-class ClassificationMetrics(ScoresDict):
+class ClassificationMetrics(TypedDict):
     """Scores for classification tasks
 
     Attributes:
