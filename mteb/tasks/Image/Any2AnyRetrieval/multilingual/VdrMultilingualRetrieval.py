@@ -20,8 +20,7 @@ def _load_vdr_multilingual_data(
     path: str,
     langs: list,
     split: str,
-    revision: str = None,
-    trust_remote_code: bool = False,
+    revision: str | None = None,
 ):
     """Load data from the VDR Multilingual dataset."""
     corpus_dict = {}
@@ -34,7 +33,6 @@ def _load_vdr_multilingual_data(
             name=lang_code,
             split=split,
             revision=revision,
-            trust_remote_code=trust_remote_code,
         )
 
         corpus_records = []
@@ -138,8 +136,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             split=_EVAL_SPLIT,
-            revision=self.metadata.dataset.get("revision", None),
-            trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

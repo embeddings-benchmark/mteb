@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb.cli import create_meta, run
+from mteb.cli.build_cli import create_meta, run
 
 
 def test_available_tasks():
@@ -78,20 +78,21 @@ def test_run_task(
     )
 
 
-def test_create_meta():
+def test_create_meta(tmp_path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     output_folder = test_folder / "create_meta"
-    results = (
-        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
-    )
-    output_path = output_folder / "model_card.md"
+    output_path = tmp_path / "model_card.md"
 
     args = Namespace(
-        results_folder=results,
+        model_name=model_name,
+        results_folder=output_folder,
         output_path=output_path,
         overwrite=True,
         from_existing=None,
+        tasks=None,
+        benchmarks=None,
     )
 
     create_meta(args)
@@ -117,7 +118,7 @@ def test_create_meta():
         )
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --overwrite"
+    command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -134,18 +135,19 @@ def test_create_meta_from_existing(
 ):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     output_folder = test_folder / "create_meta"
-    results = (
-        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
-    )
     output_path = tmp_path / "model_card.md"
     existing_readme = output_folder / existing_readme_name
 
     args = Namespace(
-        results_folder=results,
+        model_name=model_name,
+        results_folder=output_folder,
         output_path=output_path,
         overwrite=True,
         from_existing=str(existing_readme),
+        tasks=None,
+        benchmarks=None,
     )
 
     create_meta(args)
@@ -180,6 +182,6 @@ def test_create_meta_from_existing(
         )
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create-meta --results-folder {results.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
+    command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"

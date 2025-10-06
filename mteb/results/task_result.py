@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 import numpy as np
+from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
@@ -217,6 +218,7 @@ class TaskResult(BaseModel):
 
     @property
     def languages(self) -> list[str]:
+        """Get the languages present in the scores."""
         langs = []
         for split, split_res in self.scores.items():
             for entry in split_res:
@@ -225,12 +227,14 @@ class TaskResult(BaseModel):
 
     @cached_property
     def task(self) -> AbsTask:
+        """Get the task associated with the result."""
         from mteb.overview import get_task
 
         return get_task(self.task_name)
 
     @property
     def domains(self) -> list[str]:
+        """Get the domains of the task."""
         doms = self.task.metadata.domains
         if doms is None:
             doms = []
@@ -238,6 +242,7 @@ class TaskResult(BaseModel):
 
     @property
     def task_type(self) -> str:
+        """Get the type of the task."""
         return self.task.metadata.type
 
     @property
@@ -255,10 +260,12 @@ class TaskResult(BaseModel):
         return list(self.scores.keys())
 
     def to_dict(self) -> dict:
+        """Convert the TaskResult to a dictionary."""
         return self.model_dump()
 
     @classmethod
     def from_dict(cls, data: dict) -> TaskResult:
+        """Create a TaskResult from a dictionary."""
         return cls.model_validate(data)
 
     def _round_scores(self, scores: dict[SplitName, list[ScoresDict]], n: int) -> None:
@@ -354,10 +361,10 @@ class TaskResult(BaseModel):
 
     @classmethod
     def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
-        from mteb.overview import TASKS_REGISTRY
+        from mteb.overview import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
-        lower_case_registry = {k.lower(): v for k, v in TASKS_REGISTRY.items()}
+        lower_case_registry = {k.lower(): v for k, v in _TASKS_REGISTRY.items()}
 
         scores = {**data}
 
@@ -393,7 +400,9 @@ class TaskResult(BaseModel):
         else:
             if task_name in renamed_tasks:
                 task_name = renamed_tasks[task_name]
-            task = TASKS_REGISTRY.get(task_name, lower_case_registry[task_name.lower()])
+            task = _TASKS_REGISTRY.get(
+                task_name, lower_case_registry[task_name.lower()]
+            )
 
         # make sure that main score exists
         main_score = task.metadata.main_score
@@ -483,14 +492,13 @@ class TaskResult(BaseModel):
 
         return aggregation(values)
 
-    def get_score_fast(
+    def _get_score_fast(
         self,
         splits: Iterable[str] | None = None,
         languages: str | None = None,
         subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
-        # TODO: v2: We should make this private
         if splits is None:
             splits = self.scores.keys()
         val_sum = 0
@@ -739,3 +747,33 @@ class TaskResult(BaseModel):
                     missing_splits[splits] = missing_subsets
 
         return missing_splits
+
+    def get_hf_eval_results(self) -> list[EvalResult]:
+        """Create HF evaluation results objects from TaskResult objects.
+
+        Returns:
+            List of EvalResult objects for each split and subset.
+        """
+        task_metadata = self.task.metadata
+        task_type = task_metadata._hf_task_type()[0]
+        results = []
+        for split, scores in self.scores.items():
+            for subset_results in scores:
+                subset = subset_results.get("hf_subset", "default")
+                results.append(
+                    EvalResult(
+                        task_type=task_type,
+                        task_name=task_metadata.type,
+                        dataset_type=task_metadata.dataset["path"],
+                        dataset_name=f"{task_metadata.name} ({subset})",
+                        dataset_config=subset,
+                        dataset_split=split,
+                        dataset_revision=task_metadata.dataset["revision"],
+                        metric_type=task_metadata.main_score,
+                        metric_name=task_metadata.main_score,
+                        metric_value=subset_results["main_score"],
+                        source_name="MTEB",
+                        source_url="https://github.com/embeddings-benchmark/mteb/",
+                    )
+                )
+        return results

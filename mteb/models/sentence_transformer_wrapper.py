@@ -68,7 +68,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         if built_in_prompts and not model_prompts:
             model_prompts = built_in_prompts
         elif model_prompts and built_in_prompts:
-            logger.warning(f"Model prompts will be overwritten with {model_prompts}")
+            logger.warning(
+                f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+            )
             self.model.prompts = model_prompts
 
         self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
@@ -223,7 +225,7 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
         all_embeddings = []
         for batch in inputs:
-            batch_column = list(batch.keys())[0]
+            batch_column = next(iter(batch.keys()))
             batched_input = [dict() for _ in range(len(batch[batch_column]))]
 
             # transform from {"text": [text1, text2], "image": [image1, image2]} to

@@ -9,9 +9,8 @@ class GeoreviewClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GeoreviewClassification",
         dataset={
-            "path": "ai-forever/georeview-classification",
-            "revision": "3765c0d1de6b7d264bc459433c45e5a75513839c",
-            "trust_remote_code": True,
+            "path": "mteb/GeoreviewClassification",
+            "revision": "fb29d6137c54550329411023aee45a8ff29f0c62",
         },
         description="Review classification (5-point scale) based on Yandex Georeview dataset",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
@@ -31,11 +30,6 @@ class GeoreviewClassification(AbsTaskAnyClassification):
         bibtex_citation="",
         prompt="Classify the organization rating based on the reviews",
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, n_samples=2048, splits=["test"]
-        )
 
 
 class GeoreviewClassificationV2(AbsTaskAnyClassification):

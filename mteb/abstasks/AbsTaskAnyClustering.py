@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -11,9 +12,9 @@ from mteb._evaluators import ClusteringEvaluator
 from mteb.models import Encoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
-    DescriptiveStatistics,
     ImageStatistics,
     LabelStatistics,
+    SplitDescriptiveStatistics,
     TextStatistics,
 )
 
@@ -27,7 +28,7 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-class ClusteringDescriptiveStatistics(DescriptiveStatistics):
+class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Clustering
 
     Attributes:
@@ -63,21 +64,20 @@ class AbsTaskAnyClustering(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: Dataset,
+        data_split: Dataset,
         *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
+        prediction_folder: Path | None = None,
+        **kwargs: Any,
     ) -> ScoresDict:
-        ## MTEB v1 text clustering requires renaming and eval per subset.
-        if "sentences" in dataset.column_names and isinstance(
-            dataset[self.input_column_name][0], list
-        ):
+        # MTEB text clustering requires renaming and eval per subset.
+        if self.metadata.modalities == ["text"]:
             v_measures = []
-            for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
-                clustering_dataset = Dataset.from_dict(cluster_set).rename_column(
-                    original_column_name="sentences", new_column_name="text"
+            for cluster_set in tqdm.tqdm(data_split, desc="Clustering"):
+                clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
+                    [self.input_column_name, self.label_column_name]
                 )
                 evaluator = self.evaluator(
                     clustering_dataset,
@@ -103,8 +103,11 @@ class AbsTaskAnyClustering(AbsTask):
             self._add_main_score(scores)
             return scores
 
+        data_split = data_split.select_columns(
+            [self.input_column_name, self.label_column_name]
+        )
         evaluator = self.evaluator(
-            dataset,
+            data_split,
             input_column_name=self.input_column_name,
             label_column_name=self.label_column_name,
             task_metadata=self.metadata,

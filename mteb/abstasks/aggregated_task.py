@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+
+from mteb.results.task_result import TaskResult
 
 from .AbsTask import AbsTask
 from .aggregate_task_metadata import AggregateTaskMetadata
@@ -11,8 +14,7 @@ from .aggregate_task_metadata import AggregateTaskMetadata
 if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
-    from mteb.load_results.task_results import TaskResult
-    from mteb.models.models_protocols import Encoder
+    from mteb.models.models_protocols import MTEBModels
     from mteb.types import HFSubset, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics
 
@@ -26,6 +28,7 @@ class AbsTaskAggregate(AbsTask):
     _eval_splits: list[str] | None = None
 
     def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)
         self.tasks = self.metadata.tasks
         self.taskname_to_task = {task.metadata.name: task for task in self.tasks}
 
@@ -49,7 +52,7 @@ class AbsTaskAggregate(AbsTask):
             for task_res in task_results:
                 for langs in eval_langs:
                     main_scores.append(
-                        task_res.get_score_fast(
+                        task_res._get_score_fast(
                             languages=[lang.split("-")[0] for lang in langs],
                             splits=self.metadata.eval_splits,
                             subsets=subsets,
@@ -68,10 +71,6 @@ class AbsTaskAggregate(AbsTask):
         """Combined the task results for using `task_results_to_scores`. Do not redefine this function if you want to implement a custom aggregation.
         Instead redefin `task_results_to_scores`.
         """
-        from mteb.load_results.task_results import (
-            TaskResult,  # to prevent circular imports, # TODO: can potentially likely be out of function in in v2.0.0
-        )
-
         eval_times = [tr.evaluation_time for tr in task_results if tr.evaluation_time]
         if len(eval_times) != len(task_results):
             logger.info(
@@ -123,11 +122,12 @@ class AbsTaskAggregate(AbsTask):
 
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         # TODO: If we refactor the runner to at least have a subfunction mteb.run_task(model, task) we could use that here
@@ -137,7 +137,7 @@ class AbsTaskAggregate(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: MTEBModels,
         data_split: DatasetDict | Dataset,
         encode_kwargs: dict[str, Any],
         **kwargs: Any,
@@ -156,9 +156,3 @@ class AbsTaskAggregate(AbsTask):
     @property
     def is_aggregate(self):  # Overrides the is_aggregate method on AbsTask
         return True
-
-    @property
-    def eval_splits(self) -> list[str]:
-        if self._eval_splits:
-            return self._eval_splits
-        return self.metadata.eval_splits

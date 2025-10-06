@@ -9,9 +9,8 @@ class PawsXPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PawsXPairClassification",
         dataset={
-            "path": "google-research-datasets/paws-x",
-            "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
-            "trust_remote_code": True,
+            "path": "mteb/PawsXPairClassification",
+            "revision": "558da352e7dba3ed3229fc4922aef2ebaff0a90b",
         },
         description="{PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
         reference="https://arxiv.org/abs/1908.11828",
@@ -47,19 +46,3 @@ class PawsXPairClassification(AbsTaskPairClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        _dataset = {}
-        for lang in self.hf_subsets:
-            _dataset[lang] = {}
-            for split in self.metadata.eval_splits:
-                hf_dataset = self.dataset[lang][split]
-
-                _dataset[lang][split] = [
-                    {
-                        "sentence1": hf_dataset["sentence1"],
-                        "sentence2": hf_dataset["sentence2"],
-                        "labels": hf_dataset["label"],
-                    }
-                ]
-        self.dataset = _dataset

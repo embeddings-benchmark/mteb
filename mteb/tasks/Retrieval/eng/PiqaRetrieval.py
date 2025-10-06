@@ -11,9 +11,8 @@ class PIQA(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on PIQA.",
         reference="https://arxiv.org/abs/1911.11641",
         dataset={
-            "path": "RAR-b/piqa",
-            "revision": "bb30be7e9184e6b6b1d99bbfe1bb90a3a81842e6",
-            "trust_remote_code": True,
+            "path": "mteb/PIQA",
+            "revision": "aee23bb32dafbaddddf16cd5033d912693984d9a",
         },
         type="Retrieval",
         category="t2t",

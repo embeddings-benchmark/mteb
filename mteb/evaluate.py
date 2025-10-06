@@ -11,8 +11,6 @@ from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
-from mteb.load_results.benchmark_results import ModelResult
-from mteb.load_results.task_results import TaskResult
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
@@ -23,6 +21,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.results import ModelResult, TaskResult
 from mteb.types import HFSubset, SplitName
 from mteb.types._metadata import ModelName, Revision
 
@@ -60,7 +59,7 @@ empty_model_meta = ModelMeta(
 )
 
 
-def create_empty_model_meta() -> ModelMeta:
+def _create_empty_model_meta() -> ModelMeta:
     meta = deepcopy(empty_model_meta)
     meta.revision = "no_revision_available"
     meta.name = "no_model_name_available"
@@ -85,7 +84,7 @@ def _sanitize_model(
     elif hasattr(model, "mteb_model_meta"):
         meta = model.mteb_model_meta  # type: ignore[attr-defined]
     else:
-        meta = create_empty_model_meta() if not isinstance(model, ModelMeta) else model
+        meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
 
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)

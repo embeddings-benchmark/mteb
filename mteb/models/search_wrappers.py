@@ -52,7 +52,7 @@ class SearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
         """
-        # to make more efficient corpus encoding, they will be encoded in search method
+        # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
 
     def search(
@@ -102,7 +102,7 @@ class SearchEncoderWrapper:
         query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
 
         if top_ranked is not None:
-            logger.info("Performing reranking on pre-ranked documents...")
+            logger.info("Reranking pre-ranked documents...")
             result_heaps = self._rerank_documents(
                 query_idx_to_id=query_idx_to_id,
                 query_embeddings=query_embeddings,

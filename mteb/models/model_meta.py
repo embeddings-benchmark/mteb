@@ -124,8 +124,8 @@ class ModelMeta(BaseModel):
     @classmethod
     def validate_similarity_fn_name(cls, value):
         """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for
-        pylate uses Literal['MaxSim']
+        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'],
+        and pylate uses Literal['MaxSim']
         """
         if type(value) is ScoringFunction or value is None:
             return value
@@ -216,7 +216,7 @@ class ModelMeta(BaseModel):
         intersection = training_datasets & benchmark_datasets
         return len(intersection) == 0
 
-    def get_training_datasets(self) -> dict[str, list[str]] | None:
+    def get_training_datasets(self) -> set[str] | None:
         """Returns all training datasets of the model including similar tasks."""
         import mteb
 
@@ -301,7 +301,7 @@ class ModelMeta(BaseModel):
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     """Recursively collect all similar tasks for a given dataset."""
-    from ..overview import SIMILAR_TASKS
+    from ..overview import _SIMILAR_TASKS
 
     if dataset in visited:
         return set()
@@ -310,13 +310,13 @@ def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     similar = set()
 
     # Check if dataset is a key in SIMILAR_TASKS
-    if dataset in SIMILAR_TASKS:
-        for similar_task in SIMILAR_TASKS[dataset]:
+    if dataset in _SIMILAR_TASKS:
+        for similar_task in _SIMILAR_TASKS[dataset]:
             similar.add(similar_task)
             similar.update(collect_similar_tasks(similar_task, visited))
 
     # Check if dataset appears as a value in SIMILAR_TASKS
-    for parent, children in SIMILAR_TASKS.items():
+    for parent, children in _SIMILAR_TASKS.items():
         if dataset in children:
             similar.add(parent)
             similar.update(collect_similar_tasks(parent, visited))

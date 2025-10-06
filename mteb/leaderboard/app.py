@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import itertools
 import json
 import logging
@@ -19,6 +20,7 @@ from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.leaderboard.benchmark_selector import (
     BENCHMARK_ENTRIES,
     DEFAULT_BENCHMARK_NAME,
+    RTEB_BENCHMARK_ENTRIES,
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
@@ -37,7 +39,7 @@ def load_results():
     if not results_cache_path.exists():
         all_results = mteb.load_results(
             only_main_score=True, require_model_meta=False, models=ALL_MODELS
-        ).filter_models()
+        )._filter_models()
         all_results.to_disk(results_cache_path)
         return all_results
     else:
@@ -190,7 +192,23 @@ def filter_models(
     return list(models_to_keep)
 
 
+def get_startup_arguments():
+    parser = argparse.ArgumentParser()
+
+    # Add a Boolean flag parameter
+    parser.add_argument(
+        "--show_rteb",
+        action="store_true",
+        help="If set, display RTEB results; otherwise show default results.",
+    )
+
+    return parser.parse_args()
+
+
 def get_leaderboard_app() -> gr.Blocks:
+    args = get_startup_arguments()
+    show_rteb = args.show_rteb
+
     logger.info("Loading all benchmark results")
     all_results = load_results()
 
@@ -207,7 +225,7 @@ def get_leaderboard_app() -> gr.Blocks:
     default_results = all_benchmark_results[default_benchmark.name]
     logger.info("Benchmark results loaded")
 
-    default_scores = default_results.get_scores(format="long")
+    default_scores = default_results._get_scores(format="long")
     all_models = list({entry["model_name"] for entry in default_scores})
     filtered_models = filter_models(
         all_models,
@@ -277,8 +295,12 @@ def get_leaderboard_app() -> gr.Blocks:
             visible=True,
             width="18%",
         ):
-            gr.Markdown("## Select Benchmark")
-            benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
+            if show_rteb:
+                benchmark_select, column = make_selector(
+                    BENCHMARK_ENTRIES + RTEB_BENCHMARK_ENTRIES
+                )
+            else:
+                benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
         gr.Markdown(
             """
         ## Embedding Leaderboard
@@ -399,7 +421,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 gr.Markdown(FAQ)
 
         with gr.Tab("Performance per Model Size") as plot_tab:
-            plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
+            plot = gr.Plot(performance_size_plot, inputs=[summary_table])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all tasks in the benchmark*"
             )
@@ -408,7 +430,7 @@ def get_leaderboard_app() -> gr.Blocks:
             )
 
         with gr.Tab("Performance per Task Type") as radar_plot_tab:
-            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
+            radar_plot = gr.Plot(radar_chart, inputs=[summary_table])
             gr.Markdown(
                 "*We only display TOP 5 models that have been run on all task types in the benchmark*"
             )
@@ -458,7 +480,7 @@ def get_leaderboard_app() -> gr.Blocks:
             )
             elapsed = time.time() - start_time
             benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results.get_scores(format="long")
+            scores = benchmark_results._get_scores(format="long")
             logger.debug(f"on_benchmark_select callback: {elapsed}s")
             return (
                 languages,
@@ -493,7 +515,7 @@ def get_leaderboard_app() -> gr.Blocks:
             if not len(languages):
                 return []
             benchmark_results = all_benchmark_results[benchmark_name]
-            scores = benchmark_results.get_scores(languages=languages, format="long")
+            scores = benchmark_results._get_scores(languages=languages, format="long")
             elapsed = time.time() - start_time
             logger.debug(f"update_scores callback: {elapsed}s")
             return scores

@@ -3,9 +3,10 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 from time import time
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
@@ -20,6 +21,7 @@ from mteb.create_dataloaders import (
 from mteb.models import (
     CrossEncoderProtocol,
     Encoder,
+    MTEBModels,
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
     SearchProtocol,
@@ -32,9 +34,9 @@ from mteb.types import (
     ScoresDict,
 )
 from mteb.types.statistics import (
-    DescriptiveStatistics,
     ImageStatistics,
     RelevantDocsStatistics,
+    SplitDescriptiveStatistics,
     TextStatistics,
     TopRankedStatistics,
 )
@@ -49,13 +51,13 @@ from .AbsTask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     RetrievalSplitData,
-    combine_queries_with_instructions_datasets,
+    _combine_queries_with_instructions_datasets,
 )
 
 logger = logging.getLogger(__name__)
 
 
-class RetrievalDescriptiveStatistics(DescriptiveStatistics):
+class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
@@ -133,7 +135,7 @@ class AbsTaskRetrieval(AbsTask):
 
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
-    k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000]
+    k_values: Sequence[int] = (1, 3, 5, 10, 20, 100, 1000)
     top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
     cross_encoder_top_k: int = 100
@@ -197,7 +199,7 @@ class AbsTaskRetrieval(AbsTask):
                     if hasattr(self, "instructions"):
                         instructions = self.instructions[subset][split]
                         self.dataset[subset][split]["queries"] = (
-                            combine_queries_with_instructions_datasets(
+                            _combine_queries_with_instructions_datasets(
                                 self.dataset[subset][split]["queries"],
                                 instructions,
                             )
@@ -242,7 +244,7 @@ class AbsTaskRetrieval(AbsTask):
                 if hasattr(self, "instructions"):
                     instructions = self.instructions[split]
                     self.dataset[subset][split]["queries"] = (
-                        combine_queries_with_instructions_datasets(
+                        _combine_queries_with_instructions_datasets(
                             self.dataset[subset][split]["queries"],
                             instructions,
                         )
@@ -295,7 +297,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def evaluate(
         self,
-        model: Encoder,
+        model: MTEBModels,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
@@ -333,7 +335,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: MTEBModels,
         data_split: RetrievalSplitData,
         encode_kwargs: dict[str, Any],
         hf_split: str,
@@ -387,7 +389,6 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever(
             search_model,
             encode_kwargs=encode_kwargs,
-            **kwargs,
         )
         end_time = time()
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
@@ -476,7 +477,9 @@ class AbsTaskRetrieval(AbsTask):
                     corpus = concatenate_datasets([corpus, split_data["corpus"]])
 
                 relevant_docs.update(
-                    process_relevant_docs(split_data["relevant_docs"], hf_subset, split)
+                    _process_relevant_docs(
+                        split_data["relevant_docs"], hf_subset, split
+                    )
                 )
 
                 if "top_ranked" in split_data and split_data["top_ranked"] is not None:
@@ -500,7 +503,12 @@ class AbsTaskRetrieval(AbsTask):
         num_documents = len(corpus)
         num_queries = len(queries)
 
-        queries_modalities, corpus_modalities = self.metadata.category.split("2")
+        if self.metadata.category is None:
+            queries_modalities = "t"
+            corpus_modalities = "t"
+        else:
+            queries_modalities, corpus_modalities = self.metadata.category.split("2")
+
         number_of_characters = 0
 
         documents_text_statistics = None
@@ -554,8 +562,8 @@ class AbsTaskRetrieval(AbsTask):
         self.convert_v1_dataset_format_to_v2()
 
         def _push_section(
-            data: dict[str, dict[Any, Any]],
-            subset_item: str,
+            data: dict[str, RetrievalSplitData],
+            subset_item: Literal["corpus", "queries", "relevant_docs", "top_ranked"],
             hf_subset_name: str,
             converter: Callable[[Any, Any], dict[str, Any]] | None = None,
         ) -> None:
@@ -572,7 +580,7 @@ class AbsTaskRetrieval(AbsTask):
                 # skip empty instructions and top ranked
                 if subset_item not in data[split] or data[split][subset_item] is None:
                     continue
-                if isinstance(sections[split], Dataset):
+                if isinstance(data[split][subset_item], Dataset):
                     sections[split] = data[split][subset_item]
                 elif converter is not None:
                     sections[split] = Dataset.from_list(
@@ -673,7 +681,7 @@ class AbsTaskRetrieval(AbsTask):
         return self
 
 
-def process_relevant_docs(
+def _process_relevant_docs(
     collection: dict[str, dict[str, float]],
     hf_subset: str,
     split: str,

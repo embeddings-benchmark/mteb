@@ -4,7 +4,6 @@ import pytest
 from pydantic import ValidationError
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.overview import get_tasks
 
@@ -378,167 +377,17 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         )
 
 
-def test_disallow_trust_remote_code_in_new_datasets():
-    # DON'T ADD NEW DATASETS TO THIS LIST
-    # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
-    exceptions = [
-        "BornholmBitextMining",
-        "BibleNLPBitextMining",
-        "DiaBlaBitextMining",
-        "FloresBitextMining",
-        "IN22ConvBitextMining",
-        "NTREXBitextMining",
-        "IN22GenBitextMining",
-        "IndicGenBenchFloresBitextMining",
-        "IWSLT2017BitextMining",
-        "SRNCorpusBitextMining",
-        "VieMedEVBitextMining",
-        "HotelReviewSentimentClassification",
-        "TweetEmotionClassification",
-        "DanishPoliticalCommentsClassification",
-        "TenKGnadClassification",
-        "ArxivClassification",
-        "FinancialPhrasebankClassification",
-        "FrenkEnClassification",
-        "PatentClassification",
-        "PoemSentimentClassification",
-        "TweetTopicSingleClassification",
-        "YahooAnswersTopicsClassification",
-        "FilipinoHateSpeechClassification",
-        "HebrewSentimentAnalysis",
-        "HindiDiscourseClassification",
-        "FrenkHrClassification",
-        "Itacola",
-        "JavaneseIMDBClassification",
-        "WRIMEClassification",
-        "KorHateClassification",
-        "KorSarcasmClassification",
-        "AfriSentiClassification",
-        "AmazonCounterfactualClassification",
-        "AmazonReviewsClassification",
-        "MTOPDomainClassification",
-        "MTOPIntentClassification",
-        "NaijaSenti",
-        "NordicLangClassification",
-        "NusaX-senti",
-        "SwissJudgementClassification",
-        "MyanmarNews",
-        "DutchBookReviewSentimentClassification",
-        "NorwegianParliamentClassification",
-        "PAC",
-        "HateSpeechPortugueseClassification",
-        "Moroco",
-        "RomanianReviewsSentiment",
-        "RomanianSentimentClassification",
-        "GeoreviewClassification",
-        "FrenkSlClassification",
-        "DalajClassification",
-        "SwedishSentimentClassification",
-        "WisesightSentimentClassification",
-        "UrduRomanSentimentClassification",
-        "VieStudentFeedbackClassification",
-        "IndicReviewsClusteringP2P",
-        "MasakhaNEWSClusteringP2P",
-        "MasakhaNEWSClusteringS2S",
-        "MLSUMClusteringP2P.v2",
-        "CodeSearchNetRetrieval",
-        "DanFEVER",
-        "GerDaLIR",
-        "GermanDPR",
-        "AlphaNLI",
-        "ARCChallenge",
-        "FaithDial",
-        "HagridRetrieval",
-        "HellaSwag",
-        "PIQA",
-        "Quail",
-        "RARbCode",
-        "RARbMath",
-        "SIQA",
-        "SpartQA",
-        "TempReasonL1",
-        "TempReasonL2Context",
-        "TempReasonL2Fact",
-        "TempReasonL2Pure",
-        "TempReasonL3Context",
-        "TempReasonL3Fact",
-        "TempReasonL3Pure",
-        "TopiOCQA",
-        "WinoGrande",
-        "AlloprofRetrieval",
-        "BSARDRetrieval",
-        "BSARDRetrieval.v2",
-        "JaGovFaqsRetrieval",
-        "JaQuADRetrieval",
-        "NLPJournalAbsIntroRetrieval",
-        "NLPJournalTitleAbsRetrieval",
-        "NLPJournalTitleIntroRetrieval",
-        "IndicQARetrieval",
-        "MintakaRetrieval",
-        "MIRACLRetrieval",
-        "MLQARetrieval",
-        "MultiLongDocRetrieval",
-        "NeuCLIR2022Retrieval",
-        "NeuCLIR2023Retrieval",
-        "XMarket",
-        "XPQARetrieval",
-        "ArguAna-PL",
-        "DBPedia-PL",
-        "FiQA-PL",
-        "HotpotQA-PL",
-        "MSMARCO-PL",
-        "NFCorpus-PL",
-        "NQ-PL",
-        "Quora-PL",
-        "SCIDOCS-PL",
-        "SciFact-PL",
-        "TRECCOVID-PL",
-        "SpanishPassageRetrievalS2P",
-        "SpanishPassageRetrievalS2S",
-        "SwednRetrieval",
-        "SweFaqRetrieval",
-        "KorHateSpeechMLClassification",
-        "BrazilianToxicTweetsClassification",
-        "CTKFactsNLI",
-        "LegalBenchPC",
-        "indonli",
-        "OpusparcusPC",
-        "PawsX",
-        "XStance",
-        "MIRACLReranking",
-        "FinParaSTS",
-        "JSICK",
-        "JSTS",
-        "RonSTS",
-        "STSES",
-        "AlloProfClusteringP2P.v2",
-        "AlloProfClusteringS2S.v2",
-        "LivedoorNewsClustering",
-        "MewsC16JaClustering",
-        "MLSUMClusteringS2S.v2",
-        "SwednClusteringP2P",
-        "SwednClusteringS2S",
-        "IndicXnliPairClassification",
-    ]
-
-    assert 137 == len(exceptions), (
-        "The number of exceptions has changed. Please do not add new datasets to this list."
+@pytest.mark.parametrize("task", get_tasks(exclude_superseded=True))
+def test_disallow_trust_remote_code_in_new_datasets(task: AbsTask):
+    assert task.metadata.dataset.get("trust_remote_code", False) is False, (
+        f"Dataset {task.metadata.name} should not trust remote code"
     )
 
-    exceptions = []
 
-    for task in get_tasks(exclude_superseded=False):
-        if task.metadata.dataset.get("trust_remote_code", False):
-            assert task.metadata.name not in exceptions, (
-                f"Dataset {task.metadata.name} should not trust remote code"
-            )
-
-
-@pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
+@pytest.mark.parametrize(
+    "task", get_tasks(exclude_superseded=False, exclude_aggregate=True)
+)
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
-    if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
-        return
-
     if "image" in task.metadata.modalities:
         return
 

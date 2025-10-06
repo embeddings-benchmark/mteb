@@ -3,15 +3,17 @@ from __future__ import annotations
 import itertools
 import logging
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import numpy as np
-from datasets import Dataset, DatasetDict
+from datasets import DatasetDict
 from sklearn.base import clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
+from typing_extensions import override
 
 from mteb.models import Encoder
 from mteb.types import ScoresDict
@@ -23,7 +25,7 @@ from .AbsTaskAnyClassification import AbsTaskAnyClassification
 logger = logging.getLogger(__name__)
 
 
-def evaluate_classifier(
+def _evaluate_classifier(
     embeddings_train: np.ndarray,
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
@@ -67,18 +69,24 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     input_column_name: str = "text"
     label_column_name: str = "label"
 
+    @override
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict | Dataset,
+        data_split: DatasetDict,
         *,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[self.train_split]
-        eval_split = dataset[hf_split]
+        if isinstance(data_split, DatasetDict):
+            data_split = data_split.select_columns(
+                [self.input_column_name, self.label_column_name]
+            )
+        train_split = data_split[self.train_split]
+        eval_split = data_split[hf_split]
 
         scores = []
         # Bootstrap sample indices from training set for each experiment
@@ -147,7 +155,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
-            scores_exp = evaluate_classifier(
+            scores_exp = _evaluate_classifier(
                 X_train, y_train, X_test, y_test, self.evaluator
             )
             scores.append(scores_exp)
@@ -167,6 +175,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         if idxs is None:
             idxs = np.arange(len(y))
         self.np_rng.shuffle(idxs)
+        idxs = idxs.tolist()
         label_counter = defaultdict(int)
         for i in idxs:
             if any((label_counter[label] < samples_per_label) for label in y[i]):

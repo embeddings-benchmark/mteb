@@ -98,7 +98,7 @@ class AudioInput(TypedDict):
     audio: list[list[bytes]]
 
 
-class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):
+class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput):  # type: ignore[misc]
     """The input to the encoder for multimodal data."""
 
     pass

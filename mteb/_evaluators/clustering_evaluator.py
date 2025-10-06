@@ -6,10 +6,9 @@ from typing import Any
 from datasets import Dataset
 from scipy.optimize import linear_sum_assignment
 from sklearn import cluster, metrics
-from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_image_dataloader
+from mteb.create_dataloaders import create_dataloader
 from mteb.models import Encoder
 
 from .evaluator import Evaluator
@@ -28,7 +27,7 @@ class ClusteringEvaluator(Evaluator):
         hf_subset: str,
         clustering_batch_size: int = 500,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.dataset = dataset
         self.clustering_batch_size = clustering_batch_size
@@ -38,29 +37,19 @@ class ClusteringEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def create_dataloader(self, batch_size: int) -> DataLoader:
-        if self.task_metadata.modalities == ["image"]:
-            return create_image_dataloader(
-                self.dataset,
-                image_column_name=self.input_column_name,
-                batch_size=batch_size,
-            )
-        elif self.task_metadata.modalities == ["text"]:
-            return DataLoader(self.dataset)
-        else:
-            raise ValueError(
-                f"Unsupported modality {self.task_metadata.modalities}. "
-                "Currently only 'image' modality is supported."
-            )
-
     def __call__(
         self,
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
         v_measure_only: bool = False,
-    ):
-        data_loader = self.create_dataloader(batch_size=encode_kwargs["batch_size"])
+    ) -> dict[str, float]:
+        data_loader = create_dataloader(
+            self.dataset,
+            self.task_metadata,
+            input_column=self.input_column_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
 
         embeddings = model.encode(
             data_loader,

@@ -8,8 +8,6 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SyntecRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLITS = ["test"]
-
     metadata = TaskMetadata(
         name="SyntecRetrieval",
         description="This dataset has been built from the Syntec Collective bargaining agreement.",
@@ -21,7 +19,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=_EVAL_SPLITS,
+        eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
         date=None,  # not specified

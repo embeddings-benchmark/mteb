@@ -18,17 +18,21 @@ from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from mteb.load_results.task_results import ScoresDict
 from mteb.models import MTEBModels
-from mteb.types import HFSubset
-from mteb.types.statistics import DescriptiveStatistics, ScoreStatistics, TextStatistics
+from mteb.models.models_protocols import Encoder
+from mteb.types import HFSubset, ScoresDict
+from mteb.types.statistics import (
+    ScoreStatistics,
+    SplitDescriptiveStatistics,
+    TextStatistics,
+)
 
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class RegressionDescriptiveStatistics(DescriptiveStatistics):
+class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for Regression
 
     Attributes:
@@ -71,16 +75,17 @@ class AbsTaskTextRegression(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: MTEBModels,
-        dataset: DatasetDict,
+        model: Encoder,
+        data_split: DatasetDict,
+        *,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[self.train_split]
-        eval_split = dataset[hf_split]
+        train_split = data_split[self.train_split]
+        eval_split = data_split[hf_split]
 
         scores_list, test_cache = [], None
         for i in range(self.n_experiments):
@@ -221,29 +226,35 @@ class AbsTaskTextRegression(AbsTask):
     ) -> RegressionDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            texts = self.dataset[hf_subset][split]["text"]
-            values = self.dataset[hf_subset][split]["value"]
-            if split != "train":
-                train_text = self.dataset[hf_subset]["train"]["text"]
+            texts = self.dataset[hf_subset][split][self.input_column_name]
+            values = self.dataset[hf_subset][split][self.label_column_name]
+            if split != self.train_split:
+                train_text = self.dataset[hf_subset][self.train_split][
+                    self.input_column_name
+                ]
         elif compute_overall:
             texts = []
             values = []
             for lang_subset in self.metadata.eval_langs:
-                texts.extend(self.dataset[lang_subset][split]["text"])
-                values.extend(self.dataset[lang_subset][split]["value"])
+                texts.extend(self.dataset[lang_subset][split][self.input_column_name])
+                values.extend(self.dataset[lang_subset][split][self.label_column_name])
                 if split != "train":
-                    train_text.extend(self.dataset[lang_subset]["train"]["text"])
+                    train_text.extend(
+                        self.dataset[lang_subset][self.train_split][
+                            self.input_column_name
+                        ]
+                    )
         else:
-            texts = self.dataset[split]["text"]
-            values = self.dataset[split]["value"]
+            texts = self.dataset[split][self.input_column_name]
+            values = self.dataset[split][self.label_column_name]
             if split != "train":
-                train_text = self.dataset["train"]["text"]
+                train_text = self.dataset[self.train_split][self.input_column_name]
 
         text_lengths = [len(t) for t in texts]
         total_text_length = sum(text_lengths)
 
         num_texts_in_train_val = (
-            len(set(texts) & set(train_text)) if split != "train" else None
+            len(set(texts) & set(train_text)) if split != self.train_split else None
         )
 
         return RegressionDescriptiveStatistics(

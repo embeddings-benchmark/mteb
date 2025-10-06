@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -13,9 +11,8 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         description="Test collection for passage retrieval from health-related Web resources in Spanish.",
         reference="https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/",
         dataset={
-            "path": "jinaai/spanish_passage_retrieval",
-            "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
-            "trust_remote_code": True,
+            "path": "mteb/SpanishPassageRetrievalS2S",
+            "revision": "6f276e4831066ee6d81d5f6d18b8949d17e65566",
         },
         type="Retrieval",
         category="t2t",
@@ -55,34 +52,3 @@ and Hiemstra, Djoerd},
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        query_rows = datasets.load_dataset(
-            name="queries",
-            split="test",
-            **self.metadata.dataset,
-        )
-        corpus_rows = datasets.load_dataset(
-            name="corpus.sentences",
-            split="test",
-            **self.metadata.dataset,
-        )
-        qrels_rows = datasets.load_dataset(
-            name="qrels.s2s",
-            split="test",
-            **self.metadata.dataset,
-        )
-
-        self.queries = {"test": {row["_id"]: row["text"] for row in query_rows}}
-        self.corpus = {"test": {row["_id"]: row for row in corpus_rows}}
-        self.relevant_docs = {
-            "test": {
-                row["_id"]: dict.fromkeys(row["text"].split(" "), 1)
-                for row in qrels_rows
-            }
-        }
-
-        self.data_loaded = True

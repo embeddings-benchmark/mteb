@@ -6,8 +6,7 @@ import pandas as pd
 import pytest
 
 import mteb
-from mteb.load_results import ModelResult
-from mteb.load_results.task_results import TaskResult
+from mteb.results import ModelResult, TaskResult
 
 # TODO: v2 ^ we probably want to refactor such that this import looks like
 # from mteb.results import ModelResult, TaskResults
@@ -76,7 +75,7 @@ def test_select_tasks(
 
 
 def test_to_dataframe(
-    model_result: ModelResult,  # noqa: F811
+    model_result: ModelResult,
 ) -> None:
     mr = model_result
     required_columns = [

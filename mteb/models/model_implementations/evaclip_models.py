@@ -1,24 +1,24 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from mteb._requires_package import requires_image_dependencies
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
 
 def evaclip_loader(model_name, **kwargs):
     try:
-        import os
         import sys
 
-        sys.path.insert(0, os.path.join(os.getcwd(), "EVA/EVA-CLIP/rei"))
+        sys.path.insert(0, str(Path.cwd() / "EVA" / "EVA-CLIP" / "rei"))
 
         from eva_clip import create_model_and_transforms, get_tokenizer
     except ImportError:

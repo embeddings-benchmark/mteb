@@ -2650,7 +2650,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 4,
+                "unique_images": 2,
             },
             "queries_text_statistics": {
                 "total_text_length": 120,
@@ -2666,7 +2666,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 4,
+                "unique_images": 2,
             },
             "relevant_docs_statistics": {
                 "num_relevant_docs": 4,
@@ -3014,7 +3014,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 10,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -3079,7 +3079,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 4,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -3144,7 +3144,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 20,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 1,
@@ -3165,7 +3165,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
-                        "unique_images": 10,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 1,
@@ -3186,7 +3186,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
-                        "unique_images": 10,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 1,
@@ -3309,7 +3309,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 4,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 2,
@@ -3335,7 +3335,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 10,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 2,
@@ -3405,7 +3405,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 8,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 2,
@@ -3431,7 +3431,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
-                        "unique_images": 4,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 2,
@@ -3457,7 +3457,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
-                        "unique_images": 4,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 2,
@@ -3485,7 +3485,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                 "min_image_height": 100,
                 "average_image_height": 100.0,
                 "max_image_height": 100,
-                "unique_images": 20,
+                "unique_images": 2,
             },
             "label_statistics": {
                 "min_labels_per_text": 2,
@@ -3511,7 +3511,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
-                        "unique_images": 10,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 2,
@@ -3537,7 +3537,7 @@ class MockMultilingualImageMultilabelClassificationTask(
                         "min_image_height": 100,
                         "average_image_height": 100.0,
                         "max_image_height": 100,
-                        "unique_images": 10,
+                        "unique_images": 2,
                     },
                     "label_statistics": {
                         "min_labels_per_text": 2,

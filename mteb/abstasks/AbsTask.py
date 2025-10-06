@@ -23,8 +23,8 @@ from mteb.models import (
     SearchProtocol,
 )
 from mteb.set_seed import set_seed
-from mteb.types import HFSubset, ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types import HFSubset, Modalities, ScoresDict
+from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -191,8 +191,9 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: MTEBModels,
+        model: Encoder,
         data_split: Dataset,
+        *,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
@@ -313,7 +314,7 @@ class AbsTask(ABC):
         self.dataset_transform()
         self.data_loaded = True
 
-    def fast_load(self, **kwargs: Any) -> None:
+    def fast_load(self) -> None:
         """**Deprecated**. Load all subsets at once, then group by language. Using fast loading has two requirements:
 
         - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair
@@ -336,7 +337,7 @@ class AbsTask(ABC):
 
     def calculate_descriptive_statistics(
         self, overwrite_results: bool = False
-    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+    ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset."""
         from mteb.abstasks import AbsTaskAnyClassification
 
@@ -347,7 +348,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        descriptive_stats = {}
+        descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
         if isinstance(self, AbsTaskAnyClassification):
@@ -387,7 +388,7 @@ class AbsTask(ABC):
 
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False
-    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+    ) -> dict[str, DescriptiveStatistics]:
         return self.calculate_descriptive_statistics(
             overwrite_results=overwrite_results
         )
@@ -395,7 +396,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> DescriptiveStatistics:
+    ) -> SplitDescriptiveStatistics:
         raise NotImplementedError
 
     @property
@@ -546,22 +547,16 @@ class AbsTask(ABC):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         raise NotImplementedError
 
-    def push_dataset_to_hub(self, repo_name: str, reupload: bool = False) -> None:
+    def push_dataset_to_hub(self, repo_name: str) -> None:
         """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
-            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Examples:
             >>> import mteb
             >>> task = mteb.get_task("Caltech101")
             >>> repo_name = f"myorg/{task.metadata.name}"
-            >>> task.load_data() # ensure that the dataset can load
-            >>>
-            >>> # Create the repo on HuggingFace Hub if it does not exist
-            >>> from huggingface_hub import create_repo
-            >>> create_repo(repo_name, repo_type="dataset")
             >>> # Push the dataset to the Hub
             >>> task.push_dataset_to_hub(repo_name)
         """
@@ -584,7 +579,7 @@ class AbsTask(ABC):
         return self.metadata.eval_splits
 
     @property
-    def modalities(self) -> list[str]:
+    def modalities(self) -> list[Modalities]:
         """Returns the modalities of the task."""
         return self.metadata.modalities
 

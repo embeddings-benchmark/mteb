@@ -10,9 +10,8 @@ class FrenkSlClassification(AbsTaskAnyClassification):
         name="FrenkSlClassification",
         description="Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub: English subset, Croatian subset.",
         dataset={
-            "path": "classla/FRENK-hate-sl",
-            "revision": "37c8b42c63d4eb75f549679158a85eb5bd984caa",
-            "trust_remote_code": True,
+            "path": "mteb/FrenkSlClassification",
+            "revision": "65ee787b7cc409d51ec6ee4d003596b66cdb70f3",
         },
         reference="https://arxiv.org/pdf/1906.02045",
         type="Classification",
@@ -40,11 +39,6 @@ class FrenkSlClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
 
 
 class FrenkSlClassificationV2(AbsTaskAnyClassification):

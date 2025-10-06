@@ -19,17 +19,17 @@ from .Image import (
 
 __all__ = [
     "AbsTask",
-    "AbsTaskBitextMining",
     "AbsTaskAnyClassification",
     "AbsTaskAnyClustering",
+    "AbsTaskAnySTS",
+    "AbsTaskAnyZeroShotClassification",
+    "AbsTaskBitextMining",
     "AbsTaskClusteringFast",
+    "AbsTaskImageTextPairClassification",
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
-    "AbsTaskRetrieval",
     "AbsTaskReranking",
-    "AbsTaskAnySTS",
+    "AbsTaskRetrieval",
     "AbsTaskSummarization",
-    "AbsTaskImageTextPairClassification",
-    "AbsTaskAnyZeroShotClassification",
     "AbsTaskTextRegression",
 ]

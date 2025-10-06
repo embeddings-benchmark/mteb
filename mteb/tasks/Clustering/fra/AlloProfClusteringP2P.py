@@ -1,12 +1,8 @@
 from __future__ import annotations
 
-import datasets
-import numpy as np
-
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
-    check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -19,10 +15,8 @@ class AlloProfClusteringP2P(AbsTaskAnyClustering):
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
         dataset={
-            "path": "lyon-nlp/alloprof",
-            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
-            "name": "documents",
-            "trust_remote_code": True,
+            "path": "mteb/AlloProfClusteringP2P",
+            "revision": "e602956286061cc4e6a0c8055fa7a51ff7e939b7",
         },
         type="Clustering",
         category="t2c",
@@ -51,23 +45,6 @@ class AlloProfClusteringP2P(AbsTaskAnyClustering):
 """,
     )
 
-    def create_description(self, example):
-        example["text"] = example["title"] + " " + example["text"]
-        return example
-
-    def dataset_transform(self):
-        """Convert to standard format"""
-        self.dataset = self.dataset.remove_columns("uuid")
-        self.dataset = self.dataset.map(self.create_description)
-        texts = self.dataset["documents"]["text"]
-        topics = self.dataset["documents"]["topic"]
-        new_format = {
-            "sentences": [split.tolist() for split in np.array_split(texts, 10)],
-            "labels": [split.tolist() for split in np.array_split(topics, 10)],
-        }
-        self.dataset["test"] = datasets.Dataset.from_dict(new_format)
-        self.dataset.pop("documents")
-
 
 class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
     max_document_to_embed = 2556
@@ -78,10 +55,8 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
         dataset={
-            "path": "lyon-nlp/alloprof",
-            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
-            "name": "documents",
-            "trust_remote_code": True,
+            "path": "mteb/AlloProfClusteringP2P.v2",
+            "revision": "7b04358904493dd215592234f583bdde16ead610",
         },
         type="Clustering",
         category="t2c",
@@ -111,26 +86,3 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
 """,
         adapted_from=["AlloProfClusteringP2P"],
     )
-
-    def create_description(self, example):
-        example["sentences"] = example["title"] + " " + example["text"]
-        return example
-
-    def dataset_transform(self):
-        self.dataset["test"] = (
-            self.dataset["documents"]
-            .map(self.create_description)
-            .rename_columns({"topic": "labels"})
-            .select_columns(["sentences", "labels"])
-        )
-        self.dataset.pop("documents")
-        unique_labels = list(set(self.dataset["test"]["labels"]))
-        unique_labels.sort()
-        self.dataset["test"] = self.dataset["test"].cast(
-            datasets.Features(
-                sentences=datasets.Value("string"),
-                labels=datasets.ClassLabel(names=unique_labels),
-            )
-        )
-        for split in self.metadata.eval_splits:
-            check_label_distribution(self.dataset[split])

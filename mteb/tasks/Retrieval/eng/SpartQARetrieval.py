@@ -11,9 +11,8 @@ class SpartQA(AbsTaskRetrieval):
         description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SpartQA.",
         reference="https://github.com/HLR/SpartQA_generation",
         dataset={
-            "path": "RAR-b/spartqa",
-            "revision": "9ab3ca3ccdd0d43f9cd6d346a363935d127f4f45",
-            "trust_remote_code": True,
+            "path": "mteb/SpartQA",
+            "revision": "1c858df377e57725a014a1b7321ebd79d62016b6",
         },
         type="Retrieval",
         category="t2t",

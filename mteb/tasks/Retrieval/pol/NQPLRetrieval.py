@@ -47,9 +47,8 @@ class NQPLHardNegatives(AbsTaskRetrieval):
         description="Natural Questions: A Benchmark for Question Answering Research. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://ai.google.com/research/NaturalQuestions/",
         dataset={
-            "path": "mteb/NQ_PL_test_top_250_only_w_correct-v2",
-            "revision": "9a2878a70ea545a8f4df0cdfa1adea27f4f64390",
-            "trust_remote_code": True,
+            "path": "mteb/NQ-PLHardNegatives",
+            "revision": "cd0cab9433aa7f4e939883d822fb93e362fd493a",
         },
         type="Retrieval",
         category="t2t",

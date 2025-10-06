@@ -8,8 +8,6 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class FQuADRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLITS = ["test", "validation"]
-
     metadata = TaskMetadata(
         name="FQuADRetrieval",
         description="This dataset has been built from the French SQuad dataset.",
@@ -21,7 +19,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=_EVAL_SPLITS,
+        eval_splits=["test", "validation"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
         date=("2019-11-01", "2020-05-01"),

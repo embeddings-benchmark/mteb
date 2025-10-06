@@ -865,7 +865,6 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
             "path": "davidstap/biblenlp-corpus-mmteb",
             "revision": "264a18480c529d9e922483839b4b9758e690b762",
             "split": f"train[:{_N}]",
-            "trust_remote_code": True,
         },
         description="Partial Bible translations in 829 languages, aligned by verse.",
         reference="https://arxiv.org/abs/2304.09919",

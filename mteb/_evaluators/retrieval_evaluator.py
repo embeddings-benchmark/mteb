@@ -34,7 +34,7 @@ class RetrievalEvaluator(Evaluator):
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.corpus = corpus
         self.queries = queries
@@ -46,11 +46,10 @@ class RetrievalEvaluator(Evaluator):
         self.qid = qid
         self.top_k = top_k
 
-    def __call__(
+    def __call__(  # type: ignore[override]
         self,
         search_model: SearchProtocol,
         encode_kwargs: dict[str, Any],
-        **kwargs: Any,
     ) -> RetrievalOutputType:
         search_model.index(
             corpus=self.corpus,

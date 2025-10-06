@@ -9,9 +9,9 @@ import torch
 import mteb
 from mteb.cache import ResultCache
 from mteb.evaluate import OverwriteStrategy
+from mteb.results.generate_model_card import generate_model_card
 
 from ._display_tasks import _display_benchmarks, _display_tasks
-from .generate_readme import generate_readme
 
 logger = logging.getLogger(__name__)
 
@@ -226,10 +226,16 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
 
 
 def create_meta(args: argparse.Namespace) -> None:
-    results_folder = Path(args.results_folder)
+    model_name = args.model_name
+    tasks_names = args.tasks
+    benchmarks = args.benchmarks
+    results_folder = Path(args.results_folder) if args.results_folder else None
     output_path = Path(args.output_path)
     overwrite = args.overwrite
-    from_existing = Path(args.from_existing) if args.from_existing else None
+    from_existing = args.from_existing if args.from_existing else None
+    if from_existing is not None and from_existing.endswith(".md"):
+        from_existing = Path(from_existing)
+
     if output_path.exists() and overwrite:
         logger.warning("Output path already exists, overwriting.")
     elif output_path.exists():
@@ -237,21 +243,53 @@ def create_meta(args: argparse.Namespace) -> None:
             "Output path already exists, use --overwrite to overwrite."
         )
 
-    frontmatter = generate_readme(results_folder, from_existing)
+    tasks = []
+    if tasks_names is not None:
+        tasks = mteb.get_tasks(tasks_names)
+    if benchmarks is not None:
+        benchmarks = mteb.get_benchmarks(benchmarks)
+        for benchmark in benchmarks:
+            tasks.extend(benchmark.tasks)
 
-    with output_path.open("w") as f:
-        f.write(frontmatter)
+    generate_model_card(
+        model_name,
+        tasks if len(tasks) > 0 else None,
+        existing_model_card_id_or_path=from_existing,
+        results_cache=ResultCache(results_folder),
+        output_path=output_path,
+    )
 
 
 def _add_create_meta_parser(subparsers) -> None:
-    parser = subparsers.add_parser(
-        "create-meta", help="Create model metadata from a folder of results"
-    )
+    parser = subparsers.add_parser("create-model-results", help="Create model results")
 
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        help="Name of the model",
+    )
+    parser.add_argument(
+        "--tasks",
+        type=str,
+        nargs="+",
+        help="Name of the tasks to use. By default, all tasks results will be used.",
+        required=False,
+        default=None,
+    )
+    parser.add_argument(
+        "--benchmarks",
+        type=str,
+        nargs="+",
+        help="Name of the benchmarks to use",
+        required=False,
+        default=None,
+    )
     parser.add_argument(
         "--results-folder",
         type=str,
         help="Folder containing the results of a model run",
+        required=False,
+        default=None,
     )
     parser.add_argument(
         "--output-path",
@@ -269,7 +307,8 @@ def _add_create_meta_parser(subparsers) -> None:
         "--from-existing",
         type=str,
         required=False,
-        help="Merge results with existing README.md",
+        help="Merge results with existing README.md. Can be path to file or Huggingface model_id",
+        default=None,
     )
 
     parser.set_defaults(func=create_meta)

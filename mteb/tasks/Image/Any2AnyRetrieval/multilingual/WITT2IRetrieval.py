@@ -20,7 +20,7 @@ _LANGUAGES = {
 }
 
 
-def _load_wit_data(path: str, langs: list, splits: str, revision: str = None):
+def _load_wit_data(path: str, langs: list, splits: str, revision: str | None = None):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -32,7 +32,6 @@ def _load_wit_data(path: str, langs: list, splits: str, revision: str = None):
             path,
             split=lang,
             revision=revision,
-            # trust_remote_code=True,
         )
         lang_corpus = lang_data.map(
             lambda x: {

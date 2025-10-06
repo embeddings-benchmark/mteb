@@ -3,11 +3,11 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_text_queries_dataloader
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import SearchProtocol
-from mteb.requires_package import requires_package
 from mteb.types import (
     CorpusDatasetType,
     InstructionDatasetType,

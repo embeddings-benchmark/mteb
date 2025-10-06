@@ -9,9 +9,8 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Itacola",
         dataset={
-            "path": "gsarti/itacola",
-            "revision": "f8f98e5c4d3059cf1a00c8eb3d70aa271423f636",
-            "trust_remote_code": True,
+            "path": "mteb/Itacola",
+            "revision": "da15a902074d9cd7777a376b222840dce8917029",
         },
         description="An Italian Corpus of Linguistic Acceptability taken from linguistic literature with a binary annotation made by the original authors themselves.",
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
@@ -46,13 +45,6 @@ Tonelli, Sara},
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = (
-            self.dataset.rename_columns({"acceptability": "label"})
-            .rename_columns({"sentence": "text"})
-            .remove_columns(["unique_id", "source"])
-        )
 
 
 class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskAnyClassification):

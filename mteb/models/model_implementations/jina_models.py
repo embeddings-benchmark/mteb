@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, ClassVar
 
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
+from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -152,7 +152,7 @@ JinaV4_TRAINING_DATA = {
 class JinaWrapper(SentenceTransformerEncoderWrapper):
     """following the hf model card documentation."""
 
-    jina_task_to_prompt = {
+    jina_task_to_prompt: ClassVar[dict[str, str]] = {
         "retrieval.query": "Represent the query for retrieving evidence documents: ",
         "retrieval.passage": "Represent the document for retrieval: ",
     }
@@ -223,7 +223,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
 class JinaV4Wrapper(AbsEncoder):
     """following the hf model card documentation."""
 
-    SUPPORTED_VECTOR_TYPES = {"single_vector", "multi_vector"}
+    SUPPORTED_VECTOR_TYPES: ClassVar[set[str]] = {"single_vector", "multi_vector"}
 
     def __init__(
         self,

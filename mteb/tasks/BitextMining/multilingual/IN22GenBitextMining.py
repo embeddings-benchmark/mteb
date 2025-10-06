@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
+from collections import defaultdict
 
 import datasets
+from datasets import Dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -53,13 +54,11 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class IN22GenBitextMining(AbsTaskBitextMining):
-    parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22GenBitextMining",
         dataset={
-            "path": "mteb/IN22-Gen",
-            "revision": "ec381535fe3ddf699297a023bcecaa548096ed68",
-            "trust_remote_code": True,
+            "path": "mteb/IN22GenBitextMining",
+            "revision": "aed6ff7eed647cd6eead02f70efa23a4e67329dc",
         },
         description="IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Gen",
@@ -97,9 +96,23 @@ class IN22GenBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
+    def load_data(self) -> None:
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
+
+        dataset = datasets.load_dataset(
+            **self.metadata.dataset,
+            split=self.metadata.eval_splits[0],
+        )
+        self.dataset = defaultdict(dict)
+        for lang in self.metadata.eval_langs:
+            first_lang, second_lang = lang.split("-")
+            ds = Dataset.from_dict(
+                {
+                    "sentence1": dataset[first_lang],
+                    "sentence2": dataset[second_lang],
+                }
+            )
+            self.dataset[lang][self.metadata.eval_splits[0]] = ds
+
         self.data_loaded = True

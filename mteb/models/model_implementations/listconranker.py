@@ -13,7 +13,7 @@ from .rerankers_custom import RerankerWrapper
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str | None = None, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str, **kwargs) -> None:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         super().__init__(model_name_or_path, **kwargs)
@@ -52,7 +52,7 @@ class ListConRanker(RerankerWrapper):
         final_scores = []
         query = queries[0]
         tmp_passages = []
-        if "traditional_inference" in kwargs and kwargs["traditional_inference"]:
+        if kwargs.get("traditional_inference"):
             for q, p in zip(queries, passages):
                 if query == q:
                     tmp_passages.append(p)

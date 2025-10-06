@@ -37,7 +37,8 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [MTEB(deu, v1)](https://arxiv.org/html/2401.02709v1) | German | 19 | Classification: 6, Clustering: 4, PairClassification: 2, Reranking: 1, Retrieval: 4, STS: 2 | [Encyclopaedic, Legal, News, Non-fiction, Reviews, Spoken, Web, Written] | deu |
 | MTEB(eng, v1) | English Legacy | 56 | Classification: 12, Retrieval: 15, Clustering: 11, Reranking: 4, STS: 10, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng,vie |
 | MTEB(eng, v2) | English | 41 | Retrieval: 10, Clustering: 8, Reranking: 2, STS: 9, Classification: 8, PairClassification: 3, Summarization: 1 | [Academic, Blog, Encyclopaedic, Financial, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | eng |
-| [MTEB(fas, v1)](https://arxiv.org/abs/2502.11571) | Farsi | 60 | Classification: 18, Clustering: 5, PairClassification: 8, Reranking: 2, Retrieval: 21, STS: 3, BitextMining: 3 | [Academic, Blog, Encyclopaedic, Medical, News, Religious, Reviews, Social, Spoken, Web, Written] | fas |
+| [MTEB(fas, v1)](https://arxiv.org/abs/2502.11571) | Farsi Legacy | 60 | Classification: 18, Clustering: 5, PairClassification: 8, Reranking: 2, Retrieval: 21, STS: 3, BitextMining: 3 | [Academic, Blog, Encyclopaedic, Medical, News, Religious, Reviews, Social, Spoken, Web, Written] | fas |
+| [MTEB(fas, v2)](https://arxiv.org/abs/2502.11571) | Farsi | 52 | Classification: 16, Clustering: 5, PairClassification: 7, Reranking: 2, Retrieval: 17, STS: 2, BitextMining: 3 | [Academic, Blog, Encyclopaedic, Medical, News, Religious, Reviews, Social, Spoken, Web, Written] | fas |
 | [MTEB(fra, v1)](https://arxiv.org/abs/2405.20468) | French | 25 | Classification: 6, Clustering: 7, PairClassification: 1, Reranking: 2, Retrieval: 5, STS: 3, Summarization: 1 | [Academic, Encyclopaedic, Legal, News, Non-fiction, Reviews, Social, Spoken, Web, Written] | eng,fra |
 | [MTEB(jpn, v1)](https://github.com/sbintuitions/JMTEB) | Japanese | 16 | Clustering: 2, Classification: 4, STS: 2, PairClassification: 1, Retrieval: 6, Reranking: 1 | [Academic, Encyclopaedic, News, Non-fiction, Reviews, Spoken, Web, Written] | jpn |
 | MTEB(kor, v1) | Korean | 6 | Classification: 1, Reranking: 1, Retrieval: 2, STS: 2 | [Encyclopaedic, News, Reviews, Spoken, Web, Written] | kor |
@@ -46,6 +47,14 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [NanoBEIR](https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6) | NanoBEIR | 13 | Retrieval: 13 | [Academic, Encyclopaedic, Medical, News, Non-fiction, Social, Web, Written] | eng |
 | [R2MED](https://r2med.github.io/) | Reasoning-driven medical retrieval | 8 | Retrieval: 8 | [Medical] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
+| RTEB(Code, beta) | RTEB Code | 8 | Retrieval: 8 | [Programming, Written] | eng,go,javascript,jpn,python,sql |
+| RTEB(Health, beta) | RTEB Healthcare | 4 | Retrieval: 4 | [Academic, Medical, Written] | deu,eng,fra,spa |
+| RTEB(Law, beta) | RTEB Legal | 7 | Retrieval: 7 | [Legal, Written] | deu,eng,fra,jpn |
+| RTEB(beta) | RTEB Retrieval Embedding Benchmark | 28 | Retrieval: 28 | [Academic, Encyclopaedic, Financial, Legal, Medical, Non-fiction, Programming, Written] | deu,eng,fra,go,javascript,jpn,python,spa,sql |
+| RTEB(deu, beta) | RTEB German | 4 | Retrieval: 4 | [Legal, Medical, Non-fiction, Written] | deu |
+| RTEB(eng, beta) | RTEB English | 20 | Retrieval: 20 | [Academic, Financial, Legal, Medical, Non-fiction, Programming, Written] | eng,fra,go,javascript,python,spa,sql |
+| RTEB(fin, beta) | RTEB Finance | 7 | Retrieval: 7 | [Financial, Non-fiction, Written] | eng |
+| RTEB(fr, beta) | RTEB French | 3 | Retrieval: 3 | [Academic, Encyclopaedic, Legal, Medical, Written] | eng,fra |
 | [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
 | [VN-MTEB (vie, v1)](https://arxiv.org/abs/2507.21500) | Vietnamese | 50 | Retrieval: 24, Classification: 12, PairClassification: 3, Clustering: 5, Reranking: 3, STS: 3 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | vie |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
