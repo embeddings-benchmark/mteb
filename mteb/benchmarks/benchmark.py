@@ -10,6 +10,7 @@ from mteb.benchmarks._create_table import (
     _create_per_task_table_from_benchmark_results,
     _create_summary_table_from_benchmark_results,
     _create_summary_table_mean_public_private,
+    _create_summary_table_mean_subset,
 )
 from mteb.load_results import load_results
 from mteb.results import BenchmarkResults
@@ -93,3 +94,11 @@ class RtebBenchmark(Benchmark):
     ) -> pd.DataFrame:
         """Create summary table. Called by the leaderboard app."""
         return _create_summary_table_mean_public_private(benchmark_results)
+
+
+class HUMEBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_subset(benchmark_results)

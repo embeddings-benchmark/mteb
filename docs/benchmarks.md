@@ -56,6 +56,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | RTEB(eng, beta) | RTEB English | 20 | Retrieval: 20 | [Academic, Financial, Legal, Medical, Non-fiction, Programming, Written] | eng,fra,go,javascript,python,spa,sql |
 | RTEB(fin, beta) | RTEB Finance | 7 | Retrieval: 7 | [Financial, Non-fiction, Written] | eng |
 | RTEB(fra, beta) | RTEB French | 3 | Retrieval: 3 | [Academic, Encyclopaedic, Legal, Medical, Written] | eng,fra |
+| RTEB(jpn, beta) | RTEB Japanese | 2 | Retrieval: 2 | [Legal, Programming, Written] | jpn |
 | [RuSciBench](https://link.springer.com/article/10.1134/S1064562424602191) | RuSciBench | 9 | BitextMining: 1, Classification: 4, Retrieval: 2, Regression: 2 | [Academic, Non-fiction, Written] | eng,rus |
 | [VN-MTEB (vie, v1)](https://arxiv.org/abs/2507.21500) | Vietnamese | 50 | Retrieval: 24, Classification: 12, PairClassification: 3, Clustering: 5, Reranking: 3, STS: 3 | [Academic, Blog, Encyclopaedic, Financial, Government, Medical, News, Non-fiction, Programming, Reviews, Social, Spoken, Web, Written] | vie |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |

@@ -54,6 +54,7 @@ from mteb.benchmarks.benchmarks.rteb_benchmarks import (
     RTEB_FRENCH,
     RTEB_GERMAN,
     RTEB_HEALTHCARE,
+    RTEB_JAPANESE,
     RTEB_LEGAL,
     RTEB_MAIN,
 )
@@ -70,6 +71,7 @@ __all__ = [
     "ENCODECHKA",
     "FA_MTEB",
     "FA_MTEB_2",
+    "HUME",
     "HUME",
     "JINA_VDR",
     "LONG_EMBED",
@@ -99,6 +101,7 @@ __all__ = [
     "RTEB_FRENCH",
     "RTEB_GERMAN",
     "RTEB_HEALTHCARE",
+    "RTEB_JAPANESE",
     "RTEB_LEGAL",
     "RTEB_MAIN",
     "RU_SCI_BENCH",

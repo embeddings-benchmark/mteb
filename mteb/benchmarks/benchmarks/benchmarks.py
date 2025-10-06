@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
@@ -2358,7 +2358,7 @@ JINA_VDR = Benchmark(
 )
 
 
-HUME = Benchmark(
+HUME = HUMEBenchmark(
     name="HUME(v1)",
     display_name="Human Benchmark",
     # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
@@ -2381,7 +2381,13 @@ HUME = Benchmark(
             "HUMESTSBenchmark",
             "HUMESTS22",
         ],
-        languages=["eng-Latn", "ara-Arab", "rus-Cyrl", "dan-Latn", "nob-Latn"],
+        languages=[
+            "eng-Latn",
+            "ara-Arab",
+            "rus-Cyrl",
+            "dan-Latn",
+            "nob-Latn",
+        ],
     ),
     description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
     reference="Coming soon (in review)",
