@@ -235,3 +235,6 @@ conflicts = [
     [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
 ]
+
+[tool.uv.extra-build-dependencies]
+flash-attn = [{ requirement = "torch", match-runtime = true }]
