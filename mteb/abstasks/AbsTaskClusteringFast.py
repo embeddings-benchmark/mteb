@@ -154,7 +154,7 @@ class AbsTaskClusteringFast(AbsTask):
             raise Exception(
                 "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
             )
-    
+
         pbar = tqdm(
             desc="Running Clustering",
             total=4,
