@@ -501,6 +501,7 @@ def _create_summary_table_mean_subset(
 
     return joint_table
 
+
 def _create_summary_table_mean_task_type(
     benchmark_results: BenchmarkResults,
 ) -> pd.DataFrame:
