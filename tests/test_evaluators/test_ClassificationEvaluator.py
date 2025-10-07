@@ -40,19 +40,11 @@ def test_output_structure(model, mock_task):
             max_iter=100,
         ),
     )
-    scores, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
+    y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
 
     # Check basic structure
-    assert isinstance(scores, dict)
+    assert isinstance(y_pred, np.ndarray)
     assert isinstance(test_cache, np.ndarray)
-
-    # Check required metrics
-    assert "accuracy" in scores
-    assert "f1" in scores
-    assert "f1_weighted" in scores
-
-    assert "ap" in scores
-    assert "ap_weighted" in scores
 
 
 def test_expected_scores(model, mock_task):
@@ -73,12 +65,10 @@ def test_expected_scores(model, mock_task):
             max_iter=100,
         ),
     )
-    scores, _ = evaluator(model, encode_kwargs={"batch_size": 32})
+    y_pred, _ = evaluator(model, encode_kwargs={"batch_size": 32})
 
     # Check that we get reasonable scores (MockClassificationTask has deterministic data)
-    assert 0.0 <= scores["accuracy"] <= 1.0
-    assert 0.0 <= scores["f1"] <= 1.0
-    assert 0.0 <= scores["f1_weighted"] <= 1.0
+    assert y_pred.tolist() == [1, 0]
 
 
 def test_cache_usage_binary():
@@ -134,16 +124,10 @@ def test_cache_usage_binary():
             max_iter=100,
         ),
     )
-    scores_with_cache, test_cache_after_cache_usage = evaluator_with_cache(
+    y_pred, test_cache_after_cache_usage = evaluator_with_cache(
         model, encode_kwargs={"batch_size": 32}, test_cache=test_cache_initial
     )
 
     # Verify cache is preserved
     assert np.array_equal(test_cache_initial, test_cache_after_cache_usage)
-
-    # Verify that scores are returned (structure check only)
-    assert "accuracy" in scores_with_cache
-    assert "f1" in scores_with_cache
-    assert "f1_weighted" in scores_with_cache
-    assert "ap" in scores_with_cache
-    assert "ap_weighted" in scores_with_cache
+    assert y_pred.tolist() == [1, 0]

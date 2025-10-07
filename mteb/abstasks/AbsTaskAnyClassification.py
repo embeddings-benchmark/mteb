@@ -235,7 +235,9 @@ class AbsTaskAnyClassification(AbsTask):
             )
 
         avg_scores: dict[str, Any] = {
-            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+            # ap will be none for non binary classification tasks
+            k: np.mean([s[k] for s in scores if s[k] is not None])
+            for k in scores[0].keys()
         }
         return FullClassificationMetrics(
             scores_per_experiment=scores,
