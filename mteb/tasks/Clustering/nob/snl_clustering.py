@@ -30,7 +30,7 @@ class SNLClustering(AbsTaskAnyClustering):
             "path": "adrlau/navjordj-SNL_summarization_copy",  # TODO: replace with mteb/SNLRetrieval after #2820 is resolved.
             "revision": "22c474c88fb4678052f9099bb917ad8f9e155f9f",
         },
-        description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
+        description="Webscraped articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
         reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
         type="Clustering",
         category="t2c",
