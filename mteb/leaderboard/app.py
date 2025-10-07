@@ -792,7 +792,7 @@ def get_leaderboard_app() -> gr.Blocks:
 
             # Apply task filtering if needed
             if filtered_task_names != benchmark_tasks:
-                filtered_benchmark_results = filtered_benchmark_results.filter_tasks(
+                filtered_benchmark_results = filtered_benchmark_results._filter_tasks(
                     task_names=list(filtered_task_names)
                 )
 
