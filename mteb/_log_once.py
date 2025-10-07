@@ -5,6 +5,7 @@ from typing import ClassVar
 
 class LogOnce:
     """Logger wrapper that ensures each unique message is logged only once per logger instance."""
+
     _seen: ClassVar[dict] = {}  # Class-level cache shared across instances
 
     def __init__(self, logger):

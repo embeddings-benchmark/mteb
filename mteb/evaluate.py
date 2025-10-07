@@ -206,7 +206,7 @@ def evaluate(
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
         prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
-        show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the 
+        show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
 
     Returns:
@@ -326,7 +326,9 @@ def evaluate(
         logger.info("✓ Model loaded")
 
     if encode_kwargs is None:
-        encode_kwargs = {"show_progress_bar": False} if show_progress_bar is False else {}
+        encode_kwargs = (
+            {"show_progress_bar": False} if show_progress_bar is False else {}
+        )
     if "batch_size" not in encode_kwargs:
         encode_kwargs["batch_size"] = 32
         logger.info(
