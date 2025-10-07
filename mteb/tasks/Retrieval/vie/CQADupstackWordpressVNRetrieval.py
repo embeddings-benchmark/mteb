@@ -18,7 +18,7 @@ class CQADupstackWordpressVN(AbsTaskRetrieval):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

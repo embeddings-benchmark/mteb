@@ -15,7 +15,7 @@ class HumanEvalRetrieval(AbsTaskRetrieval):
             "revision": "ed1f48aca747f10bac146795328e2f03326e7625",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "python-Code"],

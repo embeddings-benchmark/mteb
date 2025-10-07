@@ -18,7 +18,7 @@ class StackOverflowDupQuestionsVN(AbsTaskReranking):
             "revision": "3ceb17db245f52beaf27a3720aa71e1cc5f06faf",
         },
         type="Reranking",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="map",

@@ -58,7 +58,7 @@ results = mteb.evaluate(model, tasks=tasks)
 You can also run it using the CLI:
 
 ```bash
-mteb run \ 
+mteb run \
     -m sentence-transformers/all-MiniLM-L6-v2 \
     -t Banking77Classification \
     --output-folder results

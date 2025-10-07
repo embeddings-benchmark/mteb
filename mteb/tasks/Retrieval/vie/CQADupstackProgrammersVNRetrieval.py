@@ -18,7 +18,7 @@ class CQADupstackProgrammersRetrievalVN(AbsTaskRetrieval):
             "revision": "1a628c4e61f71ffdb7707d6d4024d25cfe68215a",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",
