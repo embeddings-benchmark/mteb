@@ -111,8 +111,7 @@ class ClassificationEvaluator(Evaluator):
 
         pbar_desc = ""
         if pbar is not None:
-            # remove ": " but only in the end
-            pbar_desc = pbar.desc[:-2] if pbar.desc.endswith(": ") else pbar.desc
+            pbar_desc = pbar.desc.removesuffix(": ")
 
         ntqdm = nested_tqdm(pbar) if pbar is not None else nullcontext()
 

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 
 @contextmanager
