@@ -15,7 +15,7 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
             "revision": "fda6fad068f2ed814d99f29dc95dbb28ac586943",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

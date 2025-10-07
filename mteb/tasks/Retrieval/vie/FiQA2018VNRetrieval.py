@@ -18,7 +18,7 @@ class FiQA2018VN(AbsTaskRetrieval):
             "revision": "6c3cdf6f102151dbbbbc1d2cf999b305eba44dae",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

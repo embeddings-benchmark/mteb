@@ -18,7 +18,7 @@ class Touche2020VN(AbsTaskRetrieval):
             "revision": "cd4389b182aec622c8121ee8db988359197159c1",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

@@ -18,7 +18,7 @@ class ClimateFEVERVN(AbsTaskRetrieval):
             "revision": "42328bf787e17b1ad1a88be4f5e87ea9fb668511",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

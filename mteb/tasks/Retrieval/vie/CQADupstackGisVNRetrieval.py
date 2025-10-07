@@ -18,7 +18,7 @@ class CQADupstackGisVN(AbsTaskRetrieval):
             "revision": "755156d548a8288efdb29b80bad302750ab33977",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

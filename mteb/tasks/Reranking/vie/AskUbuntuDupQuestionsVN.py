@@ -18,7 +18,7 @@ class AskUbuntuDupQuestionsVN(AbsTaskReranking):
             "revision": "5cfaa5c07252d30c37302bfc056f0d85884971a1",
         },
         type="Reranking",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="map",

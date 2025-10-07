@@ -15,7 +15,7 @@ class ChatDoctorRetrieval(AbsTaskRetrieval):
             "revision": "50c2986fedffa33b38afd5c1752026f8e9e5ed1d",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

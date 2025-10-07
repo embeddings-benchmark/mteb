@@ -15,7 +15,7 @@ class DS1000Retrieval(AbsTaskRetrieval):
             "revision": "25cd4dc8172e799235d83c66439b6b7b8e6583ec",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "python-Code"],
