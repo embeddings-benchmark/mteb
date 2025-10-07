@@ -60,6 +60,8 @@
   
     
     
+      
+    
     
     
     
@@ -113,7 +115,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -218,13 +256,13 @@
     
     
       <li class="md-tabs__item">
-        <a href="../api/" class="md-tabs__link">
+        <a href="../overview/" class="md-tabs__link">
           
   
   
     
   
-  API
+  Overview
 
         </a>
       </li>
@@ -240,13 +278,13 @@
     
     
       <li class="md-tabs__item">
-        <a href="../overview/" class="md-tabs__link">
+        <a href="../api/" class="md-tabs__link">
           
   
   
     
   
-  Overview
+  API
 
         </a>
       </li>
@@ -470,6 +508,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#multimodal-input-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multimodal Input format
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#descriptive-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descriptive Statistics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Saving Predictions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#upgrading-from-v1" class="md-nav__link">
     <span class="md-ellipsis">
       Upgrading from v1
@@ -480,9 +545,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#replacing-mteb" class="md-nav__link">
+  <a href="#replacing-mtebmteb" class="md-nav__link">
     <span class="md-ellipsis">
-      Replacing MTEB
+      Replacing mteb.MTEB
     </span>
   </a>
   
@@ -492,6 +557,15 @@
   <a href="#replacing-mtebload_results" class="md-nav__link">
     <span class="md-ellipsis">
       Replacing mteb.load_results()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#converting-model-to-new-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Converting model to new format
     </span>
   </a>
   
@@ -791,8 +865,6 @@
       
         
       
-        
-      
     
     
     
@@ -810,12 +882,12 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../api/" class="md-nav__link ">
+            <a href="../overview/" class="md-nav__link ">
               
   
   
   <span class="md-ellipsis">
-    API
+    Overview
     
   </span>
   
@@ -831,169 +903,6 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            API
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/benchmark/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Benchmark
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/task/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Task
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/model/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Model
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Additional Types
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../overview/" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    Overview
-    
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Overview
           </label>
@@ -1025,10 +934,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
         
           
-          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
             
   
   
@@ -1041,8 +950,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
             Benchmarks
           </label>
@@ -1103,10 +1012,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
             
   
   
@@ -1119,8 +1028,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
             <span class="md-nav__icon md-icon"></span>
             Tasks
           </label>
@@ -1192,10 +1101,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_1" >
         
           
-          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
             
   
   
@@ -1208,8 +1117,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_3_1">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
             <span class="md-nav__icon md-icon"></span>
             Available Tasks
           </label>
@@ -1761,10 +1670,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
             
   
   
@@ -1777,8 +1686,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
             <span class="md-nav__icon md-icon"></span>
             Models
           </label>
@@ -1812,10 +1721,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_1" >
         
           
-          <label class="md-nav__link" for="__nav_3_4_1" id="__nav_3_4_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_1" id="__nav_2_4_1_label" tabindex="0">
             
   
   
@@ -1828,8 +1737,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4_1">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_1">
             <span class="md-nav__icon md-icon"></span>
             Available Models
           </label>
@@ -1933,6 +1842,196 @@
   
   
   
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../api/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Benchmark
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/task/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Task
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Model
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Results
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="https://huggingface.co/spaces/mteb/leaderboard" class="md-nav__link">
         
@@ -2003,6 +2102,33 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#multimodal-input-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multimodal Input format
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#descriptive-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Descriptive Statistics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-predictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Saving Predictions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#upgrading-from-v1" class="md-nav__link">
     <span class="md-ellipsis">
       Upgrading from v1
@@ -2013,9 +2139,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#replacing-mteb" class="md-nav__link">
+  <a href="#replacing-mtebmteb" class="md-nav__link">
     <span class="md-ellipsis">
-      Replacing MTEB
+      Replacing mteb.MTEB
     </span>
   </a>
   
@@ -2025,6 +2151,15 @@
   <a href="#replacing-mtebload_results" class="md-nav__link">
     <span class="md-ellipsis">
       Replacing mteb.load_results()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#converting-model-to-new-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Converting model to new format
     </span>
   </a>
   
@@ -2068,17 +2203,20 @@
 
 
 <h1 id="new-in-v20">New in v2.0 🎉<a class="headerlink" href="#new-in-v20" title="Permanent link">&para;</a></h1>
-<!-- TODO: not finished -->
 <p>This section goes through new features added in v2. Below we give an overview of changes following by detailed examples.</p>
 <p><strong>Overview of changes:</strong></p>
 <ul>
 <li>Easier evaluation using <code>mteb.evaluate</code></li>
 <li>Easier caching and results loading using the <code>ResultCache</code></li>
+<li>Support for multimodal evaluation</li>
 <li>New documentation</li>
-<li>Standardization of file names and typing across the library </li>
+<li>Descriptive statistics for all tasks</li>
+<li>Better support for error analysis, allowing you to save predictions </li>
+<li>Standardization of file names and typing across the library</li>
+<li>And much more</li>
 </ul>
 <p>What are the reason for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there is multiple import areas to expand in, e.g. <a href="https://arxiv.org/abs/2504.10471">adding new benchamrk for image embeddings</a>, support new model types in general making the library more accecible. 
-We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See <a href="#upgrading-from-v1">upgrading from v1</a> for specific deprecations and the reasoning behind them.</p>
+We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See <a href="#upgrading-from-v1">upgrading from v1</a> for specific deprecations and how to fix them.</p>
 <h3 id="easier-evalation">Easier evalation<a class="headerlink" href="#easier-evalation" title="Permanent link">&para;</a></h3>
 <p>Evaluations is not a lot easier using <code>mteb.evaluate</code>, </p>
 <div class="highlight"><pre><span></span><code><span class="n">results</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tasks</span><span class="p">)</span>
@@ -2111,11 +2249,54 @@ We have already been able to add many new feature in v2.0, but hope that this ne
 <span class="n">results</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">load_results</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sentence-transformers/all-MiniLM-L6-v2&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">tasks</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;STS12&quot;</span><span class="p">])</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
 </code></pre></div>
-<!-- MORE NEW FEATURES -->
+<h3 id="multimodal-input-format">Multimodal Input format<a class="headerlink" href="#multimodal-input-format" title="Permanent link">&para;</a></h3>
+<p>Models in mteb who implements the <a href="../api/model/#mteb.models.encoder"><code>Encoder</code></a> protocol now supports multimodal input With the model protocol roughly looking like so:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Encoder</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span> <span class="c1"># simplified</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The interface for an encoder in MTEB.&quot;&quot;&quot;</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">[</span><span class="n">BatchedInput</span><span class="p">],</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+<p>Not only does this allow more efficient loading using the torch dataloader, but it also allows keys for multiple modalities:</p>
+<div class="highlight"><pre><span></span><code><span class="n">batch_input</span><span class="p">:</span> <span class="n">BatchedInput</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">images</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">images</span><span class="p">]],</span>
+    <span class="n">audio</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">audio</span><span class="p">]],</span> <span class="c1"># upcoming</span>
+    <span class="c1"># + optional fields such as document title</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Where <code>text</code> is a batch of texts and <code>list[images]</code> is a batch for that texts. This e.g. allows markdown documents with multiple figures like so: </p>
+<blockquote>
+<p>As you see in the following figure <a href="image_1">figure 1</a> there is a correlation between A and B. This is similarly seen in figure 2 <a href="image_2">figure 2</a></p>
+</blockquote>
+<p>However this also allows no text, multi-image inputs (e.g. for PDFs). Overall this greatly expands the possible tasks that can now be evaluated in MTEB.
+To see how to convert a legacy model see the <a href="#converting-model-to-new-format">converting model</a> section.</p>
+<h3 id="descriptive-statistics">Descriptive Statistics<a class="headerlink" href="#descriptive-statistics" title="Permanent link">&para;</a></h3>
+<p>Descriptive statistics isn't a new thing in MTEB, however, now it is there for every task, to extract it simply run:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">mteb</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_task</span><span class="p">(</span><span class="s2">&quot;MIRACLRetrievalHardNegatives&quot;</span><span class="p">)</span>
+
+<span class="n">task</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">descriptive_stats</span>
+</code></pre></div>
+<p>And you will get a highly detailed set of descriptive statistics covering everything from number of samples query lengths, duplicates, etc.. These not only make it easier for you to examine tasks but it also make it easier for us to make quality checks on future tasks.</p>
+<h3 id="saving-predictions">Saving Predictions<a class="headerlink" href="#saving-predictions" title="Permanent link">&para;</a></h3>
+<p>To support error analysis it is now possible to save the model prediction on a given task. You can do this simply as follows:
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">mteb</span>
+
+<span class="c1"># using a small model and small dataset</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;sentence-transformers/static-similarity-mrl-multilingual-v1&quot;</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">get_task</span><span class="p">(</span><span class="s2">&quot;NanoArguAnaRetrieval&quot;</span><span class="p">)</span>
+
+<span class="n">prediction_folder</span> <span class="o">=</span> <span class="s2">&quot;model_predictions&quot;</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">mteb</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+    <span class="n">encoder</span><span class="p">,</span>
+    <span class="n">task</span><span class="p">,</span>
+    <span class="n">prediction_folder</span><span class="o">=</span><span class="n">prediction_folder</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></p>
 <h2 id="upgrading-from-v1">Upgrading from v1<a class="headerlink" href="#upgrading-from-v1" title="Permanent link">&para;</a></h2>
 <p>This section gives an introduction of how to upgrade from v1 to v2.</p>
-<h3 id="replacing-mteb">Replacing <code>MTEB</code><a class="headerlink" href="#replacing-mteb" title="Permanent link">&para;</a></h3>
+<h3 id="replacing-mtebmteb">Replacing <code>mteb.MTEB</code><a class="headerlink" href="#replacing-mtebmteb" title="Permanent link">&para;</a></h3>
 <p>The previous approach to evaluate would require you to first create <code>MTEB</code> object and then call <code>.run</code> on that object. 
 The <code>MTEB</code> object was initially a sort of catch all object intended for both filtering tasks, selecting tasks, evaluating and few other cases.</p>
 <p>This overload of functionality made it hard to change. We have already for a while made it easier to filter and select tasks using <code>get_tasks</code> and
@@ -2149,6 +2330,33 @@ The <code>MTEB</code> object was initially a sort of catch all object intended f
 
 <span class="n">results</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">load_results</span><span class="p">(</span><span class="n">models</span><span class="o">=</span><span class="n">model_names</span><span class="p">,</span> <span class="n">tasks</span><span class="o">=</span><span class="n">tasks</span><span class="p">)</span>
 </code></pre></div>
+<h3 id="converting-model-to-new-format">Converting model to new format<a class="headerlink" href="#converting-model-to-new-format" title="Permanent link">&para;</a></h3>
+<p>As mentioned in <a href="#multimodal-input-format">the above section</a> MTEB v2, now supports multimodal input as the default. 
+Luckily for you all models implemented in MTEB already supports this new format! However, if you have a local model that you would like to evaluate
+Here is a quick conversion guide. If you previous implementation looks like so:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># v1.X.X</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyDummyEncoder</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sentences</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">embeddings</span>
+</code></pre></div>
+<p>You can simply unpack it to its text input like so:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># v2.0.0</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyDummyEncoder</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">DataLoader</span><span class="p">[</span><span class="n">BatchedInput</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="c1"># unpack to v1 format:</span>
+        <span class="n">sentences</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span> <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">inputs</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]]</span>
+        <span class="c1"># do as you did beforehand:</span>
+        <span class="n">embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sentences</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">embeddings</span>
+</code></pre></div>
+<p>Of course it will be more efficient if work directly with the dataloader.</p>
 
 
 

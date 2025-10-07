@@ -12,7 +12,7 @@
         <link rel="prev" href="../task/">
       
       
-        <link rel="next" href="../types/">
+        <link rel="next" href="../results/">
       
       
       <link rel="icon" href="../../images/logos/mteb_logo/dots-icon.png">
@@ -59,6 +59,8 @@
   
   
     
+    
+      
     
     
     
@@ -113,7 +115,43 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="light-blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -212,6 +250,28 @@
   
   
   
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Overview
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -225,28 +285,6 @@
     
   
   API
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../overview/" class="md-tabs__link">
-          
-  
-  
-    
-  
-  Overview
 
         </a>
       </li>
@@ -666,335 +704,6 @@
       
   
   
-    
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
-        
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
-              
-  
-  
-  <span class="md-ellipsis">
-    API
-    
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_2">
-            <span class="md-nav__icon md-icon"></span>
-            API
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../benchmark/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Benchmark
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../task/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Task
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Model
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    Model
-    
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#utilities" class="md-nav__link">
-    <span class="md-ellipsis">
-      Utilities
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Utilities">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mteb.get_model_metas" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_model_metas
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mteb.get_model_meta" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_model_meta
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mteb.get_model" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_model
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#metadata" class="md-nav__link">
-    <span class="md-ellipsis">
-      Metadata
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Metadata">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mteb.models.model_meta.ModelMeta" class="md-nav__link">
-    <span class="md-ellipsis">
-      ModelMeta
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#model-protocols" class="md-nav__link">
-    <span class="md-ellipsis">
-      Model Protocols
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Model Protocols">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#mteb.models.Encoder" class="md-nav__link">
-    <span class="md-ellipsis">
-      Encoder
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mteb.models.SearchProtocol" class="md-nav__link">
-    <span class="md-ellipsis">
-      SearchProtocol
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mteb.models.CrossEncoderProtocol" class="md-nav__link">
-    <span class="md-ellipsis">
-      CrossEncoderProtocol
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#mteb.models.MTEBModels" class="md-nav__link">
-    <span class="md-ellipsis">
-      MTEBModels
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../types/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Additional Types
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
   
   
     
@@ -1023,7 +732,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1040,14 +749,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Overview
           </label>
@@ -1079,10 +788,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
         
           
-          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
             
   
   
@@ -1095,8 +804,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
             <span class="md-nav__icon md-icon"></span>
             Benchmarks
           </label>
@@ -1157,10 +866,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
             
   
   
@@ -1173,8 +882,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
             <span class="md-nav__icon md-icon"></span>
             Tasks
           </label>
@@ -1246,10 +955,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_1" >
         
           
-          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
             
   
   
@@ -1262,8 +971,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_3_1">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
             <span class="md-nav__icon md-icon"></span>
             Available Tasks
           </label>
@@ -1815,10 +1524,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
             
   
   
@@ -1831,8 +1540,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
             <span class="md-nav__icon md-icon"></span>
             Models
           </label>
@@ -1866,10 +1575,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_1" >
         
           
-          <label class="md-nav__link" for="__nav_3_4_1" id="__nav_3_4_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2_4_1" id="__nav_2_4_1_label" tabindex="0">
             
   
   
@@ -1882,8 +1591,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4_1">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_1">
             <span class="md-nav__icon md-icon"></span>
             Available Models
           </label>
@@ -1969,6 +1678,360 @@
           </ul>
         </nav>
       
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Benchmark
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../task/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Task
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Model
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Model
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#utilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Utilities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Utilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mteb.get_model_metas" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_model_metas
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mteb.get_model_meta" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_model_meta
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mteb.get_model" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_model
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metadata
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mteb.models.model_meta.ModelMeta" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModelMeta
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-protocols" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Protocols
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Protocols">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mteb.models.Encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Encoder
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mteb.models.SearchProtocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      SearchProtocol
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mteb.models.CrossEncoderProtocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      CrossEncoderProtocol
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mteb.models.MTEBModels" class="md-nav__link">
+    <span class="md-ellipsis">
+      MTEBModels
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Results
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Additional Types
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -2179,8 +2242,6 @@
 
 
 <h1 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h1>
-<!-- TODO: Encoder or model? Encoder is consistent with the code, but might be less used WDYT? We also use ModelMeta ... -->
-
 <p>A model in <code>mteb</code> covers two concepts: metadata and implementation.
 - Metadata contains information about the model such as maximum input
 length, valid frameworks, license, and degree of openness.
@@ -2336,9 +2397,7 @@ If (None, None), this filter is ignored.</p>
 
             <details class="quote">
               <summary>Source code in <code>mteb/models/get_model_meta.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
 <span class="normal">29</span>
@@ -2391,7 +2450,9 @@ If (None, None), this filter is ignored.</p>
 <span class="normal">76</span>
 <span class="normal">77</span>
 <span class="normal">78</span>
-<span class="normal">79</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model_metas</span><span class="p">(</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model_metas</span><span class="p">(</span>
     <span class="n">model_names</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">languages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">open_weights</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2555,11 +2616,7 @@ If (None, None), this filter is ignored.</p>
 
             <details class="quote">
               <summary>Source code in <code>mteb/models/get_model_meta.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">122</span>
 <span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span>
@@ -2602,7 +2659,11 @@ If (None, None), this filter is ignored.</p>
 <span class="normal">162</span>
 <span class="normal">163</span>
 <span class="normal">164</span>
-<span class="normal">165</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model_meta</span><span class="p">(</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model_meta</span><span class="p">(</span>
     <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">fetch_from_hf</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelMeta</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to fetch a model metadata object by name.</span>
@@ -2628,7 +2689,7 @@ If (None, None), this filter is ignored.</p>
             <span class="s2">&quot;Model not found in model registry. Attempting to extract metadata by loading the model (</span><span class="si">{model_name}</span><span class="s2">) using HuggingFace.&quot;</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">meta</span> <span class="o">=</span> <span class="n">model_meta_from_hf_hub</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">_model_meta_from_hf_hub</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
             <span class="n">meta</span><span class="o">.</span><span class="n">revision</span> <span class="o">=</span> <span class="n">revision</span>
             <span class="k">return</span> <span class="n">meta</span>
         <span class="k">except</span> <span class="n">RepositoryNotFoundError</span><span class="p">:</span>
@@ -2766,9 +2827,7 @@ If (None, None), this filter is ignored.</p>
 
             <details class="quote">
               <summary>Source code in <code>mteb/models/get_model_meta.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 84</span>
 <span class="normal"> 85</span>
 <span class="normal"> 86</span>
 <span class="normal"> 87</span>
@@ -2799,7 +2858,11 @@ If (None, None), this filter is ignored.</p>
 <span class="normal">112</span>
 <span class="normal">113</span>
 <span class="normal">114</span>
-<span class="normal">115</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p">(</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p">(</span>
     <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MTEBModels</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to fetch and load model object by name.</span>
@@ -2815,6 +2878,8 @@ If (None, None), this filter is ignored.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        A model object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sentence_transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CrossEncoder</span><span class="p">,</span> <span class="n">SentenceTransformer</span>
+
     <span class="n">meta</span> <span class="o">=</span> <span class="n">get_model_meta</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">revision</span><span class="p">)</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -2981,7 +3046,7 @@ models).</p>
           <tr class="doc-section-item">
             <td><code><span title="mteb.models.model_meta.ModelMeta.license">license</span></code></td>
             <td>
-                  <code><a class="autorefs autorefs-internal" title="&lt;code class=&quot;highlight language-python&quot;&gt;&lt;span class=&quot;n&quot;&gt;Licenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;not specified&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;mit&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-2.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-sa-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-sa-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-sa-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-sa-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-nd-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nd-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;openrail&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;openrail++&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;odc-by&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;afl-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;apache-2.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nd-2.1-jp&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc0-1.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bsd-3-clause&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;gpl-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lgpl&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lgpl-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cdla-sharing-1.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;mpl-2.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;msr-la-nc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;multiple&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;
+                  <code><a class="autorefs autorefs-internal" title="&lt;code class=&quot;highlight language-python&quot;&gt;&lt;span class=&quot;n&quot;&gt;Licenses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;not specified&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;mit&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-2.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-sa-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-sa-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-sa-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-sa-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nc-nd-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nd-4.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;openrail&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;openrail++&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;odc-by&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;afl-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;apache-2.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc-by-nd-2.1-jp&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cc0-1.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;bsd-3-clause&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;gpl-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lgpl&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lgpl-3.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cdla-sharing-1.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;mpl-2.0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;msr-la-nc&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;multiple&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;gemma&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;
 
   &lt;span class=&quot;doc doc-labels&quot;&gt;
       &lt;small class=&quot;doc doc-label doc-label-module-attribute&quot;&gt;&lt;code&gt;module-attribute&lt;/code&gt;&lt;/small&gt;
@@ -3487,8 +3552,8 @@ a benchmark as well as mark dataset contaminations.</p>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_similarity_fn_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the similarity function name to the corresponding enum value.</span>
-<span class="sd">        sentence_transformers uses Literal[&#39;cosine&#39;, &#39;dot&#39;, &#39;euclidean&#39;, &#39;manhattan&#39;] for</span>
-<span class="sd">        pylate uses Literal[&#39;MaxSim&#39;]</span>
+<span class="sd">        sentence_transformers uses Literal[&#39;cosine&#39;, &#39;dot&#39;, &#39;euclidean&#39;, &#39;manhattan&#39;],</span>
+<span class="sd">        and pylate uses Literal[&#39;MaxSim&#39;]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ScoringFunction</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">value</span>
@@ -3527,7 +3592,7 @@ a benchmark as well as mark dataset contaminations.</p>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">check_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;bm25s&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bm25s&quot;</span><span class="p">,</span> <span class="s2">&quot;Human&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">v</span>
         <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -3579,7 +3644,7 @@ a benchmark as well as mark dataset contaminations.</p>
         <span class="n">intersection</span> <span class="o">=</span> <span class="n">training_datasets</span> <span class="o">&amp;</span> <span class="n">benchmark_datasets</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">intersection</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_training_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_training_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns all training datasets of the model including similar tasks.&quot;&quot;&quot;</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">mteb</span>
 
@@ -3595,7 +3660,7 @@ a benchmark as well as mark dataset contaminations.</p>
                 <span class="n">adapted_training_datasets</span> <span class="o">=</span> <span class="n">adapted_from_model</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">adapted_training_datasets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">training_datasets</span> <span class="o">|=</span> <span class="n">adapted_training_datasets</span>
-            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get source model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> in MTEB&quot;</span><span class="p">)</span>
 
         <span class="n">return_dataset</span> <span class="o">=</span> <span class="n">training_datasets</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -3813,7 +3878,7 @@ a benchmark as well as mark dataset contaminations.</p>
 <span class="normal">242</span>
 <span class="normal">243</span>
 <span class="normal">244</span>
-<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_training_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_training_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns all training datasets of the model including similar tasks.&quot;&quot;&quot;</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">mteb</span>
 
@@ -3829,7 +3894,7 @@ a benchmark as well as mark dataset contaminations.</p>
             <span class="n">adapted_training_datasets</span> <span class="o">=</span> <span class="n">adapted_from_model</span><span class="o">.</span><span class="n">get_training_datasets</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">adapted_training_datasets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">training_datasets</span> <span class="o">|=</span> <span class="n">adapted_training_datasets</span>
-        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not get source model: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2"> in MTEB&quot;</span><span class="p">)</span>
 
     <span class="n">return_dataset</span> <span class="o">=</span> <span class="n">training_datasets</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -3929,8 +3994,8 @@ Returns None if no training data is specified on the model.</p>
     <div class="doc doc-contents ">
 
         <p>Converts the similarity function name to the corresponding enum value.
-sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for
-pylate uses Literal['MaxSim']</p>
+sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'],
+and pylate uses Literal['MaxSim']</p>
 
 
             <details class="quote">
@@ -3955,8 +4020,8 @@ pylate uses Literal['MaxSim']</p>
 <span class="nd">@classmethod</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">validate_similarity_fn_name</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts the similarity function name to the corresponding enum value.</span>
-<span class="sd">    sentence_transformers uses Literal[&#39;cosine&#39;, &#39;dot&#39;, &#39;euclidean&#39;, &#39;manhattan&#39;] for</span>
-<span class="sd">    pylate uses Literal[&#39;MaxSim&#39;]</span>
+<span class="sd">    sentence_transformers uses Literal[&#39;cosine&#39;, &#39;dot&#39;, &#39;euclidean&#39;, &#39;manhattan&#39;],</span>
+<span class="sd">    and pylate uses Literal[&#39;MaxSim&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ScoringFunction</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
@@ -6091,13 +6156,13 @@ E.g. Current language</p>
         
         
           
-          <a href="../types/" class="md-footer__link md-footer__link--next" aria-label="Next: Additional Types">
+          <a href="../results/" class="md-footer__link md-footer__link--next" aria-label="Next: Results">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Additional Types
+                Results
               </div>
             </div>
             <div class="md-footer__button md-icon">
