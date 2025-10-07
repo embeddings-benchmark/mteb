@@ -3602,12 +3602,22 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "num_images": 2,
-            "num_texts": 2,
-            "num_unique_texts": 2,
-            "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
+            "text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
         }
     }
 
@@ -3645,26 +3655,63 @@ class MockMultilingualImageTextPairClassificationTask(
 ):
     expected_stats = {
         "test": {
+            "num_samples": 4,
+            "text_statistics": {
+                "total_text_length": 104,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "num_images": 2,
-                    "num_texts": 2,
-                    "num_unique_texts": 2,
-                    "min_text_length": 23,
-                    "average_text_length": 26.0,
-                    "max_text_length": 29,
+                    "text_statistics": {
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
+                        "unique_texts": 2,
+                    },
+                    "image_statistics": {
+                        "min_image_width": 100,
+                        "average_image_width": 100.0,
+                        "max_image_width": 100,
+                        "min_image_height": 100,
+                        "average_image_height": 100.0,
+                        "max_image_height": 100,
+                        "unique_images": 2,
+                    },
                 },
                 "fra": {
                     "num_samples": 2,
-                    "num_images": 2,
-                    "num_texts": 2,
-                    "num_unique_texts": 2,
-                    "min_text_length": 23,
-                    "average_text_length": 26.0,
-                    "max_text_length": 29,
+                    "text_statistics": {
+                        "total_text_length": 52,
+                        "min_text_length": 23,
+                        "average_text_length": 26.0,
+                        "max_text_length": 29,
+                        "unique_texts": 2,
+                    },
+                    "image_statistics": {
+                        "min_image_width": 100,
+                        "average_image_width": 100.0,
+                        "max_image_width": 100,
+                        "min_image_height": 100,
+                        "average_image_height": 100.0,
+                        "max_image_height": 100,
+                        "unique_images": 2,
+                    },
                 },
-            }
+            },
         }
     }
 
