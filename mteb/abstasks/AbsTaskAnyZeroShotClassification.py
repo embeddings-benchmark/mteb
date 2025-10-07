@@ -54,21 +54,9 @@ class ZeroShotClassificationMetrics(TypedDict):
 
     Attributes:
         accuracy: Accuracy of the model.
-        f1_macro: Macro F1 score of the model.
-        f1_micro: Micro F1 score of the model.
-        precision_macro: Macro precision of the model.
-        precision_micro: Micro precision of the model.
-        recall_macro: Macro recall of the model.
-        recall_micro: Micro recall of the model.
     """
 
     accuracy: float
-    f1_macro: float
-    f1_micro: float
-    precision_macro: float
-    precision_micro: float
-    recall_macro: float
-    recall_micro: float
 
 
 class AbsTaskAnyZeroShotClassification(AbsTask):
@@ -167,20 +155,6 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
     ) -> ZeroShotClassificationMetrics:
         return ZeroShotClassificationMetrics(
             accuracy=metrics.accuracy_score(labels, predictions),
-            f1_macro=metrics.f1_score(labels, predictions, average="macro"),
-            f1_micro=metrics.f1_score(labels, predictions, average="micro"),
-            precision_macro=metrics.precision_score(
-                labels, predictions, average="macro", zero_division=0
-            ),
-            precision_micro=metrics.precision_score(
-                labels, predictions, average="micro", zero_division=0
-            ),
-            recall_macro=metrics.recall_score(
-                labels, predictions, average="macro", zero_division=0
-            ),
-            recall_micro=metrics.recall_score(
-                labels, predictions, average="micro", zero_division=0
-            ),
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
