@@ -18,7 +18,7 @@ class MSMARCOVN(AbsTaskRetrieval):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://microsoft.github.io/msmarco/",
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["dev"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

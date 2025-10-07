@@ -18,7 +18,7 @@ class ArguAnaVN(AbsTaskRetrieval):
             "revision": "2a5133a05d7430e6f353497b1624a6e73148105b",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

@@ -18,7 +18,7 @@ class CQADupstackAndroidVN(AbsTaskRetrieval):
             "revision": "4a022e7213ccc05ee970a176abd0293b3a0a2da0",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

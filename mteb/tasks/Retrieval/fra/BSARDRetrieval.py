@@ -59,7 +59,7 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
             "revision": "e4b6c883c5bb602e1ac46d2939484ff40b1545f4",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],

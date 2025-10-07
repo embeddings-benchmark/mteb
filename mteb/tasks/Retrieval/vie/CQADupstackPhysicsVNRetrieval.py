@@ -18,7 +18,7 @@ class CQADupstackPhysicsVN(AbsTaskRetrieval):
             "revision": "8b6b68b59933cc72985f674f76c80a678c27d6be",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

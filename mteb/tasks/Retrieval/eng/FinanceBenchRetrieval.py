@@ -15,7 +15,7 @@ class FinanceBenchRetrieval(AbsTaskRetrieval):
             "revision": "e68478442112cae36b70a216f52cc2777acf0a7e",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

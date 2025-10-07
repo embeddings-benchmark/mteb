@@ -15,7 +15,7 @@ class FreshStackRetrieval(AbsTaskRetrieval):
             "revision": "7a20df1abe4dafc46f93f9a7965bf9c6968bdf04",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "python-Code", "javascript-Code", "go-Code"],

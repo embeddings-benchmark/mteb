@@ -15,7 +15,7 @@ class WikiSQLRetrieval(AbsTaskRetrieval):
             "revision": "4e099ab42dffd49d72c1472f451371e53343e3d7",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "sql-Code"],

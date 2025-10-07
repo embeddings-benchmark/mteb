@@ -18,7 +18,7 @@ class CQADupstackMathematicaVN(AbsTaskRetrieval):
             "revision": "d0cc9b60ba66faa3fb21cb9a54ef969af548b312",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",
