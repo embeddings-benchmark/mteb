@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import tqdm
 from datasets import Dataset
+from tqdm.auto import tqdm
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import Encoder
@@ -70,12 +70,18 @@ class AbsTaskAnyClustering(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> ScoresDict:
         # MTEB text clustering requires renaming and eval per subset.
         if self.metadata.modalities == ["text"]:
             v_measures = []
-            for cluster_set in tqdm.tqdm(data_split, desc="Clustering"):
+            pbar = tqdm(
+                data_split,
+                desc=f"Running Clustering (0/{len(data_split)})",
+                disable=not show_progress_bar,
+            )
+            for cluster_set in pbar:
                 clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
                     [self.input_column_name, self.label_column_name]
                 )
@@ -86,6 +92,7 @@ class AbsTaskAnyClustering(AbsTask):
                     task_metadata=self.metadata,
                     hf_split=hf_split,
                     hf_subset=hf_subset,
+                    pbar=pbar,
                     **kwargs,
                 )
                 metrics = evaluator(
@@ -103,6 +110,13 @@ class AbsTaskAnyClustering(AbsTask):
             self._add_main_score(scores)
             return scores
 
+        # make a progress bar for consistent interface
+        pbar = tqdm(
+            desc="Running Clustering (1/1)",
+            total=1,
+            disable=not show_progress_bar,
+        )
+
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]
         )
@@ -113,6 +127,7 @@ class AbsTaskAnyClustering(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            pbar=pbar,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)

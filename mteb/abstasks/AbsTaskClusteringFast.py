@@ -11,6 +11,7 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
+from tqdm.auto import tqdm
 
 from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
@@ -143,6 +144,7 @@ class AbsTaskClusteringFast(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> ScoresDict:
         if (
@@ -152,6 +154,15 @@ class AbsTaskClusteringFast(AbsTask):
             raise Exception(
                 "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
             )
+    
+        pbar = tqdm(
+            desc="Running Clustering",
+            total=4,
+            disable=not show_progress_bar,
+        )
+
+        pbar.set_description("Running Clustering - Preparing data...")
+        pbar.update(1)
 
         if (
             self.max_document_to_embed is None
@@ -175,6 +186,10 @@ class AbsTaskClusteringFast(AbsTask):
         downsampled_dataset = downsampled_dataset.select_columns(
             [self.input_column_name, self.label_column_name]
         )
+
+        pbar.set_description("Running Clustering - Encoding samples...")
+        pbar.update(1)
+
         embeddings = model.encode(
             create_dataloader(
                 downsampled_dataset,
@@ -187,6 +202,9 @@ class AbsTaskClusteringFast(AbsTask):
             hf_split=hf_split,
             **encode_kwargs,
         )
+
+        pbar.set_description("Running Clustering - Evaluating clustering...")
+        pbar.update(1)
 
         labels = []
         for label in downsampled_dataset[self.label_column_name]:
@@ -204,6 +222,9 @@ class AbsTaskClusteringFast(AbsTask):
             rng_state=self.rng_state,
         )
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
+
+        pbar.set_description("Running Clustering - Finished")
+        pbar.update(1)
 
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)

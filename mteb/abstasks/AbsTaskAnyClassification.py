@@ -200,11 +200,11 @@ class AbsTaskAnyClassification(AbsTask):
         # for i in range(self.n_experiments):
         pbar = tqdm(
             range(1, self.n_experiments + 1),
-            desc=f"Running Experiment (0/{self.n_experiments})",
+            desc=f"Running Classification (0/{self.n_experiments})",
             disable=not show_progress_bar,
         )
         for i in pbar:
-            pbar.set_description(f"Running Experiment ({i}/{self.n_experiments})")
+            pbar.set_description(f"Running Classification ({i}/{self.n_experiments})")
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
