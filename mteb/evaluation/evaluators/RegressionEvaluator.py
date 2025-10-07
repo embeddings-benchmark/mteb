@@ -53,19 +53,13 @@ class LinearRegressionEvaluator(Evaluator):
         scores = {}
         X_train = model.encode(
             self.sentences_train,
-            model=model,
             task_name=self.task_name,
-            hf_split="train",
-            hf_subset=self.hf_subset,
             **encode_kwargs,
         )
         if test_cache is None:
             X_test = model.encode(
                 self.sentences_test,
-                model=model,
                 task_name=self.task_name,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
             test_cache = X_test
