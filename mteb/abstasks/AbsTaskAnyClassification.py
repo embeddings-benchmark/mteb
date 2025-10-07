@@ -184,6 +184,7 @@ class AbsTaskAnyClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         train_split = data_split[self.train_split]
@@ -200,6 +201,7 @@ class AbsTaskAnyClassification(AbsTask):
         pbar = tqdm(
             range(1, self.n_experiments + 1),
             desc=f"Running Experiment (0/{self.n_experiments})",
+            disable=not show_progress_bar,
         )
         for i in pbar:
             pbar.set_description(f"Running Experiment ({i}/{self.n_experiments})")

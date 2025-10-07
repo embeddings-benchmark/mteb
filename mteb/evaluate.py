@@ -100,6 +100,7 @@ def _evaluate_task(
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
+    show_progress_bar: bool = True,
 ) -> TaskResult:
     """The core logic to run a model on a given task. See `evaluate` for more details."""
     if co2_tracker is None or co2_tracker is True:
@@ -128,6 +129,7 @@ def _evaluate_task(
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
+                show_progress_bar=show_progress_bar,
             )
         result.kg_co2_emissions = tracker.final_emissions
         return result
@@ -150,6 +152,7 @@ def _evaluate_task(
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            show_progress_bar=show_progress_bar,
         )
         tock = time()
 
@@ -181,6 +184,7 @@ def evaluate(
     cache: ResultCache | None = ResultCache(),
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
+    show_progress_bar: bool = True,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -202,6 +206,8 @@ def evaluate(
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
         prediction_folder: Optional folder in which to save model predictions for the task. Predictions of the tasks will be sabed in `prediction_folder/{task_name}_predictions.json`
+        show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the 
+            `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
 
     Returns:
         The results of the evaluation.
@@ -261,6 +267,7 @@ def evaluate(
                 cache=cache,
                 overwrite_strategy=overwrite_strategy,
                 prediction_folder=prediction_folder,
+                show_progress_bar=show_progress_bar,
             )
             results.extend(_res.task_results)
         return ModelResult(
@@ -319,7 +326,7 @@ def evaluate(
         logger.info("✓ Model loaded")
 
     if encode_kwargs is None:
-        encode_kwargs = {}
+        encode_kwargs = {"show_progress_bar": False} if show_progress_bar is False else {}
     if "batch_size" not in encode_kwargs:
         encode_kwargs["batch_size"] = 32
         logger.info(
@@ -335,6 +342,7 @@ def evaluate(
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                show_progress_bar=show_progress_bar,
             )
         except Exception as e:
             logger.error(
@@ -353,6 +361,7 @@ def evaluate(
             co2_tracker=False,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
+            show_progress_bar=show_progress_bar,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

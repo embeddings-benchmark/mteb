@@ -125,6 +125,7 @@ class AbsTask(ABC):
         *,
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -183,6 +184,7 @@ class AbsTask(ABC):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                show_progress_bar=show_progress_bar,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -198,6 +200,7 @@ class AbsTask(ABC):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
