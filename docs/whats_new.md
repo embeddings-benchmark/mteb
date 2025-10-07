@@ -1,5 +1,4 @@
 # New in v2.0 🎉
-<!-- TODO: not finished -->
 This section goes through new features added in v2. Below we give an overview of changes following by detailed examples.
 
 **Overview of changes:**
@@ -9,6 +8,7 @@ This section goes through new features added in v2. Below we give an overview of
 - Support for multimodal evaluation
 - New documentation
 - Descriptive statistics for all tasks
+- Better support for error analysis, allowing you to save predictions 
 - Standardization of file names and typing across the library
 - And much more
 
@@ -90,8 +90,6 @@ Where `text` is a batch of texts and `list[images]` is a batch for that texts. T
 However this also allows no text, multi-image inputs (e.g. for PDFs). Overall this greatly expands the possible tasks that can now be evaluated in MTEB.
 To see how to convert a legacy model see the [converting model](#converting-model-to-new-format) section.
 
-<!-- MORE NEW FEATURES -->
-
 ### Descriptive Statistics
 
 Descriptive statistics isn't a new thing in MTEB, however, now it is there for every task, to extract it simply run:
@@ -104,6 +102,25 @@ task.metadata.descriptive_stats
 ```
 
 And you will get a highly detailed set of descriptive statistics covering everything from number of samples query lengths, duplicates, etc.. These not only make it easier for you to examine tasks but it also make it easier for us to make quality checks on future tasks.
+
+### Saving Predictions
+
+To support error analysis it is now possible to save the model prediction on a given task. You can do this simply as follows:
+```python
+import mteb
+
+# using a small model and small dataset
+encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
+task = mteb.get_task("NanoArguAnaRetrieval")
+
+prediction_folder = "model_predictions"
+
+res = mteb.evaluate(
+    encoder,
+    task,
+    prediction_folder=prediction_folder,
+)
+```
 
 
 ## Upgrading from v1

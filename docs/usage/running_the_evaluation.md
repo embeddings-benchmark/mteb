@@ -80,24 +80,18 @@ In prompts the key can be:
 
 
 
-## Saving retrieval task predictions
+## Saving predictions
 
-To save the predictions from a retrieval task simply set the `prediction_folder`:
+To save the predictions from a task simply set the `prediction_folder`:
 Python:
+
 ```python
-import mteb
+# ...
 
-# using a small model and small dataset
-encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
-task = mteb.get_task("NanoArguAnaRetrieval")
-
-prediction_folder = "model_predictions"
-
-
-res = mteb.evaluate(
-    encoder,
+results = mteb.evaluate(
+    model,
     task,
-    prediction_folder=prediction_folder,
+    prediction_folder="model_predictions",
 )
 ```
 
