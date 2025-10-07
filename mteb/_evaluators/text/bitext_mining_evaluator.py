@@ -5,9 +5,9 @@ from typing import Any
 
 import numpy as np
 import torch
-import tqdm
 from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
@@ -64,7 +64,7 @@ class BitextMiningEvaluator(Evaluator):
             subsets = list(pair_elements)
 
         embeddings = {}
-        for sub in tqdm.tqdm(subsets):
+        for sub in tqdm(subsets):
             dataloader = create_dataloader_from_texts(self.sentences[sub])
             embeddings[sub] = model.encode(
                 dataloader,
@@ -76,9 +76,7 @@ class BitextMiningEvaluator(Evaluator):
             )
 
         scores = {}
-        for i, (key1, key2) in enumerate(
-            tqdm.tqdm(self.pairs, desc="Matching sentences")
-        ):
+        for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
             scores[f"{key1}-{key2}"] = self._compute_metrics(
                 embeddings[key1], embeddings[key2], model
             )

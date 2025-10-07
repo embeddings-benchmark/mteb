@@ -4,8 +4,8 @@ import logging
 from typing import Any, ClassVar
 
 import numpy as np
-import tqdm
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -117,7 +117,7 @@ class OpenAIModel(AbsEncoder):
 
         no_empty_embeddings = []
 
-        for sublist in tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar):
+        for sublist in tqdm(sublists, leave=False, disable=not show_progress_bar):
             try:
                 response = self._client.embeddings.create(
                     input=sublist,

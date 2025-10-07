@@ -4,8 +4,8 @@ from typing import Any, Literal, get_args
 
 import numpy as np
 import torch
-import tqdm
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
@@ -176,7 +176,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
+        for batch in tqdm(batches, leave=False, disable=not show_progress_bar):
             while retries > 0:  # Cohere's API is not always reliable
                 try:
                     embed_kwargs = {
