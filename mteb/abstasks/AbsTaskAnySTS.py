@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, cast
+from pathlib import Path
+from typing import Any, TypedDict, cast
 
 from datasets import Dataset
+from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb.models import Encoder
-from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
     ScoreStatistics,
@@ -15,6 +16,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
+from .._evaluators.any_sts_evaluator import STSEvaluatorScores
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
@@ -55,6 +57,30 @@ class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
     label_statistics: ScoreStatistics
 
 
+class STSMetrics(TypedDict):
+    """Metrics for STS tasks
+
+    Attributes:
+        pearson: Pearson correlation coefficient using the model's similarity function or cosine similarity if not available
+        spearman: Spearman correlation coefficient using the model's similarity function or cosine similarity if not available
+        cosine_pearson: Pearson correlation coefficient using cosine similarity
+        cosine_spearman: Spearman correlation coefficient using cosine similarity
+        manhattan_pearson: Pearson correlation coefficient using Manhattan distance
+        manhattan_spearman: Spearman correlation coefficient using Manhattan distance
+        euclidean_pearson: Pearson correlation coefficient using Euclidean distance
+        euclidean_spearman: Spearman correlation coefficient using Euclidean distance
+    """
+
+    pearson: float
+    spearman: float
+    cosine_pearson: float
+    cosine_spearman: float
+    manhattan_pearson: float
+    manhattan_spearman: float
+    euclidean_pearson: float
+    euclidean_spearman: float
+
+
 class AbsTaskAnySTS(AbsTask):
     """Abstract class for STS experiments.
 
@@ -76,22 +102,69 @@ class AbsTaskAnySTS(AbsTask):
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
+        prediction_folder: Path | None = None,
         **kwargs: Any,
-    ) -> ScoresDict:
+    ) -> STSMetrics:
         normalized_scores = list(map(self.normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 
         evaluator = AnySTSEvaluator(
             data_split,
             self.column_names,
-            normalized_scores,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
-        return scores
+        if prediction_folder:
+            self._save_task_predictions(
+                scores,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
+        return self._calculate_scores(scores, normalized_scores)
+
+    def _calculate_scores(
+        self, scores: STSEvaluatorScores, normalized_scores: list[float]
+    ) -> STSMetrics:
+        def compute_corr(x: list[float], y: list[float]) -> tuple[float, float]:
+            """Return (pearson, spearman) correlations between x and y."""
+            return pearsonr(x, y)[0], spearmanr(x, y)[0]
+
+        cosine_pearson, cosine_spearman = compute_corr(
+            normalized_scores, scores["cosine_scores"]
+        )
+        manhattan_pearson, manhattan_spearman = compute_corr(
+            normalized_scores, scores["manhattan_distances"]
+        )
+        euclidean_pearson, euclidean_spearman = compute_corr(
+            normalized_scores, scores["euclidean_distances"]
+        )
+
+        if scores["similarity_scores"] is not None:
+            pearson, spearman = compute_corr(
+                normalized_scores, scores["similarity_scores"]
+            )
+        else:
+            # if model does not have a similarity function, assume cosine similarity
+            pearson, spearman = cosine_pearson, cosine_spearman
+
+        return STSMetrics(
+            # using the models own similarity score
+            pearson=pearson,
+            spearman=spearman,
+            # generic similarity scores
+            cosine_pearson=cosine_pearson,
+            cosine_spearman=cosine_spearman,
+            manhattan_pearson=manhattan_pearson,
+            manhattan_spearman=manhattan_spearman,
+            euclidean_pearson=euclidean_pearson,
+            euclidean_spearman=euclidean_spearman,
+        )
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
