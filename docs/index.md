@@ -38,7 +38,7 @@ To see more check out the [installation guide](./installation.md).
     from sentence_transformers import SentenceTransformer
 
     # Select model
-    model_name = "average_word_embeddings_komninos"
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 
     # Select tasks

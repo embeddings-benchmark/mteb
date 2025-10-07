@@ -27,11 +27,11 @@ class SNLClustering(AbsTaskAnyClustering):
     metadata = TaskMetadata(
         name="SNLClustering",
         dataset={
-            "path": "navjordj/SNL_summarization",
-            "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+            "path": "adrlau/navjordj-SNL_summarization_copy",  # TODO: replace with mteb/SNLRetrieval after #2820 is resolved.
+            "revision": "22c474c88fb4678052f9099bb917ad8f9e155f9f",
         },
-        description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
-        reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
+        description="Webscraped articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
+        reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
         type="Clustering",
         category="t2c",
         modalities=["text"],
