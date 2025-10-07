@@ -37,22 +37,7 @@ def test_output_structure(model, mock_task):
     # Check basic structure
     assert isinstance(scores, dict)
 
-    # Check required metrics
-    assert "pearson" in scores
-    assert "spearman" in scores
-    assert "cosine_pearson" in scores
-    assert "cosine_spearman" in scores
-    assert "manhattan_pearson" in scores
-    assert "manhattan_spearman" in scores
-    assert "euclidean_pearson" in scores
-    assert "euclidean_spearman" in scores
-
-    # Check exact score values with deterministic model
-    assert scores["pearson"] == 1.0
-    assert scores["spearman"] == 0.9999999999999999
-    assert scores["cosine_pearson"] == 1.0
-    assert scores["cosine_spearman"] == 0.9999999999999999
-    assert scores["manhattan_pearson"] == 1.0
-    assert scores["manhattan_spearman"] == 0.9999999999999999
-    assert scores["euclidean_pearson"] == 1.0
-    assert scores["euclidean_spearman"] == 0.9999999999999999
+    assert "cosine_scores" in scores
+    assert "manhattan_distances" in scores
+    assert "euclidean_distances" in scores
+    assert "similarity_scores" in scores

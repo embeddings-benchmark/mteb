@@ -394,7 +394,7 @@ class AbsTaskRetrieval(AbsTask):
         logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if prediction_folder:
-            self.save_task_predictions(
+            self._save_task_predictions(
                 results,
                 model,
                 prediction_folder,

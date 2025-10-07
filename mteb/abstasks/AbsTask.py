@@ -204,14 +204,23 @@ class AbsTask(ABC):
             "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
 
-    def save_task_predictions(
+    def _save_task_predictions(
         self,
-        predictions: dict[str, Any],
+        predictions: dict[str, Any] | list[Any],
         model: MTEBModels,
         prediction_folder: Path,
         hf_split: str,
         hf_subset: str,
     ) -> None:
+        """Saves the predictions of the model on the task to a json file.
+
+        Args:
+            predictions: Dictionary containing the predictions.
+            model: The model used to generate the predictions.
+            prediction_folder: The folder to save the predictions to.
+            hf_split: The split of the dataset (e.g. "test").
+            hf_subset: The subset of the dataset (e.g. "en").
+        """
         predictions_path = self._predictions_path(prediction_folder)
         existing_results = {
             "mteb_model_meta": {

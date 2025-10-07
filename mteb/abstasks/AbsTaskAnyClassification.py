@@ -3,12 +3,19 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import ImageFile
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score,
+    average_precision_score,
+    f1_score,
+    precision_score,
+    recall_score,
+)
 
 from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
@@ -52,6 +59,42 @@ class ClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     label_statistics: LabelStatistics
+
+
+class ClassificationMetrics(TypedDict):
+    """Scores for classification tasks
+
+    Attributes:
+        accuracy: Accuracy score.
+        f1: F1 score (macro).
+        f1_weighted: Weighted F1 score.
+        precision: Precision score (macro).
+        precision_weighted: Weighted precision score.
+        recall: Recall score (macro).
+        recall_weighted: Weighted recall score.
+        ap: Average precision score (macro) for binary classification.
+        ap_weighted: Weighted average precision score for binary classification.
+    """
+
+    accuracy: float
+    f1: float
+    f1_weighted: float
+    precision: float
+    precision_weighted: float
+    recall: float
+    recall_weighted: float
+    ap: float | None
+    ap_weighted: float | None
+
+
+class FullClassificationMetrics(ClassificationMetrics):
+    """Full classification metrics including scores per experiment. In main scores, the average over all experiments is reported.
+
+    Attributes:
+        scores_per_experiment: List of ClassificationMetrics for each experiment.
+    """
+
+    scores_per_experiment: list[ClassificationMetrics]
 
 
 class AbsTaskAnyClassification(AbsTask):
@@ -141,17 +184,17 @@ class AbsTaskAnyClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         **kwargs: Any,
-    ) -> ScoresDict:
+    ) -> FullClassificationMetrics:
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
         params = {"k": self.k}
         params.update(kwargs)
 
         scores = []
-        test_cache, idxs = (
-            None,
-            None,
-        )  # we store idxs to make the shuffling reproducible
+        # we store idxs to make the shuffling reproducible
+        test_cache, idxs = None, None
+
+        all_predictions = []
         for i in range(self.n_experiments):
             logger.info(
                 "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
@@ -173,16 +216,58 @@ class AbsTaskAnyClassification(AbsTask):
                 classifier=self.classifier,
                 **params,
             )
-            scores_exp, test_cache = evaluator(
+            y_pred, test_cache = evaluator(
                 model, encode_kwargs=encode_kwargs, test_cache=test_cache
             )
+            if prediction_folder:
+                all_predictions.append(y_pred.tolist())
+            y_test = eval_split[self.label_column_name]
+            scores_exp = self._calculate_scores(y_test, y_pred)
             scores.append(scores_exp)
 
+        if prediction_folder:
+            self._save_task_predictions(
+                all_predictions,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
         avg_scores: dict[str, Any] = {
-            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+            # ap will be none for non binary classification tasks
+            k: np.mean([s[k] for s in scores if s[k] is not None])
+            for k in scores[0].keys()
         }
-        avg_scores["scores_per_experiment"] = scores
-        return avg_scores
+        return FullClassificationMetrics(
+            scores_per_experiment=scores,
+            **avg_scores,
+        )
+
+    def _calculate_scores(
+        self,
+        y_test: np.ndarray | list[int],
+        y_pred: np.ndarray,
+    ) -> ClassificationMetrics:
+        scores = ClassificationMetrics(
+            accuracy=accuracy_score(y_test, y_pred),
+            f1=f1_score(y_test, y_pred, average="macro"),
+            f1_weighted=f1_score(y_test, y_pred, average="weighted"),
+            precision=precision_score(y_test, y_pred, average="macro"),
+            precision_weighted=precision_score(y_test, y_pred, average="weighted"),
+            recall=recall_score(y_test, y_pred, average="macro"),
+            recall_weighted=recall_score(y_test, y_pred, average="weighted"),
+            ap=None,
+            ap_weighted=None,
+        )
+
+        # if binary classification
+        if len(np.unique(y_test)) == 2:
+            scores["ap"] = average_precision_score(y_test, y_pred, average="macro")
+            scores["ap_weighted"] = average_precision_score(
+                y_test, y_pred, average="weighted"
+            )
+        return scores
 
     def _undersample_data(
         self, dataset: Dataset, idxs: list[int] | None = None

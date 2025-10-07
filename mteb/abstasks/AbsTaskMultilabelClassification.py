@@ -4,7 +4,7 @@ import itertools
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
 from datasets import DatasetDict
@@ -16,7 +16,6 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from typing_extensions import override
 
 from mteb.models import Encoder
-from mteb.types import ScoresDict
 
 from .._evaluators.classification_evaluator import SklearnClassifierProtocol
 from ..create_dataloaders import create_dataloader
@@ -29,27 +28,35 @@ def _evaluate_classifier(
     embeddings_train: np.ndarray,
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
-    y_test: np.ndarray,
     classifier: SklearnClassifierProtocol,
-) -> dict[str, float]:
+) -> tuple[np.ndarray, SklearnClassifierProtocol]:
     classifier: SklearnClassifierProtocol = clone(classifier)
     classifier.fit(embeddings_train, y_train)
-    y_pred = classifier.predict(embeddings_test)
-    accuracy = classifier.score(embeddings_test, y_test)
-    if isinstance(classifier, MultiOutputClassifier):
-        predictions = classifier.predict_proba(embeddings_test)
-        all_probs = [emb[:, 1] for emb in predictions]
+    return classifier.predict(embeddings_test), classifier
 
-        y_score = np.stack(all_probs, axis=1)  # shape: (n_samples, n_labels)
-        lrap = label_ranking_average_precision_score(y_test, y_score)
-    else:
-        lrap = label_ranking_average_precision_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred, average="macro")
-    return {
-        "accuracy": accuracy,
-        "f1": f1,
-        "lrap": lrap,
-    }
+
+class MultilabelClassificationMetrics(TypedDict):
+    """Scores for multilabel classification tasks.
+
+    Attributes:
+        accuracy: Accuracy of the classifier.
+        lrap: Label Ranking Average Precision (LRAP) score.
+        f1: Macro F1 score.
+    """
+
+    accuracy: float
+    lrap: float
+    f1: float
+
+
+class FullMultilabelClassificationMetrics(MultilabelClassificationMetrics):
+    """Extended scores for multilabel classification tasks.
+
+    Attributes:
+        scores_per_experiment: List of individual experiment scores.
+    """
+
+    scores_per_experiment: list[MultilabelClassificationMetrics]
 
 
 class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
@@ -80,7 +87,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         hf_subset: str,
         prediction_folder: Path | None = None,
         **kwargs: Any,
-    ) -> ScoresDict:
+    ) -> FullMultilabelClassificationMetrics:
         if isinstance(data_split, DatasetDict):
             data_split = data_split.select_columns(
                 [self.input_column_name, self.label_column_name]
@@ -146,6 +153,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(test_dataset[self.label_column_name])
 
+        all_predictions = []
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
@@ -155,17 +163,56 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
-            scores_exp = _evaluate_classifier(
-                X_train, y_train, X_test, y_test, self.evaluator
+            y_pred, current_classifier = _evaluate_classifier(
+                X_train, y_train, X_test, self.evaluator
+            )
+            if prediction_folder:
+                all_predictions.append(y_pred.tolist())
+
+            scores_exp = self._calculate_scores(
+                y_test, y_pred, X_test, current_classifier
             )
             scores.append(scores_exp)
+
+        if prediction_folder:
+            self._save_task_predictions(
+                all_predictions,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
 
         avg_scores: dict[str, Any] = {
             k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
         }
-        avg_scores["scores_per_experiment"] = scores
+        return FullMultilabelClassificationMetrics(
+            scores_per_experiment=scores,
+            **avg_scores,
+        )
 
-        return avg_scores
+    def _calculate_scores(
+        self,
+        y_test: np.ndarray,
+        y_pred: np.ndarray,
+        x_test_embedding: np.ndarray,
+        current_classifier: SklearnClassifierProtocol,
+    ) -> MultilabelClassificationMetrics:
+        accuracy = current_classifier.score(x_test_embedding, y_test)
+        if isinstance(current_classifier, MultiOutputClassifier):
+            predictions = current_classifier.predict_proba(x_test_embedding)
+            all_probs = [emb[:, 1] for emb in predictions]
+
+            y_score = np.stack(all_probs, axis=1)  # shape: (n_samples, n_labels)
+            lrap = label_ranking_average_precision_score(y_test, y_score)
+        else:
+            lrap = label_ranking_average_precision_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred, average="macro")
+        return MultilabelClassificationMetrics(
+            accuracy=accuracy,
+            lrap=lrap,
+            f1=f1,
+        )
 
     def _undersample_data_indices(
         self, y: list[list[int]], samples_per_label: int, idxs: list[int] | None = None

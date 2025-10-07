@@ -1201,7 +1201,7 @@ BRIGHT = Benchmark(
 )
 
 BRIGHT_LONG = Benchmark(
-    name="BRIGHT(long)",
+    name="BRIGHT (long)",
     tasks=MTEBTasks(
         (
             get_task(
