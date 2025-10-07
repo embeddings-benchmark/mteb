@@ -63,7 +63,7 @@ df = results.to_dataframe()
 
 ### Multimodal Input format
 
-Models in mteb who implements the `Encoder` protocol now supports multimodal input With the model protocol roughly looking like so:
+Models in mteb who implements the [`Encoder`](api/model.md#mteb.models.encoder) protocol now supports multimodal input With the model protocol roughly looking like so:
 
 ```py
 class Encoder(Protocol): # simplified
@@ -103,28 +103,8 @@ task = mteb.get_task("MIRACLRetrievalHardNegatives")
 task.metadata.descriptive_stats
 ```
 
-And you will get a highly detailed set of descriptive statistics:
+And you will get a highly detailed set of descriptive statistics covering everything from number of samples query lengths, duplicates, etc.. These not only make it easier for you to examine tasks but it also make it easier for us to make quality checks on future tasks.
 
-```py
-{'dev': {'num_samples': 2460458,
-  'number_of_characters': 1023437450,
-  'num_documents': 2449382,
-  'min_document_length': 2,
-  'average_document_length': 417.6655323669399,
-  'max_document_length': 48550,
-  'unique_documents': 2449382,
-  'num_queries': 11076,
-  'min_query_length': 5,
-  'average_query_length': 37.46957385337667,
-  'max_query_length': 176,
-  ...
-  'hf_subset_descriptive_stats': {'ar': {'num_samples': 193103,
-    'number_of_characters': 84206668,
-    'num_documents': 192103,
-    'min_document_length': 4, ...
-  }}
-}}
-```
 
 ## Upgrading from v1
 
