@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import Any
+from typing import Any, TypedDict
 
 from datasets import Dataset, DatasetDict
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.models import Encoder, MTEBModels
@@ -35,6 +36,22 @@ class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
 
     sentence1_statistics: TextStatistics
     sentence2_statistics: TextStatistics
+
+
+class BitextMiningMetrics(TypedDict):
+    """Metrics for BitextMining tasks
+
+    Attributes:
+        precision: Precision of the model.
+        recall: Recall of the model.
+        f1: F1 score of the model.
+        accuracy: Accuracy of the model.
+    """
+
+    precision: float
+    recall: float
+    f1: float
+    accuracy: float
 
 
 class AbsTaskBitextMining(AbsTask):
@@ -127,13 +144,48 @@ class AbsTaskBitextMining(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        metrics = evaluator(model, encode_kwargs=encode_kwargs)
+        # NOTE: used only by BUCC
+        gold = (
+            list(zip(range(len(data_split)), range(len(data_split))))
+            if "gold" not in data_split
+            else data_split["gold"]
+        )
+
+        neigbours = evaluator(model, encode_kwargs=encode_kwargs)
+        metrics = {}
+        for keys, nearest_neighbors in neigbours.items():
+            metrics[keys] = self._compute_metrics(nearest_neighbors, gold)
+
         if parallel:
             for v in metrics.values():
                 self._add_main_score(v)
         else:
             self._add_main_score(metrics)
         return metrics
+
+    def _compute_metrics(
+        self,
+        nearest_neighbors: list[list[dict[str, float]]],
+        gold: list[tuple[int, int]],
+    ) -> BitextMiningMetrics:
+        logger.info("Computing metrics...")
+        labels = []
+        predictions = []
+        for i, x in enumerate(nearest_neighbors):
+            j = x[0]["corpus_id"]
+            predictions.append(j)
+            labels.append(gold[i][1])
+
+        return BitextMiningMetrics(
+            precision=precision_score(
+                labels, predictions, zero_division=0, average="weighted"
+            ),
+            recall=recall_score(
+                labels, predictions, zero_division=0, average="weighted"
+            ),
+            f1=f1_score(labels, predictions, zero_division=0, average="weighted"),
+            accuracy=accuracy_score(labels, predictions),
+        )
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

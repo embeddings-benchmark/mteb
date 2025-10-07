@@ -7,7 +7,6 @@ import numpy as np
 import torch
 import tqdm
 from datasets import Dataset
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
@@ -35,25 +34,13 @@ class BitextMiningEvaluator(Evaluator):
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
-        # NOTE: used only by BUCC
-        self.gold = (
-            list(zip(range(self.n), range(self.n)))
-            if "gold" not in sentences
-            else sentences["gold"]
-        )
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
 
     def __call__(
         self, model: Encoder, *, encode_kwargs: dict[str, Any]
-    ) -> dict[str, float]:
-        scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
-        return scores
-
-    def compute_metrics(
-        self, model: Encoder, encode_kwargs: dict[str, Any]
-    ) -> dict[str, float]:
+    ) -> dict[str, list[list[dict[str, float]]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [
@@ -75,53 +62,20 @@ class BitextMiningEvaluator(Evaluator):
                 **encode_kwargs,
             )
 
-        scores = {}
+        logger.info("Finding nearest neighbors...")
+        neighbours = {}
         for i, (key1, key2) in enumerate(
             tqdm.tqdm(self.pairs, desc="Matching sentences")
         ):
-            scores[f"{key1}-{key2}"] = self._compute_metrics(
-                embeddings[key1], embeddings[key2], model
+            neighbours[f"{key1}-{key2}"] = self._similarity_search(
+                embeddings[key1], embeddings[key2], model, top_k=1
             )
 
         # in case of default pair unnest the dict
         def_pair_str = "-".join(DEFAULT_PAIR[0])
-        if def_pair_str in scores:
-            scores = scores[def_pair_str]
-
-        return scores
-
-    def _compute_metrics(
-        self,
-        embeddings1: np.ndarray,
-        embeddings2: np.ndarray,
-        model: Encoder,
-    ) -> dict[str, float]:
-        # Find nearest neighbors
-        logger.info("Finding nearest neighbors...")
-        nearest_neighbors = self._similarity_search(
-            embeddings1, embeddings2, model, top_k=1
-        )
-
-        # Compute errors
-        logger.info("Computing metrics...")
-        labels = []
-        predictions = []
-        for i, x in enumerate(nearest_neighbors):
-            j = x[0]["corpus_id"]
-            predictions.append(j)
-            labels.append(self.gold[i][1])
-
-        scores = {
-            "precision": precision_score(
-                labels, predictions, zero_division=0, average="weighted"
-            ),
-            "recall": recall_score(
-                labels, predictions, zero_division=0, average="weighted"
-            ),
-            "f1": f1_score(labels, predictions, zero_division=0, average="weighted"),
-            "accuracy": accuracy_score(labels, predictions),
-        }
-        return scores
+        if def_pair_str in neighbours:
+            neighbours = neighbours[def_pair_str]
+        return neighbours
 
     def _similarity_search(
         self,
