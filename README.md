@@ -23,7 +23,7 @@
 </h4>
 
 <h3 align="center">
-    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/hf_logo.png" /></a>
+    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/logos/hf_logo.png" /></a>
 </h3>
 
 
@@ -58,7 +58,7 @@ results = mteb.evaluate(model, tasks=tasks)
 You can also run it using the CLI:
 
 ```bash
-mteb run \ 
+mteb run \
     -m sentence-transformers/all-MiniLM-L6-v2 \
     -t Banking77Classification \
     --output-folder results
