@@ -296,7 +296,7 @@ def evaluate(
     ):
         # if there are no missing evals we can just return the results
         logger.debug(
-            f"Results for {task.metadata.name} already exist in cache. Skipping evaluation."
+            f"Results for {task.metadata.name} already exist in cache. Skipping evaluation and loading results."
         )
         return ModelResult(
             model_name=model_name,
@@ -316,13 +316,14 @@ def evaluate(
             f"Loading model {model_name} with revision {model_revision} from ModelMeta."
         )
         model = model.load_model()
+        logger.info("✓ Model loaded")
 
     if encode_kwargs is None:
         encode_kwargs = {}
     if "batch_size" not in encode_kwargs:
         encode_kwargs["batch_size"] = 32
         logger.info(
-            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
+            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
 
     if raise_error is False:
@@ -353,6 +354,7 @@ def evaluate(
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
         )
+    logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
     if existing_results:
         result = result.merge(existing_results)

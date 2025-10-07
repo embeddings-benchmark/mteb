@@ -1,0 +1,69 @@
+# logs before changes (after numpy warnings fix)
+
+INFO:sentence_transformers.SentenceTransformer:Load pretrained SentenceTransformer: sentence-transformers/static-similarity-mrl-multilingual-v1
+INFO:mteb.evaluate:No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`.
+WARNING:mteb.abstasks.AbsTask:Dataset 'Banking77Classification' is superseded by 'Banking77Classification.v2', you might consider using the newer version of the dataset.
+INFO:mteb.abstasks.AbsTaskAnyClassification:Task: Banking77Classification, split: test, subset: default. Running...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 1/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 338.43it/s]
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 3080 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 97/97 [00:00<00:00, 597.95it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 2/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 540.22it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 3/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 570.39it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 4/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 524.25it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 5/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 493.87it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 6/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 539.85it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 7/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 530.06it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 8/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 468.82it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 9/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 518.57it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...
+INFO:mteb.abstasks.AbsTaskAnyClassification:========== Experiment 10/10 ==========
+INFO:mteb.models.sentence_transformer_wrapper:No model prompts found for task=Banking77Classification prompt_type=None
+INFO:mteb.models.sentence_transformer_wrapper:Encoding 616 sentences.
+Batches: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 20/20 [00:00<00:00, 627.61it/s]
+INFO:mteb._evaluators.classification_evaluator:Fitting classifier...
+INFO:mteb._evaluators.classification_evaluator:Evaluating...

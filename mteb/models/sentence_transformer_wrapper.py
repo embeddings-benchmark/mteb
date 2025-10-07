@@ -8,6 +8,7 @@ import torch
 from packaging.version import Version
 from torch.utils.data import DataLoader
 
+from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -146,14 +147,14 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             prompt_name = self.get_prompt_name(task_metadata, prompt_type)
             prompt = self.model_prompts.get(prompt_name, None)
         if prompt_name:
-            logger.info(
-                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
-            )
+            prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
         else:
-            logger.info(
+            prompt_log = (
                 f"No model prompts found for task={task_metadata.name} {prompt_type=}"
             )
-        logger.info(f"Encoding {len(_inputs)} sentences.")
+
+        LogOnce(logger).info(prompt_log)
+        logger.debug(f"Encoding {len(_inputs)} sentences.")
 
         if prompt_type and HAS_QUERY_ENCODE:
             if prompt_type == PromptType.query:

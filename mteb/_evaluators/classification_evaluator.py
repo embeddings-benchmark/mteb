@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import logging
+from contextlib import nullcontext
 from typing import Any, Protocol
 
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from typing_extensions import Self
 
+from mteb._nested_tqdm import nested_tqdm
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
 from mteb.models import Encoder
@@ -87,6 +90,7 @@ class ClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
+        pbar: tqdm[int] | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """Classification evaluation by training a sklearn classifier on the
         embeddings of the training set and evaluating on the embeddings of the test set.
@@ -95,6 +99,7 @@ class ClassificationEvaluator(Evaluator):
             model: Encoder
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
+            pbar: Optional tqdm progress bar
 
         Returns:
             Tuple of test predictions and embeddings
@@ -104,24 +109,38 @@ class ClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"]
         )
 
-        X_train = model.encode(
-            dataloader_train,
-            task_metadata=self.task_metadata,
-            hf_split="train",
-            hf_subset=self.hf_subset,
-            **encode_kwargs,
-        )
-        if test_cache is None:
-            test_cache = model.encode(
-                dataloader_test,
+        pbar_desc = ""
+        if pbar is not None:
+            # remove ": " but only in the end
+            pbar_desc = pbar.desc[:-2] if pbar.desc.endswith(": ") else pbar.desc
+
+        ntqdm = nested_tqdm(pbar) if pbar is not None else nullcontext()
+
+        with ntqdm:
+            X_train = model.encode(
+                dataloader_train,
                 task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
+                hf_split="train",
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-        logger.info("Fitting logistic regression classifier...")
+            if test_cache is None:
+                test_cache = model.encode(
+                    dataloader_test,
+                    task_metadata=self.task_metadata,
+                    hf_split=self.hf_split,
+                    hf_subset=self.hf_subset,
+                    **encode_kwargs,
+                )
+
+        if pbar is not None:
+            pbar.set_description(pbar_desc + " - Fitting Classifier...")
+
         y_train = self.train_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
-        logger.info("Evaluating...")
+
+        if pbar is not None:
+            pbar.set_description(pbar_desc + " - Evaluating Classifier...")
+
         y_pred = self.classifier.predict(test_cache)
         return y_pred, test_cache
