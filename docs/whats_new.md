@@ -113,7 +113,7 @@ import mteb
 encoder = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
 task = mteb.get_task("NanoArguAnaRetrieval")
 
-prediction_folder = "model_predictions"
+prediction_folder = "path/to/model_predictions"
 
 res = mteb.evaluate(
     encoder,
