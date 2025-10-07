@@ -338,6 +338,9 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
   year = {2023},
 }
 """,
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
+        },
         adapted_from=["MIRACLRetrieval"],
     )
 
