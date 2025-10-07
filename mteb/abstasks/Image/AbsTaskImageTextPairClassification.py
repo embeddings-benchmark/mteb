@@ -77,7 +77,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
         if isinstance(self.images_column_names, str):
             images = list(dataset[self.images_column_names])
-        elif isinstance(self.images_column_names, list):
+        elif isinstance(self.images_column_names, Sequence):
             images = [
                 img
                 for img_column in self.images_column_names
@@ -86,7 +86,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
         if isinstance(self.texts_column_names, str):
             texts = list(dataset[self.texts_column_names])
-        elif isinstance(self.texts_column_names, list):
+        elif isinstance(self.texts_column_names, Sequence):
             texts = [
                 text
                 for text_column in self.texts_column_names
@@ -129,3 +129,20 @@ class AbsTaskImageTextPairClassification(AbsTask):
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
         return scores
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        text_columns = (
+            [self.texts_column_names]
+            if isinstance(self.texts_column_names, str)
+            else self.texts_column_names
+        )
+        image_columns = (
+            [self.images_column_names]
+            if isinstance(self.images_column_names, str)
+            else self.images_column_names
+        )
+
+        self._upload_dataset_to_hub(
+            repo_name,
+            [*text_columns, *image_columns],
+        )
