@@ -17,9 +17,6 @@ from ..evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-DEFAULT_PAIR = [("sentence1", "sentence2")]
-
-
 class BitextMiningEvaluator(Evaluator):
     def __init__(
         self,
@@ -27,7 +24,7 @@ class BitextMiningEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
+        pair_columns: list[tuple[str, str]],
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -40,7 +37,7 @@ class BitextMiningEvaluator(Evaluator):
 
     def __call__(
         self, model: Encoder, *, encode_kwargs: dict[str, Any]
-    ) -> dict[str, list[list[dict[str, float]]]]:
+    ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [
@@ -70,11 +67,6 @@ class BitextMiningEvaluator(Evaluator):
             neighbours[f"{key1}-{key2}"] = self._similarity_search(
                 embeddings[key1], embeddings[key2], model
             )
-
-        # in case of default pair unnest the dict
-        def_pair_str = "-".join(DEFAULT_PAIR[0])
-        if def_pair_str in neighbours:
-            neighbours = neighbours[def_pair_str]
         return neighbours
 
     def _similarity_search(

@@ -132,6 +132,7 @@ class AbsTaskAnyClassification(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not isinstance(model, Encoder):
@@ -168,6 +169,7 @@ class AbsTaskAnyClassification(AbsTask):
                 hf_split=split,
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
