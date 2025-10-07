@@ -618,6 +618,13 @@ def _create_summary_table_mean_task_type(
         }
     )
 
+    if "Any Any Multilingual Retrieval" in joint_table.columns:
+        joint_table = joint_table.rename(
+            columns={"Any Any Multilingual Retrieval": "Multilingual Retrieval"}
+        )
+    if "Any Any Retrieval" in joint_table.columns:
+        joint_table = joint_table.rename(columns={"Any Any Retrieval": "Retrieval"})
+
     # Move borda rank to front
     joint_table.insert(0, "Rank", joint_table.pop("rank"))
 
