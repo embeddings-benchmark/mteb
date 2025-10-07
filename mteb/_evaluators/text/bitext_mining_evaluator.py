@@ -68,7 +68,7 @@ class BitextMiningEvaluator(Evaluator):
             tqdm.tqdm(self.pairs, desc="Matching sentences")
         ):
             neighbours[f"{key1}-{key2}"] = self._similarity_search(
-                embeddings[key1], embeddings[key2], model, top_k=1
+                embeddings[key1], embeddings[key2], model
             )
 
         # in case of default pair unnest the dict
@@ -84,8 +84,7 @@ class BitextMiningEvaluator(Evaluator):
         model: Encoder,
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
-        top_k: int = 10,
-    ) -> list[list[dict[str, float]]]:
+    ) -> list[dict[str, float]]:
         """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
 
@@ -96,7 +95,6 @@ class BitextMiningEvaluator(Evaluator):
                 queries and corpus if they are not already tensors.
             query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
             corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
-            top_k: Retrieve top k matching entries.
 
         Returns:
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
@@ -133,7 +131,7 @@ class BitextMiningEvaluator(Evaluator):
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                     similarity_scores,
-                    min(top_k, len(similarity_scores[0])),
+                    1,
                     dim=1,
                     largest=True,
                     sorted=False,
@@ -157,6 +155,6 @@ class BitextMiningEvaluator(Evaluator):
             queries_result_list[idx] = sorted(
                 queries_result_list[idx], key=lambda x: x["score"], reverse=True
             )
-            queries_result_list[idx] = queries_result_list[idx][0:top_k]
+            queries_result_list[idx] = queries_result_list[idx][0]
 
         return queries_result_list
