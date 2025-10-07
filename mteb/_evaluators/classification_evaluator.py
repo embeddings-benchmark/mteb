@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from contextlib import nullcontext
 from typing import Any, Protocol
 
 import numpy as np
@@ -10,7 +9,6 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from typing_extensions import Self
 
-from mteb._nested_tqdm import nested_tqdm
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
 from mteb.models import Encoder
@@ -113,24 +111,24 @@ class ClassificationEvaluator(Evaluator):
         if pbar is not None:
             pbar_desc = pbar.desc.removesuffix(": ")
 
-        ntqdm = nested_tqdm(pbar) if pbar is not None else nullcontext()
+        if pbar is not None:
+            pbar.set_description(pbar_desc + " - Encoding samples...")
 
-        with ntqdm:
-            X_train = model.encode(
-                dataloader_train,
+        X_train = model.encode(
+            dataloader_train,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset=self.hf_subset,
+            **encode_kwargs,
+        )
+        if test_cache is None:
+            test_cache = model.encode(
+                dataloader_test,
                 task_metadata=self.task_metadata,
-                hf_split="train",
+                hf_split=self.hf_split,
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-            if test_cache is None:
-                test_cache = model.encode(
-                    dataloader_test,
-                    task_metadata=self.task_metadata,
-                    hf_split=self.hf_split,
-                    hf_subset=self.hf_subset,
-                    **encode_kwargs,
-                )
 
         if pbar is not None:
             pbar.set_description(pbar_desc + " - Fitting Classifier...")
