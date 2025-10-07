@@ -116,6 +116,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """Apply styling to a raw summary DataFrame"""
     excluded_columns = [
         "Rank (Borda)",
+        "Rank",
         "Model",
         "Number of Parameters",
         "Embedding Dimensions",
