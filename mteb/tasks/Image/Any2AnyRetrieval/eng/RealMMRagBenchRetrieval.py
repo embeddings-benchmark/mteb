@@ -75,7 +75,9 @@ def _load_data(
 class RealMMRagFinReportRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RealMMRagFinReportRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="""Contains annual financial reports rich in text, tables, and figures from IBM’s public filings.
+                    Queries ask about financial results, trends, or statements across multiple years.
+                    Retrieval goal: find the specific report page containing the relevant financial information.""",
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_FinReport_BEIR",
@@ -133,7 +135,9 @@ class RealMMRagFinReportRetrieval(AbsTaskAny2AnyRetrieval):
 class RealMMRagFinSlidesRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RealMMRagFinSlidesRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="""Comprises quarterly investor presentation slides combining tables, charts, and textual highlights.
+                    Queries focus on revenue trends, growth metrics, or business segments.
+                    Retrieval goal: retrieve the slide that presents the requested financial data or insight.""",
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_FinSlides_BEIR",
@@ -190,7 +194,9 @@ class RealMMRagFinSlidesRetrieval(AbsTaskAny2AnyRetrieval):
 class RealMMRagTechReportRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RealMMRagTechReportRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="""Includes technical documentation and whitepapers on IBM storage and automation systems with text-heavy content and supporting visuals.
+                    Queries address specific technologies, architectures, or performance aspects.
+                    Retrieval goal: locate the report page providing the technical explanation or result.""",
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_TechReport_BEIR",
@@ -247,7 +253,9 @@ class RealMMRagTechReportRetrieval(AbsTaskAny2AnyRetrieval):
 class RealMMRagTechSlidesRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RealMMRagTechSlidesRetrieval",
-        description="Retrieve associated pages according to questions.",
+        description="""Features technical presentation slides containing bullet points, flow diagrams, and schematic figures.
+                    Queries reflect realistic information-seeking about system design or AI and automation concepts.
+                    Retrieval goal: retrieve the slide that best answers the technical query through text and visuals.""",
         reference="https://arxiv.org/abs/2502.12342",
         dataset={
             "path": "ibm-research/REAL-MM-RAG_TechSlides_BEIR",

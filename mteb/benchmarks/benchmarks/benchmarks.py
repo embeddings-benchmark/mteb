@@ -2307,7 +2307,9 @@ REAL_MM_RAG = Benchmark(
             "RealMMRagTechSlidesRetrieval",
         ],
     ),
-    description="Realistic and multi-modal document retrieval benchmark.",
+    description="""REAL-MM-RAG is a realistic benchmark that reflects real-world multi-modal document retrieval challenges.
+                It includes infographic-rich documents such as slides, reports, and technical manuals with tables, charts, and figures, requiring models to integrate textual and visual evidence.
+                The benchmark features multi-modality, realistic queries, and accurate labeling for comprehensive evaluation.""",
     reference="https://arxiv.org/abs/2502.12342",
     citation=r"""
 @article{wasserman2025real,

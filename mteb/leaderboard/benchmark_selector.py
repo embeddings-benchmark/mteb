@@ -46,7 +46,6 @@ BENCHMARK_ENTRIES = [
                         "MIEB(Img)",
                         "VisualDocumentRetrieval",
                         "JinaVDR",
-                        "REAL_MM_RAG"
                     ]
                 ),
             ),
