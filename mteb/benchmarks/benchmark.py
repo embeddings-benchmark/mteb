@@ -96,8 +96,7 @@ class Benchmark:
     def get_required_reference_models(self) -> dict[str, list[str]]:
         """Get the reference models required for each task in this benchmark.
         
-        This is a lightweight method that doesn't load actual results,
-        just determines what models should be evaluated.
+        This is a method that determines what models should be evaluated.
         
         Returns:
             Dictionary mapping task names to lists of required reference model names.
