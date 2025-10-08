@@ -14,6 +14,12 @@ from mteb.evaluation import *
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.models import get_model, get_model_meta, get_model_metas
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
+from mteb.reference_models import (
+    get_reference_models,
+    get_reference_models_for_task_type,
+    get_reference_models_for_task,
+    is_reference_model,
+)
 
 from .benchmarks.benchmarks import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
