@@ -6,6 +6,7 @@ from typing import Any, Protocol
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -87,6 +88,7 @@ class ClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
+        pbar: tqdm[int] | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """Classification evaluation by training a sklearn classifier on the
         embeddings of the training set and evaluating on the embeddings of the test set.
@@ -95,6 +97,7 @@ class ClassificationEvaluator(Evaluator):
             model: Encoder
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
+            pbar: Optional tqdm progress bar
 
         Returns:
             Tuple of test predictions and embeddings
@@ -103,6 +106,13 @@ class ClassificationEvaluator(Evaluator):
         dataloader_train, dataloader_test = self.create_dataloaders(
             batch_size=encode_kwargs["batch_size"]
         )
+
+        pbar_desc = ""
+        if pbar is not None:
+            pbar_desc = pbar.desc.removesuffix(": ")
+
+        if pbar is not None:
+            pbar.set_description(pbar_desc + " - Encoding samples...")
 
         X_train = model.encode(
             dataloader_train,
@@ -119,9 +129,15 @@ class ClassificationEvaluator(Evaluator):
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
-        logger.info("Fitting logistic regression classifier...")
+
+        if pbar is not None:
+            pbar.set_description(pbar_desc + " - Fitting Classifier...")
+
         y_train = self.train_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
-        logger.info("Evaluating...")
+
+        if pbar is not None:
+            pbar.set_description(pbar_desc + " - Evaluating Classifier...")
+
         y_pred = self.classifier.predict(test_cache)
         return y_pred, test_cache
