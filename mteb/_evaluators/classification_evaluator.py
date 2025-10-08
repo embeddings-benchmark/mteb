@@ -111,6 +111,7 @@ class ClassificationEvaluator(Evaluator):
         if pbar is not None:
             pbar_desc = pbar.desc.removesuffix(": ")
 
+        logger.debug("Running classification - Encoding samples...")
         if pbar is not None:
             pbar.set_description(pbar_desc + " - Encoding samples...")
 
@@ -130,14 +131,16 @@ class ClassificationEvaluator(Evaluator):
                 **encode_kwargs,
             )
 
+        logger.debug("Running classification - Fitting classifier...")
         if pbar is not None:
-            pbar.set_description(pbar_desc + " - Fitting Classifier...")
+            pbar.set_description(pbar_desc + " - Fitting classifier...")
 
         y_train = self.train_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
 
+        logger.debug("Running classification - Evaluating classifier...")
         if pbar is not None:
-            pbar.set_description(pbar_desc + " - Evaluating Classifier...")
+            pbar.set_description(pbar_desc + " - Evaluating classifier...")
 
         y_pred = self.classifier.predict(test_cache)
         return y_pred, test_cache

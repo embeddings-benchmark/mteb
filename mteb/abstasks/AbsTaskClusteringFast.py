@@ -161,7 +161,8 @@ class AbsTaskClusteringFast(AbsTask):
             disable=not show_progress_bar,
         )
 
-        pbar.set_description("Running Clustering - Preparing data...")
+        logger.debug("Running clustering - Preparing data...")
+        pbar.set_description("Running clustering - Preparing data...")
         pbar.update(1)
 
         if (
@@ -187,7 +188,8 @@ class AbsTaskClusteringFast(AbsTask):
             [self.input_column_name, self.label_column_name]
         )
 
-        pbar.set_description("Running Clustering - Encoding samples...")
+        logger.debug("Running clustering - Encoding samples...")
+        pbar.set_description("Running clustering - Encoding samples...")
         pbar.update(1)
 
         embeddings = model.encode(
@@ -203,7 +205,8 @@ class AbsTaskClusteringFast(AbsTask):
             **encode_kwargs,
         )
 
-        pbar.set_description("Running Clustering - Evaluating clustering...")
+        logger.debug("Running clustering - Evaluating clustering...")
+        pbar.set_description("Running clustering - Evaluating clustering...")
         pbar.update(1)
 
         labels = []
@@ -223,8 +226,10 @@ class AbsTaskClusteringFast(AbsTask):
         )
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
-        pbar.set_description("Running Clustering - Finished")
+        logger.debug("Running clustering - Finished.")
+        pbar.set_description("Running clustering - Finished")
         pbar.update(1)
+        pbar.close()
 
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
