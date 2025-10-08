@@ -4,7 +4,7 @@ import os
 
 from datasets import Dataset, DatasetDict, load_dataset
 from huggingface_hub import create_repo
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 WRITE_TOK = os.environ["HF_TOKEN"]
 

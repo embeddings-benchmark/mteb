@@ -6,7 +6,7 @@ from pathlib import Path
 
 import iso639
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 

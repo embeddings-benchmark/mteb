@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata

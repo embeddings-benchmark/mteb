@@ -6,8 +6,8 @@ import re
 from typing import Any
 
 import numpy as np
-import tqdm
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -84,9 +84,7 @@ class BedrockModel(AbsEncoder):
         # https://docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html
         max_sequence_length = int(self._max_tokens * 4.5)
 
-        for sentence in tqdm.tqdm(
-            sentences, leave=False, disable=not show_progress_bar
-        ):
+        for sentence in tqdm(sentences, leave=False, disable=not show_progress_bar):
             if len(sentence) > max_sequence_length:
                 truncated_sentence = sentence[:max_sequence_length]
             else:
@@ -126,7 +124,7 @@ class BedrockModel(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
+        for batch in tqdm(batches, leave=False, disable=not show_progress_bar):
             response = self._client.invoke_model(
                 body=json.dumps(
                     {

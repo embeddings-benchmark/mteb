@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy as np
 import torch
-import tqdm
+from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
@@ -133,7 +133,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
         all_embeddings = []
 
         for i, sublist in enumerate(
-            tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar)
+            tqdm(sublists, leave=False, disable=not show_progress_bar)
         ):
             while retries > 0:
                 try:

@@ -10,9 +10,9 @@ from typing import Any, cast
 
 import datasets
 import numpy as np
-import tqdm
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
@@ -125,6 +125,7 @@ class AbsTask(ABC):
         *,
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -135,6 +136,7 @@ class AbsTask(ABC):
             subsets_to_run: List of huggingface subsets (HFSubsets) to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
+            show_progress_bar: Whether to show the progress bar or not.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:
@@ -183,6 +185,7 @@ class AbsTask(ABC):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
+                show_progress_bar=show_progress_bar,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -198,6 +201,7 @@ class AbsTask(ABC):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -363,7 +367,7 @@ class AbsTask(ABC):
         if isinstance(self, AbsTaskAnyClassification):
             eval_splits.append(self.train_split)
 
-        pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
+        pbar_split = tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
@@ -375,7 +379,7 @@ class AbsTask(ABC):
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
 
-                pbar_subsets = tqdm.tqdm(
+                pbar_subsets = tqdm(
                     self.metadata.hf_subsets,
                     desc="Processing Languages...",
                 )

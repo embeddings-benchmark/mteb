@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-import tqdm
+from tqdm.auto import tqdm
 
 from mteb._evaluators.retrieval_metrics import max_over_subqueries
 from mteb.abstasks import AbsTaskRetrieval
@@ -152,7 +152,7 @@ Recommendation},
 
             # First pass: expand queries while maintaining relationships
             current_instance_idx = 0
-            for instance in tqdm.tqdm(self.dataset[split]):
+            for instance in tqdm(self.dataset[split]):
                 queries = instance["query"]
                 positives = instance.get("positive", [])
                 negatives = instance.get("negative", [])
@@ -190,7 +190,7 @@ Recommendation},
 
             # Process valid examples in batches
             batch_size = 1000
-            for batch_start in tqdm.tqdm(range(0, len(valid_examples), batch_size)):
+            for batch_start in tqdm(range(0, len(valid_examples), batch_size)):
                 batch_end = min(batch_start + batch_size, len(valid_examples))
                 batch_indices = valid_examples[batch_start:batch_end]
 

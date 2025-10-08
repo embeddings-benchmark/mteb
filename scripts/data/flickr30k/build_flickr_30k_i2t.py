@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 
 from datasets import Dataset, DatasetDict, load_dataset
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 WRITE_TOK = os.environ["HF_TOKEN"]
 

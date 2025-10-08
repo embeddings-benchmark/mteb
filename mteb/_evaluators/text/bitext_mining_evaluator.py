@@ -5,8 +5,8 @@ from typing import Any
 
 import numpy as np
 import torch
-import tqdm
 from datasets import Dataset
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
@@ -48,7 +48,7 @@ class BitextMiningEvaluator(Evaluator):
             subsets = list(pair_elements)
 
         embeddings = {}
-        for sub in tqdm.tqdm(subsets):
+        for sub in tqdm(subsets):
             dataloader = create_dataloader_from_texts(self.sentences[sub])
             embeddings[sub] = model.encode(
                 dataloader,
@@ -61,9 +61,7 @@ class BitextMiningEvaluator(Evaluator):
 
         logger.info("Finding nearest neighbors...")
         neighbours = {}
-        for i, (key1, key2) in enumerate(
-            tqdm.tqdm(self.pairs, desc="Matching sentences")
-        ):
+        for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
             neighbours[f"{key1}-{key2}"] = self._similarity_search(
                 embeddings[key1], embeddings[key2], model
             )

@@ -6,7 +6,7 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     requires_image_dependencies,
