@@ -71,9 +71,9 @@ def get_reference_models_for_task(task: AbsTask) -> list[str]:
     Returns:
         List of model names that should be evaluated on this task
     """
-    # Extract task type from the task class name
-    # AbsTaskRetrieval -> Retrieval, AbsTaskClassification -> Classification, etc.
-    task_type = task.__class__.__name__.replace("AbsTask", "")
+    # Get task type from the task metadata, which is more reliable
+    # than trying to parse class names
+    task_type = task.metadata.type
     return get_reference_models_for_task_type(task_type)
 
 def is_reference_model(model_name: str) -> bool:

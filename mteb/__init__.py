@@ -20,6 +20,12 @@ from mteb.reference_models import (
     get_reference_models_for_task,
     is_reference_model,
 )
+from mteb.validation import (
+    CoverageValidator,
+    validate_benchmark_coverage,
+    get_missing_reference_models,
+    get_reference_model_coverage_summary,
+)
 
 from .benchmarks.benchmarks import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
@@ -46,4 +52,12 @@ __all__ = [
     "get_benchmarks",
     "BenchmarkResults",
     "BENCHMARK_REGISTRY",
+    "get_reference_models",
+    "get_reference_models_for_task_type",
+    "get_reference_models_for_task",
+    "is_reference_model",
+    "CoverageValidator",
+    "validate_benchmark_coverage",
+    "get_missing_reference_models",
+    "get_reference_model_coverage_summary",
 ]
