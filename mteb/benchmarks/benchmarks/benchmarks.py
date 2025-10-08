@@ -1184,6 +1184,42 @@ BRIGHT = Benchmark(
 """,
 )
 
+BRIGHT_SUBSETS = Benchmark(
+    name="BRIGHT (subsets)",
+    display_name="Reasoning Retrieval (subsets)",
+    tasks=get_tasks(
+        tasks=[
+            "BrightBiologyRetrieval",
+            "BrightEarthScienceRetrieval",
+            "BrightEconomicsRetrieval",
+            "BrightPsychologyRetrieval",
+            "BrightRoboticsRetrieval",
+            "BrightStackoverflowRetrieval",
+            "BrightSustainableLivingRetrieval",
+            "BrightPonyRetrieval",
+            "BrightLeetcodeRetrieval",
+            "BrightAopsRetrieval",
+            "BrightTheoremQATheoremsRetrieval",
+            "BrightTheoremQAQuestionsRetrieval",
+        ],
+    ),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval (Individual Subsets).
+    This benchmark contains individual subset tasks for each domain in the BRIGHT benchmark,
+    allowing for domain-specific evaluation. The subsets include: biology, earth science, economics,
+    psychology, robotics, stackoverflow, sustainable living, pony, leetcode, aops, theoremqa_theorems,
+    and theoremqa_questions.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation=r"""
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
+)
+
 BRIGHT_LONG = Benchmark(
     name="BRIGHT (long)",
     tasks=MTEBTasks(
@@ -1201,6 +1237,37 @@ economics, psychology, mathematics, and coding. These queries are drawn from
 naturally occurring and carefully curated human data.
 
 This is the long version of the benchmark, which only filter longer documents.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation=r"""
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
+)
+
+BRIGHT_SUBSETS_LONG = Benchmark(
+    name="BRIGHT (long subsets)",
+    display_name="Reasoning Retrieval (long subsets)",
+    tasks=get_tasks(
+        tasks=[
+            "BrightBiologyLongRetrieval",
+            "BrightEarthScienceLongRetrieval",
+            "BrightEconomicsLongRetrieval",
+            "BrightPsychologyLongRetrieval",
+            "BrightRoboticsLongRetrieval",
+            "BrightStackoverflowLongRetrieval",
+            "BrightSustainableLivingLongRetrieval",
+            "BrightPonyLongRetrieval",
+        ],
+    ),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval (Long Individual Subsets).
+    This benchmark contains individual subset tasks for each domain in the BRIGHT benchmark with long documents,
+    allowing for domain-specific evaluation with longer context. The subsets include: biology, earth science,
+    economics, psychology, robotics, stackoverflow, sustainable living, and pony.
     """,
     reference="https://brightbenchmark.github.io/",
     citation=r"""
@@ -1603,8 +1670,7 @@ BEIR_NL = Benchmark(
             "TRECCOVID-NL",
         ],
     ),
-    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
-    "translation.",
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated translation.",
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
     citation=r"""

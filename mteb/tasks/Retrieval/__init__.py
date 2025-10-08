@@ -43,6 +43,8 @@ from .eng.BarExamQARetrieval import *
 from .eng.BillSumCARetrieval import *
 from .eng.BillSumUSRetrieval import *
 from .eng.BrightRetrieval import *
+from .eng.BrightSubsetsLongRetrieval import *
+from .eng.BrightSubsetsRetrieval import *
 from .eng.BuiltBenchRetrieval import *
 from .eng.ChatDoctorRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
