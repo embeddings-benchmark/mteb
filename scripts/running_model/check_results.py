@@ -91,10 +91,16 @@ def normalize_results(results):
     return results
 
 
-model_names = [
-    "sentence-transformers/all-MiniLM-L6-v2",
+# Import reference models registry
+from mteb.reference_models import get_reference_models
+
+# Get the core reference models that should always be evaluated
+reference_models = get_reference_models()
+
+# Additional important models beyond the core reference set
+additional_models = [
+    "sentence-transformers/all-MiniLM-L6-v2",  # Popular baseline
     "sentence-transformers/all-MiniLM-L12-v2",
-    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "sentence-transformers/all-mpnet-base-v2",
     "sentence-transformers/LaBSE",
@@ -102,10 +108,12 @@ model_names = [
     "intfloat/e5-mistral-7b-instruct",
     "GritLM/GritLM-7B",
     "GritLM/GritLM-8x7B",
-    "intfloat/multilingual-e5-small",
     "intfloat/multilingual-e5-base",
     "intfloat/multilingual-e5-large",
 ]
+
+# Combine reference models with additional models
+model_names = reference_models + additional_models
 
 
 tasks_which_should_be_there = mteb.get_tasks(
