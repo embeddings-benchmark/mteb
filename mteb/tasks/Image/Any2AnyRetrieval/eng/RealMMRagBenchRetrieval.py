@@ -96,10 +96,10 @@ class RealMMRagFinReportRetrieval(AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @article{wasserman2025real,
-  title={REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
-  author={Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
-  journal={arXiv preprint arXiv:2502.12342},
-  year={2025}
+  author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal = {arXiv preprint arXiv:2502.12342},
+  title = {REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
@@ -154,10 +154,10 @@ class RealMMRagFinSlidesRetrieval(AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @article{wasserman2025real,
-  title={REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
-  author={Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
-  journal={arXiv preprint arXiv:2502.12342},
-  year={2025}
+  author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal = {arXiv preprint arXiv:2502.12342},
+  title = {REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
@@ -211,10 +211,10 @@ class RealMMRagTechReportRetrieval(AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @article{wasserman2025real,
-  title={REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
-  author={Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
-  journal={arXiv preprint arXiv:2502.12342},
-  year={2025}
+  author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal = {arXiv preprint arXiv:2502.12342},
+  title = {REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
@@ -268,10 +268,10 @@ class RealMMRagTechSlidesRetrieval(AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @article{wasserman2025real,
-  title={REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
-  author={Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
-  journal={arXiv preprint arXiv:2502.12342},
-  year={2025}
+  author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal = {arXiv preprint arXiv:2502.12342},
+  title = {REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
