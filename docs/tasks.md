@@ -882,7 +882,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SiswatiNewsClassification.v2](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News, Written] | None | None |
 | [SketchyI2IRetrieval](https://arxiv.org/abs/2202.01747) (Ypsilantis et al., 2021) | ['eng'] | Any2AnyRetrieval | i2i | [Encyclopaedic] | {'test': 477886} | {'test': {'number_of_characters': 0, 'num_samples': 477886, 'num_queries': 452886, 'num_documents': 25000, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 25000, 'min_query_length': 0, 'average_query_length': 0, 'max_query_length': 0, 'unique_queries': 0, 'num_query_images': 452886, 'min_relevant_docs_per_query': 100, 'average_relevant_docs_per_query': 100.0, 'max_relevant_docs_per_query': 100, 'unique_relevant_docs': 12500}} |
 | [SlovakHateSpeechClassification.v2](https://huggingface.co/datasets/TUKE-KEMT/hate_speech_slovak) | ['slk'] | Classification | s2s | [Social, Written] | None | None |
-| [SlovakMovieReviewSentimentClassification.v2](https://arxiv.org/pdf/2304.01922) ({\v{S, 2023) | ['svk'] | Classification | s2s | [Reviews, Written] | None | None |
+| [SlovakMovieReviewSentimentClassification.v2](https://arxiv.org/pdf/2304.01922) ({\v{S, 2023) | ['slk'] | Classification | s2s | [Reviews, Written] | None | None |
 | [SlovakSumRetrieval](https://huggingface.co/datasets/NaiveNeuron/slovaksum) | ['slk'] | Retrieval | s2s | [News, Social, Web, Written] | None | None |
 | [SouthAfricanLangClassification](https://www.kaggle.com/competitions/south-african-language-identification/) (ExploreAI Academy et al., 2022) | ['afr', 'eng', 'nbl', 'nso', 'sot', 'ssw', 'tsn', 'tso', 'ven', 'xho', 'zul'] | Classification | s2s | [Non-fiction, Web, Written] | None | None |
 | [SpanishNewsClassification.v2](https://huggingface.co/datasets/MarcOrfilaCarreras/spanish-news) | ['spa'] | Classification | s2s | [News, Written] | None | None |
@@ -1920,7 +1920,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sim | Mende (Papua New Guinea) | Sepik | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sin | Sinhala | Indo-European | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | sja | Epena | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slk | Slovak | Indo-European | 0 | 0 | 0 | 5 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 15 |
+| slk | Slovak | Indo-European | 0 | 0 | 0 | 5 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 16 |
 | sll | Salt-Yui | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | slv | Slovenian | Indo-European | 0 | 0 | 0 | 5 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
 | smk | Bolinao | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1959,7 +1959,6 @@ The following tables give you an overview of the tasks in MTEB.
 | sun | Sundanese | Austronesian | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
 | sus | Susu | Mande | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | suz | Sunwar | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| svk | Slovakian Sign Language | Sign Language | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swa | Swahili (macrolanguage) | Atlantic-Congo | 0 | 1 | 0 | 1 | 7 | 2 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 17 |
 | swe | Swedish | Indo-European | 0 | 1 | 0 | 6 | 9 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 1 | 0 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 30 |
 | swg | Swabian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
