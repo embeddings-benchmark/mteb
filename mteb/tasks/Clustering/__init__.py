@@ -13,6 +13,9 @@ from .eng.BiorxivClusteringS2S import *
 from .eng.BuiltBenchClusteringP2P import *
 from .eng.BuiltBenchClusteringS2S import *
 from .eng.ClusTrecCovid import *
+from .eng.HUMEArxivClusteringP2P import *
+from .eng.HUMERedditClusteringP2P import *
+from .eng.HUMEWikiCitiesClustering import *
 from .eng.MedrxivClusteringP2P import *
 from .eng.MedrxivClusteringS2S import *
 from .eng.RedditClustering import *
@@ -31,6 +34,7 @@ from .jpn.LivedoorNewsClustering import *
 from .jpn.MewsC16JaClustering import *
 from .kor.KlueMrcDomainClustering import *
 from .kor.KlueYnatMrcCategoryClustering import *
+from .multilingual.HUMESIB200ClusteringS2S import *
 from .multilingual.IndicReviewsClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *

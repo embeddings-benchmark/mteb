@@ -13,6 +13,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     ENCODECHKA,
     FA_MTEB,
     FA_MTEB_2,
+    HUME,
     JINA_VDR,
     REAL_MM_RAG,
     LONG_EMBED,
@@ -55,6 +56,7 @@ from mteb.benchmarks.benchmarks.rteb_benchmarks import (
     RTEB_FRENCH,
     RTEB_GERMAN,
     RTEB_HEALTHCARE,
+    RTEB_JAPANESE,
     RTEB_LEGAL,
     RTEB_MAIN,
 )
@@ -113,5 +115,6 @@ __all__ = [
     "RTEB_ENGLISH",
     "RTEB_FRENCH",
     "RTEB_GERMAN",
-    "REAL_MM_RAG",
+    "RTEB_JAPANESE",
+    "HUME",
 ]

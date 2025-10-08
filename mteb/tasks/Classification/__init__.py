@@ -29,6 +29,9 @@ from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.FrenkEnClassification import *
+from .eng.HUMEEmotionClassification import *
+from .eng.HUMEToxicConversationsClassification import *
+from .eng.HUMETweetSentimentExtractionClassification import *
 from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
@@ -95,6 +98,7 @@ from .multilingual.AmazonReviewsClassification import *
 from .multilingual.CataloniaTweetClassification import *
 from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
+from .multilingual.HUMEMultilingualSentimentClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicNLPNewsClassification import *
 from .multilingual.IndicSentimentClassification import *

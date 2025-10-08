@@ -80,7 +80,7 @@ _LANGUAGES = {
     "dan-isl": ["dan-Latn", "isl-Latn"],  # Samples: 327
     "dan-ita": ["dan-Latn", "ita-Latn"],  # Samples: 3,818
     "dan-nld": ["dan-Latn", "nld-Latn"],  # Samples: 4,099
-    "dan-nor": ["dan-Latn", "nor-Latn"],  # Samples: 2,603
+    "dan-nor": ["dan-Latn", "nor-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,603
     "dan-por": ["dan-Latn", "por-Latn"],  # Samples: 3,206
     "dan-ron": ["dan-Latn", "ron-Latn"],  # Samples: 2,052
     "dan-spa": ["dan-Latn", "spa-Latn"],  # Samples: 3,571
@@ -89,7 +89,7 @@ _LANGUAGES = {
     "deu-isl": ["deu-Latn", "isl-Latn"],  # Samples: 294
     "deu-ita": ["deu-Latn", "ita-Latn"],  # Samples: 18,787
     "deu-nld": ["deu-Latn", "nld-Latn"],  # Samples: 14,211
-    "deu-nor": ["deu-Latn", "nor-Latn"],  # Samples: 2,783
+    "deu-nor": ["deu-Latn", "nor-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,783
     "deu-por": ["deu-Latn", "por-Latn"],  # Samples: 11,319
     "deu-ron": ["deu-Latn", "ron-Latn"],  # Samples: 3,598
     "deu-spa": ["deu-Latn", "spa-Latn"],  # Samples: 19,739
@@ -97,7 +97,7 @@ _LANGUAGES = {
     "fra-isl": ["fra-Latn", "isl-Latn"],  # Samples: 347
     "fra-ita": ["fra-Latn", "ita-Latn"],  # Samples: 20,002
     "fra-nld": ["fra-Latn", "nld-Latn"],  # Samples: 14,684
-    "fra-nor": ["fra-Latn", "nor-Latn"],  # Samples: 2,558
+    "fra-nor": ["fra-Latn", "nor-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,558
     "fra-por": ["fra-Latn", "por-Latn"],  # Samples: 13,265
     "fra-ron": ["fra-Latn", "ron-Latn"],  # Samples: 3,295
     "fra-spa": ["fra-Latn", "spa-Latn"],  # Samples: 23,311
@@ -113,15 +113,15 @@ _LANGUAGES = {
     "ita-ron": ["ita-Latn", "ron-Latn"],  # Samples: 3,360
     "ita-spa": ["ita-Latn", "spa-Latn"],  # Samples: 16,534
     "ita-swe": ["ita-Latn", "swe-Latn"],  # Samples: 4,741
-    "nld-nor": ["nld-Latn", "nor-Latn"],  # Samples: 2,664
+    "nld-nor": ["nld-Latn", "nor-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,664
     "nld-por": ["nld-Latn", "por-Latn"],  # Samples: 7,021
     "nld-ron": ["nld-Latn", "ron-Latn"],  # Samples: 2,888
     "nld-spa": ["nld-Latn", "spa-Latn"],  # Samples: 9,555
     "nld-swe": ["nld-Latn", "swe-Latn"],  # Samples: 5,072
-    "nor-por": ["nor-Latn", "por-Latn"],  # Samples: 2,096
-    "nor-ron": ["nor-Latn", "ron-Latn"],  # Samples: 1,412
-    "nor-spa": ["nor-Latn", "spa-Latn"],  # Samples: 2,603
-    "nor-swe": ["nor-Latn", "swe-Latn"],  # Samples: 3,165
+    "nor-por": ["nor-Latn", "por-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,096
+    "nor-ron": ["nor-Latn", "ron-Latn", "nno-Latn", "nob-Latn"],  # Samples: 1,412
+    "nor-spa": ["nor-Latn", "spa-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,603
+    "nor-swe": ["nor-Latn", "swe-Latn", "nno-Latn", "nob-Latn"],  # Samples: 3,165
     "por-ron": ["por-Latn", "ron-Latn"],  # Samples: 3,026
     "por-spa": ["por-Latn", "spa-Latn"],  # Samples: 16,084
     "por-swe": ["por-Latn", "swe-Latn"],  # Samples: 4,235
@@ -176,7 +176,7 @@ _LANGUAGES = {
     "eng-mar": ["eng-Latn", "mar-Deva"],  # Samples: 280
     "eng-msa": ["eng-Latn", "msa-Latn"],  # Samples: 469
     "eng-nld": ["eng-Latn", "nld-Latn"],  # Samples: 15,613
-    "eng-nor": ["eng-Latn", "nor-Latn"],  # Samples: 2,666
+    "eng-nor": ["eng-Latn", "nor-Latn", "nno-Latn", "nob-Latn"],  # Samples: 2,666
     "eng-pol": ["eng-Latn", "pol-Latn"],  # Samples: 6,868
     "eng-por": ["eng-Latn", "por-Latn"],  # Samples: 12,406
     "eng-ron": ["eng-Latn", "ron-Latn"],  # Samples: 3,039

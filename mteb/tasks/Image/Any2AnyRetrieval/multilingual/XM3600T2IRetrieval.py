@@ -29,7 +29,7 @@ _LANGUAGES = {
     "ko": ["kor-Hang"],
     "mi": ["mri-Latn"],
     "nl": ["nld-Latn"],
-    "no": ["nor-Latn"],
+    "no": ["nor-Latn", "nno-Latn", "nob-Latn"],
     "pl": ["pol-Latn"],
     "pt": ["por-Latn"],
     "quz": ["quz-Latn"],
