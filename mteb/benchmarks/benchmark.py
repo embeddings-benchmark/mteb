@@ -95,50 +95,51 @@ class Benchmark:
 
     def get_required_reference_models(self) -> dict[str, list[str]]:
         """Get the reference models required for each task in this benchmark.
-        
+
         This is a method that determines what models should be evaluated.
-        
+
         Returns:
             Dictionary mapping task names to lists of required reference model names.
         """
         from mteb.reference_models import get_reference_models_for_task
-        
+
         required_models = {}
         for task in self.tasks:
             task_name = task.metadata.name
             required_models[task_name] = get_reference_models_for_task(task)
-        
+
         return required_models
 
     def get_all_required_reference_models(self) -> list[str]:
         """Get all unique reference models required across all tasks in this benchmark.
-        
+
         Returns:
             List of unique reference model names required for this benchmark.
         """
         required_by_task = self.get_required_reference_models()
-        
+
         # Flatten and deduplicate
         all_required = set()
         for task_models in required_by_task.values():
             all_required.update(task_models)
-        
+
         return sorted(list(all_required))
 
     def validate_reference_model_coverage(
         self, base_results: BenchmarkResults | None = None
     ) -> dict[str, list[str]]:
         """Validate reference model coverage for this benchmark.
-        
+
         This is a convenience method that delegates to the validation module.
-        
+
         Args:
             base_results: Optional benchmark results to check against.
-            
+
         Returns:
             Dictionary mapping task names to lists of missing reference model names.
         """
         from mteb.validation import CoverageValidator
+
         validator = CoverageValidator(self)
         return validator.validate_reference_model_coverage(base_results)
 
@@ -146,16 +147,17 @@ class Benchmark:
         self, base_results: BenchmarkResults | None = None
     ) -> list[str]:
         """Get missing reference models for this benchmark.
-        
+
         This is a convenience method that delegates to the validation module.
-        
+
         Args:
             base_results: Optional benchmark results to check against.
-            
+
         Returns:
             List of missing reference model names.
         """
         from mteb.validation import CoverageValidator
+
         validator = CoverageValidator(self)
         return validator.get_missing_reference_models(base_results)
 
@@ -163,16 +165,17 @@ class Benchmark:
         self, base_results: BenchmarkResults | None = None
     ) -> dict[str, any]:
         """Get reference model coverage summary for this benchmark.
-        
+
         This is a convenience method that delegates to the validation module.
-        
+
         Args:
             base_results: Optional benchmark results to check against.
-            
+
         Returns:
             Dictionary with coverage statistics and details.
         """
         from mteb.validation import CoverageValidator
+
         validator = CoverageValidator(self)
         return validator.get_reference_model_coverage_summary(base_results)
 
