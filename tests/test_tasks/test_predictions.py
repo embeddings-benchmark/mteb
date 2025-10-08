@@ -10,6 +10,7 @@ from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
     MockSTSTask,
     MockTextZeroShotClassificationTask,
@@ -63,6 +64,16 @@ from tests.test_benchmark.mock_tasks import (
                 "similarity_scores": [0.6676753163337708, 0.44889140129089355],
             },
         ),
+        (
+            MockPairClassificationTask,
+            {
+                "cosine_scores": [0.6676752688013152, 0.44889138491964875],
+                "euclidean_distances": [1.4245895965840156, 1.8406867696540525],
+                "manhattan_distances": [3.8137664259525317, 5.127750669852312],
+                "similarity_scores": [0.6676753163337708, 0.44889140129089355],
+                "dot_scores": [1.834609502285649, 1.3250427203346034],
+            },
+        ),
     ],
 )
 def test_predictions(tmp_path: Path, task_cls, expected):
@@ -75,4 +86,5 @@ def test_predictions(tmp_path: Path, task_cls, expected):
         full_predictions = json.load(f)
 
     predictions = full_predictions["default"]["test"]
+    print(predictions)
     assert predictions == expected
