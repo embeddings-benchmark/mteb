@@ -117,4 +117,5 @@ __all__ = [
     "RTEB_GERMAN",
     "RTEB_JAPANESE",
     "HUME",
+    "REAL_MM_RAG",
 ]
