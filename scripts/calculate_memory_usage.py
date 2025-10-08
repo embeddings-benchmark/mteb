@@ -13,7 +13,7 @@ import os
 import re
 from typing import Any
 
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 # IMPORTANT: Adjust the import below to point to the module where ModelMeta is defined.
 # For example, if ModelMeta is defined in a file model_meta.py in your package, do:

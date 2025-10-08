@@ -15,7 +15,7 @@ import pandas as pd
 import typer
 from datasets import Dataset, DatasetDict
 from huggingface_hub import HfApi
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 """
 This script is designed for data cleaning and the automatic creation of new task versions with updated data.

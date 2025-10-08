@@ -6,7 +6,7 @@ from typing import Any, Literal
 
 import numpy as np
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata

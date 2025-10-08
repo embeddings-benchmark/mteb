@@ -6,7 +6,7 @@ import gzip
 
 import jsonlines
 import requests
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 api = "https://api.biorxiv.org/details/medrxiv/2021-01-01/2022-05-10/"
 
