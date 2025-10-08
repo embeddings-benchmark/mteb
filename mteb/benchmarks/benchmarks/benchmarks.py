@@ -2325,6 +2325,7 @@ REAL_MM_RAG = Benchmark(
   year={2025}
 }
 """,
+)
 
 HUME = HUMEBenchmark(
     name="HUME(v1)",
