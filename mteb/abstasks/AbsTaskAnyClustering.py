@@ -111,7 +111,7 @@ class AbsTaskAnyClustering(AbsTask):
             return scores
 
         # make a progress bar for consistent interface
-        logger.debug("Running clustering")
+        logger.info("Running clustering")
         pbar = tqdm(
             desc="Running clustering (1/1)",
             total=1,

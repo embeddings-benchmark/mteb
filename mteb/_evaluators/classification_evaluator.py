@@ -88,7 +88,6 @@ class ClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
-        pbar: tqdm[int] | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
         """Classification evaluation by training a sklearn classifier on the
         embeddings of the training set and evaluating on the embeddings of the test set.
@@ -107,15 +106,7 @@ class ClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"]
         )
 
-        pbar_desc = ""
-        if pbar is not None:
-            pbar_desc = pbar.desc.removesuffix(": ")
-
         logger.debug("Running classification - Encoding samples...")
-
-        if pbar is not None:
-            pbar.set_description(pbar_desc + " - Encoding samples...")
-
         X_train = model.encode(
             dataloader_train,
             task_metadata=self.task_metadata,
@@ -133,15 +124,9 @@ class ClassificationEvaluator(Evaluator):
             )
 
         logger.debug("Running classification - Fitting classifier...")
-        if pbar is not None:
-            pbar.set_description(pbar_desc + " - Fitting classifier...")
-
         y_train = self.train_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
 
         logger.debug("Running classification - Evaluating classifier...")
-        if pbar is not None:
-            pbar.set_description(pbar_desc + " - Evaluating classifier...")
-
         y_pred = self.classifier.predict(test_cache)
         return y_pred, test_cache

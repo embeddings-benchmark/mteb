@@ -16,7 +16,6 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
 )
-from tqdm.auto import tqdm
 
 from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
@@ -197,15 +196,8 @@ class AbsTaskAnyClassification(AbsTask):
         test_cache, idxs = None, None
 
         all_predictions = []
-        # for i in range(self.n_experiments):
-        pbar = tqdm(
-            range(1, self.n_experiments + 1),
-            desc=f"Running classification (0/{self.n_experiments})",
-            disable=not show_progress_bar,
-        )
-        for i in pbar:
-            logger.debug(f"Running classification ({i}/{self.n_experiments})")
-            pbar.set_description(f"Running classification ({i}/{self.n_experiments})")
+        for i in range(self.n_experiments):
+            logger.info(f"Running classification experiment ({i}/{self.n_experiments})")
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
@@ -224,17 +216,13 @@ class AbsTaskAnyClassification(AbsTask):
                 **params,
             )
             y_pred, test_cache = evaluator(
-                model, encode_kwargs=encode_kwargs, test_cache=test_cache, pbar=pbar
+                model, encode_kwargs=encode_kwargs, test_cache=test_cache
             )
             if prediction_folder:
                 all_predictions.append(y_pred.tolist())
             y_test = eval_split[self.label_column_name]
             scores_exp = self._calculate_scores(y_test, y_pred)
             scores.append(scores_exp)
-        pbar.set_description(
-            f"Experiment {self.n_experiments}/{self.n_experiments} - Completed"
-        )
-        pbar.close()
 
         if prediction_folder:
             self._save_task_predictions(
@@ -254,6 +242,7 @@ class AbsTaskAnyClassification(AbsTask):
             )
             for k in scores[0].keys()
         }
+        logger.info("Running classification - Finished.")
         return FullClassificationMetrics(
             scores_per_experiment=scores,
             **avg_scores,

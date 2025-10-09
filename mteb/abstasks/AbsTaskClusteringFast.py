@@ -11,7 +11,6 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
-from tqdm.auto import tqdm
 
 from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
@@ -144,7 +143,6 @@ class AbsTaskClusteringFast(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> ScoresDict:
         if (
@@ -155,16 +153,7 @@ class AbsTaskClusteringFast(AbsTask):
                 "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
             )
 
-        pbar = tqdm(
-            desc="Running Clustering",
-            total=10,
-            disable=not show_progress_bar,
-        )
-
-        logger.debug("Running clustering - Preparing data...")
-        pbar.set_description("Running clustering - Preparing data...")
-        pbar.update(1)
-
+        logger.info("Running clustering - Preparing data...")
         if (
             self.max_document_to_embed is None
             and self.max_fraction_of_documents_to_embed is None
@@ -188,10 +177,7 @@ class AbsTaskClusteringFast(AbsTask):
             [self.input_column_name, self.label_column_name]
         )
 
-        logger.debug("Running clustering - Encoding samples...")
-        pbar.set_description("Running clustering - Encoding samples...")
-        pbar.update(7)
-
+        logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
             create_dataloader(
                 downsampled_dataset,
@@ -205,10 +191,7 @@ class AbsTaskClusteringFast(AbsTask):
             **encode_kwargs,
         )
 
-        logger.debug("Running clustering - Evaluating clustering...")
-        pbar.set_description("Running clustering - Evaluating clustering...")
-        pbar.update(1)
-
+        logger.info("Running clustering - Evaluating clustering...")
         labels = []
         for label in downsampled_dataset[self.label_column_name]:
             if not isinstance(label, list):
@@ -226,11 +209,7 @@ class AbsTaskClusteringFast(AbsTask):
         )
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
-        logger.debug("Running clustering - Finished.")
-        pbar.set_description("Running clustering - Finished")
-        pbar.update(1)
-        pbar.close()
-
+        logger.info("Running clustering - Finished.")
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
         return {
