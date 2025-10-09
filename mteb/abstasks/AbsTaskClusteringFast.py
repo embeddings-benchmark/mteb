@@ -157,7 +157,7 @@ class AbsTaskClusteringFast(AbsTask):
 
         pbar = tqdm(
             desc="Running Clustering",
-            total=4,
+            total=10,
             disable=not show_progress_bar,
         )
 
@@ -190,7 +190,7 @@ class AbsTaskClusteringFast(AbsTask):
 
         logger.debug("Running clustering - Encoding samples...")
         pbar.set_description("Running clustering - Encoding samples...")
-        pbar.update(1)
+        pbar.update(7)
 
         embeddings = model.encode(
             create_dataloader(

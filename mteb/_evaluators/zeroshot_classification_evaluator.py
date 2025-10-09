@@ -6,6 +6,7 @@ from typing import Any
 from datasets import Dataset
 from sklearn import metrics
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
@@ -43,7 +44,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.hf_subset = hf_subset
 
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+        self, model: Encoder, *, encode_kwargs: dict[str, Any], pbar: tqdm | None = None
     ) -> dict[str, float]:
         if "image" in self.task_metadata.modalities:
             dataloader = create_image_dataloader(
@@ -61,6 +62,12 @@ class ZeroShotClassificationEvaluator(Evaluator):
                 "ZeroShotClassificationEvaluator only supports image and text modalities."
             )
 
+        logger.debug("Running zero-shot classification - Encoding labels...")
+        if pbar is not None:
+            pbar.set_description(
+                "Running zero-shot classification - Encoding labels..."
+            )
+            pbar.update(2)
         text_label_embeddings = model.encode(
             create_dataloader_from_texts(self.candidate_labels),
             task_metadata=self.task_metadata,
@@ -68,6 +75,13 @@ class ZeroShotClassificationEvaluator(Evaluator):
             hf_split=self.hf_split,
             **encode_kwargs,
         )
+
+        logger.debug("Running zero-shot classification - Encoding samples...")
+        if pbar is not None:
+            pbar.set_description(
+                "Running zero-shot classification - Encoding samples..."
+            )
+            pbar.update(4)
 
         input_embeddings = model.encode(
             dataloader,
@@ -77,6 +91,13 @@ class ZeroShotClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
 
+        logger.debug("Running zero-shot classification - Evaluating accuracy...")
+        if pbar is not None:
+            pbar.set_description(
+                "Running zero-shot classification - Evaluating accuracy..."
+            )
+            pbar.update(2)
+
         if self.task_metadata.modalities == ["text"]:
             probs = model.similarity(text_label_embeddings, input_embeddings)
         else:
@@ -84,4 +105,12 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         predictions = probs.argmax(dim=1)
         accuracy = metrics.accuracy_score(self.labels, predictions.tolist())
+
+        logger.info("Running zero-shot classification - Finished.")
+        if pbar is not None:
+            pbar.set_description(
+                f"Finished zero-shot classification - Accuracy: {accuracy:.4f}"
+            )
+            pbar.update(2)
+
         return {"accuracy": accuracy}

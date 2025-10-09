@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "/Users/au561649/Github/mteb/tmp.py", line 6, in <module>
+    import mteb
+  File "/Users/au561649/Github/mteb/mteb/__init__.py", line 5, in <module>
+    from mteb.abstasks import AbsTask
+  File "/Users/au561649/Github/mteb/mteb/abstasks/__init__.py", line 3, in <module>
+    from .AbsTask import AbsTask
+  File "/Users/au561649/Github/mteb/mteb/abstasks/AbsTask.py", line 17, in <module>
+    from mteb.abstasks.task_metadata import TaskMetadata
+  File "/Users/au561649/Github/mteb/mteb/abstasks/task_metadata.py", line 25, in <module>
+    from mteb.types import (
+  File "/Users/au561649/Github/mteb/mteb/types/__init__.py", line 3, in <module>
+    from ._encoder_io import (
+  File "/Users/au561649/Github/mteb/mteb/types/_encoder_io.py", line 8, in <module>
+    import torch
+  File "/Users/au561649/Github/mteb/.venv/lib/python3.12/site-packages/torch/__init__.py", line 2150, in <module>
+    from torch import _VF as _VF, functional as functional  # usort: skip
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/au561649/Github/mteb/.venv/lib/python3.12/site-packages/torch/functional.py", line 8, in <module>
+    import torch.nn.functional as F
+  File "/Users/au561649/Github/mteb/.venv/lib/python3.12/site-packages/torch/nn/__init__.py", line 9, in <module>
+    from torch.nn import (
+  File "<frozen importlib._bootstrap>", line 1354, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1325, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 929, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 990, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1086, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1186, in get_data
+KeyboardInterrupt
