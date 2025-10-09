@@ -7,13 +7,16 @@ import os
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
-
+from weaviate.collections import collection
+import weaviate
+from weaviate.classes.config import Configure, Property, DataType
+from weaviate.collections.classes.grpc import MetadataQuery
 import numpy as np
 import pytrec_eval
 import torch
 import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
-
+from tqdm import tqdm
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
@@ -94,6 +97,99 @@ class DenseRetrievalExactSearch:
             # load the predict instance from the CrossEncoder
             # custom functions can be used by extending the DenseRetrievalExactSearch class
             self.predict = self.model.predict
+
+    def search_vetor_db(
+        self,
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str | list[str]],
+        top_k: int,
+        collection: collection,
+        task_name: str,
+        instructions: dict[str, str] | None = None,
+        request_qid: str | None = None,
+        return_sorted: bool = False,
+        **kwargs,
+    ):
+        logger.info("Sorting Corpus by document length (Longest first)...")
+        corpus_ids = sorted(
+            corpus,
+            reverse=True,
+        )
+        corpus = [corpus[cid] for cid in corpus_ids]  # type: ignore
+
+        logger.info("Encoding Corpus in batches... Warning: This might take a while!")
+        itr = range(0, len(corpus), self.corpus_chunk_size)
+
+        for batch_num, corpus_start_idx in tqdm(enumerate(itr)):
+            logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
+            corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
+
+            # Encode chunk of corpus
+            if (
+                self.save_corpus_embeddings
+                and request_qid
+                and len(self.corpus_embeddings[request_qid])
+            ):
+                sub_corpus_embeddings = torch.tensor(
+                    self.corpus_embeddings[request_qid][batch_num]
+                )
+            else:
+                # Encode chunk of corpus
+                sub_corpus_embeddings = self.model.encode(
+                    corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
+                    task_name=task_name,
+                    prompt_type=PromptType.document,
+                    request_qid=request_qid,
+                    **self.encode_kwargs,
+                )
+                if self.save_corpus_embeddings and request_qid:
+                    self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
+
+            with collection.batch.fixed_size(batch_size=self.corpus_chunk_size) as batch:
+                for index, current_corpus_id in enumerate(range(corpus_start_idx,corpus_end_idx)):
+                    batch.add_object(
+                        properties={"text": corpus[current_corpus_id], "docid": corpus_ids[current_corpus_id]},
+                        vector={"muvera_vector": sub_corpus_embeddings[index]}  
+                    )
+
+                if collection.batch.failed_objects:
+                    print(f"Number of failed imports: {len(collection.batch.failed_objects)}")
+                    print(f"First failed object: {collection.batch.failed_objects[0]}")
+
+        logger.info("Encoding Queries.")
+        query_ids = list(queries.keys())
+        self.results = {qid: {} for qid in query_ids}
+        queries = [queries[qid] for qid in queries]  # type: ignore
+        if instructions:
+            queries = [f"{query} {instructions[query]}".strip() for query in queries]
+
+        for q_id, query in tqdm(zip(query_ids, queries)):
+            if isinstance(queries[0], list):  # type: ignore
+                query_embeddings = self.encode_conversations(
+                    model=self.model,
+                    conversations=query,  # type: ignore
+                    task_name=task_name,
+                    **self.encode_kwargs,
+                )
+            else:
+                query_embeddings = self.model.encode(
+                    query,  # type: ignore
+                    task_name=task_name,
+                    prompt_type=PromptType.query,
+                    **self.encode_kwargs,
+                )
+            response = collection.query.near_vector(
+                        near_vector=query_embeddings,
+                        target_vector="muvera_vector",
+                        limit=top_k,
+                        return_metadata=MetadataQuery.full()
+                    )
+            print(q_id)
+            for obj in response.objects:
+                # result_properties = json.dumps(, indent=2)
+                self.results[q_id][obj.properties["docid"]] = obj.metadata.distance
+
+        return self.results
 
     def search(
         self,
@@ -454,6 +550,35 @@ class RetrievalEvaluator(Evaluator):
             self.retriever = DenseRetrievalExactSearch(
                 DRESModel(retriever), encode_kwargs=encode_kwargs, **kwargs
             )
+        self.approximate_search_type = None
+        if kwargs.get("approximate_search"):
+            approximate_search_type = kwargs.get("approximate_search_type")
+            self.approximate_search_type = approximate_search_type
+            
+            client = weaviate.connect_to_local(port="8081")
+            client.collections.delete_all()
+            collection_name = "MuveraTest1"
+            collection = client.collections.create(
+                collection_name,
+                vector_config=[
+                    # User-provided embeddings
+                    Configure.MultiVectors.self_provided(
+                        name="muvera_vector",
+                        encoding=Configure.VectorIndex.MultiVector.Encoding.muvera(
+                            ksim=5,
+                            dprojections=8,
+                            repetitions= 20,
+                        ),
+                        quantizer=Configure.VectorIndex.Quantizer.pq(centroids=256)
+                    ),
+                ],
+                properties=[
+                    Property(name="text", data_type=DataType.TEXT),
+                    Property(name="docid", data_type=DataType.TEXT),
+                ]
+            )
+            self.collection = collection
+            self.collection_name = collection_name
         self.k_values = k_values
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
@@ -470,6 +595,14 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
+        elif self.approximate_search_type:
+            return self.retriever.search_vetor_db(
+                                        corpus,
+                                        queries,
+                                        self.top_k,
+                                        self.collection,
+                                        task_name=self.task_name,  # type: ignore
+                                    )
         elif (
             hasattr(self.retriever.model.model, "mteb_model_meta")
             and self.retriever.model.model.mteb_model_meta.name == "bm25s"
