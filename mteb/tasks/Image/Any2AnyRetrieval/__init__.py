@@ -29,6 +29,7 @@ from .eng.NIGHTSI2IRetrieval import *
 from .eng.OKVQAIT2TRetrieval import *
 from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *
+from .eng.RealMMRagBenchRetrieval import *
 from .eng.ReMuQIT2TRetrieval import *
 from .eng.ROxfordI2IRetrieval import *
 from .eng.RP2kI2IRetrieval import *
@@ -46,7 +47,6 @@ from .eng.VizWizIT2TRetrieval import *
 from .eng.VQA2IT2TRetrieval import *
 from .eng.WebQAT2ITRetrieval import *
 from .eng.WebQAT2TRetrieval import *
-from .eng.RealMMRagBenchRetrieval import *
 from .multilingual.JinaVDRBenchRetrieval import *
 from .multilingual.MIRACLVisionRetrieval import *
 from .multilingual.VdrMultilingualRetrieval import *

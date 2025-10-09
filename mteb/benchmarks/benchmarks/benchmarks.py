@@ -2319,10 +2319,10 @@ REAL_MM_RAG = Benchmark(
     reference="https://arxiv.org/abs/2502.12342",
     citation=r"""
 @article{wasserman2025real,
-  title={REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
-  author={Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
-  journal={arXiv preprint arXiv:2502.12342},
-  year={2025}
+  author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal = {arXiv preprint arXiv:2502.12342},
+  title = {REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  year = {2025},
 }
 """,
 )
