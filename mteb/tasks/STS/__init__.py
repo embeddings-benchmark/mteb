@@ -28,6 +28,7 @@ from .por.SickBrSTS import *
 from .ron.RonSTS import *
 from .rus.RUParaPhraserSTS import *
 from .rus.RuSTSBenchmarkSTS import *
+from .slk.SlovakSTS import *
 from .spa.STSES import *
 from .vie.BiossesSTSVN import *
 from .vie.SickrSTSVN import *
