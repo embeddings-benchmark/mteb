@@ -12,17 +12,17 @@ revision = "be653fab7d27a7348a0c2c3d16b9f92a7f10cb0c"
 english_code_retriever = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
-        model_name=model_name,
-        revision=revision,
+        model_name="fyaronskiy/english_code_retriever",
+        revision="be653fab7d27a7348a0c2c3d16b9f92a7f10cb0c",
         model_prompts={
             PromptType.query.value: "search_query: ",
             PromptType.document.value: "search_document: ",
         },
     ),
-    name=model_name,
+    name="fyaronskiy/english_code_retriever",
     languages=["eng-Latn"],
     open_weights=True,
-    revision=revision,
+    revision="be653fab7d27a7348a0c2c3d16b9f92a7f10cb0c",
     release_date="2025-07-10",
     n_parameters=149_000_000,
     memory_usage_mb=568,
