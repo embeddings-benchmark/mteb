@@ -183,7 +183,6 @@ class AbsTaskAnyClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
         train_split = data_split[self.train_split]

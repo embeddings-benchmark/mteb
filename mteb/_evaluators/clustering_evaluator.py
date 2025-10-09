@@ -6,7 +6,6 @@ from typing import Any
 from datasets import Dataset
 from scipy.optimize import linear_sum_assignment
 from sklearn import cluster, metrics
-from tqdm import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
@@ -44,7 +43,6 @@ class ClusteringEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
         v_measure_only: bool = False,
-        pbar: tqdm | None = None,
     ) -> dict[str, float]:
         data_loader = create_dataloader(
             self.dataset,
@@ -53,13 +51,7 @@ class ClusteringEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
         )
 
-        pbar_desc = ""
-        if pbar is not None:
-            pbar_desc = pbar.desc.removesuffix(": ")
-
-        if pbar is not None:
-            pbar.set_description(pbar_desc + " - Encoding samples...")
-
+        logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
             data_loader,
             task_metadata=self.task_metadata,
@@ -69,9 +61,8 @@ class ClusteringEvaluator(Evaluator):
         )
 
         labels = self.dataset[self.label_column_name]
-        if pbar is not None:
-            pbar.set_description(pbar_desc + " - Fitting Mini-Batch K-Means...")
 
+        logger.info("Running clustering - Fitting Mini-Batch K-Means...")
         clustering_model = cluster.MiniBatchKMeans(
             n_clusters=len(set(labels)),
             batch_size=self.clustering_batch_size,
@@ -80,9 +71,7 @@ class ClusteringEvaluator(Evaluator):
         clustering_model.fit(embeddings)
         cluster_assignment = clustering_model.labels_
 
-        if pbar is not None:
-            pbar.set_description(pbar_desc + " - Evaluating clustering...")
-
+        logger.info("Running clustering - Evaluating clustering...")
         v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
         if v_measure_only:
             return {"v_measure": float(v_measure)}

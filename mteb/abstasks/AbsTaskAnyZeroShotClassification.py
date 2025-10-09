@@ -106,15 +106,8 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
-        show_progress_bar: bool = True,
         **kwargs,
     ) -> ScoresDict:
-        pbar = tqdm(
-            desc="Running zero-shot classification",
-            total=10,
-            disable=not show_progress_bar,
-        )
-
         candidate_labels = self.get_candidate_labels()
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]
@@ -129,8 +122,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        res = evaluator(model, encode_kwargs=encode_kwargs, pbar=pbar)
-        pbar.close()
+        res = evaluator(model, encode_kwargs=encode_kwargs)
         return res
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:

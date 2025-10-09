@@ -104,14 +104,8 @@ class AbsTaskAnySTS(AbsTask):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> STSMetrics:
-        pbar = tqdm(
-            desc="Running semantic similarity",
-            total=10,
-            disable=not show_progress_bar,
-        )
 
         normalized_scores = list(map(self.normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
@@ -124,8 +118,8 @@ class AbsTaskAnySTS(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs, pbar=pbar)
-        pbar.close()
+        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        
         if prediction_folder:
             self._save_task_predictions(
                 scores,

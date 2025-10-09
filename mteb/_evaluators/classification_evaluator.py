@@ -6,7 +6,6 @@ from typing import Any, Protocol
 import numpy as np
 from datasets import Dataset
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -106,7 +105,7 @@ class ClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"]
         )
 
-        logger.debug("Running classification - Encoding samples...")
+        logger.info("Running classification - Encoding samples...")
         X_train = model.encode(
             dataloader_train,
             task_metadata=self.task_metadata,
@@ -123,10 +122,10 @@ class ClassificationEvaluator(Evaluator):
                 **encode_kwargs,
             )
 
-        logger.debug("Running classification - Fitting classifier...")
+        logger.info("Running classification - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]
         self.classifier.fit(X_train, y_train)
 
-        logger.debug("Running classification - Evaluating classifier...")
+        logger.info("Running classification - Evaluating classifier...")
         y_pred = self.classifier.predict(test_cache)
         return y_pred, test_cache
