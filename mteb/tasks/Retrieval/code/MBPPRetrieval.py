@@ -15,7 +15,7 @@ class MBPPRetrieval(AbsTaskRetrieval):
             "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "python-Code"],

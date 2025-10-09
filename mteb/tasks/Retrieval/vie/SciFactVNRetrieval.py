@@ -18,7 +18,7 @@ class SciFactVN(AbsTaskRetrieval):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://github.com/allenai/scifact",
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

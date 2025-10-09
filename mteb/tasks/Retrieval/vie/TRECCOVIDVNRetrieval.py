@@ -18,7 +18,7 @@ class TRECCOVIDVN(AbsTaskRetrieval):
             "revision": "54d73a1ea11ea0ae4ec0214ec519c93db79dee88",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="ndcg_at_10",

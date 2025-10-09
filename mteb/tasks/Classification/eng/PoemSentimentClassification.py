@@ -13,7 +13,6 @@ class PoemSentimentClassification(AbsTaskAnyClassification):
         dataset={
             "path": "mteb/PoemSentimentClassification",
             "revision": "84af4753ebb04ca836fb54ce89a339839b03b748",
-            "trust_remote_code": True,
         },
         type="Classification",
         category="t2c",
@@ -39,9 +38,6 @@ class PoemSentimentClassification(AbsTaskAnyClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("verse_text", "text")
 
 
 class PoemSentimentClassificationV2(AbsTaskAnyClassification):

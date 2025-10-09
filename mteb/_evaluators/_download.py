@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import requests
-import tqdm
+from tqdm.auto import tqdm
 
 
 # https://stackoverflow.com/a/62113293
@@ -12,7 +12,7 @@ def download(url: str, fname: str):
     total = int(resp.headers.get("content-length", 0))
     with (
         Path(fname).open("wb") as file,
-        tqdm.tqdm(
+        tqdm(
             desc=fname,
             total=total,
             unit="iB",

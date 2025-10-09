@@ -4,9 +4,6 @@
     <a href="https://github.com/embeddings-benchmark/mteb/releases">
         <img alt="GitHub release" src="https://img.shields.io/github/release/embeddings-benchmark/mteb.svg">
     </a>
-    <a href="https://arxiv.org/abs/2210.07316">
-        <img alt="GitHub release" src="https://img.shields.io/badge/arXiv-2305.14251-b31b1b.svg">
-    </a>
     <a href="https://github.com/embeddings-benchmark/mteb/blob/master/LICENSE">
         <img alt="License" src="https://img.shields.io/github/license/embeddings-benchmark/mteb.svg?color=green">
     </a>
@@ -17,20 +14,22 @@
 
 <h4 align="center">
     <p>
-        <a href="#installation">Installation</a> |
-        <a href="#usage-documentation">Usage</a> |
+        <a href="https://embeddings-benchmark.github.io/mteb/installation/">Installation</a> |
+        <a href="https://embeddings-benchmark.github.io/mteb/">Usage</a> |
         <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
-        <a href="#documentation">Documentation</a> |
+        <a href="https://embeddings-benchmark.github.io/mteb/">Documentation</a> |
         <a href="#citing">Citing</a>
     <p>
 </h4>
 
 <h3 align="center">
-    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/hf_logo.png" /></a>
+    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/logos/hf_logo.png" /></a>
 </h3>
 
 
 ## Installation
+
+You can install mteb simply using pip. For more on installation please see the [documentation](https://embeddings-benchmark.github.io/mteb/installation/).
 
 ```bash
 pip install mteb
@@ -39,89 +38,68 @@ pip install mteb
 
 ## Example Usage
 
-
-### Using a script
+Below we present a simple use-case example. For more information, see the [documentation](https://embeddings-benchmark.github.io/mteb/).
 
 ```python
 import mteb
 from sentence_transformers import SentenceTransformer
 
-# Define the sentence-transformers model name
-model_name = "average_word_embeddings_komninos"
-
+# Select model
+model_name = "sentence-transformers/all-MiniLM-L6-v2"
 model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
+
+# Select tasks
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+
+# evaluate
 results = mteb.evaluate(model, tasks=tasks)
 ```
 
-### Using the CLI
+You can also run it using the CLI:
 
 ```bash
-mteb available-tasks # list _all_ available tasks
-mteb available-tasks --languages eng --task-types Retrieval # Available tasks for English Retrieval
-
-mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
-    -t Banking77Classification
-
-# if nothing is specified default to saving the results in the results/{model_name} folder
+mteb run \
+    -m sentence-transformers/all-MiniLM-L6-v2 \
+    -t Banking77Classification \
+    --output-folder results
 ```
 
-Note that using multiple GPUs in parallel can be done by just having a custom encode function that distributes the inputs to multiple GPUs like e.g. [here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60) or [here](https://github.com/ContextualAI/gritlm/blob/09d8630f0c95ac6a456354bcb6f964d7b9b6a609/gritlm/gritlm.py#L75). See [custom models](docs/usage/usage.md#using-a-custom-model) for more information.
-
-
-## Usage Documentation
-The following links to the main sections in the usage documentation.
-
-| Section | |
-| ------- |- |
-| **General** | |
-| [Evaluating a Model](docs/usage/usage.md#evaluating-a-model) | How to evaluate a model |
-| [Evaluating on different Modalities](docs/usage/usage.md#evaluating-on-different-modalities) | How to evaluate image and image-text tasks |
-| [MIEB](docs/mieb/readme.md) | How to run the Massive Image Embedding Benchmark |
-| **Selecting Tasks** | |
-| [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select benchmarks |
-| [Task selection](docs/usage/usage.md#task-selection) | How to select and filter tasks |
-| [Selecting Split and Subsets](docs/usage/usage.md#selecting-evaluation-split-or-subsets) | How to select evaluation splits or subsets |
-| [Using a Custom Task](docs/usage/usage.md#using-a-custom-task) | How to evaluate on a custom task |
-| **Selecting a Model** | |
-| [Using a Pre-defined Model](docs/usage/usage.md#using-a-pre-defined-model) | How to run a pre-defined model |
-| [Using a SentenceTransformer Model](docs/usage/usage.md#using-a-sentence-transformer-model) | How to run a model loaded using sentence-transformers |
-| [Using a Custom Model](docs/usage/usage.md#using-a-custom-model) | How to run and implement a custom model |
-| **Running Evaluation** | |
-| [Passing Arguments to the model](docs/usage/usage.md#passing-in-encode-arguments) | How to pass `encode` arguments to the model |
-| [Running Cross Encoders](docs/usage/usage.md#running-cross-encoders-on-reranking) | How to run cross encoders for reranking |
-| [Running Late Interaction (ColBERT)](docs/usage/usage.md#using-late-interaction-models) | How to run late interaction models |
-| [Saving Retrieval Predictions](docs/usage/usage.md#saving-retrieval-task-predictions) | How to save prediction for later analysis |
-| [Caching Embeddings](docs/usage/usage.md#caching-embeddings-to-re-use-them) | How to cache and re-use embeddings |
-| **Leaderboard** | |
-| [Running the Leaderboard Locally](docs/usage/usage.md#running-the-leaderboard-locally) | How to run the leaderboard locally |
-| [Report Data Contamination](docs/usage/usage.md#annotate-contamination) | How to report data contamination for a model |
-| [Loading and working with Results](docs/usage/results.md) | How to load and working with the raw results from the leaderboard, including making result dataframes |
-
-
+For more on how to use the CLI check out the [related documentation](https://embeddings-benchmark.github.io/mteb/usage/cli/).
 
 ## Overview
 
-| Overview                       |                                                                                     |
-|--------------------------------|-------------------------------------------------------------------------------------|
-| 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                        |
-| 📋 [Tasks]                     | Overview of available tasks                                                         |
-| 📐 [Benchmarks]                | Overview of available benchmarks                                                    |
-| **Contributing**               |                                                                                     |
-| 🤖 [Adding a model]            | How to submit a model to MTEB and to the leaderboard                                |
-| 👩‍🔬 [Reproducible workflows]    | How to create reproducible workflows with MTEB                                      |
-| 👩‍💻 [Adding a dataset]          | How to add a new task/dataset to MTEB                                               |
-| 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                           |
-| 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
+| Overview                       |                                                                                      |
+|--------------------------------|--------------------------------------------------------------------------------------|
+| 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                         |
+| **Get Started**.               |                                                                                      |
+| 🏃 [Get Started]               | Overview of how to use mteb                                                          |
+| 🤖 [Defining Models]           | How to use existing model and define custom ones                                     |
+| 📋 [Selecting tasks]           | How to select tasks, benchmarks, splits etc.                                         |
+| 🏭 [Running Evaluation]        | How to run the evaluations, including cache management, speeding up evaluations etc. |
+| 📊 [Loading Results]           | How to load and work with existing model results                                     |
+| **Overview**.                  |                                                                                      |
+| 📋 [Tasks]                     | Overview of available tasks                                                          |
+| 📐 [Benchmarks]                | Overview of available benchmarks                                                     |
+| 🤖 [Models]                    | Overview of available Models                                                         |
+| **Contributing**               |                                                                                      |
+| 🤖 [Adding a model]            | How to submit a model to MTEB and to the leaderboard                                 |
+| 👩‍💻 [Adding a dataset]          | How to add a new task/dataset to MTEB                                                |
+| 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                            |
+| 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                              |
 
-[Tasks]: docs/tasks.md
-[Benchmarks]: docs/benchmarks.md
+[Get Started]: https://embeddings-benchmark.github.io/mteb/usage/get_started/
+[Defining Models]: https://embeddings-benchmark.github.io/mteb/usage/defining_the_model/
+[Selecting tasks]: https://embeddings-benchmark.github.io/mteb/usage/selecting_tasks/
+[Running Evaluation]: https://embeddings-benchmark.github.io/mteb/usage/running_the_evaluation/
+[Loading Results]: https://embeddings-benchmark.github.io/mteb/usage/loading_results/
+[Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/any2anymultilingualretrieval/
+[Benchmarks]: https://embeddings-benchmark.github.io/mteb/overview/available_benchmarks/
+[Models]: https://embeddings-benchmark.github.io/mteb/overview/available_models/text/
 [Contributing]: CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
 [Adding a benchmark]: docs/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
-[Reproducible workflows]: docs/reproducible_workflow.md
 
 ## Citing
 
@@ -155,7 +133,7 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
 </details>
 
 
-If you use any of the specific benchmarks, we also recommend that you cite the authors.
+If you use any of the specific benchmarks, we also recommend that you cite the authors of both the benchmark and its tasks:
 
 ```py
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
@@ -164,13 +142,3 @@ benchmark.citation # get citation for a specific benchmark
 # you can also create a table of the task for the appendix using:
 benchmark.tasks.to_latex()
 ```
-
-Some of these amazing publications include (ordered chronologically):
-- Shitao Xiao, Zheng Liu, Peitian Zhang, Niklas Muennighoff. "[C-Pack: Packaged Resources To Advance General Chinese Embedding](https://arxiv.org/abs/2309.07597)" arXiv 2023
-- Michael Günther, Jackmin Ong, Isabelle Mohr, Alaeddine Abdessalem, Tanguy Abel, Mohammad Kalim Akram, Susana Guzman, Georgios Mastrapas, Saba Sturua, Bo Wang, Maximilian Werk, Nan Wang, Han Xiao. "[Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents](https://arxiv.org/abs/2310.19923)" arXiv 2023
-- Silvan Wehrli, Bert Arnrich, Christopher Irrgang. "[German Text Embedding Clustering Benchmark](https://arxiv.org/abs/2401.02709)" arXiv 2024
-- Orion Weller, Benjamin Chang, Sean MacAvaney, Kyle Lo, Arman Cohan, Benjamin Van Durme, Dawn Lawrie, Luca Soldaini. "[FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions](https://arxiv.org/abs/2403.15246)" arXiv 2024
-- Dawei Zhu, Liang Wang, Nan Yang, Yifan Song, Wenhao Wu, Furu Wei, Sujian Li. "[LongEmbed: Extending Embedding Models for Long Context Retrieval](https://arxiv.org/abs/2404.12096)" arXiv 2024
-- Kenneth Enevoldsen, Márton Kardos, Niklas Muennighoff, Kristoffer Laigaard Nielbo. "[The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding](https://arxiv.org/abs/2406.02396)" arXiv 2024
-- Ali Shiraee Kasmaee, Mohammad Khodadad, Mohammad Arshi Saloot, Nick Sherck, Stephen Dokas, Hamidreza Mahyar, Soheila Samiee. "[ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain](https://arxiv.org/abs/2412.00532)" arXiv 2024
-- Chenghao Xiao, Isaac Chung, Imene Kerboua, Jamie Stirling, Xin Zhang, Márton Kardos, Roman Solomatin, Noura Al Moubayed, Kenneth Enevoldsen, Niklas Muennighoff. "[MIEB: Massive Image Embedding Benchmark](https://arxiv.org/abs/2504.10471)" arXiv 2025

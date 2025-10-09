@@ -6,8 +6,8 @@ from typing import Any
 
 import numpy as np
 import torch
-import tqdm
 from scipy.stats import pearsonr, spearmanr
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
@@ -115,7 +115,7 @@ class SummarizationEvaluator(Evaluator):
             embs_machine_summaries_all, np.cumsum(machine_lens)[:-1]
         )
 
-        for i, (embs_human_summaries, embs_machine_summaries) in tqdm.tqdm(
+        for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
             enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)),
             desc="Scoring",
             total=len(self.human_summaries),
@@ -272,7 +272,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
             embs_machine_summaries_all, np.cumsum(machine_lens)[:-1]
         )
 
-        for i, (embs_human_summaries, embs_machine_summaries) in tqdm.tqdm(
+        for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
             enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)),
             desc="Scoring",
             total=len(self.human_summaries),

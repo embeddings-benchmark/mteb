@@ -10,9 +10,9 @@ from typing import Any, cast
 
 import datasets
 import numpy as np
-import tqdm
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
+from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
@@ -367,7 +367,7 @@ class AbsTask(ABC):
         if isinstance(self, AbsTaskAnyClassification):
             eval_splits.append(self.train_split)
 
-        pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
+        pbar_split = tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
@@ -379,7 +379,7 @@ class AbsTask(ABC):
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
 
-                pbar_subsets = tqdm.tqdm(
+                pbar_subsets = tqdm(
                     self.metadata.hf_subsets,
                     desc="Processing Languages...",
                 )

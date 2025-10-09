@@ -112,6 +112,7 @@ class ClassificationEvaluator(Evaluator):
             pbar_desc = pbar.desc.removesuffix(": ")
 
         logger.debug("Running classification - Encoding samples...")
+
         if pbar is not None:
             pbar.set_description(pbar_desc + " - Encoding samples...")
 

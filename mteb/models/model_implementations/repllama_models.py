@@ -6,8 +6,8 @@ from typing import Any, Callable
 import numpy as np
 import torch
 import torch.nn.functional as F
-import tqdm
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -107,7 +107,7 @@ class RepLLaMAModel(AbsEncoder):
             else:
                 sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
 
-        for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
+        for i in tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i : i + batch_size]
 
             batch_dict = self.create_batch_dict(self.tokenizer, batch_texts)

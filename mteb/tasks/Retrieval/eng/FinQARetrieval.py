@@ -15,7 +15,7 @@ class FinQARetrieval(AbsTaskRetrieval):
             "revision": "bdd1903ce03153129480bfc14b710e3d612c1efd",
         },
         type="Retrieval",
-        category="t2c",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

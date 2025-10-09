@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
-import tqdm
 from packaging.version import Version
 from torch.utils.data import DataLoader
+from tqdm.auto import tqdm
 from transformers import __version__ as transformers_version
 
 from mteb._requires_package import requires_package
@@ -107,7 +107,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
+        for batch in tqdm(batches, leave=False, disable=not show_progress_bar):
             try:
                 embeddings_batch = model.get_embeddings(batch, **kwargs)
             # Except the very rare google.api_core.exceptions.InternalServerError

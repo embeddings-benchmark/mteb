@@ -427,7 +427,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "eng-Latn",
     ],
     open_weights=True,
-    revision="78d50a162b04dfdc45c3af6b4294ba77c24888a3",
+    revision="c1647d10d6edc6f70837f42f0a978f2df53f51dd",
     public_training_code="https://gist.github.com/NohTow/3030fe16933d8276dd5b3e9877d89f0f",
     public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
     release_date="2025-04-30",
