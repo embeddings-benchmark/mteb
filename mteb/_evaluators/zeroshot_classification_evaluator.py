@@ -90,10 +90,4 @@ class ZeroShotClassificationEvaluator(Evaluator):
         accuracy = metrics.accuracy_score(self.labels, predictions.tolist())
 
         logger.info("Running zero-shot classification - Finished.")
-        if pbar is not None:
-            pbar.set_description(
-                f"Finished zero-shot classification - Accuracy: {accuracy:.4f}"
-            )
-            pbar.update(2)
-
         return {"accuracy": accuracy}

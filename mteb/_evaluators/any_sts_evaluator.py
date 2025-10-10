@@ -91,7 +91,6 @@ class AnySTSEvaluator(Evaluator):
         euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)
         similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
-
         logger.info("Running semantic similarity - Finished.")
         return STSEvaluatorScores(
             cosine_scores=cosine_scores.tolist(),

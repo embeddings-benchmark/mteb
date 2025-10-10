@@ -95,7 +95,6 @@ class ClassificationEvaluator(Evaluator):
             model: Encoder
             encode_kwargs: encode kwargs
             test_cache: embeddings of the test set, if already computed
-            pbar: Optional tqdm progress bar
 
         Returns:
             Tuple of test predictions and embeddings

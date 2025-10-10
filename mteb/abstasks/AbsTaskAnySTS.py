@@ -6,7 +6,6 @@ from typing import Any, TypedDict, cast
 
 from datasets import Dataset
 from scipy.stats import pearsonr, spearmanr
-from tqdm.auto import tqdm
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb.models import Encoder
@@ -106,7 +105,6 @@ class AbsTaskAnySTS(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
-
         normalized_scores = list(map(self.normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 
@@ -119,7 +117,7 @@ class AbsTaskAnySTS(AbsTask):
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
-        
+
         if prediction_folder:
             self._save_task_predictions(
                 scores,

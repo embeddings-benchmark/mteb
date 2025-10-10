@@ -6,7 +6,6 @@ from typing import Any
 
 import numpy as np
 from datasets import Dataset
-from tqdm.auto import tqdm
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import Encoder
@@ -76,7 +75,9 @@ class AbsTaskAnyClustering(AbsTask):
         if self.metadata.modalities == ["text"]:
             v_measures = []
             for i, cluster_set in enumerate(data_split):
-                logger.info(f"Running clustering on cluster ({i+1}/{len(data_split)})")
+                logger.info(
+                    f"Running clustering on cluster ({i + 1}/{len(data_split)})"
+                )
                 clustering_dataset = Dataset.from_dict(cluster_set).select_columns(
                     [self.input_column_name, self.label_column_name]
                 )

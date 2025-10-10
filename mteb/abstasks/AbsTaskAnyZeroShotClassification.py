@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 from datasets import Dataset
-from tqdm.auto import tqdm
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
 from mteb.types import ScoresDict

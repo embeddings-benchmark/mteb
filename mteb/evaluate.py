@@ -7,6 +7,8 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
 
+from tqdm.auto import tqdm
+
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -29,7 +31,6 @@ if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
 logger = logging.getLogger(__name__)
-from tqdm.auto import tqdm
 
 
 class OverwriteStrategy(HelpfulStrEnum):
@@ -339,7 +340,6 @@ def evaluate(
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
-
 
     if raise_error is False:
         try:
