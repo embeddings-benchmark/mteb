@@ -43,20 +43,22 @@ from .task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
+# test_multiple_mteb_tasks -> test_evaluate_w_multiple_tasks
+# @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
+# @pytest.mark.parametrize("model", [MockNumpyEncoder()])
+# def test_multiple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path: Path):
+#     """Test that multiple tasks can be run"""
 
-@pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
-@pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_multiple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path: Path):
-    """Test that multiple tasks can be run"""
-    eval = mteb.MTEB(tasks=tasks)
-    eval.run(
-        model,
-        output_folder=(tmp_path / "results").as_posix(),
-        overwrite_results=False,
-        co2_tracker=False,
-    )
+#     eval = mteb.MTEB(tasks=tasks)
+#     eval.run(
+#         model,
+#         output_folder=(tmp_path / "results").as_posix(),
+#         overwrite_results=False,
+#         co2_tracker=False,
+#     )
 
 
+# TODO: will move this to test_models and refactor to use mteb.evaluate
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize(
     "model",
@@ -80,48 +82,51 @@ def test_benchmark_encoders_on_task(
     eval.run(model, output_folder=tmp_path.as_posix())
 
 
-@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask()])
-@pytest.mark.parametrize(
-    "model",
-    [MockSentenceTransformer()],
-)
-def test_run_eval_without_co2_tracking(
-    task: str | AbsTask, model: mteb.Encoder, tmp_path: Path
-):
-    """Test that a task can be fetched and run without CO2 tracking"""
-    if isinstance(task, str):
-        tasks = mteb.get_tasks(tasks=[task])
-    else:
-        tasks = [task]
+# outdated
+# @pytest.mark.parametrize("task", [MockMultilingualRetrievalTask()])
+# @pytest.mark.parametrize(
+#     "model",
+#     [MockSentenceTransformer()],
+# )
+# def test_run_eval_without_co2_tracking(
+#     task: str | AbsTask, model: mteb.Encoder, tmp_path: Path
+# ):
+#     """Test that a task can be fetched and run without CO2 tracking"""
+#     if isinstance(task, str):
+#         tasks = mteb.get_tasks(tasks=[task])
+#     else:
+#         tasks = [task]
 
-    eval = mteb.MTEB(tasks=tasks)
-    eval.run(model, output_folder=tmp_path.as_posix(), co2_tracker=False)
-
-
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
-@pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_reload_results(task: str | AbsTask, model: mteb.Encoder, tmp_path: Path):
-    """Test that when rerunning the results are reloaded correctly"""
-    if isinstance(task, str):
-        tasks = mteb.get_tasks(tasks=[task])
-    else:
-        tasks = [task]
-
-    eval = mteb.MTEB(tasks=tasks)
-    results = eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
-
-    assert isinstance(results, list)
-    assert isinstance(results[0], mteb.TaskResult)
-
-    # reload the results
-    results = eval.run(
-        model, output_folder=tmp_path.as_posix(), overwrite_results=False
-    )
-
-    assert isinstance(results, list)
-    assert isinstance(results[0], mteb.TaskResult)
+#     eval = mteb.MTEB(tasks=tasks)
+#     eval.run(model, output_folder=tmp_path.as_posix(), co2_tracker=False)
 
 
+# outdated -- results reloading is already tested for evaluate
+# @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
+# @pytest.mark.parametrize("model", [MockNumpyEncoder()])
+# def test_reload_results(task: str | AbsTask, model: mteb.Encoder, tmp_path: Path):
+#     """Test that when rerunning the results are reloaded correctly"""
+#     if isinstance(task, str):
+#         tasks = mteb.get_tasks(tasks=[task])
+#     else:
+#         tasks = [task]
+
+#     eval = mteb.MTEB(tasks=tasks)
+#     results = eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
+
+#     assert isinstance(results, list)
+#     assert isinstance(results[0], mteb.TaskResult)
+
+#     # reload the results
+#     results = eval.run(
+#         model, output_folder=tmp_path.as_posix(), overwrite_results=False
+#     )
+
+#     assert isinstance(results, list)
+#     assert isinstance(results[0], mteb.TaskResult)
+
+
+# TODO: should be moved to test_models and refactored to use mteb.evaluate
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
 def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the prompt_name to the encoder which supports it, and that the encoder which does not support it does not
@@ -169,6 +174,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
     eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
+# TODO: should be moved to test_models and refactored to use mteb.evaluate
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
 def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
@@ -200,6 +206,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
     )
 
 
+# TODO: should be moved to test_models and refactored to use mteb.evaluate
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID)
 def test_task_metadata_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the task_name to the encoder."""

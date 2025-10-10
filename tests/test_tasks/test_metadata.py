@@ -1,3 +1,5 @@
+"""Tests for testing the descriptive statistics calculation of all tasks"""
+
 from __future__ import annotations
 
 import pytest

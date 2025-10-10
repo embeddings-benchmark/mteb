@@ -17,7 +17,7 @@ from tests.test_benchmark.mock_tasks import MockRetrievalTask
 logging.basicConfig(level=logging.INFO)
 
 
-def test_mteb_rerank(tmp_path: Path):
+def test_convert_reranking(tmp_path: Path):
     model = CrossEncoderWrapper("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     task: AbsTaskRetrieval = mteb.get_task("SciFact")
     task.load_data()
@@ -68,6 +68,8 @@ def test_mteb_rerank(tmp_path: Path):
 
 
 def test_reranker_same_ndcg1(tmp_path: Path):
+    # TODO: Not sure what this is testing exactly
+
     de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = mteb.get_model(de_name, revision=revision)

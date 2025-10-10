@@ -15,6 +15,7 @@ from tests.test_benchmark.task_grid import TASK_TEST_GRID
 logging.basicConfig(level=logging.INFO)
 
 
+# tested in CLI can probably be removed or converted to a MTEB test (before full deprecation)
 @pytest.mark.parametrize(
     "task_name, model_name, model_revision",
     [
@@ -42,6 +43,7 @@ def test_reproducibility_workflow(
     eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
+# TODO: should be moved to test_models and refactored to use mteb.evaluate (probably some sort of test prompts)
 @pytest.mark.parametrize(
     "task_name",
     TASK_TEST_GRID
@@ -77,6 +79,7 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
     AbsMockEncoder.validate_task_to_prompt_name(model_prompts)
 
 
+# TODO: should be moved to test_models and refactored to use mteb.evaluate (probably some sort of test prompts)
 @pytest.mark.parametrize("raise_for_invalid_keys", (True, False))
 def test_validate_task_to_prompt_name_for_none(raise_for_invalid_keys: bool):
     result = AbsMockEncoder.validate_task_to_prompt_name(
@@ -100,6 +103,7 @@ def test_validate_task_to_prompt_name_fails_and_raises(
         AbsMockEncoder.validate_task_to_prompt_name(task_prompt_dict)
 
 
+# TODO: should be moved to test_models and refactored to use mteb.evaluate (probably some sort of test prompts)
 @pytest.mark.parametrize(
     "task_prompt_dict, expected_valid, expected_invalid",
     [

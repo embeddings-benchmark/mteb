@@ -38,6 +38,16 @@ def test_evaluate(model: Encoder, task: AbsTask, expected_score: float):
 
 
 @pytest.mark.parametrize(
+    "model, tasks",
+    [[MockClassificationTask(), MockRetrievalTask()]],
+    ids=["mock_clf_and_retrieval"],
+)
+def test_evaluate_w_multiple_tasks(model: Encoder, tasks: list[AbsTask]):
+    results = mteb.evaluate(model, tasks, cache=None, co2_tracker=False)
+    assert len(results) == len(tasks), "should return exactly one result per task"
+
+
+@pytest.mark.parametrize(
     "model, task, expected_score", [mock_classification], ids=["mock_classification"]
 )
 def test_evaluate_with_cache(

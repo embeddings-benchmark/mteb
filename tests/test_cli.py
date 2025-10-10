@@ -33,9 +33,9 @@ def test_available_benchmarks():
 
 run_task_fixures = [
     (
-        "intfloat/multilingual-e5-small",
+        "sentence-transformers/all-MiniLM-L6-v2",
         "BornholmBitextMining",
-        "fd1525a9fd15316a2d503bf26ab031a61d056e98",
+        "8b3219a92973c328a8e22fadcfa821b5dc75636a",
     ),
 ]
 
