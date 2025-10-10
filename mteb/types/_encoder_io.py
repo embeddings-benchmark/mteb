@@ -11,7 +11,6 @@ from PIL import Image
 from typing_extensions import NotRequired
 
 # --- Output types ---
-# should be as Union, because `|` won't work for python3.9
 Array = np.ndarray | torch.Tensor
 """General array type, can be a numpy array or a torch tensor."""
 
@@ -104,7 +103,6 @@ class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput
     pass
 
 
-# should be as Union, because `|` won't work for python3.9
 BatchedInput = (
     TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
 )
