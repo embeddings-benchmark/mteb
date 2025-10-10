@@ -153,6 +153,7 @@ class AbsTaskClusteringFast(AbsTask):
                 "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
             )
 
+        logger.info("Running clustering - Preparing data...")
         if (
             self.max_document_to_embed is None
             and self.max_fraction_of_documents_to_embed is None
@@ -175,6 +176,8 @@ class AbsTaskClusteringFast(AbsTask):
         downsampled_dataset = downsampled_dataset.select_columns(
             [self.input_column_name, self.label_column_name]
         )
+
+        logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
             create_dataloader(
                 downsampled_dataset,
@@ -188,6 +191,7 @@ class AbsTaskClusteringFast(AbsTask):
             **encode_kwargs,
         )
 
+        logger.info("Running clustering - Evaluating clustering...")
         labels = []
         for label in downsampled_dataset[self.label_column_name]:
             if not isinstance(label, list):
@@ -205,6 +209,7 @@ class AbsTaskClusteringFast(AbsTask):
         )
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
+        logger.info("Running clustering - Finished.")
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
         return {

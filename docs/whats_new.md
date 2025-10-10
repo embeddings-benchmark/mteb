@@ -10,6 +10,7 @@ This section goes through new features added in v2. Below we give an overview of
 - Descriptive statistics for all tasks
 - Better support for error analysis, allowing you to save predictions 
 - Standardization of file names and typing across the library
+- Consistent logging and progress bars
 - And much more
 
 What are the reason for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there is multiple import areas to expand in, e.g. [adding new benchamrk for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accecible. 

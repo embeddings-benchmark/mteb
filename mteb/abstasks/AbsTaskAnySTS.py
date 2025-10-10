@@ -117,6 +117,7 @@ class AbsTaskAnySTS(AbsTask):
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
+
         if prediction_folder:
             self._save_task_predictions(
                 scores,

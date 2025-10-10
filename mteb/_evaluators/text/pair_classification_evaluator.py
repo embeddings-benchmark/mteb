@@ -79,6 +79,8 @@ class PairClassificationEvaluator(Evaluator):
         model: Encoder,
         encode_kwargs: dict[str, Any],
     ) -> PairClassificationDistances:
+        logger.info("Running pair classification - Encoding sentences...")
+
         all_sentences = self.sentences1[:] + self.sentences2[:]
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
@@ -92,7 +94,7 @@ class PairClassificationEvaluator(Evaluator):
         embeddings1 = embeddings[:len_sentences1]
         embeddings2 = embeddings[len_sentences1:]
 
-        logger.info("Computing similarity distances.")
+        logger.info("Running pair classification - Evaluating pair similarity...")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
