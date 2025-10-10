@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
 import datasets
-from datasets import Dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -236,6 +233,8 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining):
+    parallel_subsets = True
+
     metadata = TaskMetadata(
         name="FloresBitextMining",
         dataset={
@@ -272,19 +271,5 @@ class FloresBitextMining(AbsTaskBitextMining):
         if self.data_loaded:
             return
 
-        dataset = datasets.load_dataset(
-            **self.metadata.dataset,
-            split=self.metadata.eval_splits[0],
-        )
-        self.dataset = defaultdict(dict)
-        for lang in self.metadata.eval_langs:
-            first_lang, second_lang = lang.split("-")
-            ds = Dataset.from_dict(
-                {
-                    "sentence1": dataset[first_lang],
-                    "sentence2": dataset[second_lang],
-                }
-            )
-            self.dataset[lang][self.metadata.eval_splits[0]] = ds
-
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True

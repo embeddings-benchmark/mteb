@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from pathlib import Path
+from typing import Any, TypedDict
 
 from datasets import Dataset
+from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
-from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -46,6 +47,16 @@ class ZeroShotClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     image_statistics: ImageStatistics | None
     label_statistics: LabelStatistics
     candidates_labels_text_statistics: TextStatistics
+
+
+class ZeroShotClassificationMetrics(TypedDict):
+    """Metrics for ZeroShotClassification
+
+    Attributes:
+        accuracy: Accuracy of the model.
+    """
+
+    accuracy: float
 
 
 class AbsTaskAnyZeroShotClassification(AbsTask):
@@ -105,8 +116,9 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs,
-    ) -> ScoresDict:
+    ) -> ZeroShotClassificationMetrics:
         candidate_labels = self.get_candidate_labels()
         data_split = data_split.select_columns(
             [self.input_column_name, self.label_column_name]
@@ -114,14 +126,36 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
         evaluator = ZeroShotClassificationEvaluator(
             data_split,
             self.input_column_name,
-            self.label_column_name,
             candidate_labels,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
             **kwargs,
         )
-        return evaluator(model, encode_kwargs=encode_kwargs)
+        probs = evaluator(model, encode_kwargs=encode_kwargs)
+
+        if prediction_folder:
+            self._save_task_predictions(
+                probs.tolist(),
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
+        return self._calculate_scores(
+            data_split[self.label_column_name],
+            probs.argmax(dim=1).tolist(),
+        )
+
+    def _calculate_scores(
+        self,
+        labels: list[int],
+        predictions: list[float],
+    ) -> ZeroShotClassificationMetrics:
+        return ZeroShotClassificationMetrics(
+            accuracy=metrics.accuracy_score(labels, predictions),
+        )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         self._upload_dataset_to_hub(
