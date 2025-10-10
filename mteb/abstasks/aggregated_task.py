@@ -1,21 +1,18 @@
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import numpy as np
+from datasets import Dataset, DatasetDict
 from typing_extensions import Self
 
+from mteb.models.models_protocols import MTEBModels
 from mteb.results.task_result import TaskResult
+from mteb.types import HFSubset, ScoresDict
+from mteb.types.statistics import DescriptiveStatistics
 
 from .AbsTask import AbsTask
 from .aggregate_task_metadata import AggregateTaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset, DatasetDict
-
-    from mteb.models.models_protocols import MTEBModels
-    from mteb.types import HFSubset, ScoresDict
-    from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 

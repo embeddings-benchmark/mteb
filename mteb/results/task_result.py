@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import logging
 from argparse import Namespace
@@ -339,7 +341,7 @@ class TaskResult(BaseModel):
         return obj
 
     @classmethod
-    def _fix_pair_classification_scores(cls, obj: "TaskResult") -> None:
+    def _fix_pair_classification_scores(cls, obj: TaskResult) -> None:
         from mteb import get_task
 
         task_name = obj.task_name
@@ -608,7 +610,7 @@ class TaskResult(BaseModel):
 
     def is_mergeable(
         self,
-        result: "TaskResult" | AbsTask,
+        result: TaskResult | AbsTask,
         criteria: list[str] | list[Criterias] = [
             "mteb_version",
             "dataset_revision",
@@ -665,7 +667,7 @@ class TaskResult(BaseModel):
 
     def merge(
         self,
-        new_results: "TaskResult",
+        new_results: TaskResult,
         criteria: list[str] | list[Criterias] = [
             "mteb_version",
             "dataset_revision",

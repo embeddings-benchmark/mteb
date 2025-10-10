@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -24,7 +26,7 @@ SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, **kwargs
-) -> "SentenceTransformerEncoderWrapper":
+) -> SentenceTransformerEncoderWrapper:
     return SentenceTransformerEncoderWrapper(
         model=model_name, revision=revision, **kwargs
     )

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import difflib
 import logging
 from collections.abc import Iterable

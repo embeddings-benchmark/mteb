@@ -70,7 +70,7 @@ class SearchProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> ModelMeta:
+    def mteb_model_meta(self) -> "ModelMeta":
         """Metadata of the model"""
         ...
 
@@ -167,7 +167,7 @@ class Encoder(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> ModelMeta:
+    def mteb_model_meta(self) -> "ModelMeta":
         """Metadata of the model"""
         ...
 
@@ -219,7 +219,7 @@ class CrossEncoderProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> ModelMeta:
+    def mteb_model_meta(self) -> "ModelMeta":
         """Metadata of the model"""
         ...
 
