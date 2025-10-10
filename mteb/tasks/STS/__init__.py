@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from .deu.GermanSTSBenchmarkSTS import *
 from .eng.BiossesSTS import *
+from .eng.HUMESICKR import *
+from .eng.HUMESTS12 import *
+from .eng.HUMESTSBenchmark import *
 from .eng.SickrSTS import *
 from .eng.STS12STS import *
 from .eng.STS13STS import *
@@ -17,6 +20,7 @@ from .jpn.JSICK import *
 from .jpn.JSTS import *
 from .kor.KlueSTS import *
 from .kor.KorSTS import *
+from .multilingual.HUMESTS22 import *
 from .multilingual.IndicCrosslingualSTS import *
 from .multilingual.SemRel24STS import *
 from .multilingual.STS17CrosslingualSTS import *

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import argparse
 import itertools
 import json
 import logging
@@ -17,11 +16,12 @@ import pandas as pd
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.custom_validators import MODALITIES
 from mteb.leaderboard.benchmark_selector import (
-    BENCHMARK_ENTRIES,
     DEFAULT_BENCHMARK_NAME,
-    RTEB_BENCHMARK_ENTRIES,
+    GP_BENCHMARK_ENTRIES,
+    R_BENCHMARK_ENTRIES,
     make_selector,
 )
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
@@ -123,6 +123,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "reference",
             "main_score",
             "modalities",
+            "is_public",
         ]
     )
     df["languages"] = df["languages"].map(format_list)
@@ -138,6 +139,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "domains": "Domains",
             "main_score": "Metric",
             "modalities": "Modality",
+            "is_public": "Public",
         }
     )
     df = df.drop(columns="reference")
@@ -195,23 +197,15 @@ def filter_models(
     return list(models_to_keep)
 
 
-def get_startup_arguments():
-    parser = argparse.ArgumentParser()
+def should_show_zero_shot_filter(benchmark_name: str) -> bool:
+    benchmark = mteb.get_benchmark(benchmark_name)
 
-    # Add a Boolean flag parameter
-    parser.add_argument(
-        "--show_rteb",
-        action="store_true",
-        help="If set, display RTEB results; otherwise show default results.",
-    )
-
-    return parser.parse_args()
+    if isinstance(benchmark, RtebBenchmark):
+        return False
+    return True
 
 
 def get_leaderboard_app() -> gr.Blocks:
-    args = get_startup_arguments()
-    show_rteb = args.show_rteb
-
     logger.info("Loading all benchmark results")
     all_results = load_results()
 
@@ -309,12 +303,10 @@ def get_leaderboard_app() -> gr.Blocks:
             visible=True,
             width="18%",
         ):
-            if show_rteb:
-                benchmark_select, column = make_selector(
-                    BENCHMARK_ENTRIES + RTEB_BENCHMARK_ENTRIES
-                )
-            else:
-                benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
+            benchmark_select, column = make_selector(
+                GP_BENCHMARK_ENTRIES + R_BENCHMARK_ENTRIES
+            )
+
         gr.Markdown(
             """
         ## Embedding Leaderboard
@@ -496,6 +488,8 @@ def get_leaderboard_app() -> gr.Blocks:
             benchmark_results = all_benchmark_results[benchmark_name]
             scores = benchmark_results.get_scores(format="long")
             logger.debug(f"on_benchmark_select callback: {elapsed}s")
+            show_zero_shot = should_show_zero_shot_filter(benchmark_name)
+
             return (
                 languages,
                 domains,
@@ -503,6 +497,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 modalities,
                 sorted([task.metadata.name for task in benchmark.tasks]),
                 scores,
+                gr.update(visible=show_zero_shot),
             )
 
         benchmark_select.change(
@@ -515,6 +510,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 modality_select,
                 task_select,
                 scores,
+                zero_shot,
             ],
         )
 
@@ -856,6 +852,7 @@ def get_leaderboard_app() -> gr.Blocks:
             bench_modalities,
             bench_tasks,
             bench_scores,
+            zero_shot,
         ) = on_benchmark_select(benchmark.name)
         filtered_models = update_models(
             bench_scores,

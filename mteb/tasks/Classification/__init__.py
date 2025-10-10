@@ -29,6 +29,9 @@ from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.FrenkEnClassification import *
+from .eng.HUMEEmotionClassification import *
+from .eng.HUMEToxicConversationsClassification import *
+from .eng.HUMETweetSentimentExtractionClassification import *
 from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
@@ -95,6 +98,7 @@ from .multilingual.AmazonReviewsClassification import *
 from .multilingual.CataloniaTweetClassification import *
 from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
+from .multilingual.HUMEMultilingualSentimentClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicNLPNewsClassification import *
 from .multilingual.IndicSentimentClassification import *
@@ -146,11 +150,11 @@ from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
 from .slk.CSFDSKMovieReviewSentimentClassification import *
 from .slk.SlovakHateSpeechClassification import *
+from .slk.SlovakMovieReviewSentimentClassification import *
 from .slv.FrenkSlClassification import *
 from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
-from .svk.SlovakMovieReviewSentimentClassification import *
 from .swa.SwahiliNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SwedishSentimentClassification import *

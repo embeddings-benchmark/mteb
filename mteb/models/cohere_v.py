@@ -10,10 +10,15 @@ from typing import Any, Literal, get_args
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.cohere_models import (
+    COHERE_MAX_BATCH_SIZE,
+    COHERE_MAX_TOKENS_PER_BATCH,
+    retry_with_rate_limit,
+)
 from mteb.requires_package import requires_image_dependencies, requires_package
 
 
@@ -114,6 +119,8 @@ all_languages = [
     "nep-Deva",
     "nld-Latn",
     "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
     "nya-Latn",
     "ori-Orya",
     "pan-Guru",
@@ -192,9 +199,15 @@ def cohere_v_loader(**kwargs):
             self.embedding_type = embedding_type
             self.output_dimension = output_dimension
             api_key = os.getenv("COHERE_API_KEY")
+
             self.client = cohere.ClientV2(api_key)
             self.image_format = "JPEG"
             self.transform = transforms.Compose([transforms.PILToTensor()])
+
+        @retry_with_rate_limit(max_retries=5, max_rpm=300)
+        def _embed_func(self, **kwargs):
+            """Call Cohere embed API with retry and rate limiting."""
+            return self.client.embed(**kwargs)
 
         def get_text_embeddings(
             self,
@@ -206,11 +219,39 @@ def cohere_v_loader(**kwargs):
             **kwargs: Any,
         ):
             all_text_embeddings = []
+            index = 0
 
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            pbar = tqdm(total=len(texts), desc="Encoding text sentences")
+
+            while index < len(texts):
+                # Build batch respecting both count and token limits
+                batch, batch_tokens = [], 0
+                while (
+                    index < len(texts)
+                    and len(batch) < COHERE_MAX_BATCH_SIZE
+                    and batch_tokens < COHERE_MAX_TOKENS_PER_BATCH
+                ):
+                    # Count tokens for current sentence
+                    n_tokens = len(
+                        self.client.tokenize(
+                            text=texts[index], model=self.model_name
+                        ).tokens
+                    )
+
+                    # Check if adding this sentence would exceed token limit
+                    if (
+                        batch_tokens + n_tokens > COHERE_MAX_TOKENS_PER_BATCH
+                        and len(batch) > 0
+                    ):
+                        break
+
+                    batch_tokens += n_tokens
+                    batch.append(texts[index])
+                    index += 1
+
+                # Embed the batch with retry logic handled by client
                 embed_kwargs = {
-                    "texts": batch_texts,
+                    "texts": batch,
                     "model": self.model_name,
                     "input_type": "search_document",
                     "embedding_types": [self.embedding_type],
@@ -218,7 +259,7 @@ def cohere_v_loader(**kwargs):
                 if self.output_dimension is not None:
                     embed_kwargs["output_dimension"] = self.output_dimension
 
-                response = self.client.embed(**embed_kwargs)
+                response = self._embed_func(**embed_kwargs)
 
                 # Get embeddings based on requested type
                 if self.embedding_type == "float":
@@ -234,7 +275,9 @@ def cohere_v_loader(**kwargs):
                         f"Embedding type {self.embedding_type} not allowed"
                     )
                 all_text_embeddings.append(torch.tensor(embeddings))
+                pbar.update(len(batch))
 
+            pbar.close()
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
 
             # Post-process embeddings based on type
@@ -279,7 +322,7 @@ def cohere_v_loader(**kwargs):
                         if self.output_dimension is not None:
                             embed_kwargs["output_dimension"] = self.output_dimension
 
-                        response = self.client.embed(**embed_kwargs)
+                        response = self._embed_func(**embed_kwargs)
 
                         # Get embeddings based on requested type
                         if self.embedding_type == "float":
@@ -320,7 +363,7 @@ def cohere_v_loader(**kwargs):
                         if self.output_dimension is not None:
                             embed_kwargs["output_dimension"] = self.output_dimension
 
-                        response = self.client.embed(**embed_kwargs)
+                        response = self._embed_func(**embed_kwargs)
 
                         # Get embeddings based on requested type
                         if self.embedding_type == "float":

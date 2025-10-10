@@ -73,6 +73,8 @@ multilingual_langs = [
     "nep-Deva",
     "nld-Latn",
     "nor-Latn",
+    "nob-Latn",
+    "nno-Latn",
     "pan-Guru",
     "pol-Latn",
     "por-Latn",

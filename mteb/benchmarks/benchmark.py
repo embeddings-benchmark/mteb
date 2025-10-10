@@ -10,6 +10,9 @@ from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from mteb.benchmarks._create_table import (
     _create_per_task_table_from_benchmark_results,
     _create_summary_table_from_benchmark_results,
+    _create_summary_table_mean_public_private,
+    _create_summary_table_mean_subset,
+    _create_summary_table_mean_task_type,
 )
 from mteb.load_results.load_results import load_results
 
@@ -89,3 +92,27 @@ class Benchmark:
     ) -> pd.DataFrame:
         """Create per-task table. Called by the leaderboard app."""
         return _create_per_task_table_from_benchmark_results(benchmark_results)
+
+
+class RtebBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_public_private(benchmark_results)
+
+
+class HUMEBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_subset(benchmark_results)
+
+
+class MIEBBenchmark(Benchmark):
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        """Create summary table. Called by the leaderboard app."""
+        return _create_summary_table_mean_task_type(benchmark_results)

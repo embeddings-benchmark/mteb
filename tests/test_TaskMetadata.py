@@ -159,6 +159,8 @@ _HISTORIC_DATASETS = [
     "STS15",
     "STS16",
     "STSBenchmark",
+    "HUMESTSBenchmark",
+    "HUMESICK-R",
     "FinParaSTS",
     "SICKFr",
     "KLUE-STS",

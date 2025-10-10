@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.61"
+version = "1.39.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -40,6 +40,7 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
+    "transformers<4.57.0; python_version == '3.9'",  # https://github.com/huggingface/transformers/issues/41339
 ]
 
 
@@ -234,3 +235,6 @@ conflicts = [
     [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
 ]
+
+[tool.uv.extra-build-dependencies]
+flash-attn = [{ requirement = "torch", match-runtime = true }]

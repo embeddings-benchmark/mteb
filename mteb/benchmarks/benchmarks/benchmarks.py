@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
-from mteb.benchmarks.benchmark import Benchmark
+from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
 
 if TYPE_CHECKING:
@@ -445,6 +445,7 @@ SEB = Benchmark(
 CoIR = Benchmark(
     name="CoIR",
     display_name="Code Information Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
         tasks=[
             "AppsRetrieval",
@@ -476,7 +477,7 @@ CoIR = Benchmark(
 
 RAR_b = Benchmark(
     name="RAR-b",
-    display_name="Reasoning retrieval",
+    display_name="Reasoning as retrieval",
     tasks=get_tasks(
         tasks=[
             "ARCChallenge",
@@ -1163,6 +1164,7 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
+    display_name="Reasoning Retrieval",
     tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
@@ -1238,6 +1240,8 @@ CODE_RAG = Benchmark(
 
 BEIR = Benchmark(
     name="BEIR",
+    display_name="BEIR",
+    icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
     tasks=get_tasks(
         tasks=[
             "TRECCOVID",
@@ -1578,6 +1582,8 @@ CHEMTEB = Benchmark(
 
 BEIR_NL = Benchmark(
     name="BEIR-NL",
+    display_name="BEIR-NL",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
     tasks=get_tasks(
         tasks=[
             "ArguAna-NL",
@@ -1748,7 +1754,7 @@ MIEB_common_tasks = [
     "WebQAT2TRetrieval",
 ]
 
-MIEB_ENG = Benchmark(
+MIEB_ENG = MIEBBenchmark(
     name="MIEB(eng)",
     display_name="Image-Text, English",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
@@ -1777,7 +1783,7 @@ MIEB_ENG = Benchmark(
 """,
 )
 
-MIEB_MULTILINGUAL = Benchmark(
+MIEB_MULTILINGUAL = MIEBBenchmark(
     name="MIEB(Multilingual)",
     display_name="Image-Text, Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
@@ -1812,7 +1818,7 @@ MIEB_MULTILINGUAL = Benchmark(
 """,
 )
 
-MIEB_LITE = Benchmark(
+MIEB_LITE = MIEBBenchmark(
     name="MIEB(lite)",
     display_name="Image-Text, Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
@@ -1896,7 +1902,7 @@ MIEB_LITE = Benchmark(
 """,
 )
 
-MIEB_IMG = Benchmark(
+MIEB_IMG = MIEBBenchmark(
     name="MIEB(Img)",
     display_name="Image only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
@@ -2294,4 +2300,42 @@ JINA_VDR = Benchmark(
   url = {https://arxiv.org/abs/2506.18902},
   year = {2025},
 }""",
+)
+
+
+HUME = HUMEBenchmark(
+    name="HUME(v1)",
+    display_name="Human Benchmark",
+    # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
+    tasks=get_tasks(
+        tasks=[
+            "HUMEEmotionClassification",
+            "HUMEToxicConversationsClassification",
+            "HUMETweetSentimentExtractionClassification",
+            "HUMEMultilingualSentimentClassification",
+            "HUMEArxivClusteringP2P",
+            "HUMERedditClusteringP2P",
+            "HUMEWikiCitiesClustering",
+            "HUMESIB200ClusteringS2S",
+            "HUMECore17InstructionReranking",
+            "HUMENews21InstructionReranking",
+            "HUMERobust04InstructionReranking",
+            "HUMEWikipediaRerankingMultilingual",
+            "HUMESICK-R",
+            "HUMESTS12",
+            "HUMESTSBenchmark",
+            "HUMESTS22",
+        ],
+        languages=[
+            "eng-Latn",
+            "ara-Arab",
+            "rus-Cyrl",
+            "dan-Latn",
+            "nob-Latn",
+        ],
+    ),
+    description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
+    reference="Coming soon (in review)",
+    citation=None,
+    contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )
