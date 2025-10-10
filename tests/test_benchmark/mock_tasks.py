@@ -928,14 +928,12 @@ class MockPairClassificationTask(AbsTaskPairClassification):
     )
 
     def load_data(self) -> None:
-        sentence1 = [["This is a test sentence", "This is another test sentence"]]
+        sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
-            [
-                "dette er en test sætning",
-                "denne her matche ikke den ovenstående",
-            ]
-        ]  # "this is a test sentence", "this does not match the above"
-        labels = [[1, 0]]
+            "dette er en test sætning",
+            "denne her matche ikke den ovenstående",
+        ]
+        labels = [1, 0]
 
         self.dataset = DatasetDict(
             {

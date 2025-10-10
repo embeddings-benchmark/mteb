@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import TypedDict
 
 import numpy as np
 from datasets import Dataset
@@ -50,27 +49,6 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     labels_statistics: LabelStatistics
 
 
-_PAIR_CLASSIFICATION_METRICS = ["f1", "ap", "precision", "recall", "accuracy"]
-
-_PAIR_CLASSIFICATION_METRICS_NAMES = [
-    f"{metric}_{distances.value}"
-    for metric in _PAIR_CLASSIFICATION_METRICS
-    for distances in ScoringFunction
-]
-_PAIR_CLASSIFICATION_METRICS_NAMES += [
-    f"max_{distances.value}" for distances in ScoringFunction
-]
-
-PairClassificationMetricsValues = TypedDict(
-    "PairClassificationMetricsValues",
-    dict.fromkeys(_PAIR_CLASSIFICATION_METRICS, float),
-)
-PairClassificationMetrics = TypedDict(
-    "PairClassificationMetrics",
-    dict.fromkeys(_PAIR_CLASSIFICATION_METRICS_NAMES, float),
-)
-
-
 class AbsTaskPairClassification(AbsTask):
     """Abstract class for PairClassificationTasks
     The similarity is computed between pairs and the results are ranked. Average precision
@@ -97,7 +75,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: dict[str, str],
         prediction_folder: Path | None = None,
         **kwargs,
-    ) -> PairClassificationMetrics:
+    ) -> dict[str, float]:
         data_split = data_split[0] if len(data_split) == 1 else data_split
         evaluator = PairClassificationEvaluator(
             data_split[self.sentence1_column_name],
@@ -123,7 +101,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _compute_metrics(
         self, similarity_scores: PairClassificationDistances, labels: list[int]
-    ) -> PairClassificationMetrics:
+    ) -> dict[str, float]:
         logger.info("Computing metrics...")
         labels = np.asarray(labels)
         output_scores = {}
@@ -147,18 +125,13 @@ class AbsTaskPairClassification(AbsTask):
             ],
             [ScoringFunction.DOT_PRODUCT.value, similarity_scores["dot_scores"], True],
         ]:
-            print(
-                short_name,
-                scores,
-                labels,
-            )
             metrics = self._compute_metrics_values(scores, labels, reverse)
             for metric_name, metric_value in metrics.items():
                 output_scores[f"{short_name}_{metric_name}"] = metric_value
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
-            if metric in _PAIR_CLASSIFICATION_METRICS:
+            if metric in ["f1", "ap", "precision", "recall", "accuracy"]:
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
         return output_scores
 
@@ -233,7 +206,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _compute_metrics_values(
         self, scores: list[float], labels: np.ndarray, high_score_more_similar: bool
-    ) -> PairClassificationMetricsValues:
+    ) -> dict[str, float]:
         """Compute the metrics for the given scores and labels.
 
         Args:
@@ -257,7 +230,7 @@ class AbsTaskPairClassification(AbsTask):
             labels, np.array(scores) * (1 if high_score_more_similar else -1)
         )
 
-        return PairClassificationMetricsValues(
+        return dict(
             accuracy=float(acc),
             f1=float(f1),
             precision=float(precision),

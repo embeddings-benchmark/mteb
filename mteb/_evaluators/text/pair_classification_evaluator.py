@@ -80,7 +80,7 @@ class PairClassificationEvaluator(Evaluator):
         encode_kwargs: dict[str, Any],
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding sentences...")
-
+        # datasets v4 will pass column objects, so we need to extract the text
         all_sentences = self.sentences1[:] + self.sentences2[:]
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
