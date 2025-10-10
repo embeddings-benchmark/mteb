@@ -246,6 +246,10 @@ class TaskResult(BaseModel):
         return self.task.metadata.type
 
     @property
+    def is_public(self) -> bool:
+        return self.task.metadata.is_public
+
+    @property
     def hf_subsets(self) -> list[str]:
         """Get the hf_subsets present in the scores."""
         hf_subsets = set()

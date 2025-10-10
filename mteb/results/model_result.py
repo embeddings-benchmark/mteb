@@ -102,6 +102,7 @@ class ModelResult(BaseModel):
         domains: list[TaskDomain] | None = None,
         task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
+        is_public: bool | None = None,
     ) -> ModelResult:
         new_task_results = []
         for task_result in self.task_results:
@@ -121,6 +122,8 @@ class ModelResult(BaseModel):
                 task_modalities = getattr(task_result, "modalities", [])
                 if not any(modality in task_modalities for modality in modalities):
                     continue
+            if (is_public is not None) and (task_result.is_public is not is_public):
+                continue
             new_task_results.append(task_result)
         return type(self).model_construct(
             model_name=self.model_name,
