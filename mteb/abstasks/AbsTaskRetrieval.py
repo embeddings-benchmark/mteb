@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 from time import time
-from typing import Any, Callable, Literal
+from typing import Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
@@ -529,7 +529,7 @@ class AbsTaskRetrieval(AbsTask):
             if "instruction" in queries_[0]:
                 queries_ = queries_.map(combine_queries_with_instruction_text)
 
-            if isinstance(queries_["text"][0], (dict, list)):
+            if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(convert_conv_history_to_query)
             queries_text_statistics = calculate_text_statistics(queries_["text"])
 

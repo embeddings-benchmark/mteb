@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 import warnings
-from collections.abc import Iterable, Sequence
-from typing import Any, Callable, Literal
+from collections.abc import Callable, Iterable, Sequence
+from typing import Any, Literal
 
 import numpy as np
 import pandas as pd

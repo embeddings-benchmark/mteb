@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
-from typing import Any, Callable, Literal, cast
+from typing import Any, Literal, cast
 
 from huggingface_hub import get_safetensors_metadata
 from huggingface_hub.errors import (

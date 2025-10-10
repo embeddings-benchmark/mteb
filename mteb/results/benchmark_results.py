@@ -3,9 +3,9 @@ from __future__ import annotations
 import json
 import logging
 import warnings
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from pathlib import Path
-from typing import Any, Callable, Literal
+from typing import Any, Literal
 
 import pandas as pd
 from packaging.version import InvalidVersion, Version
