@@ -4,11 +4,11 @@ import json
 import logging
 from argparse import Namespace
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 import numpy as np
 from huggingface_hub import EvalResult

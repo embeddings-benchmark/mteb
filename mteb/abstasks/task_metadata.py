@@ -4,7 +4,7 @@ import json
 import logging
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from huggingface_hub import (
     DatasetCard,
@@ -18,7 +18,7 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Required, TypedDict
 
 import mteb
 from mteb.languages import check_language_code
