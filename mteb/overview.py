@@ -217,7 +217,7 @@ class MTEBTasks(tuple[AbsTask]):
         """
 
         def _limit_entries_in_cell_inner(cell: Any):
-            if isinstance(cell, (list, set)):
+            if isinstance(cell, list | set):
                 return self._limit_entries_in_cell(cell, limit_n_entries)
             return cell
 
@@ -292,7 +292,7 @@ class MTEBTasks(tuple[AbsTask]):
         if limit_n_entries and df.shape[0]:  # ensure that there are entries
             for col in df.columns:
                 # check if content is a list or set
-                if isinstance(df[col].iloc[0], (list, set)):
+                if isinstance(df[col].iloc[0], list | set):
                     _col = []
                     for val in df[col]:
                         str_col = self._limit_entries_in_cell(val, limit_n_entries)
