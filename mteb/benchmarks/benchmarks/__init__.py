@@ -36,6 +36,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
     NANOBEIR,
     R2MED,
+    REAL_MM_RAG,
     RU_SCI_BENCH,
     SEB,
     VIDORE,
@@ -116,4 +117,5 @@ __all__ = [
     "RTEB_GERMAN",
     "RTEB_JAPANESE",
     "HUME",
+    "REAL_MM_RAG",
 ]
