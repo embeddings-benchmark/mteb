@@ -51,6 +51,7 @@ class ClusteringEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
         )
 
+        logger.info("Running clustering - Encoding samples...")
         embeddings = model.encode(
             data_loader,
             task_metadata=self.task_metadata,
@@ -60,7 +61,8 @@ class ClusteringEvaluator(Evaluator):
         )
 
         labels = self.dataset[self.label_column_name]
-        logger.info("Fitting Mini-Batch K-Means model...")
+
+        logger.info("Running clustering - Fitting Mini-Batch K-Means...")
         clustering_model = cluster.MiniBatchKMeans(
             n_clusters=len(set(labels)),
             batch_size=self.clustering_batch_size,
@@ -69,10 +71,10 @@ class ClusteringEvaluator(Evaluator):
         clustering_model.fit(embeddings)
         cluster_assignment = clustering_model.labels_
 
-        logger.info("Evaluating...")
+        logger.info("Running clustering - Evaluating clustering...")
         v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
         if v_measure_only:
-            return {"v_measure": v_measure}
+            return {"v_measure": float(v_measure)}
 
         nmi = metrics.cluster.normalized_mutual_info_score(labels, cluster_assignment)
         ari = metrics.cluster.adjusted_rand_score(labels, cluster_assignment)
@@ -84,8 +86,8 @@ class ClusteringEvaluator(Evaluator):
         clustering_accuracy = total_correct / len(labels)
 
         return {
-            "v_measure": v_measure,
-            "nmi": nmi,
-            "ari": ari,
-            "cluster_accuracy": clustering_accuracy,
+            "v_measure": float(v_measure),
+            "nmi": float(nmi),
+            "ari": float(ari),
+            "cluster_accuracy": float(clustering_accuracy),
         }

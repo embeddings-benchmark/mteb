@@ -111,6 +111,7 @@ class PairClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
     ) -> dict[str, float]:
+        logger.info("Running pair classification - Encoding sentences...")
         all_sentences = self.sentences1[:] + self.sentences2[:]
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
@@ -124,7 +125,7 @@ class PairClassificationEvaluator(Evaluator):
         embeddings1 = embeddings[:len_sentences1]
         embeddings2 = embeddings[len_sentences1:]
 
-        logger.info("Computing similarity distances.")
+        logger.info("Running pair classification - Evaluating pair similarity...")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
@@ -138,7 +139,6 @@ class PairClassificationEvaluator(Evaluator):
             for i in range(len(embeddings1_np))
         ]
 
-        logger.info("Computing metrics...")
         labels = np.asarray(self.labels)
         output_scores = {}
         max_scores = defaultdict(list)
@@ -173,6 +173,7 @@ class PairClassificationEvaluator(Evaluator):
             if metric in ["f1", "ap", "f1", "precision", "recall", "accuracy"]:
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
 
+        logger.info("Running pair classification - Finished.")
         return output_scores
 
     @staticmethod

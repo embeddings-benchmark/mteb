@@ -95,6 +95,9 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
 
+        logger.info(
+            "Running multilabel classification task - Sampling training data..."
+        )
         scores = []
         # Bootstrap sample indices from training set for each experiment
         train_samples = []
@@ -115,6 +118,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             batch_size=encode_kwargs["batch_size"],
         )
 
+        logger.info("Running multilabel classification - Encoding training set...")
         _unique_train_embeddings = model.encode(
             dataloader_train,
             task_metadata=self.metadata,
@@ -143,6 +147,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
             batch_size=encode_kwargs["batch_size"],
         )
 
+        logger.info("Running multilabel classification - Encoding test set...")
         X_test = model.encode(
             dataloader_test,
             task_metadata=self.metadata,
@@ -153,13 +158,9 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(test_dataset[self.label_column_name])
 
+        logger.info("Running multilabel classification - Evaluating classifiers...")
         all_predictions = []
         for i_experiment, sample_indices in enumerate(train_samples):
-            logger.info(
-                "=" * 10
-                + f" Experiment {i_experiment + 1}/{self.n_experiments} "
-                + "=" * 10
-            )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)[self.label_column_name]
             y_train = binarizer.transform(y_train)
@@ -186,6 +187,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         avg_scores: dict[str, Any] = {
             k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
         }
+        logger.info("Running multilabel classification - Finished.")
         return FullMultilabelClassificationMetrics(
             scores_per_experiment=scores,
             **avg_scores,

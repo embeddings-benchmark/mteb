@@ -273,7 +273,7 @@ class AbsTaskRetrieval(AbsTask):
 
         def process_data(split: str, hf_subset: str = "default"):
             """Helper function to load and process data for a given split and language"""
-            logger.info(
+            logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
 
@@ -391,7 +391,9 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs=encode_kwargs,
         )
         end_time = time()
-        logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+        logger.debug(
+            f"Running retrieval task - Time taken to retrieve: {end_time - start_time:.2f} seconds"
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -402,6 +404,7 @@ class AbsTaskRetrieval(AbsTask):
                 hf_split=hf_split,
             )
 
+        logger.info("Running retrieval task - Evaluating retrieval scores...")
         (
             all_scores,
             ndcg,
@@ -426,7 +429,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
-
+        logger.info("Running retrieval task - Finished.")
         return make_score_dict(
             ndcg,
             _map,

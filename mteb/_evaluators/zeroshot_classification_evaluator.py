@@ -47,6 +47,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             task_metadata=self.task_metadata,
         )
 
+        logger.info("Running zero-shot classification - Encoding labels...")
         text_label_embeddings = model.encode(
             create_dataloader_from_texts(self.candidate_labels),
             task_metadata=self.task_metadata,
@@ -55,6 +56,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
 
+        logger.info("Running zero-shot classification - Encoding samples...")
         input_embeddings = model.encode(
             dataloader,
             task_metadata=self.task_metadata,
@@ -62,6 +64,8 @@ class ZeroShotClassificationEvaluator(Evaluator):
             hf_split=self.hf_split,
             **encode_kwargs,
         )
+
+        logger.info("Running zero-shot classification - Evaluating accuracy...")
 
         if self.task_metadata.modalities == ["text"]:
             probs = model.similarity(text_label_embeddings, input_embeddings)

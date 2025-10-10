@@ -67,6 +67,7 @@ class AnySTSEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any],
     ) -> STSEvaluatorScores:
+        logger.info("Running semantic similarity - Encoding samples (1/2)")
         embeddings1 = model.encode(
             self.first_column,
             task_metadata=self.task_metadata,
@@ -74,6 +75,8 @@ class AnySTSEvaluator(Evaluator):
             hf_subset=self.hf_subset,
             **encode_kwargs,
         )
+
+        logger.info("Running semantic similarity - Encoding samples (2/2)...")
         embeddings2 = model.encode(
             self.second_column,
             task_metadata=self.task_metadata,
@@ -82,12 +85,13 @@ class AnySTSEvaluator(Evaluator):
             **encode_kwargs,
         )
 
-        logger.info("Evaluating...")
+        logger.info("Running semantic similarity - Evaluating similarity...")
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)
         similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
+        logger.info("Running semantic similarity - Finished.")
         return STSEvaluatorScores(
             cosine_scores=cosine_scores.tolist(),
             manhattan_distances=manhattan_distances.tolist(),
