@@ -361,32 +361,24 @@ class ResultCache:
         paths: list[Path],
         models: Sequence[str] | Sequence[ModelMeta] | None = None,
     ) -> list[Path]:
-        model_revisions: list[str] | None = None
-        if models is not None:
-            if isinstance(models[0], ModelMeta):
-                models = cast(list[ModelMeta], models)
-                model_names = {m.model_name_as_path() for m in models}
-                model_revisions = [
-                    m.revision if m.revision else "no_revision_available"
-                    for m in models
-                ]
+        """Filter a list of paths by model name and optional revision."""
+        if not models:
+            return paths
 
-            else:
-                models = cast(list[str], models)
-                model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
+        if isinstance(models[0], ModelMeta):
+            models = cast(list[ModelMeta], models)
+            name_and_revision = {
+                (m.model_name_as_path(), m.revision or "no_revision_available")
+                for m in models
+            }
+            return [
+                p
+                for p in paths
+                if (p.parent.parent.name, p.parent.name) in name_and_revision
+            ]
 
-            if model_revisions is None:  # filter by model names only
-                paths = [p for p in paths if p.parent.parent.name in model_names]
-            else:  # filter by model names and revisions
-                name_and_revision = {
-                    (nam, rev) for nam, rev in zip(model_names, model_revisions)
-                }
-                paths = [
-                    p
-                    for p in paths
-                    if (p.parent.parent.name, p.parent.name) in name_and_revision
-                ]
-        return paths
+        model_names = {m.replace("/", "__").replace(" ", "_") for m in models}
+        return [p for p in paths if p.parent.parent.name in model_names]
 
     @staticmethod
     def _filter_paths_by_task(

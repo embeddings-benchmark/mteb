@@ -45,7 +45,8 @@ def load_results():
         all_results = results_cache.load_results(
             models=mteb.get_model_metas(),
             only_main_score=True,
-            require_model_meta=False,
+            require_model_meta=True,
+            include_remote=True,
         )
         return all_results
     else:
