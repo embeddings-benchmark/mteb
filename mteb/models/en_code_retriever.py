@@ -5,7 +5,6 @@ from functools import partial
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-
 english_code_retriever = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
