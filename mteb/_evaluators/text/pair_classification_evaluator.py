@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
-from sklearn.metrics import average_precision_score
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
     paired_euclidean_distances,
@@ -15,12 +13,29 @@ from sklearn.metrics.pairwise import (
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import Encoder
-from mteb.models.model_meta import ScoringFunction
 from mteb.similarity_functions import compute_pairwise_similarity
 
 from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
+
+
+class PairClassificationDistances(TypedDict):
+    """Pair classification distances.
+
+    Attributes:
+        cosine_scores: Cosine similarity scores.
+        euclidean_distances: Euclidean similarity scores.
+        manhattan_distances: Manhattan similarity scores.
+        similarity_scores: Similarity scores.
+        dot_scores: Dot similarity scores.
+    """
+
+    cosine_scores: list[float]
+    euclidean_distances: list[float]
+    manhattan_distances: list[float]
+    similarity_scores: list[float]
+    dot_scores: list[float]
 
 
 class PairClassificationEvaluator(Evaluator):
@@ -35,16 +50,13 @@ class PairClassificationEvaluator(Evaluator):
         sentences1: The first column of sentences
         sentences2: The second column of sentences
         labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
-        name: Name for the output
         batch_size: Batch size used to compute embeddings
-        write_csv: Write results to a CSV file
     """
 
     def __init__(
         self,
-        sentences1,
-        sentences2,
-        labels,
+        sentences1: list[str],
+        sentences2: list[str],
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -53,27 +65,57 @@ class PairClassificationEvaluator(Evaluator):
         super().__init__(**kwargs)
         self.sentences1 = sentences1
         self.sentences2 = sentences2
-        self.labels = labels
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-        assert len(self.sentences1) == len(self.sentences2)
-        assert len(self.sentences1) == len(self.labels)
-        for label in labels:
-            assert label == 0 or label == 1
+        if len(self.sentences1) != len(self.sentences2):
+            raise ValueError(
+                f"Sentences1 and Sentences2 must have the same length for task {task_metadata.name}"
+            )
 
     def __call__(
         self,
         model: Encoder,
         encode_kwargs: dict[str, Any],
-    ) -> dict[str, float]:
-        scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
+    ) -> PairClassificationDistances:
+        logger.info("Running pair classification - Encoding sentences...")
+        # datasets v4 will pass column objects, so we need to extract the text
+        all_sentences = self.sentences1[:] + self.sentences2[:]
+        len_sentences1 = len(self.sentences1)
+        embeddings = self._encode_unique_texts(
+            all_sentences,
+            model,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            **encode_kwargs,
+        )
+        embeddings1 = embeddings[:len_sentences1]
+        embeddings2 = embeddings[len_sentences1:]
 
-        # Main score is the max of Average Precision (AP)
-        main_score = max(scores[short_name]["ap"] for short_name in scores)
-        scores["main_score"] = main_score
-        return scores
+        logger.info("Running pair classification - Evaluating pair similarity...")
+        cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
+        manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
+        euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
+
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
+
+        embeddings1_np = np.asarray(embeddings1)
+        embeddings2_np = np.asarray(embeddings2)
+        dot_scores = np.asarray(
+            [
+                np.dot(embeddings1_np[i], embeddings2_np[i])
+                for i in range(len(embeddings1_np))
+            ]
+        )
+        return PairClassificationDistances(
+            cosine_scores=cosine_scores.tolist(),
+            euclidean_distances=euclidean_distances.tolist(),
+            manhattan_distances=manhattan_distances.tolist(),
+            similarity_scores=similarity_scores.tolist(),
+            dot_scores=dot_scores.tolist(),
+        )
 
     @staticmethod
     def _encode_unique_texts(
@@ -104,186 +146,3 @@ class PairClassificationEvaluator(Evaluator):
             )
         )
         return all_unique_texts_embs[all_texts_indexes]
-
-    def compute_metrics(
-        self,
-        model: Encoder,
-        *,
-        encode_kwargs: dict[str, Any],
-    ) -> dict[str, float]:
-        logger.info("Running pair classification - Encoding sentences...")
-        all_sentences = self.sentences1[:] + self.sentences2[:]
-        len_sentences1 = len(self.sentences1)
-        embeddings = self._encode_unique_texts(
-            all_sentences,
-            model,
-            task_metadata=self.task_metadata,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            **encode_kwargs,
-        )
-        embeddings1 = embeddings[:len_sentences1]
-        embeddings2 = embeddings[len_sentences1:]
-
-        logger.info("Running pair classification - Evaluating pair similarity...")
-        cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
-        manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
-        euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
-
-        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
-
-        embeddings1_np = np.asarray(embeddings1)
-        embeddings2_np = np.asarray(embeddings2)
-        dot_scores = [
-            np.dot(embeddings1_np[i], embeddings2_np[i])
-            for i in range(len(embeddings1_np))
-        ]
-
-        labels = np.asarray(self.labels)
-        output_scores = {}
-        max_scores = defaultdict(list)
-        for short_name, name, scores, reverse in [
-            [
-                "similarity",
-                "Model-Specified Similarity",
-                similarity_scores,
-                True,
-            ],
-            [ScoringFunction.COSINE.value, "Cosine-Similarity", cosine_scores, True],
-            [
-                ScoringFunction.MANHATTAN.value,
-                "Manhattan-Distance",
-                manhattan_distances,
-                False,
-            ],
-            [
-                ScoringFunction.EUCLIDEAN.value,
-                "Euclidean-Distance",
-                euclidean_distances,
-                False,
-            ],
-            [ScoringFunction.DOT_PRODUCT.value, "Dot-Product", dot_scores, True],
-        ]:
-            metrics = self._compute_metrics(scores, labels, reverse)
-            for metric_name, metric_value in metrics.items():
-                output_scores[f"{short_name}_{metric_name}"] = metric_value
-                max_scores[metric_name].append(metric_value)
-
-        for metric in max_scores:
-            if metric in ["f1", "ap", "f1", "precision", "recall", "accuracy"]:
-                output_scores[f"max_{metric}"] = max(max_scores[metric])
-
-        logger.info("Running pair classification - Finished.")
-        return output_scores
-
-    @staticmethod
-    def _compute_metrics(
-        scores: np.ndarray, labels: np.ndarray, high_score_more_similar: bool
-    ) -> dict[str, float]:
-        """Compute the metrics for the given scores and labels.
-
-        Args:
-            scores: The similarity/dissimilarity scores for the pairs, specified as an array of shape (n_pairs, ).
-            labels: The labels for the pairs, specified as an array of shape (n_pairs, ).
-            high_score_more_similar: If true, then the higher the score, the more similar the pairs are.
-
-        Returns:
-            The metrics for the given scores and labels.
-        """
-        acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
-            scores, labels, high_score_more_similar
-        )
-        (
-            f1,
-            precision,
-            recall,
-            f1_threshold,
-        ) = PairClassificationEvaluator.find_best_f1_and_threshold(
-            scores, labels, high_score_more_similar
-        )
-        ap = PairClassificationEvaluator.ap_score(
-            scores, labels, high_score_more_similar
-        )
-
-        return {
-            "accuracy": float(acc),
-            "accuracy_threshold": float(acc_threshold),
-            "f1": float(f1),
-            "f1_threshold": float(f1_threshold),
-            "precision": float(precision),
-            "recall": float(recall),
-            "ap": float(ap),
-        }
-
-    @staticmethod
-    def find_best_acc_and_threshold(
-        scores: np.ndarray, labels: np.ndarray, high_score_more_similar: bool
-    ) -> tuple[float, float]:
-        assert len(scores) == len(labels)
-        rows = list(zip(scores, labels))
-
-        rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
-
-        max_acc = 0
-        best_threshold = -1
-
-        positive_so_far = 0
-        remaining_negatives = sum(np.array(labels) == 0)
-
-        for i in range(len(rows) - 1):
-            score, label = rows[i]
-            if label == 1:
-                positive_so_far += 1
-            else:
-                remaining_negatives -= 1
-
-            acc = (positive_so_far + remaining_negatives) / len(labels)
-            if acc > max_acc:
-                max_acc = acc
-                best_threshold = (rows[i][0] + rows[i + 1][0]) / 2
-
-        return max_acc, best_threshold
-
-    @staticmethod
-    def find_best_f1_and_threshold(
-        scores, labels, high_score_more_similar: bool
-    ) -> tuple[float, float, float, float]:
-        assert len(scores) == len(labels)
-
-        scores = np.asarray(scores)
-        labels = np.asarray(labels)
-
-        rows = list(zip(scores, labels))
-
-        rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
-
-        best_f1 = best_precision = best_recall = 0
-        threshold = 0
-        nextract = 0
-        ncorrect = 0
-        total_num_duplicates = sum(labels)
-
-        for i in range(len(rows) - 1):
-            score, label = rows[i]
-            nextract += 1
-
-            if label == 1:
-                ncorrect += 1
-
-            if ncorrect > 0:
-                precision = ncorrect / nextract
-                recall = ncorrect / total_num_duplicates
-                f1 = 2 * precision * recall / (precision + recall)
-                if f1 > best_f1:
-                    best_f1 = f1
-                    best_precision = precision
-                    best_recall = recall
-                    threshold = (rows[i][0] + rows[i + 1][0]) / 2
-
-        return best_f1, best_precision, best_recall, threshold
-
-    @staticmethod
-    def ap_score(scores, labels, high_score_more_similar: bool) -> float:
-        return average_precision_score(
-            labels, scores * (1 if high_score_more_similar else -1)
-        )
