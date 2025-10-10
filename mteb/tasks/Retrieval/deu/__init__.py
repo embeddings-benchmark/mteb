@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .GerDaLIRRetrieval import GerDaLIR
 from .GerDaLIRSmallRetrieval import GerDaLIRSmall
 from .German1Retrieval import German1Retrieval

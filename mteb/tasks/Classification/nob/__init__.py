@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .NoRecClassification import NoRecClassification, NoRecClassificationV2
 from .NorwegianParliamentClassification import (
     NorwegianParliamentClassification,

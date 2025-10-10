@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .HUMESTS22 import HUMESTS22
 from .IndicCrosslingualSTS import IndicCrosslingualSTS
 from .SemRel24STS import SemRel24STS

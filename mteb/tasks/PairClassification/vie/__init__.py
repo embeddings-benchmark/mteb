@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .SprintDuplicateQuestionsPCVN import SprintDuplicateQuestionsPCVN
 from .TwitterSemEval2015PCVN import TwitterSemEval2015PCVN
 from .TwitterURLCorpusPCVN import TwitterURLCorpusPC

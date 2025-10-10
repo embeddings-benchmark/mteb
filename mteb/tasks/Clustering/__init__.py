@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .deu import *
 from .eng import *
 from .fas import *

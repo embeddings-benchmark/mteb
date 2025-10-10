@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from importlib.metadata import version
 from pathlib import Path
 

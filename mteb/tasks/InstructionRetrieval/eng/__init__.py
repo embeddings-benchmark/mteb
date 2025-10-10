@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .IFIRAilaRetrieval import IFIRAila
 from .IFIRCdsRetrieval import IFIRCds
 from .IFIRFiQARetrieval import IFIRFiQA

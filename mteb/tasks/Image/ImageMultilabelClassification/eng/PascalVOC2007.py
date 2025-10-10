@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from sklearn.linear_model import LogisticRegression
 from sklearn.multioutput import MultiOutputClassifier
 

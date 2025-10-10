@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb._evaluators.retrieval_metrics import robustness_at_10
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata

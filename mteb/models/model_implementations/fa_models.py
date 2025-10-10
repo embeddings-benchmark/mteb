@@ -1,7 +1,5 @@
 """Farsi/Persian models for evaluation on the Persian part of MTEB"""
 
-from __future__ import annotations
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 FAQ = """### What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?
 
 - **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models per their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 import logging
 from argparse import Namespace
@@ -14,6 +12,7 @@ import numpy as np
 from huggingface_hub import EvalResult
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
+from typing_extensions import Self
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
@@ -166,7 +165,7 @@ class TaskResult(BaseModel):
         scores: dict[SplitName, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
-    ) -> TaskResult:
+    ) -> Self:
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         flat_scores = defaultdict(list)
@@ -264,7 +263,7 @@ class TaskResult(BaseModel):
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> TaskResult:
+    def from_dict(cls, data: dict) -> Self:
         """Create a TaskResult from a dictionary."""
         return cls.model_validate(data)
 
@@ -291,7 +290,7 @@ class TaskResult(BaseModel):
             json.dump(json_obj, f, indent=2)
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = True) -> TaskResult:  # type: ignore
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> Self:  # type: ignore
         """Load TaskResult from disk.
 
         Args:
@@ -340,7 +339,7 @@ class TaskResult(BaseModel):
         return obj
 
     @classmethod
-    def _fix_pair_classification_scores(cls, obj: TaskResult) -> None:
+    def _fix_pair_classification_scores(cls, obj: "TaskResult") -> None:
         from mteb import get_task
 
         task_name = obj.task_name
@@ -360,7 +359,7 @@ class TaskResult(BaseModel):
                             hf_subset_scores.pop(key)
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
+    def _convert_from_before_v1_11_0(cls, data: dict) -> Self:
         from mteb.overview import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -535,13 +534,13 @@ class TaskResult(BaseModel):
         return val_sum / n_val
 
     @classmethod
-    def from_validated(cls, **data) -> TaskResult:
+    def from_validated(cls, **data) -> Self:
         return cls.model_construct(**data)
 
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
-    def only_main_score(self) -> TaskResult:
+    def only_main_score(self) -> Self:
         new_scores = {}
         for split in self.scores:
             new_scores[split] = []
@@ -557,7 +556,7 @@ class TaskResult(BaseModel):
         new_res = TaskResult.from_validated(**new_res)
         return new_res
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> Self:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.
@@ -609,7 +608,7 @@ class TaskResult(BaseModel):
 
     def is_mergeable(
         self,
-        result: TaskResult | AbsTask,
+        result: "TaskResult" | AbsTask,
         criteria: list[str] | list[Criterias] = [
             "mteb_version",
             "dataset_revision",
@@ -666,12 +665,12 @@ class TaskResult(BaseModel):
 
     def merge(
         self,
-        new_results: TaskResult,
+        new_results: "TaskResult",
         criteria: list[str] | list[Criterias] = [
             "mteb_version",
             "dataset_revision",
         ],
-    ) -> TaskResult:
+    ) -> Self:
         """Merges two TaskResult objects.
 
         Args:

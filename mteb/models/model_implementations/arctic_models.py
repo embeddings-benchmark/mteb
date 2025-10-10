@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,

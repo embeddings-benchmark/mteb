@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .iso_mappings import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,

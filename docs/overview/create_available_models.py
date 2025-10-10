@@ -1,7 +1,5 @@
 """Updates the available models markdown files."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import mteb
@@ -13,7 +11,7 @@ END_INSERT = "<!-- END TASK DESCRIPTION -->"
 model_entry = """
 ####  [`{model_name}`]({reference})
 
- **License:** {license} 
+ **License:** {license}
 
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
@@ -26,7 +24,7 @@ h1_header = """
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of models:** {num_models} 
+- **Number of models:** {num_models}
 
 {models_md}
 """

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining

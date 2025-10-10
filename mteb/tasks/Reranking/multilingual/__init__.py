@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .ESCIReranking import ESCIReranking
 from .HUMEWikipediaRerankingMultilingual import HUMEWikipediaRerankingMultilingual
 from .MIRACLReranking import MIRACLReranking

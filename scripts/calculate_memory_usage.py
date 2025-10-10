@@ -5,8 +5,6 @@ the calculate_memory_usage_mb method, and then updates the source code in place 
 inserting or replacing the "memory_usage_mb" keyword argument in the ModelMeta constructor.
 """
 
-from __future__ import annotations
-
 import glob
 import importlib.util
 import os

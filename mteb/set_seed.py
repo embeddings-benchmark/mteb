@@ -3,8 +3,6 @@
 Derived from `transformers.trainer_utils.set_seed`. It assumes torch is installed.
 """
 
-from __future__ import annotations
-
 import logging
 import random
 

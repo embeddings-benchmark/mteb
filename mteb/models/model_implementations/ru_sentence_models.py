@@ -1,7 +1,5 @@
 """Sentence models for evaluation on the Russian part of MTEB"""
 
-from __future__ import annotations
-
 import torch
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel

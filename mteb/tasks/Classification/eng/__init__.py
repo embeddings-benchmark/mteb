@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AmazonPolarityClassification import (
     AmazonPolarityClassification,
     AmazonPolarityClassificationV2,

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .ArguAnaVNRetrieval import ArguAnaVN
 from .ClimateFEVERVNRetrieval import ClimateFEVERVN
 from .CQADupstackAndroidVNRetrieval import CQADupstackAndroidVN

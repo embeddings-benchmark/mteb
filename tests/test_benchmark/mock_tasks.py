@@ -1,7 +1,5 @@
 """This implements minimal viable mock tasks for testing the benchmarking framework."""
 
-from __future__ import annotations
-
 from datasets import Dataset, DatasetDict
 from PIL import Image
 

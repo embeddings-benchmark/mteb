@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .estonian_valence import (
     EstonianValenceClassification,
     EstonianValenceClassificationV2,

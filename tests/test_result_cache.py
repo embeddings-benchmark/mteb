@@ -1,7 +1,5 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 from mteb.cache import ResultCache

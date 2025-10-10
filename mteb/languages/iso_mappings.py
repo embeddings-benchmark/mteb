@@ -2,8 +2,6 @@
 Script codes (ISO 15924) obtained from: https://unicode.org/iso15924/iso15924.txt
 """
 
-from __future__ import annotations
-
 import json
 from pathlib import Path
 

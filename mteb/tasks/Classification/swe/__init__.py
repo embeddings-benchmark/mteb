@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .DalajClassification import DalajClassification, DalajClassificationV2
 from .SwedishSentimentClassification import (
     SwedishSentimentClassification,

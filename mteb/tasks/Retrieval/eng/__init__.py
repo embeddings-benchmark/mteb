@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AILACasedocsRetrieval import AILACasedocs
 from .AILAStatutesRetrieval import AILAStatutes
 from .AlphaNLIRetrieval import AlphaNLI

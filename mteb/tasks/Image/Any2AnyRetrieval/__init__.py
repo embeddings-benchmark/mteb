@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .eng import (
     CUB200I2I,
     FORBI2I,

@@ -1,7 +1,5 @@
 """This script contains functions that are used to get an overview of the MTEB benchmark."""
 
-from __future__ import annotations
-
 import difflib
 import logging
 from collections import Counter, defaultdict

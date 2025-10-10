@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .CMTEBClustering import (
     CLSClusteringFastP2P,
     CLSClusteringFastS2S,
