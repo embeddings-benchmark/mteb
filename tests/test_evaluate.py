@@ -39,7 +39,7 @@ def test_evaluate(model: Encoder, task: AbsTask, expected_score: float):
 
 @pytest.mark.parametrize(
     "model, tasks",
-    [[MockClassificationTask(), MockRetrievalTask()]],
+    [(MockSentenceTransformer(), [MockClassificationTask(), MockRetrievalTask()])],
     ids=["mock_clf_and_retrieval"],
 )
 def test_evaluate_w_multiple_tasks(model: Encoder, tasks: list[AbsTask]):
