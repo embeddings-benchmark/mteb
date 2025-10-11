@@ -4,46 +4,13 @@ import logging
 
 import pytest
 
-import mteb
-from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder
 from tests.test_benchmark.mock_models import AbsMockEncoder
 from tests.test_benchmark.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
 
-# tested in CLI can probably be removed or converted to a MTEB test (before full deprecation)
-@pytest.mark.parametrize(
-    "task_name, model_name, model_revision",
-    [
-        (
-            "BornholmBitextMining",
-            "sentence-transformers/all-MiniLM-L6-v2",
-            "8b3219a92973c328a8e22fadcfa821b5dc75636a",
-        ),
-    ],
-)
-def test_reproducibility_workflow(
-    task_name: str, model_name: str, model_revision: str, tmp_path
-):
-    """Test that a model and a task can be fetched and run in a reproducible fashion."""
-    model_meta = mteb.get_model_meta(model_name, revision=model_revision)
-    task = mteb.get_task(task_name)
-
-    assert isinstance(model_meta, ModelMeta)
-    assert isinstance(task, AbsTask)
-
-    model = mteb.get_model(model_name, revision=model_revision)
-    assert isinstance(model, Encoder)
-
-    eval = MTEB(tasks=[task])
-    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
-
-
-# TODO: should be moved to test_models and refactored to use mteb.evaluate (probably some sort of test prompts)
 @pytest.mark.parametrize(
     "task_name",
     TASK_TEST_GRID
@@ -79,7 +46,6 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
     AbsMockEncoder.validate_task_to_prompt_name(model_prompts)
 
 
-# TODO: should be moved to test_models and refactored to use mteb.evaluate (probably some sort of test prompts)
 @pytest.mark.parametrize("raise_for_invalid_keys", (True, False))
 def test_validate_task_to_prompt_name_for_none(raise_for_invalid_keys: bool):
     result = AbsMockEncoder.validate_task_to_prompt_name(
@@ -103,7 +69,6 @@ def test_validate_task_to_prompt_name_fails_and_raises(
         AbsMockEncoder.validate_task_to_prompt_name(task_prompt_dict)
 
 
-# TODO: should be moved to test_models and refactored to use mteb.evaluate (probably some sort of test prompts)
 @pytest.mark.parametrize(
     "task_prompt_dict, expected_valid, expected_invalid",
     [
