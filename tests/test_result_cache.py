@@ -82,6 +82,32 @@ def test_get_models_and_tasks() -> None:
     )
 
 
+def test_no_duplicates_in_models() -> None:
+    """Test that get_models() returns no duplicates (issue #3173)."""
+    cache = ResultCache(cache_path=test_cache_path)
+
+    models = cache.get_models()
+
+    # Check that there are no duplicates
+    assert len(models) == len(set(models)), (
+        f"get_models() returned {len(models)} models but {len(set(models))} unique models. "
+        "There should be no duplicates."
+    )
+
+
+def test_no_duplicates_in_tasks() -> None:
+    """Test that get_task_names() returns no duplicates (issue #3173)."""
+    cache = ResultCache(cache_path=test_cache_path)
+
+    tasks = cache.get_task_names()
+
+    # Check that there are no duplicates
+    assert len(tasks) == len(set(tasks)), (
+        f"get_task_names() returned {len(tasks)} tasks but {len(set(tasks))} unique tasks. "
+        "There should be no duplicates."
+    )
+
+
 def test_load_results():
     cache = ResultCache(cache_path=test_cache_path)
 

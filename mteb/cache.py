@@ -317,7 +317,7 @@ class ResultCache:
             include_remote=include_remote,
         )
         models = [(p.parent.parent.name, p.parent.name) for p in cache_paths]
-        return models
+        return list(set(models))
 
     def get_task_names(
         self,
@@ -332,7 +332,7 @@ class ResultCache:
             include_remote=include_remote,
         )
         tasks = [p.stem for p in cache_paths]
-        return tasks
+        return list(set(tasks))
 
     @staticmethod
     def _get_model_name_and_revision_from_path(
