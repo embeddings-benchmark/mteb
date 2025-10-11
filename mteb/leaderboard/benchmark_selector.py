@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 import gradio as gr
@@ -12,7 +14,7 @@ DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 @dataclass
 class MenuEntry:
     name: str | None
-    benchmarks: list[Benchmark | "MenuEntry"]
+    benchmarks: list[Benchmark | MenuEntry]
     description: str | None = None
     open: bool = False
     size: str = "sm"

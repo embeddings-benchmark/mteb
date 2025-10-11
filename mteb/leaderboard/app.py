@@ -14,6 +14,7 @@ import pandas as pd
 
 import mteb
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
+from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
     GP_BENCHMARK_ENTRIES,
@@ -31,16 +32,21 @@ from mteb.types import Modalities
 logger = logging.getLogger(__name__)
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
-ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
 
 def load_results():
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
-        all_results = mteb.load_results(
-            only_main_score=True, require_model_meta=False, models=ALL_MODELS
-        )._filter_models()
-        all_results.to_disk(results_cache_path)
+        results_cache = ResultCache()
+        results_cache.download_from_remote()
+        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
+
+        all_results = results_cache.load_results(
+            models=all_model_names,
+            only_main_score=True,
+            require_model_meta=False,
+            include_remote=True,
+        )
         return all_results
     else:
         with results_cache_path.open() as cache_file:
