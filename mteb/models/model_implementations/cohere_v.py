@@ -10,8 +10,14 @@ from tqdm.auto import tqdm
 
 from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.model_implementations.cohere_models import (
+    COHERE_MAX_BATCH_SIZE,
+    COHERE_MAX_TOKENS_PER_BATCH,
+    retry_with_rate_limit,
+)
+from mteb.models.model_meta import ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
 
@@ -198,6 +204,11 @@ def cohere_v_loader(model_name, **kwargs):
             self.image_format = "JPEG"
             self.transform = transforms.Compose([transforms.PILToTensor()])
 
+        @retry_with_rate_limit(max_retries=5, max_rpm=300)
+        def _embed_func(self, **kwargs):
+            """Call Cohere embed API with retry and rate limiting."""
+            return self.client.embed(**kwargs)
+
         def get_text_embeddings(
             self,
             texts: DataLoader[BatchedInput],
@@ -205,12 +216,43 @@ def cohere_v_loader(model_name, **kwargs):
             **kwargs: Any,
         ):
             all_text_embeddings = []
+            index = 0
 
+            pbar = tqdm(total=len(texts), desc="Encoding text sentences")
+
+            while index < len(texts):
+                # Build batch respecting both count and token limits
+                batch, batch_tokens = [], 0
+                while (
+                    index < len(texts)
+                    and len(batch) < COHERE_MAX_BATCH_SIZE
+                    and batch_tokens < COHERE_MAX_TOKENS_PER_BATCH
+                ):
+                    # Count tokens for current sentence
+                    n_tokens = len(
+                        self.client.tokenize(
+                            text=texts[index], model=self.model_name
+                        ).tokens
+                    )
+
+                    # Check if adding this sentence would exceed token limit
+                    if (
+                        batch_tokens + n_tokens > COHERE_MAX_TOKENS_PER_BATCH
+                        and len(batch) > 0
+                    ):
+                        break
+
+                    batch_tokens += n_tokens
+                    batch.append(texts[index])
+                    index += 1
+
+                # Embed the batch with retry logic handled by client
             for batch in tqdm(
                 texts, disable=not show_progress_bar, desc="Text Encoding"
             ):
                 embed_kwargs = {
-                    "texts": batch["text"],
+                    "texts": batch,
+                    # "texts": batch["text"],
                     "model": self.model_name,
                     "input_type": "search_document",
                     "embedding_types": [self.embedding_type],
@@ -218,7 +260,7 @@ def cohere_v_loader(model_name, **kwargs):
                 if self.output_dimension is not None:
                     embed_kwargs["output_dimension"] = self.output_dimension
 
-                response = self.client.embed(**embed_kwargs)
+                response = self._embed_func(**embed_kwargs)
 
                 # Get embeddings based on requested type
                 if self.embedding_type == "float":
@@ -234,7 +276,9 @@ def cohere_v_loader(model_name, **kwargs):
                         f"Embedding type {self.embedding_type} not allowed"
                     )
                 all_text_embeddings.append(torch.tensor(embeddings))
+                pbar.update(len(batch))
 
+            pbar.close()
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
 
             # Post-process embeddings based on type
@@ -250,6 +294,7 @@ def cohere_v_loader(model_name, **kwargs):
             show_progress_bar: bool = True,
             **kwargs: Any,
         ):
+            # todo
             all_image_embeddings = []
 
             for batch in tqdm(
@@ -273,23 +318,23 @@ def cohere_v_loader(model_name, **kwargs):
                     if self.output_dimension is not None:
                         embed_kwargs["output_dimension"] = self.output_dimension
 
-                    response = self.client.embed(**embed_kwargs)
+                        response = self._embed_func(**embed_kwargs)
 
-                    # Get embeddings based on requested type
-                    if self.embedding_type == "float":
-                        embeddings = response.embeddings.float
-                    elif self.embedding_type == "int8":
-                        embeddings = response.embeddings.int8
-                    elif self.embedding_type == "uint8":
-                        embeddings = response.embeddings.uint8
-                    elif self.embedding_type == "binary":
-                        embeddings = response.embeddings.binary
-                    else:
-                        raise ValueError(
-                            f"Embedding type {self.embedding_type} not allowed"
-                        )
-                    all_image_embeddings.append(torch.tensor(embeddings))
-                    time.sleep(1.5)
+                        # Get embeddings based on requested type
+                        if self.embedding_type == "float":
+                            embeddings = response.embeddings.float
+                        elif self.embedding_type == "int8":
+                            embeddings = response.embeddings.int8
+                        elif self.embedding_type == "uint8":
+                            embeddings = response.embeddings.uint8
+                        elif self.embedding_type == "binary":
+                            embeddings = response.embeddings.binary
+                        else:
+                            raise ValueError(
+                                f"Embedding type {self.embedding_type} not allowed"
+                            )
+                        all_image_embeddings.append(torch.tensor(embeddings))
+                        time.sleep(1.5)
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 
             # Post-process embeddings based on type
