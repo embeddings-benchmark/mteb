@@ -3,8 +3,8 @@ from pathlib import Path
 
 from huggingface_hub import snapshot_download
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 
 class MLQuestionsRetrieval(AbsTaskRetrieval):

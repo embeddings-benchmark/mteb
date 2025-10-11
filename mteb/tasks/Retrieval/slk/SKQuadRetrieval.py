@@ -1,7 +1,7 @@
 from datasets import load_dataset
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 
 class SKQuadRetrieval(AbsTaskRetrieval):

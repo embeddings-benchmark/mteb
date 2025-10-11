@@ -11,7 +11,7 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.text.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.overview import _TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import (

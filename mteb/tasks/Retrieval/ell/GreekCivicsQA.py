@@ -2,8 +2,8 @@ from hashlib import sha256
 
 import datasets
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 
 class GreekCivicsQA(AbsTaskRetrieval):

@@ -2,8 +2,8 @@ import logging
 
 import datasets
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 _EVAL_SPLIT = "test"

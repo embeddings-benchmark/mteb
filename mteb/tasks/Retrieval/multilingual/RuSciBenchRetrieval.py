@@ -3,8 +3,8 @@ from typing import cast
 
 import datasets
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 _LANGUAGES = {
     "ru": ["rus-Cyrl"],
