@@ -18,9 +18,6 @@ from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval, RetrievalSplitData
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.AbsTaskTextRegression import AbsTaskTextRegression
-from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
-    AbsTaskImageMultilabelClassification,
-)
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
@@ -3942,13 +3939,14 @@ class MockRegressionTask(AbsTaskTextRegression):
             "num_samples": 2,
             "number_of_characters": 52,
             "num_texts_in_train": 1,
-            "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
-            "unique_text": 2,
-            "min_value": 0.0,
-            "average_value": 0.5,
-            "max_value": 1.0,
+            "text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         }
     }
 
