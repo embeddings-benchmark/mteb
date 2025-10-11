@@ -1,8 +1,8 @@
+from mteb.abstasks.regression import AbsTaskRegression
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.text_regression import AbsTaskTextRegression
 
 
-class RuSciBenchCitedCountRegression(AbsTaskTextRegression):
+class RuSciBenchCitedCountRegression(AbsTaskRegression):
     metadata = TaskMetadata(
         name="RuSciBenchCitedCountRegression",
         description="""Predicts the number of times a scientific article has been cited by other papers.
@@ -48,7 +48,7 @@ class RuSciBenchCitedCountRegression(AbsTaskTextRegression):
     )
 
 
-class RuSciBenchYearPublRegression(AbsTaskTextRegression):
+class RuSciBenchYearPublRegression(AbsTaskRegression):
     metadata = TaskMetadata(
         name="RuSciBenchYearPublRegression",
         description="""Predicts the publication year of a scientific article. The prediction is based on the
