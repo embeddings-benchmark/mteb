@@ -48,9 +48,6 @@ def test_task_modality_filtering(mock_logger, task):
     )
 
 
-
-
-
 # TODO: KCE: Unsure if we need this test:
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
 def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):

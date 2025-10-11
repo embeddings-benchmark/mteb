@@ -14,6 +14,7 @@ from tests.mock_tasks import (
     MockTextZeroShotClassificationTask,
 )
 
+
 @pytest.mark.parametrize(
     "task_cls, expected",
     [
