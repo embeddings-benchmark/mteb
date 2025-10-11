@@ -28,10 +28,16 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "task", [MockImageTextPairClassificationTask(), MockRetrievalTask()]
 )
-@pytest.mark.parametrize("model", [MockMocoEncoder()])
 @patch.object(logger, "info")
-def test_task_modality_filtering(mock_logger, task: mteb.AbsTask, model: mteb.Encoder):
-    mteb.evaluate(MockMocoEncoder(), task, cache=None)
+def test_task_modality_filtering(mock_logger, task):
+    eval = mteb.MTEB(tasks=[task])
+
+    # Run the evaluation
+    eval.run(
+        model=MockMocoEncoder(),
+        output_folder="tests/results",
+        overwrite_results=True,
+    )
 
     # Check that the task was skipped and the correct log message was generated
     task_modalities = ", ".join(
@@ -40,6 +46,9 @@ def test_task_modality_filtering(mock_logger, task: mteb.AbsTask, model: mteb.En
     mock_logger.assert_called_with(
         f"mock/MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
     )
+
+
+
 
 
 # TODO: KCE: Unsure if we need this test:

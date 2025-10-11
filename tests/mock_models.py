@@ -16,6 +16,27 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import Array, BatchedInput, PromptType
 
+empty_metadata_kwargs = dict(
+    loader=None,
+    languages=["eng-Latn"],
+    revision="1",
+    release_date=None,
+    modalities=["text"],
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=[],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=None,
+)
+
 
 class AbsMockEncoder(AbsEncoder):
     def __init__(self, seed: int | None = None):
@@ -78,6 +99,8 @@ class MockNumpyEncoder(AbsMockEncoder):
 
 
 class MockTorchEncoder(AbsMockEncoder):
+    mteb_model_meta = ModelMeta(name="mock/MockTorchEncoder", **empty_metadata_kwargs)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -92,6 +115,10 @@ class MockTorchEncoder(AbsMockEncoder):
 
 
 class MockTorchfp16Encoder(AbsMockEncoder):
+    mteb_model_meta = ModelMeta(
+        name="mock/MockTorchfp16Encoder", **empty_metadata_kwargs
+    )
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -106,6 +133,7 @@ class MockTorchfp16Encoder(AbsMockEncoder):
 
 
 class MockCLIPEncoder(AbsMockEncoder):
+    mteb_model_meta = ModelMeta(name="mock/MockCLIPEncoder", **empty_metadata_kwargs)
     mteb_model_meta = ModelMeta(
         loader=None,
         name="mock/MockCLIPModel",
@@ -203,6 +231,10 @@ class MockSentenceTransformer(SentenceTransformer):
 
 
 class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
+    mteb_model_meta = ModelMeta(
+        name="mock/MockSentenceTransformersbf16Encoder", **empty_metadata_kwargs
+    )
+
     def encode(
         self,
         sentences: str | list[str],
