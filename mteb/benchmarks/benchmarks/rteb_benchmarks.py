@@ -1,5 +1,5 @@
 # RTEB Benchmarks - Retrieval Embedding Benchmark
-from __future__ import annotations
+
 
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.overview import get_tasks

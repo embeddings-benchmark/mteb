@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder

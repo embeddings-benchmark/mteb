@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 import warnings
 from collections.abc import Callable, Iterable, Sequence
@@ -8,6 +6,7 @@ from typing import Any, Literal
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
+from typing_extensions import Self
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.task_metadata import (
@@ -89,7 +88,7 @@ class ModelResult(BaseModel):
         return f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, task_results=[...](#{n_entries}))"
 
     @classmethod
-    def from_validated(cls, **data) -> ModelResult:
+    def from_validated(cls, **data) -> Self:
         data["task_results"] = [
             TaskResult.from_validated(**res) for res in data["task_results"]
         ]
@@ -103,7 +102,7 @@ class ModelResult(BaseModel):
         task_types: list[TaskType] | None = None,
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
-    ) -> ModelResult:
+    ) -> Self:
         new_task_results = []
         for task_result in self.task_results:
             if (task_names is not None) and (task_result.task_name not in task_names):
@@ -131,7 +130,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> ModelResult:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> Self:
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])

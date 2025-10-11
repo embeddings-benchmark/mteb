@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import pytest
 
 from mteb.overview import get_task, get_tasks

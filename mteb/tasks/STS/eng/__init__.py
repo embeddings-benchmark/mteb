@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .BiossesSTS import BiossesSTS
 from .HUMESICKR import HUMESICKR
 from .HUMESTS12 import HUMESTS12

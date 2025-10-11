@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .Birdsnap import BirdsnapZeroShotClassification
 from .Caltech101 import Caltech101ZeroShotClassification
 from .CIFAR import CIFAR10ZeroShotClassification, CIFAR100ZeroShotClassification

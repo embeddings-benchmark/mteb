@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .MalayalamNewsClassification import (
     MalayalamNewsClassification,
     MalayalamNewsClassificationV2,

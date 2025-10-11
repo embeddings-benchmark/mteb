@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .BelebeleRetrieval import BelebeleRetrieval
 from .CrossLingualSemanticDiscriminationWMT19 import (
     CrossLingualSemanticDiscriminationWMT19,

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .snl_clustering import SNLClustering
 from .SNLHierarchicalClustering import (
     SNLHierarchicalClusteringP2P,

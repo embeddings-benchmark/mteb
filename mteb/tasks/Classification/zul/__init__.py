@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .IsiZuluNewsClassification import (
     IsiZuluNewsClassification,
     IsiZuluNewsClassificationV2,

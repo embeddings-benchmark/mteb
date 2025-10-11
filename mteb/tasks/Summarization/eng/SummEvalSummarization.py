@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb._evaluators.text.summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
 )

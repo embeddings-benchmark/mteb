@@ -1,7 +1,5 @@
 """Moka AI's Chinese embedding models"""
 
-from __future__ import annotations
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 

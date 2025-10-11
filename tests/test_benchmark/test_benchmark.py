@@ -1,7 +1,5 @@
 """test that the mteb.MTEB works as intended and that encoders are correctly called and passed the correct arguments."""
 
-from __future__ import annotations
-
 import logging
 from pathlib import Path
 from typing import Any

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks import AbsTaskRetrieval

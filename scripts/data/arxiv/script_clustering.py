@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import gzip
 import os
 from collections import Counter

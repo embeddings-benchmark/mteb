@@ -1,7 +1,5 @@
 """Updates the available tasks markdown files."""
 
-from __future__ import annotations
-
 from pathlib import Path
 
 import mteb
@@ -24,7 +22,7 @@ task_type_section = """
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** {num_tasks} 
+- **Number of tasks:** {num_tasks}
 
 {tasks_md}
 """

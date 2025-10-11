@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 import logging
 from abc import ABC, abstractmethod
@@ -13,6 +11,7 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
+from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
@@ -424,7 +423,7 @@ class AbsTask(ABC):
 
         return self.metadata.languages
 
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTask:
+    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
         """Filter the evaluation splits of the task.
 
         Args:
@@ -438,7 +437,7 @@ class AbsTask(ABC):
 
     def filter_modalities(
         self, modalities: list[str] | None, exclusive_modality_filter: bool = False
-    ) -> AbsTask:
+    ) -> Self:
         """Filter the modalities of the task.
 
         Args:
@@ -468,7 +467,7 @@ class AbsTask(ABC):
         script: list[str] | None = None,
         hf_subsets: list[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
-    ) -> AbsTask:
+    ) -> Self:
         """Filter the languages of the task.
 
         Args:

@@ -2,8 +2,6 @@
 only keep useful information
 """
 
-from __future__ import annotations
-
 import gzip
 import json
 

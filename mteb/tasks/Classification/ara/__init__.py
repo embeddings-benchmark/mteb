@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AJGT import AJGT, AJGTV2
 from .HotelReviewSentimentClassification import (
     HotelReviewSentimentClassification,

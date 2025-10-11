@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from functools import partial
 
 from mteb.encoder_interface import PromptType

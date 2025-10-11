@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from time import sleep
 
 from datasets import DatasetDict, Features, Value, load_dataset

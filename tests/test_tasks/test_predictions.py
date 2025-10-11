@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 from pathlib import Path
 
@@ -10,6 +8,7 @@ from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
     MockSTSTask,
     MockTextZeroShotClassificationTask,
@@ -61,6 +60,16 @@ from tests.test_benchmark.mock_tasks import (
                 "manhattan_distances": [-3.8137664259525317, -5.127750669852312],
                 "euclidean_distances": [-1.4245895965840156, -1.8406867696540525],
                 "similarity_scores": [0.6676753163337708, 0.44889140129089355],
+            },
+        ),
+        (
+            MockPairClassificationTask,
+            {
+                "cosine_scores": [0.6676752688013152, 0.44889138491964875],
+                "euclidean_distances": [1.4245895965840156, 1.8406867696540525],
+                "manhattan_distances": [3.8137664259525317, 5.127750669852312],
+                "similarity_scores": [0.6676753163337708, 0.44889140129089355],
+                "dot_scores": [1.834609502285649, 1.3250427203346034],
             },
         ),
     ],

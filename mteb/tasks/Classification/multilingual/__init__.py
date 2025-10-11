@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AfriSentiClassification import AfriSentiClassification
 from .AfriSentiLangClassification import AfriSentiLangClassification
 from .AmazonCounterfactualClassification import AmazonCounterfactualClassification

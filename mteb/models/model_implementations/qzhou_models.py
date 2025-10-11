@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.bge_models import (
     bge_chinese_training_data,
