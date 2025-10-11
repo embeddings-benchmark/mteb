@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .KurdishSentimentClassification import (
     KurdishSentimentClassification,
     KurdishSentimentClassificationV2,

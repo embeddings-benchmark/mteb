@@ -1,7 +1,7 @@
-from __future__ import annotations
-
 from collections.abc import Iterable
 from dataclasses import dataclass
+
+from typing_extensions import Self
 
 
 @dataclass
@@ -24,7 +24,7 @@ class LanguageScripts:
     @classmethod
     def from_languages_and_scripts(
         cls, languages: list[str] | None = None, scripts: list[str] | None = None
-    ) -> LanguageScripts:
+    ) -> Self:
         lang_script_codes = set()
         script_codes: set[str] = set(scripts) if (scripts is not None) else set()
         # normalize to 3 letter language codes

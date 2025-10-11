@@ -1,22 +1,18 @@
-from __future__ import annotations
-
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import numpy as np
+from datasets import Dataset, DatasetDict
+from typing_extensions import Self
 
+from mteb.models.models_protocols import MTEBModels
 from mteb.results.task_result import TaskResult
+from mteb.types import HFSubset, ScoresDict
+from mteb.types.statistics import DescriptiveStatistics
 
 from .AbsTask import AbsTask
 from .aggregate_task_metadata import AggregateTaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset, DatasetDict
-
-    from mteb.models.models_protocols import MTEBModels
-    from mteb.types import HFSubset, ScoresDict
-    from mteb.types.statistics import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -108,14 +104,14 @@ class AbsTaskAggregate(AbsTask):
         task_res.mteb_version = task_results[0].mteb_version
         return task_res
 
-    def check_if_dataset_is_superseded(self):
+    def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version"""
         if self.superseded_by:
             logger.warning(
                 f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTaskAggregate:
+    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
         """Filter the evaluation splits of the task."""
         self._eval_splits = eval_splits
         return self
@@ -154,5 +150,5 @@ class AbsTaskAggregate(AbsTask):
         )
 
     @property
-    def is_aggregate(self):  # Overrides the is_aggregate method on AbsTask
+    def is_aggregate(self) -> bool:  # Overrides the is_aggregate method on AbsTask
         return True

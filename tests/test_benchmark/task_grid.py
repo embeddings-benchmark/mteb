@@ -1,7 +1,5 @@
 """Task grid for testing purposes. This is a list of tasks that can be used to test the benchmarking pipeline."""
 
-from __future__ import annotations
-
 import mteb
 from mteb.abstasks import AbsTask
 

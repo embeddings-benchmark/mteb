@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 
 from mteb.models.instruct_wrapper import instruct_wrapper

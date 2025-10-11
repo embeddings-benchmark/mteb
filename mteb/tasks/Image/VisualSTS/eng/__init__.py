@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .STS12VisualSTS import STS12VisualSTS
 from .STS13VisualSTS import STS13VisualSTS
 from .STS14VisualSTS import STS14VisualSTS

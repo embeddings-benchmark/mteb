@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .CSFDSKMovieReviewSentimentClassification import (
     CSFDSKMovieReviewSentimentClassification,
     CSFDSKMovieReviewSentimentClassificationV2,

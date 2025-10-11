@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .FilipinoHateSpeechClassification import (
     FilipinoHateSpeechClassification,
     FilipinoHateSpeechClassificationV2,

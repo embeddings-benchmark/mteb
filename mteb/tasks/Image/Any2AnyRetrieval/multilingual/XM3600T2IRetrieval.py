@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datasets import Dataset, DatasetDict, load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval

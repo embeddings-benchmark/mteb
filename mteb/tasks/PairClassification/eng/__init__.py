@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .LegalBenchPC import LegalBenchPC
 from .PubChemAISentenceParaphrasePC import PubChemAISentenceParaphrasePC
 from .PubChemSMILESPC import PubChemSMILESPC

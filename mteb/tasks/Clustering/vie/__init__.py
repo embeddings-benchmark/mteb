@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .RedditClusteringP2PVN import RedditClusteringP2PVN
 from .RedditClusteringVN import RedditClusteringVN
 from .StackExchangeClusteringP2PVN import StackExchangeClusteringP2PVN

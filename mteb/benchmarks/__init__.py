@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import (
     get_benchmark,

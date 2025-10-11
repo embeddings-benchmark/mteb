@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AbsTask import AbsTask
 from .AbsTaskAnyClassification import AbsTaskAnyClassification
 from .AbsTaskAnyClustering import AbsTaskAnyClustering

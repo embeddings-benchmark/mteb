@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import random
 from collections.abc import Iterable
 from itertools import islice

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .GermanPoliticiansTwitterSentimentClassification import (
     GermanPoliticiansTwitterSentimentClassification,
     GermanPoliticiansTwitterSentimentClassificationV2,

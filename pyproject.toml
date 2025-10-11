@@ -248,9 +248,6 @@ ignore = [
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
 
-[tool.ruff.lint.isort]
-required-imports = ["from __future__ import annotations"]
-
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 

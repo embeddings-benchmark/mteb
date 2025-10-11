@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .any_sts_evaluator import AnySTSEvaluator
 from .classification_evaluator import ClassificationEvaluator
 from .clustering_evaluator import ClusteringEvaluator

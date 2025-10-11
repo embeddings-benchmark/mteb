@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AppsRetrieval import AppsRetrieval
 from .Code1Retrieval import Code1Retrieval
 from .CodeEditSearchRetrieval import CodeEditSearchRetrieval

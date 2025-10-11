@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .CMTEBRetrieval import (
     CmedqaRetrieval,
     CovidRetrieval,

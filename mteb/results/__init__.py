@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .benchmark_results import BenchmarkResults, ModelResult
 from .task_result import TaskResult
 

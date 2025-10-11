@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.AbsTaskTextRegression import AbsTaskTextRegression
 from mteb.abstasks.task_metadata import TaskMetadata
 

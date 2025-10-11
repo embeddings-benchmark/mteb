@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .aggregated_tasks import *
 from .BitextMining import *
 from .Classification import *

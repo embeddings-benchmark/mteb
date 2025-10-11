@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .BengaliDocumentClassification import (
     BengaliDocumentClassification,
     BengaliDocumentClassificationV2,

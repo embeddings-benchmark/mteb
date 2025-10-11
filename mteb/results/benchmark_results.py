@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 import logging
 import warnings
@@ -10,6 +8,7 @@ from typing import Any, Literal
 import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
+from typing_extensions import Self
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.task_metadata import (
@@ -61,7 +60,7 @@ class BenchmarkResults(BaseModel):
         task_types: list[TaskType] | None = None,  # type: ignore
         modalities: list[Modalities] | None = None,
         is_public: bool | None = None,
-    ) -> BenchmarkResults:
+    ) -> Self:
         # TODO: Same as filter_models
         model_results = [
             res._filter_tasks(
@@ -78,7 +77,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> Self:
         """Select tasks from the benchmark results.
 
         Args:
@@ -93,7 +92,7 @@ class BenchmarkResults(BaseModel):
         self,
         names: list[str] | list[ModelMeta],
         revisions: list[str | None] | None = None,
-    ) -> BenchmarkResults:
+    ) -> Self:
         """Get models by name and revision.
 
         Args:
@@ -134,7 +133,7 @@ class BenchmarkResults(BaseModel):
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
         zero_shot_on: list[AbsTask] | None = None,
-    ) -> BenchmarkResults:
+    ) -> Self:
         # mostly a utility function for the leaderboard app.
         # I would probably move the filtering of the models outside of this call. No need to call get_model_metas inside the filter.
         # interface would then be the same as the get_models function
@@ -157,7 +156,7 @@ class BenchmarkResults(BaseModel):
 
         return type(self).model_construct(model_results=new_model_results)
 
-    def join_revisions(self) -> BenchmarkResults:
+    def join_revisions(self) -> Self:
         """Join revisions of the same model.
 
         In case of conflicts, the following rules are applied:
@@ -362,7 +361,7 @@ class BenchmarkResults(BaseModel):
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> BenchmarkResults:
+    def from_dict(cls, data: dict) -> Self:
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:
@@ -372,14 +371,14 @@ class BenchmarkResults(BaseModel):
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_validated(cls, **data) -> BenchmarkResults:
+    def from_validated(cls, **data) -> Self:
         model_results = []
         for model_res in data["model_results"]:
             model_results.append(ModelResult.from_validated(**model_res))
         return cls.model_construct(model_results=model_results)
 
     @classmethod
-    def from_disk(cls, path: Path | str) -> BenchmarkResults:
+    def from_disk(cls, path: Path | str) -> Self:
         """Load the BenchmarkResults from a JSON file."""
         path = Path(path)
         with path.open() as in_file:

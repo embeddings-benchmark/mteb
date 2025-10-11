@@ -1,7 +1,5 @@
 """Models for GeoGPT-Research-Project"""
 
-from __future__ import annotations
-
 import torch
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel

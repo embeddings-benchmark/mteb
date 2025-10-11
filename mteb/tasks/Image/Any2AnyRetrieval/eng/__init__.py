@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .BLINKIT2IRetrieval import BLINKIT2IRetrieval
 from .BLINKIT2TRetrieval import BLINKIT2TRetrieval
 from .CIRRIT2IRetrieval import CIRRIT2IRetrieval

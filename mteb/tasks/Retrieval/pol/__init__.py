@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .ArguAnaPLRetrieval import ArguAnaPL
 from .CqadupstackPLRetrieval import (
     CQADupstackAndroidRetrievalPL,
