@@ -3,13 +3,13 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 30 
+- **Number of tasks:** 30
 
 #### BUCC
 
 BUCC bitext mining dataset
 
-**Dataset:** [`mteb/bucc-bitext-mining`](https://huggingface.co/datasets/mteb/bucc-bitext-mining) • **License:** not specified • [Learn more →](https://comparable.limsi.fr/bucc2018/bucc2018-task.html)
+**Dataset:** [`mteb/BUCC`](https://huggingface.co/datasets/mteb/BUCC) • **License:** not specified • [Learn more →](https://comparable.limsi.fr/bucc2018/bucc2018-task.html)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -19,9 +19,9 @@ BUCC bitext mining dataset
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{zweigenbaum-etal-2017-overview,
       abstract = {This paper presents the BUCC 2017 shared task on parallel sentence extraction from comparable corpora. It recalls the design of the datasets, presents their final construction and statistics and the methods used to evaluate system results. 13 runs were submitted to the shared task by 4 teams, covering three of the four proposed language pairs: French-English (7 runs), German-English (3 runs), and Chinese-English (3 runs). The best F-scores as measured against the gold standard were 0.84 (German-English), 0.80 (French-English), and 0.43 (Chinese-English). Because of the design of the dataset, in which not all gold parallel sentence pairs are known, these are only minimum values. We examined manually a small sample of the false negative sentence pairs for the most precise French-English runs and estimated the number of parallel sentence pairs not yet in the provided gold standard. Adding them to the gold standard leads to revised estimates for the French-English F-scores of at most +1.5pt. This suggests that the BUCC 2017 datasets provide a reasonable approximate evaluation of the parallel sentence spotting task.},
       address = {Vancouver, Canada},
@@ -40,9 +40,9 @@ BUCC bitext mining dataset
       url = {https://aclanthology.org/W17-2512},
       year = {2017},
     }
-    
+
     ```
-    
+
 
 
 
@@ -60,9 +60,9 @@ BUCC bitext mining dataset
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{zweigenbaum-etal-2017-overview,
       abstract = {This paper presents the BUCC 2017 shared task on parallel sentence extraction from comparable corpora. It recalls the design of the datasets, presents their final construction and statistics and the methods used to evaluate system results. 13 runs were submitted to the shared task by 4 teams, covering three of the four proposed language pairs: French-English (7 runs), German-English (3 runs), and Chinese-English (3 runs). The best F-scores as measured against the gold standard were 0.84 (German-English), 0.80 (French-English), and 0.43 (Chinese-English). Because of the design of the dataset, in which not all gold parallel sentence pairs are known, these are only minimum values. We examined manually a small sample of the false negative sentence pairs for the most precise French-English runs and estimated the number of parallel sentence pairs not yet in the provided gold standard. Adding them to the gold standard leads to revised estimates for the French-English F-scores of at most +1.5pt. This suggests that the BUCC 2017 datasets provide a reasonable approximate evaluation of the parallel sentence spotting task.},
       address = {Vancouver, Canada},
@@ -81,9 +81,9 @@ BUCC bitext mining dataset
       url = {https://aclanthology.org/W17-2512},
       year = {2017},
     }
-    
+
     ```
-    
+
 
 
 
@@ -101,18 +101,18 @@ Partial Bible translations in 829 languages, aligned by verse.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{akerman2023ebible,
       author = {Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
       journal = {arXiv preprint arXiv:2304.09919},
       title = {The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -120,7 +120,7 @@ Partial Bible translations in 829 languages, aligned by verse.
 
 Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the island of Bornholm, Denmark. Historically it is a part of east Danish which was also spoken in Scania and Halland, Sweden.
 
-**Dataset:** [`strombergnlp/bornholmsk_parallel`](https://huggingface.co/datasets/strombergnlp/bornholmsk_parallel) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/W19-6138/)
+**Dataset:** [`mteb/BornholmBitextMining`](https://huggingface.co/datasets/mteb/BornholmBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/W19-6138/)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -130,9 +130,9 @@ Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{derczynskiBornholmskNaturalLanguage2019,
       author = {Derczynski, Leon and Kjeldsen, Alex Speed},
       booktitle = {Proceedings of the Nordic Conference of Computational Linguistics (2019)},
@@ -145,9 +145,9 @@ Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the 
       url = {https://pure.itu.dk/ws/files/84551091/W19_6138.pdf},
       urldate = {2024-04-24},
     }
-    
+
     ```
-    
+
 
 
 
@@ -165,9 +165,9 @@ A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{elrc_danish_medicines_agency_2018,
       author = {Rozis, Roberts},
       institution = {European Union},
@@ -177,9 +177,9 @@ A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.
       url = {https://sprogteknologi.dk/dataset/bilingual-english-danish-parallel-corpus-from-the-danish-medicines-agency},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -187,7 +187,7 @@ A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.
 
 English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.
 
-**Dataset:** [`rbawden/DiaBLa`](https://huggingface.co/datasets/rbawden/DiaBLa) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://inria.hal.science/hal-03021633)
+**Dataset:** [`mteb/DiaBlaBitextMining`](https://huggingface.co/datasets/mteb/DiaBlaBitextMining) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://inria.hal.science/hal-03021633)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -197,9 +197,9 @@ English-French Parallel Corpus. DiaBLa is an English-French dataset for the eval
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{gonzalez2019diabla,
       author = {González, Matilde and García, Clara and Sánchez, Lucía},
       booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
@@ -207,9 +207,9 @@ English-French Parallel Corpus. DiaBLa is an English-French dataset for the eval
       title = {DiaBLa: A Corpus of Bilingual Spontaneous Written Dialogues for Machine Translation},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -217,7 +217,7 @@ English-French Parallel Corpus. DiaBLa is an English-French dataset for the eval
 
 FLORES is a benchmark dataset for machine translation between English and low-resource languages.
 
-**Dataset:** [`mteb/flores`](https://huggingface.co/datasets/mteb/flores) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/facebook/flores)
+**Dataset:** [`mteb/FloresBitextMining`](https://huggingface.co/datasets/mteb/FloresBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/facebook/flores)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -227,9 +227,9 @@ FLORES is a benchmark dataset for machine translation between English and low-re
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{goyal2022flores,
       author = {Goyal, Naman and Gao, Cynthia and Chaudhary, Vishrav and Chen, Peng-Jen and Wenzek, Guillaume and Ju, Da and Krishnan, Sanjana and Ranzato, Marc'Aurelio and Guzm{\'a}n, Francisco},
       booktitle = {Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
@@ -237,9 +237,9 @@ FLORES is a benchmark dataset for machine translation between English and low-re
       title = {The FLORES-101 Evaluation Benchmark for Low-Resource and Multilingual Machine Translation},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -247,7 +247,7 @@ FLORES is a benchmark dataset for machine translation between English and low-re
 
 IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.
 
-**Dataset:** [`mteb/IN22-Conv`](https://huggingface.co/datasets/mteb/IN22-Conv) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/ai4bharat/IN22-Conv)
+**Dataset:** [`mteb/IN22ConvBitextMining`](https://huggingface.co/datasets/mteb/IN22ConvBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/ai4bharat/IN22-Conv)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -257,9 +257,9 @@ IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{gala2023indictrans,
       author = {Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
       issn = {2835-8856},
@@ -269,9 +269,9 @@ IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine 
       url = {https://openreview.net/forum?id=vfT4YuzAYA},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -279,7 +279,7 @@ IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine 
 
 IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.
 
-**Dataset:** [`mteb/IN22-Gen`](https://huggingface.co/datasets/mteb/IN22-Gen) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/ai4bharat/IN22-Gen)
+**Dataset:** [`mteb/IN22GenBitextMining`](https://huggingface.co/datasets/mteb/IN22GenBitextMining) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/ai4bharat/IN22-Gen)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -289,9 +289,9 @@ IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{gala2023indictrans,
       author = {Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
       issn = {2835-8856},
@@ -301,9 +301,9 @@ IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for 
       url = {https://openreview.net/forum?id=vfT4YuzAYA},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -321,9 +321,9 @@ The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{cettolo-etal-2017-overview,
       address = {Tokyo, Japan},
       author = {Cettolo, Mauro  and
@@ -344,9 +344,9 @@ The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot
       url = {https://aclanthology.org/2017.iwslt-1.1},
       year = {2017},
     }
-    
+
     ```
-    
+
 
 
 
@@ -354,7 +354,7 @@ The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot
 
 Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google
 
-**Dataset:** [`google/IndicGenBench_flores_in`](https://huggingface.co/datasets/google/IndicGenBench_flores_in) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/google-research-datasets/indic-gen-bench/)
+**Dataset:** [`mteb/IndicGenBenchFloresBitextMining`](https://huggingface.co/datasets/mteb/IndicGenBenchFloresBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/google-research-datasets/indic-gen-bench/)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -364,9 +364,9 @@ Flores-IN dataset is an extension of Flores dataset released as a part of the In
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{singh2024indicgenbench,
       archiveprefix = {arXiv},
       author = {Harman Singh and Nitish Gupta and Shikhar Bharadwaj and Dinesh Tewari and Partha Talukdar},
@@ -375,9 +375,9 @@ Flores-IN dataset is an extension of Flores dataset released as a part of the In
       title = {IndicGenBench: A Multilingual Benchmark to Evaluate Generation Capabilities of LLMs on Indic Languages},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -395,9 +395,9 @@ LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{aguilar2020lince,
       author = {Aguilar, Gustavo and Kar, Sudipta and Solorio, Thamar},
       booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
@@ -405,9 +405,9 @@ LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish
       title = {LinCE: A Centralized Benchmark for Linguistic Code-switching Evaluation},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -415,7 +415,7 @@ LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish
 
 NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.
 
-**Dataset:** [`mteb/NTREX`](https://huggingface.co/datasets/mteb/NTREX) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/davidstap/NTREX)
+**Dataset:** [`mteb/NTREXBitextMining`](https://huggingface.co/datasets/mteb/NTREXBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/davidstap/NTREX)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -425,9 +425,9 @@ NTREX is a News Test References dataset for Machine Translation Evaluation, cove
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{federmann-etal-2022-ntrex,
       address = {Online},
       author = {Federmann, Christian and Kocmi, Tom and Xin, Ying},
@@ -439,9 +439,9 @@ NTREX is a News Test References dataset for Machine Translation Evaluation, cove
       url = {https://aclanthology.org/2022.sumeval-1.4},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -459,9 +459,9 @@ NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{shode2023nollysenti,
       author = {Shode, Iyanuoluwa and Adelani, David Ifeoluwa and Peng, Jing and Feldman, Anna},
       booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
@@ -469,9 +469,9 @@ NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeri
       title = {NollySenti: Leveraging Transfer Learning and Machine Translation for Nigerian Movie Sentiment Classification},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -489,18 +489,18 @@ Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{opus4,
       author = {Tiedemann, J{\"o}rg and Thottingal, Santhosh},
       booktitle = {Proceedings of the 22nd Annual Conference of the European Association for Machine Translation (EAMT)},
       title = {OPUS-MT — Building open translation services for the World},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -518,9 +518,9 @@ NusaTranslation is a parallel dataset for machine translation on 11 Indonesia la
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{cahyawijaya2023nusawrites,
       author = {Cahyawijaya, Samuel and Lovenia, Holy and Koto, Fajri and Adhista, Dea and Dave, Emmanuel and Oktavianti, Sarah and Akbar, Salsabil and Lee, Jhonson and Shadieq, Nuur and Cenggoro, Tjeng Wawan and others},
       booktitle = {Proceedings of the 13th International Joint Conference on Natural Language Processing and the 3rd Conference of the Asia-Pacific Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -528,9 +528,9 @@ NusaTranslation is a parallel dataset for machine translation on 11 Indonesia la
       title = {NusaWrites: Constructing High-Quality Corpora for Underrepresented and Extremely Low-Resource Languages},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -548,9 +548,9 @@ NusaX is a parallel dataset for machine translation and sentiment analysis on 11
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{winata2023nusax,
       author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya, Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony, Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo, Radityo Eko and Fung, Pascale and others},
       booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
@@ -558,7 +558,7 @@ NusaX is a parallel dataset for machine translation and sentiment analysis on 11
       title = {NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
       year = {2023},
     }
-    
+
     @misc{winata2024miners,
       archiveprefix = {arXiv},
       author = {Genta Indra Winata and Ruochen Zhang and David Ifeoluwa Adelani},
@@ -567,9 +567,9 @@ NusaX is a parallel dataset for machine translation and sentiment analysis on 11
       title = {MINERS: Multilingual Language Models as Semantic Retrievers},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -587,9 +587,9 @@ Phinc is a parallel corpus for machine translation pairing code-mixed Hinglish (
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{srivastava2020phinc,
       author = {Srivastava, Vivek and Singh, Mayank},
       booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
@@ -597,9 +597,9 @@ Phinc is a parallel corpus for machine translation pairing code-mixed Hinglish (
       title = {PHINC: A Parallel Hinglish Social Media Code-Mixed Corpus for Machine Translation},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -617,16 +617,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-    
+
     @article{kim2023pubchem,
       author = {Kim, Sunghwan and Chen, Jie and Cheng, Tiejun and Gindulyte, Asta and He, Jia and He, Siqian and Li, Qingliang and Shoemaker, Benjamin A and Thiessen, Paul A and Yu, Bo and others},
       journal = {Nucleic acids research},
@@ -637,9 +637,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       volume = {51},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -673,9 +673,9 @@ This task focuses on finding translations of scientific articles.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -689,9 +689,9 @@ This task focuses on finding translations of scientific articles.
       volume = {110},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -711,7 +711,7 @@ Translated Version of SAMSum Dataset for summary retrieval.
 
 SRNCorpus is a machine translation corpus for creole language Sranantongo and Dutch.
 
-**Dataset:** [`davidstap/sranantongo`](https://huggingface.co/datasets/davidstap/sranantongo) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2212.06383)
+**Dataset:** [`mteb/SRNCorpusBitextMining`](https://huggingface.co/datasets/mteb/SRNCorpusBitextMining) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2212.06383)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -721,18 +721,18 @@ SRNCorpus is a machine translation corpus for creole language Sranantongo and Du
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{zwennicker2022towards,
       author = {Zwennicker, Just and Stap, David},
       journal = {arXiv preprint arXiv:2212.06383},
       title = {Towards a general purpose machine translation system for Sranantongo},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -750,11 +750,11 @@ Synthetic Persian Chatbot RAG Summary Dataset for summary retrieval.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
@@ -772,11 +772,11 @@ Synthetic Persian Chatbot Summary Dataset for summary retrieval.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
@@ -794,17 +794,17 @@ Synthetic Persian Chatbot Summary Dataset for summary retrieval.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{tatoeba,
       author = {Tatoeba community},
       title = {Tatoeba: Collection of sentences and translations},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -824,7 +824,7 @@ Parallel news titles from the Tbilisi City Hall website (https://tbilisi.gov.ge/
 
 A high-quality Vietnamese-English parallel data from the medical domain for machine translation
 
-**Dataset:** [`nhuvo/MedEV`](https://huggingface.co/datasets/nhuvo/MedEV) • **License:** cc-by-nc-4.0 • [Learn more →](https://aclanthology.org/2015.iwslt-evaluation.11/)
+**Dataset:** [`mteb/VieMedEVBitextMining`](https://huggingface.co/datasets/mteb/VieMedEVBitextMining) • **License:** cc-by-nc-4.0 • [Learn more →](https://aclanthology.org/2015.iwslt-evaluation.11/)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -834,18 +834,18 @@ A high-quality Vietnamese-English parallel data from the medical domain for mach
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{medev,
       author = {Nhu Vo and Dat Quoc Nguyen and Dung D. Le and Massimo Piccardi and Wray Buntine},
       booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
       title = {{Improving Vietnamese-English Medical Machine Translation}},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -859,15 +859,15 @@ The dataset is sourced from FAQ pages on the web.
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ara, aze, ben, bul, cat, ... (47) | Web, Written | human-annotated | human-translated |
+| text to text (t2t) | f1 | ara, aze, ben, bul, cat, ... (49) | Web, Written | human-annotated | human-translated |
 
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{dinzinger2025webfaq,
       archiveprefix = {arXiv},
       author = {Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
@@ -877,9 +877,9 @@ The dataset is sourced from FAQ pages on the web.
       url = {https://arxiv.org/abs/2502.20936},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -893,15 +893,15 @@ The dataset is sourced from FAQ pages on the web.
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
-| text to text (t2t) | f1 | ara, aze, ben, bul, cat, ... (47) | Web, Written | human-annotated | human-translated |
+| text to text (t2t) | f1 | ara, aze, ben, bul, cat, ... (49) | Web, Written | human-annotated | human-translated |
 
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{dinzinger2025webfaq,
       archiveprefix = {arXiv},
       author = {Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
@@ -911,5 +911,5 @@ The dataset is sourced from FAQ pages on the web.
       url = {https://arxiv.org/abs/2502.20936},
       year = {2025},
     }
-    
+
     ```

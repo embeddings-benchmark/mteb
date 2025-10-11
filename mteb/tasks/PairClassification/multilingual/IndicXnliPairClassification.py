@@ -1,6 +1,5 @@
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
+from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 
 _LANGUAGES = {
     "as": ["asm-Beng"],

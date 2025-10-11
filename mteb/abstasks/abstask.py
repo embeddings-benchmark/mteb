@@ -6,9 +6,8 @@ from copy import copy
 from pathlib import Path
 from typing import Any, cast
 
-import datasets
 import numpy as np
-from datasets import Dataset, DatasetDict
+from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 from typing_extensions import Self
@@ -255,12 +254,12 @@ class AbsTask(ABC):
 
     @staticmethod
     def stratified_subsampling(
-        dataset_dict: datasets.DatasetDict,
+        dataset_dict: DatasetDict,
         seed: int,
         splits: list[str] = ["test"],
         label: str = "label",
         n_samples: int = 2048,
-    ) -> datasets.DatasetDict:
+    ) -> DatasetDict:
         """Subsamples the dataset with stratification by the supplied label.
         Returns a datasetDict object.
 
@@ -272,7 +271,7 @@ class AbsTask(ABC):
             n_samples: Optional, number of samples to subsample. Default is max_n_samples.
         """
         ## Can only do this if the label column is of ClassLabel.
-        if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
+        if not isinstance(dataset_dict[splits[0]].features[label], ClassLabel):
             try:
                 dataset_dict = dataset_dict.class_encode_column(label)
             except ValueError as e:
@@ -312,13 +311,13 @@ class AbsTask(ABC):
             else:
                 self.dataset = {}
                 for hf_subset in self.hf_subsets:
-                    self.dataset[hf_subset] = datasets.load_dataset(
+                    self.dataset[hf_subset] = load_dataset(
                         name=hf_subset,
                         **self.metadata.dataset,
                     )
         else:
             # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+            self.dataset = load_dataset(**self.metadata.dataset)  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
 
@@ -329,19 +328,17 @@ class AbsTask(ABC):
         - The datasets must have a 'default' config that loads all the subsets of the dataset (see more [here](https://huggingface.co/docs/datasets/en/repository_structure#configurations))
         """
         self.dataset = {}
-        merged_dataset = datasets.load_dataset(
-            **self.metadata.dataset
-        )  # load "default" subset
+        merged_dataset = load_dataset(**self.metadata.dataset)  # load "default" subset
         for split in merged_dataset.keys():
             df_split = merged_dataset[split].to_polars()
             df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
                 self.dataset.setdefault(lang, {})
-                self.dataset[lang][split] = datasets.Dataset.from_polars(
+                self.dataset[lang][split] = Dataset.from_polars(
                     df_grouped[(lang,)].drop("lang")
                 )  # Remove lang column and convert back to HF datasets, not strictly necessary but better for compatibility
         for lang, subset in self.dataset.items():
-            self.dataset[lang] = datasets.DatasetDict(subset)
+            self.dataset[lang] = DatasetDict(subset)
 
     def calculate_descriptive_statistics(
         self, overwrite_results: bool = False

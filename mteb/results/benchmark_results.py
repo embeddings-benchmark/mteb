@@ -10,7 +10,7 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import (
     TaskDomain,
     TaskType,

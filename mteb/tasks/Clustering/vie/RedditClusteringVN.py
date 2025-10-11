@@ -1,4 +1,4 @@
-from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 

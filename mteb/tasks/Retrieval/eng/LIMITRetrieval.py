@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _CITATION = """

@@ -3,7 +3,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 3 
+- **Number of tasks:** 3
 
 #### WITT2IRetrieval
 
@@ -19,9 +19,9 @@ Retrieve images based on multilingual descriptions.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{bugliarello2022iglue,
       author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
       booktitle = {International Conference on Machine Learning},
@@ -30,9 +30,9 @@ Retrieve images based on multilingual descriptions.
       title = {IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -50,9 +50,9 @@ Retrieve images based on multilingual descriptions.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{bugliarello2022iglue,
       author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
       booktitle = {International Conference on Machine Learning},
@@ -61,9 +61,9 @@ Retrieve images based on multilingual descriptions.
       title = {IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -75,15 +75,15 @@ Retrieve images based on multilingual descriptions.
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
-| text to image (t2i) | ndcg_at_10 | ara, ben, ces, dan, deu, ... (36) | Encyclopaedic, Written | derived | found |
+| text to image (t2i) | ndcg_at_10 | ara, ben, ces, dan, deu, ... (38) | Encyclopaedic, Written | derived | found |
 
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{thapliyal2022crossmodal,
       author = {Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
       booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
@@ -91,5 +91,5 @@ Retrieve images based on multilingual descriptions.
       title = {Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
       year = {2022},
     }
-    
+
     ```

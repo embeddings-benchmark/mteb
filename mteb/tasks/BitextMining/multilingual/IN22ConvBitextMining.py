@@ -3,8 +3,8 @@ from collections import defaultdict
 import datasets
 from datasets import Dataset
 
-from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
 _LANGUAGES = [
     "asm_Beng",

@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
 # Consider only those language pairs with at least 250 samples
 _LANGUAGES = {

@@ -2,7 +2,7 @@ import logging
 from collections.abc import Callable, Sequence
 from dataclasses import field
 from enum import Enum
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from huggingface_hub import get_safetensors_metadata
 from huggingface_hub.errors import (
@@ -12,7 +12,8 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from mteb.abstasks import AbsTask
+if TYPE_CHECKING:
+    from ..abstasks import AbsTask
 from mteb.languages import check_language_code
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
@@ -191,7 +192,9 @@ class ModelMeta(BaseModel):
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
 
-    def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
+    def is_zero_shot_on(
+        self, tasks: Sequence["AbsTask"] | Sequence[str]
+    ) -> bool | None:
         """Indicates whether the given model can be considered
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
@@ -207,7 +210,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence[AbsTask], tasks)
+            tasks = cast(Sequence["AbsTask"], tasks)
             benchmark_datasets = set()
             for task in tasks:
                 benchmark_datasets.add(task.metadata.name)
@@ -243,7 +246,7 @@ class ModelMeta(BaseModel):
         return return_dataset
 
     def zero_shot_percentage(
-        self, tasks: Sequence[AbsTask] | Sequence[str]
+        self, tasks: Sequence["AbsTask"] | Sequence[str]
     ) -> int | None:
         """Indicates how out-of-domain the selected tasks are for the given model."""
         training_datasets = self.get_training_datasets()
@@ -252,7 +255,7 @@ class ModelMeta(BaseModel):
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
-            tasks = cast(Sequence[AbsTask], tasks)
+            tasks = cast(Sequence["AbsTask"], tasks)
             benchmark_datasets = {task.metadata.name for task in tasks}
         overlap = training_datasets & benchmark_datasets
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))

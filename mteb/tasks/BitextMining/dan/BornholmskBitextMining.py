@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
 
 class BornholmBitextMining(AbsTaskBitextMining):

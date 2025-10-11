@@ -13,11 +13,11 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ._statistics_calculation import (
+from .._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from .AbsTask import AbsTask
+from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

@@ -3,7 +3,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 4 
+- **Number of tasks:** 4
 
 #### SummEval
 
@@ -19,18 +19,18 @@ News Article Summary Semantic Similarity Estimation.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{fabbri2020summeval,
       author = {Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
       journal = {arXiv preprint arXiv:2007.12626},
       title = {SummEval: Re-evaluating Summarization Evaluation},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -48,18 +48,18 @@ News Article Summary Semantic Similarity Estimation translated from english to f
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{fabbri2020summeval,
       author = {Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
       journal = {arXiv preprint arXiv:2007.12626},
       title = {SummEval: Re-evaluating Summarization Evaluation},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -77,18 +77,18 @@ News Article Summary Semantic Similarity Estimation translated from english to f
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{fabbri2020summeval,
       author = {Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
       journal = {arXiv preprint arXiv:2007.12626},
       title = {SummEval: Re-evaluating Summarization Evaluation},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -106,14 +106,14 @@ News Article Summary Semantic Similarity Estimation. This version fixes a bug in
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{fabbri2020summeval,
       author = {Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
       journal = {arXiv preprint arXiv:2007.12626},
       title = {SummEval: Re-evaluating Summarization Evaluation},
       year = {2020},
     }
-    
+
     ```

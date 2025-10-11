@@ -13,14 +13,16 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .._evaluators.text.pair_classification_evaluator import PairClassificationDistances
-from ..models.model_meta import ScoringFunction
-from ..models.models_protocols import Encoder
-from ._statistics_calculation import (
+from ..._evaluators.text.pair_classification_evaluator import (
+    PairClassificationDistances,
+)
+from ...models.model_meta import ScoringFunction
+from ...models.models_protocols import Encoder
+from .._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
 )
-from .AbsTask import AbsTask
+from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

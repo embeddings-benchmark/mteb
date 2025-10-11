@@ -33,7 +33,7 @@ from ._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
 )
-from .AbsTask import AbsTask
+from .abstask import AbsTask
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)

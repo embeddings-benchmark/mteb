@@ -45,7 +45,7 @@ from ._statistics_calculation import (
     calculate_text_statistics,
     calculate_top_ranked_statistics,
 )
-from .AbsTask import AbsTask
+from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     RetrievalSplitData,

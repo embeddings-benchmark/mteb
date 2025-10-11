@@ -4,12 +4,12 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
-from ....abstasks.AbsTaskClusteringFast import (
+from mteb.abstasks.text.clustering_fast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
+
+from ....abstasks.any_clustering import AbsTaskAnyClustering
 
 
 class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):

@@ -96,7 +96,7 @@ See [how to add a new task](https://github.com/embeddings-benchmark/mteb/blob/ma
 
 ```python
 import mteb
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
 class MyCustomTask(AbsTaskReranking):
@@ -105,5 +105,3 @@ class MyCustomTask(AbsTaskReranking):
 model = mteb.get_model(...)
 results = mteb.evaluate(model, tasks=[MyCustomTask()])
 ```
-
-

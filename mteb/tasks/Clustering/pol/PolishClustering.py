@@ -3,12 +3,12 @@ from itertools import chain
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
-from mteb.abstasks.AbsTaskClusteringFast import (
+from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.clustering_fast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
 

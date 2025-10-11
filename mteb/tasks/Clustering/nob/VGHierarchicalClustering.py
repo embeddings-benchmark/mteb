@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.clustering_fast import AbsTaskClusteringFast
 
 N_SAMPLES = 2048
 

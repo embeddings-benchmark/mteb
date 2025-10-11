@@ -1,4 +1,4 @@
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 DOMAINS = ["writing", "recreation", "science", "technology", "lifestyle"]

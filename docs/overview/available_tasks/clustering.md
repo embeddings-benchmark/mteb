@@ -3,13 +3,13 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 98 
+- **Number of tasks:** 102
 
 #### AlloProfClusteringP2P
 
 Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
-**Dataset:** [`lyon-nlp/alloprof`](https://huggingface.co/datasets/lyon-nlp/alloprof) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
+**Dataset:** [`mteb/AlloProfClusteringP2P`](https://huggingface.co/datasets/mteb/AlloProfClusteringP2P) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -19,9 +19,9 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{lef23,
       author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
       copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
@@ -32,9 +32,9 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
       url = {https://arxiv.org/abs/2302.07738},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -42,7 +42,7 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
 
 Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
-**Dataset:** [`lyon-nlp/alloprof`](https://huggingface.co/datasets/lyon-nlp/alloprof) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
+**Dataset:** [`mteb/AlloProfClusteringP2P.v2`](https://huggingface.co/datasets/mteb/AlloProfClusteringP2P.v2) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -52,9 +52,9 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{lef23,
       author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
       copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
@@ -65,9 +65,9 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
       url = {https://arxiv.org/abs/2302.07738},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -75,7 +75,7 @@ Clustering of document titles and descriptions from Allo Prof dataset. Clusterin
 
 Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
-**Dataset:** [`lyon-nlp/alloprof`](https://huggingface.co/datasets/lyon-nlp/alloprof) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
+**Dataset:** [`mteb/AlloProfClusteringS2S`](https://huggingface.co/datasets/mteb/AlloProfClusteringS2S) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -85,9 +85,9 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{lef23,
       author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
       copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
@@ -98,9 +98,9 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
       url = {https://arxiv.org/abs/2302.07738},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -108,7 +108,7 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
 
 Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.
 
-**Dataset:** [`lyon-nlp/alloprof`](https://huggingface.co/datasets/lyon-nlp/alloprof) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
+**Dataset:** [`mteb/AlloProfClusteringS2S.v2`](https://huggingface.co/datasets/mteb/AlloProfClusteringS2S.v2) • **License:** mit • [Learn more →](https://huggingface.co/datasets/lyon-nlp/alloprof)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -118,9 +118,9 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{lef23,
       author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
       copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
@@ -131,9 +131,9 @@ Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on t
       url = {https://arxiv.org/abs/2302.07738},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -175,9 +175,9 @@ Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the m
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{arxiv_org_submitters_2024,
       author = {arXiv.org submitters},
       doi = {10.34740/KAGGLE/DSV/7548853},
@@ -186,9 +186,9 @@ Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the m
       url = {https://www.kaggle.com/dsv/7548853},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -206,9 +206,9 @@ Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the m
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{arxiv_org_submitters_2024,
       author = {arXiv.org submitters},
       doi = {10.34740/KAGGLE/DSV/7548853},
@@ -217,9 +217,9 @@ Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the m
       url = {https://www.kaggle.com/dsv/7548853},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -237,9 +237,9 @@ Clustering of titles from arxiv. Clustering of 30 sets, either on the main or se
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{arxiv_org_submitters_2024,
       author = {arXiv.org submitters},
       doi = {10.34740/KAGGLE/DSV/7548853},
@@ -248,9 +248,9 @@ Clustering of titles from arxiv. Clustering of 30 sets, either on the main or se
       url = {https://www.kaggle.com/dsv/7548853},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -268,11 +268,11 @@ Beytoote Website Articles Clustering
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
@@ -290,9 +290,9 @@ Clustering of documents from the Big Patent dataset. Test set only includes docu
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{DBLP:journals/corr/abs-1906-03741,
       author = {Eva Sharma and
     Chen Li and
@@ -309,9 +309,9 @@ Clustering of documents from the Big Patent dataset. Test set only includes docu
       volume = {abs/1906.03741},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -329,9 +329,9 @@ Clustering of documents from the Big Patent dataset. Test set only includes docu
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{DBLP:journals/corr/abs-1906-03741,
       author = {Eva Sharma and
     Chen Li and
@@ -348,9 +348,9 @@ Clustering of documents from the Big Patent dataset. Test set only includes docu
       volume = {abs/1906.03741},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -416,9 +416,9 @@ Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or s
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Remus2019GermEval2T,
       author = {Steffen Remus and Rami Aly and Chris Biemann},
       booktitle = {Conference on Natural Language Processing},
@@ -426,9 +426,9 @@ Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or s
       url = {https://api.semanticscholar.org/CorpusID:208334484},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -446,9 +446,9 @@ Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or s
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Remus2019GermEval2T,
       author = {Steffen Remus and Rami Aly and Chris Biemann},
       booktitle = {Conference on Natural Language Processing},
@@ -456,9 +456,9 @@ Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or s
       url = {https://api.semanticscholar.org/CorpusID:208334484},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -476,9 +476,9 @@ Clustering of book titles. Clustering of 28 sets, either on the main or secondar
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Remus2019GermEval2T,
       author = {Steffen Remus and Rami Aly and Chris Biemann},
       booktitle = {Conference on Natural Language Processing},
@@ -486,9 +486,9 @@ Clustering of book titles. Clustering of 28 sets, either on the main or secondar
       url = {https://api.semanticscholar.org/CorpusID:208334484},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -506,9 +506,9 @@ Clustering of book titles. Clustering of 28 sets, either on the main or secondar
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Remus2019GermEval2T,
       author = {Steffen Remus and Rami Aly and Chris Biemann},
       booktitle = {Conference on Natural Language Processing},
@@ -516,9 +516,9 @@ Clustering of book titles. Clustering of 28 sets, either on the main or secondar
       url = {https://api.semanticscholar.org/CorpusID:208334484},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -536,18 +536,18 @@ Clustering of built asset item descriptions based on categories identified withi
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{shahinmoghadam2024benchmarking,
       author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
       journal = {arXiv preprint arXiv:2411.12056},
       title = {Benchmarking pre-trained text embedding models in aligning built asset information},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -565,18 +565,18 @@ Clustering of built asset names/titles based on categories identified within ind
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{shahinmoghadam2024benchmarking,
       author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
       journal = {arXiv preprint arXiv:2411.12056},
       title = {Benchmarking pre-trained text embedding models in aligning built asset information},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -594,18 +594,18 @@ Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the m
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{li2022csl,
       author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
       journal = {arXiv preprint arXiv:2209.05034},
       title = {CSL: A large-scale Chinese scientific literature dataset},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -623,9 +623,9 @@ Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the m
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{li2022csl,
       archiveprefix = {arXiv},
       author = {Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
@@ -634,9 +634,9 @@ Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the m
       title = {CSL: A Large-scale Chinese Scientific Literature Dataset},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -654,18 +654,18 @@ Clustering of titles from CLS dataset. Clustering of 13 sets on the main categor
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{li2022csl,
       author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
       journal = {arXiv preprint arXiv:2209.05034},
       title = {CSL: A large-scale Chinese scientific literature dataset},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -683,9 +683,9 @@ Clustering of titles from CLS dataset. Clustering of 13 sets on the main categor
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{li2022csl,
       archiveprefix = {arXiv},
       author = {Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
@@ -694,9 +694,9 @@ Clustering of titles from CLS dataset. Clustering of 13 sets on the main categor
       title = {CSL: A Large-scale Chinese Scientific Literature Dataset},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -714,9 +714,9 @@ A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{katz-etal-2024-knowledge,
       address = {Miami, Florida, USA},
       author = {Katz, Uri  and
@@ -730,9 +730,9 @@ A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-
       url = {https://aclanthology.org/2024.findings-emnlp.516},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -740,7 +740,7 @@ A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-
 
 A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.
 
-**Dataset:** [`PNLPhub/DigiMag`](https://huggingface.co/datasets/PNLPhub/DigiMag) • **License:** not specified • [Learn more →](https://hooshvare.github.io/docs/datasets/tc)
+**Dataset:** [`mteb/DigikalamagClustering`](https://huggingface.co/datasets/mteb/DigikalamagClustering) • **License:** not specified • [Learn more →](https://hooshvare.github.io/docs/datasets/tc)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -750,11 +750,11 @@ A total of 8,515 articles scraped from Digikala Online Magazine. This dataset in
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
@@ -772,9 +772,9 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{dadas-etal-2020-evaluation,
       abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
       address = {Marseille, France},
@@ -805,9 +805,9 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
       url = {https://aclanthology.org/2020.lrec-1.207},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -825,9 +825,9 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{dadas-etal-2020-evaluation,
       abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
       address = {Marseille, France},
@@ -858,9 +858,9 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
       url = {https://aclanthology.org/2020.lrec-1.207},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -890,9 +890,9 @@ Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{ciancone2024extending,
       archiveprefix = {arXiv},
       author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -901,9 +901,9 @@ Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clusteri
       title = {Extending the Massive Text Embedding Benchmark to French},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -921,9 +921,9 @@ Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{ciancone2024extending,
       archiveprefix = {arXiv},
       author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -932,9 +932,143 @@ Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clusteri
       title = {Extending the Massive Text Embedding Benchmark to French},
       year = {2024},
     }
-    
+
     ```
-    
+
+
+
+
+#### HUMEArxivClusteringP2P
+
+Human evaluation subset of Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category
+
+**Dataset:** [`mteb/mteb-human-arxiv-clustering`](https://huggingface.co/datasets/mteb/mteb-human-arxiv-clustering) • **License:** cc0-1.0 • [Learn more →](https://www.kaggle.com/Cornell-University/arxiv)
+
+| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
+|-------|-------|-------|-------|-------|-------|
+| text to text (t2t) | v_measure | eng | Academic, Written | derived | found |
+
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+
+    @misc{arxiv_org_submitters_2024,
+      author = {arXiv.org submitters},
+      doi = {10.34740/KAGGLE/DSV/7548853},
+      publisher = {Kaggle},
+      title = {arXiv Dataset},
+      url = {https://www.kaggle.com/dsv/7548853},
+      year = {2024},
+    }
+
+    ```
+
+
+
+
+#### HUMERedditClusteringP2P
+
+Human evaluation subset of Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.
+
+**Dataset:** [`mteb/mteb-human-reddit-clustering`](https://huggingface.co/datasets/mteb/mteb-human-reddit-clustering) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2104.07081)
+
+| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
+|-------|-------|-------|-------|-------|-------|
+| text to text (t2t) | v_measure | eng | Social, Web, Written | derived | found |
+
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+
+    @article{geigle:2021:arxiv,
+      archiveprefix = {arXiv},
+      author = {Gregor Geigle and
+    Nils Reimers and
+    Andreas R{\"u}ckl{\'e} and
+    Iryna Gurevych},
+      eprint = {2104.07081},
+      journal = {arXiv preprint},
+      title = {TWEAC: Transformer with Extendable QA Agent Classifiers},
+      url = {http://arxiv.org/abs/2104.07081},
+      volume = {abs/2104.07081},
+      year = {2021},
+    }
+
+    ```
+
+
+
+
+#### HUMESIB200ClusteringS2S
+
+Human evaluation subset of Clustering of news article headlines from SIB-200. Clustering of 10 sets, each with 8 categories and 10 texts per category.
+
+**Dataset:** [`mteb/mteb-human-sib200-clustering`](https://huggingface.co/datasets/mteb/mteb-human-sib200-clustering) • **License:** cc-by-4.0 • [Learn more →](https://github.com/dadelani/sib-200)
+
+| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
+|-------|-------|-------|-------|-------|-------|
+| text to text (t2t) | v_measure | ara, dan, eng, fra, rus | News, Written | derived | found |
+
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+
+    @inproceedings{adelani-etal-2023-sib,
+      address = {Toronto, Canada},
+      author = {Adelani, David Ifeoluwa  and
+    Hedderich, Michael A.  and
+    Zhu, Dawei  and
+    van den Berg, Esther  and
+    Klakow, Dietrich},
+      booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+      doi = {10.18653/v1/2023.acl-long.660},
+      month = jul,
+      pages = {11784--11801},
+      publisher = {Association for Computational Linguistics},
+      title = {{SIB}-200: A Large-Scale News Classification Dataset for Over 200 Languages},
+      url = {https://aclanthology.org/2023.acl-long.660},
+      year = {2023},
+    }
+
+    ```
+
+
+
+
+#### HUMEWikiCitiesClustering
+
+Human evaluation subset of Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.
+
+**Dataset:** [`mteb/mteb-human-wikicities-clustering`](https://huggingface.co/datasets/mteb/mteb-human-wikicities-clustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/wikipedia)
+
+| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
+|-------|-------|-------|-------|-------|-------|
+| text to text (t2t) | v_measure | eng | Encyclopaedic, Written | derived | found |
+
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+
+    @online{wikidump,
+      author = {Wikimedia Foundation},
+      title = {Wikimedia Downloads},
+      url = {https://dumps.wikimedia.org},
+    }
+
+    ```
+
 
 
 
@@ -952,11 +1086,11 @@ These datasets have been extracted from the RSS feed of two Farsi news agency we
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
@@ -974,9 +1108,9 @@ Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{doddapaneni2022towards,
       author = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
       doi = {10.18653/v1/2023.acl-long.693},
@@ -984,9 +1118,9 @@ Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the 
       title = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1004,9 +1138,9 @@ this dataset is a processed and redistributed version of the KLUE-MRC dataset. D
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{park2021klue,
       archiveprefix = {arXiv},
       author = {Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
@@ -1015,9 +1149,9 @@ this dataset is a processed and redistributed version of the KLUE-MRC dataset. D
       title = {KLUE: Korean Language Understanding Evaluation},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1035,9 +1169,9 @@ this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MR
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{park2021klue,
       archiveprefix = {arXiv},
       author = {Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
@@ -1046,9 +1180,9 @@ this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MR
       title = {KLUE: Korean Language Understanding Evaluation},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1056,7 +1190,7 @@ this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MR
 
 Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics).
 
-**Dataset:** [`sbintuitions/JMTEB`](https://huggingface.co/datasets/sbintuitions/JMTEB) • **License:** cc-by-nd-2.1-jp • [Learn more →](https://github.com/sbintuitions/JMTEB)
+**Dataset:** [`mteb/LivedoorNewsClustering`](https://huggingface.co/datasets/mteb/LivedoorNewsClustering) • **License:** cc-by-nd-2.1-jp • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1068,7 +1202,7 @@ Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUI
 
 Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics). Version 2 updated on LivedoorNewsClustering by removing pairs where one of entries contain an empty sentences.
 
-**Dataset:** [`sbintuitions/JMTEB`](https://huggingface.co/datasets/sbintuitions/JMTEB) • **License:** cc-by-nd-2.1-jp • [Learn more →](https://github.com/sbintuitions/JMTEB)
+**Dataset:** [`mteb/LivedoorNewsClustering.v2`](https://huggingface.co/datasets/mteb/LivedoorNewsClustering.v2) • **License:** cc-by-nd-2.1-jp • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1090,18 +1224,18 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{scialom2020mlsum,
       author = {Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
       journal = {arXiv preprint arXiv:2004.14900},
       title = {MLSUM: The Multilingual Summarization Corpus},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1119,18 +1253,18 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{scialom2020mlsum,
       author = {Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
       journal = {arXiv preprint arXiv:2004.14900},
       title = {MLSUM: The Multilingual Summarization Corpus},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1148,18 +1282,18 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{scialom2020mlsum,
       author = {Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
       journal = {arXiv preprint arXiv:2004.14900},
       title = {MLSUM: The Multilingual Summarization Corpus},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1177,18 +1311,18 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{scialom2020mlsum,
       author = {Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
       journal = {arXiv preprint arXiv:2004.14900},
       title = {MLSUM: The Multilingual Summarization Corpus},
       year = {2020},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1196,7 +1330,7 @@ Clustering of newspaper article contents and titles from MLSUM dataset. Clusteri
 
 Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.
 
-**Dataset:** [`masakhane/masakhanews`](https://huggingface.co/datasets/masakhane/masakhanews) • **License:** afl-3.0 • [Learn more →](https://huggingface.co/datasets/masakhane/masakhanews)
+**Dataset:** [`mteb/MasakhaNEWSClusteringP2P`](https://huggingface.co/datasets/mteb/MasakhaNEWSClusteringP2P) • **License:** afl-3.0 • [Learn more →](https://huggingface.co/datasets/masakhane/masakhanews)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1206,9 +1340,9 @@ Clustering of news article headlines and texts from MasakhaNEWS dataset. Cluster
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{adelani2023masakhanews,
       author = {David Ifeoluwa Adelani and  Marek Masiak and  Israel Abebe Azime and  Jesujoba Oluwadara Alabi and  Atnafu Lambebo Tonja and  Christine Mwase and  Odunayo Ogundepo and  Bonaventure F. P. Dossou and  Akintunde Oladipo and  Doreen Nixdorf and  Chris Chinenye Emezue and  Sana Sabah al-azzawi and  Blessing K. Sibanda and  Davis David and  Lolwethu Ndolela and  Jonathan Mukiibi and  Tunde Oluwaseyi Ajayi and  Tatiana Moteu Ngoli and  Brian Odhiambo and  Abraham Toluwase Owodunni and  Nnaemeka C. Obiefuna and  Shamsuddeen Hassan Muhammad and  Saheed Salahudeen Abdullahi and  Mesay Gemeda Yigezu and  Tajuddeen Gwadabe and  Idris Abdulmumin and  Mahlet Taye Bame and  Oluwabusayo Olufunke Awoyomi and  Iyanuoluwa Shode and  Tolulope Anu Adelani and  Habiba Abdulganiy Kailani and  Abdul-Hakeem Omotayo and  Adetola Adeeko and  Afolabi Abeeb and  Anuoluwapo Aremu and  Olanrewaju Samuel and  Clemencia Siro and  Wangari Kimotho and  Onyekachi Raphael Ogbu and  Chinedu E. Mbonu and  Chiamaka I. Chukwuneke and  Samuel Fanijo and  Jessica Ojo and  Oyinkansola F. Awosan and  Tadesse Kebede Guge and  Sakayo Toadoum Sari and  Pamela Nyatsine and  Freedmore Sidume and  Oreen Yousuf and  Mardiyyah Oduwole and  Ussen Kimanuka and  Kanda Patrick Tshinu and  Thina Diko and  Siyanda Nxakama and   Abdulmejid Tuni Johar and  Sinodos Gebre and  Muhidin Mohamed and  Shafie Abdi Mohamed and  Fuad Mire Hassan and  Moges Ahmed Mehamed and  Evrard Ngabire and  and Pontus Stenetorp},
       journal = {ArXiv},
@@ -1216,9 +1350,9 @@ Clustering of news article headlines and texts from MasakhaNEWS dataset. Cluster
       volume = {},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1226,7 +1360,7 @@ Clustering of news article headlines and texts from MasakhaNEWS dataset. Cluster
 
 Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.
 
-**Dataset:** [`masakhane/masakhanews`](https://huggingface.co/datasets/masakhane/masakhanews) • **License:** afl-3.0 • [Learn more →](https://huggingface.co/datasets/masakhane/masakhanews)
+**Dataset:** [`mteb/MasakhaNEWSClusteringS2S`](https://huggingface.co/datasets/mteb/MasakhaNEWSClusteringS2S) • **License:** afl-3.0 • [Learn more →](https://huggingface.co/datasets/masakhane/masakhanews)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1236,9 +1370,9 @@ Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{adelani2023masakhanews,
       author = {David Ifeoluwa Adelani and  Marek Masiak and  Israel Abebe Azime and  Jesujoba Oluwadara Alabi and  Atnafu Lambebo Tonja and  Christine Mwase and  Odunayo Ogundepo and  Bonaventure F. P. Dossou and  Akintunde Oladipo and  Doreen Nixdorf and  Chris Chinenye Emezue and  Sana Sabah al-azzawi and  Blessing K. Sibanda and  Davis David and  Lolwethu Ndolela and  Jonathan Mukiibi and  Tunde Oluwaseyi Ajayi and  Tatiana Moteu Ngoli and  Brian Odhiambo and  Abraham Toluwase Owodunni and  Nnaemeka C. Obiefuna and  Shamsuddeen Hassan Muhammad and  Saheed Salahudeen Abdullahi and  Mesay Gemeda Yigezu and  Tajuddeen Gwadabe and  Idris Abdulmumin and  Mahlet Taye Bame and  Oluwabusayo Olufunke Awoyomi and  Iyanuoluwa Shode and  Tolulope Anu Adelani and  Habiba Abdulganiy Kailani and  Abdul-Hakeem Omotayo and  Adetola Adeeko and  Afolabi Abeeb and  Anuoluwapo Aremu and  Olanrewaju Samuel and  Clemencia Siro and  Wangari Kimotho and  Onyekachi Raphael Ogbu and  Chinedu E. Mbonu and  Chiamaka I. Chukwuneke and  Samuel Fanijo and  Jessica Ojo and  Oyinkansola F. Awosan and  Tadesse Kebede Guge and  Sakayo Toadoum Sari and  Pamela Nyatsine and  Freedmore Sidume and  Oreen Yousuf and  Mardiyyah Oduwole and  Ussen Kimanuka and  Kanda Patrick Tshinu and  Thina Diko and  Siyanda Nxakama and   Abdulmejid Tuni Johar and  Sinodos Gebre and  Muhidin Mohamed and  Shafie Abdi Mohamed and  Fuad Mire Hassan and  Moges Ahmed Mehamed and  Evrard Ngabire and  and Pontus Stenetorp},
       journal = {ArXiv},
@@ -1246,9 +1380,9 @@ Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 
       volume = {},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1306,7 +1440,7 @@ MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) i
         This dataset is the Japanese split of MewsC-16, containing topic sentences from Wikinews articles in 12 categories.
         More detailed information is available in the Appendix E of the citation.
 
-**Dataset:** [`sbintuitions/JMTEB`](https://huggingface.co/datasets/sbintuitions/JMTEB) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/sbintuitions/JMTEB)
+**Dataset:** [`mteb/MewsC16JaClustering`](https://huggingface.co/datasets/mteb/MewsC16JaClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/sbintuitions/JMTEB)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1316,9 +1450,9 @@ MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) i
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{nishikawa-etal-2022-ease,
       abstract = {We present EASE, a novel method for learning sentence embeddings via contrastive learning between sentences and their related entities.The advantage of using entity supervision is twofold: (1) entities have been shown to be a strong indicator of text semantics and thus should provide rich training signals for sentence embeddings; (2) entities are defined independently of languages and thus offer useful cross-lingual alignment supervision.We evaluate EASE against other unsupervised models both in monolingual and multilingual settings.We show that EASE exhibits competitive or better performance in English semantic textual similarity (STS) and short text clustering (STC) tasks and it significantly outperforms baseline methods in multilingual settings on a variety of tasks.Our source code, pre-trained models, and newly constructed multi-lingual STC dataset are available at https://github.com/studio-ousia/ease.},
       address = {Seattle, United States},
@@ -1335,9 +1469,9 @@ MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) i
       url = {https://aclanthology.org/2022.naacl-main.284},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1355,11 +1489,11 @@ Clustering of tweets from twitter across 26 categories.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
@@ -1425,9 +1559,9 @@ Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1441,9 +1575,9 @@ Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1465,9 +1599,9 @@ A translated dataset from Clustering of titles from 199 subreddits. Clustering o
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1477,9 +1611,9 @@ A translated dataset from Clustering of titles from 199 subreddits. Clustering o
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1497,9 +1631,9 @@ Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1513,9 +1647,9 @@ Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1533,9 +1667,9 @@ Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs a
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1549,9 +1683,9 @@ Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs a
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1573,9 +1707,9 @@ A translated dataset from Clustering of title+posts from reddit. Clustering of 1
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1585,9 +1719,9 @@ A translated dataset from Clustering of title+posts from reddit. Clustering of 1
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1605,9 +1739,9 @@ Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs a
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1621,9 +1755,9 @@ Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs a
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1670,7 +1804,7 @@ SIB-200 is the largest publicly available topic classification
         annotated in English for the topics,  science/technology, travel, politics, sports,
         health, entertainment, and geography. The labels are then transferred to the other languages
         in Flores-200 which are human-translated.
-        
+
 
 **Dataset:** [`mteb/sib200`](https://huggingface.co/datasets/mteb/sib200) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2309.07445)
 
@@ -1682,18 +1816,18 @@ SIB-200 is the largest publicly available topic classification
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{adelani2023sib,
       author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
       journal = {arXiv preprint arXiv:2309.07445},
       title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1711,19 +1845,19 @@ Clustering of summariesfrom SIDClustring across categories.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-     
+
     ```
-    
+
 
 
 
 #### SNLClustering
 
-Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.
+Webscraped articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.
 
-**Dataset:** [`navjordj/SNL_summarization`](https://huggingface.co/datasets/navjordj/SNL_summarization) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/navjordj/SNL_summarization)
+**Dataset:** [`adrlau/navjordj-SNL_summarization_copy`](https://huggingface.co/datasets/adrlau/navjordj-SNL_summarization_copy) • **License:** cc-by-nc-4.0 • [Learn more →](https://huggingface.co/datasets/mteb/SNLRetrieval)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1733,18 +1867,18 @@ Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1762,18 +1896,18 @@ Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1791,18 +1925,18 @@ Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1832,9 +1966,9 @@ Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 1
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1848,9 +1982,9 @@ Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 1
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1872,9 +2006,9 @@ A translated dataset from Clustering of titles from 121 stackexchanges. Clusteri
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1884,9 +2018,9 @@ A translated dataset from Clustering of titles from 121 stackexchanges. Clusteri
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1904,9 +2038,9 @@ Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 1
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1920,9 +2054,9 @@ Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 1
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1940,9 +2074,9 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -1956,9 +2090,9 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1980,9 +2114,9 @@ A translated Clustering of title+body from stackexchange. Clustering of 5 sets o
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1992,9 +2126,9 @@ A translated Clustering of title+body from stackexchange. Clustering of 5 sets o
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2012,9 +2146,9 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{geigle:2021:arxiv,
       archiveprefix = {arXiv},
       author = {Gregor Geigle and
@@ -2028,9 +2162,9 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
       volume = {abs/2104.07081},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2038,7 +2172,7 @@ Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragra
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.
 
-**Dataset:** [`sbx/superlim-2`](https://huggingface.co/datasets/sbx/superlim-2) • **License:** not specified • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
+**Dataset:** [`mteb/SwednClustering`](https://huggingface.co/datasets/mteb/SwednClustering) • **License:** not specified • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -2048,18 +2182,18 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{monsen2021method,
       author = {Monsen, Julius and J{\"o}nsson, Arne},
       booktitle = {Proceedings of CLARIN Annual Conference},
       title = {A method for building non-english corpora for abstractive text summarization},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2067,7 +2201,7 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.
 
-**Dataset:** [`sbx/superlim-2`](https://huggingface.co/datasets/sbx/superlim-2) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
+**Dataset:** [`mteb/SwednClusteringP2P`](https://huggingface.co/datasets/mteb/SwednClusteringP2P) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -2077,18 +2211,18 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{monsen2021method,
       author = {Monsen, Julius and J{\"o}nsson, Arne},
       booktitle = {Proceedings of CLARIN Annual Conference},
       title = {A method for building non-english corpora for abstractive text summarization},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2096,7 +2230,7 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.
 
-**Dataset:** [`sbx/superlim-2`](https://huggingface.co/datasets/sbx/superlim-2) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
+**Dataset:** [`mteb/SwednClusteringS2S`](https://huggingface.co/datasets/mteb/SwednClusteringS2S) • **License:** cc-by-4.0 • [Learn more →](https://spraakbanken.gu.se/en/resources/swedn)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -2106,18 +2240,18 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{monsen2021method,
       author = {Monsen, Julius and J{\"o}nsson, Arne},
       booktitle = {Proceedings of CLARIN Annual Conference},
       title = {A method for building non-english corpora for abstractive text summarization},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2183,16 +2317,16 @@ Clustering of titles + abstracts from the THUCNews dataset
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{eisner2007proceedings,
       author = {Eisner, Jason},
       booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
       title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
       year = {2007},
     }
-    
+
     @inproceedings{li2006comparison,
       author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
       booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
@@ -2200,9 +2334,9 @@ Clustering of titles + abstracts from the THUCNews dataset
       title = {A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
       year = {2006},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2220,9 +2354,9 @@ Clustering of titles + abstracts from the THUCNews dataset
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @software{THUCTC,
       author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
       note = {THU Chinese Text Classification Toolkit},
@@ -2231,9 +2365,9 @@ Clustering of titles + abstracts from the THUCNews dataset
       url = {https://github.com/thunlp/THUCTC},
       year = {2016},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2251,16 +2385,16 @@ Clustering of titles from the THUCNews dataset
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{eisner2007proceedings,
       author = {Eisner, Jason},
       booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
       title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
       year = {2007},
     }
-    
+
     @inproceedings{li2006comparison,
       author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
       booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
@@ -2268,9 +2402,9 @@ Clustering of titles from the THUCNews dataset
       title = {A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
       year = {2006},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2288,9 +2422,9 @@ Clustering of titles from the THUCNews dataset
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @software{THUCTC,
       author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
       note = {THU Chinese Text Classification Toolkit},
@@ -2299,9 +2433,9 @@ Clustering of titles from the THUCNews dataset
       url = {https://github.com/thunlp/THUCTC},
       year = {2016},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2319,9 +2453,9 @@ Clustering of the 20 Newsgroups dataset (subject only).
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @incollection{LANG1995331,
       address = {San Francisco (CA)},
       author = {Ken Lang},
@@ -2335,9 +2469,9 @@ Clustering of the 20 Newsgroups dataset (subject only).
       url = {https://www.sciencedirect.com/science/article/pii/B9781558603776500487},
       year = {1995},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2359,9 +2493,9 @@ A translated dataset from Clustering of the 20 Newsgroups dataset (subject only)
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2371,9 +2505,9 @@ A translated dataset from Clustering of the 20 Newsgroups dataset (subject only)
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2391,9 +2525,9 @@ Clustering of the 20 Newsgroups dataset (subject only).
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @incollection{LANG1995331,
       address = {San Francisco (CA)},
       author = {Ken Lang},
@@ -2407,9 +2541,9 @@ Clustering of the 20 Newsgroups dataset (subject only).
       url = {https://www.sciencedirect.com/science/article/pii/B9781558603776500487},
       year = {1995},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2427,18 +2561,18 @@ Articles and their classes (e.g. sports) from VG news articles extracted from No
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2456,18 +2590,18 @@ Articles and their classes (e.g. sports) from VG news articles extracted from No
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2485,18 +2619,18 @@ Articles and their classes (e.g. sports) from VG news articles extracted from No
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2514,17 +2648,17 @@ Clustering of Wikipedia articles of cities by country from https://huggingface.c
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @online{wikidump,
       author = {Wikimedia Foundation},
       title = {Wikimedia Downloads},
       url = {https://dumps.wikimedia.org},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2566,18 +2700,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2595,14 +2729,14 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-    
+
     ```
