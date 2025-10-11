@@ -12,13 +12,20 @@ from torch.utils.data import DataLoader
 import mteb
 import mteb.overview
 from mteb.abstasks import AbsTask
-
-from ..integration_tests.task_grid import MOCK_TASK_TEST_GRID
-from .mock_models import (
+from tests.mock_models import (
     AbsMockEncoder,
     MockSentenceTransformer,
     MockSentenceTransformerWrapper,
 )
+from tests.mock_tasks import (
+    MockInstructionRetrieval,
+    MockMultilingualInstructionRetrieval,
+    MockMultilingualRerankingTask,
+    MockMultilingualRetrievalTask,
+    MockRerankingTask,
+    MockRetrievalTask,
+)
+from tests.task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

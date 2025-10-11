@@ -1,8 +1,8 @@
 import pytest
 
 from mteb._evaluators import SummarizationEvaluator
-from tests.test_integrations.mock_models import MockNumpyEncoder
-from tests.test_integrations.mock_tasks import MockSummarizationTask
+from tests.mock_models import MockNumpyEncoder
+from tests.mock_tasks import MockSummarizationTask
 
 
 # Fixtures

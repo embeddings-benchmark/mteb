@@ -15,8 +15,7 @@ from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.MTEB import logger
 from mteb.types import Array, BatchedInput, PromptType
-
-from .mock_models import (
+from tests.mock_models import (
     AbsMockEncoder,
     MockCLIPEncoder,
     MockMocoEncoder,
@@ -27,7 +26,7 @@ from .mock_models import (
     MockTorchEncoder,
     MockTorchfp16Encoder,
 )
-from .mock_tasks import (
+from tests.mock_tasks import (
     MockImageClusteringTask,
     MockImageTextPairClassificationTask,
     MockInstructionRetrieval,
@@ -37,7 +36,8 @@ from .mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from .task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
+
+from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

@@ -8,7 +8,7 @@ import pytest
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb import MTEB, AbsTask
-from tests.test_integrations.mock_tasks import MockRetrievalTask
+from tests.mock_tasks import MockRetrievalTask
 
 
 def test_create_model_meta_from_sentence_transformers():

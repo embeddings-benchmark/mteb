@@ -10,14 +10,13 @@ import pytest
 import mteb
 import mteb.overview
 from mteb.abstasks import AbsTask
-
-from ..integration_tests.task_grid import MOCK_TASK_TEST_GRID
-from .mock_models import (
+from tests.mock_models import (
     MockNumpyEncoder,
     MockSentenceTransformersbf16Encoder,
     MockTorchEncoder,
     MockTorchfp16Encoder,
 )
+from tests.task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

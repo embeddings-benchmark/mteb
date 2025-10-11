@@ -15,12 +15,8 @@ import mteb.overview
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import Array, BatchedInput, PromptType
-
-from ..integration_tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
-from .mock_models import (
-    AbsMockEncoder,
-    MockCLIPEncoder,
-)
+from tests.mock_models import AbsMockEncoder, MockCLIPEncoder
+from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

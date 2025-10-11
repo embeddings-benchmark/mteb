@@ -5,8 +5,7 @@ import pytest
 import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-
-from .mock_tasks import MockRetrievalTask
+from tests.mock_tasks import MockRetrievalTask
 
 
 @pytest.mark.parametrize("model", ["colbert-ir/colbertv2.0"])

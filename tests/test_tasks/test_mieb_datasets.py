@@ -1,11 +1,6 @@
 """test mteb.MIEB's integration with datasets"""
 
-<<<<<<< HEAD
 # TODO: KCE: Is this test needed? I would probably delete
-from __future__ import annotations
-
-=======
->>>>>>> 5b4c6da2eee9d799693184bdfb95447187187f5c
 import logging
 
 import pytest
@@ -13,9 +8,8 @@ import pytest
 import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-
-from ..test_integrations.mock_models import MockCLIPEncoder
-from ..integration_tests.task_grid import MOCK_MIEB_TASK_GRID
+from tests.mock_models import MockCLIPEncoder
+from tests.task_grid import MOCK_MIEB_TASK_GRID
 
 logging.basicConfig(level=logging.INFO)
 

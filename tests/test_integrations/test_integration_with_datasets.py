@@ -9,9 +9,8 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTask
-
-from .mock_models import MockNumpyEncoder
-from .task_grid import TASK_TEST_GRID
+from tests.mock_models import MockNumpyEncoder
+from tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

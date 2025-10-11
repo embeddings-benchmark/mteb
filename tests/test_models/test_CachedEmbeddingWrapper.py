@@ -11,8 +11,8 @@ from mteb import TaskMetadata
 from mteb.abstasks import AbsTask
 from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.models_protocols import Encoder
-from tests.test_integrations.mock_models import MockCLIPEncoder, MockNumpyEncoder
-from tests.test_integrations.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
+from tests.mock_models import MockCLIPEncoder, MockNumpyEncoder
+from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 
 class DummyModel(Encoder):

@@ -11,11 +11,11 @@ import mteb
 import mteb.overview
 from mteb.MTEB import logger
 
-from .mock_models import (
+from tests.mock_models import (
     MockCLIPEncoder,
     MockMocoEncoder,
 )
-from .mock_tasks import (
+from tests.mock_tasks import (
     MockImageClusteringTask,
     MockImageTextPairClassificationTask,
     MockRetrievalTask,

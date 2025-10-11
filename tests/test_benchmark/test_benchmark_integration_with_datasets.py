@@ -10,9 +10,8 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.cache import ResultCache
 from mteb.results.generate_model_card import generate_model_card
-
-from .mock_models import MockNumpyEncoder
-from .task_grid import TASK_TEST_GRID
+from tests.mock_models import MockNumpyEncoder
+from tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

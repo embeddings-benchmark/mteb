@@ -1,13 +1,8 @@
-<<<<<<< HEAD
 """Tests for testing the descriptive statistics calculation of all tasks"""
 
-from __future__ import annotations
-
-=======
->>>>>>> 5b4c6da2eee9d799693184bdfb95447187187f5c
 import pytest
 
-from tests.integration_tests.task_grid import ALL_TASK_TEST_GRID
+from tests.task_grid import ALL_TASK_TEST_GRID
 
 
 @pytest.mark.parametrize(

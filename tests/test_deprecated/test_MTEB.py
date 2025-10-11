@@ -9,10 +9,7 @@ import pytest
 
 import mteb
 import mteb.overview
-
-from ..test_integrations.mock_models import (
-    MockNumpyEncoder,
-)
+from tests.mock_models import MockNumpyEncoder
 
 logging.basicConfig(level=logging.INFO)
 

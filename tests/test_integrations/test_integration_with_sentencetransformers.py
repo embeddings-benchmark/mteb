@@ -8,8 +8,7 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
-
-from .task_grid import MOCK_TASK_TEST_GRID
+from tests.task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
