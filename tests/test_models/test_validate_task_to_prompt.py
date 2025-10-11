@@ -5,8 +5,8 @@ import logging
 import pytest
 
 from mteb.abstasks import AbsTask
-from tests.test_benchmark.mock_models import AbsMockEncoder
-from tests.test_benchmark.task_grid import TASK_TEST_GRID
+from tests.test_integrations.mock_models import AbsMockEncoder
+from tests.integration_tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 

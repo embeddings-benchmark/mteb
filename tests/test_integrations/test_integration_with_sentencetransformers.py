@@ -1,4 +1,4 @@
-"""test mteb.MTEB's integration with SentenceTransformers"""
+"""test that mteb.evaluate integrates with SentenceTransformers"""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from sentence_transformers import SentenceTransformer
 
-from mteb import MTEB
+import mteb
 from mteb.abstasks import AbsTask
 
 from .task_grid import MOCK_TASK_TEST_GRID
@@ -17,12 +17,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
-@pytest.mark.parametrize(
-    "model_name",
-    [
-        "average_word_embeddings_levy_dependency",
-    ],
-)
+@pytest.mark.parametrize("model_name", ["average_word_embeddings_levy_dependency"])
 def test_benchmark_sentence_transformer(
     task: str | AbsTask, model_name: str, tmp_path: Path
 ):
@@ -35,5 +30,4 @@ def test_benchmark_sentence_transformer(
     # test now sets the prompts to None explicitly to preserve the legacy
     # behavior and focus the test on the tasks instead of the prompts.
     model.prompts = None
-    eval = MTEB(tasks=[task])
-    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
+    mteb.evaluate(model, task, cache=None)

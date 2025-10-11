@@ -11,8 +11,8 @@ import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 
-from ..test_benchmark.mock_models import MockCLIPEncoder
-from ..test_benchmark.task_grid import MOCK_MIEB_TASK_GRID
+from ..test_integrations.mock_models import MockCLIPEncoder
+from ..integration_tests.task_grid import MOCK_MIEB_TASK_GRID
 
 logging.basicConfig(level=logging.INFO)
 

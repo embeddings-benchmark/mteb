@@ -3,10 +3,10 @@ from __future__ import annotations
 import pytest
 
 from mteb import MTEB
-from tests.test_benchmark.mock_models import (
+from tests.test_integrations.mock_models import (
     MockSentenceTransformer,
 )
-from tests.test_benchmark.mock_tasks import (
+from tests.test_integrations.mock_tasks import (
     MockMultilingualRetrievalTask,
     MockMultilingualSTSTask,
     MockRetrievalTask,

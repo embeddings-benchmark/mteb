@@ -8,8 +8,8 @@ import mteb
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models.models_protocols import Encoder
-from tests.test_benchmark.mock_models import MockSentenceTransformer
-from tests.test_benchmark.mock_tasks import (
+from tests.test_integrations.mock_models import MockSentenceTransformer
+from tests.test_integrations.mock_tasks import (
     MockClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,

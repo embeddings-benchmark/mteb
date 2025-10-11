@@ -11,8 +11,8 @@ from mteb.abstasks import AbsTaskRetrieval
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
-from tests.test_benchmark.mock_models import MockNumpyEncoder
-from tests.test_benchmark.mock_tasks import MockRetrievalTask
+from tests.test_integrations.mock_models import MockNumpyEncoder
+from tests.test_integrations.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
