@@ -10,7 +10,6 @@ import pytest
 import mteb
 import mteb.overview
 from mteb.MTEB import logger
-
 from tests.mock_models import (
     MockCLIPEncoder,
     MockMocoEncoder,
@@ -41,6 +40,7 @@ def test_task_modality_filtering(mock_logger, task: mteb.AbsTask, model: mteb.En
     mock_logger.assert_called_with(
         f"mock/MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
     )
+
 
 # TODO: KCE: Unsure if we need this test:
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])

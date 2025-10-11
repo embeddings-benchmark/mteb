@@ -36,7 +36,6 @@ from tests.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-
 from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
