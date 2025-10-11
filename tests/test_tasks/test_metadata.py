@@ -1,6 +1,8 @@
+"""Tests for testing the descriptive statistics calculation of all tasks"""
+
 import pytest
 
-from tests.test_benchmark.task_grid import ALL_TASK_TEST_GRID
+from tests.task_grid import ALL_TASK_TEST_GRID
 
 
 @pytest.mark.parametrize(

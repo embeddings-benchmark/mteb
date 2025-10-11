@@ -1,5 +1,6 @@
 """test mteb.MIEB's integration with datasets"""
 
+# TODO: KCE: Is this test needed? I would probably delete
 import logging
 
 import pytest
@@ -7,9 +8,8 @@ import pytest
 import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-
-from ..test_benchmark.mock_models import MockCLIPEncoder
-from ..test_benchmark.task_grid import MOCK_MIEB_TASK_GRID
+from tests.mock_models import MockCLIPEncoder
+from tests.task_grid import MOCK_MIEB_TASK_GRID
 
 logging.basicConfig(level=logging.INFO)
 

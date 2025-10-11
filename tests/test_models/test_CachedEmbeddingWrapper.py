@@ -11,8 +11,8 @@ from mteb import TaskMetadata
 from mteb.abstasks import AbsTask
 from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.models_protocols import Encoder
-from tests.test_benchmark.mock_models import MockCLIPEncoder, MockNumpyEncoder
-from tests.test_benchmark.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
+from tests.mock_models import MockCLIPEncoder, MockNumpyEncoder
+from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 
 class DummyModel(Encoder):
@@ -156,5 +156,5 @@ class TestCachedEmbeddingWrapper:
 )
 def test_wrapper_mock_tasks(task: AbsTask, model: Encoder, tmp_path: Path):
     cached_model = CachedEmbeddingWrapper(model, tmp_path)
-    mteb.evaluate(cached_model, task)
+    mteb.evaluate(cached_model, task, cache=None)
     assert len(list((tmp_path / task.metadata.name).glob("*"))) == 3

@@ -2,7 +2,7 @@ import pytest
 
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
-from tests.test_benchmark.mock_tasks import general_args
+from tests.mock_tasks import general_args
 
 TOL = 0.0001
 

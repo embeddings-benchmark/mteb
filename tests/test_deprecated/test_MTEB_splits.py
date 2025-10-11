@@ -1,10 +1,10 @@
 import pytest
 
 from mteb import MTEB
-from tests.test_benchmark.mock_models import (
+from tests.mock_models import (
     MockSentenceTransformer,
 )
-from tests.test_benchmark.mock_tasks import (
+from tests.mock_tasks import (
     MockMultilingualRetrievalTask,
     MockMultilingualSTSTask,
     MockRetrievalTask,
