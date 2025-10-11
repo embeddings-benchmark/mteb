@@ -11,13 +11,14 @@ from mteb.types import Modalities
 
 
 def test_get_tasks_size_differences():
-    assert len(get_tasks()) > 0
-    assert len(get_tasks()) >= len(get_tasks(languages=["eng"]))
-    assert len(get_tasks()) >= len(get_tasks(script=["Latn"]))
-    assert len(get_tasks()) >= len(get_tasks(domains=["Legal"]))
-    assert len(get_tasks()) >= len(get_tasks(languages=["eng", "deu"]))
-    assert len(get_tasks()) >= len(get_tasks(modalities=["text"]))
-    assert len(get_tasks()) >= len(get_tasks(modalities=["image"]))
+    default_tasks = get_tasks()
+    assert len(default_tasks) > 0
+    assert len(default_tasks) >= len(get_tasks(languages=["eng"]))
+    assert len(default_tasks) >= len(get_tasks(script=["Latn"]))
+    assert len(default_tasks) >= len(get_tasks(domains=["Legal"]))
+    assert len(default_tasks) >= len(get_tasks(languages=["eng", "deu"]))
+    assert len(default_tasks) >= len(get_tasks(modalities=["text"]))
+    assert len(default_tasks) >= len(get_tasks(modalities=["image"]))
     assert len(get_tasks(languages=["eng", "deu"])) >= len(
         get_tasks(languages=["eng", "deu"])
     )
