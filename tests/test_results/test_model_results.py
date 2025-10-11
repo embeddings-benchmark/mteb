@@ -8,9 +8,6 @@ import pytest
 import mteb
 from mteb.results import ModelResult, TaskResult
 
-# TODO: v2 ^ we probably want to refactor such that this import looks like
-# from mteb.results import ModelResult, TaskResults
-
 
 @pytest.fixture
 def model_result() -> ModelResult:
