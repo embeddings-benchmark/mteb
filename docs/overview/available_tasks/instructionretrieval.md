@@ -3,11 +3,11 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 8 
+- **Number of tasks:** 8
 
 #### IFIRAila
 
-Benchmark aila subset in aila within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents. 
+Benchmark aila subset in aila within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents.
 
 **Dataset:** [`if-ir/aila`](https://huggingface.co/datasets/if-ir/aila) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -19,9 +19,9 @@ Benchmark aila subset in aila within instruction following abilities. The instru
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -29,15 +29,15 @@ Benchmark aila subset in aila within instruction following abilities. The instru
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
 #### IFIRCds
 
-Benchmark IFIR cds subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information. 
+Benchmark IFIR cds subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information.
 
 **Dataset:** [`if-ir/cds`](https://huggingface.co/datasets/if-ir/cds) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -49,9 +49,9 @@ Benchmark IFIR cds subset within instruction following abilities. The instructio
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -59,15 +59,15 @@ Benchmark IFIR cds subset within instruction following abilities. The instructio
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
 #### IFIRFiQA
 
-Benchmark IFIR fiqa subset within instruction following abilities. The instructions simulate people's daily life queries to retrieve suitable financial suggestions. 
+Benchmark IFIR fiqa subset within instruction following abilities. The instructions simulate people's daily life queries to retrieve suitable financial suggestions.
 
 **Dataset:** [`if-ir/fiqa`](https://huggingface.co/datasets/if-ir/fiqa) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -79,9 +79,9 @@ Benchmark IFIR fiqa subset within instruction following abilities. The instructi
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -89,15 +89,15 @@ Benchmark IFIR fiqa subset within instruction following abilities. The instructi
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
 #### IFIRFire
 
-Benchmark IFIR fire subset within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents. 
+Benchmark IFIR fire subset within instruction following abilities. The instructions simulate lawyers' or legal assistants' nuanced queries to retrieve relevant legal documents.
 
 **Dataset:** [`if-ir/fire`](https://huggingface.co/datasets/if-ir/fire) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -109,9 +109,9 @@ Benchmark IFIR fire subset within instruction following abilities. The instructi
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -119,15 +119,15 @@ Benchmark IFIR fire subset within instruction following abilities. The instructi
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
 #### IFIRNFCorpus
 
-Benchmark IFIR nfcorpus subset within instruction following abilities. The instructions in this dataset simulate nuanced queries from students or researchers to retrieve relevant science literature in the medical and biological domains. 
+Benchmark IFIR nfcorpus subset within instruction following abilities. The instructions in this dataset simulate nuanced queries from students or researchers to retrieve relevant science literature in the medical and biological domains.
 
 **Dataset:** [`if-ir/nfcorpus`](https://huggingface.co/datasets/if-ir/nfcorpus) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -139,9 +139,9 @@ Benchmark IFIR nfcorpus subset within instruction following abilities. The instr
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -149,15 +149,15 @@ Benchmark IFIR nfcorpus subset within instruction following abilities. The instr
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
 #### IFIRPm
 
-Benchmark IFIR pm subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information. 
+Benchmark IFIR pm subset within instruction following abilities. The instructions simulate a doctor's nuanced queries to retrieve suitable clinical trails, treatment and diagnosis information.
 
 **Dataset:** [`if-ir/pm`](https://huggingface.co/datasets/if-ir/pm) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -169,9 +169,9 @@ Benchmark IFIR pm subset within instruction following abilities. The instruction
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -179,15 +179,15 @@ Benchmark IFIR pm subset within instruction following abilities. The instruction
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
 #### IFIRScifact
 
-Benchmark IFIR scifact_open subset within instruction following abilities. The instructions in this dataset simulate nuanced queries from students or researchers to retrieve relevant science literature. 
+Benchmark IFIR scifact_open subset within instruction following abilities. The instructions in this dataset simulate nuanced queries from students or researchers to retrieve relevant science literature.
 
 **Dataset:** [`if-ir/scifact_open`](https://huggingface.co/datasets/if-ir/scifact_open) • **License:** mit • [Learn more →](https://arxiv.org/abs/2503.04644)
 
@@ -199,9 +199,9 @@ Benchmark IFIR scifact_open subset within instruction following abilities. The i
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{song2025ifir,
       author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
       booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -209,9 +209,9 @@ Benchmark IFIR scifact_open subset within instruction following abilities. The i
       title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -229,9 +229,9 @@ A benchmark specifically designed to evaluate the instruction following ability 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{oh2024instructir,
       archiveprefix = {{arXiv}},
       author = {{Hanseok Oh and Hyunji Lee and Seonghyeon Ye and Haebin Shin and Hansol Jang and Changwook Jun and Minjoon Seo}},
@@ -240,5 +240,5 @@ A benchmark specifically designed to evaluate the instruction following ability 
       title = {{INSTRUCTIR: A Benchmark for Instruction Following of Information Retrieval Models}},
       year = {{2024}},
     }
-    
+
     ```

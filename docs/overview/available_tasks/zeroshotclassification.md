@@ -3,7 +3,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 24 
+- **Number of tasks:** 24
 
 #### BirdsnapZeroShot
 
@@ -19,9 +19,9 @@ Classifying bird images from 500 species.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Berg_2014_CVPR,
       author = {Berg, Thomas and Liu, Jiongxin and Woo Lee, Seung and Alexander, Michelle L. and Jacobs, David W. and Belhumeur, Peter N.},
       booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
@@ -29,9 +29,9 @@ Classifying bird images from 500 species.
       title = {Birdsnap: Large-scale Fine-grained Visual Categorization of Birds},
       year = {2014},
     }
-    
+
     ```
-    
+
 
 
 
@@ -49,18 +49,18 @@ Classifying images from 100 classes.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @techreport{Krizhevsky09learningmultiple,
       author = {Alex Krizhevsky},
       institution = {},
       title = {Learning multiple layers of features from tiny images},
       year = {2009},
     }
-    
+
     ```
-    
+
 
 
 
@@ -78,18 +78,18 @@ Classifying images from 10 classes.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @techreport{Krizhevsky09learningmultiple,
       author = {Alex Krizhevsky},
       institution = {},
       title = {Learning multiple layers of features from tiny images},
       year = {2009},
     }
-    
+
     ```
-    
+
 
 
 
@@ -107,9 +107,9 @@ CLEVR count objects task.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Johnson_2017_CVPR,
       author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
       booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
@@ -117,9 +117,9 @@ CLEVR count objects task.
       title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
       year = {2017},
     }
-    
+
     ```
-    
+
 
 
 
@@ -137,9 +137,9 @@ CLEVR closest object distance identification task.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Johnson_2017_CVPR,
       author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
       booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
@@ -147,9 +147,9 @@ CLEVR closest object distance identification task.
       title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
       year = {2017},
     }
-    
+
     ```
-    
+
 
 
 
@@ -167,9 +167,9 @@ Classifying images of 101 widely varied objects.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{1384978,
       author = {Li Fei-Fei and Fergus, R. and Perona, P.},
       booktitle = {2004 Conference on Computer Vision and Pattern Recognition Workshop},
@@ -181,9 +181,9 @@ Classifying images of 101 widely varied objects.
       volume = {},
       year = {2004},
     }
-    
+
     ```
-    
+
 
 
 
@@ -201,18 +201,18 @@ Classifying images of 211 countries.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{radford2021learning,
       author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
       journal = {arXiv preprint arXiv:2103.00020},
       title = {Learning Transferable Visual Models From Natural Language Supervision},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -230,18 +230,18 @@ Describable Textures Dataset in 47 categories.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{cimpoi14describing,
       author = {M. Cimpoi and S. Maji and I. Kokkinos and S. Mohamed and and A. Vedaldi},
       booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
       title = {Describing Textures in the Wild},
       year = {2014},
     }
-    
+
     ```
-    
+
 
 
 
@@ -259,9 +259,9 @@ Classifying satellite images.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{8736785,
       author = {Helber, Patrick and Bischke, Benjamin and Dengel, Andreas and Borth, Damian},
       doi = {10.1109/JSTARS.2019.2918242},
@@ -273,9 +273,9 @@ Classifying satellite images.
       volume = {12},
       year = {2019},
     }
-    
+
     ```
-    
+
 
 
 
@@ -293,9 +293,9 @@ Classifying facial emotions.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{goodfellow2015explainingharnessingadversarialexamples,
       archiveprefix = {arXiv},
       author = {Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
@@ -305,9 +305,9 @@ Classifying facial emotions.
       url = {https://arxiv.org/abs/1412.6572},
       year = {2015},
     }
-    
+
     ```
-    
+
 
 
 
@@ -315,7 +315,7 @@ Classifying facial emotions.
 
 Classifying aircraft images from 41 manufacturers and 102 variants.
 
-**Dataset:** [`HuggingFaceM4/FGVC-Aircraft`](https://huggingface.co/datasets/HuggingFaceM4/FGVC-Aircraft) • **License:** not specified • [Learn more →](https://arxiv.org/abs/1306.5151)
+**Dataset:** [`mteb/FGVCAircraft`](https://huggingface.co/datasets/mteb/FGVCAircraft) • **License:** not specified • [Learn more →](https://arxiv.org/abs/1306.5151)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -325,9 +325,9 @@ Classifying aircraft images from 41 manufacturers and 102 variants.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{maji2013finegrainedvisualclassificationaircraft,
       archiveprefix = {arXiv},
       author = {Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
@@ -337,9 +337,9 @@ Classifying aircraft images from 41 manufacturers and 102 variants.
       url = {https://arxiv.org/abs/1306.5151},
       year = {2013},
     }
-    
+
     ```
-    
+
 
 
 
@@ -357,18 +357,18 @@ Classifying food.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{bossard14,
       author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc},
       booktitle = {European Conference on Computer Vision},
       title = {Food-101 -- Mining Discriminative Components with Random Forests},
       year = {2014},
     }
-    
+
     ```
-    
+
 
 
 
@@ -386,9 +386,9 @@ The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classific
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{6033395,
       author = {Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
       booktitle = {The 2011 International Joint Conference on Neural Networks},
@@ -400,9 +400,9 @@ The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classific
       volume = {},
       year = {2011},
     }
-    
+
     ```
-    
+
 
 
 
@@ -420,9 +420,9 @@ ImageNet, a large-scale ontology of images built upon the backbone of the WordNe
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{deng2009imagenet,
       author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li},
       journal = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
@@ -431,9 +431,9 @@ ImageNet, a large-scale ontology of images built upon the backbone of the WordNe
       title = {ImageNet: A large-scale hierarchical image database},
       year = {2009},
     }
-    
+
     ```
-    
+
 
 
 
@@ -451,9 +451,9 @@ Classifying handwritten digits.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{lecun2010mnist,
       author = {LeCun, Yann and Cortes, Corinna and Burges, CJ},
       journal = {ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
@@ -461,9 +461,9 @@ Classifying handwritten digits.
       volume = {2},
       year = {2010},
     }
-    
+
     ```
-    
+
 
 
 
@@ -481,9 +481,9 @@ Classifying animal images.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{maji2013finegrainedvisualclassificationaircraft,
       archiveprefix = {arXiv},
       author = {Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
@@ -493,9 +493,9 @@ Classifying animal images.
       url = {https://arxiv.org/abs/1306.5151},
       year = {2013},
     }
-    
+
     ```
-    
+
 
 
 
@@ -513,9 +513,9 @@ Histopathology diagnosis classification dataset.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{10.1007/978-3-030-00934-2_24,
       abstract = {We propose a new model for digital pathology segmentation, based on the observation that histopathology images are inherently symmetric under rotation and reflection. Utilizing recent findings on rotation equivariant CNNs, the proposed model leverages these symmetries in a principled manner. We present a visual analysis showing improved stability on predictions, and demonstrate that exploiting rotation equivariance significantly improves tumor detection performance on a challenging lymph node metastases dataset. We further present a novel derived dataset to enable principled comparison of machine learning models, in combination with an initial benchmark. Through this dataset, the task of histopathology diagnosis becomes accessible as a challenging benchmark for fundamental machine learning research.},
       address = {Cham},
@@ -536,9 +536,9 @@ Histopathology diagnosis classification dataset.
       title = {Rotation Equivariant CNNs for Digital Pathology},
       year = {2018},
     }
-    
+
     ```
-    
+
 
 
 
@@ -556,9 +556,9 @@ Remote Sensing Image Scene Classification by Northwestern Polytechnical Universi
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{7891544,
       author = {Cheng, Gong and Han, Junwei and Lu, Xiaoqiang},
       doi = {10.1109/JPROC.2017.2675998},
@@ -570,9 +570,9 @@ Remote Sensing Image Scene Classification by Northwestern Polytechnical Universi
       volume = {105},
       year = {2017},
     }
-    
+
     ```
-    
+
 
 
 
@@ -602,9 +602,9 @@ Classifying 96x96 images from 10 classes.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{pmlr-v15-coates11a,
       address = {Fort Lauderdale, FL, USA},
       author = {Coates, Adam and Ng, Andrew and Lee, Honglak},
@@ -620,9 +620,9 @@ Classifying 96x96 images from 10 classes.
       volume = {15},
       year = {2011},
     }
-    
+
     ```
-    
+
 
 
 
@@ -640,9 +640,9 @@ Large scale scene recognition in 397 categories.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{5539970,
       author = {Xiao, Jianxiong and Hays, James and Ehinger, Krista A. and Oliva, Aude and Torralba, Antonio},
       booktitle = {2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
@@ -653,9 +653,9 @@ Large scale scene recognition in 397 categories.
       volume = {},
       year = {2010},
     }
-    
+
     ```
-    
+
 
 
 
@@ -673,9 +673,9 @@ SciMMIR.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{wu2024scimmirbenchmarkingscientificmultimodal,
       archiveprefix = {arXiv},
       author = {Siwei Wu and Yizhi Li and Kang Zhu and Ge Zhang and Yiming Liang and Kaijing Ma and Chenghao Xiao and Haoran Zhang and Bohao Yang and Wenhu Chen and Wenhao Huang and Noura Al Moubayed and Jie Fu and Chenghua Lin},
@@ -685,9 +685,9 @@ SciMMIR.
       url = {https://arxiv.org/abs/2401.13478},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -705,18 +705,18 @@ Classifying car images from 96 makes.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{Krause2013CollectingAL,
       author = {Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
       title = {Collecting a Large-scale Dataset of Fine-grained Cars},
       url = {https://api.semanticscholar.org/CorpusID:16632981},
       year = {2013},
     }
-    
+
     ```
-    
+
 
 
 
@@ -738,9 +738,9 @@ version train/test list.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{soomro2012ucf101dataset101human,
       archiveprefix = {arXiv},
       author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
@@ -750,5 +750,5 @@ version train/test list.
       url = {https://arxiv.org/abs/1212.0402},
       year = {2012},
     }
-    
+
     ```
