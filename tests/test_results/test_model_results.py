@@ -1,7 +1,5 @@
 """Tests for the ModelResult class"""
 
-from __future__ import annotations
-
 import pandas as pd
 import pytest
 

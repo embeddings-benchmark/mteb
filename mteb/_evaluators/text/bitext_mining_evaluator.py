@@ -1,12 +1,9 @@
-from __future__ import annotations
-
 import logging
 from typing import Any
 
 import numpy as np
 import torch
 from datasets import Dataset
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from tqdm.auto import tqdm
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -18,9 +15,6 @@ from ..evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-DEFAULT_PAIR = [("sentence1", "sentence2")]
-
-
 class BitextMiningEvaluator(Evaluator):
     def __init__(
         self,
@@ -28,32 +22,20 @@ class BitextMiningEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
+        pair_columns: list[tuple[str, str]],
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
-        # NOTE: used only by BUCC
-        self.gold = (
-            list(zip(range(self.n), range(self.n)))
-            if "gold" not in sentences
-            else sentences["gold"]
-        )
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
 
     def __call__(
         self, model: Encoder, *, encode_kwargs: dict[str, Any]
-    ) -> dict[str, float]:
-        scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
-        return scores
-
-    def compute_metrics(
-        self, model: Encoder, encode_kwargs: dict[str, Any]
-    ) -> dict[str, float]:
+    ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [
@@ -75,51 +57,13 @@ class BitextMiningEvaluator(Evaluator):
                 **encode_kwargs,
             )
 
-        scores = {}
+        logger.info("Finding nearest neighbors...")
+        neighbours = {}
         for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
-            scores[f"{key1}-{key2}"] = self._compute_metrics(
+            neighbours[f"{key1}-{key2}"] = self._similarity_search(
                 embeddings[key1], embeddings[key2], model
             )
-
-        # in case of default pair unnest the dict
-        def_pair_str = "-".join(DEFAULT_PAIR[0])
-        if def_pair_str in scores:
-            scores = scores[def_pair_str]
-
-        return scores
-
-    def _compute_metrics(
-        self,
-        embeddings1: np.ndarray,
-        embeddings2: np.ndarray,
-        model: Encoder,
-    ) -> dict[str, float]:
-        # Find nearest neighbors
-        logger.info("Finding nearest neighbors...")
-        nearest_neighbors = self._similarity_search(
-            embeddings1, embeddings2, model, top_k=1
-        )
-
-        # Compute errors
-        logger.info("Computing metrics...")
-        labels = []
-        predictions = []
-        for i, x in enumerate(nearest_neighbors):
-            j = x[0]["corpus_id"]
-            predictions.append(j)
-            labels.append(self.gold[i][1])
-
-        scores = {
-            "precision": precision_score(
-                labels, predictions, zero_division=0, average="weighted"
-            ),
-            "recall": recall_score(
-                labels, predictions, zero_division=0, average="weighted"
-            ),
-            "f1": f1_score(labels, predictions, zero_division=0, average="weighted"),
-            "accuracy": accuracy_score(labels, predictions),
-        }
-        return scores
+        return neighbours
 
     def _similarity_search(
         self,
@@ -128,8 +72,7 @@ class BitextMiningEvaluator(Evaluator):
         model: Encoder,
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
-        top_k: int = 10,
-    ) -> list[list[dict[str, float]]]:
+    ) -> list[dict[str, float]]:
         """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
 
@@ -140,7 +83,6 @@ class BitextMiningEvaluator(Evaluator):
                 queries and corpus if they are not already tensors.
             query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
             corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
-            top_k: Retrieve top k matching entries.
 
         Returns:
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
@@ -177,7 +119,7 @@ class BitextMiningEvaluator(Evaluator):
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                     similarity_scores,
-                    min(top_k, len(similarity_scores[0])),
+                    1,
                     dim=1,
                     largest=True,
                     sorted=False,
@@ -201,6 +143,6 @@ class BitextMiningEvaluator(Evaluator):
             queries_result_list[idx] = sorted(
                 queries_result_list[idx], key=lambda x: x["score"], reverse=True
             )
-            queries_result_list[idx] = queries_result_list[idx][0:top_k]
+            queries_result_list[idx] = queries_result_list[idx][0]
 
         return queries_result_list

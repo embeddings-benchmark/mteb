@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections import defaultdict
 
 import datasets
@@ -68,6 +66,8 @@ def check_uniques(example, uniques):
 
 
 class IN22ConvBitextMining(AbsTaskBitextMining):
+    parallel_subsets = True
+
     metadata = TaskMetadata(
         name="IN22ConvBitextMining",
         dataset={

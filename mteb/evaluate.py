@@ -7,6 +7,8 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any, cast
 
+from tqdm.auto import tqdm
+
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -100,7 +102,6 @@ def _evaluate_task(
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
-    show_progress_bar: bool = True,
 ) -> TaskResult:
     """The core logic to run a model on a given task. See `evaluate` for more details."""
     if co2_tracker is None or co2_tracker is True:
@@ -129,7 +130,6 @@ def _evaluate_task(
                 encode_kwargs=encode_kwargs,
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
-                show_progress_bar=show_progress_bar,
             )
         result.kg_co2_emissions = tracker.final_emissions
         return result
@@ -152,7 +152,6 @@ def _evaluate_task(
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
-            show_progress_bar=show_progress_bar,
         )
         tock = time()
 
@@ -233,6 +232,16 @@ def evaluate(
     if isinstance(prediction_folder, str):
         prediction_folder = Path(prediction_folder)
 
+    if encode_kwargs is None:
+        encode_kwargs = (
+            {"show_progress_bar": False} if show_progress_bar is False else {}
+        )
+    if "batch_size" not in encode_kwargs:
+        encode_kwargs["batch_size"] = 32
+        logger.info(
+            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
+        )
+
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         task = cast(AbsTaskAggregate, tasks)
@@ -245,6 +254,7 @@ def evaluate(
             cache=cache,
             overwrite_strategy=overwrite_strategy,
             prediction_folder=prediction_folder,
+            show_progress_bar=show_progress_bar,
         )
         result = task.combine_task_results(results.task_results)
         return ModelResult(
@@ -257,7 +267,13 @@ def evaluate(
         task = tasks
     else:
         results = []
-        for task in tasks:
+        tasks_tqdm = tqdm(
+            tasks,
+            desc="Evaluating tasks",
+            disable=not show_progress_bar,
+        )
+        for i, task in enumerate(tasks_tqdm):
+            tasks_tqdm.set_description(f"Evaluating task {task.metadata.name}")
             _res = evaluate(
                 model,
                 task,
@@ -267,7 +283,7 @@ def evaluate(
                 cache=cache,
                 overwrite_strategy=overwrite_strategy,
                 prediction_folder=prediction_folder,
-                show_progress_bar=show_progress_bar,
+                show_progress_bar=False,
             )
             results.extend(_res.task_results)
         return ModelResult(
@@ -325,16 +341,6 @@ def evaluate(
         model = model.load_model()
         logger.info("✓ Model loaded")
 
-    if encode_kwargs is None:
-        encode_kwargs = (
-            {"show_progress_bar": False} if show_progress_bar is False else {}
-        )
-    if "batch_size" not in encode_kwargs:
-        encode_kwargs["batch_size"] = 32
-        logger.info(
-            "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
-        )
-
     if raise_error is False:
         try:
             result = _evaluate_task(
@@ -344,7 +350,6 @@ def evaluate(
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
-                show_progress_bar=show_progress_bar,
             )
         except Exception as e:
             logger.error(
@@ -363,7 +368,6 @@ def evaluate(
             co2_tracker=False,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
-            show_progress_bar=show_progress_bar,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

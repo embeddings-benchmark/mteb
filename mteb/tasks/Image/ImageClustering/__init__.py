@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .eng import (
     CIFAR10Clustering,
     CIFAR100Clustering,

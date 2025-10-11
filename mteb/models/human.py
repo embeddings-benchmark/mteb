@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.model_meta import ModelMeta
 
 human = ModelMeta(

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .BlurbsClusteringP2P import BlurbsClusteringP2P, BlurbsClusteringP2PFast
 from .BlurbsClusteringS2S import BlurbsClusteringS2S, BlurbsClusteringS2SFast
 from .TenKGnadClusteringP2P import TenKGnadClusteringP2P, TenKGnadClusteringP2PFast

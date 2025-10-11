@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .ArxivClusteringP2P import ArxivClusteringP2P, ArxivClusteringP2PFast
 from .ArxivClusteringS2S import ArxivClusteringS2S
 from .ArXivHierarchicalClustering import (

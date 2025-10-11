@@ -1,7 +1,5 @@
 """This script checks that all result have been run and writes a file: missing_tasks.txt with the missing tasks for each model"""
 
-from __future__ import annotations
-
 from collections.abc import Iterable
 
 import pandas as pd

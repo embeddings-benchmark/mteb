@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 from collections.abc import Mapping
-from typing import Literal, Union
+from typing import Literal
 
 from ._result import HFSubset
 
@@ -15,7 +13,7 @@ ISOLanguage = str
 ISOScript = str
 """A string representing the script. The script is denoted by a 4-letter [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924) script code (e.g. "Latn")."""
 
-Languages = Union[list[ISOLanguageScript], Mapping[HFSubset, list[ISOLanguageScript]]]
+Languages = list[ISOLanguageScript] | Mapping[HFSubset, list[ISOLanguageScript]]
 """A list of languages or a mapping from HFSubset to a list of languages. E.g. ["eng-Latn", "deu-Latn"] or {"en-de": ["eng-Latn", "deu-Latn"], "fr-it": ["fra-Latn", "ita-Latn"]}."""
 
 # LICENSE TYPES

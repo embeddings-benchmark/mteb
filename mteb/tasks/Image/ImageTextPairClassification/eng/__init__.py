@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AROCocoOrder import AROCocoOrder
 from .AROFlickrOrder import AROFlickrOrder
 from .AROVisualAttribution import AROVisualAttribution

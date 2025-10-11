@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .IndicXnliPairClassification import IndicXnliPairClassification
 from .OpusparcusPC import OpusparcusPC
 from .PawsXPairClassification import PawsXPairClassification

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -44,7 +42,7 @@ class Benchmark:
     """
 
     name: str
-    tasks: Sequence[AbsTask]
+    tasks: Sequence["AbsTask"]
     description: str | None = None
     reference: StrURL | None = None
     citation: str | None = None
@@ -53,13 +51,13 @@ class Benchmark:
     icon: str | None = None
     display_name: str | None = None
 
-    def __iter__(self) -> Iterable[AbsTask]:
+    def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
 
     def __len__(self) -> int:
         return len(self.tasks)
 
-    def __getitem__(self, index: int) -> AbsTask:
+    def __getitem__(self, index: int) -> "AbsTask":
         return self.tasks[index]
 
     def load_results(

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 from pathlib import Path
 from typing import Any, TypedDict, cast
@@ -117,6 +115,7 @@ class AbsTaskAnySTS(AbsTask):
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
+
         if prediction_folder:
             self._save_task_predictions(
                 scores,

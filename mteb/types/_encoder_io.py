@@ -1,8 +1,6 @@
-from __future__ import annotations
-
 from collections.abc import Mapping
 from enum import Enum
-from typing import TypedDict, Union
+from typing import TypedDict
 
 import numpy as np
 import torch
@@ -11,8 +9,7 @@ from PIL import Image
 from typing_extensions import NotRequired
 
 # --- Output types ---
-# should be as Union, because `|` won't work for python3.9
-Array = Union[np.ndarray, torch.Tensor]
+Array = np.ndarray | torch.Tensor
 """General array type, can be a numpy array or a torch tensor."""
 
 
@@ -104,13 +101,12 @@ class MultimodalInput(TextInput, CorpusInput, QueryInput, ImageInput, AudioInput
     pass
 
 
-# should be as Union, because `|` won't work for python3.9
-BatchedInput = Union[
-    TextInput, CorpusInput, QueryInput, ImageInput, AudioInput, MultimodalInput
-]
+BatchedInput = (
+    TextInput | CorpusInput | QueryInput | ImageInput | AudioInput | MultimodalInput
+)
 """The input to the encoder for a batch of data."""
 
-TextBatchedInput = Union[TextInput, CorpusInput, QueryInput]
+TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
 QueryDatasetType = Dataset

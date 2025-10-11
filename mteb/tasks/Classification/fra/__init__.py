@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .FrenchBookReviews import FrenchBookReviews, FrenchBookReviewsV2
 from .MovieReviewSentimentClassification import (
     MovieReviewSentimentClassification,

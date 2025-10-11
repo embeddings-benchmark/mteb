@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .FaMTEBClassification import (
     DeepSentiPers,
     DeepSentiPersV2,

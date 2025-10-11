@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datasets import load_dataset
 
 from mteb._evaluators.retrieval_metrics import evaluate_p_mrr_change

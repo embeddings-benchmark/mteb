@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .Moroco import Moroco, MorocoV2
 from .RomanianReviewsSentiment import (
     RomanianReviewsSentiment,

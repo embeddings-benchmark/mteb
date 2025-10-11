@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 from collections.abc import Sequence
 from typing import Any
@@ -52,6 +50,7 @@ class RetrievalEvaluator(Evaluator):
         search_model: SearchProtocol,
         encode_kwargs: dict[str, Any],
     ) -> RetrievalOutputType:
+        logger.info("Running retrieval task - Indexing corpus...")
         search_model.index(
             corpus=self.corpus,
             task_metadata=self.task_metadata,
@@ -59,6 +58,7 @@ class RetrievalEvaluator(Evaluator):
             hf_subset=self.hf_subset,
             encode_kwargs=encode_kwargs,
         )
+        logger.info("Running retrieval task - Searching queries...")
         return search_model.search(
             queries=self.queries,
             top_k=self.top_k,

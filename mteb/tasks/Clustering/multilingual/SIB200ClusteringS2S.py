@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast

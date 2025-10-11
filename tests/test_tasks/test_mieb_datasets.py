@@ -1,8 +1,11 @@
 """test mteb.MIEB's integration with datasets"""
 
+<<<<<<< HEAD
 # TODO: KCE: Is this test needed? I would probably delete
 from __future__ import annotations
 
+=======
+>>>>>>> 5b4c6da2eee9d799693184bdfb95447187187f5c
 import logging
 
 import pytest

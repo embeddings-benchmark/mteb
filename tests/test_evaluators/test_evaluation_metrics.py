@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb._evaluators.retrieval_metrics import calculate_pmrr
 
 

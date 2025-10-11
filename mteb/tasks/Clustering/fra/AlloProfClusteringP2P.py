@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,

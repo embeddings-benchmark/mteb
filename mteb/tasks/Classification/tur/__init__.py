@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .TurkishMovieSentimentClassification import (
     TurkishMovieSentimentClassification,
     TurkishMovieSentimentClassificationV2,

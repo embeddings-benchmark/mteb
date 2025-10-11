@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import logging
 from typing import Any, Protocol
 
@@ -66,6 +64,7 @@ class LinearRegressionEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"]
         )
 
+        logger.info("Running regression task - Encoding train set...")
         X_train = model.encode(
             dataloader_train,
             task_metadata=self.task_metadata,
@@ -74,6 +73,7 @@ class LinearRegressionEvaluator(Evaluator):
             **encode_kwargs,
         )
         if test_cache is None:
+            logger.info("Running regression task - Encoding test set...")
             X_test = model.encode(
                 dataloader_test,
                 task_metadata=self.task_metadata,
@@ -83,6 +83,7 @@ class LinearRegressionEvaluator(Evaluator):
             )
             test_cache = X_test
 
+        logger.info("Running regression task - Fitting regressor...")
         self.regressor.fit(X_train, y_train)
         y_pred = self.regressor.predict(test_cache)
         scores = {
@@ -93,6 +94,7 @@ class LinearRegressionEvaluator(Evaluator):
         }
         scores["rmse"] = np.sqrt(scores["mse"])
 
+        logger.info("Running regression task - Finished.")
         return scores, test_cache
 
     def create_dataloaders(

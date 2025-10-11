@@ -1,9 +1,8 @@
-from __future__ import annotations
-
 import logging
 from datetime import datetime
 
 from pydantic import ConfigDict, Field, model_validator
+from typing_extensions import Self
 
 from mteb.types import (
     HFSubset,
@@ -68,7 +67,7 @@ class AggregateTaskMetadata(TaskMetadata):
         return {"default": self.eval_langs}  # type: ignore
 
     @model_validator(mode="after")  # type: ignore
-    def compute_unfilled_cases(self) -> AggregateTaskMetadata:
+    def compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:
             self.eval_langs = self._compute_eval_langs()
         if not self.date:

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
     AbsTaskAnyZeroShotClassification,
 )

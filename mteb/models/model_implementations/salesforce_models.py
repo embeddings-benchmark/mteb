@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
     instruct_wrapper,

@@ -1,10 +1,10 @@
-from __future__ import annotations
-
 import logging
 from collections import defaultdict
-from typing import Any
+from pathlib import Path
+from typing import Any, ClassVar, TypedDict
 
 from datasets import Dataset, DatasetDict
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.models import Encoder, MTEBModels
@@ -37,6 +37,22 @@ class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
     sentence2_statistics: TextStatistics
 
 
+class BitextMiningMetrics(TypedDict):
+    """Metrics for BitextMining tasks
+
+    Attributes:
+        precision: Precision of the model.
+        recall: Recall of the model.
+        f1: F1 score of the model.
+        accuracy: Accuracy of the model.
+    """
+
+    precision: float
+    recall: float
+    f1: float
+    accuracy: float
+
+
 class AbsTaskBitextMining(AbsTask):
     """Abstract class for BitextMining tasks
     The similarity is computed between pairs and the results are ranked.
@@ -49,6 +65,7 @@ class AbsTaskBitextMining(AbsTask):
 
     parallel_subsets = False
     abstask_prompt = "Retrieve parallel sentences."
+    _DEFAULT_PAIR: ClassVar[list[tuple[str, str]]] = [("sentence1", "sentence2")]
 
     def evaluate(
         self,
@@ -57,6 +74,7 @@ class AbsTaskBitextMining(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
@@ -77,6 +95,7 @@ class AbsTaskBitextMining(AbsTask):
                 hf_split=split,
                 hf_subset="parallel",
                 encode_kwargs=encode_kwargs,
+                prediction_folder=prediction_folder,
                 **kwargs,
             )
         else:
@@ -95,13 +114,14 @@ class AbsTaskBitextMining(AbsTask):
                     hf_split=split,
                     hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
+                    prediction_folder=prediction_folder,
                     **kwargs,
                 )
 
         return scores
 
     def get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
-        pairs = [("sentence1", "sentence2")]
+        pairs = self._DEFAULT_PAIR
         if parallel:
             pairs = [langpair.split("-") for langpair in self.hf_subsets]
         return pairs
@@ -115,6 +135,7 @@ class AbsTaskBitextMining(AbsTask):
         hf_subset: str,
         parallel: bool = False,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
         pairs = self.get_pairs(parallel)
@@ -127,13 +148,60 @@ class AbsTaskBitextMining(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        metrics = evaluator(model, encode_kwargs=encode_kwargs)
+        # NOTE: used only by BUCC
+        gold = (
+            list(zip(range(len(data_split)), range(len(data_split))))
+            if "gold" not in data_split
+            else data_split["gold"]
+        )
+
+        neighbours = evaluator(model, encode_kwargs=encode_kwargs)
+
+        if prediction_folder:
+            self._save_task_predictions(
+                neighbours,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
         if parallel:
+            metrics = {}
+            for keys, nearest_neighbors in neighbours.items():
+                metrics[keys] = self._compute_metrics(nearest_neighbors, gold)
+
             for v in metrics.values():
                 self._add_main_score(v)
         else:
+            def_pair_str = "-".join(self._DEFAULT_PAIR[0])
+            metrics = self._compute_metrics(neighbours[def_pair_str], gold)
             self._add_main_score(metrics)
         return metrics
+
+    def _compute_metrics(
+        self,
+        nearest_neighbors: list[dict[str, float]],
+        gold: list[tuple[int, int]],
+    ) -> BitextMiningMetrics:
+        logger.info("Computing metrics...")
+        labels = []
+        predictions = []
+        for i, x in enumerate(nearest_neighbors):
+            j = x["corpus_id"]
+            predictions.append(j)
+            labels.append(gold[i][1])
+
+        return BitextMiningMetrics(
+            precision=precision_score(
+                labels, predictions, zero_division=0, average="weighted"
+            ),
+            recall=recall_score(
+                labels, predictions, zero_division=0, average="weighted"
+            ),
+            f1=f1_score(labels, predictions, zero_division=0, average="weighted"),
+            accuracy=accuracy_score(labels, predictions),
+        )
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .BibleNLPBitextMining import BibleNLPBitextMining
 from .BUCCBitextMining import BUCCBitextMining
 from .BUCCBitextMiningFast import BUCCBitextMiningFast

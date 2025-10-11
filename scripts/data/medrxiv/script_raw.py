@@ -1,7 +1,5 @@
 """Fetch data from https://api.biorxiv.org/ and keep useful information"""
 
-from __future__ import annotations
-
 import gzip
 
 import jsonlines

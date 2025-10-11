@@ -1,7 +1,5 @@
 """Creates slurm jobs for running models on all tasks"""
 
-from __future__ import annotations
-
 import subprocess
 from collections.abc import Iterable
 from pathlib import Path

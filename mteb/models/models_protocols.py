@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Any, Protocol, Union, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from torch.utils.data import DataLoader
 
@@ -72,7 +70,7 @@ class SearchProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> ModelMeta:
+    def mteb_model_meta(self) -> "ModelMeta":
         """Metadata of the model"""
         ...
 
@@ -169,7 +167,7 @@ class Encoder(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> ModelMeta:
+    def mteb_model_meta(self) -> "ModelMeta":
         """Metadata of the model"""
         ...
 
@@ -221,10 +219,10 @@ class CrossEncoderProtocol(Protocol):
         ...
 
     @property
-    def mteb_model_meta(self) -> ModelMeta:
+    def mteb_model_meta(self) -> "ModelMeta":
         """Metadata of the model"""
         ...
 
 
-MTEBModels = Union[Encoder, CrossEncoderProtocol, SearchProtocol]
+MTEBModels = Encoder | CrossEncoderProtocol | SearchProtocol
 """Type alias for all MTEB model types as many models implement multiple protocols and many tasks can be solved by multiple model types."""

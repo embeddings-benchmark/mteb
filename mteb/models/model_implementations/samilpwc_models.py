@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.e5_models import ME5_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta

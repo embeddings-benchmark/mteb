@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .AmazonCounterfactualVNClassification import AmazonCounterfactualVNClassification
 from .AmazonPolarityVNClassification import AmazonPolarityVNClassification
 from .AmazonReviewsVNClassification import AmazonReviewsVNClassification

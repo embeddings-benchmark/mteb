@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from __future__ import annotations
+=======
+from pathlib import Path
+>>>>>>> 5b4c6da2eee9d799693184bdfb95447187187f5c
 
 import pytest
 

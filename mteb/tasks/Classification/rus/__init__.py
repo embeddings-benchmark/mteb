@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .GeoreviewClassification import GeoreviewClassification, GeoreviewClassificationV2
 from .HeadlineClassification import HeadlineClassification, HeadlineClassificationV2
 from .InappropriatenessClassification import (

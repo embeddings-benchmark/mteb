@@ -1,12 +1,10 @@
-from __future__ import annotations
-
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 from time import time
-from typing import Any, Callable, Literal
+from typing import Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
@@ -273,7 +271,7 @@ class AbsTaskRetrieval(AbsTask):
 
         def process_data(split: str, hf_subset: str = "default"):
             """Helper function to load and process data for a given split and language"""
-            logger.info(
+            logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
 
@@ -391,7 +389,9 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs=encode_kwargs,
         )
         end_time = time()
-        logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+        logger.debug(
+            f"Running retrieval task - Time taken to retrieve: {end_time - start_time:.2f} seconds"
+        )
 
         if prediction_folder:
             self._save_task_predictions(
@@ -402,6 +402,7 @@ class AbsTaskRetrieval(AbsTask):
                 hf_split=hf_split,
             )
 
+        logger.info("Running retrieval task - Evaluating retrieval scores...")
         (
             all_scores,
             ndcg,
@@ -426,7 +427,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
-
+        logger.info("Running retrieval task - Finished.")
         return make_score_dict(
             ndcg,
             _map,
@@ -529,7 +530,7 @@ class AbsTaskRetrieval(AbsTask):
             if "instruction" in queries_[0]:
                 queries_ = queries_.map(combine_queries_with_instruction_text)
 
-            if isinstance(queries_["text"][0], (dict, list)):
+            if isinstance(queries_["text"][0], dict | list):
                 queries_ = queries_.map(convert_conv_history_to_query)
             queries_text_statistics = calculate_text_statistics(queries_["text"])
 

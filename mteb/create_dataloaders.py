@@ -1,7 +1,6 @@
-from __future__ import annotations
-
 import logging
-from typing import Any, Callable, cast
+from collections.abc import Callable
+from typing import Any, cast
 
 import torch
 from datasets import Dataset
@@ -355,10 +354,12 @@ def create_dataloader(
         return create_image_dataloader(
             dataset,
             image_column_name=input_column,
+            batch_size=batch_size,
         )
     if "text" in task_metadata.modalities and input_column is not None:
         return create_dataloader_from_texts(
             dataset[input_column],
+            batch_size=batch_size,
         )
     return DataLoader(
         dataset,

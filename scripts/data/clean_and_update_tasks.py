@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import ast
 import importlib.util
 import re
@@ -428,7 +426,7 @@ def filter_controversial(dataset_dict: DatasetDict) -> DatasetDict:
         for text, label in zip(ds["text"], ds["label"]):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(
-                label if isinstance(label, (str, int, float)) else tuple(label)
+                label if isinstance(label, str | int | float) else tuple(label)
             )
     bad_texts = {t for t, labels in normalized.items() if len(labels) > 1}
     return DatasetDict(

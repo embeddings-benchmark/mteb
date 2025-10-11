@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 import logging
 from abc import ABC, abstractmethod
@@ -13,6 +11,7 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
+from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
@@ -125,7 +124,6 @@ class AbsTask(ABC):
         *,
         encode_kwargs: dict[str, Any],
         prediction_folder: Path | None = None,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -136,7 +134,6 @@ class AbsTask(ABC):
             subsets_to_run: List of huggingface subsets (HFSubsets) to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
-            show_progress_bar: Whether to show the progress bar or not.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:
@@ -185,7 +182,6 @@ class AbsTask(ABC):
                 hf_subset=hf_subset,
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
-                show_progress_bar=show_progress_bar,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -201,7 +197,6 @@ class AbsTask(ABC):
         hf_split: str,
         hf_subset: str,
         prediction_folder: Path | None = None,
-        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -428,7 +423,7 @@ class AbsTask(ABC):
 
         return self.metadata.languages
 
-    def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTask:
+    def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
         """Filter the evaluation splits of the task.
 
         Args:
@@ -442,7 +437,7 @@ class AbsTask(ABC):
 
     def filter_modalities(
         self, modalities: list[str] | None, exclusive_modality_filter: bool = False
-    ) -> AbsTask:
+    ) -> Self:
         """Filter the modalities of the task.
 
         Args:
@@ -472,7 +467,7 @@ class AbsTask(ABC):
         script: list[str] | None = None,
         hf_subsets: list[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
-    ) -> AbsTask:
+    ) -> Self:
         """Filter the languages of the task.
 
         Args:

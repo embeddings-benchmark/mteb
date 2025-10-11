@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import polars as pl
 from datasets import concatenate_datasets, load_dataset
 

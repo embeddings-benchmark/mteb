@@ -27,6 +27,7 @@ import datasets
 
 import mteb
 from mteb.abstasks import AbsTask
+from mteb.benchmarks import Benchmark
 from mteb.models import (
     CrossEncoderWrapper,
     Encoder,
@@ -35,12 +36,10 @@ from mteb.models import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import TaskResult
+from mteb.types import ScoresDict
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
-
-    from mteb.benchmarks import Benchmark
-    from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
 

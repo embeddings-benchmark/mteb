@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
 

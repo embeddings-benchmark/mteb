@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .DadoEvalCoarseClassification import DadoEvalCoarseClassification
 from .ItaCaseholdClassification import ItaCaseholdClassification
 from .ItalianLinguistAcceptabilityClassification import (
