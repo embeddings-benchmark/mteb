@@ -5,13 +5,21 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-from datasets import Dataset
+from datasets import Dataset, concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
 from mteb.models.models_protocols import Encoder
 from mteb.types import ScoresDict
 
-from ...types.statistics import SplitDescriptiveStatistics
+from ...types.statistics import (
+    ImageStatistics,
+    SplitDescriptiveStatistics,
+    TextStatistics,
+)
+from .._statistics_calculation import (
+    calculate_image_statistics,
+    calculate_text_statistics,
+)
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -22,23 +30,13 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
 
     Attributes:
         num_samples: number of samples in the dataset.
-        num_images: number of images in the dataset.
-        num_texts: number of texts in the dataset.
-        num_unique_texts: number of unique texts in the dataset.
-
-        min_text_length: Minimum length of texts
-        average_text_length: Average length of texts
-        max_text_length: Maximum length of texts
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
     """
 
     num_samples: int
-    num_images: int
-    num_texts: int
-    num_unique_texts: int
-
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
+    text_statistics: TextStatistics
+    image_statistics: ImageStatistics
 
 
 class AbsTaskImageTextPairClassification(AbsTask):
@@ -56,18 +54,16 @@ class AbsTaskImageTextPairClassification(AbsTask):
     images_column_names: str | Sequence[str] = "image"
     texts_column_names: str | Sequence[str] = "caption"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ImageTextPairClassificationDescriptiveStatistics:
         if compute_overall:
-            # TODO: implement overall statistics
-            return {}
+            dataset = concatenate_datasets(
+                [
+                    self.dataset[hf_subset][split]
+                    for hf_subset in self.metadata.eval_langs
+                ]
+            )
         else:
             dataset = (
                 self.dataset[split]
@@ -76,34 +72,31 @@ class AbsTaskImageTextPairClassification(AbsTask):
             )
         num_samples = len(dataset)
 
+        images = None
+        texts = None
+
         if isinstance(self.images_column_names, str):
-            num_images = len(list(dataset[self.images_column_names]))
-        elif isinstance(self.images_column_names, list):
-            num_images = sum(
-                [len(dataset[img_column]) for img_column in self.images_column_names]
-            )
+            images = list(dataset[self.images_column_names])
+        elif isinstance(self.images_column_names, Sequence):
+            images = [
+                img
+                for img_column in self.images_column_names
+                for img in dataset[img_column]
+            ]
 
         if isinstance(self.texts_column_names, str):
             texts = list(dataset[self.texts_column_names])
-            unique_texts = set(texts)
-            text_lengths = [len(text) for text in texts]
-        elif isinstance(self.texts_column_names, list):
+        elif isinstance(self.texts_column_names, Sequence):
             texts = [
                 text
                 for text_column in self.texts_column_names
                 for text in dataset[text_column]
             ]
-            unique_texts = set(texts)
-            text_lengths = [len(text) for text in texts]
 
         return ImageTextPairClassificationDescriptiveStatistics(
             num_samples=num_samples,
-            num_images=num_images,
-            num_texts=len(texts),
-            num_unique_texts=len(unique_texts),
-            min_text_length=min(text_lengths),
-            average_text_length=sum(text_lengths) / len(text_lengths),
-            max_text_length=max(text_lengths),
+            text_statistics=calculate_text_statistics(texts),
+            image_statistics=calculate_image_statistics(images),
         )
 
     def _evaluate_subset(
@@ -135,5 +128,21 @@ class AbsTaskImageTextPairClassification(AbsTask):
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
-        self._add_main_score(scores)
         return scores
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        text_columns = (
+            [self.texts_column_names]
+            if isinstance(self.texts_column_names, str)
+            else self.texts_column_names
+        )
+        image_columns = (
+            [self.images_column_names]
+            if isinstance(self.images_column_names, str)
+            else self.images_column_names
+        )
+
+        self._upload_dataset_to_hub(
+            repo_name,
+            [*text_columns, *image_columns],
+        )
