@@ -211,12 +211,13 @@ def cohere_v_loader(model_name, **kwargs):
 
         def get_text_embeddings(
             self,
-            texts: DataLoader[BatchedInput],
+            inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_text_embeddings = []
             index = 0
+            texts = [text for batch in inputs for text in batch["text"]]
 
             pbar = tqdm(total=len(texts), desc="Encoding text sentences")
 
@@ -252,7 +253,6 @@ def cohere_v_loader(model_name, **kwargs):
             ):
                 embed_kwargs = {
                     "texts": batch,
-                    # "texts": batch["text"],
                     "model": self.model_name,
                     "input_type": "search_document",
                     "embedding_types": [self.embedding_type],
@@ -294,8 +294,8 @@ def cohere_v_loader(model_name, **kwargs):
             show_progress_bar: bool = True,
             **kwargs: Any,
         ):
-            # todo
             all_image_embeddings = []
+            images = [image for batch in images for image in batch["images"]]
 
             for batch in tqdm(
                 images, disable=not show_progress_bar, desc="Image Encoding"

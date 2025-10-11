@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models import ModelMeta
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -20,22 +18,20 @@ def instruction_template(
 
 REASONIR_TRAINING_DATA = {
     # source, section D: https://arxiv.org/pdf/2504.20595
-    "MSMARCO": ["train"],
-    "NQ": ["train"],
-    "FEVER": ["train"],
-    "HotpotQA": ["train"],
-    "MIRACLRetrieval": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "T2Reranking": ["train"],
-    "DuRetrieval": ["train"],
-    "QuoraRetrieval": ["train"],
+    "MSMARCO",
+    "NQ",
+    "FEVER",
+    "HotpotQA",
+    "MIRACLRetrieval",
+    "MrTidyRetrieval",
+    "T2Reranking",
+    "DuRetrieval",
+    "QuoraRetrieval",
 }
 
 ReasonIR_8B = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="ReasonIR/ReasonIR-8B",
-        revision="c3d0690370ff4a8c3d3882d8dfa85c43650034fa",
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,
     ),

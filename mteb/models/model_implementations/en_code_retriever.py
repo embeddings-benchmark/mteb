@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.types import PromptType
 
 english_code_retriever = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="fyaronskiy/english_code_retriever",
-        revision="be653fab7d27a7348a0c2c3d16b9f92a7f10cb0c",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts={
             PromptType.query.value: "search_query: ",
             PromptType.document.value: "search_document: ",
@@ -31,5 +27,5 @@ english_code_retriever = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/code-search-net/code_search_net",
-    training_datasets={"CodeSearchNet": ["train"]},
+    training_datasets={"CodeSearchNet"},
 )
