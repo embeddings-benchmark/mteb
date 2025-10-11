@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskTextRegression import AbsTaskTextRegression
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.text_regression import AbsTaskTextRegression
 
 
 class RuSciBenchCitedCountRegression(AbsTaskTextRegression):

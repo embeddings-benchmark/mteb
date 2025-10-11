@@ -1,7 +1,5 @@
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import *
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 _LANGUAGES = {
     "fas": ["fas-Arab"],

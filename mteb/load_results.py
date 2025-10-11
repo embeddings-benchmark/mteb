@@ -4,7 +4,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ModelMeta
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.types import ModelName, Revision

@@ -2,7 +2,7 @@ import pytest
 
 import mteb
 from mteb import get_task, get_tasks
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.overview import MTEBTasks
 from mteb.types import Modalities

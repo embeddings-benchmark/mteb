@@ -1,6 +1,6 @@
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
+from ....abstasks.any_clustering import AbsTaskAnyClustering
 
 
 class SpanishNewsClusteringP2P(AbsTaskAnyClustering):

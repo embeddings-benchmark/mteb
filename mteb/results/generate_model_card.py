@@ -4,7 +4,7 @@ from pathlib import Path
 from huggingface_hub import ModelCard, ModelCardData, repo_exists
 
 from mteb import BenchmarkResults
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 
 logger = logging.getLogger(__name__)

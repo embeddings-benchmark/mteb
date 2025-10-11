@@ -3,8 +3,7 @@ import json
 import datasets
 
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 _EVAL_SPLITS = ["dev", "test"]
 

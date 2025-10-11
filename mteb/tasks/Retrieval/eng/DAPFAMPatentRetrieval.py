@@ -1,7 +1,7 @@
 from datasets import load_dataset
 
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"

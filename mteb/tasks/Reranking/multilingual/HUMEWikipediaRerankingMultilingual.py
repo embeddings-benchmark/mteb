@@ -1,6 +1,5 @@
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.text.reranking import AbsTaskReranking
 
 _LANGUAGES = {
     "en": ["eng-Latn"],

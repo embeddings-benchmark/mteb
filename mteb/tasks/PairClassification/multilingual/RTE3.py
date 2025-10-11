@@ -1,7 +1,7 @@
 import datasets
 
-from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 
 _LANGS = {
     "de": ["deu-Latn"],

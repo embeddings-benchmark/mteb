@@ -39,14 +39,14 @@ from mteb.types.statistics import (
     TopRankedStatistics,
 )
 
-from ._statistics_calculation import (
+from .._statistics_calculation import (
     calculate_image_statistics,
     calculate_relevant_docs_statistics,
     calculate_text_statistics,
     calculate_top_ranked_statistics,
 )
-from .AbsTask import AbsTask
-from .retrieval_dataset_loaders import (
+from ..abstask import AbsTask
+from ..retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     RetrievalSplitData,
     _combine_queries_with_instructions_datasets,

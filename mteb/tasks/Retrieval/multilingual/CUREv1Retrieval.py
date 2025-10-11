@@ -3,8 +3,7 @@ from enum import Enum
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 _LANGUAGES = {
     "en": ["eng-Latn", "eng-Latn"],

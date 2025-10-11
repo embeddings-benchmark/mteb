@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 
 class FrenchLegal1Retrieval(AbsTaskRetrieval):

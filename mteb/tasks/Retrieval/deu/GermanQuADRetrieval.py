@@ -3,8 +3,7 @@ from collections import defaultdict
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 
 def load_retrieval_data(dataset_path, eval_splits):

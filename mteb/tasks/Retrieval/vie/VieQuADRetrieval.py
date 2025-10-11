@@ -2,8 +2,8 @@ import random
 
 from datasets import load_dataset
 
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.retrieval import AbsTaskRetrieval
 
 TEST_SAMPLES = 2048
 

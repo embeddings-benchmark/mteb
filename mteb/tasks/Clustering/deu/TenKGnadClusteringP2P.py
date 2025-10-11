@@ -1,6 +1,6 @@
-from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
+from mteb.abstasks.any_clustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.clustering_fast import AbsTaskClusteringFast, convert_to_fast
 
 
 class TenKGnadClusteringP2P(AbsTaskAnyClustering):

@@ -5,8 +5,8 @@ from copy import copy
 import datasets
 from datasets import Dataset
 
-from .AbsTaskRetrieval import AbsTaskRetrieval
-from .retrieval_dataset_loaders import RetrievalSplitData
+from ..retrieval_dataset_loaders import RetrievalSplitData
+from .retrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 

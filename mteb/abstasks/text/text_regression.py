@@ -25,7 +25,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .AbsTask import AbsTask
+from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

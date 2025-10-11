@@ -1,6 +1,6 @@
 import datasets
 
-from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
+from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata

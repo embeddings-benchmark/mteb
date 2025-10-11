@@ -12,8 +12,8 @@ from mteb.abstasks import (
     AbsTask,
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
+from mteb.abstasks.text.reranking import AbsTaskReranking
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
