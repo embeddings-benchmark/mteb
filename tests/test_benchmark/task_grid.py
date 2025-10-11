@@ -62,7 +62,7 @@ TASK_TEST_GRID = (
             "TwitterHjerneRetrieval",  # retrieval
             "SciDocsRR",  # reranking
             "Core17InstructionRetrieval",  # instruction reranking
-            "InstructIR",  # instruction retrieval
+            "IFIRNFCorpus",  # instruction retrieval
         ]
     )
     + mteb.get_tasks(tasks=["IndicSentimentClassification"], languages=["asm-Beng"])
