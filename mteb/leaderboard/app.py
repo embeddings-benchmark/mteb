@@ -39,11 +39,12 @@ def load_results():
     if not results_cache_path.exists():
         results_cache = ResultCache()
         results_cache.download_from_remote()
+        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
 
         all_results = results_cache.load_results(
-            models=mteb.get_model_metas(),
+            models=all_model_names,
             only_main_score=True,
-            require_model_meta=True,
+            require_model_meta=False,
             include_remote=True,
         )
         return all_results
