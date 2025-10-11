@@ -1,4 +1,4 @@
-from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark
+from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
@@ -1770,7 +1770,7 @@ MIEB_common_tasks = [
     "WebQAT2TRetrieval",
 ]
 
-MIEB_ENG = Benchmark(
+MIEB_ENG = MIEBBenchmark(
     name="MIEB(eng)",
     display_name="Image-Text, English",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
@@ -1799,7 +1799,7 @@ MIEB_ENG = Benchmark(
 """,
 )
 
-MIEB_MULTILINGUAL = Benchmark(
+MIEB_MULTILINGUAL = MIEBBenchmark(
     name="MIEB(Multilingual)",
     display_name="Image-Text, Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
@@ -1834,7 +1834,7 @@ MIEB_MULTILINGUAL = Benchmark(
 """,
 )
 
-MIEB_LITE = Benchmark(
+MIEB_LITE = MIEBBenchmark(
     name="MIEB(lite)",
     display_name="Image-Text, Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
@@ -1918,7 +1918,7 @@ MIEB_LITE = Benchmark(
 """,
 )
 
-MIEB_IMG = Benchmark(
+MIEB_IMG = MIEBBenchmark(
     name="MIEB(Img)",
     display_name="Image only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",

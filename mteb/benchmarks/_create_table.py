@@ -334,13 +334,6 @@ def _create_summary_table_mean_public_private(
         ),
     )
 
-    # Add zero-shot percentage
-    tasks = get_tasks(tasks=list(data["task_name"].unique()))
-    joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
-    )
-    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
-
     # Clean up model names (remove HF organization)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -495,5 +488,134 @@ def _create_summary_table_mean_subset(
 
     # Move borda rank to front
     joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
+
+    return joint_table
+
+
+def _create_summary_table_mean_task_type(
+    benchmark_results: BenchmarkResults,
+) -> pd.DataFrame:
+    """Create summary table from BenchmarkResults.
+
+    Returns a DataFrame with one row per model containing summary statistics
+    and task type averages.
+
+    Args:
+        benchmark_results: BenchmarkResults object containing model results
+
+    Returns:
+        DataFrame with model summaries, ready for styling in the leaderboard
+    """
+    data = benchmark_results.to_dataframe(format="long")
+
+    if data.empty:
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return no_results_frame
+
+    # Convert to DataFrame and pivot
+    per_task = data.pivot(index="model_name", columns="task_name", values="score")
+
+    # Remove models with no scores
+    to_remove = per_task.isna().all(axis="columns")
+    if to_remove.all():
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return no_results_frame
+
+    models_to_remove = list(per_task[to_remove].index)
+    per_task = per_task.drop(models_to_remove, axis=0)
+
+    # Calculate means by task type
+    mean_per_type = _get_means_per_types(per_task)
+    mean_per_type = mean_per_type.pivot(
+        index="model_name", columns="task_type", values="score"
+    )
+    mean_per_type.columns = [
+        _split_on_capital(column) for column in mean_per_type.columns
+    ]
+
+    # Calculate overall means
+    typed_mean = mean_per_type.mean(skipna=False, axis=1)
+
+    # Build joint table
+    joint_table = mean_per_type.copy()
+    joint_table = joint_table.drop(models_to_remove, axis=0)
+    joint_table.insert(0, "mean_by_task_type", typed_mean)
+    joint_table = joint_table.sort_values("mean_by_task_type", ascending=False)
+    joint_table["borda_rank"] = _get_borda_rank(per_task)
+    joint_table["rank"] = [i + 1 for i in range(len(joint_table))]
+    joint_table = joint_table.reset_index()
+
+    # Add model metadata
+    model_metas = joint_table["model_name"].map(mteb.get_model_meta)
+    joint_table = joint_table[model_metas.notna()]
+    joint_table["model_link"] = model_metas.map(lambda m: m.reference)
+
+    # Insert model metadata columns
+    joint_table.insert(
+        1,
+        "Max Tokens",
+        model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
+    )
+    joint_table.insert(
+        1,
+        "Embedding Dimensions",
+        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
+    )
+    joint_table.insert(
+        1,
+        "Number of Parameters",
+        model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
+    )
+    joint_table.insert(
+        1,
+        "Memory Usage (MB)",
+        model_metas.map(
+            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+        ),
+    )
+
+    # Add zero-shot percentage
+    tasks = get_tasks(tasks=list(data["task_name"].unique()))
+    joint_table.insert(
+        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
+    )
+    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+
+    # Clean up model names (remove HF organization)
+    joint_table["model_name"] = joint_table["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
+
+    # Add markdown links to model names
+    name_w_link = (
+        "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
+    )
+    joint_table["model_name"] = joint_table["model_name"].mask(
+        joint_table["model_link"].notna(), name_w_link
+    )
+    joint_table = joint_table.drop(columns=["model_link"])
+
+    # Rename columns
+    joint_table = joint_table.rename(
+        columns={
+            "model_name": "Model",
+            "mean_by_task_type": "Mean (TaskType)",
+            "borda_rank": "Rank (Borda)",
+        }
+    )
+
+    if "Any Any Multilingual Retrieval" in joint_table.columns:
+        joint_table = joint_table.rename(
+            columns={"Any Any Multilingual Retrieval": "Multilingual Retrieval"}
+        )
+    if "Any Any Retrieval" in joint_table.columns:
+        joint_table = joint_table.rename(columns={"Any Any Retrieval": "Retrieval"})
+
+    # Move borda rank to front
+    joint_table.insert(0, "Rank", joint_table.pop("rank"))
 
     return joint_table

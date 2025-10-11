@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.39.2"
+version = "1.39.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -307,6 +307,9 @@ conflicts = [
     [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
 ]
+
+[tool.uv.extra-build-dependencies]
+flash-attn = [{ requirement = "torch", match-runtime = true }]
 
 [tool.mypy]
 plugins = ['pydantic.mypy']
