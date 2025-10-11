@@ -110,7 +110,9 @@ def test_model_memory_usage_api_model():
     meta = mteb.get_model_meta("openai/text-embedding-3-large")
     assert meta.memory_usage_mb is None
 
+
 #### --- Create model meta --- ####
+
 
 def test_create_model_meta_from_sentence_transformers():
     model_name = "sentence-transformers/average_word_embeddings_levy_dependency"
@@ -126,7 +128,6 @@ def test_create_model_meta_from_sentence_transformers():
     assert meta.revision == revision
 
 
-
 def test_create_model_meta_from_cross_encoder():
     model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"
     revision = "841d331b6f34b15d6ac0ab366ae3a3b36eeac691"
@@ -136,6 +137,7 @@ def test_create_model_meta_from_cross_encoder():
 
     assert meta.name == model_name
     assert meta.revision == revision
+
 
 @pytest.mark.parametrize("task", [MockRetrievalTask()])
 def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
