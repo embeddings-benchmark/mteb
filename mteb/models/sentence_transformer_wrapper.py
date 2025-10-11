@@ -160,7 +160,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             if prompt_type == PromptType.query:
                 encode_function = self.model.encode_query
             elif prompt_type == PromptType.document:
-                encode_function = self.model.encode_corpus
+                encode_function = self.model.encode_document
             else:
                 raise ValueError(f"Unknown prompt type: {prompt_type}")
         else:
