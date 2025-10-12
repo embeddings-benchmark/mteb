@@ -6,10 +6,8 @@ import pytest
 from sentence_transformers import SentenceTransformer
 
 import mteb
-from mteb import MTEB
 from mteb.abstasks import AbsTask
-from tests.mock_models import MockCLIPEncoder
-from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
+from tests.task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
