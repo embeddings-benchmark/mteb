@@ -17,6 +17,7 @@ from mteb.abstasks.AbsTaskMultilabelClassification import (
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval, RetrievalSplitData
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
+from mteb.abstasks.AbsTaskTextRegression import AbsTaskTextRegression
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
@@ -3930,3 +3931,52 @@ class MockTextZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return ["This is a test sentence", "This is another test sentence"]
+
+
+class MockRegressionTask(AbsTaskTextRegression):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "number_of_characters": 52,
+            "num_texts_in_train": 1,
+            "text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="Regression",
+        name="MockRegressionTask",
+        main_score="kendalltau",
+        **general_args,  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        train_texts = ["This is a test sentence", "This is another train sentence"]
+        test_texts = ["This is a test sentence", "This is another test sentence"]
+        train_values = [1.0, 0.0]
+        test_values = [1.0, 0.0]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "text": test_texts,
+                        "value": test_values,
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "text": train_texts,
+                        "value": train_values,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True

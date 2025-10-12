@@ -124,6 +124,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     """Apply styling to a raw summary DataFrame"""
     excluded_columns = [
         "Rank (Borda)",
+        "Rank",
         "Model",
         "Number of Parameters",
         "Embedding Dimensions",
@@ -146,7 +147,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     numeric_data = joint_table.copy()
 
     # Format data for display
-    joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
+    if "Zero-shot" in joint_table.columns:
+        joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
 
     joint_table_style = joint_table.style.format(
@@ -195,7 +197,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         joint_table_style,
         datatype=column_types,
         interactive=False,
-        pinned_columns=3,
+        pinned_columns=2,
         column_widths=column_widths,
         wrap=True,
         show_fullscreen_button=True,
