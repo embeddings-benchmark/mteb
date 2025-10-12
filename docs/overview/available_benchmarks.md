@@ -34,18 +34,18 @@ BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{thakur2021beir,
       author = {Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
       journal = {arXiv preprint arXiv:2104.08663},
       title = {Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
       year = {2021},
     }
-    
+
     ```
-    
+
 
 
 
@@ -80,9 +80,9 @@ BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -92,9 +92,9 @@ BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created 
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -106,7 +106,7 @@ BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
     economics, psychology, mathematics, and coding. These queries are drawn from
     naturally occurring and carefully curated human data.
-    
+
 
 [Learn more →](https://brightbenchmark.github.io/)
 
@@ -121,22 +121,22 @@ BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{su2024bright,
       author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
       journal = {arXiv preprint arXiv:2407.12883},
       title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
       year = {2024},
     }
-    
+
     ```
-    
 
 
 
-####  BRIGHT(long)
+
+####  BRIGHT (long)
 
 BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
 BRIGHT is the first text retrieval
@@ -146,7 +146,7 @@ economics, psychology, mathematics, and coding. These queries are drawn from
 naturally occurring and carefully curated human data.
 
 This is the long version of the benchmark, which only filter longer documents.
-    
+
 
 [Learn more →](https://brightbenchmark.github.io/)
 
@@ -161,18 +161,18 @@ This is the long version of the benchmark, which only filter longer documents.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{su2024bright,
       author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
       journal = {arXiv preprint arXiv:2407.12883},
       title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -196,18 +196,18 @@ This is the long version of the benchmark, which only filter longer documents.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{shahinmoghadam2024benchmarking,
       author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
       journal = {arXiv preprint arXiv:2411.12056},
       title = {Benchmarking pre-trained text embedding models in aligning built asset information},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -254,18 +254,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -295,9 +295,9 @@ CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{li2024coircomprehensivebenchmarkcode,
       archiveprefix = {arXiv},
       author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
@@ -307,9 +307,9 @@ CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
       url = {https://arxiv.org/abs/2407.02883},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -333,9 +333,9 @@ A benchmark for evaluating code retrieval augmented generation, testing models' 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{wang2024coderagbenchretrievalaugmentcode,
       archiveprefix = {arXiv},
       author = {Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
@@ -345,9 +345,9 @@ A benchmark for evaluating code retrieval augmented generation, testing models' 
       url = {https://arxiv.org/abs/2406.14497},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -374,9 +374,9 @@ A benchmark for evaluating text embedding models on Russian data.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{dale_encodechka,
       author = {Dale, David},
       editor = {habr.com},
@@ -386,9 +386,9 @@ A benchmark for evaluating text embedding models on Russian data.
       url = {https://habr.com/ru/articles/669674/},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -411,9 +411,9 @@ Retrieval w/Instructions is the task of finding relevant documents for a query t
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{weller2024followir,
       archiveprefix = {arXiv},
       author = {Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
@@ -422,10 +422,40 @@ Retrieval w/Instructions is the task of finding relevant documents for a query t
       title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       year = {2024},
     }
-    
-    ```
-    
 
+    ```
+
+
+
+
+####  HUME(v1)
+
+The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.
+
+[Learn more →](Coming soon (in review))
+
+
+
+??? info "Tasks"
+
+    | name                                                                                                                        | type           | modalities   | languages               |
+    |:----------------------------------------------------------------------------------------------------------------------------|:---------------|:-------------|:------------------------|
+    | [HUMEEmotionClassification](../available_tasks/classification/#humeemotionclassification)                                   | Classification | text         | eng                     |
+    | [HUMEToxicConversationsClassification](../available_tasks/classification/#humetoxicconversationsclassification)             | Classification | text         | eng                     |
+    | [HUMETweetSentimentExtractionClassification](../available_tasks/classification/#humetweetsentimentextractionclassification) | Classification | text         | eng                     |
+    | [HUMEMultilingualSentimentClassification](../available_tasks/classification/#humemultilingualsentimentclassification)       | Classification | text         | ara, eng, nob, rus      |
+    | [HUMEArxivClusteringP2P](../available_tasks/clustering/#humearxivclusteringp2p)                                             | Clustering     | text         | eng                     |
+    | [HUMERedditClusteringP2P](../available_tasks/clustering/#humeredditclusteringp2p)                                           | Clustering     | text         | eng                     |
+    | [HUMEWikiCitiesClustering](../available_tasks/clustering/#humewikicitiesclustering)                                         | Clustering     | text         | eng                     |
+    | [HUMESIB200ClusteringS2S](../available_tasks/clustering/#humesib200clusterings2s)                                           | Clustering     | text         | ara, dan, eng, fra, rus |
+    | [HUMECore17InstructionReranking](../available_tasks/reranking/#humecore17instructionreranking)                              | Reranking      | text         | eng                     |
+    | [HUMENews21InstructionReranking](../available_tasks/reranking/#humenews21instructionreranking)                              | Reranking      | text         | eng                     |
+    | [HUMERobust04InstructionReranking](../available_tasks/reranking/#humerobust04instructionreranking)                          | Reranking      | text         | eng                     |
+    | [HUMEWikipediaRerankingMultilingual](../available_tasks/reranking/#humewikipediarerankingmultilingual)                      | Reranking      | text         | dan, eng, nob           |
+    | [HUMESICK-R](../available_tasks/sts/#humesick-r)                                                                            | STS            | text         | eng                     |
+    | [HUMESTS12](../available_tasks/sts/#humests12)                                                                              | STS            | text         | eng                     |
+    | [HUMESTSBenchmark](../available_tasks/sts/#humestsbenchmark)                                                                | STS            | text         | eng                     |
+    | [HUMESTS22](../available_tasks/sts/#humests22)                                                                              | STS            | text         | ara, eng, fra, rus      |
 
 
 ####  JinaVDR
@@ -487,7 +517,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -499,7 +529,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
       year = {2025},
     }
     ```
-    
+
 
 
 
@@ -508,7 +538,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
 LongEmbed is a benchmark oriented at exploring models' performance on long-context retrieval.
     The benchmark comprises two synthetic tasks and four carefully chosen real-world tasks,
     featuring documents of varying length and dispersed target information.
-    
+
 
 [Learn more →](https://arxiv.org/abs/2404.12096v2)
 
@@ -528,18 +558,18 @@ LongEmbed is a benchmark oriented at exploring models' performance on long-conte
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{zhu2024longembed,
       author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
       journal = {arXiv preprint arXiv:2404.12096},
       title = {LongEmbed: Extending Embedding Models for Long Context Retrieval},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -608,9 +638,9 @@ A image-only version of MIEB(Multilingual) that consists of 49 tasks.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -620,9 +650,9 @@ A image-only version of MIEB(Multilingual) that consists of 49 tasks.
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -766,7 +796,7 @@ MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 ta
     | [WebQAT2TRetrieval](../available_tasks/any2anyretrieval/#webqat2tretrieval)                                                                  | Any2AnyRetrieval             | text         | eng                               |
     | [WITT2IRetrieval](../available_tasks/any2anymultilingualretrieval/#witt2iretrieval)                                                          | Any2AnyMultilingualRetrieval | text, image  | ara, bul, dan, ell, eng, ... (11) |
     | [XFlickr30kCoT2IRetrieval](../available_tasks/any2anymultilingualretrieval/#xflickr30kcot2iretrieval)                                        | Any2AnyMultilingualRetrieval | text, image  | deu, eng, ind, jpn, rus, ... (8)  |
-    | [XM3600T2IRetrieval](../available_tasks/any2anymultilingualretrieval/#xm3600t2iretrieval)                                                    | Any2AnyMultilingualRetrieval | text, image  | ara, ben, ces, dan, deu, ... (36) |
+    | [XM3600T2IRetrieval](../available_tasks/any2anymultilingualretrieval/#xm3600t2iretrieval)                                                    | Any2AnyMultilingualRetrieval | text, image  | ara, ben, ces, dan, deu, ... (38) |
     | [VisualSTS17Eng](../available_tasks/visualsts(eng)/#visualsts17eng)                                                                          | VisualSTS(eng)               | image        | eng                               |
     | [VisualSTS-b-Eng](../available_tasks/visualsts(eng)/#visualsts-b-eng)                                                                        | VisualSTS(eng)               | image        | eng                               |
     | [VisualSTS17Multilingual](../available_tasks/visualsts(multi)/#visualsts17multilingual)                                                      | VisualSTS(multi)             | image        | ara, deu, eng, fra, ita, ... (9)  |
@@ -775,9 +805,9 @@ MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 ta
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -787,9 +817,9 @@ MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 ta
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -936,9 +966,9 @@ MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -948,9 +978,9 @@ MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, 
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1018,14 +1048,14 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
     | [VQA2IT2TRetrieval](../available_tasks/any2anyretrieval/#vqa2it2tretrieval)                                  | Any2AnyRetrieval             | text, image  | eng                               |
     | [WebQAT2ITRetrieval](../available_tasks/any2anyretrieval/#webqat2itretrieval)                                | Any2AnyRetrieval             | image, text  | eng                               |
     | [WITT2IRetrieval](../available_tasks/any2anymultilingualretrieval/#witt2iretrieval)                          | Any2AnyMultilingualRetrieval | text, image  | ara, bul, dan, ell, eng, ... (11) |
-    | [XM3600T2IRetrieval](../available_tasks/any2anymultilingualretrieval/#xm3600t2iretrieval)                    | Any2AnyMultilingualRetrieval | text, image  | ara, ben, ces, dan, deu, ... (36) |
+    | [XM3600T2IRetrieval](../available_tasks/any2anymultilingualretrieval/#xm3600t2iretrieval)                    | Any2AnyMultilingualRetrieval | text, image  | ara, ben, ces, dan, deu, ... (38) |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -1035,9 +1065,9 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1046,7 +1076,7 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
 Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate the
     ability of multilingual LMs in semantic retrieval tasks,
     including bitext mining and classification via retrieval-augmented contexts.
-    
+
 
 [Learn more →](https://arxiv.org/pdf/2406.07424)
 
@@ -1067,18 +1097,18 @@ Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{winata2024miners,
       author = {Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
       journal = {arXiv preprint arXiv:2406.07424},
       title = {MINERS: Multilingual Language Models as Semantic Retrievers},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1106,7 +1136,7 @@ A massive code embedding benchmark covering retrieval tasks in a miriad of popul
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1118,7 +1148,7 @@ A massive code embedding benchmark covering retrieval tasks in a miriad of popul
       year = {2025},
     }
     ```
-    
+
 
 
 
@@ -1194,7 +1224,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
     | [PSC](../available_tasks/pairclassification/#psc)                                                                           | PairClassification       | text         | pol                                |
     | [WebLINXCandidatesReranking](../available_tasks/reranking/#weblinxcandidatesreranking)                                      | Reranking                | text         | eng                                |
     | [AlloprofReranking](../available_tasks/reranking/#alloprofreranking)                                                        | Reranking                | text         | fra                                |
-    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                              | Reranking                | text         | ben, bul, ces, dan, deu, ... (16)  |
+    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                              | Reranking                | text         | ben, bul, ces, dan, deu, ... (18)  |
     | [SICK-R](../available_tasks/sts/#sick-r)                                                                                    | STS                      | text         | eng                                |
     | [STS12](../available_tasks/sts/#sts12)                                                                                      | STS                      | text         | eng                                |
     | [STS14](../available_tasks/sts/#sts14)                                                                                      | STS                      | text         | eng                                |
@@ -1208,7 +1238,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1220,7 +1250,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
       year = {2025},
     }
     ```
-    
+
 
 
 
@@ -1253,13 +1283,13 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
     | [XNLI](../available_tasks/pairclassification/#xnli)                                                     | PairClassification | text         | ara, bul, deu, ell, eng, ... (14)  |
     | [BelebeleRetrieval](../available_tasks/retrieval/#belebeleretrieval)                                    | Retrieval          | text         | acm, afr, als, amh, apc, ... (115) |
     | [XQuADRetrieval](../available_tasks/retrieval/#xquadretrieval)                                          | Retrieval          | text         | arb, deu, ell, eng, hin, ... (12)  |
-    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)          | Reranking          | text         | ben, bul, ces, dan, deu, ... (16)  |
+    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)          | Reranking          | text         | ben, bul, ces, dan, deu, ... (18)  |
     | [IndicCrosslingualSTS](../available_tasks/sts/#indiccrosslingualsts)                                    | STS                | text         | asm, ben, eng, guj, hin, ... (13)  |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1271,7 +1301,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
       year = {2025},
     }
     ```
-    
+
 
 
 
@@ -1438,7 +1468,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
     | [WebLINXCandidatesReranking](../available_tasks/reranking/#weblinxcandidatesreranking)                                      | Reranking                | text         | eng                                |
     | [AlloprofReranking](../available_tasks/reranking/#alloprofreranking)                                                        | Reranking                | text         | fra                                |
     | [VoyageMMarcoReranking](../available_tasks/reranking/#voyagemmarcoreranking)                                                | Reranking                | text         | jpn                                |
-    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                              | Reranking                | text         | ben, bul, ces, dan, deu, ... (16)  |
+    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                              | Reranking                | text         | ben, bul, ces, dan, deu, ... (18)  |
     | [RuBQReranking](../available_tasks/reranking/#rubqreranking)                                                                | Reranking                | text         | rus                                |
     | [T2Reranking](../available_tasks/reranking/#t2reranking)                                                                    | Reranking                | text         | cmn                                |
     | [GermanSTSBenchmark](../available_tasks/sts/#germanstsbenchmark)                                                            | STS                      | text         | deu                                |
@@ -1463,7 +1493,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1475,13 +1505,13 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
       year = {2025},
     }
     ```
-    
+
 
 
 
 ####  MTEB(Multilingual, v2)
 
-A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. 
+A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.
 
 [Learn more →](https://arxiv.org/abs/2502.13595)
 
@@ -1602,7 +1632,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
     | [WebLINXCandidatesReranking](../available_tasks/reranking/#weblinxcandidatesreranking)                                      | Reranking                | text         | eng                                |
     | [AlloprofReranking](../available_tasks/reranking/#alloprofreranking)                                                        | Reranking                | text         | fra                                |
     | [VoyageMMarcoReranking](../available_tasks/reranking/#voyagemmarcoreranking)                                                | Reranking                | text         | jpn                                |
-    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                              | Reranking                | text         | ben, bul, ces, dan, deu, ... (16)  |
+    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                              | Reranking                | text         | ben, bul, ces, dan, deu, ... (18)  |
     | [RuBQReranking](../available_tasks/reranking/#rubqreranking)                                                                | Reranking                | text         | rus                                |
     | [T2Reranking](../available_tasks/reranking/#t2reranking)                                                                    | Reranking                | text         | cmn                                |
     | [GermanSTSBenchmark](../available_tasks/sts/#germanstsbenchmark)                                                            | STS                      | text         | deu                                |
@@ -1626,7 +1656,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1638,7 +1668,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
       year = {2025},
     }
     ```
-    
+
 
 
 
@@ -1686,9 +1716,9 @@ A curated selection of tasks coverering the Scandinavian languages; Danish, Swed
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{enevoldsen2024scandinavian,
       author = {Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -1696,9 +1726,9 @@ A curated selection of tasks coverering the Scandinavian languages; Danish, Swed
       url = {https://nips.cc/virtual/2024/poster/97869},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1750,9 +1780,9 @@ The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchma
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{c-pack,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
@@ -1761,9 +1791,9 @@ The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchma
       title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
       year = {2023},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1802,9 +1832,9 @@ A benchmark for text-embedding performance in German.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{wehrli2024germantextembeddingclustering,
       archiveprefix = {arXiv},
       author = {Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
@@ -1814,9 +1844,9 @@ A benchmark for text-embedding performance in German.
       url = {https://arxiv.org/abs/2401.02709},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1825,7 +1855,7 @@ A benchmark for text-embedding performance in German.
 The original English benchmark by Muennighoff et al., (2023).
 This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, as it uses updated versions of the task, making it notably faster to run and resolving [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning, such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
-    
+
 
 ??? info "Tasks"
 
@@ -1891,9 +1921,9 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{muennighoff2022mteb,
       author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
       doi = {10.48550/ARXIV.2210.07316},
@@ -1903,9 +1933,9 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
       url = {https://arxiv.org/abs/2210.07316},
       year = {2022},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1917,7 +1947,7 @@ to tasks in the original MTEB, and contains tasks that are not as frequently use
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
 The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
-    
+
 
 ??? info "Tasks"
 
@@ -1968,7 +1998,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1980,7 +2010,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
       year = {2025},
     }
     ```
-    
+
 
 
 
@@ -2028,7 +2058,7 @@ The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchma
     | [ParsinluEntail](../available_tasks/pairclassification/#parsinluentail)                                                         | PairClassification | text         | fas                               |
     | [ParsinluQueryParaphPC](../available_tasks/pairclassification/#parsinluqueryparaphpc)                                           | PairClassification | text         | fas                               |
     | [MIRACLReranking](../available_tasks/reranking/#miraclreranking)                                                                | Reranking          | text         | ara, ben, deu, eng, fas, ... (18) |
-    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                                  | Reranking          | text         | ben, bul, ces, dan, deu, ... (16) |
+    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                                  | Reranking          | text         | ben, bul, ces, dan, deu, ... (18) |
     | [SynPerQARetrieval](../available_tasks/retrieval/#synperqaretrieval)                                                            | Retrieval          | text         | fas                               |
     | [SynPerChatbotTopicsRetrieval](../available_tasks/retrieval/#synperchatbottopicsretrieval)                                      | Retrieval          | text         | fas                               |
     | [SynPerChatbotRAGTopicsRetrieval](../available_tasks/retrieval/#synperchatbotragtopicsretrieval)                                | Retrieval          | text         | fas                               |
@@ -2060,18 +2090,101 @@ The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchma
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{zinvandi2025famteb,
       author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
       journal = {arXiv preprint arXiv:2502.11571},
       title = {Famteb: Massive text embedding benchmark in persian language},
       year = {2025},
     }
-    
+
     ```
-    
+
+
+
+
+####  MTEB(fas, v2)
+
+The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark. For more details on the improvements, see the main PR comment: [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157).
+
+[Learn more →](https://arxiv.org/abs/2502.11571)
+
+
+
+??? info "Tasks"
+
+    | name                                                                                                                            | type               | modalities   | languages                         |
+    |:--------------------------------------------------------------------------------------------------------------------------------|:-------------------|:-------------|:----------------------------------|
+    | [PersianFoodSentimentClassification](../available_tasks/classification/#persianfoodsentimentclassification)                     | Classification     | text         | fas                               |
+    | [SynPerChatbotConvSAClassification](../available_tasks/classification/#synperchatbotconvsaclassification)                       | Classification     | text         | fas                               |
+    | [SynPerChatbotConvSAToneChatbotClassification](../available_tasks/classification/#synperchatbotconvsatonechatbotclassification) | Classification     | text         | fas                               |
+    | [SynPerChatbotConvSAToneUserClassification](../available_tasks/classification/#synperchatbotconvsatoneuserclassification)       | Classification     | text         | fas                               |
+    | [SynPerChatbotSatisfactionLevelClassification](../available_tasks/classification/#synperchatbotsatisfactionlevelclassification) | Classification     | text         | fas                               |
+    | [SynPerTextToneClassification.v3](../available_tasks/classification/#synpertexttoneclassification.v3)                           | Classification     | text         | fas                               |
+    | [SIDClassification.v2](../available_tasks/classification/#sidclassification.v2)                                                 | Classification     | text         | fas                               |
+    | [DeepSentiPers.v2](../available_tasks/classification/#deepsentipers.v2)                                                         | Classification     | text         | fas                               |
+    | [PersianTextEmotion.v2](../available_tasks/classification/#persiantextemotion.v2)                                               | Classification     | text         | fas                               |
+    | [NLPTwitterAnalysisClassification.v2](../available_tasks/classification/#nlptwitteranalysisclassification.v2)                   | Classification     | text         | fas                               |
+    | [DigikalamagClassification](../available_tasks/classification/#digikalamagclassification)                                       | Classification     | text         | fas                               |
+    | [MassiveIntentClassification](../available_tasks/classification/#massiveintentclassification)                                   | Classification     | text         | afr, amh, ara, aze, ben, ... (50) |
+    | [MassiveScenarioClassification](../available_tasks/classification/#massivescenarioclassification)                               | Classification     | text         | afr, amh, ara, aze, ben, ... (50) |
+    | [StyleClassification](../available_tasks/classification/#styleclassification)                                                   | Classification     | text         | fas                               |
+    | [PerShopDomainClassification](../available_tasks/classification/#pershopdomainclassification)                                   | Classification     | text         | fas                               |
+    | [PerShopIntentClassification](../available_tasks/classification/#pershopintentclassification)                                   | Classification     | text         | fas                               |
+    | [BeytooteClustering](../available_tasks/clustering/#beytooteclustering)                                                         | Clustering         | text         | fas                               |
+    | [DigikalamagClustering](../available_tasks/clustering/#digikalamagclustering)                                                   | Clustering         | text         | fas                               |
+    | [HamshahriClustring](../available_tasks/clustering/#hamshahriclustring)                                                         | Clustering         | text         | fas                               |
+    | [NLPTwitterAnalysisClustering](../available_tasks/clustering/#nlptwitteranalysisclustering)                                     | Clustering         | text         | fas                               |
+    | [SIDClustring](../available_tasks/clustering/#sidclustring)                                                                     | Clustering         | text         | fas                               |
+    | [FarsTail](../available_tasks/pairclassification/#farstail)                                                                     | PairClassification | text         | fas                               |
+    | [SynPerChatbotRAGFAQPC](../available_tasks/pairclassification/#synperchatbotragfaqpc)                                           | PairClassification | text         | fas                               |
+    | [FarsiParaphraseDetection](../available_tasks/pairclassification/#farsiparaphrasedetection)                                     | PairClassification | text         | fas                               |
+    | [SynPerTextKeywordsPC](../available_tasks/pairclassification/#synpertextkeywordspc)                                             | PairClassification | text         | fas                               |
+    | [SynPerQAPC](../available_tasks/pairclassification/#synperqapc)                                                                 | PairClassification | text         | fas                               |
+    | [ParsinluEntail](../available_tasks/pairclassification/#parsinluentail)                                                         | PairClassification | text         | fas                               |
+    | [ParsinluQueryParaphPC](../available_tasks/pairclassification/#parsinluqueryparaphpc)                                           | PairClassification | text         | fas                               |
+    | [MIRACLReranking](../available_tasks/reranking/#miraclreranking)                                                                | Reranking          | text         | ara, ben, deu, eng, fas, ... (18) |
+    | [WikipediaRerankingMultilingual](../available_tasks/reranking/#wikipediarerankingmultilingual)                                  | Reranking          | text         | ben, bul, ces, dan, deu, ... (18) |
+    | [SynPerQARetrieval](../available_tasks/retrieval/#synperqaretrieval)                                                            | Retrieval          | text         | fas                               |
+    | [SynPerChatbotRAGFAQRetrieval](../available_tasks/retrieval/#synperchatbotragfaqretrieval)                                      | Retrieval          | text         | fas                               |
+    | [PersianWebDocumentRetrieval](../available_tasks/retrieval/#persianwebdocumentretrieval)                                        | Retrieval          | text         | fas                               |
+    | [WikipediaRetrievalMultilingual](../available_tasks/retrieval/#wikipediaretrievalmultilingual)                                  | Retrieval          | text         | ben, bul, ces, dan, deu, ... (16) |
+    | [MIRACLRetrievalHardNegatives](../available_tasks/retrieval/#miraclretrievalhardnegatives)                                      | Retrieval          | text         | ara, ben, deu, eng, fas, ... (18) |
+    | [HotpotQA-FaHardNegatives](../available_tasks/retrieval/#hotpotqa-fahardnegatives)                                              | Retrieval          | text         | fas                               |
+    | [MSMARCO-FaHardNegatives](../available_tasks/retrieval/#msmarco-fahardnegatives)                                                | Retrieval          | text         | fas                               |
+    | [NQ-FaHardNegatives](../available_tasks/retrieval/#nq-fahardnegatives)                                                          | Retrieval          | text         | fas                               |
+    | [ArguAna-Fa.v2](../available_tasks/retrieval/#arguana-fa.v2)                                                                    | Retrieval          | text         | fas                               |
+    | [FiQA2018-Fa.v2](../available_tasks/retrieval/#fiqa2018-fa.v2)                                                                  | Retrieval          | text         | fas                               |
+    | [QuoraRetrieval-Fa.v2](../available_tasks/retrieval/#quoraretrieval-fa.v2)                                                      | Retrieval          | text         | fas                               |
+    | [SCIDOCS-Fa.v2](../available_tasks/retrieval/#scidocs-fa.v2)                                                                    | Retrieval          | text         | fas                               |
+    | [SciFact-Fa.v2](../available_tasks/retrieval/#scifact-fa.v2)                                                                    | Retrieval          | text         | fas                               |
+    | [TRECCOVID-Fa.v2](../available_tasks/retrieval/#treccovid-fa.v2)                                                                | Retrieval          | text         | fas                               |
+    | [FEVER-FaHardNegatives](../available_tasks/retrieval/#fever-fahardnegatives)                                                    | Retrieval          | text         | fas                               |
+    | [NeuCLIR2023RetrievalHardNegatives](../available_tasks/retrieval/#neuclir2023retrievalhardnegatives)                            | Retrieval          | text         | fas, rus, zho                     |
+    | [WebFAQRetrieval](../available_tasks/retrieval/#webfaqretrieval)                                                                | Retrieval          | text         | ara, aze, ben, bul, cat, ... (51) |
+    | [Farsick](../available_tasks/sts/#farsick)                                                                                      | STS                | text         | fas                               |
+    | [SynPerSTS](../available_tasks/sts/#synpersts)                                                                                  | STS                | text         | fas                               |
+    | [SAMSumFa](../available_tasks/bitextmining/#samsumfa)                                                                           | BitextMining       | text         | fas                               |
+    | [SynPerChatbotSumSRetrieval](../available_tasks/bitextmining/#synperchatbotsumsretrieval)                                       | BitextMining       | text         | fas                               |
+    | [SynPerChatbotRAGSumSRetrieval](../available_tasks/bitextmining/#synperchatbotragsumsretrieval)                                 | BitextMining       | text         | fas                               |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+
+    @article{zinvandi2025famteb,
+      author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+      journal = {arXiv preprint arXiv:2502.11571},
+      title = {Famteb: Massive text embedding benchmark in persian language},
+      year = {2025},
+    }
+
+    ```
+
 
 
 
@@ -2116,9 +2229,9 @@ MTEB-French, a French expansion of the original benchmark with high-quality nati
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{ciancone2024mtebfrenchresourcesfrenchsentence,
       archiveprefix = {arXiv},
       author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -2128,9 +2241,9 @@ MTEB-French, a French expansion of the original benchmark with high-quality nati
       url = {https://arxiv.org/abs/2405.20468},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2217,18 +2330,18 @@ two novel clustering tasks.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{poswiata2024plmteb,
       author = {Rafał Poświata and Sławomir Dadas and Michał Perełkiewicz},
       journal = {arXiv preprint arXiv:2405.10138},
       title = {PL-MTEB: Polish Massive Text Embedding Benchmark},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2271,9 +2384,9 @@ A Russian version of the Massive Text Embedding Benchmark with a number of novel
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       archiveprefix = {arXiv},
       author = {Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
@@ -2283,9 +2396,9 @@ A Russian version of the Massive Text Embedding Benchmark with a number of novel
       url = {https://arxiv.org/abs/2408.12503},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2321,7 +2434,7 @@ A benchmark to evaluate with subsets of BEIR datasets to use less computational 
 R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
     R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
     It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
-    
+
 
 [Learn more →](https://r2med.github.io/)
 
@@ -2343,18 +2456,18 @@ R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2391,18 +2504,318 @@ A benchmark to evaluate reasoning capabilities of retrievers.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-    
+
     ```
-    
+
+
+
+
+####  RTEB(Code, beta)
+
+RTEB Code is a subset of RTEB containing retrieval tasks specifically focused on programming and code domains including algorithmic problems, data science tasks, code evaluation, SQL retrieval, and multilingual code retrieval. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                           | type      | modalities   | languages                   |
+    |:-------------------------------------------------------------------------------|:----------|:-------------|:----------------------------|
+    | [AppsRetrieval](../available_tasks/retrieval/#appsretrieval)                   | Retrieval | text         | eng, python                 |
+    | [DS1000Retrieval](../available_tasks/retrieval/#ds1000retrieval)               | Retrieval | text         | eng, python                 |
+    | [HumanEvalRetrieval](../available_tasks/retrieval/#humanevalretrieval)         | Retrieval | text         | eng, python                 |
+    | [MBPPRetrieval](../available_tasks/retrieval/#mbppretrieval)                   | Retrieval | text         | eng, python                 |
+    | [WikiSQLRetrieval](../available_tasks/retrieval/#wikisqlretrieval)             | Retrieval | text         | eng, sql                    |
+    | [FreshStackRetrieval](../available_tasks/retrieval/#freshstackretrieval)       | Retrieval | text         | eng, go, javascript, python |
+    | [Code1Retrieval](../available_tasks/retrieval/#code1retrieval)                 | Retrieval | text         | eng                         |
+    | [JapaneseCode1Retrieval](../available_tasks/retrieval/#japanesecode1retrieval) | Retrieval | text         | jpn                         |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(Health, beta)
+
+RTEB Healthcare is a subset of RTEB containing retrieval tasks specifically focused on healthcare and medical domains including medical Q&A, healthcare information retrieval, cross-lingual medical retrieval, and multilingual medical consultation. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                                     | type      | modalities   | languages     |
+    |:-----------------------------------------------------------------------------------------|:----------|:-------------|:--------------|
+    | [ChatDoctorRetrieval](../available_tasks/retrieval/#chatdoctorretrieval)                 | Retrieval | text         | eng           |
+    | [CUREv1](../available_tasks/retrieval/#curev1)                                           | Retrieval | text         | eng, fra, spa |
+    | [EnglishHealthcare1Retrieval](../available_tasks/retrieval/#englishhealthcare1retrieval) | Retrieval | text         | eng           |
+    | [GermanHealthcare1Retrieval](../available_tasks/retrieval/#germanhealthcare1retrieval)   | Retrieval | text         | deu           |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(Law, beta)
+
+RTEB Legal is a subset of RTEB containing retrieval tasks specifically focused on legal domain including case documents, statutes, legal summarization, and multilingual legal Q&A. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                             | type      | modalities   | languages   |
+    |:---------------------------------------------------------------------------------|:----------|:-------------|:------------|
+    | [AILACasedocs](../available_tasks/retrieval/#ailacasedocs)                       | Retrieval | text         | eng         |
+    | [AILAStatutes](../available_tasks/retrieval/#ailastatutes)                       | Retrieval | text         | eng         |
+    | [LegalSummarization](../available_tasks/retrieval/#legalsummarization)           | Retrieval | text         | eng         |
+    | [LegalQuAD](../available_tasks/retrieval/#legalquad)                             | Retrieval | text         | deu         |
+    | [FrenchLegal1Retrieval](../available_tasks/retrieval/#frenchlegal1retrieval)     | Retrieval | text         | fra         |
+    | [GermanLegal1Retrieval](../available_tasks/retrieval/#germanlegal1retrieval)     | Retrieval | text         | deu         |
+    | [JapaneseLegal1Retrieval](../available_tasks/retrieval/#japaneselegal1retrieval) | Retrieval | text         | jpn         |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(beta)
+
+RTEB (ReTrieval Embedding Benchmark) is a comprehensive benchmark for evaluating text retrieval models across multiple specialized domains including legal, finance, code, and healthcare. It contains diverse retrieval tasks designed to test models' ability to understand domain-specific terminology and retrieve relevant documents in specialized contexts across multiple languages. The dataset includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                                       | type      | modalities   | languages                         |
+    |:-------------------------------------------------------------------------------------------|:----------|:-------------|:----------------------------------|
+    | [AILACasedocs](../available_tasks/retrieval/#ailacasedocs)                                 | Retrieval | text         | eng                               |
+    | [AILAStatutes](../available_tasks/retrieval/#ailastatutes)                                 | Retrieval | text         | eng                               |
+    | [LegalSummarization](../available_tasks/retrieval/#legalsummarization)                     | Retrieval | text         | eng                               |
+    | [LegalQuAD](../available_tasks/retrieval/#legalquad)                                       | Retrieval | text         | deu                               |
+    | [FinanceBenchRetrieval](../available_tasks/retrieval/#financebenchretrieval)               | Retrieval | text         | eng                               |
+    | [HC3FinanceRetrieval](../available_tasks/retrieval/#hc3financeretrieval)                   | Retrieval | text         | eng                               |
+    | [FinQARetrieval](../available_tasks/retrieval/#finqaretrieval)                             | Retrieval | text         | eng                               |
+    | [AppsRetrieval](../available_tasks/retrieval/#appsretrieval)                               | Retrieval | text         | eng, python                       |
+    | [DS1000Retrieval](../available_tasks/retrieval/#ds1000retrieval)                           | Retrieval | text         | eng, python                       |
+    | [HumanEvalRetrieval](../available_tasks/retrieval/#humanevalretrieval)                     | Retrieval | text         | eng, python                       |
+    | [MBPPRetrieval](../available_tasks/retrieval/#mbppretrieval)                               | Retrieval | text         | eng, python                       |
+    | [WikiSQLRetrieval](../available_tasks/retrieval/#wikisqlretrieval)                         | Retrieval | text         | eng, sql                          |
+    | [FreshStackRetrieval](../available_tasks/retrieval/#freshstackretrieval)                   | Retrieval | text         | eng, go, javascript, python       |
+    | [ChatDoctorRetrieval](../available_tasks/retrieval/#chatdoctorretrieval)                   | Retrieval | text         | eng                               |
+    | [CUREv1](../available_tasks/retrieval/#curev1)                                             | Retrieval | text         | eng, fra, spa                     |
+    | [MIRACLRetrievalHardNegatives](../available_tasks/retrieval/#miraclretrievalhardnegatives) | Retrieval | text         | ara, ben, deu, eng, fas, ... (18) |
+    | [Code1Retrieval](../available_tasks/retrieval/#code1retrieval)                             | Retrieval | text         | eng                               |
+    | [JapaneseCode1Retrieval](../available_tasks/retrieval/#japanesecode1retrieval)             | Retrieval | text         | jpn                               |
+    | [EnglishFinance1Retrieval](../available_tasks/retrieval/#englishfinance1retrieval)         | Retrieval | text         | eng                               |
+    | [EnglishFinance2Retrieval](../available_tasks/retrieval/#englishfinance2retrieval)         | Retrieval | text         | eng                               |
+    | [EnglishFinance3Retrieval](../available_tasks/retrieval/#englishfinance3retrieval)         | Retrieval | text         | eng                               |
+    | [EnglishFinance4Retrieval](../available_tasks/retrieval/#englishfinance4retrieval)         | Retrieval | text         | eng                               |
+    | [EnglishHealthcare1Retrieval](../available_tasks/retrieval/#englishhealthcare1retrieval)   | Retrieval | text         | eng                               |
+    | [French1Retrieval](../available_tasks/retrieval/#french1retrieval)                         | Retrieval | text         | fra                               |
+    | [FrenchLegal1Retrieval](../available_tasks/retrieval/#frenchlegal1retrieval)               | Retrieval | text         | fra                               |
+    | [German1Retrieval](../available_tasks/retrieval/#german1retrieval)                         | Retrieval | text         | deu                               |
+    | [GermanHealthcare1Retrieval](../available_tasks/retrieval/#germanhealthcare1retrieval)     | Retrieval | text         | deu                               |
+    | [GermanLegal1Retrieval](../available_tasks/retrieval/#germanlegal1retrieval)               | Retrieval | text         | deu                               |
+    | [JapaneseLegal1Retrieval](../available_tasks/retrieval/#japaneselegal1retrieval)           | Retrieval | text         | jpn                               |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(deu, beta)
+
+RTEB German is a subset of RTEB containing retrieval tasks in German across legal, healthcare, and business domains. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                                   | type      | modalities   | languages   |
+    |:---------------------------------------------------------------------------------------|:----------|:-------------|:------------|
+    | [LegalQuAD](../available_tasks/retrieval/#legalquad)                                   | Retrieval | text         | deu         |
+    | [German1Retrieval](../available_tasks/retrieval/#german1retrieval)                     | Retrieval | text         | deu         |
+    | [GermanHealthcare1Retrieval](../available_tasks/retrieval/#germanhealthcare1retrieval) | Retrieval | text         | deu         |
+    | [GermanLegal1Retrieval](../available_tasks/retrieval/#germanlegal1retrieval)           | Retrieval | text         | deu         |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(eng, beta)
+
+RTEB English is a subset of RTEB containing retrieval tasks in English across legal, finance, code, and healthcare domains. Includes diverse tasks covering specialized domains such as healthcare and finance. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                                     | type      | modalities   | languages                   |
+    |:-----------------------------------------------------------------------------------------|:----------|:-------------|:----------------------------|
+    | [AILACasedocs](../available_tasks/retrieval/#ailacasedocs)                               | Retrieval | text         | eng                         |
+    | [AILAStatutes](../available_tasks/retrieval/#ailastatutes)                               | Retrieval | text         | eng                         |
+    | [LegalSummarization](../available_tasks/retrieval/#legalsummarization)                   | Retrieval | text         | eng                         |
+    | [FinanceBenchRetrieval](../available_tasks/retrieval/#financebenchretrieval)             | Retrieval | text         | eng                         |
+    | [HC3FinanceRetrieval](../available_tasks/retrieval/#hc3financeretrieval)                 | Retrieval | text         | eng                         |
+    | [FinQARetrieval](../available_tasks/retrieval/#finqaretrieval)                           | Retrieval | text         | eng                         |
+    | [AppsRetrieval](../available_tasks/retrieval/#appsretrieval)                             | Retrieval | text         | eng, python                 |
+    | [DS1000Retrieval](../available_tasks/retrieval/#ds1000retrieval)                         | Retrieval | text         | eng, python                 |
+    | [HumanEvalRetrieval](../available_tasks/retrieval/#humanevalretrieval)                   | Retrieval | text         | eng, python                 |
+    | [MBPPRetrieval](../available_tasks/retrieval/#mbppretrieval)                             | Retrieval | text         | eng, python                 |
+    | [WikiSQLRetrieval](../available_tasks/retrieval/#wikisqlretrieval)                       | Retrieval | text         | eng, sql                    |
+    | [FreshStackRetrieval](../available_tasks/retrieval/#freshstackretrieval)                 | Retrieval | text         | eng, go, javascript, python |
+    | [ChatDoctorRetrieval](../available_tasks/retrieval/#chatdoctorretrieval)                 | Retrieval | text         | eng                         |
+    | [CUREv1](../available_tasks/retrieval/#curev1)                                           | Retrieval | text         | eng, fra, spa               |
+    | [Code1Retrieval](../available_tasks/retrieval/#code1retrieval)                           | Retrieval | text         | eng                         |
+    | [EnglishFinance1Retrieval](../available_tasks/retrieval/#englishfinance1retrieval)       | Retrieval | text         | eng                         |
+    | [EnglishFinance2Retrieval](../available_tasks/retrieval/#englishfinance2retrieval)       | Retrieval | text         | eng                         |
+    | [EnglishFinance3Retrieval](../available_tasks/retrieval/#englishfinance3retrieval)       | Retrieval | text         | eng                         |
+    | [EnglishFinance4Retrieval](../available_tasks/retrieval/#englishfinance4retrieval)       | Retrieval | text         | eng                         |
+    | [EnglishHealthcare1Retrieval](../available_tasks/retrieval/#englishhealthcare1retrieval) | Retrieval | text         | eng                         |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(fin, beta)
+
+RTEB Finance is a subset of RTEB  containing retrieval tasks specifically focused on financial domain including finance benchmarks, Q&A, financial document retrieval, and corporate governance. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                               | type      | modalities   | languages   |
+    |:-----------------------------------------------------------------------------------|:----------|:-------------|:------------|
+    | [FinanceBenchRetrieval](../available_tasks/retrieval/#financebenchretrieval)       | Retrieval | text         | eng         |
+    | [HC3FinanceRetrieval](../available_tasks/retrieval/#hc3financeretrieval)           | Retrieval | text         | eng         |
+    | [FinQARetrieval](../available_tasks/retrieval/#finqaretrieval)                     | Retrieval | text         | eng         |
+    | [EnglishFinance1Retrieval](../available_tasks/retrieval/#englishfinance1retrieval) | Retrieval | text         | eng         |
+    | [EnglishFinance2Retrieval](../available_tasks/retrieval/#englishfinance2retrieval) | Retrieval | text         | eng         |
+    | [EnglishFinance3Retrieval](../available_tasks/retrieval/#englishfinance3retrieval) | Retrieval | text         | eng         |
+    | [EnglishFinance4Retrieval](../available_tasks/retrieval/#englishfinance4retrieval) | Retrieval | text         | eng         |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(fra, beta)
+
+RTEB French is a subset of RTEB containing retrieval tasks in French across legal and general knowledge domains. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                         | type      | modalities   | languages     |
+    |:-----------------------------------------------------------------------------|:----------|:-------------|:--------------|
+    | [CUREv1](../available_tasks/retrieval/#curev1)                               | Retrieval | text         | eng, fra, spa |
+    | [French1Retrieval](../available_tasks/retrieval/#french1retrieval)           | Retrieval | text         | fra           |
+    | [FrenchLegal1Retrieval](../available_tasks/retrieval/#frenchlegal1retrieval) | Retrieval | text         | fra           |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
+
+
+
+####  RTEB(jpn, beta)
+
+RTEB Japanese is a subset of RTEB  containing retrieval tasks in Japanese across legal and code domains. The benchmark includes both open and closed datasets, providing a robust evaluation framework for real-world applications. To submit results on private tasks, please create [open an issue](https://github.com/embeddings-benchmark/mteb/issues).
+
+??? info "Tasks"
+
+    | name                                                                             | type      | modalities   | languages   |
+    |:---------------------------------------------------------------------------------|:----------|:-------------|:------------|
+    | [JapaneseCode1Retrieval](../available_tasks/retrieval/#japanesecode1retrieval)   | Retrieval | text         | jpn         |
+    | [JapaneseLegal1Retrieval](../available_tasks/retrieval/#japaneselegal1retrieval) | Retrieval | text         | jpn         |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{rteb2025,
+      author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
+      title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
+      year = {2025},
+    }
+    ```
+
 
 
 
@@ -2431,9 +2844,9 @@ RuSciBench is a benchmark designed for evaluating sentence encoders and language
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -2447,9 +2860,9 @@ RuSciBench is a benchmark designed for evaluating sentence encoders and language
       volume = {110},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2519,9 +2932,9 @@ A benchmark for text-embedding performance in Vietnamese.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2531,9 +2944,9 @@ A benchmark for text-embedding performance in Vietnamese.
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2563,18 +2976,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2598,18 +3011,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2643,15 +3056,15 @@ A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-    
+
     ```
 <!-- END TASK DESCRIPTION -->

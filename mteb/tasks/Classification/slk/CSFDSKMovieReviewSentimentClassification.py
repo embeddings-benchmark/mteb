@@ -1,4 +1,4 @@
-from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
+from mteb.abstasks.any_classification import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048

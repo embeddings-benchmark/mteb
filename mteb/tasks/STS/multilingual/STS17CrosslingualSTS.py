@@ -1,4 +1,4 @@
-from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
+from mteb.abstasks.any_sts import AbsTaskAnySTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {

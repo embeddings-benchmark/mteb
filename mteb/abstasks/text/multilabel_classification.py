@@ -15,9 +15,9 @@ from typing_extensions import override
 
 from mteb.models import Encoder
 
-from .._evaluators.sklearn_evaluator import SklearnModelProtocol
-from ..create_dataloaders import create_dataloader
-from .AbsTaskAnyClassification import AbsTaskAnyClassification
+from ..._evaluators.sklearn_evaluator import SklearnModelProtocol
+from ...create_dataloaders import create_dataloader
+from ..any_classification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 

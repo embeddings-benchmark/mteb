@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from mteb.abstasks.AbsTaskAnyZeroShotClassification import (
+from mteb.abstasks.any_zeroshot_classification import (
     AbsTaskAnyZeroShotClassification,
 )
 from mteb.abstasks.task_metadata import TaskMetadata

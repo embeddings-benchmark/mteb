@@ -1,8 +1,8 @@
 from mteb._evaluators.text.summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
 )
-from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.summarization import AbsTaskSummarization
 
 
 class SummEvalFrSummarization(AbsTaskSummarization):

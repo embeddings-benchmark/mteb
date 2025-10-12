@@ -11,7 +11,7 @@ from mteb.results.task_result import TaskResult
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
 
-from .AbsTask import AbsTask
+from .abstask import AbsTask
 from .aggregate_task_metadata import AggregateTaskMetadata
 
 logger = logging.getLogger(__name__)

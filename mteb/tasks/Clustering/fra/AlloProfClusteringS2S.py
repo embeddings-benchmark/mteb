@@ -1,8 +1,8 @@
-from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
-from mteb.abstasks.AbsTaskClusteringFast import (
+from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.clustering_fast import (
     AbsTaskClusteringFast,
 )
-from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AlloProfClusteringS2S(AbsTaskAnyClustering):

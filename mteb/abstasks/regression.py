@@ -20,7 +20,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .AbsTaskAnyClassification import AbsTaskAnyClassification
+from .any_classification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class RegressionMetrics(TypedDict):
     kendalltau: float
 
 
-class AbsTaskTextRegression(AbsTaskAnyClassification):
+class AbsTaskRegression(AbsTaskAnyClassification):
     """Abstract class for regression tasks
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It

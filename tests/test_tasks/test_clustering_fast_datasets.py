@@ -1,6 +1,6 @@
 import pytest
 
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.text.clustering_fast import AbsTaskClusteringFast
 
 
 @pytest.mark.parametrize("dataset", AbsTaskClusteringFast.__subclasses__())

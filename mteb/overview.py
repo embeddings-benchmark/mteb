@@ -11,10 +11,10 @@ import pandas as pd
 from mteb.abstasks import (
     AbsTask,
     AbsTaskMultilabelClassification,
-    AbsTaskTextRegression,
+    AbsTaskRegression,
 )
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
+from mteb.abstasks.text.reranking import AbsTaskReranking
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
@@ -30,7 +30,7 @@ def _create_task_list() -> list[type[AbsTask]]:
     # reranking subclasses retrieval to share methods, but is an abstract task
     tasks_categories_cls = list(AbsTask.__subclasses__()) + [
         AbsTaskMultilabelClassification,
-        AbsTaskTextRegression,
+        AbsTaskRegression,
         AbsTaskReranking,
     ]
     tasks = []
