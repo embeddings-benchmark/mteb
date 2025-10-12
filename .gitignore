@@ -158,6 +158,3 @@ powermetrics_log.txt
 # vscode
 .vscode/launch.json
 
-# produced during testing
-results/mock__MockSentenceTransformer/1.0.0/MockMultilingualSTSTask.json
-results/mock__MockSentenceTransformer/1.0.0/model_meta.json
