@@ -55,20 +55,47 @@ from tests.mock_tasks import (
         (
             MockSTSTask,
             {
-                "cosine_scores": [0.7271937024333304, 0.7652846502146503],
-                "manhattan_distances": [-11.606113294587654, -11.687107717574829],
-                "euclidean_distances": [-2.4683132356991315, -2.404168159957386],
-                "similarity_scores": [0.7271937023895851, 0.7652846501709707],
+                "cosine_scores": [
+                    pytest.approx(0.7271937024333304),
+                    pytest.approx(0.7652846502146503),
+                ],
+                "manhattan_distances": [
+                    pytest.approx(-11.606113294587654),
+                    pytest.approx(-11.687107717574829),
+                ],
+                "euclidean_distances": [
+                    pytest.approx(-2.4683132356991315),
+                    pytest.approx(-2.404168159957386),
+                ],
+                "similarity_scores": [
+                    pytest.approx(0.7271937023895851),
+                    pytest.approx(0.7652846501709707),
+                ],
             },
         ),
         (
             MockPairClassificationTask,
             {
-                "cosine_scores": [0.7271937024333304, 0.7652846502146503],
-                "euclidean_distances": [2.4683132356991315, 2.404168159957386],
-                "manhattan_distances": [11.606113294587654, 11.687107717574829],
-                "similarity_scores": [0.7271937023895851, 0.7652846501709707],
-                "dot_scores": [8.047867836468026, 9.399434014739104],
+                "cosine_scores": [
+                    pytest.approx(0.7271937024333304),
+                    pytest.approx(0.7652846502146503),
+                ],
+                "euclidean_distances": [
+                    pytest.approx(2.4683132356991315),
+                    pytest.approx(2.404168159957386),
+                ],
+                "manhattan_distances": [
+                    pytest.approx(11.606113294587654),
+                    pytest.approx(11.687107717574829),
+                ],
+                "similarity_scores": [
+                    pytest.approx(0.7271937023895851),
+                    pytest.approx(0.7652846501709707),
+                ],
+                "dot_scores": [
+                    pytest.approx(8.047867836468026),
+                    pytest.approx(9.399434014739104),
+                ],
             },
         ),
     ],
