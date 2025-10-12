@@ -133,7 +133,6 @@ class MockTorchfp16Encoder(AbsMockEncoder):
 
 
 class MockCLIPEncoder(AbsMockEncoder):
-    mteb_model_meta = ModelMeta(name="mock/MockCLIPEncoder", **empty_metadata_kwargs)
     mteb_model_meta = ModelMeta(
         loader=None,
         name="mock/MockCLIPModel",

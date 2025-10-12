@@ -23,7 +23,6 @@ from tests.mock_tasks import (
 logging.basicConfig(level=logging.INFO)
 
 
-# TODO: KCE we might need to add support for this in mteb.evaluate
 # NOTE: Covers image and image-text tasks. Can be extended to cover new mixed-modality task types.
 @pytest.mark.parametrize(
     "task", [MockImageTextPairClassificationTask(), MockRetrievalTask()]
@@ -48,7 +47,6 @@ def test_task_modality_filtering(mock_logger, task):
     )
 
 
-# TODO: KCE: Unsure if we need this test:
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
 def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
     eval = mteb.MTEB(tasks=[task])

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 
 import pytest
 
@@ -31,12 +30,5 @@ logging.basicConfig(level=logging.INFO)
         MockSentenceTransformersbf16Encoder(),
     ],
 )
-def test_benchmark_encoders_on_task(
-    task: str | AbsTask, model: mteb.Encoder, tmp_path: Path
-):
-    if isinstance(task, str):
-        tasks = mteb.get_tasks(tasks=[task])
-    else:
-        tasks = [task]
-
-    mteb.evaluate(model, tasks)
+def test_benchmark_encoders_on_task(task: AbsTask, model: mteb.Encoder):
+    mteb.evaluate(model, task, cache=None)
