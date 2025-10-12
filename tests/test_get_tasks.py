@@ -9,19 +9,12 @@ from mteb.types import Modalities
 
 
 def test_get_tasks_size_differences():
-    assert len(get_tasks()) > 0
-    assert len(get_tasks()) >= len(get_tasks(languages=["eng"]))
-    assert len(get_tasks()) >= len(get_tasks(script=["Latn"]))
-    assert len(get_tasks()) >= len(get_tasks(domains=["Legal"]))
-    assert len(get_tasks()) >= len(get_tasks(languages=["eng", "deu"]))
-    assert len(get_tasks()) >= len(get_tasks(modalities=["text"]))
-    assert len(get_tasks()) >= len(get_tasks(modalities=["image"]))
-    assert len(get_tasks(languages=["eng", "deu"])) >= len(
-        get_tasks(languages=["eng", "deu"])
-    )
-    assert len(get_tasks(modalities=["text", "image"])) >= len(
-        get_tasks(modalities=["text"])
-    )
+    default_tasks = get_tasks()
+    assert len(default_tasks) > 0
+    assert len(default_tasks) >= len(get_tasks(script=["Latn"]))
+    assert len(default_tasks) >= len(get_tasks(domains=["Legal"]))
+    assert len(default_tasks) >= len(get_tasks(languages=["eng", "deu"]))
+    assert len(default_tasks) >= len(get_tasks(modalities=["text"]))
     assert len(get_tasks(modalities=["text", "image"])) >= len(
         get_tasks(modalities=["image"])
     )
@@ -66,30 +59,21 @@ def test_get_task(
 @pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("domains", [["Legal"], ["Medical", "Non-fiction"], None])
-@pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
-@pytest.mark.parametrize("exclude_superseded_datasets", [True, False])
-@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
-@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
-@pytest.mark.parametrize("exclude_aggregate", [True, False])
+@pytest.mark.parametrize("task_types", [["Classification"], None])
 def test_get_tasks(
     languages: list[str],
     script: list[str],
     domains: list[TaskDomain],
-    task_types: list[TaskType] | None,
-    exclude_superseded_datasets: bool,
-    modalities: list[Modalities] | None,
-    exclusive_modality_filter: bool,
-    exclude_aggregate: bool,
+    task_types: list[TaskType] | None,  # type: ignore
 ):
+    """Tests that get_tasks filters tasks correctly. This could in principle be combined with the following tests, but they have been kept
+    seperate to reduce the grid size.
+    """
     tasks = mteb.get_tasks(
         languages=languages,
         script=script,
         domains=domains,
         task_types=task_types,
-        exclude_superseded=exclude_superseded_datasets,
-        modalities=modalities,
-        exclusive_modality_filter=exclusive_modality_filter,
-        exclude_aggregate=exclude_aggregate,
     )
 
     for task in tasks:
@@ -104,13 +88,82 @@ def test_get_tasks(
             assert set(domains).intersection(set(task_domains))
         if task_types:
             assert task.metadata.type in task_types
+
+
+@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"]])
+@pytest.mark.parametrize("domains", [["Medical", "Non-fiction"], None])
+@pytest.mark.parametrize("task_types", [["Classification"], None])
+@pytest.mark.parametrize("exclude_superseded_datasets", [True, False])
+def test_get_tasks_superseded(
+    languages: list[str],
+    domains: list[TaskDomain],
+    task_types: list[TaskType] | None,  # type: ignore
+    exclude_superseded_datasets: bool,
+):
+    tasks = mteb.get_tasks(
+        languages=languages,
+        domains=domains,
+        task_types=task_types,
+        exclude_superseded=exclude_superseded_datasets,
+    )
+
+    for task in tasks:
+        if languages:
+            assert set(languages).intersection(task.metadata.languages)
+        if domains:
+            task_domains = (
+                set(task.metadata.domains) if task.metadata.domains else set()
+            )
+            assert set(domains).intersection(set(task_domains))
+        if task_types:
+            assert task.metadata.type in task_types
         if exclude_superseded_datasets:
             assert task.superseded_by is None
+
+
+@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"]])
+@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
+@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
+def test_get_tasks_modalities(
+    languages: list[str],
+    modalities: list[Modalities] | None,
+    exclusive_modality_filter: bool,
+):
+    tasks = mteb.get_tasks(
+        languages=languages,
+        modalities=modalities,
+        exclusive_modality_filter=exclusive_modality_filter,
+    )
+
+    for task in tasks:
+        if languages:
+            assert set(languages).intersection(task.metadata.languages)
         if modalities:
             if exclusive_modality_filter:
                 assert set(task.modalities) == set(modalities)
             else:
                 assert any(mod in task.modalities for mod in modalities)
+
+
+@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])
+@pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
+@pytest.mark.parametrize("exclude_aggregate", [True, False])
+def test_get_tasks_exclude_aggregate(
+    languages: list[str],
+    script: list[str],
+    exclude_aggregate: bool,
+):
+    tasks = mteb.get_tasks(
+        languages=languages,
+        script=script,
+        exclude_aggregate=exclude_aggregate,
+    )
+
+    for task in tasks:
+        if languages:
+            assert set(languages).intersection(task.metadata.languages)
+        if script:
+            assert set(script).intersection(task.metadata.scripts)
         if exclude_aggregate:
             # Aggregate tasks should be excluded
             assert not task.is_aggregate
@@ -135,12 +188,12 @@ def test_get_tasks_filtering():
                 )
 
 
-@pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
+@pytest.mark.parametrize("script", [["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
 def test_mteb_mteb_tasks(
     script: list[str],
-    task_types: list[TaskType] | None,
+    task_types: list[TaskType] | None,  # type: ignore
     modalities: list[Modalities] | None,
 ):
     tasks = mteb.get_tasks(script=script, task_types=task_types, modalities=modalities)

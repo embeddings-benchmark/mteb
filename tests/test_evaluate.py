@@ -6,8 +6,8 @@ import mteb
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models.models_protocols import Encoder
-from tests.test_benchmark.mock_models import MockSentenceTransformer
-from tests.test_benchmark.mock_tasks import (
+from tests.mock_models import MockSentenceTransformer
+from tests.mock_tasks import (
     MockClassificationTask,
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
@@ -33,6 +33,16 @@ def test_evaluate(model: Encoder, task: AbsTask, expected_score: float):
     assert result.get_score() == expected_score, (
         "main score should match the expected value"
     )
+
+
+@pytest.mark.parametrize(
+    "model, tasks",
+    [(MockSentenceTransformer(), [MockClassificationTask(), MockRetrievalTask()])],
+    ids=["mock_clf_and_retrieval"],
+)
+def test_evaluate_w_multiple_tasks(model: Encoder, tasks: list[AbsTask]):
+    results = mteb.evaluate(model, tasks, cache=None, co2_tracker=False)
+    assert len(results) == len(tasks), "should return exactly one result per task"
 
 
 @pytest.mark.parametrize(

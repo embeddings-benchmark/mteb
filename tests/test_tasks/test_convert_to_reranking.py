@@ -9,13 +9,13 @@ from mteb.abstasks import AbsTaskRetrieval
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
-from tests.test_benchmark.mock_models import MockNumpyEncoder
-from tests.test_benchmark.mock_tasks import MockRetrievalTask
+from tests.mock_models import MockNumpyEncoder
+from tests.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
 
-def test_mteb_rerank(tmp_path: Path):
+def test_convert_reranking(tmp_path: Path):
     model = CrossEncoderWrapper("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     task: AbsTaskRetrieval = mteb.get_task("SciFact")
     task.load_data()
@@ -46,6 +46,7 @@ def test_mteb_rerank(tmp_path: Path):
         task,
         overwrite_strategy="always",
         prediction_folder=tmp_path,
+        cache=None,
     )
 
     # read in the results
@@ -99,13 +100,14 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         task,
         overwrite_strategy="always",
         prediction_folder=results_folder,
+        cache=cache,
     )
     task = task.convert_to_reranking(results_folder / task.prediction_file_name)
     ce_results = mteb.evaluate(
         ce,
         task,
-        cache=cache,
         overwrite_strategy="always",
+        cache=cache,
     )
 
     assert (
