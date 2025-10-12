@@ -1,5 +1,4 @@
 """Tests for testing the load_data method of all tasks"""
-# TODO: KCE I would probably delete this test as it really doesn't test a lot
 
 from __future__ import annotations
 

@@ -5,10 +5,7 @@ import pytest
 from tests.task_grid import ALL_TASK_TEST_GRID
 
 
-@pytest.mark.parametrize(
-    "task",
-    ALL_TASK_TEST_GRID,
-)
+@pytest.mark.parametrize("task", ALL_TASK_TEST_GRID)
 def test_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file

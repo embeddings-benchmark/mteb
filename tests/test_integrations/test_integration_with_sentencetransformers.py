@@ -6,15 +6,17 @@ import pytest
 from sentence_transformers import SentenceTransformer
 
 import mteb
+from mteb import MTEB
 from mteb.abstasks import AbsTask
-from tests.task_grid import MOCK_TASK_TEST_GRID
+from tests.mock_models import MockCLIPEncoder
+from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize("model_name", ["average_word_embeddings_levy_dependency"])
-def test_benchmark_sentence_transformer(task: AbsTask, model_name: str):
+def test_sentence_transformer_integration(task: AbsTask, model_name: str):
     """Test that a task can be fetched and run"""
     model = SentenceTransformer(model_name)
     # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the
@@ -25,3 +27,11 @@ def test_benchmark_sentence_transformer(task: AbsTask, model_name: str):
     # behavior and focus the test on the tasks instead of the prompts.
     model.prompts = None
     mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
+@pytest.mark.parametrize("model", [MockCLIPEncoder()])
+def test_benchmark_sentence_transformer(task: AbsTask, model: mteb.Encoder):
+    """Test that a task can be fetched and run"""
+    eval = MTEB(tasks=[task])
+    eval.run(model, output_folder="tests/results", overwrite_results=True)
