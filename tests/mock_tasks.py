@@ -1487,7 +1487,7 @@ class MockRerankingTask(AbsTaskRetrieval):
     def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
-        self.dataset["default"]["test"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit}}
         self.data_loaded = True
 
 
@@ -1606,10 +1606,10 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
     def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
-
-        self.dataset["eng"]["test"] = base_datasplit
-        self.dataset["fra"]["test"] = base_datasplit
-
+        self.dataset = {
+            "eng": {"test": base_datasplit},
+            "fra": {"test": base_datasplit},
+        }
         self.data_loaded = True
 
 
@@ -1685,9 +1685,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
-
-        self.dataset["default"]["test"] = base_datasplit
-        self.dataset["default"]["val"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit, "val": base_datasplit}}
         self.data_loaded = True
 
 
@@ -1781,9 +1779,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 ],
             }
         )
-
-        self.dataset["default"]["test"] = base_datasplit
-        self.dataset["default"]["val"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit, "val": base_datasplit}}
         self.data_loaded = True
 
 
