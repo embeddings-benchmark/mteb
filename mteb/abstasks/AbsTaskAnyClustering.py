@@ -107,11 +107,11 @@ class AbsTaskAnyClustering(AbsTask):
                     hf_subset=hf_subset,
                     **kwargs,
                 )
-                clusters_assigment = evaluator(model, encode_kwargs=encode_kwargs)
-                clusters.append(clusters_assigment)
+                clusters_assignment = evaluator(model, encode_kwargs=encode_kwargs)
+                clusters.append(clusters_assignment)
                 set_metrics = self._compute_metrics(
                     clustering_dataset[self.label_column_name],
-                    clusters_assigment,
+                    clusters_assignment,
                     v_measure_only=True,
                 )
                 all_metrics.append(set_metrics)

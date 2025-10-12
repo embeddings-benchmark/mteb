@@ -131,14 +131,14 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
         data_split = data_split.select_columns(select_columns)
         num_images_per_sample = (
-            len(self.images_column_names)
-            if isinstance(self.images_column_names, Sequence)
-            else 1
+            1
+            if isinstance(self.images_column_names, str)
+            else len(self.images_column_names)
         )
         num_texts_per_sample = (
-            len(self.texts_column_names)
-            if isinstance(self.texts_column_names, Sequence)
-            else 1
+            1
+            if isinstance(self.texts_column_names, str)
+            else len(self.texts_column_names)
         )
         evaluator = ImageTextPairClassificationEvaluator(
             data_split,

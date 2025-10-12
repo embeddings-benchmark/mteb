@@ -1,5 +1,4 @@
 import logging
-from collections.abc import Sequence
 from typing import Any
 
 import torch
@@ -84,22 +83,22 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         encode_kwargs: dict[str, Any],
     ) -> list[torch.Tensor]:
         images = []
-        if isinstance(self.images_column_names, Sequence):
+        if isinstance(self.images_column_names, str):
+            images = self.dataset[self.images_column_names]
+        else:
             for row in self.dataset:
                 for col in self.images_column_names:
                     images.append(row[col])
-        else:
-            images = self.dataset[self.images_column_names]
 
         images = [transform_image_to_rgb(img) for img in images]
 
         texts = []
-        if isinstance(self.texts_column_names, Sequence):
+        if isinstance(self.texts_column_names, str):
+            texts = self.dataset[self.texts_column_names]
+        else:
             for row in self.dataset:
                 for col in self.texts_column_names:
                     texts.append(row[col])
-        else:
-            texts = self.dataset[self.texts_column_names]
 
         text_embeddings = model.encode(
             DataLoader(
