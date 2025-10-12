@@ -2,6 +2,7 @@
 
 from datasets import Dataset, DatasetDict
 from PIL import Image
+from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
@@ -109,6 +110,7 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
 
 
 class MockClassificationTask(AbsTaskAnyClassification):
+    classifier = LogisticRegression(n_jobs=1, max_iter=2)  # type: ignore
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -183,6 +185,8 @@ class MockClassificationTask(AbsTaskAnyClassification):
 
 
 class MockMultilingualClassificationTask(AbsTaskAnyClassification):
+    classifier = LogisticRegression(n_jobs=1, max_iter=2)
+
     expected_stats = {
         "test": {
             "num_samples": 4,
