@@ -47,24 +47,21 @@ from .mock_tasks import (
     MockZeroShotClassificationTask,
 )
 
-TASK_TEST_GRID = (
-    mteb.get_tasks(
-        tasks=[
-            "BornholmBitextMining",  # bitext mining + just supplying a task class instead of a string
-            "TwentyNewsgroupsClustering",  # clustering and string instead of class
-            "TwentyNewsgroupsClustering.v2",  # fast clustering
-            "Banking77Classification",  # classification
-            "FarsTail",  # pair classification
-            "BrazilianToxicTweetsClassification",  # multilabel classification
-            "FaroeseSTS",  # STS
-            "SummEval",  # summarization
-            "TwitterHjerneRetrieval",  # retrieval
-            "SciDocsRR",  # reranking
-            "Core17InstructionRetrieval",  # instruction reranking
-            "IFIRNFCorpus",  # instruction retrieval
-        ]
-    )
-    + mteb.get_tasks(tasks=["IndicSentimentClassification"], languages=["asm-Beng"])
+TASK_TEST_GRID = mteb.get_tasks(
+    tasks=[
+        "BornholmBitextMining",  # bitext mining + just supplying a task class instead of a string
+        "TwentyNewsgroupsClustering",  # clustering and string instead of class
+        "TwentyNewsgroupsClustering.v2",  # fast clustering
+        "LccSentimentClassification",  # classification
+        "FarsTail",  # pair classification
+        "BrazilianToxicTweetsClassification",  # multilabel classification
+        "FaroeseSTS",  # STS
+        "SummEval",  # summarization
+        "TwitterHjerneRetrieval",  # retrieval
+        "SciDocsRR",  # reranking
+        "Core17InstructionRetrieval",  # instruction reranking
+        "IFIRNFCorpus",  # instruction retrieval
+    ]
 )
 
 TASK_TEST_GRID_AS_STRING = [
