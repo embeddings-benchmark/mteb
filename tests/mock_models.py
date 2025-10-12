@@ -200,6 +200,7 @@ class MockSentenceTransformer(SentenceTransformer):
         model_name="mock/MockSentenceTransformer",
         base_model_revision="1.0.0",
     )
+    prompts = {}
 
     def __init__(self):
         self._modules = {}

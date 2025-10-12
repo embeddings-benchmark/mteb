@@ -14,6 +14,8 @@ import pandas as pd
 
 import mteb
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
+from mteb.benchmarks.benchmark import RtebBenchmark
+from mteb.cache import ResultCache
 from mteb.leaderboard.benchmark_selector import (
     DEFAULT_BENCHMARK_NAME,
     GP_BENCHMARK_ENTRIES,
@@ -31,16 +33,21 @@ from mteb.types import Modalities
 logger = logging.getLogger(__name__)
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
-ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
 
 def load_results():
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
-        all_results = mteb.load_results(
-            only_main_score=True, require_model_meta=False, models=ALL_MODELS
-        )._filter_models()
-        all_results.to_disk(results_cache_path)
+        results_cache = ResultCache()
+        results_cache.download_from_remote()
+        all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
+
+        all_results = results_cache.load_results(
+            models=all_model_names,
+            only_main_score=True,
+            require_model_meta=False,
+            include_remote=True,
+        )
         return all_results
     else:
         with results_cache_path.open() as cache_file:
@@ -192,6 +199,14 @@ def filter_models(
                 continue
         models_to_keep.add(model_meta.name)
     return list(models_to_keep)
+
+
+def should_show_zero_shot_filter(benchmark_name: str) -> bool:
+    benchmark = mteb.get_benchmark(benchmark_name)
+
+    if isinstance(benchmark, RtebBenchmark):
+        return False
+    return True
 
 
 def get_leaderboard_app() -> gr.Blocks:
@@ -477,6 +492,8 @@ def get_leaderboard_app() -> gr.Blocks:
             benchmark_results = all_benchmark_results[benchmark_name]
             scores = benchmark_results._get_scores(format="long")
             logger.debug(f"on_benchmark_select callback: {elapsed}s")
+            show_zero_shot = should_show_zero_shot_filter(benchmark_name)
+
             return (
                 languages,
                 domains,
@@ -484,6 +501,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 modalities,
                 sorted([task.metadata.name for task in benchmark.tasks]),
                 scores,
+                gr.update(visible=show_zero_shot),
             )
 
         benchmark_select.change(
@@ -496,6 +514,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 modality_select,
                 task_select,
                 scores,
+                zero_shot,
             ],
         )
 
@@ -837,6 +856,7 @@ def get_leaderboard_app() -> gr.Blocks:
             bench_modalities,
             bench_tasks,
             bench_scores,
+            zero_shot,
         ) = on_benchmark_select(benchmark.name)
         filtered_models = update_models(
             bench_scores,

@@ -1,7 +1,6 @@
 """test that mteb.evaluate integrates with SentenceTransformers"""
 
 import logging
-from pathlib import Path
 
 import pytest
 from sentence_transformers import SentenceTransformer
@@ -15,9 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize("model_name", ["average_word_embeddings_levy_dependency"])
-def test_benchmark_sentence_transformer(
-    task: str | AbsTask, model_name: str, tmp_path: Path
-):
+def test_benchmark_sentence_transformer(task: AbsTask, model_name: str):
     """Test that a task can be fetched and run"""
     model = SentenceTransformer(model_name)
     # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the

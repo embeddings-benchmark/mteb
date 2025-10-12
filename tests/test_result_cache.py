@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import mteb
 from mteb.cache import ResultCache
 from mteb.results import TaskResult
 
@@ -82,6 +83,32 @@ def test_get_models_and_tasks() -> None:
     )
 
 
+def test_no_duplicates_in_models() -> None:
+    """Test that get_models() returns no duplicates (issue #3173)."""
+    cache = ResultCache(cache_path=test_cache_path)
+
+    models = cache.get_models()
+
+    # Check that there are no duplicates
+    assert len(models) == len(set(models)), (
+        f"get_models() returned {len(models)} models but {len(set(models))} unique models. "
+        "There should be no duplicates."
+    )
+
+
+def test_no_duplicates_in_tasks() -> None:
+    """Test that get_task_names() returns no duplicates (issue #3173)."""
+    cache = ResultCache(cache_path=test_cache_path)
+
+    tasks = cache.get_task_names()
+
+    # Check that there are no duplicates
+    assert len(tasks) == len(set(tasks)), (
+        f"get_task_names() returned {len(tasks)} tasks but {len(set(tasks))} unique tasks. "
+        "There should be no duplicates."
+    )
+
+
 def test_load_results():
     cache = ResultCache(cache_path=test_cache_path)
 
@@ -105,3 +132,58 @@ def test_load_result_specific_model():
     model_names = {mdl_res.model_name for mdl_res in results.model_results}
     assert len(model_names) == 1, "Should only have one model in the results"
     assert model in model_names, "Model should be in the results"
+
+
+def test_filter_with_modelmeta():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    base = test_cache_path / "results"
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    model_name = model_meta.model_name_as_path()
+    model_revision_1 = model_meta.revision
+    sample_paths = [
+        base / model_name / model_revision_1 / "task1.json",
+        base / model_name / model_revision_1 / "task2.json",
+        base / model_name / "revision" / "task1.json",
+        base / "not_existing_model" / "revision" / "task2.json",
+    ]
+
+    filtered = cache._filter_paths_by_model_and_revision(sample_paths, [model_meta])
+
+    expected = {
+        (
+            "sentence-transformers__all-MiniLM-L6-v2",
+            "8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        )
+    }
+    actual = {(p.parent.parent.name, p.parent.name) for p in filtered}
+    assert actual == expected
+
+
+def test_filter_with_string_models():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    base = test_cache_path / "results"
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    model_name = model_meta.model_name_as_path()
+    model_revision_1 = model_meta.revision
+    sample_paths = [
+        base / model_name / model_revision_1 / "task1.json",
+        base / model_name / model_revision_1 / "task2.json",
+        base / model_name / "revision" / "task1.json",
+        base / "not_existing_model" / "revision" / "task2.json",
+    ]
+
+    filtered = cache._filter_paths_by_model_and_revision(sample_paths, [model_name])
+
+    expected = {
+        (
+            "sentence-transformers__all-MiniLM-L6-v2",
+            "8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        ),
+        ("sentence-transformers__all-MiniLM-L6-v2", "revision"),
+    }
+    actual = {(p.parent.parent.name, p.parent.name) for p in filtered}
+    assert actual == expected
