@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import Any, TypedDict
 
+import torch
 from datasets import Dataset
 from sklearn import metrics
 
@@ -143,7 +144,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
 
         return self._calculate_scores(
             data_split[self.label_column_name],
-            probs.argmax(dim=1).tolist(),
+            torch.tensor(probs).argmax(dim=1).tolist(),
         )
 
     def _calculate_scores(
