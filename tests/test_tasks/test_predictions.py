@@ -5,8 +5,8 @@ from typing import Any
 import pytest
 
 import mteb
-from tests.test_benchmark.mock_models import MockNumpyEncoder
-from tests.test_benchmark.mock_tasks import (
+from tests.mock_models import MockNumpyEncoder
+from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,

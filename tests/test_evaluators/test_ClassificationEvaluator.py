@@ -3,8 +3,8 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from mteb._evaluators import SklearnEvaluator
-from tests.test_benchmark.mock_models import MockNumpyEncoder
-from tests.test_benchmark.mock_tasks import MockClassificationTask
+from tests.mock_models import MockNumpyEncoder
+from tests.mock_tasks import MockClassificationTask
 
 
 # Fixtures
