@@ -47,7 +47,7 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
     label_statistics: LabelStatistics
 
 
-class ClusteringMetrics(TypedDict):
+class ClusteringMetrics(TypedDict, total=False):
     """Clustering metrics.
 
     Attributes:
@@ -112,6 +112,7 @@ class AbsTaskAnyClustering(AbsTask):
                 set_metrics = self._compute_metrics(
                     clustering_dataset[self.label_column_name],
                     clusters_assigment,
+                    v_measure_only=True,
                 )
                 all_metrics.append(set_metrics)
 
@@ -161,10 +162,17 @@ class AbsTaskAnyClustering(AbsTask):
         )
 
     def _compute_metrics(
-        self, labels: list[int], cluster_assignment: list[int]
+        self,
+        labels: list[int],
+        cluster_assignment: list[int],
+        v_measure_only: bool = False,
     ) -> ClusteringMetrics:
         logger.info("Running clustering - Evaluating clustering...")
         v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
+        if v_measure_only:
+            return ClusteringMetrics(
+                v_measure=v_measure,
+            )
         nmi = metrics.cluster.normalized_mutual_info_score(labels, cluster_assignment)
         ari = metrics.cluster.adjusted_rand_score(labels, cluster_assignment)
 

@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Sequence
 from typing import Any
 
 import torch
@@ -83,7 +84,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         encode_kwargs: dict[str, Any],
     ) -> list[torch.Tensor]:
         images = []
-        if isinstance(self.images_column_names, list):
+        if isinstance(self.images_column_names, Sequence):
             for row in self.dataset:
                 for col in self.images_column_names:
                     images.append(row[col])
@@ -93,7 +94,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         images = [transform_image_to_rgb(img) for img in images]
 
         texts = []
-        if isinstance(self.texts_column_names, list):
+        if isinstance(self.texts_column_names, Sequence):
             for row in self.dataset:
                 for col in self.texts_column_names:
                     texts.append(row[col])

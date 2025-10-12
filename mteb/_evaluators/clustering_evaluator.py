@@ -66,4 +66,4 @@ class ClusteringEvaluator(Evaluator):
             compute_labels=True,
         )
         clustering_model.fit(embeddings)
-        return clustering_model.labels_.tolist()
+        return clustering_model.labels_
