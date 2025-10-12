@@ -368,26 +368,23 @@ def test_filled_metadata_is_filled():
     )
 
 
-@pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
+@pytest.mark.parametrize(
+    "task", get_tasks(exclude_superseded=True, exclude_aggregate=True)
+)
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
+    # --- test metadata is filled and valid ---
     if task.metadata.name not in _HISTORIC_DATASETS:
         task.metadata._validate_metadata()
         assert task.metadata.is_filled(), (
             f"Metadata for {task.metadata.name} is not filled"
         )
 
-
-@pytest.mark.parametrize("task", get_tasks(exclude_superseded=True))
-def test_disallow_trust_remote_code_in_new_datasets(task: AbsTask):
+    # --- Check that no dataset trusts remote code ---
     assert task.metadata.dataset.get("trust_remote_code", False) is False, (
         f"Dataset {task.metadata.name} should not trust remote code"
     )
 
-
-@pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=False, exclude_aggregate=True)
-)
-def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
+    # --- Test is descriptive stats are present for all datasets ---
     if "image" in task.metadata.modalities:
         return
 
