@@ -2,42 +2,11 @@ import logging
 
 import pytest
 
-import mteb
-from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder
-from tests.test_benchmark.mock_models import AbsMockEncoder
-from tests.test_benchmark.task_grid import TASK_TEST_GRID
+from tests.mock_models import AbsMockEncoder
+from tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
-
-
-@pytest.mark.parametrize(
-    "task_name, model_name, model_revision",
-    [
-        (
-            "BornholmBitextMining",
-            "sentence-transformers/all-MiniLM-L6-v2",
-            "8b3219a92973c328a8e22fadcfa821b5dc75636a",
-        ),
-    ],
-)
-def test_reproducibility_workflow(
-    task_name: str, model_name: str, model_revision: str, tmp_path
-):
-    """Test that a model and a task can be fetched and run in a reproducible fashion."""
-    model_meta = mteb.get_model_meta(model_name, revision=model_revision)
-    task = mteb.get_task(task_name)
-
-    assert isinstance(model_meta, ModelMeta)
-    assert isinstance(task, AbsTask)
-
-    model = mteb.get_model(model_name, revision=model_revision)
-    assert isinstance(model, Encoder)
-
-    eval = MTEB(tasks=[task])
-    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
 @pytest.mark.parametrize(

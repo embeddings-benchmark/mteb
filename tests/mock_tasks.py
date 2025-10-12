@@ -2,6 +2,7 @@
 
 from datasets import Dataset, DatasetDict
 from PIL import Image
+from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.AbsTaskAnyClustering import AbsTaskAnyClustering
@@ -109,6 +110,8 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
 
 
 class MockClassificationTask(AbsTaskAnyClassification):
+    classifier = LogisticRegression(n_jobs=1, max_iter=10)  # type: ignore
+
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -183,6 +186,8 @@ class MockClassificationTask(AbsTaskAnyClassification):
 
 
 class MockMultilingualClassificationTask(AbsTaskAnyClassification):
+    classifier = LogisticRegression(n_jobs=1, max_iter=10)
+
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1487,7 +1492,7 @@ class MockRerankingTask(AbsTaskRetrieval):
     def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
 
-        self.dataset["default"]["test"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit}}
         self.data_loaded = True
 
 
@@ -1606,10 +1611,10 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
 
     def load_data(self) -> None:
         base_datasplit = base_retrieval_datasplit()
-
-        self.dataset["eng"]["test"] = base_datasplit
-        self.dataset["fra"]["test"] = base_datasplit
-
+        self.dataset = {
+            "eng": {"test": base_datasplit},
+            "fra": {"test": base_datasplit},
+        }
         self.data_loaded = True
 
 
@@ -1685,9 +1690,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
-
-        self.dataset["default"]["test"] = base_datasplit
-        self.dataset["default"]["val"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit, "val": base_datasplit}}
         self.data_loaded = True
 
 
@@ -1781,9 +1784,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 ],
             }
         )
-
-        self.dataset["default"]["test"] = base_datasplit
-        self.dataset["default"]["val"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit, "val": base_datasplit}}
         self.data_loaded = True
 
 
@@ -1975,10 +1976,10 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
-
-        for subset in ["eng", "fra"]:
-            for split in ["test", "val"]:
-                self.dataset[subset][split] = base_datasplit
+        self.dataset = {
+            "eng": {"test": base_datasplit, "val": base_datasplit},
+            "fra": {"test": base_datasplit, "val": base_datasplit},
+        }
         self.data_loaded = True
 
 
@@ -2257,7 +2258,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
-        self.dataset["default"]["test"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit}}
         self.data_loaded = True
 
 
@@ -2307,8 +2308,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
 
     def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
-
-        self.dataset["default"]["test"] = base_datasplit
+        self.dataset = {"default": {"test": base_datasplit}}
         self.data_loaded = True
 
 
@@ -2413,9 +2413,10 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
-
-        for subset in ["eng", "fra"]:
-            self.dataset[subset]["test"] = base_datasplit
+        self.dataset = {
+            "eng": {"test": base_datasplit},
+            "fra": {"test": base_datasplit},
+        }
         self.data_loaded = True
 
 
@@ -2534,10 +2535,10 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
 
     def load_data(self) -> None:
         base_datasplit = instruction_retrieval_datasplit()
-
-        for subset in ["eng", "fra"]:
-            for split in ["test", "val"]:
-                self.dataset[subset][split] = base_datasplit
+        self.dataset = {
+            "eng": {"test": base_datasplit, "val": base_datasplit},
+            "fra": {"test": base_datasplit, "val": base_datasplit},
+        }
         self.data_loaded = True
 
 
@@ -2602,7 +2603,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
         images = [
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
-        self.dataset["default"]["test"] = RetrievalSplitData(
+        retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
                     "id": [f"q{i}" for i in range(2)],
@@ -2630,7 +2631,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "q1": ["d2", "d1"],
             },
         )
-
+        self.dataset = {"default": {"test": retrieval_split_data}}
         self.data_loaded = True
 
 
@@ -2874,7 +2875,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
 
-        self.dataset["default"]["test"] = RetrievalSplitData(
+        retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
                     "id": [f"q{i}" for i in range(2)],
@@ -2898,6 +2899,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
             },
             top_ranked=None,
         )
+        self.dataset = {"default": {"test": retrieval_split_data}}
         self.data_loaded = True
 
 
@@ -2950,7 +2952,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
             Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
 
-        self.dataset["default"]["test"] = RetrievalSplitData(
+        retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
                 {
                     "id": [f"q{i}" for i in range(2)],
@@ -2974,6 +2976,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
             },
             top_ranked=None,
         )
+        self.dataset = {"default": {"test": retrieval_split_data}}
         self.data_loaded = True
 
 

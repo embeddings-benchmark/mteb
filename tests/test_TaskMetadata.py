@@ -370,7 +370,7 @@ def test_filled_metadata_is_filled():
 
 @pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
-    if task.metadata.name.replace("HardNegatives", "") not in _HISTORIC_DATASETS:
+    if task.metadata.name not in _HISTORIC_DATASETS:
         task.metadata._validate_metadata()
         assert task.metadata.is_filled(), (
             f"Metadata for {task.metadata.name} is not filled"
