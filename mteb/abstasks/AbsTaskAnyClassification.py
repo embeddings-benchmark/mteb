@@ -24,9 +24,9 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .._evaluators.classification_evaluator import (
-    ClassificationEvaluator,
-    SklearnClassifierProtocol,
+from .._evaluators.sklearn_evaluator import (
+    SklearnEvaluator,
+    SklearnModelProtocol,
 )
 from ._statistics_calculation import (
     calculate_image_statistics,
@@ -109,15 +109,14 @@ class AbsTaskAnyClassification(AbsTask):
 
     """
 
-    evaluator: type[ClassificationEvaluator] = ClassificationEvaluator
-    classifier: SklearnClassifierProtocol = LogisticRegression(
+    evaluator: type[SklearnEvaluator] = SklearnEvaluator
+    evaluator_model: SklearnModelProtocol = LogisticRegression(
         n_jobs=-1,
         max_iter=100,
     )
 
     samples_per_label: int = 8
     n_experiments: int = 10
-    k: int = 3
     train_split: str = "train"
     label_column_name: str = "label"
     input_column_name: str = "text"
@@ -142,8 +141,10 @@ class AbsTaskAnyClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        if "random_state" in self.classifier.get_params():
-            self.classifier = self.classifier.set_params(random_state=self.seed)
+        if "random_state" in self.evaluator_model.get_params():
+            self.evaluator_model = self.evaluator_model.set_params(
+                random_state=self.seed
+            )
         scores = {}
         hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
@@ -187,8 +188,6 @@ class AbsTaskAnyClassification(AbsTask):
     ) -> FullClassificationMetrics:
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
-        params = {"k": self.k}
-        params.update(kwargs)
 
         scores = []
         # we store idxs to make the shuffling reproducible
@@ -211,8 +210,7 @@ class AbsTaskAnyClassification(AbsTask):
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
-                classifier=self.classifier,
-                **params,
+                evaluator_model=self.evaluator_model,
             )
             y_pred, test_cache = evaluator(
                 model, encode_kwargs=encode_kwargs, test_cache=test_cache
@@ -235,7 +233,7 @@ class AbsTaskAnyClassification(AbsTask):
         avg_scores: dict[str, Any] = {
             # ap will be none for non binary classification tasks
             k: (
-                np.mean(values)
+                float(np.mean(values))
                 if (values := [s[k] for s in scores if s[k] is not None])
                 else np.nan
             )

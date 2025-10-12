@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from mteb._evaluators import ClassificationEvaluator
+from mteb._evaluators import SklearnEvaluator
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import MockClassificationTask
 
@@ -25,7 +25,7 @@ def test_output_structure(model, mock_task):
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    evaluator = ClassificationEvaluator(
+    evaluator = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -50,7 +50,7 @@ def test_expected_scores(model, mock_task):
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    evaluator = ClassificationEvaluator(
+    evaluator = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -93,7 +93,7 @@ def test_cache_usage_binary():
     model = MockNumpyEncoder()
 
     # First evaluation to generate cache
-    evaluator_initial = ClassificationEvaluator(
+    evaluator_initial = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -109,7 +109,7 @@ def test_cache_usage_binary():
     _, test_cache_initial = evaluator_initial(model, encode_kwargs={"batch_size": 32})
 
     # Second evaluation using cache
-    evaluator_with_cache = ClassificationEvaluator(
+    evaluator_with_cache = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,

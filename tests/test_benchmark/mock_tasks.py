@@ -741,6 +741,8 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
 class MockClusteringFastTask(AbsTaskClusteringFast):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
+    n_clusters = 3
+    max_documents_per_cluster = 3
     expected_stats = {
         "test": {
             "num_samples": 3,

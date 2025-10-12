@@ -2,8 +2,7 @@ import logging
 from typing import Any
 
 from datasets import Dataset
-from scipy.optimize import linear_sum_assignment
-from sklearn import cluster, metrics
+from sklearn import cluster
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
@@ -40,8 +39,7 @@ class ClusteringEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any],
-        v_measure_only: bool = False,
-    ) -> dict[str, float]:
+    ) -> list[int]:
         data_loader = create_dataloader(
             self.dataset,
             self.task_metadata,
@@ -65,27 +63,7 @@ class ClusteringEvaluator(Evaluator):
             n_clusters=len(set(labels)),
             batch_size=self.clustering_batch_size,
             n_init="auto",
+            compute_labels=True,
         )
         clustering_model.fit(embeddings)
-        cluster_assignment = clustering_model.labels_
-
-        logger.info("Running clustering - Evaluating clustering...")
-        v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
-        if v_measure_only:
-            return {"v_measure": float(v_measure)}
-
-        nmi = metrics.cluster.normalized_mutual_info_score(labels, cluster_assignment)
-        ari = metrics.cluster.adjusted_rand_score(labels, cluster_assignment)
-
-        matrix = metrics.confusion_matrix(labels, cluster_assignment)
-        # get linear sum assignment
-        row_ind, col_ind = linear_sum_assignment(matrix, maximize=True)
-        total_correct = matrix[row_ind, col_ind].sum()
-        clustering_accuracy = total_correct / len(labels)
-
-        return {
-            "v_measure": float(v_measure),
-            "nmi": float(nmi),
-            "ari": float(ari),
-            "cluster_accuracy": float(clustering_accuracy),
-        }
+        return clustering_model.labels_.tolist()

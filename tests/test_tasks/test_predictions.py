@@ -8,9 +8,14 @@ from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
+    MockClusteringFastTask,
+    MockClusteringTask,
+    MockImageTextPairClassificationTask,
     MockPairClassificationTask,
+    MockRegressionTask,
     MockRetrievalTask,
     MockSTSTask,
+    MockSummarizationTask,
     MockTextZeroShotClassificationTask,
 )
 
@@ -71,6 +76,45 @@ from tests.test_benchmark.mock_tasks import (
                 "similarity_scores": [0.6676753163337708, 0.44889140129089355],
                 "dot_scores": [1.834609502285649, 1.3250427203346034],
             },
+        ),
+        (
+            MockSummarizationTask,
+            {
+                "cosine_scores": [
+                    [0.7504136562347412, 0.7362898588180542],
+                    [0.6851023435592651, 0.9213399887084961],
+                ],
+                "dot_scores": [
+                    [2.157850742340088, 2.9930126667022705],
+                    [1.9915030002593994, 3.0875353813171387],
+                ],
+                "similarity_scores": [
+                    [0.7504136562347412, 0.7362898588180542],
+                    [0.6851023435592651, 0.9213399887084961],
+                ],
+                "human_scores": [[1.0, 0.0], [0.0, 1.0]],
+            },
+        ),
+        (MockClusteringTask, [[2, 2, 1]]),
+        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 2], [2, 0, 0]]}),
+        (
+            MockRegressionTask,
+            [
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+                [0.3944576968553871, 0.7601581443608189],
+            ],
+        ),
+        (
+            MockImageTextPairClassificationTask,
+            [[[0.6676752688013152]], [[0.44889138491964875]]],
         ),
     ],
 )

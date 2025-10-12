@@ -16,7 +16,7 @@ from .evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-class SklearnClassifierProtocol(Protocol):
+class SklearnModelProtocol(Protocol):
     def fit(self, X: np.ndarray, y: np.ndarray | list[int]) -> None: ...  # noqa: N803
     def predict(self, X: np.ndarray) -> np.ndarray: ...  # noqa: N803
     def get_params(self) -> dict[str, Any]: ...
@@ -24,7 +24,7 @@ class SklearnClassifierProtocol(Protocol):
     def score(self, X: np.ndarray, y: np.ndarray | list[int]) -> float: ...  # noqa: N803
 
 
-class ClassificationEvaluator(Evaluator):
+class SklearnEvaluator(Evaluator):
     def __init__(
         self,
         train_dataset: Dataset,
@@ -34,7 +34,7 @@ class ClassificationEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        classifier: SklearnClassifierProtocol,
+        evaluator_model: SklearnModelProtocol,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -47,7 +47,7 @@ class ClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.classifier = classifier
+        self.evaluator_model = evaluator_model
 
     def create_dataloaders(
         self, batch_size: int
@@ -121,8 +121,8 @@ class ClassificationEvaluator(Evaluator):
 
         logger.info("Running classification - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]
-        self.classifier.fit(X_train, y_train)
+        self.evaluator_model.fit(X_train, y_train)
 
         logger.info("Running classification - Evaluating classifier...")
-        y_pred = self.classifier.predict(test_cache)
+        y_pred = self.evaluator_model.predict(test_cache)
         return y_pred, test_cache
