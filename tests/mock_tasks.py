@@ -3952,7 +3952,20 @@ class MockRegressionTask(AbsTaskRegression):
                 "unique_texts": 2,
             },
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
-        }
+        },
+        "train": {
+            "num_samples": 2,
+            "number_of_characters": 53,
+            "num_texts_in_train": None,
+            "text_statistics": {
+                "total_text_length": 53,
+                "min_text_length": 23,
+                "average_text_length": 26.5,
+                "max_text_length": 30,
+                "unique_texts": 2,
+            },
+            "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
+        },
     }
 
     metadata = TaskMetadata(

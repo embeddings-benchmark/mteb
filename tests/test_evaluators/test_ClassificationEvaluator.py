@@ -33,9 +33,9 @@ def test_output_structure(model, mock_task):
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
@@ -58,9 +58,9 @@ def test_expected_scores(model, mock_task):
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     y_pred, _ = evaluator(model, encode_kwargs={"batch_size": 32})
@@ -101,9 +101,9 @@ def test_cache_usage_binary():
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     _, test_cache_initial = evaluator_initial(model, encode_kwargs={"batch_size": 32})
@@ -117,9 +117,9 @@ def test_cache_usage_binary():
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     y_pred, test_cache_after_cache_usage = evaluator_with_cache(
