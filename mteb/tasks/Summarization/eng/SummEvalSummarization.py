@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 class SummEvalSummarization(AbsTaskSummarization):
     superseded_by = "SummEvalSummarization.v2"
-    evalutor = DeprecatedSummarizationEvaluator
+    evaluator = DeprecatedSummarizationEvaluator
 
     metadata = TaskMetadata(
         name="SummEval",
