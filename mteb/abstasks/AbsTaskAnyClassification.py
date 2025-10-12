@@ -195,7 +195,7 @@ class AbsTaskAnyClassification(AbsTask):
 
         all_predictions = []
         for i in range(self.n_experiments):
-            logger.info(f"Running classification experiment ({i}/{self.n_experiments})")
+            logger.info(f"Running experiment ({i}/{self.n_experiments})")
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
@@ -240,7 +240,7 @@ class AbsTaskAnyClassification(AbsTask):
             )
             for k in scores[0].keys()
         }
-        logger.info("Running classification - Finished.")
+        logger.info(f"Running {self.metadata.name} - Finished.")
         return FullClassificationMetrics(
             scores_per_experiment=scores,
             **avg_scores,

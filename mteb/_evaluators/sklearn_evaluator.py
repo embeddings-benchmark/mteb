@@ -102,7 +102,7 @@ class SklearnEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"]
         )
 
-        logger.info("Running classification - Encoding samples...")
+        logger.info("Running - Encoding samples...")
         X_train = model.encode(
             dataloader_train,
             task_metadata=self.task_metadata,
@@ -119,10 +119,10 @@ class SklearnEvaluator(Evaluator):
                 **encode_kwargs,
             )
 
-        logger.info("Running classification - Fitting classifier...")
+        logger.info("Running - Fitting classifier...")
         y_train = self.train_dataset[self.label_column_name]
         self.evaluator_model.fit(X_train, y_train)
 
-        logger.info("Running classification - Evaluating classifier...")
+        logger.info("Running - Evaluating classifier...")
         y_pred = self.evaluator_model.predict(test_cache)
         return y_pred, test_cache
