@@ -72,6 +72,9 @@ def load_results(
         cache.download_from_remote(remote=results_repo, download_latest=download_latest)
     repo_directory = cache.cache_path
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
+    model_paths += [
+        p for p in (repo_directory / "remote" / "results").glob("*") if p.is_dir()
+    ]
 
     if models is not None:
         models_to_keep = {}

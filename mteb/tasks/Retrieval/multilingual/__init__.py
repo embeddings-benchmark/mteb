@@ -8,7 +8,11 @@ from .CrossLingualSemanticDiscriminationWMT21 import (
 from .CUREv1Retrieval import CUREv1Retrieval
 from .IndicQARetrieval import IndicQARetrieval
 from .MintakaRetrieval import MintakaRetrieval
-from .MIRACLRetrieval import MIRACLRetrieval, MIRACLRetrievalHardNegatives
+from .MIRACLRetrieval import (
+    MIRACLRetrieval,
+    MIRACLRetrievalHardNegatives,
+    MIRACLRetrievalHardNegativesV2,
+)
 from .MKQARetrieval import MKQARetrieval
 from .MLQARetrieval import MLQARetrieval
 from .MrTidyRetrieval import MrTidyRetrieval
@@ -38,6 +42,7 @@ __all__ = [
     "IndicQARetrieval",
     "MIRACLRetrieval",
     "MIRACLRetrievalHardNegatives",
+    "MIRACLRetrievalHardNegativesV2",
     "MKQARetrieval",
     "MLQARetrieval",
     "MintakaRetrieval",

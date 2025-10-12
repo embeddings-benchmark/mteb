@@ -43,7 +43,6 @@ from .slk import *
 from .slv import *
 from .spa import *
 from .ssw import *
-from .svk import *
 from .swa import *
 from .swe import *
 from .tam import *

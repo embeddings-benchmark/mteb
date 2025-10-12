@@ -32,6 +32,6 @@ def test_benchmark_sentence_transformer(
     # this behavior and keeps the prompts as configured by the model, so this
     # test now sets the prompts to None explicitly to preserve the legacy
     # behavior and focus the test on the tasks instead of the prompts.
-    model.prompts = None
+    model.prompts = {}
     eval = MTEB(tasks=[task])
     eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)

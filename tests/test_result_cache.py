@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import mteb
 from mteb.cache import ResultCache
 from mteb.results import TaskResult
 
@@ -131,3 +132,58 @@ def test_load_result_specific_model():
     model_names = {mdl_res.model_name for mdl_res in results.model_results}
     assert len(model_names) == 1, "Should only have one model in the results"
     assert model in model_names, "Model should be in the results"
+
+
+def test_filter_with_modelmeta():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    base = test_cache_path / "results"
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    model_name = model_meta.model_name_as_path()
+    model_revision_1 = model_meta.revision
+    sample_paths = [
+        base / model_name / model_revision_1 / "task1.json",
+        base / model_name / model_revision_1 / "task2.json",
+        base / model_name / "revision" / "task1.json",
+        base / "not_existing_model" / "revision" / "task2.json",
+    ]
+
+    filtered = cache._filter_paths_by_model_and_revision(sample_paths, [model_meta])
+
+    expected = {
+        (
+            "sentence-transformers__all-MiniLM-L6-v2",
+            "8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        )
+    }
+    actual = {(p.parent.parent.name, p.parent.name) for p in filtered}
+    assert actual == expected
+
+
+def test_filter_with_string_models():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    base = test_cache_path / "results"
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    model_name = model_meta.model_name_as_path()
+    model_revision_1 = model_meta.revision
+    sample_paths = [
+        base / model_name / model_revision_1 / "task1.json",
+        base / model_name / model_revision_1 / "task2.json",
+        base / model_name / "revision" / "task1.json",
+        base / "not_existing_model" / "revision" / "task2.json",
+    ]
+
+    filtered = cache._filter_paths_by_model_and_revision(sample_paths, [model_name])
+
+    expected = {
+        (
+            "sentence-transformers__all-MiniLM-L6-v2",
+            "8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        ),
+        ("sentence-transformers__all-MiniLM-L6-v2", "revision"),
+    }
+    actual = {(p.parent.parent.name, p.parent.name) for p in filtered}
+    assert actual == expected
