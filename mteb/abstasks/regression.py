@@ -25,7 +25,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .AbsTask import AbsTask
+from .abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,8 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
     values_statistics: ScoreStatistics
 
 
-class AbsTaskTextRegression(AbsTask):
+# TODO: To be extended to support images.
+class AbsTaskRegression(AbsTask):
     """Abstract class for regression tasks
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It

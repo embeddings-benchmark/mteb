@@ -1,6 +1,6 @@
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
+from ....abstasks.any_sts import AbsTaskAnySTS
 
 
 class Farsick(AbsTaskAnySTS):

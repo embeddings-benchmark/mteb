@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, cast
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta

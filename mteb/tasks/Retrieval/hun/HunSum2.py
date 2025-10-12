@@ -1,8 +1,7 @@
 from datasets import load_dataset
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):

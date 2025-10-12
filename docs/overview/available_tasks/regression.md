@@ -3,7 +3,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 2 
+- **Number of tasks:** 2
 
 #### RuSciBenchCitedCountRegression
 
@@ -21,9 +21,9 @@ Predicts the number of times a scientific article has been cited by other papers
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -37,9 +37,9 @@ Predicts the number of times a scientific article has been cited by other papers
       volume = {110},
       year = {2024},
     }
-    
+
     ```
-    
+
 
 
 
@@ -59,9 +59,9 @@ Predicts the publication year of a scientific article. The prediction is based o
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -75,5 +75,5 @@ Predicts the publication year of a scientific article. The prediction is based o
       volume = {110},
       year = {2024},
     }
-    
+
     ```

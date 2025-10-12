@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 import mteb
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
 from mteb.models.models_protocols import Encoder
 from tests.mock_models import MockSentenceTransformer

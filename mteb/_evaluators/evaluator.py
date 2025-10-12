@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from mteb.abstasks.AbsTask import set_seed
+from mteb.abstasks.abstask import set_seed
 from mteb.models import Encoder
 
 

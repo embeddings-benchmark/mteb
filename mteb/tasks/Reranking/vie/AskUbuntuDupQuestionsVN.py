@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
 class AskUbuntuDupQuestionsVN(AbsTaskReranking):

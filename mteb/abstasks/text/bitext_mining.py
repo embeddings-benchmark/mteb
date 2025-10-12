@@ -11,8 +11,8 @@ from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
 
-from ._statistics_calculation import calculate_text_statistics
-from .AbsTask import AbsTask
+from .._statistics_calculation import calculate_text_statistics
+from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

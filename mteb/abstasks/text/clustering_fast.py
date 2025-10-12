@@ -18,12 +18,12 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..create_dataloaders import create_dataloader
-from ._statistics_calculation import (
+from ...create_dataloaders import create_dataloader
+from .._statistics_calculation import (
     calculate_label_statistics,
     calculate_text_statistics,
 )
-from .AbsTask import AbsTask
+from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

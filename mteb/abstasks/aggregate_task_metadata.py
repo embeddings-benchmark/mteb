@@ -13,7 +13,7 @@ from mteb.types import (
     StrDate,
 )
 
-from .AbsTask import AbsTask
+from .abstask import AbsTask
 from .task_metadata import (
     AnnotatorType,
     MetadataDatasetDict,
