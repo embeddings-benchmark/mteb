@@ -4,7 +4,6 @@ from pathlib import Path
 import pytest
 
 import mteb
-from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
@@ -22,54 +21,54 @@ from tests.mock_tasks import (
             MockBitextMiningTask,
             {
                 "sentence1-sentence2": [
-                    {"corpus_id": 0, "score": 0.667675256729126},
-                    {"corpus_id": 0, "score": 0.5796383023262024},
+                    {"corpus_id": 1, "score": 0.7652846501709707},
+                    {"corpus_id": 1, "score": 0.7652846501709707},
                 ]
             },
         ),
         (
             MockClassificationTask,
             [
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
             ],
         ),
         (
             MockTextZeroShotClassificationTask,
             [
-                [0.667675256729126, 0.5808462500572205],
-                [0.5796383023262024, 0.44889137148857117],
+                [0.9999999999419484, 0.9999999999419484],
+                [0.9999999999419484, 0.9999999999419484],
             ],
         ),
         (
             MockRetrievalTask,
-            {"q1": {"d2": 0.667675256729126}, "q2": {"d2": 0.5796383023262024}},
+            {"q1": {"d2": 0.9999999999419484}, "q2": {"d2": 0.9999999999419484}},
         ),
         (
             MockSTSTask,
             {
-                "cosine_scores": [0.6676752688013152, 0.44889138491964875],
-                "manhattan_distances": [-3.8137664259525317, -5.127750669852312],
-                "euclidean_distances": [-1.4245895965840156, -1.8406867696540525],
-                "similarity_scores": [0.6676753163337708, 0.44889140129089355],
+                "cosine_scores": [0.7271937024333304, 0.7652846502146503],
+                "manhattan_distances": [-11.606113294587654, -11.687107717574829],
+                "euclidean_distances": [-2.4683132356991315, -2.404168159957386],
+                "similarity_scores": [0.7271937023895851, 0.7652846501709707],
             },
         ),
         (
             MockPairClassificationTask,
             {
-                "cosine_scores": [0.6676752688013152, 0.44889138491964875],
-                "euclidean_distances": [1.4245895965840156, 1.8406867696540525],
-                "manhattan_distances": [3.8137664259525317, 5.127750669852312],
-                "similarity_scores": [0.6676753163337708, 0.44889140129089355],
-                "dot_scores": [1.834609502285649, 1.3250427203346034],
+                "cosine_scores": [0.7271937024333304, 0.7652846502146503],
+                "euclidean_distances": [2.4683132356991315, 2.404168159957386],
+                "manhattan_distances": [11.606113294587654, 11.687107717574829],
+                "similarity_scores": [0.7271937023895851, 0.7652846501709707],
+                "dot_scores": [8.047867836468026, 9.399434014739104],
             },
         ),
     ],
@@ -77,7 +76,7 @@ from tests.mock_tasks import (
 def test_predictions(tmp_path: Path, task_cls, expected):
     """Run evaluation for each mock task and check predictions match exactly."""
     task = task_cls()
-    model = MockNumpyEncoder()
+    model = mteb.get_model_meta("mteb/random-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
     with task._predictions_path(tmp_path).open() as f:
