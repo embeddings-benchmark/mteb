@@ -110,7 +110,8 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
 
 
 class MockClassificationTask(AbsTaskAnyClassification):
-    classifier = LogisticRegression(n_jobs=1, max_iter=2)  # type: ignore
+    classifier = LogisticRegression(n_jobs=1, max_iter=10)  # type: ignore
+
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -185,7 +186,7 @@ class MockClassificationTask(AbsTaskAnyClassification):
 
 
 class MockMultilingualClassificationTask(AbsTaskAnyClassification):
-    classifier = LogisticRegression(n_jobs=1, max_iter=2)
+    classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
     expected_stats = {
         "test": {
