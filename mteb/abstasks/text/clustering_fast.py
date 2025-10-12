@@ -13,6 +13,7 @@ from sklearn.metrics.cluster import v_measure_score
 from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
+    ImageStatistics,
     LabelStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
@@ -20,6 +21,7 @@ from mteb.types.statistics import (
 
 from ...create_dataloaders import create_dataloader
 from .._statistics_calculation import (
+    calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
 )
@@ -90,13 +92,15 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
 
-        text_statistics: Statistics for the text
-        labels_statistics: Statistics for the labels
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        labels_statistics: Statistics for labels
     """
 
     num_samples: int
 
-    text_statistics: TextStatistics
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -220,22 +224,37 @@ class AbsTaskClusteringFast(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
         if hf_subset:
-            sentences = self.dataset[hf_subset][split][self.input_column_name]
+            inputs = self.dataset[hf_subset][split][self.input_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
-            sentences = []
+            inputs = []
             labels = []
             for hf_subset in self.metadata.eval_langs:
-                sentences.extend(self.dataset[hf_subset][split][self.input_column_name])
+                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
-            sentences = self.dataset[split][self.input_column_name]
+            inputs = self.dataset[split][self.input_column_name]
             labels = self.dataset[split][self.label_column_name]
 
+        if isinstance(inputs[0], list):
+            inputs = [item for sublist in inputs for item in sublist]
+        if isinstance(labels[0], list):
+            labels = [item for sublist in labels for item in sublist]
+
+        text_statistics, image_statistics = None, None
+        if "image" in self.metadata.modalities:
+            image_statistics = calculate_image_statistics(inputs)
+
+        if "text" in self.metadata.modalities:
+            text_statistics = calculate_text_statistics(inputs)
+
+        label_statistics = calculate_label_statistics(labels)
+
         return ClusteringFastDescriptiveStatistics(
-            num_samples=len(sentences),
-            text_statistics=calculate_text_statistics(sentences),
-            labels_statistics=calculate_label_statistics(labels),
+            num_samples=len(inputs),
+            text_statistics=text_statistics,
+            image_statistics=image_statistics,
+            labels_statistics=label_statistics,
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
