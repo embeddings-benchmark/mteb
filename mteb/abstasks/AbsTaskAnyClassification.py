@@ -199,6 +199,7 @@ class AbsTaskAnyClassification(AbsTask):
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
+                i,
                 idxs,
             )
 
@@ -271,12 +272,13 @@ class AbsTaskAnyClassification(AbsTask):
         return scores
 
     def _undersample_data(
-        self, dataset: Dataset, idxs: list[int] | None = None
+        self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int]]:
         """Undersample data to have `samples_per_label` samples of each label.
 
         Args:
             dataset: Hugging Face `datasets.Dataset` containing "text" and "label".
+            experiment_num: Experiment number, used to set the random seed.
             idxs: Optional indices to shuffle and sample from.
 
         Returns:

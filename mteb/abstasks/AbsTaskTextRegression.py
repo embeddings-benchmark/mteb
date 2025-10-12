@@ -1,11 +1,10 @@
 import logging
-from pathlib import Path
-from typing import Any, TypedDict
+from typing import TypedDict
 
 import datasets
 import numpy as np
 import pandas as pd
-from datasets import DatasetDict
+from datasets import Dataset
 from scipy.stats import kendalltau
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -15,7 +14,6 @@ from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from mteb.models.models_protocols import Encoder
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -66,16 +64,6 @@ class RegressionMetrics(TypedDict):
     kendalltau: float
 
 
-class FullRegressionMetrics(RegressionMetrics):
-    """Full Regression metrics including scores per experiment. In main scores, the average over all experiments is reported.
-
-    Attributes:
-        scores_per_experiment: List of ClassificationMetrics for each experiment.
-    """
-
-    scores_per_experiment: list[RegressionMetrics]
-
-
 class AbsTaskTextRegression(AbsTaskAnyClassification):
     """Abstract class for regression tasks
 
@@ -96,73 +84,20 @@ class AbsTaskTextRegression(AbsTaskAnyClassification):
     n_experiments: int = 10
     n_samples: int = 2048
 
-    def _evaluate_subset(
-        self,
-        model: Encoder,
-        data_split: DatasetDict,
-        *,
-        encode_kwargs: dict[str, Any],
-        hf_split: str,
-        hf_subset: str,
-        prediction_folder: Path | None = None,
-        **kwargs: Any,
-    ) -> FullRegressionMetrics:
-        train_split = data_split[self.train_split]
-        eval_split = data_split[hf_split]
-
-        scores_list, test_cache = [], None
-        all_predictions = []
-        scores = []
-        for i in range(self.n_experiments):
-            logger.info(f"Running regression experiment ({i}/{self.n_experiments})")
-
-            if self.n_samples >= len(train_split):
-                train_split_sampled = train_split
-            else:
-                train_split_sampled = self.stratified_subsampling(
-                    datasets.DatasetDict({"train": train_split}),
-                    seed=self.seed + i,
-                    splits=["train"],
-                    label=self.label_column_name,
-                    n_samples=self.n_samples,
-                )["train"]
-
-            evaluator = self.evaluator(
-                train_split_sampled,
-                eval_split,
-                self.input_column_name,
-                self.label_column_name,
-                task_metadata=self.metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                evaluator_model=self.evaluator_model,
-                **kwargs,
-            )
-            y_pred, test_cache = evaluator(
-                model, encode_kwargs=encode_kwargs, test_cache=test_cache
-            )
-            if prediction_folder:
-                all_predictions.append(y_pred.tolist())
-            y_test = eval_split[self.label_column_name]
-            scores_exp = self._calculate_scores(y_test, y_pred)
-            scores.append(scores_exp)
-
-        if prediction_folder:
-            self._save_task_predictions(
-                all_predictions,
-                model,
-                prediction_folder,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
-            )
-
-        avg_scores: dict[str, Any] = {
-            k: float(np.mean([s[k] for s in scores])) for k in scores[0].keys()
-        }
-        return FullRegressionMetrics(
-            scores_per_experiment=scores_list,
-            **avg_scores,
-        )
+    def _undersample_data(
+        self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
+    ) -> tuple[Dataset, list[int]]:
+        if self.n_samples >= len(dataset):
+            train_split_sampled = dataset
+        else:
+            train_split_sampled = self.stratified_subsampling(
+                datasets.DatasetDict({"train": dataset}),
+                seed=self.seed + experiment_num,
+                splits=["train"],
+                label=self.label_column_name,
+                n_samples=self.n_samples,
+            )["train"]
+        return train_split_sampled, []
 
     def _calculate_scores(
         self,
