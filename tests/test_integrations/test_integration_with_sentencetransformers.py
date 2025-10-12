@@ -23,9 +23,10 @@ def test_sentence_transformer_integration(task: AbsTask, model_name: str):
     # SentenceTransformerWrapper would set the model's prompts to None because
     # the mock tasks are not in the MTEB task registry. The linked PR changes
     # this behavior and keeps the prompts as configured by the model, so this
-    # test now sets the prompts to None explicitly to preserve the legacy
+    # test now sets the prompts to an empty dict explicitly to preserve the legacy
     # behavior and focus the test on the tasks instead of the prompts.
-    model.prompts = None
+    # Using empty dict instead of None to avoid TypeError in SentenceTransformers 5.0.0+
+    model.prompts = {}
     mteb.evaluate(model, task, cache=None)
 
 
