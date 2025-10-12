@@ -7,7 +7,6 @@ import logging
 import pytest
 
 import mteb
-import mteb.overview
 from mteb.abstasks import AbsTask
 from tests.mock_models import (
     MockNumpyEncoder,
@@ -15,12 +14,47 @@ from tests.mock_models import (
     MockTorchEncoder,
     MockTorchfp16Encoder,
 )
-from tests.task_grid import MOCK_TASK_TEST_GRID
+from tests.mock_tasks import (
+    MockBitextMiningTask,
+    MockClassificationTask,
+    MockClusteringFastTask,
+    MockClusteringTask,
+    MockInstructionReranking,
+    MockInstructionRetrieval,
+    MockMultilabelClassification,
+    MockPairClassificationTask,
+    MockRegressionTask,
+    MockRerankingTask,
+    MockRetrievalDialogTask,
+    MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
+)
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockBitextMiningTask(),
+        MockClassificationTask(),
+        MockRegressionTask(),
+        MockClusteringTask(),
+        MockClusteringFastTask(),
+        MockPairClassificationTask(),
+        MockRerankingTask(),
+        MockRetrievalTask(),
+        MockSTSTask(),
+        MockMultilabelClassification(),
+        MockSummarizationTask(),
+        MockInstructionRetrieval(),
+        MockInstructionReranking(),
+        MockRetrievalDialogTask(),
+        MockTextZeroShotClassificationTask(),
+    ],
+)
 @pytest.mark.parametrize(
     "model",
     [
@@ -30,5 +64,5 @@ logging.basicConfig(level=logging.INFO)
         MockSentenceTransformersbf16Encoder(),
     ],
 )
-def test_benchmark_encoders_on_task(task: AbsTask, model: mteb.Encoder):
+def test_encoder_dtype_on_task(task: AbsTask, model: mteb.Encoder):
     mteb.evaluate(model, task, cache=None)
