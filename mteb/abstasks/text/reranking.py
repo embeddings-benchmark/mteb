@@ -1,4 +1,5 @@
 import logging
+import sys
 from collections import defaultdict
 from copy import copy
 
@@ -8,11 +9,21 @@ from datasets import Dataset
 from ..retrieval import AbsTaskRetrieval
 from ..retrieval_dataset_loaders import RetrievalSplitData
 
+if sys.version_info >= (3, 13):
+    from warnings import deprecated
+else:
+    from typing_extensions import deprecated
+
 logger = logging.getLogger(__name__)
 
 OLD_FORMAT_RERANKING_TASKS = []
 
 
+@deprecated(
+    "This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead. "
+    "You can add your task name to mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS to load it in new format. "
+    "You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data."
+)
 class AbsTaskReranking(AbsTaskRetrieval):
     """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but here to adapt the old format to the new format. TODO: update these tasks to the new format and delete this class."""
 
