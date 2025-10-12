@@ -112,12 +112,12 @@ class LinearRegressionEvaluator(Evaluator):
                 batch_size=batch_size,
             )
         elif self.task_metadata.modalities == ["text"]:
-            if self.label_column_name != "text":
+            if self.values_column != "text":
                 self.train_dataset = self.train_dataset.rename_column(
-                    self.label_column_name, "text"
+                    self.values_column, "text"
                 )
                 self.eval_dataset = self.eval_dataset.rename_column(
-                    self.label_column_name, "text"
+                    self.values_column, "text"
                 )
             dataloader_train = DataLoader(self.train_dataset)
             dataloader_test = DataLoader(self.eval_dataset)
