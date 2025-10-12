@@ -62,6 +62,7 @@ empty_model_meta = ModelMeta(
 
 
 def _create_empty_model_meta() -> ModelMeta:
+    logger.warning("Model metadata is missing. Using empty metadata.")
     meta = deepcopy(empty_model_meta)
     meta.revision = "no_revision_available"
     meta.name = "no_model_name_available"
@@ -85,6 +86,8 @@ def _sanitize_model(
         model = _mdl
     elif hasattr(model, "mteb_model_meta"):
         meta = model.mteb_model_meta  # type: ignore[attr-defined]
+        if not isinstance(meta, ModelMeta):
+            meta = _create_empty_model_meta()
     else:
         meta = _create_empty_model_meta() if not isinstance(model, ModelMeta) else model
 
