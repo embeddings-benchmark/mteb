@@ -10,9 +10,6 @@ import pytest
 import mteb
 import mteb.overview
 from mteb.MTEB import logger
-from tests.mock_models import (
-    MockMocoEncoder,
-)
 from tests.mock_tasks import (
     MockImageClusteringTask,
     MockImageTextPairClassificationTask,
@@ -30,9 +27,11 @@ logging.basicConfig(level=logging.INFO)
 def test_task_modality_filtering(mock_logger, task):
     eval = mteb.MTEB(tasks=[task])
 
+    model_name = "mock/random-image-only-encoder-baseline"
+
     # Run the evaluation
     eval.run(
-        model=MockMocoEncoder(),
+        model=mteb.get_model(model_name),
         output_folder="tests/results",
         overwrite_results=True,
     )
@@ -42,7 +41,7 @@ def test_task_modality_filtering(mock_logger, task):
         f"'{modality}'" for modality in sorted(task.metadata.modalities)
     )
     mock_logger.assert_called_with(
-        f"mock/MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
+        f"{model_name} only supports ['image'], but the task modalities are [{task_modalities}]."
     )
 
 
@@ -52,7 +51,7 @@ def test_task_modality_filtering_model_modalities_more_than_task_modalities(task
 
     # Run the evaluation
     eval.run(
-        model=mteb.get_model("mteb/random-encoder-baseline"),
+        model=mteb.get_model("mock/random-encoder-baseline"),
         output_folder="tests/results",
         overwrite_results=True,
     )

@@ -2,6 +2,7 @@ import hashlib
 from typing import Any
 
 import numpy as np
+import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 
@@ -18,7 +19,7 @@ def _string_to_vector(text: str | None, size: int):
     # numpy rng seed must be between 0 and 2**32
     seed = int(hashlib.sha256(text.encode("utf-8")).hexdigest(), 16) % 2**32
     rng = np.random.default_rng(seed)
-    return rng.random(size)
+    return rng.random(size, dtype=np.float32)
 
 
 def _image_to_vector(image: Image.Image, size: int):
@@ -27,7 +28,7 @@ def _image_to_vector(image: Image.Image, size: int):
     image_bytes = image.tobytes()
     seed = int(hashlib.sha256(image_bytes).hexdigest(), 16) % (2**32)
     rng = np.random.default_rng(seed)
-    return rng.random(size)
+    return rng.random(size, dtype=np.float32)
 
 
 def _batch_to_embeddings(
@@ -65,9 +66,18 @@ class RandomEncoderBaseline:
 
     mteb_model_meta: ModelMeta | None = None
 
-    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
-        self.rng_state = np.random.RandomState(42)
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None,
+        is_torch: bool = False,
+        torch_dtype: torch.dtype | None = None,
+        **kwargs: Any,
+    ) -> None:
+        self.rng_state = np.random.default_rng(42)
         self.embedding_dim = 32
+        self.is_torch = is_torch
+        self.torch_dtype = torch_dtype if torch_dtype is not None else torch.float32
 
     def encode(
         self,
@@ -79,7 +89,10 @@ class RandomEncoderBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        return _batch_to_embeddings(inputs, self.embedding_dim)
+        embedding = _batch_to_embeddings(inputs, self.embedding_dim)
+        if self.is_torch:
+            return torch.tensor(embedding, dtype=self.torch_dtype)
+        return embedding
 
     def similarity(
         self,
@@ -111,13 +124,89 @@ class RandomEncoderBaseline:
         )
         normalized1 = embeddings1 / (norm1 + 1e-10)
         normalized2 = embeddings2 / (norm2 + 1e-10)
+        normalized1 = np.asarray(normalized1)
+        normalized2 = np.asarray(normalized2)
         return np.sum(normalized1 * normalized2, axis=1)
 
 
 random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,  # type: ignore
-    name="mteb/random-encoder-baseline",
+    name="mock/random-encoder-baseline",
     modalities=["text", "image"],
+    languages=None,
+    open_weights=True,
+    revision="1",
+    release_date=None,
+    n_parameters=0,
+    memory_usage_mb=0,
+    embed_dim=32,
+    license="mit",
+    max_tokens=np.inf,
+    reference=None,
+    similarity_fn_name="cosine",  # type: ignore
+    framework=[],
+    use_instructions=False,
+    public_training_code=None,  # No training code, as this is a random baseline
+    public_training_data=None,  # No training data, as this is a random baseline
+    training_datasets=set(),
+)
+
+random_torch_encoder_baseline = ModelMeta(
+    loader=RandomEncoderBaseline,  # type: ignore
+    loader_kwargs=dict(
+        is_torch=True,
+        torch_dtype=torch.float32,
+    ),
+    name="mock/random-torch-encoder-baseline",
+    modalities=["text", "image"],
+    languages=None,
+    open_weights=True,
+    revision="1",
+    release_date=None,
+    n_parameters=0,
+    memory_usage_mb=0,
+    embed_dim=32,
+    license="mit",
+    max_tokens=np.inf,
+    reference=None,
+    similarity_fn_name="cosine",  # type: ignore
+    framework=[],
+    use_instructions=False,
+    public_training_code=None,  # No training code, as this is a random baseline
+    public_training_data=None,  # No training data, as this is a random baseline
+    training_datasets=set(),
+)
+
+random_torch_fp16_encoder_baseline = ModelMeta(
+    loader=RandomEncoderBaseline,  # type: ignore
+    loader_kwargs=dict(
+        is_torch=True,
+        torch_dtype=torch.float16,
+    ),
+    name="mock/random-torch-fp16-encoder-baseline",
+    modalities=["text", "image"],
+    languages=None,
+    open_weights=True,
+    revision="1",
+    release_date=None,
+    n_parameters=0,
+    memory_usage_mb=0,
+    embed_dim=32,
+    license="mit",
+    max_tokens=np.inf,
+    reference=None,
+    similarity_fn_name="cosine",  # type: ignore
+    framework=[],
+    use_instructions=False,
+    public_training_code=None,  # No training code, as this is a random baseline
+    public_training_data=None,  # No training data, as this is a random baseline
+    training_datasets=set(),
+)
+
+random_image_only_encoder_baseline = ModelMeta(
+    loader=RandomEncoderBaseline,  # type: ignore
+    name="mock/random-image-only-encoder-baseline",
+    modalities=["image"],
     languages=None,
     open_weights=True,
     revision="1",
@@ -147,7 +236,7 @@ class RandomCrossEncoderBaseline:
     mteb_model_meta: ModelMeta | None = None
 
     def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
-        self.rng_state = np.random.RandomState(42)
+        self.rng_state = np.random.default_rng(42)
         self.embedding_dim = 32
 
     def predict(
@@ -175,7 +264,7 @@ class RandomCrossEncoderBaseline:
 
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,  # type: ignore
-    name="mteb/random-crossencoder-baseline",
+    name="mock/random-crossencoder-baseline",
     modalities=["text", "image"],
     languages=None,
     open_weights=True,

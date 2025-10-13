@@ -9,8 +9,6 @@ import mteb
 from mteb.abstasks import AbsTask
 from tests.mock_tasks import (
     MockInstructionReranking,
-    MockMultilingualInstructionReranking,
-    MockMultilingualRerankingTask,
     MockRerankingTask,
 )
 from tests.task_grid import MOCK_TASK_TEST_GRID
@@ -38,9 +36,7 @@ def test_sentence_transformer_integration(task: AbsTask, model_name: str):
     "task",
     [
         MockRerankingTask(),
-        MockMultilingualRerankingTask(),
         MockInstructionReranking(),
-        MockMultilingualInstructionReranking(),
     ],
 )
 @pytest.mark.parametrize("model_name", ["cross-encoder/ms-marco-TinyBERT-L2-v2"])

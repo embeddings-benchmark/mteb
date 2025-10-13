@@ -11,7 +11,6 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import Array, BatchedInput, PromptType
@@ -36,84 +35,6 @@ empty_metadata_kwargs = dict(
     use_instructions=False,
     training_datasets=None,
 )
-
-
-class AbsMockEncoder(AbsEncoder):
-    def __init__(self, seed: int | None = None):
-        if seed is not None:
-            self.rng = np.random.default_rng(seed)
-        else:
-            self.rng = np.random.default_rng()
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        return np.random.rand(len(inputs.dataset), 10)  # noqa: NPY002
-
-
-class MockTorchEncoder(AbsMockEncoder):
-    mteb_model_meta = ModelMeta(name="mock/MockTorchEncoder", **empty_metadata_kwargs)
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        return torch.randn(len(inputs.dataset), 10)
-
-
-class MockTorchfp16Encoder(AbsMockEncoder):
-    mteb_model_meta = ModelMeta(
-        name="mock/MockTorchfp16Encoder", **empty_metadata_kwargs
-    )
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        return torch.randn(len(inputs.dataset), 10, dtype=torch.float16)  # type: ignore
-
-
-class MockMocoEncoder(AbsMockEncoder):
-    mteb_model_meta = ModelMeta(
-        loader=None,
-        name="mock/MockMocoModel",
-        languages=["eng-Latn"],
-        revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
-        release_date="2024-01-01",
-        modalities=["image"],
-        n_parameters=86_600_000,
-        memory_usage_mb=330,
-        max_tokens=None,
-        embed_dim=768,
-        license=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        framework=["PyTorch"],
-        reference="https://github.com/facebookresearch/moco-v3",
-        similarity_fn_name=None,
-        use_instructions=False,
-        training_datasets=None,
-    )
 
 
 class MockSentenceTransformer(SentenceTransformer):
@@ -202,7 +123,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):
             )
         else:
             self.model = model
-
+        # same as SentenceTransformerEncoderWrapper, but removed validation of task names in model_prompts
         if (
             model_prompts is None
             and hasattr(self.model, "prompts")

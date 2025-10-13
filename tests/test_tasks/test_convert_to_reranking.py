@@ -6,8 +6,8 @@ from tests.mock_tasks import MockRetrievalTask
 
 
 def test_two_stage_reranking(tmp_path: Path):
-    de = mteb.get_model("mteb/random-encoder-baseline")
-    ce = mteb.get_model("mteb/random-crossencoder-baseline")
+    de = mteb.get_model("mock/random-encoder-baseline")
+    ce = mteb.get_model("mock/random-crossencoder-baseline")
     task = MockRetrievalTask()
     cache = ResultCache(tmp_path)
     results_folder = tmp_path / "retrieve_results" / "de"
