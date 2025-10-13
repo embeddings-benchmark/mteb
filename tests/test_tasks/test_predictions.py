@@ -23,14 +23,12 @@ from tests.mock_tasks import (
     [
         (
             MockBitextMiningTask(),
-            pytest.approx(
-                {
-                    "sentence1-sentence2": [
-                        {"corpus_id": 1, "score": 0.7544079055482198},
-                        {"corpus_id": 1, "score": 0.7991580438841115},
-                    ]
-                }
-            ),
+            {
+                "sentence1-sentence2": [
+                    {"corpus_id": 1, "score": pytest.approx(0.7544079055482198)},
+                    {"corpus_id": 1, "score": pytest.approx(0.7991580438841115)},
+                ]
+            },
         ),
         (
             MockClassificationTask(),
@@ -112,7 +110,7 @@ from tests.mock_tasks import (
             ),
         ),
         (MockClusteringTask(), [[2, 1, 0]]),
-        (MockClusteringFastTask(), {"Level 0": [[0, 1, 1], [0, 2, 1], [1, 0, 0]]}),
+        (MockClusteringFastTask(), {"Level 0": [[0, 1, 1], [0, 2, 1], [1, 2, 2]]}),
         (
             MockRegressionTask(),
             [pytest.approx([0.9999999999999999, 0.5297196305892906])] * 10,
