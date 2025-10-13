@@ -2302,6 +2302,30 @@ JINA_VDR = Benchmark(
 }""",
 )
 
+REAL_MM_RAG = Benchmark(
+    name="REAL_MM_RAG",
+    display_name="IBM Visual Document Retrieval",
+    tasks=get_tasks(
+        tasks=[
+            "RealMMRagFinReportRetrieval",
+            "RealMMRagFinSlidesRetrieval",
+            "RealMMRagTechReportRetrieval",
+            "RealMMRagTechSlidesRetrieval",
+        ],
+    ),
+    description="""REAL-MM-RAG is a realistic benchmark that reflects real-world multi-modal document retrieval challenges.
+                It includes infographic-rich documents such as slides, reports, and technical manuals with tables, charts, and figures, requiring models to integrate textual and visual evidence.
+                The benchmark features multi-modality, realistic queries, and accurate labeling for comprehensive evaluation.""",
+    reference="https://arxiv.org/abs/2502.12342",
+    citation=r"""
+@article{wasserman2025real,
+  author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
+  journal = {arXiv preprint arXiv:2502.12342},
+  title = {REAL-MM-RAG: A Real-World Multi-Modal Retrieval Benchmark},
+  year = {2025},
+}
+""",
+)
 
 HUME = HUMEBenchmark(
     name="HUME(v1)",
