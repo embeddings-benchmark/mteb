@@ -19,7 +19,7 @@ from tests.mock_tasks import (
         MockMultilingualInstructionReranking(),
     ],
 )
-def test_mock_cross_encoder(task: AbsTask):
-    """Test that a task can be fetched and run"""
+def test_cross_encoder_on_task(task: AbsTask):
+    """Ensures that cross-encoders can be run on retrieval and reranking tasks"""
     model = mteb.get_model("mteb/random-crossencoder-baseline")
     mteb.evaluate(model, task, cache=None)
