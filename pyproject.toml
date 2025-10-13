@@ -223,6 +223,7 @@ select = [
     "RUF101",  # redirected-noqa
     "RUF200",  # invalid-pyproject-toml
     "PTH",     # use pathlib
+    "TID",     # tidy-imports
 ]
 
 ignore = [

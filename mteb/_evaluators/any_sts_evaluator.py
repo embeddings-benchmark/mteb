@@ -11,8 +11,8 @@ from sklearn.metrics.pairwise import (
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
 from mteb.models import Encoder
+from mteb.similarity_functions import compute_pairwise_similarity
 
-from ..similarity_functions import compute_pairwise_similarity
 from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

@@ -7,18 +7,17 @@ import torch
 from datasets import Dataset, concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
+from mteb.abstasks._statistics_calculation import (
+    calculate_image_statistics,
+    calculate_text_statistics,
+)
+from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import Encoder
 from mteb.types.statistics import (
     ImageStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
 )
-
-from .._statistics_calculation import (
-    calculate_image_statistics,
-    calculate_text_statistics,
-)
-from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

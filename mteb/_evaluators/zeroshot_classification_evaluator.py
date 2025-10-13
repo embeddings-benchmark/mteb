@@ -10,8 +10,8 @@ from mteb.create_dataloaders import (
 )
 from mteb.models import Encoder
 from mteb.similarity_functions import similarity
+from mteb.types import Array
 
-from ..types import Array
 from .evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

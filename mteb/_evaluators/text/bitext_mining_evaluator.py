@@ -6,11 +6,10 @@ import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
+from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import Encoder
-
-from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
