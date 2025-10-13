@@ -588,7 +588,6 @@ class MockClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 3,
-            "number_of_characters": 0,
             "text_statistics": {
                 "total_text_length": 81,
                 "min_text_length": 23,
@@ -641,7 +640,6 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 6,
-            "number_of_characters": 0,
             "text_statistics": {
                 "total_text_length": 162,
                 "min_text_length": 23,
@@ -660,7 +658,6 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 3,
-                    "number_of_characters": 0,
                     "text_statistics": {
                         "total_text_length": 81,
                         "min_text_length": 23,
@@ -683,7 +680,6 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
                 },
                 "fra": {
                     "num_samples": 3,
-                    "number_of_characters": 0,
                     "text_statistics": {
                         "total_text_length": 81,
                         "min_text_length": 23,
@@ -756,6 +752,7 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
                 "max_text_length": 29,
                 "unique_texts": 3,
             },
+            "image_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -807,6 +804,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
                 "max_text_length": 29,
                 "unique_texts": 3,
             },
+            "image_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -824,6 +822,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
                         "max_text_length": 29,
                         "unique_texts": 3,
                     },
+                    "image_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -845,6 +844,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
                         "max_text_length": 29,
                         "unique_texts": 3,
                     },
+                    "image_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -3245,7 +3245,6 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": 0,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3275,6 +3274,62 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
     metadata.modalities = ["image"]
     input_column_name = "image"
     label_column_name = "label"
+
+    def load_data(self) -> None:
+        images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
+        labels = [1, 0]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "image": images,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+
+class MockImageClusteringFastTask(AbsTaskClusteringFast):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "text_statistics": None,
+            "image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "0": {"count": 1}},
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="ImageClustering",
+        name="MockImageClusteringFastTask",
+        main_score="v_measure",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["image"]
+    input_column_name = "image"
+    label_column_name = "label"
+    max_fraction_of_documents_to_embed = None
+    max_document_to_embed = 2
 
     def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]

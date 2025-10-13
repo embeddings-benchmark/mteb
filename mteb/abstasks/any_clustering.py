@@ -30,7 +30,6 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
@@ -38,7 +37,6 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
-    number_of_characters: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
@@ -140,7 +138,6 @@ class AbsTaskAnyClustering(AbsTask):
         if isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        total_text_len = 0
         text_statistics, image_statistics = None, None
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
@@ -152,7 +149,6 @@ class AbsTaskAnyClustering(AbsTask):
 
         return ClusteringDescriptiveStatistics(
             num_samples=len(inputs),
-            number_of_characters=total_text_len,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             label_statistics=label_statistics,
