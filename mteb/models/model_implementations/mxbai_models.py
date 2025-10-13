@@ -51,7 +51,7 @@ mxbai_embed_large_v1 = ModelMeta(
     """,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=mixedbread_training_data,
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
