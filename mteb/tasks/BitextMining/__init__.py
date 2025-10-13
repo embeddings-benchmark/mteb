@@ -25,5 +25,6 @@ from .multilingual.RomaTalesBitextMining import *
 from .multilingual.RuSciBenchBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .multilingual.WebFAQBitextMining import *
+from .slk.OpusSlovakEnglishBitextMining import *
 from .srn.SRNCorpusBitextMining import *
 from .vie.VieMedEVBitextMining import *
