@@ -8,5 +8,6 @@ from .por.BrazilianToxicTweetsClassification import *
 from .rus.CEDRClassification import *
 from .rus.ru_toixic_multilabelclassification_okmlcup import *
 from .rus.SensitiveTopicsClassification import *
+from .slk.MultiEURLEXSlovakClassification import *
 from .swe.SwedishPatentCPCGroupClassification import *
 from .swe.SwedishPatentCPCSubclassClassification import *
