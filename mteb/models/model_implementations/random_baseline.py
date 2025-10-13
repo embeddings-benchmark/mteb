@@ -87,8 +87,12 @@ class RandomEncoderBaseline:
         embeddings2: Array,
     ) -> Array:
         """Cosine similarity"""
-        norm1 = np.linalg.norm(embeddings1, axis=1, keepdims=True)
-        norm2 = np.linalg.norm(embeddings2, axis=1, keepdims=True)
+        norm1 = np.linalg.norm(
+            embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        )
+        norm2 = np.linalg.norm(
+            embeddings2.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        )
         normalized1 = embeddings1 / (norm1 + 1e-10)
         normalized2 = embeddings2 / (norm2 + 1e-10)
         return np.dot(normalized1, normalized2.T)
@@ -99,8 +103,12 @@ class RandomEncoderBaseline:
         embeddings2: Array,
     ) -> Array:
         """Cosine similarity"""
-        norm1 = np.linalg.norm(embeddings1, axis=1, keepdims=True)
-        norm2 = np.linalg.norm(embeddings2, axis=1, keepdims=True)
+        norm1 = np.linalg.norm(
+            embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        )
+        norm2 = np.linalg.norm(
+            embeddings2.reshape(-1, self.embedding_dim), axis=1, keepdims=True
+        )
         normalized1 = embeddings1 / (norm1 + 1e-10)
         normalized2 = embeddings2 / (norm2 + 1e-10)
         return np.sum(normalized1 * normalized2, axis=1)

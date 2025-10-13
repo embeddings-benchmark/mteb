@@ -14,6 +14,18 @@ from mteb.models.models_protocols import Encoder
 from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 
+class DummyModel(Encoder):
+    def __init__(self, embedding_dim=768):
+        self.embedding_dim = embedding_dim
+        self.call_count = 0
+
+    def encode(self, inputs, **kwargs):
+        self.call_count += 1
+        return np.random.rand(len(inputs.dataset), self.embedding_dim).astype(  # noqa: NPY002
+            np.float32
+        )
+
+
 class TestCachedEmbeddingWrapper:
     @pytest.fixture(scope="function")
     def cache_dir(self, tmp_path):
@@ -25,7 +37,7 @@ class TestCachedEmbeddingWrapper:
 
     def test_caching_functionality(self, cache_dir):
         # Create a dummy model
-        dummy_model = mteb.get_model("mteb/random-encoder-baseline")
+        dummy_model = DummyModel()
         dummy_task_metadata_query = TaskMetadata(
             name="DummyTaskQuery",
             description="Dummy task metadata",

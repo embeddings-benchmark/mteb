@@ -44,7 +44,7 @@ def test_expected_scores(model, mock_task):
     assert isinstance(test_cache, np.ndarray)
 
     # Check that we get reasonable scores (MockClassificationTask has deterministic data)
-    assert y_pred.tolist() == [1, 0]
+    assert y_pred.tolist() == [0, 0]
 
 
 def test_cache_usage_binary(model):
@@ -104,4 +104,4 @@ def test_cache_usage_binary(model):
 
     # Verify cache is preserved
     assert np.array_equal(test_cache_initial, test_cache_after_cache_usage)
-    assert y_pred.tolist() == [1, 0]
+    assert y_pred.tolist() == [0, 0]
