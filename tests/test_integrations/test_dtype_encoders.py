@@ -14,47 +14,12 @@ from tests.mock_models import (
     MockTorchEncoder,
     MockTorchfp16Encoder,
 )
-from tests.mock_tasks import (
-    MockBitextMiningTask,
-    MockClassificationTask,
-    MockClusteringFastTask,
-    MockClusteringTask,
-    MockInstructionReranking,
-    MockInstructionRetrieval,
-    MockMultilabelClassification,
-    MockPairClassificationTask,
-    MockRegressionTask,
-    MockRerankingTask,
-    MockRetrievalDialogTask,
-    MockRetrievalTask,
-    MockSTSTask,
-    MockSummarizationTask,
-    MockTextZeroShotClassificationTask,
-)
+from tests.task_grid import MOCK_TASK_TEST_GRID_MONOLINGUAL
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize(
-    "task",
-    [
-        MockBitextMiningTask(),
-        MockClassificationTask(),
-        MockRegressionTask(),
-        MockClusteringTask(),
-        MockClusteringFastTask(),
-        MockPairClassificationTask(),
-        MockRerankingTask(),
-        MockRetrievalTask(),
-        MockSTSTask(),
-        MockMultilabelClassification(),
-        MockSummarizationTask(),
-        MockInstructionRetrieval(),
-        MockInstructionReranking(),
-        MockRetrievalDialogTask(),
-        MockTextZeroShotClassificationTask(),
-    ],
-)
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID_MONOLINGUAL)
 @pytest.mark.parametrize(
     "model",
     [

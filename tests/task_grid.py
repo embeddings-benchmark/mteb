@@ -71,36 +71,43 @@ TASK_TEST_GRID_AS_STRING = [
 
 # Mock tasks for testing - intended to be faster and avoid downloading data leading to false positive potential failures in CI
 # Not all tasks are implemented as Mock tasks yet
-MOCK_TASK_TEST_GRID = [
-    MockBitextMiningTask(),
+MOCK_TASK_TEST_GRID_MULTILINGUAL = [
     MockMultilingualBitextMiningTask(),
     MockMultilingualParallelBitextMiningTask(),
+    MockMultilingualClassificationTask(),
+    MockMultilingualClusteringTask(),
+    MockMultilingualClusteringFastTask(),
+    MockMultilingualPairClassificationTask(),
+    MockMultilingualRerankingTask(),
+    MockMultilingualRetrievalTask(),
+    MockMultilingualSTSTask(),
+    MockMultilingualMultilabelClassification(),
+    MockMultilingualSummarizationTask(),
+    MockMultilingualInstructionRetrieval(),
+    MockMultilingualInstructionReranking(),
+]
+
+MOCK_TASK_TEST_GRID_MONOLINGUAL = [
+    MockBitextMiningTask(),
     MockClassificationTask(),
     MockRegressionTask(),
-    MockMultilingualClassificationTask(),
     MockClusteringTask(),
-    MockMultilingualClusteringTask(),
     MockClusteringFastTask(),
-    MockMultilingualClusteringFastTask(),
     MockPairClassificationTask(),
-    MockMultilingualPairClassificationTask(),
     MockRerankingTask(),
-    MockMultilingualRerankingTask(),
     MockRetrievalTask(),
-    MockMultilingualRetrievalTask(),
     MockSTSTask(),
     MockMultilingualSTSTask(),
     MockMultilabelClassification(),
-    MockMultilingualMultilabelClassification(),
     MockSummarizationTask(),
-    MockMultilingualSummarizationTask(),
     MockInstructionRetrieval(),
-    MockMultilingualInstructionRetrieval(),
-    MockMultilingualInstructionReranking(),
     MockInstructionReranking(),
     MockRetrievalDialogTask(),
     MockTextZeroShotClassificationTask(),
 ]
+
+
+MOCK_TASK_TEST_GRID = MOCK_TASK_TEST_GRID_MULTILINGUAL + MOCK_TASK_TEST_GRID_MONOLINGUAL
 
 MOCK_TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_TASK_TEST_GRID
