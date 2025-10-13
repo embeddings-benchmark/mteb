@@ -1,6 +1,7 @@
 from typing import Any
 
 import numpy as np
+from PIL import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -33,9 +34,22 @@ class RandomBaseline:
     ) -> Array:
         all_embeddings = []
         for batch in inputs:
-            for text in batch["text"]:
-                vector = self._string_to_vector(text, self.embedding_dim)
-                all_embeddings.append(vector)
+            if "text" in batch and "image" in batch:
+                for text, image in zip(batch["text"], batch["image"]):
+                    text_vector = self._string_to_vector(text, self.embedding_dim)
+                    image_vector = self._image_to_vector(image, self.embedding_dim)
+                    combined_vector = (text_vector + image_vector) / 2
+                    all_embeddings.append(combined_vector)
+            elif "image" in batch:
+                for image in batch["image"]:
+                    vector = self._image_to_vector(image, self.embedding_dim)
+                    all_embeddings.append(vector)
+            elif "text" in batch:
+                for text in batch["text"]:
+                    vector = self._string_to_vector(text, self.embedding_dim)
+                    all_embeddings.append(vector)
+            else:
+                raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
         return np.vstack(all_embeddings)
 
     @staticmethod
@@ -47,6 +61,15 @@ class RandomBaseline:
         seed = int.from_bytes(s.encode("utf-8"), byteorder="big") % (
             2**32
         )  # numpy rng seed must be between 0 and 2**32
+        rng = np.random.default_rng(seed)
+        return rng.random(size)
+
+    @staticmethod
+    def _image_to_vector(image: Image.Image, size: int):
+        """Generate a deterministic random vector based on image content."""
+        # Convert image to bytes and then to a numeric seed
+        image_bytes = image.tobytes()
+        seed = int.from_bytes(image_bytes, byteorder="big") % (2**32)
         rng = np.random.default_rng(seed)
         return rng.random(size)
 
@@ -78,6 +101,7 @@ class RandomBaseline:
 random_baseline = ModelMeta(
     loader=RandomBaseline,  # type: ignore
     name="mteb/random-baseline",
+    modalities=["text", "image"],
     languages=None,
     open_weights=True,
     revision="1",

@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-from typing import Any
 
 import pytest
 
@@ -15,7 +14,6 @@ from tests.mock_tasks import (
     MockRegressionTask,
     MockRetrievalTask,
     MockSTSTask,
-    MockSummarizationTask,
     MockTextZeroShotClassificationTask,
 )
 
@@ -104,15 +102,18 @@ from tests.mock_tasks import (
                 ],
             },
         ),
-        (MockClusteringTask, [[2, 2, 1]]),
-        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 2], [2, 0, 0]]}),
+        (MockClusteringTask, [[0, 0, 0]]),
+        (MockClusteringFastTask, {"Level 0": [[0, 0, 0], [0, 0, 0], [0, 0, 0]]}),
         (
             MockRegressionTask,
-            [[0.39, 0.76]] * 10,
+            [[0.5, 0.5]] * 10,
         ),
         (
             MockImageTextPairClassificationTask,
-            [[[0.67]], [[0.45]]],
+            [
+                [[pytest.approx(0.7854366638891553)]],
+                [[pytest.approx(0.7571324633489456)]],
+            ],
         ),
     ],
 )
