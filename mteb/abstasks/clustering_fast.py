@@ -40,7 +40,7 @@ def evaluate_clustering_bootstrapped(
     cluster_size: int,
     kmean_batch_size: int,
     max_depth: int | None,
-    rng_state: random.Random = random.Random(),
+    rng_state: random.Random,
 ) -> tuple[dict[str, list[float]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
 
@@ -72,6 +72,7 @@ def evaluate_clustering_bootstrapped(
             n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
+            random_state=42,
         )
         for _ in range(n_clusters):
             # sample N samples from the corpus with replacement
