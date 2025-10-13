@@ -22,7 +22,7 @@ class HUMEWikipediaRerankingMultilingual(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
-        main_score="map",
+        main_score="map_at_1000",
         date=("2023-01-01", "2023-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],

@@ -16,7 +16,7 @@ class HUMENews21InstructionReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2021-01-01", "2021-12-31"),
         domains=["News", "Written"],
         task_subtypes=[],
