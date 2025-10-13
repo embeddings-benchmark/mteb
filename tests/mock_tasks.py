@@ -588,7 +588,6 @@ class MockClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 3,
-            "number_of_characters": 0,
             "text_statistics": {
                 "total_text_length": 81,
                 "min_text_length": 23,
@@ -641,7 +640,6 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 6,
-            "number_of_characters": 0,
             "text_statistics": {
                 "total_text_length": 162,
                 "min_text_length": 23,
@@ -660,7 +658,6 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 3,
-                    "number_of_characters": 0,
                     "text_statistics": {
                         "total_text_length": 81,
                         "min_text_length": 23,
@@ -683,7 +680,6 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
                 },
                 "fra": {
                     "num_samples": 3,
-                    "number_of_characters": 0,
                     "text_statistics": {
                         "total_text_length": 81,
                         "min_text_length": 23,
@@ -3249,7 +3245,6 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": 0,
             "text_statistics": None,
             "image_statistics": {
                 "min_image_width": 100,
@@ -3334,6 +3329,7 @@ class MockImageClusteringFastTask(AbsTaskClusteringFast):
     input_column_name = "image"
     label_column_name = "label"
     max_fraction_of_documents_to_embed = None
+    max_document_to_embed = 2
 
     def load_data(self) -> None:
         images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
