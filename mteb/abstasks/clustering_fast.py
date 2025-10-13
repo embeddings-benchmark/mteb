@@ -41,6 +41,7 @@ def evaluate_clustering_bootstrapped(
     kmean_batch_size: int,
     max_depth: int | None,
     rng_state: random.Random,
+    seed: int,
 ) -> tuple[dict[str, list[float]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
 
@@ -72,7 +73,7 @@ def evaluate_clustering_bootstrapped(
             n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
-            random_state=42,
+            random_state=seed,
         )
         for _ in range(n_clusters):
             # sample N samples from the corpus with replacement
@@ -211,6 +212,7 @@ class AbsTaskClusteringFast(AbsTask):
             kmean_batch_size=self.k_mean_batch_size,
             max_depth=self.max_depth,
             rng_state=self.rng_state,
+            seed=self.seed,
         )
 
         if prediction_folder:

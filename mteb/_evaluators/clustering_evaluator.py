@@ -64,7 +64,7 @@ class ClusteringEvaluator(Evaluator):
             batch_size=self.clustering_batch_size,
             n_init="auto",
             compute_labels=True,
-            random_state=42,
+            random_state=self.seed,
         )
         clustering_model.fit(embeddings)
         return clustering_model.labels_.tolist()
