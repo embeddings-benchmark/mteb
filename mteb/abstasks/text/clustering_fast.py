@@ -13,6 +13,7 @@ from sklearn.metrics.cluster import v_measure_score
 from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
+    ImageStatistics,
     LabelStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
@@ -20,6 +21,7 @@ from mteb.types.statistics import (
 
 from ...create_dataloaders import create_dataloader
 from .._statistics_calculation import (
+    calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
 )
@@ -39,13 +41,14 @@ def evaluate_clustering_bootstrapped(
     kmean_batch_size: int,
     max_depth: int | None,
     rng_state: random.Random = random.Random(),
-) -> dict[str, list[float]]:
+) -> tuple[dict[str, list[float]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
 
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
     """
     v_measures = defaultdict(list)
+    cluster_assignments = defaultdict(list)
     if max_depth is not None:
         max_depth = min(max_depth, max(map(len, labels)))
     else:
@@ -80,8 +83,9 @@ def evaluate_clustering_bootstrapped(
             cluster_assignment = clustering_model.fit_predict(_embeddings)
             v_measure = v_measure_score(_labels, cluster_assignment)
             v_measures[f"Level {i_level}"].append(v_measure)
+            cluster_assignments[f"Level {i_level}"].append(cluster_assignment.tolist())
 
-    return v_measures
+    return v_measures, cluster_assignments
 
 
 class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
@@ -90,13 +94,15 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
 
-        text_statistics: Statistics for the text
-        labels_statistics: Statistics for the labels
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        labels_statistics: Statistics for labels
     """
 
     num_samples: int
 
-    text_statistics: TextStatistics
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -108,7 +114,7 @@ class AbsTaskClusteringFast(AbsTask):
     This approach is then repeated K times.
 
     There are two ways to specify how a dataset is downsampled:
-        - max_document_to_embe (int): default to None
+        - max_document_to_embed (int): default to None
         - max_fraction_of_documents_to_embed (float): default to 4%.
     If both parameters are set to None, no downsampling is done in self._evaluate_subset().
     Only one of these two parameters can be not None at the same time.
@@ -196,7 +202,7 @@ class AbsTaskClusteringFast(AbsTask):
                 label = [label]
             labels.append(label)
 
-        all_v_scores = evaluate_clustering_bootstrapped(
+        all_v_scores, all_assignments = evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,
@@ -205,6 +211,16 @@ class AbsTaskClusteringFast(AbsTask):
             max_depth=self.max_depth,
             rng_state=self.rng_state,
         )
+
+        if prediction_folder:
+            self._save_task_predictions(
+                all_assignments,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
         logger.info("Running clustering - Finished.")
@@ -220,22 +236,37 @@ class AbsTaskClusteringFast(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
         if hf_subset:
-            sentences = self.dataset[hf_subset][split][self.input_column_name]
+            inputs = self.dataset[hf_subset][split][self.input_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
-            sentences = []
+            inputs = []
             labels = []
             for hf_subset in self.metadata.eval_langs:
-                sentences.extend(self.dataset[hf_subset][split][self.input_column_name])
+                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
-            sentences = self.dataset[split][self.input_column_name]
+            inputs = self.dataset[split][self.input_column_name]
             labels = self.dataset[split][self.label_column_name]
 
+        if isinstance(inputs[0], list):
+            inputs = [item for sublist in inputs for item in sublist]
+        if isinstance(labels[0], list):
+            labels = [item for sublist in labels for item in sublist]
+
+        text_statistics, image_statistics = None, None
+        if "image" in self.metadata.modalities:
+            image_statistics = calculate_image_statistics(inputs)
+
+        if "text" in self.metadata.modalities:
+            text_statistics = calculate_text_statistics(inputs)
+
+        label_statistics = calculate_label_statistics(labels)
+
         return ClusteringFastDescriptiveStatistics(
-            num_samples=len(sentences),
-            text_statistics=calculate_text_statistics(sentences),
-            labels_statistics=calculate_label_statistics(labels),
+            num_samples=len(inputs),
+            text_statistics=text_statistics,
+            image_statistics=image_statistics,
+            labels_statistics=label_statistics,
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:

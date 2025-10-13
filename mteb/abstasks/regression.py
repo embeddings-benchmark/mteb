@@ -1,31 +1,26 @@
 import logging
-from pathlib import Path
-from typing import Any
+from typing import TypedDict
 
 import datasets
 import numpy as np
 import pandas as pd
-from datasets import DatasetDict
+from datasets import Dataset
+from scipy.stats import kendalltau
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from mteb._evaluators.regression_evaluator import (
-    LinearRegressionEvaluator,
-    SklearnRegressorModel,
-)
+from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.abstasks._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
 )
-from mteb.models import MTEBModels
-from mteb.models.models_protocols import Encoder
-from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
 )
 
-from .abstask import AbsTask
+from .any_classification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +46,25 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
     values_statistics: ScoreStatistics
 
 
-# TODO: To be extended to support images.
-class AbsTaskRegression(AbsTask):
+class RegressionMetrics(TypedDict):
+    """Regression metrics.
+
+    Attributes:
+        mae: Mean Absolute Error.
+        mse: Mean Squared Error.
+        rmse: Root Mean Squared Error.
+        r2: R^2 (coefficient of determination) regression score function.
+        kendalltau: Kendall's tau correlation coefficient.
+    """
+
+    mae: float
+    mse: float
+    rmse: float
+    r2: float
+    kendalltau: float
+
+
+class AbsTaskRegression(AbsTaskAnyClassification):
     """Abstract class for regression tasks
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
@@ -61,8 +73,8 @@ class AbsTaskRegression(AbsTask):
         value: float
     """
 
-    evaluator: type[LinearRegressionEvaluator] = LinearRegressionEvaluator
-    regressor: SklearnRegressorModel = LinearRegression(n_jobs=-1)
+    evaluator: type[SklearnModelProtocol] = SklearnEvaluator
+    evaluator_model: SklearnModelProtocol = LinearRegression(n_jobs=-1)
 
     train_split: str = "train"
     label_column_name: str = "value"
@@ -72,100 +84,34 @@ class AbsTaskRegression(AbsTask):
     n_experiments: int = 10
     n_samples: int = 2048
 
-    def _evaluate_subset(
+    def _undersample_data(
+        self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
+    ) -> tuple[Dataset, list[int]]:
+        if self.n_samples >= len(dataset):
+            train_split_sampled = dataset
+        else:
+            train_split_sampled = self.stratified_subsampling(
+                datasets.DatasetDict({"train": dataset}),
+                seed=self.seed + experiment_num,
+                splits=["train"],
+                label=self.label_column_name,
+                n_samples=self.n_samples,
+            )["train"]
+        return train_split_sampled, []
+
+    def _calculate_scores(
         self,
-        model: Encoder,
-        data_split: DatasetDict,
-        *,
-        encode_kwargs: dict[str, Any],
-        hf_split: str,
-        hf_subset: str,
-        prediction_folder: Path | None = None,
-        **kwargs: Any,
-    ) -> ScoresDict:
-        train_split = data_split[self.train_split]
-        eval_split = data_split[hf_split]
-
-        scores_list, test_cache = [], None
-        for i in range(self.n_experiments):
-            logger.info(
-                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
-            )
-
-            if self.n_samples >= len(train_split):
-                train_split_sampled = train_split
-            else:
-                train_split_sampled = self.stratified_subsampling(
-                    datasets.DatasetDict({"train": train_split}),
-                    seed=self.seed + i,
-                    splits=["train"],
-                    label=self.label_column_name,
-                    n_samples=self.n_samples,
-                )["train"]
-
-            evaluator = self.evaluator(
-                train_split_sampled,
-                eval_split,
-                self.input_column_name,
-                self.label_column_name,
-                task_metadata=self.metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                regressor=self.regressor,
-                **kwargs,
-            )
-            scores, test_cache = evaluator(
-                model, encode_kwargs=encode_kwargs, test_cache=test_cache
-            )
-            scores_list.append(scores)
-
-        avg_scores: dict[str, Any] = {
-            k: np.mean([s[k] for s in scores_list]) for k in scores_list[0]
-        }
-        avg_scores["scores_per_experiment"] = scores_list
-        return avg_scores
-
-    def evaluate(
-        self,
-        model: MTEBModels,
-        split: str = "test",
-        subsets_to_run: list[HFSubset] | None = None,
-        *,
-        encode_kwargs: dict[str, Any],
-        prediction_folder: Path | None = None,
-        **kwargs: Any,
-    ) -> dict[HFSubset, ScoresDict]:
-        if not self.data_loaded:
-            self.load_data()
-
-        if "random_state" in self.regressor.get_params():
-            self.regressor = self.regressor.set_params(random_state=self.seed)
-
-        scores = {}
-        hf_subsets = self.hf_subsets
-        if subsets_to_run is not None:
-            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
-
-        for hf_subset in hf_subsets:
-            logger.info(
-                f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
-            )
-
-            if hf_subset not in self.dataset and hf_subset == "default":
-                ds = self.dataset
-            else:
-                ds = self.dataset[hf_subset]
-            scores[hf_subset] = self._evaluate_subset(
-                model,
-                ds,
-                hf_split=split,
-                hf_subset=hf_subset,
-                encode_kwargs=encode_kwargs,
-                **kwargs,
-            )
-            self._add_main_score(scores[hf_subset])
-
-        return scores
+        y_test: np.ndarray | list[int],
+        y_pred: np.ndarray,
+    ) -> RegressionMetrics:
+        mse = mean_squared_error(y_test, y_pred)
+        return RegressionMetrics(
+            mse=mse,
+            mae=mean_absolute_error(y_test, y_pred),
+            r2=r2_score(y_test, y_pred),
+            kendalltau=kendalltau(y_test, y_pred).statistic,
+            rmse=np.sqrt(mse),
+        )
 
     @staticmethod
     def stratified_subsampling(

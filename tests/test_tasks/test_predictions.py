@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -7,9 +8,14 @@ import mteb
 from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
+    MockClusteringFastTask,
+    MockClusteringTask,
+    MockImageTextPairClassificationTask,
     MockPairClassificationTask,
+    MockRegressionTask,
     MockRetrievalTask,
     MockSTSTask,
+    MockSummarizationTask,
     MockTextZeroShotClassificationTask,
 )
 
@@ -98,10 +104,20 @@ from tests.mock_tasks import (
                 ],
             },
         ),
+        (MockClusteringTask, [[2, 2, 1]]),
+        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 2], [2, 0, 0]]}),
+        (
+            MockRegressionTask,
+            [[0.39, 0.76]] * 10,
+        ),
+        (
+            MockImageTextPairClassificationTask,
+            [[[0.67]], [[0.45]]],
+        ),
     ],
 )
 def test_predictions(tmp_path: Path, task_cls, expected):
-    """Run evaluation for each mock task and check predictions match exactly."""
+    """Run evaluation for each mock task and check predictions."""
     task = task_cls()
     model = mteb.get_model_meta("mteb/random-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
