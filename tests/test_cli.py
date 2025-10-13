@@ -15,8 +15,8 @@ def test_available_tasks():
     command = f"{sys.executable} -m mteb available-tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
-    assert "Banking77Classification" in result.stdout, (
-        "Sample task Banking77Classification task not found in available tasks"
+    assert "LccSentimentClassification" in result.stdout, (
+        "Sample task LccSentimentClassification task not found in available tasks"
     )
 
 

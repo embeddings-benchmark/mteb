@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from mteb import MTEB
@@ -363,13 +365,17 @@ def test_all_splits_subsets_evaluated_with_overwrite(
         assert sorted(results2[0].languages) == ["eng", "fra"]
 
 
-def test_splits_evaluated_with_prefiltering():
+def test_splits_evaluated_with_prefiltering(tmp_path: Path):
     """Test that the evaluation only runs on the specified languages. Issue https://github.com/embeddings-benchmark/mteb/pull/1787#issuecomment-2598205049"""
     task = MockMultilingualSTSTask().filter_languages(languages=["fra"])
 
     evaluation = MTEB(tasks=[task])
 
-    results = evaluation.run(MockSentenceTransformer(), overwrite_results=True)
+    results = evaluation.run(
+        MockSentenceTransformer(),
+        overwrite_results=True,
+        output_folder=str(tmp_path / "prefiltered_langs"),
+    )
     result_scores = results[0].scores
 
     assert len(result_scores) == 1

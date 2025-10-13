@@ -118,7 +118,7 @@ class BitextMiningEvaluator(Evaluator):
 
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                    similarity_scores,
+                    torch.tensor(similarity_scores),
                     1,
                     dim=1,
                     largest=True,
