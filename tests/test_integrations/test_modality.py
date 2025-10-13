@@ -11,7 +11,6 @@ import mteb
 import mteb.overview
 from mteb.MTEB import logger
 from tests.mock_models import (
-    MockCLIPEncoder,
     MockMocoEncoder,
 )
 from tests.mock_tasks import (
@@ -53,7 +52,7 @@ def test_task_modality_filtering_model_modalities_more_than_task_modalities(task
 
     # Run the evaluation
     eval.run(
-        model=MockCLIPEncoder(),
+        model=mteb.get_model("mteb/random-encoder-baseline"),
         output_folder="tests/results",
         overwrite_results=True,
     )

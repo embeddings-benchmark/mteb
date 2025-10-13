@@ -58,46 +58,6 @@ class AbsMockEncoder(AbsEncoder):
         return np.random.rand(len(inputs.dataset), 10)  # noqa: NPY002
 
 
-class MockNumpyEncoder(AbsMockEncoder):
-    mteb_model_meta = ModelMeta(
-        loader=None,
-        name="mock/MockNumpyEncoder",
-        languages=["eng-Latn"],
-        revision="1",
-        release_date=None,
-        modalities=["text", "image"],
-        n_parameters=None,
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=None,
-        license=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        framework=["NumPy"],
-        reference=None,
-        similarity_fn_name=None,
-        use_instructions=False,
-        training_datasets=None,
-    )
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        n = 0
-        for batch in inputs:
-            batch_column = next(iter(batch.keys()))
-            n += len(batch[batch_column])
-        return np.random.rand(n, 10)  # type: ignore # noqa: NPY002
-
-
 class MockTorchEncoder(AbsMockEncoder):
     mteb_model_meta = ModelMeta(name="mock/MockTorchEncoder", **empty_metadata_kwargs)
 
@@ -130,43 +90,6 @@ class MockTorchfp16Encoder(AbsMockEncoder):
         **kwargs: Any,
     ) -> Array:
         return torch.randn(len(inputs.dataset), 10, dtype=torch.float16)  # type: ignore
-
-
-class MockCLIPEncoder(AbsMockEncoder):
-    mteb_model_meta = ModelMeta(
-        loader=None,
-        name="mock/MockCLIPModel",
-        languages=["eng-Latn"],
-        revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
-        release_date="2021-02-06",
-        modalities=["image", "text"],
-        n_parameters=86_600_000,
-        memory_usage_mb=330,
-        max_tokens=None,
-        embed_dim=768,
-        license=None,
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        framework=["PyTorch"],
-        reference="https://huggingface.co/openai/clip-vit-base-patch32",
-        similarity_fn_name=None,
-        use_instructions=False,
-        training_datasets=None,
-    )
-    model_card_data = mteb_model_meta
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        return torch.randn(len(inputs.dataset), 10)
 
 
 class MockMocoEncoder(AbsMockEncoder):

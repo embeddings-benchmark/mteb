@@ -9,7 +9,6 @@ import pytest
 import mteb
 from mteb.abstasks import AbsTask
 from tests.mock_models import (
-    MockNumpyEncoder,
     MockSentenceTransformersbf16Encoder,
     MockTorchEncoder,
     MockTorchfp16Encoder,
@@ -23,7 +22,7 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "model",
     [
-        MockNumpyEncoder(),
+        mteb.get_model("mteb/random-encoder-baseline"),
         MockTorchEncoder(),
         MockTorchfp16Encoder(),
         MockSentenceTransformersbf16Encoder(),

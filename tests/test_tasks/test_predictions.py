@@ -25,8 +25,8 @@ from tests.mock_tasks import (
             MockBitextMiningTask,
             {
                 "sentence1-sentence2": [
-                    {"corpus_id": 1, "score": 0.7652846501709707},
-                    {"corpus_id": 1, "score": 0.7652846501709707},
+                    {"corpus_id": 1, "score": 0.7544079055482198},
+                    {"corpus_id": 1, "score": 0.7991580438841115},
                 ]
             },
         ),
@@ -48,32 +48,35 @@ from tests.mock_tasks import (
         (
             MockTextZeroShotClassificationTask,
             [
-                [0.9999999999419484, 0.9999999999419484],
-                [0.9999999999419484, 0.9999999999419484],
+                [0.9999999999381253, 0.7463670084501418],
+                [0.7463670084501418, 0.9999999999291757],
             ],
         ),
         (
             MockRetrievalTask,
-            {"q1": {"d2": 0.9999999999419484}, "q2": {"d2": 0.9999999999419484}},
+            {
+                "q1": {"d1": pytest.approx(0.7990461275020804)},
+                "q2": {"d1": pytest.approx(0.7959300710973475)},
+            },
         ),
         (
             MockSTSTask,
             {
                 "cosine_scores": [
-                    pytest.approx(0.7271937024333304),
-                    pytest.approx(0.7652846502146503),
-                ],
-                "manhattan_distances": [
-                    pytest.approx(-11.606113294587654),
-                    pytest.approx(-11.687107717574829),
+                    pytest.approx(0.7420341674650179),
+                    pytest.approx(0.799158043937249),
                 ],
                 "euclidean_distances": [
-                    pytest.approx(-2.4683132356991315),
-                    pytest.approx(-2.404168159957386),
+                    pytest.approx(-2.368116011174239),
+                    pytest.approx(-1.9505613193234193),
+                ],
+                "manhattan_distances": [
+                    pytest.approx(-11.10350771249041),
+                    pytest.approx(-8.983517484440046),
                 ],
                 "similarity_scores": [
-                    pytest.approx(0.7271937023895851),
-                    pytest.approx(0.7652846501709707),
+                    pytest.approx(0.742034167419937),
+                    pytest.approx(0.7991580438841115),
                 ],
             },
         ),
@@ -81,38 +84,38 @@ from tests.mock_tasks import (
             MockPairClassificationTask,
             {
                 "cosine_scores": [
-                    pytest.approx(0.7271937024333304),
-                    pytest.approx(0.7652846502146503),
-                ],
-                "euclidean_distances": [
-                    pytest.approx(2.4683132356991315),
-                    pytest.approx(2.404168159957386),
-                ],
-                "manhattan_distances": [
-                    pytest.approx(11.606113294587654),
-                    pytest.approx(11.687107717574829),
-                ],
-                "similarity_scores": [
-                    pytest.approx(0.7271937023895851),
-                    pytest.approx(0.7652846501709707),
+                    pytest.approx(0.7420341674650179),
+                    pytest.approx(0.799158043937249),
                 ],
                 "dot_scores": [
-                    pytest.approx(8.047867836468026),
-                    pytest.approx(9.399434014739104),
+                    pytest.approx(8.044359667700071),
+                    pytest.approx(7.261175109797408),
+                ],
+                "euclidean_distances": [
+                    pytest.approx(2.368116011174239),
+                    pytest.approx(1.9505613193234193),
+                ],
+                "manhattan_distances": [
+                    pytest.approx(11.10350771249041),
+                    pytest.approx(8.983517484440046),
+                ],
+                "similarity_scores": [
+                    pytest.approx(0.742034167419937),
+                    pytest.approx(0.7991580438841115),
                 ],
             },
         ),
-        (MockClusteringTask, [[0, 0, 0]]),
-        (MockClusteringFastTask, {"Level 0": [[0, 0, 0], [0, 0, 0], [0, 0, 0]]}),
+        (MockClusteringTask, [[2, 1, 0]]),
+        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 0], [0, 1, 1]]}),
         (
             MockRegressionTask,
-            [[0.5, 0.5]] * 10,
+            [[0.9999999999999999, 0.5297196305892906]] * 10,
         ),
         (
             MockImageTextPairClassificationTask,
             [
-                [[pytest.approx(0.7854366638891553)]],
-                [[pytest.approx(0.7571324633489456)]],
+                [[pytest.approx(0.8513203857500926)]],
+                [[pytest.approx(0.7686800183685046)]],
             ],
         ),
     ],
@@ -120,7 +123,7 @@ from tests.mock_tasks import (
 def test_predictions(tmp_path: Path, task_cls, expected):
     """Run evaluation for each mock task and check predictions."""
     task = task_cls()
-    model = mteb.get_model_meta("mteb/random-baseline")
+    model = mteb.get_model_meta("mteb/random-encoder-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
     with task._predictions_path(tmp_path).open() as f:

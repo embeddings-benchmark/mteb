@@ -1,14 +1,14 @@
 import pytest
 
+import mteb
 from mteb._evaluators import AnySTSEvaluator
-from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import MockSTSTask
 
 
 # Fixtures
 @pytest.fixture
 def model():
-    return MockNumpyEncoder(seed=42)
+    return mteb.get_model("mteb/random-encoder-baseline")
 
 
 @pytest.fixture

@@ -12,8 +12,8 @@ from torch.utils.data import DataLoader
 import mteb
 import mteb.overview
 from mteb.abstasks import AbsTask
+from mteb.models.abs_encoder import AbsEncoder
 from tests.mock_models import (
-    AbsMockEncoder,
     MockSentenceTransformer,
     MockSentenceTransformerWrapper,
 )
@@ -38,12 +38,8 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts."""
     _task_name = task.metadata.name if isinstance(task, AbsTask) else task
 
-    if isinstance(task, AbsTask):
-        tasks = [task]
-        _task_type = task.metadata.type
-    else:
-        tasks = mteb.get_tasks(tasks=[task])
-        _task_type = tasks[0].metadata.type
+    tasks = [task]
+    _task_type = task.metadata.type
 
     to_compare = _task_name if is_task_name else _task_type
 
@@ -93,7 +89,7 @@ def test_prompt_name_split_correctly(task_name: str, tmp_path: Path):
     """Test that the task name is split correctly into task name and prompt type
     for tasks with multiple `-` in their names.
     """
-    AbsMockEncoder.validate_task_to_prompt_name({task_name: task_name})
+    AbsEncoder.validate_task_to_prompt_name({task_name: task_name})
 
 
 @pytest.mark.parametrize(

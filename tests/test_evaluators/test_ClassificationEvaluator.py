@@ -2,15 +2,15 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
+import mteb
 from mteb._evaluators import SklearnEvaluator
-from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import MockClassificationTask
 
 
 # Fixtures
 @pytest.fixture
 def model():
-    return MockNumpyEncoder()
+    return mteb.get_model("mteb/random-encoder-baseline")
 
 
 @pytest.fixture
@@ -18,31 +18,6 @@ def mock_task():
     task = MockClassificationTask()
     task.load_data()
     return task
-
-
-def test_output_structure(model, mock_task):
-    """Test that the evaluator returns the expected output structure."""
-    train_data = mock_task.dataset["train"]
-    test_data = mock_task.dataset["test"]
-
-    evaluator = SklearnEvaluator(
-        train_data,
-        test_data,
-        mock_task.input_column_name,
-        mock_task.label_column_name,
-        mock_task.metadata,
-        hf_split="test",
-        hf_subset="default",
-        evaluator_model=LogisticRegression(
-            n_jobs=-1,
-            max_iter=10,
-        ),
-    )
-    y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
-
-    # Check basic structure
-    assert isinstance(y_pred, np.ndarray)
-    assert isinstance(test_cache, np.ndarray)
 
 
 def test_expected_scores(model, mock_task):
@@ -63,13 +38,16 @@ def test_expected_scores(model, mock_task):
             max_iter=10,
         ),
     )
-    y_pred, _ = evaluator(model, encode_kwargs={"batch_size": 32})
+    y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
+
+    assert isinstance(y_pred, np.ndarray)
+    assert isinstance(test_cache, np.ndarray)
 
     # Check that we get reasonable scores (MockClassificationTask has deterministic data)
     assert y_pred.tolist() == [1, 0]
 
 
-def test_cache_usage_binary():
+def test_cache_usage_binary(model):
     """Test that embedding caching works correctly for binary classification.
 
     This test verifies the caching mechanism used to avoid re-encoding the same
@@ -89,8 +67,6 @@ def test_cache_usage_binary():
     mock_task.load_data()
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
-
-    model = MockNumpyEncoder()
 
     # First evaluation to generate cache
     evaluator_initial = SklearnEvaluator(

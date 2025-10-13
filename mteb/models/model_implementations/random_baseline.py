@@ -1,3 +1,4 @@
+import hashlib
 from typing import Any
 
 import numpy as np
@@ -9,7 +10,53 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types._encoder_io import Array, BatchedInput, PromptType
 
 
-class RandomBaseline:
+def _string_to_vector(text: str | None, size: int):
+    """Generate a deterministic random vector based on a string."""
+    if text is None:
+        text = ""
+    # Convert string to a numeric seed
+    # numpy rng seed must be between 0 and 2**32
+    seed = int(hashlib.sha256(text.encode("utf-8")).hexdigest(), 16) % 2**32
+    rng = np.random.default_rng(seed)
+    return rng.random(size)
+
+
+def _image_to_vector(image: Image.Image, size: int):
+    """Generate a deterministic random vector based on image content."""
+    # Convert image to bytes and then to a numeric seed
+    image_bytes = image.tobytes()
+    seed = int(hashlib.sha256(image_bytes).hexdigest(), 16) % (2**32)
+    rng = np.random.default_rng(seed)
+    return rng.random(size)
+
+
+def _batch_to_embeddings(
+    inputs: DataLoader[BatchedInput], embedding_dim: int
+) -> np.ndarray:
+    """Convert batched text/image inputs into embeddings."""
+    embeddings = []
+    for batch in inputs:
+        has_text, has_image = "text" in batch, "image" in batch
+
+        if has_text and has_image:
+            for text, image in zip(batch["text"], batch["image"]):
+                text_vec = _string_to_vector(text, embedding_dim)
+                img_vec = _image_to_vector(image, embedding_dim)
+                embeddings.append((text_vec + img_vec) / 2)
+        elif has_image:
+            embeddings.extend(
+                _image_to_vector(img, embedding_dim) for img in batch["image"]
+            )
+        elif has_text:
+            embeddings.extend(
+                _string_to_vector(txt, embedding_dim) for txt in batch["text"]
+            )
+        else:
+            raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
+    return np.vstack(embeddings)
+
+
+class RandomEncoderBaseline:
     """A random baseline that generates random embeddings. Useful to establish a lower bound for embedding performance.
     The embeddings are conditioned on the input text, so that the same text always gets the same embedding.
 
@@ -20,7 +67,7 @@ class RandomBaseline:
 
     def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
         self.rng_state = np.random.RandomState(42)
-        self.embedding_dim = 32  # not sure it matters what dimension we use here
+        self.embedding_dim = 32
 
     def encode(
         self,
@@ -32,46 +79,7 @@ class RandomBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        all_embeddings = []
-        for batch in inputs:
-            if "text" in batch and "image" in batch:
-                for text, image in zip(batch["text"], batch["image"]):
-                    text_vector = self._string_to_vector(text, self.embedding_dim)
-                    image_vector = self._image_to_vector(image, self.embedding_dim)
-                    combined_vector = (text_vector + image_vector) / 2
-                    all_embeddings.append(combined_vector)
-            elif "image" in batch:
-                for image in batch["image"]:
-                    vector = self._image_to_vector(image, self.embedding_dim)
-                    all_embeddings.append(vector)
-            elif "text" in batch:
-                for text in batch["text"]:
-                    vector = self._string_to_vector(text, self.embedding_dim)
-                    all_embeddings.append(vector)
-            else:
-                raise KeyError("Input batch must contain 'text' and/or 'image' keys.")
-        return np.vstack(all_embeddings)
-
-    @staticmethod
-    def _string_to_vector(s: str | None, size: int):
-        """Generate a deterministic random vector based on a string."""
-        if s is None:
-            s = ""
-        # Convert string to a numeric seed
-        seed = int.from_bytes(s.encode("utf-8"), byteorder="big") % (
-            2**32
-        )  # numpy rng seed must be between 0 and 2**32
-        rng = np.random.default_rng(seed)
-        return rng.random(size)
-
-    @staticmethod
-    def _image_to_vector(image: Image.Image, size: int):
-        """Generate a deterministic random vector based on image content."""
-        # Convert image to bytes and then to a numeric seed
-        image_bytes = image.tobytes()
-        seed = int.from_bytes(image_bytes, byteorder="big") % (2**32)
-        rng = np.random.default_rng(seed)
-        return rng.random(size)
+        return _batch_to_embeddings(inputs, self.embedding_dim)
 
     def similarity(
         self,
@@ -98,9 +106,68 @@ class RandomBaseline:
         return np.sum(normalized1 * normalized2, axis=1)
 
 
-random_baseline = ModelMeta(
-    loader=RandomBaseline,  # type: ignore
-    name="mteb/random-baseline",
+random_encoder_baseline = ModelMeta(
+    loader=RandomEncoderBaseline,  # type: ignore
+    name="mteb/random-encoder-baseline",
+    modalities=["text", "image"],
+    languages=None,
+    open_weights=True,
+    revision="1",
+    release_date=None,
+    n_parameters=0,
+    memory_usage_mb=0,
+    embed_dim=32,
+    license="mit",
+    max_tokens=np.inf,
+    reference=None,
+    similarity_fn_name="cosine",  # type: ignore
+    framework=[],
+    use_instructions=False,
+    public_training_code=None,  # No training code, as this is a random baseline
+    public_training_data=None,  # No training data, as this is a random baseline
+    training_datasets=set(),
+)
+
+
+class RandomCrossEncoderBaseline:
+    """A random baseline that generates random embeddings. Useful to establish a lower bound for embedding performance.
+    The embeddings are conditioned on the input text, so that the same text always gets the same embedding.
+
+    This implements the Encoder interface.
+    """
+
+    mteb_model_meta: ModelMeta | None = None
+
+    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
+        self.rng_state = np.random.RandomState(42)
+        self.embedding_dim = 32
+
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        embeddings1 = _batch_to_embeddings(inputs1, self.embedding_dim)
+        embeddings2 = _batch_to_embeddings(inputs2, self.embedding_dim)
+        similarities = []
+        for emb1, emb2 in zip(embeddings1, embeddings2):
+            norm1 = np.linalg.norm(emb1)
+            norm2 = np.linalg.norm(emb2)
+            normalized1 = emb1 / (norm1 + 1e-10)
+            normalized2 = emb2 / (norm2 + 1e-10)
+            similarities.append(np.dot(normalized1, normalized2))
+        return np.array(similarities)
+
+
+random_cross_encoder_baseline = ModelMeta(
+    loader=RandomCrossEncoderBaseline,  # type: ignore
+    name="mteb/random-crossencoder-baseline",
     modalities=["text", "image"],
     languages=None,
     open_weights=True,
