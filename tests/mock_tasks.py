@@ -10,17 +10,17 @@ from mteb.abstasks.any_sts import AbsTaskAnySTS
 from mteb.abstasks.any_zeroshot_classification import (
     AbsTaskAnyZeroShotClassification,
 )
+from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
+)
+from mteb.abstasks.multilabel_classification import (
+    AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.regression import AbsTaskRegression
 from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
-from mteb.abstasks.text.clustering_fast import AbsTaskClusteringFast
-from mteb.abstasks.text.multilabel_classification import (
-    AbsTaskMultilabelClassification,
-)
 from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.text.summarization import AbsTaskSummarization
 
