@@ -1,7 +1,7 @@
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.multilabel_classification import (
+from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
