@@ -217,7 +217,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "--prediction-folder",
         type=str,
         default=None,
-        help="Folder to save the model predictions in. Currently only works for retrieval.",
+        help="Folder to save the model predictions in. If None, predictions will not be saved.",
     )
 
     parser.set_defaults(func=run)
