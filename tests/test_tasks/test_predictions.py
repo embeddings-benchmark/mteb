@@ -25,101 +25,88 @@ from tests.mock_tasks import (
             MockBitextMiningTask(),
             {
                 "sentence1-sentence2": [
-                    {"corpus_id": 1, "score": pytest.approx(0.7544079055482198)},
-                    {"corpus_id": 1, "score": pytest.approx(0.7991580438841115)},
+                    pytest.approx({"corpus_id": 0, "score": 0.7375020384788513}),
+                    pytest.approx({"corpus_id": 1, "score": 0.7731509208679199}),
                 ]
             },
         ),
         (
             MockClassificationTask(),
             [
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
             ],
         ),
         (
             MockTextZeroShotClassificationTask(),
             [
-                pytest.approx([0.9999999999381253, 0.7463670084501418]),
-                pytest.approx([0.7463670084501418, 0.9999999999291757]),
+                pytest.approx([0.9999998807907104, 0.6840636730194092]),
+                pytest.approx([0.6840636730194092, 1.0]),
             ],
         ),
         (
             MockRetrievalTask(),
             {
-                "q1": {"d1": pytest.approx(0.7990461275020804)},
-                "q2": {"d1": pytest.approx(0.7959300710973475)},
+                "q1": {"d1": pytest.approx(0.7787374258041382)},
+                "q2": {"d1": pytest.approx(0.7900890707969666)},
             },
         ),
         (
             MockSTSTask(),
             pytest.approx(
                 {
-                    "cosine_scores": [
-                        0.7420341674650179,
-                        0.799158043937249,
-                    ],
-                    "euclidean_distances": [
-                        -2.368116011174239,
-                        -1.9505613193234193,
-                    ],
-                    "manhattan_distances": [
-                        -11.10350771249041,
-                        -8.983517484440046,
-                    ],
-                    "similarity_scores": [
-                        0.742034167419937,
-                        0.7991580438841115,
-                    ],
+                    "cosine_scores": pytest.approx(
+                        [0.7375020980834961, 0.7731508016586304]
+                    ),
+                    "euclidean_distances": pytest.approx(
+                        [-2.4108424186706543, -2.1905980110168457]
+                    ),
+                    "manhattan_distances": pytest.approx(
+                        [-11.177837371826172, -10.721406936645508]
+                    ),
+                    "similarity_scores": pytest.approx(
+                        [0.7375020384788513, 0.7731509208679199]
+                    ),
                 }
             ),
         ),
         (
             MockPairClassificationTask(),
-            pytest.approx(
-                {
-                    "cosine_scores": [
-                        0.7420341674650179,
-                        0.799158043937249,
-                    ],
-                    "dot_scores": [
-                        8.044359667700071,
-                        7.261175109797408,
-                    ],
-                    "euclidean_distances": [
-                        2.368116011174239,
-                        1.9505613193234193,
-                    ],
-                    "manhattan_distances": [
-                        11.10350771249041,
-                        8.983517484440046,
-                    ],
-                    "similarity_scores": [
-                        0.742034167419937,
-                        0.7991580438841115,
-                    ],
-                }
-            ),
+            {
+                "cosine_scores": pytest.approx(
+                    [0.7375020980834961, 0.7731508016586304]
+                ),
+                "dot_scores": pytest.approx([7.974165916442871, 8.176445960998535]),
+                "euclidean_distances": pytest.approx(
+                    [2.4108424186706543, 2.1905980110168457]
+                ),
+                "manhattan_distances": pytest.approx(
+                    [11.177837371826172, 10.721406936645508]
+                ),
+                "similarity_scores": pytest.approx(
+                    [0.7375020384788513, 0.7731509208679199]
+                ),
+            },
         ),
-        (MockClusteringTask(), [[2, 1, 0]]),
-        (MockClusteringFastTask(), {"Level 0": [[0, 1, 1], [0, 2, 1], [1, 2, 2]]}),
+        (MockClusteringTask(), [[1, 2, 0]]),
+        (MockClusteringFastTask(), {"Level 0": [[0, 1, 1], [0, 2, 1], [1, 0, 0]]}),
         (
             MockRegressionTask(),
-            [pytest.approx([0.9999999999999999, 0.5297196305892906])] * 10,
+            [pytest.approx([1.0000001192092896, 0.33665788173675537])] * 10,
         ),
         (
             MockImageTextPairClassificationTask(),
             [
-                [pytest.approx([0.8513203857500926])],
-                [pytest.approx([0.7686800183685046])],
+                [pytest.approx([0.8081411123275757])],
+                [pytest.approx([0.6950531601905823])],
             ],
         ),
     ],

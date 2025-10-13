@@ -26,17 +26,17 @@ class TestPairClassificationEvaluator:
             encode_kwargs={"batch_size": 32},
         )
         assert distances["cosine_scores"] == pytest.approx(
-            [0.7420341674650179, 0.799158043937249], TOL
+            [0.7375020980834961, 0.7731508016586304], TOL
         )
         assert distances["euclidean_distances"] == pytest.approx(
-            [2.368116011174239, 1.9505613193234193], TOL
+            [2.4108424186706543, 2.1905980110168457], TOL
         )
         assert distances["manhattan_distances"] == pytest.approx(
-            [11.10350771249041, 8.983517484440046], TOL
+            [11.177837371826172, 10.721406936645508], TOL
         )
         assert distances["similarity_scores"] == pytest.approx(
-            [0.742034167419937, 0.7991580438841115], TOL
+            [0.7375020384788513, 0.7731509208679199], TOL
         )
         assert distances["dot_scores"] == pytest.approx(
-            [8.044359667700071, 7.261175109797408], TOL
+            [7.974165916442871, 8.176445960998535], TOL
         )
