@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -7,9 +8,14 @@ import mteb
 from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
+    MockClusteringFastTask,
+    MockClusteringTask,
+    MockImageTextPairClassificationTask,
     MockPairClassificationTask,
+    MockRegressionTask,
     MockRetrievalTask,
     MockSTSTask,
+    MockSummarizationTask,
     MockTextZeroShotClassificationTask,
 )
 
@@ -97,6 +103,16 @@ from tests.mock_tasks import (
                     pytest.approx(9.399434014739104),
                 ],
             },
+        ),
+        (MockClusteringTask, [[2, 2, 1]]),
+        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 2], [2, 0, 0]]}),
+        (
+            MockRegressionTask,
+            [[0.39, 0.76]] * 10,
+        ),
+        (
+            MockImageTextPairClassificationTask,
+            [[[0.67]], [[0.45]]],
         ),
     ],
 )
