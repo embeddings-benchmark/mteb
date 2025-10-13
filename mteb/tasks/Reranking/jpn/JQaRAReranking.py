@@ -22,7 +22,7 @@ class JQaRAReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2020-01-01", "2024-12-31"),
         domains=["Encyclopaedic", "Non-fiction", "Written"],
         task_subtypes=["Question answering"],

@@ -16,7 +16,7 @@ class HUMECore17InstructionReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2017-01-01", "2017-12-31"),
         domains=["News", "Written"],
         task_subtypes=[],

@@ -17,7 +17,7 @@ class BuiltBenchReranking(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2024-06-01", "2024-11-30"),
         domains=["Engineering", "Written"],
         task_subtypes=[],
