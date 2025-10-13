@@ -1,7 +1,7 @@
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.clustering_fast import AbsTaskClusteringFast
 
 _LANGS = {
     "ace_Latn": ["ace-Latn"],

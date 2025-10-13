@@ -3,11 +3,11 @@ from .any_classification import AbsTaskAnyClassification
 from .any_clustering import AbsTaskAnyClustering
 from .any_sts import AbsTaskAnySTS
 from .any_zeroshot_classification import AbsTaskAnyZeroShotClassification
+from .clustering_fast import AbsTaskClusteringFast
 from .image.image_text_pair_classification import AbsTaskImageTextPairClassification
 from .regression import AbsTaskRegression
 from .retrieval import AbsTaskRetrieval
 from .text.bitext_mining import AbsTaskBitextMining
-from .text.clustering_fast import AbsTaskClusteringFast
 from .text.multilabel_classification import AbsTaskMultilabelClassification
 from .text.pair_classification import AbsTaskPairClassification
 from .text.reranking import AbsTaskReranking

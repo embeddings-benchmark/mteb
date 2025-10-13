@@ -3,11 +3,11 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.clustering_fast import (
+from mteb.abstasks.clustering_fast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
+from mteb.abstasks.task_metadata import TaskMetadata
 
 from ....abstasks.any_clustering import AbsTaskAnyClustering
 
