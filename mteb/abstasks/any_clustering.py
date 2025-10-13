@@ -1,9 +1,11 @@
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 import numpy as np
 from datasets import Dataset
+from scipy.optimize import linear_sum_assignment
+from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
 from mteb.models import Encoder
@@ -30,7 +32,6 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
 
         text_statistics: Statistics for text
         image_statistics: Statistics for images
@@ -38,11 +39,26 @@ class ClusteringDescriptiveStatistics(SplitDescriptiveStatistics):
     """
 
     num_samples: int
-    number_of_characters: int | None
 
     text_statistics: TextStatistics | None
     image_statistics: ImageStatistics | None
     label_statistics: LabelStatistics
+
+
+class ClusteringMetrics(TypedDict, total=False):
+    """Clustering metrics.
+
+    Attributes:
+        v_measure: V-measure score.
+        nmi: Normalized Mutual Information score.
+        ari: Adjusted Rand Index score.
+        cluster_accuracy: Clustering accuracy score.
+    """
+
+    v_measure: float
+    nmi: float
+    ari: float
+    cluster_accuracy: float
 
 
 class AbsTaskAnyClustering(AbsTask):
@@ -71,7 +87,8 @@ class AbsTaskAnyClustering(AbsTask):
     ) -> ScoresDict:
         # MTEB text clustering requires renaming and eval per subset.
         if self.metadata.modalities == ["text"]:
-            v_measures = []
+            all_metrics = []
+            clusters = []
             for i, cluster_set in enumerate(data_split):
                 logger.info(
                     f"Running clustering on cluster ({i + 1}/{len(data_split)})"
@@ -88,11 +105,24 @@ class AbsTaskAnyClustering(AbsTask):
                     hf_subset=hf_subset,
                     **kwargs,
                 )
-                metrics = evaluator(
-                    model, encode_kwargs=encode_kwargs, v_measure_only=True
+                clusters_assignment = evaluator(model, encode_kwargs=encode_kwargs)
+                clusters.append(clusters_assignment)
+                set_metrics = self._compute_metrics(
+                    clustering_dataset[self.label_column_name],
+                    clusters_assignment,
+                    v_measure_only=True,
                 )
-                v_measures.append(metrics["v_measure"])
+                all_metrics.append(set_metrics)
 
+            if prediction_folder:
+                self._save_task_predictions(
+                    clusters,
+                    model,
+                    prediction_folder,
+                    hf_subset=hf_subset,
+                    hf_split=hf_split,
+                )
+            v_measures = [m["v_measure"] for m in all_metrics]
             v_mean = np.mean(v_measures)
             v_std = np.std(v_measures)
             scores = {
@@ -100,7 +130,6 @@ class AbsTaskAnyClustering(AbsTask):
                 "v_measure_std": v_std,
                 "v_measures": v_measures,
             }
-            self._add_main_score(scores)
             return scores
 
         data_split = data_split.select_columns(
@@ -115,9 +144,47 @@ class AbsTaskAnyClustering(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        metrics = evaluator(model, encode_kwargs=encode_kwargs)
-        self._add_main_score(metrics)
-        return metrics
+        clusters = evaluator(model, encode_kwargs=encode_kwargs)
+        if prediction_folder:
+            self._save_task_predictions(
+                clusters,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
+        return self._compute_metrics(
+            data_split[self.label_column_name],
+            clusters,
+        )
+
+    def _compute_metrics(
+        self,
+        labels: list[int],
+        cluster_assignment: list[int],
+        v_measure_only: bool = False,
+    ) -> ClusteringMetrics:
+        logger.info("Running clustering - Evaluating clustering...")
+        v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
+        if v_measure_only:
+            return ClusteringMetrics(
+                v_measure=v_measure,
+            )
+        nmi = metrics.cluster.normalized_mutual_info_score(labels, cluster_assignment)
+        ari = metrics.cluster.adjusted_rand_score(labels, cluster_assignment)
+
+        matrix = metrics.confusion_matrix(labels, cluster_assignment)
+        # get linear sum assignment
+        row_ind, col_ind = linear_sum_assignment(matrix, maximize=True)
+        total_correct = matrix[row_ind, col_ind].sum()
+        clustering_accuracy = total_correct / len(labels)
+        return ClusteringMetrics(
+            v_measure=float(v_measure),
+            nmi=float(nmi),
+            ari=float(ari),
+            cluster_accuracy=float(clustering_accuracy),
+        )
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
@@ -140,7 +207,6 @@ class AbsTaskAnyClustering(AbsTask):
         if isinstance(labels[0], list):
             labels = [item for sublist in labels for item in sublist]
 
-        total_text_len = 0
         text_statistics, image_statistics = None, None
         if "image" in self.metadata.modalities:
             image_statistics = calculate_image_statistics(inputs)
@@ -152,7 +218,6 @@ class AbsTaskAnyClustering(AbsTask):
 
         return ClusteringDescriptiveStatistics(
             num_samples=len(inputs),
-            number_of_characters=total_text_len,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             label_statistics=label_statistics,

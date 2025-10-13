@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -6,13 +7,13 @@ from datasets import Dataset
 
 from mteb._evaluators import SummarizationEvaluator
 from mteb.models import Encoder
-from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
 )
 
+from ..._evaluators.text.summarization_evaluator import SummarizationMetrics
 from .._statistics_calculation import (
     calculate_score_statistics,
     calculate_text_statistics,
@@ -75,8 +76,9 @@ class AbsTaskSummarization(AbsTask):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
+        prediction_folder: Path | None = None,
         **kwargs,
-    ) -> ScoresDict:
+    ) -> SummarizationMetrics:
         normalized_scores = [
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split[self.relevancy_column_name]
@@ -91,7 +93,16 @@ class AbsTaskSummarization(AbsTask):
             hf_subset=hf_subset,
             **kwargs,
         )
-        return evaluator(model, encode_kwargs=encode_kwargs)
+        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        if prediction_folder:
+            self._save_task_predictions(
+                scores,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+        return evaluator._calculate_metrics(scores)
 
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

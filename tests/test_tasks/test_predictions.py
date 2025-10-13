@@ -101,7 +101,7 @@ from tests.mock_tasks import (
     ],
 )
 def test_predictions(tmp_path: Path, task_cls, expected):
-    """Run evaluation for each mock task and check predictions match exactly."""
+    """Run evaluation for each mock task and check predictions."""
     task = task_cls()
     model = mteb.get_model_meta("mteb/random-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)

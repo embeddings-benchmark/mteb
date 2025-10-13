@@ -11,6 +11,7 @@ import pandas as pd
 from mteb.abstasks import (
     AbsTask,
     AbsTaskMultilabelClassification,
+    AbsTaskRegression,
 )
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.abstasks.text.reranking import AbsTaskReranking
@@ -25,20 +26,18 @@ logger = logging.getLogger(__name__)
 
 
 # Create task registry
-
-
 def _create_task_list() -> list[type[AbsTask]]:
     # reranking subclasses retrieval to share methods, but is an abstract task
     tasks_categories_cls = list(AbsTask.__subclasses__()) + [
         AbsTaskMultilabelClassification,
+        AbsTaskRegression,
         AbsTaskReranking,
     ]
     tasks = []
     for cat_cls in tasks_categories_cls:
         for cls in cat_cls.__subclasses__():
-            if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
-                "AbsTaskMultilabelClassification",
-                "AbsTaskReranking",
+            if cat_cls.__name__.startswith("AbsTask") and not cls.__name__.startswith(
+                "AbsTask"
             ):
                 tasks.append(cls)
     return tasks

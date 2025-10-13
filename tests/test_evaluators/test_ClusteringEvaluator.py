@@ -35,9 +35,4 @@ class TestClusteringEvaluator:
         )
         result = clusterer(model, encode_kwargs={"batch_size": 32})
 
-        assert result == {
-            "v_measure": 1.0,
-            "ari": 1.0,
-            "cluster_accuracy": 1.0,
-            "nmi": 1.0,
-        }
+        assert result == [2, 1, 0]

@@ -15,7 +15,7 @@ from typing_extensions import override
 
 from mteb.models import Encoder
 
-from ..._evaluators.classification_evaluator import SklearnClassifierProtocol
+from ..._evaluators.sklearn_evaluator import SklearnModelProtocol
 from ...create_dataloaders import create_dataloader
 from ..any_classification import AbsTaskAnyClassification
 
@@ -26,9 +26,9 @@ def _evaluate_classifier(
     embeddings_train: np.ndarray,
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
-    classifier: SklearnClassifierProtocol,
-) -> tuple[np.ndarray, SklearnClassifierProtocol]:
-    classifier: SklearnClassifierProtocol = clone(classifier)
+    classifier: SklearnModelProtocol,
+) -> tuple[np.ndarray, SklearnModelProtocol]:
+    classifier: SklearnModelProtocol = clone(classifier)
     classifier.fit(embeddings_train, y_train)
     return classifier.predict(embeddings_test), classifier
 
@@ -70,7 +70,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
 
     """
 
-    evaluator: SklearnClassifierProtocol = KNeighborsClassifier(n_neighbors=5)
+    evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
 
@@ -196,7 +196,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
         y_test: np.ndarray,
         y_pred: np.ndarray,
         x_test_embedding: np.ndarray,
-        current_classifier: SklearnClassifierProtocol,
+        current_classifier: SklearnModelProtocol,
     ) -> MultilabelClassificationMetrics:
         accuracy = current_classifier.score(x_test_embedding, y_test)
         if isinstance(current_classifier, MultiOutputClassifier):

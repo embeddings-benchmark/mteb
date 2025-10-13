@@ -24,9 +24,9 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .._evaluators.classification_evaluator import (
-    ClassificationEvaluator,
-    SklearnClassifierProtocol,
+from .._evaluators.sklearn_evaluator import (
+    SklearnEvaluator,
+    SklearnModelProtocol,
 )
 from ._statistics_calculation import (
     calculate_image_statistics,
@@ -109,15 +109,14 @@ class AbsTaskAnyClassification(AbsTask):
 
     """
 
-    evaluator: type[ClassificationEvaluator] = ClassificationEvaluator
-    classifier: SklearnClassifierProtocol = LogisticRegression(
+    evaluator: type[SklearnEvaluator] = SklearnEvaluator
+    evaluator_model: SklearnModelProtocol = LogisticRegression(
         n_jobs=-1,
         max_iter=100,
     )
 
     samples_per_label: int = 8
     n_experiments: int = 10
-    k: int = 3
     train_split: str = "train"
     label_column_name: str = "label"
     input_column_name: str = "text"
@@ -142,8 +141,10 @@ class AbsTaskAnyClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        if "random_state" in self.classifier.get_params():
-            self.classifier = self.classifier.set_params(random_state=self.seed)
+        if "random_state" in self.evaluator_model.get_params():
+            self.evaluator_model = self.evaluator_model.set_params(
+                random_state=self.seed
+            )
         scores = {}
         hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
@@ -187,8 +188,6 @@ class AbsTaskAnyClassification(AbsTask):
     ) -> FullClassificationMetrics:
         train_split = data_split[self.train_split]
         eval_split = data_split[hf_split]
-        params = {"k": self.k}
-        params.update(kwargs)
 
         scores = []
         # we store idxs to make the shuffling reproducible
@@ -196,10 +195,11 @@ class AbsTaskAnyClassification(AbsTask):
 
         all_predictions = []
         for i in range(self.n_experiments):
-            logger.info(f"Running classification experiment ({i}/{self.n_experiments})")
+            logger.info(f"Running experiment ({i}/{self.n_experiments})")
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
+                i,
                 idxs,
             )
 
@@ -211,8 +211,7 @@ class AbsTaskAnyClassification(AbsTask):
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
-                classifier=self.classifier,
-                **params,
+                evaluator_model=self.evaluator_model,
             )
             y_pred, test_cache = evaluator(
                 model, encode_kwargs=encode_kwargs, test_cache=test_cache
@@ -235,13 +234,13 @@ class AbsTaskAnyClassification(AbsTask):
         avg_scores: dict[str, Any] = {
             # ap will be none for non binary classification tasks
             k: (
-                np.mean(values)
+                float(np.mean(values))
                 if (values := [s[k] for s in scores if s[k] is not None])
                 else np.nan
             )
             for k in scores[0].keys()
         }
-        logger.info("Running classification - Finished.")
+        logger.info(f"Running {self.metadata.name} - Finished.")
         return FullClassificationMetrics(
             scores_per_experiment=scores,
             **avg_scores,
@@ -273,12 +272,13 @@ class AbsTaskAnyClassification(AbsTask):
         return scores
 
     def _undersample_data(
-        self, dataset: Dataset, idxs: list[int] | None = None
+        self, dataset: Dataset, experiment_num: int, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int]]:
         """Undersample data to have `samples_per_label` samples of each label.
 
         Args:
             dataset: Hugging Face `datasets.Dataset` containing "text" and "label".
+            experiment_num: Experiment number, used to set the random seed.
             idxs: Optional indices to shuffle and sample from.
 
         Returns:

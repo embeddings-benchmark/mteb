@@ -58,6 +58,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         dataset,
         images_column_names: str | list[str],
         texts_column_names: str | list[str],
+        num_images_per_sample: int,
+        num_texts_per_sample: int,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -69,6 +71,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.dataset = dataset
         self.images_column_names = images_column_names
         self.texts_column_names = texts_column_names
+        self.num_images_per_sample = num_images_per_sample
+        self.num_texts_per_sample = num_texts_per_sample
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
@@ -77,38 +81,24 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self,
         model: Encoder,
         encode_kwargs: dict[str, Any],
-    ):
-        num_images_per_sample = (
-            len(self.images_column_names)
-            if isinstance(self.images_column_names, list)
-            else 1
-        )
-        num_texts_per_sample = (
-            len(self.texts_column_names)
-            if isinstance(self.texts_column_names, list)
-            else 1
-        )
-
+    ) -> list[torch.Tensor]:
         images = []
-        if isinstance(self.images_column_names, list):
+        if isinstance(self.images_column_names, str):
+            images = self.dataset[self.images_column_names]
+        else:
             for row in self.dataset:
                 for col in self.images_column_names:
                     images.append(row[col])
-        else:
-            images = self.dataset[self.images_column_names]
 
         images = [transform_image_to_rgb(img) for img in images]
 
         texts = []
-        if isinstance(self.texts_column_names, list):
+        if isinstance(self.texts_column_names, str):
+            texts = self.dataset[self.texts_column_names]
+        else:
             for row in self.dataset:
                 for col in self.texts_column_names:
                     texts.append(row[col])
-        else:
-            texts = self.dataset[self.texts_column_names]
-
-        img_ground_truths = torch.arange(num_images_per_sample)
-        caption_ground_truths = torch.arange(num_texts_per_sample)
 
         text_embeddings = model.encode(
             DataLoader(
@@ -127,7 +117,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         norm_text_embeddings = F.normalize(
             text_embeddings,
             dim=-1,
-        ).view(len(self.dataset), num_texts_per_sample, -1)
+        ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
         image_embeddings = model.encode(
             DataLoader(
@@ -146,32 +136,13 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         norm_image_embeddings = F.normalize(
             image_embeddings,
             dim=-1,
-        ).view(len(self.dataset), num_images_per_sample, -1)
+        ).view(len(self.dataset), self.num_images_per_sample, -1)
 
-        image_score = []
-        text_score = []
-        score = []
+        all_scores = []
 
         for img_emb, txt_emb in zip(norm_image_embeddings, norm_text_embeddings):
             scores = (
                 img_emb @ txt_emb.t()
             )  # shape = (num_images_per_sample x num_texts_per_sample)
-
-            image_closest_text = scores.argmax(dim=1)  # shape = (num_images_per_sample)
-            text_closest_image = scores.argmax(dim=0)  # shape = (num_texts_per_sample)
-            pred_text_is_correct = (
-                (image_closest_text == img_ground_truths).all().item()
-            )
-            pred_image_is_correct = (
-                (text_closest_image == caption_ground_truths).all().item()
-            )
-            all_correct = pred_text_is_correct and pred_image_is_correct
-            image_score.append(pred_image_is_correct)
-            text_score.append(pred_text_is_correct)
-            score.append(all_correct)
-
-        metrics = {}
-        metrics["image_acc"] = torch.Tensor(image_score).float().mean().item()
-        metrics["text_acc"] = torch.Tensor(text_score).float().mean().item()
-        metrics["accuracy"] = torch.Tensor(score).float().mean().item()
-        return metrics
+            all_scores.append(scores)
+        return all_scores
