@@ -4,16 +4,20 @@ import numpy as np
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import Encoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types._encoder_io import Array, BatchedInput, PromptType
 
 
-class RandomBaseline(Encoder):
+class RandomBaseline:
+    """A random baseline that generates random embeddings. Useful to establish a lower bound for embedding performance.
+    The embeddings are conditioned on the input text, so that the same text always gets the same embedding.
+
+    This implements the Encoder interface.
+    """
+
     mteb_model_meta: ModelMeta | None = None
 
     def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
-        """A random baseline that generates random embeddings. Useful to establish a lower bound for embedding performance."""
         self.rng_state = np.random.RandomState(42)
         self.embedding_dim = 32  # not sure it matters what dimension we use here
 
@@ -72,7 +76,7 @@ class RandomBaseline(Encoder):
 
 
 random_baseline = ModelMeta(
-    loader=RandomBaseline,
+    loader=RandomBaseline,  # type: ignore
     name="mteb/random-baseline",
     languages=None,
     open_weights=True,
@@ -84,7 +88,7 @@ random_baseline = ModelMeta(
     license="mit",
     max_tokens=np.inf,
     reference=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name="cosine",  # type: ignore
     framework=[],
     use_instructions=False,
     public_training_code=None,  # No training code, as this is a random baseline
