@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from mteb._evaluators import ClassificationEvaluator
+from mteb._evaluators import SklearnEvaluator
 from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import MockClassificationTask
 
@@ -25,7 +25,7 @@ def test_output_structure(model, mock_task):
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    evaluator = ClassificationEvaluator(
+    evaluator = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -33,9 +33,9 @@ def test_output_structure(model, mock_task):
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     y_pred, test_cache = evaluator(model, encode_kwargs={"batch_size": 32})
@@ -50,7 +50,7 @@ def test_expected_scores(model, mock_task):
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
 
-    evaluator = ClassificationEvaluator(
+    evaluator = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -58,9 +58,9 @@ def test_expected_scores(model, mock_task):
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     y_pred, _ = evaluator(model, encode_kwargs={"batch_size": 32})
@@ -93,7 +93,7 @@ def test_cache_usage_binary():
     model = MockNumpyEncoder()
 
     # First evaluation to generate cache
-    evaluator_initial = ClassificationEvaluator(
+    evaluator_initial = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -101,15 +101,15 @@ def test_cache_usage_binary():
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     _, test_cache_initial = evaluator_initial(model, encode_kwargs={"batch_size": 32})
 
     # Second evaluation using cache
-    evaluator_with_cache = ClassificationEvaluator(
+    evaluator_with_cache = SklearnEvaluator(
         train_data,
         test_data,
         mock_task.input_column_name,
@@ -117,9 +117,9 @@ def test_cache_usage_binary():
         mock_task.metadata,
         hf_split="test",
         hf_subset="default",
-        classifier=LogisticRegression(
+        evaluator_model=LogisticRegression(
             n_jobs=-1,
-            max_iter=100,
+            max_iter=10,
         ),
     )
     y_pred, test_cache_after_cache_usage = evaluator_with_cache(

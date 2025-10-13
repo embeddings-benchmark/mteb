@@ -41,13 +41,14 @@ def evaluate_clustering_bootstrapped(
     kmean_batch_size: int,
     max_depth: int | None,
     rng_state: random.Random = random.Random(),
-) -> dict[str, list[float]]:
+) -> tuple[dict[str, list[float]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
 
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
     """
     v_measures = defaultdict(list)
+    cluster_assignments = defaultdict(list)
     if max_depth is not None:
         max_depth = min(max_depth, max(map(len, labels)))
     else:
@@ -82,8 +83,9 @@ def evaluate_clustering_bootstrapped(
             cluster_assignment = clustering_model.fit_predict(_embeddings)
             v_measure = v_measure_score(_labels, cluster_assignment)
             v_measures[f"Level {i_level}"].append(v_measure)
+            cluster_assignments[f"Level {i_level}"].append(cluster_assignment.tolist())
 
-    return v_measures
+    return v_measures, cluster_assignments
 
 
 class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
@@ -112,7 +114,7 @@ class AbsTaskClusteringFast(AbsTask):
     This approach is then repeated K times.
 
     There are two ways to specify how a dataset is downsampled:
-        - max_document_to_embe (int): default to None
+        - max_document_to_embed (int): default to None
         - max_fraction_of_documents_to_embed (float): default to 4%.
     If both parameters are set to None, no downsampling is done in self._evaluate_subset().
     Only one of these two parameters can be not None at the same time.
@@ -200,7 +202,7 @@ class AbsTaskClusteringFast(AbsTask):
                 label = [label]
             labels.append(label)
 
-        all_v_scores = evaluate_clustering_bootstrapped(
+        all_v_scores, all_assignments = evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,
@@ -209,6 +211,16 @@ class AbsTaskClusteringFast(AbsTask):
             max_depth=self.max_depth,
             rng_state=self.rng_state,
         )
+
+        if prediction_folder:
+            self._save_task_predictions(
+                all_assignments,
+                model,
+                prediction_folder,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+            )
+
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
         logger.info("Running clustering - Finished.")

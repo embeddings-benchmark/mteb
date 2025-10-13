@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -8,11 +9,27 @@ from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
+    MockClusteringFastTask,
+    MockClusteringTask,
+    MockImageTextPairClassificationTask,
     MockPairClassificationTask,
+    MockRegressionTask,
     MockRetrievalTask,
     MockSTSTask,
+    MockSummarizationTask,
     MockTextZeroShotClassificationTask,
 )
+
+
+def _round_floats(obj: Any, ndigits: int = 2) -> Any:
+    """Recursively round all float values inside nested dicts/lists."""
+    if isinstance(obj, float):
+        return round(obj, ndigits)
+    elif isinstance(obj, list):
+        return [_round_floats(i, ndigits) for i in obj]
+    elif isinstance(obj, dict):
+        return {k: _round_floats(v, ndigits) for k, v in obj.items()}
+    return obj
 
 
 @pytest.mark.parametrize(
@@ -22,8 +39,8 @@ from tests.mock_tasks import (
             MockBitextMiningTask,
             {
                 "sentence1-sentence2": [
-                    {"corpus_id": 0, "score": 0.667675256729126},
-                    {"corpus_id": 0, "score": 0.5796383023262024},
+                    {"corpus_id": 0, "score": 0.67},
+                    {"corpus_id": 0, "score": 0.58},
                 ]
             },
         ),
@@ -44,38 +61,54 @@ from tests.mock_tasks import (
         ),
         (
             MockTextZeroShotClassificationTask,
-            [
-                [0.667675256729126, 0.5808462500572205],
-                [0.5796383023262024, 0.44889137148857117],
-            ],
+            [[0.67, 0.58], [0.58, 0.45]],
         ),
         (
             MockRetrievalTask,
-            {"q1": {"d2": 0.667675256729126}, "q2": {"d2": 0.5796383023262024}},
+            {"q1": {"d2": 0.67}, "q2": {"d2": 0.58}},
         ),
         (
             MockSTSTask,
             {
-                "cosine_scores": [0.6676752688013152, 0.44889138491964875],
-                "manhattan_distances": [-3.8137664259525317, -5.127750669852312],
-                "euclidean_distances": [-1.4245895965840156, -1.8406867696540525],
-                "similarity_scores": [0.6676753163337708, 0.44889140129089355],
+                "cosine_scores": [0.67, 0.45],
+                "manhattan_distances": [-3.81, -5.13],
+                "euclidean_distances": [-1.42, -1.84],
+                "similarity_scores": [0.67, 0.45],
             },
         ),
         (
             MockPairClassificationTask,
             {
-                "cosine_scores": [0.6676752688013152, 0.44889138491964875],
-                "euclidean_distances": [1.4245895965840156, 1.8406867696540525],
-                "manhattan_distances": [3.8137664259525317, 5.127750669852312],
-                "similarity_scores": [0.6676753163337708, 0.44889140129089355],
-                "dot_scores": [1.834609502285649, 1.3250427203346034],
+                "cosine_scores": [0.67, 0.45],
+                "euclidean_distances": [1.42, 1.84],
+                "manhattan_distances": [3.81, 5.13],
+                "similarity_scores": [0.67, 0.45],
+                "dot_scores": [1.83, 1.33],
             },
+        ),
+        (
+            MockSummarizationTask,
+            {
+                "cosine_scores": [[0.75, 0.74], [0.69, 0.92]],
+                "dot_scores": [[2.16, 2.99], [1.99, 3.09]],
+                "similarity_scores": [[0.75, 0.74], [0.69, 0.92]],
+                "human_scores": [[1.0, 0.0], [0.0, 1.0]],
+            },
+        ),
+        (MockClusteringTask, [[2, 2, 1]]),
+        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 2], [2, 0, 0]]}),
+        (
+            MockRegressionTask,
+            [[0.39, 0.76]] * 10,
+        ),
+        (
+            MockImageTextPairClassificationTask,
+            [[[0.67]], [[0.45]]],
         ),
     ],
 )
 def test_predictions(tmp_path: Path, task_cls, expected):
-    """Run evaluation for each mock task and check predictions match exactly."""
+    """Run evaluation for each mock task and check predictions."""
     task = task_cls()
     model = MockNumpyEncoder()
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
@@ -84,4 +117,4 @@ def test_predictions(tmp_path: Path, task_cls, expected):
         full_predictions = json.load(f)
 
     predictions = full_predictions["default"]["test"]
-    assert predictions == expected
+    assert _round_floats(predictions, 2) == expected

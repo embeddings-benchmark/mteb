@@ -65,7 +65,7 @@ class MockNumpyEncoder(AbsMockEncoder):
         languages=["eng-Latn"],
         revision="1",
         release_date=None,
-        modalities=["text"],
+        modalities=["text", "image"],
         n_parameters=None,
         memory_usage_mb=None,
         max_tokens=None,
