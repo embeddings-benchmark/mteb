@@ -141,9 +141,10 @@ def _evaluate_task(
 
     task.check_if_dataset_is_superseded()
 
-    if model.mteb_model_meta.modalities is not None and not set(
-        task.metadata.modalities
-    ).issubset(model.mteb_model_meta.modalities):
+    if model.mteb_model_meta.modalities is not None and not (
+        # all task modalities are contained within model modalities
+        set(task.metadata.modalities).issubset(model.mteb_model_meta.modalities)
+    ):
         logger.warning(
             f"Model {model.mteb_model_meta.name} support modalities {model.mteb_model_meta.modalities} but the task "
             f"{task.metadata.name} only supports {task.modalities}. Skipping task."
