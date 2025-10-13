@@ -6,8 +6,8 @@ from copy import copy
 import datasets
 from datasets import Dataset
 
-from ..retrieval import AbsTaskRetrieval
-from ..retrieval_dataset_loaders import RetrievalSplitData
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated

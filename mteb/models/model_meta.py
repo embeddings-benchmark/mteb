@@ -13,7 +13,7 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict, field_validator
 
 if TYPE_CHECKING:
-    from ..abstasks import AbsTask
+    from mteb.abstasks import AbsTask
 from mteb.languages import check_language_code
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
@@ -302,7 +302,7 @@ class ModelMeta(BaseModel):
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     """Recursively collect all similar tasks for a given dataset."""
-    from ..overview import _SIMILAR_TASKS
+    from mteb.overview import _SIMILAR_TASKS
 
     if dataset in visited:
         return set()

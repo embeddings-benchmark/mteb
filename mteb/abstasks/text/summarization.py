@@ -6,19 +6,18 @@ import numpy as np
 from datasets import Dataset
 
 from mteb._evaluators import SummarizationEvaluator
+from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
+from mteb.abstasks._statistics_calculation import (
+    calculate_score_statistics,
+    calculate_text_statistics,
+)
+from mteb.abstasks.abstask import AbsTask
 from mteb.models import Encoder
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
 )
-
-from ..._evaluators.text.summarization_evaluator import SummarizationMetrics
-from .._statistics_calculation import (
-    calculate_score_statistics,
-    calculate_text_statistics,
-)
-from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

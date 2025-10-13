@@ -7,22 +7,21 @@ from datasets import Dataset
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
+from mteb._evaluators.text.pair_classification_evaluator import (
+    PairClassificationDistances,
+)
+from mteb.abstasks._statistics_calculation import (
+    calculate_label_statistics,
+    calculate_text_statistics,
+)
+from mteb.abstasks.abstask import AbsTask
+from mteb.models.model_meta import ScoringFunction
+from mteb.models.models_protocols import Encoder
 from mteb.types.statistics import (
     LabelStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
 )
-
-from ..._evaluators.text.pair_classification_evaluator import (
-    PairClassificationDistances,
-)
-from ...models.model_meta import ScoringFunction
-from ...models.models_protocols import Encoder
-from .._statistics_calculation import (
-    calculate_label_statistics,
-    calculate_text_statistics,
-)
-from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

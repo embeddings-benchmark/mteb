@@ -1,6 +1,5 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks import AbsTaskRetrieval
 
 
 class BuiltBenchReranking(AbsTaskRetrieval):

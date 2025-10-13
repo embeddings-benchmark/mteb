@@ -1,6 +1,5 @@
+from mteb.abstasks.any_sts import AbsTaskAnySTS
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.any_sts import AbsTaskAnySTS
 
 
 class RuSTSBenchmarkSTS(AbsTaskAnySTS):

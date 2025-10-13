@@ -7,6 +7,7 @@ from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
+from mteb.models import Encoder
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -14,7 +15,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..models import Encoder
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
