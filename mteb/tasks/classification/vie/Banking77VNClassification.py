@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Banking77VNClassification(AbsTaskAnyClassification):
+class Banking77VNClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Banking77VNClassification",
         description="""A translated dataset composed of online banking queries annotated with their corresponding intents.

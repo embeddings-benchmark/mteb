@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KlueSTS(AbsTaskAnySTS):
+class KlueSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="KLUE-STS",
         dataset={

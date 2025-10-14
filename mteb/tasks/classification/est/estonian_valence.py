@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EstonianValenceClassification(AbsTaskAnyClassification):
+class EstonianValenceClassification(AbsTaskClassification):
     superseded_by = "EstonianValenceClassification.v2"
     metadata = TaskMetadata(
         name="EstonianValenceClassification",
@@ -54,7 +54,7 @@ class EstonianValenceClassification(AbsTaskAnyClassification):
     samples_per_label = 16
 
 
-class EstonianValenceClassificationV2(AbsTaskAnyClassification):
+class EstonianValenceClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="EstonianValenceClassification.v2",
         dataset={

@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -11,7 +11,7 @@ _LANGUAGES = {
 }
 
 
-class MTOPIntentClassification(AbsTaskAnyClassification):
+class MTOPIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MTOPIntentClassification",
         dataset={

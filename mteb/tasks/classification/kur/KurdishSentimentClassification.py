@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KurdishSentimentClassification(AbsTaskAnyClassification):
+class KurdishSentimentClassification(AbsTaskClassification):
     superseded_by = "KurdishSentimentClassification.v2"
     metadata = TaskMetadata(
         name="KurdishSentimentClassification",
@@ -39,7 +39,7 @@ class KurdishSentimentClassification(AbsTaskAnyClassification):
     )
 
 
-class KurdishSentimentClassificationV2(AbsTaskAnyClassification):
+class KurdishSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KurdishSentimentClassification.v2",
         description="""Kurdish Sentiment Dataset

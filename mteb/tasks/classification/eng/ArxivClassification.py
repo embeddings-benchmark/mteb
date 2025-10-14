@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ArxivClassification(AbsTaskAnyClassification):
+class ArxivClassification(AbsTaskClassification):
     superseded_by = "ArxivClassification.v2"
     metadata = TaskMetadata(
         name="ArxivClassification",
@@ -40,7 +40,7 @@ class ArxivClassification(AbsTaskAnyClassification):
     )
 
 
-class ArxivClassificationV2(AbsTaskAnyClassification):
+class ArxivClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ArxivClassification.v2",
         description="""Classification Dataset of Arxiv Papers

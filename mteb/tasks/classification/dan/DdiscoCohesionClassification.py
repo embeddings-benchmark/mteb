@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DdiscoCohesionClassification(AbsTaskAnyClassification):
+class DdiscoCohesionClassification(AbsTaskClassification):
     superseded_by = "Ddisco.v2"
     metadata = TaskMetadata(
         name="Ddisco",
@@ -62,7 +62,7 @@ Piperidis, Stelios},
         )
 
 
-class DdiscoCohesionClassificationV2(AbsTaskAnyClassification):
+class DdiscoCohesionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Ddisco.v2",
         dataset={

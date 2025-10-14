@@ -1,4 +1,4 @@
-from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -9,7 +9,7 @@ _LANGUAGES = {
 }
 
 
-class HUMESTS22(AbsTaskAnySTS):
+class HUMESTS22(AbsTaskSTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="HUMESTS22",

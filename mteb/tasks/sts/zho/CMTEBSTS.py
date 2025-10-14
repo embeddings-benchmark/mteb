@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ATEC(AbsTaskAnySTS):
+class ATEC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="ATEC",
         dataset={
@@ -51,7 +51,7 @@ Yih, Scott Wen-tau},
     max_score = 1
 
 
-class BQ(AbsTaskAnySTS):
+class BQ(AbsTaskSTS):
     metadata = TaskMetadata(
         name="BQ",
         dataset={
@@ -90,7 +90,7 @@ class BQ(AbsTaskAnySTS):
     max_score = 1
 
 
-class LCQMC(AbsTaskAnySTS):
+class LCQMC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="LCQMC",
         dataset={
@@ -129,7 +129,7 @@ class LCQMC(AbsTaskAnySTS):
     max_score = 1
 
 
-class PAWSX(AbsTaskAnySTS):
+class PAWSX(AbsTaskSTS):
     metadata = TaskMetadata(
         name="PAWSX",
         dataset={
@@ -168,7 +168,7 @@ class PAWSX(AbsTaskAnySTS):
     max_score = 1
 
 
-class STSB(AbsTaskAnySTS):
+class STSB(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSB",
         dataset={
@@ -207,7 +207,7 @@ class STSB(AbsTaskAnySTS):
     max_score = 5
 
 
-class AFQMC(AbsTaskAnySTS):
+class AFQMC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="AFQMC",
         dataset={
@@ -256,7 +256,7 @@ Yih, Scott Wen-tau},
     max_score = 1
 
 
-class QBQTC(AbsTaskAnySTS):
+class QBQTC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="QBQTC",
         dataset={

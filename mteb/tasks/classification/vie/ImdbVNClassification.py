@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ImdbVNClassification(AbsTaskAnyClassification):
+class ImdbVNClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ImdbVNClassification",
         description="""A translated dataset of large movie reviews annotated for sentiment classification.

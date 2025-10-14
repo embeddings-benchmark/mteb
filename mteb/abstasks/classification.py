@@ -92,7 +92,7 @@ class FullClassificationMetrics(ClassificationMetrics):
     scores_per_experiment: list[ClassificationMetrics]
 
 
-class AbsTaskAnyClassification(AbsTask):
+class AbsTaskClassification(AbsTask):
     """Abstract class for classification tasks
 
     Attributes:

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KorHateClassification(AbsTaskAnyClassification):
+class KorHateClassification(AbsTaskClassification):
     superseded_by = "KorHateClassification.v2"
     metadata = TaskMetadata(
         name="KorHateClassification",
@@ -57,7 +57,7 @@ class KorHateClassification(AbsTaskAnyClassification):
         )
 
 
-class KorHateClassificationV2(AbsTaskAnyClassification):
+class KorHateClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorHateClassification.v2",
         description="""The dataset was created to provide the first human-labeled Korean corpus for

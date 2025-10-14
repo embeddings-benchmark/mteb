@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaCrystallographyAnalyticalClassification(AbsTaskAnyClassification):
+class WikipediaCrystallographyAnalyticalClassification(AbsTaskClassification):
     superseded_by = "WikipediaCrystallographyAnalyticalClassification.v2"
     metadata = TaskMetadata(
         name="WikipediaCrystallographyAnalyticalClassification",
@@ -36,7 +36,7 @@ class WikipediaCrystallographyAnalyticalClassification(AbsTaskAnyClassification)
     )
 
 
-class WikipediaCrystallographyAnalyticalClassificationV2(AbsTaskAnyClassification):
+class WikipediaCrystallographyAnalyticalClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaCrystallographyAnalyticalClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.

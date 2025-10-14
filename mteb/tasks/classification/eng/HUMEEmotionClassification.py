@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEEmotionClassification(AbsTaskAnyClassification):
+class HUMEEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HUMEEmotionClassification",
         description="Human evaluation subset of Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.",

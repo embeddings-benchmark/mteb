@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -202,7 +202,7 @@ _LANGS = {
 }
 
 
-class SIB200Classification(AbsTaskAnyClassification):
+class SIB200Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SIB200Classification",
         description="""SIB-200 is the largest publicly available topic classification

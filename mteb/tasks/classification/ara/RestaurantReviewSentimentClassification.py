@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RestaurantReviewSentimentClassification(AbsTaskAnyClassification):
+class RestaurantReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "RestaurantReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
@@ -45,7 +45,7 @@ class RestaurantReviewSentimentClassification(AbsTaskAnyClassification):
         )
 
 
-class RestaurantReviewSentimentClassificationV2(AbsTaskAnyClassification):
+class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification.v2",
         dataset={

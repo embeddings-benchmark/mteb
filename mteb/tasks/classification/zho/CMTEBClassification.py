@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TNews(AbsTaskAnyClassification):
+class TNews(AbsTaskClassification):
     superseded_by = "TNews.v2"
     metadata = TaskMetadata(
         name="TNews",
@@ -76,7 +76,7 @@ Lan, Zhenzhong },
     samples_per_label = 32
 
 
-class TNewsV2(AbsTaskAnyClassification):
+class TNewsV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TNews.v2",
         description="""Short Text Classification for News
@@ -151,7 +151,7 @@ Lan, Zhenzhong },
     samples_per_label = 32
 
 
-class IFlyTek(AbsTaskAnyClassification):
+class IFlyTek(AbsTaskClassification):
     superseded_by = "IFlyTek.v2"
     metadata = TaskMetadata(
         name="IFlyTek",
@@ -226,7 +226,7 @@ Lan, Zhenzhong },
     n_experiments = 5
 
 
-class IFlyTekV2(AbsTaskAnyClassification):
+class IFlyTekV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IFlyTek.v2",
         description="""Long Text classification for the description of Apps
@@ -302,7 +302,7 @@ Lan, Zhenzhong },
     n_experiments = 5
 
 
-class MultilingualSentiment(AbsTaskAnyClassification):
+class MultilingualSentiment(AbsTaskClassification):
     superseded_by = "MultilingualSentiment.v2"
     metadata = TaskMetadata(
         name="MultilingualSentiment",
@@ -332,7 +332,7 @@ class MultilingualSentiment(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class MultilingualSentimentV2(AbsTaskAnyClassification):
+class MultilingualSentimentV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MultilingualSentiment.v2",
         description="""A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative
@@ -363,7 +363,7 @@ class MultilingualSentimentV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class JDReview(AbsTaskAnyClassification):
+class JDReview(AbsTaskClassification):
     superseded_by = "JDReview.v2"
     metadata = TaskMetadata(
         name="JDReview",
@@ -400,7 +400,7 @@ class JDReview(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class JDReviewV2(AbsTaskAnyClassification):
+class JDReviewV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JDReview.v2",
         description="""review for iphone
@@ -438,7 +438,7 @@ class JDReviewV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class OnlineShopping(AbsTaskAnyClassification):
+class OnlineShopping(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OnlineShopping",
         description="Sentiment Analysis of User Reviews on Online Shopping Websites",
@@ -474,7 +474,7 @@ class OnlineShopping(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class Waimai(AbsTaskAnyClassification):
+class Waimai(AbsTaskClassification):
     superseded_by = "Waimai.v2"
     metadata = TaskMetadata(
         name="Waimai",
@@ -511,7 +511,7 @@ class Waimai(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class WaimaiV2(AbsTaskAnyClassification):
+class WaimaiV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Waimai.v2",
         description="""Sentiment Analysis of user reviews on takeaway platforms

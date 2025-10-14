@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BiossesSTSVN(AbsTaskAnySTS):
+class BiossesSTSVN(AbsTaskSTS):
     metadata = TaskMetadata(
         name="BIOSSES-VN",
         dataset={

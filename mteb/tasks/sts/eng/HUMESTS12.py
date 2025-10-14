@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnySTS
+from mteb.abstasks import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMESTS12(AbsTaskAnySTS):
+class HUMESTS12(AbsTaskSTS):
     metadata = TaskMetadata(
         name="HUMESTS12",
         dataset={

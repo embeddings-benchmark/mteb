@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HateSpeechPortugueseClassification(AbsTaskAnyClassification):
+class HateSpeechPortugueseClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HateSpeechPortugueseClassification",
         description="HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized with their sentiment (2 classes).",

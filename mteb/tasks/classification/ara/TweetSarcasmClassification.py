@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetSarcasmClassification(AbsTaskAnyClassification):
+class TweetSarcasmClassification(AbsTaskClassification):
     superseded_by = "TweetSarcasmClassification.v2"
     metadata = TaskMetadata(
         name="TweetSarcasmClassification",
@@ -55,7 +55,7 @@ Mubarak, Hamdy},
         )
 
 
-class TweetSarcasmClassificationV2(AbsTaskAnyClassification):
+class TweetSarcasmClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetSarcasmClassification.v2",
         dataset={

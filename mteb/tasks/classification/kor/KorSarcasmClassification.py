@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KorSarcasmClassification(AbsTaskAnyClassification):
+class KorSarcasmClassification(AbsTaskClassification):
     superseded_by = "KorSarcasmClassification.v2"
     metadata = TaskMetadata(
         name="KorSarcasmClassification",
@@ -46,7 +46,7 @@ class KorSarcasmClassification(AbsTaskAnyClassification):
     )
 
 
-class KorSarcasmClassificationV2(AbsTaskAnyClassification):
+class KorSarcasmClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorSarcasmClassification.v2",
         description="""

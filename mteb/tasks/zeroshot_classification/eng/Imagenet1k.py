@@ -1,12 +1,12 @@
 from pathlib import Path
 
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class Imagenet1kZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="Imagenet1kZeroShot",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",

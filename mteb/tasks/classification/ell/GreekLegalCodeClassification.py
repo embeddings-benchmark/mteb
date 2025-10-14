@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class GreekLegalCodeClassification(AbsTaskAnyClassification):
+class GreekLegalCodeClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GreekLegalCodeClassification",
         description="Greek Legal Code Dataset for Classification. (subset = chapter)",

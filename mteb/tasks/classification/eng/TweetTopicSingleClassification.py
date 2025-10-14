@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetTopicSingleClassification(AbsTaskAnyClassification):
+class TweetTopicSingleClassification(AbsTaskClassification):
     superseded_by = "TweetTopicSingleClassification.v2"
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification",
@@ -52,7 +52,7 @@ Barbieri, Francesco},
         self.dataset["train"] = self.dataset["train_2021"]
 
 
-class TweetTopicSingleClassificationV2(AbsTaskAnyClassification):
+class TweetTopicSingleClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification.v2",
         description="""Topic classification dataset on Twitter with 6 labels. Each instance of

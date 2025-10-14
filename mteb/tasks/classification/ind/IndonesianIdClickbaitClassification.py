@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IndonesianIdClickbaitClassification(AbsTaskAnyClassification):
+class IndonesianIdClickbaitClassification(AbsTaskClassification):
     superseded_by = "IndonesianIdClickbaitClassification.v2"
     metadata = TaskMetadata(
         name="IndonesianIdClickbaitClassification",
@@ -50,7 +50,7 @@ class IndonesianIdClickbaitClassification(AbsTaskAnyClassification):
         )
 
 
-class IndonesianIdClickbaitClassificationV2(AbsTaskAnyClassification):
+class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IndonesianIdClickbaitClassification.v2",
         dataset={

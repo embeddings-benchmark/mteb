@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NordicLangClassification(AbsTaskAnyClassification):
+class NordicLangClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",

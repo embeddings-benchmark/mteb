@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SinhalaNewsSourceClassification(AbsTaskAnyClassification):
+class SinhalaNewsSourceClassification(AbsTaskClassification):
     superseded_by = "SinhalaNewsSourceClassification.v2"
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification",
@@ -42,7 +42,7 @@ class SinhalaNewsSourceClassification(AbsTaskAnyClassification):
         )
 
 
-class SinhalaNewsSourceClassificationV2(AbsTaskAnyClassification):
+class SinhalaNewsSourceClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification.v2",
         description="""This dataset contains Sinhala news headlines extracted from 9 news sources (websites) (Sri Lanka Army, Dinamina, GossipLanka, Hiru, ITN, Lankapuwath, NewsLK, Newsfirst, World Socialist Web Site-Sinhala).

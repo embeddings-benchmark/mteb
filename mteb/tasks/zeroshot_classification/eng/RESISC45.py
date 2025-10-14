@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class RESISC45ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="RESISC45ZeroShot",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",

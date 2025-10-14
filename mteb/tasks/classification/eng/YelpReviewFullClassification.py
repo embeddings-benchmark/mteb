@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YelpReviewFullClassification(AbsTaskAnyClassification):
+class YelpReviewFullClassification(AbsTaskClassification):
     superseded_by = "YelpReviewFullClassification.v2"
     metadata = TaskMetadata(
         name="YelpReviewFullClassification",
@@ -48,7 +48,7 @@ class YelpReviewFullClassification(AbsTaskAnyClassification):
         )
 
 
-class YelpReviewFullClassificationV2(AbsTaskAnyClassification):
+class YelpReviewFullClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="YelpReviewFullClassification.v2",
         description="""Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5.

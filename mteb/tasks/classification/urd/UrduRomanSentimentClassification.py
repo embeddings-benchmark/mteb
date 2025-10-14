@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UrduRomanSentimentClassification(AbsTaskAnyClassification):
+class UrduRomanSentimentClassification(AbsTaskClassification):
     superseded_by = "UrduRomanSentimentClassification.v2"
     metadata = TaskMetadata(
         name="UrduRomanSentimentClassification",
@@ -37,7 +37,7 @@ class UrduRomanSentimentClassification(AbsTaskAnyClassification):
     )
 
 
-class UrduRomanSentimentClassificationV2(AbsTaskAnyClassification):
+class UrduRomanSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UrduRomanSentimentClassification.v2",
         description="""The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)

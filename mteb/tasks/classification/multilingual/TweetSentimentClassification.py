@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -13,7 +13,7 @@ _LANGUAGES = {
 }
 
 
-class TweetSentimentClassification(AbsTaskAnyClassification):
+class TweetSentimentClassification(AbsTaskClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="TweetSentimentClassification",

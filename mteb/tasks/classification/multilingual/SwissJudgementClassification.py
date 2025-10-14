@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SwissJudgementClassification(AbsTaskAnyClassification):
+class SwissJudgementClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwissJudgementClassification",
         description="Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)",

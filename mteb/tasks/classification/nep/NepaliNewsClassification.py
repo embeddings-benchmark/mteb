@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NepaliNewsClassification(AbsTaskAnyClassification):
+class NepaliNewsClassification(AbsTaskClassification):
     superseded_by = "NepaliNewsClassification.v2"
     metadata = TaskMetadata(
         name="NepaliNewsClassification",
@@ -54,7 +54,7 @@ Tan, Liling},
         )
 
 
-class NepaliNewsClassificationV2(AbsTaskAnyClassification):
+class NepaliNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NepaliNewsClassification.v2",
         description="""A Nepali dataset for 7500 news articles

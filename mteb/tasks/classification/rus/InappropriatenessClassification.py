@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class InappropriatenessClassification(AbsTaskAnyClassification):
+class InappropriatenessClassification(AbsTaskClassification):
     superseded_by = "InappropriatenessClassification.v2"
     metadata = TaskMetadata(
         name="InappropriatenessClassification",
@@ -63,7 +63,7 @@ Robnik-{\v{S}}ikonja, Marko},
         )
 
 
-class InappropriatenessClassificationV2(AbsTaskAnyClassification):
+class InappropriatenessClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassification.v2",
         dataset={
@@ -125,7 +125,7 @@ Robnik-{\v{S}}ikonja, Marko},
         )
 
 
-class InappropriatenessClassificationv2(AbsTaskAnyClassification):
+class InappropriatenessClassificationv2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassificationv2",
         dataset={

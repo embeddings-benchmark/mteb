@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class CIFAR10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="CIFAR10ZeroShot",
         description="Classifying images from 10 classes.",
@@ -47,7 +47,7 @@ class CIFAR10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
         ]
 
 
-class CIFAR100ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class CIFAR100ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="CIFAR100ZeroShot",
         description="Classifying images from 100 classes.",

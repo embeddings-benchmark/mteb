@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class FER2013ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="FER2013ZeroShot",
         description="Classifying facial emotions.",

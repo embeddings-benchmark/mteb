@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SynPerChatbotConvSAAnger(AbsTaskAnyClassification):
+class SynPerChatbotConvSAAnger(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAAnger",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Anger",
@@ -29,7 +29,7 @@ class SynPerChatbotConvSAAnger(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSASatisfaction(AbsTaskAnyClassification):
+class SynPerChatbotConvSASatisfaction(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSASatisfaction",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Satisfaction",
@@ -56,7 +56,7 @@ class SynPerChatbotConvSASatisfaction(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAFriendship(AbsTaskAnyClassification):
+class SynPerChatbotConvSAFriendship(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAFriendship",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Friendship",
@@ -83,7 +83,7 @@ class SynPerChatbotConvSAFriendship(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAFear(AbsTaskAnyClassification):
+class SynPerChatbotConvSAFear(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAFear",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Fear",
@@ -110,7 +110,7 @@ class SynPerChatbotConvSAFear(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAJealousy(AbsTaskAnyClassification):
+class SynPerChatbotConvSAJealousy(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAJealousy",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Jealousy",
@@ -137,7 +137,7 @@ class SynPerChatbotConvSAJealousy(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSASurprise(AbsTaskAnyClassification):
+class SynPerChatbotConvSASurprise(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSASurprise",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Surprise",
@@ -164,7 +164,7 @@ class SynPerChatbotConvSASurprise(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSALove(AbsTaskAnyClassification):
+class SynPerChatbotConvSALove(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSALove",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Love",
@@ -191,7 +191,7 @@ class SynPerChatbotConvSALove(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSASadness(AbsTaskAnyClassification):
+class SynPerChatbotConvSASadness(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSASadness",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Sadness",
@@ -218,7 +218,7 @@ class SynPerChatbotConvSASadness(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAHappiness(AbsTaskAnyClassification):
+class SynPerChatbotConvSAHappiness(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAHappiness",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Happiness",
@@ -245,7 +245,7 @@ class SynPerChatbotConvSAHappiness(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAToneChatbotClassification(AbsTaskAnyClassification):
+class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAToneChatbotClassification",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Tone Chatbot Classification",
@@ -272,7 +272,7 @@ class SynPerChatbotConvSAToneChatbotClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAToneUserClassification(AbsTaskAnyClassification):
+class SynPerChatbotConvSAToneUserClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAToneUserClassification",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Tone User",
@@ -299,7 +299,7 @@ class SynPerChatbotConvSAToneUserClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotSatisfactionLevelClassification(AbsTaskAnyClassification):
+class SynPerChatbotSatisfactionLevelClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotSatisfactionLevelClassification",
         description="Synthetic Persian Chatbot Satisfaction Level Classification",
@@ -326,7 +326,7 @@ class SynPerChatbotSatisfactionLevelClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotRAGToneChatbotClassification(AbsTaskAnyClassification):
+class SynPerChatbotRAGToneChatbotClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotRAGToneChatbotClassification",
         description="Synthetic Persian Chatbot RAG Tone Chatbot Classification",
@@ -353,7 +353,7 @@ class SynPerChatbotRAGToneChatbotClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotRAGToneUserClassification(AbsTaskAnyClassification):
+class SynPerChatbotRAGToneUserClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotRAGToneUserClassification",
         description="Synthetic Persian Chatbot RAG Tone User Classification",
@@ -380,7 +380,7 @@ class SynPerChatbotRAGToneUserClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotToneChatbotClassification(AbsTaskAnyClassification):
+class SynPerChatbotToneChatbotClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotToneChatbotClassification",
         description="Synthetic Persian Chatbot Tone Chatbot Classification",
@@ -407,7 +407,7 @@ class SynPerChatbotToneChatbotClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotToneUserClassification(AbsTaskAnyClassification):
+class SynPerChatbotToneUserClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotToneUserClassification",
         description="Synthetic Persian Chatbot Tone User Classification",
@@ -434,7 +434,7 @@ class SynPerChatbotToneUserClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerTextToneClassification(AbsTaskAnyClassification):
+class SynPerTextToneClassification(AbsTaskClassification):
     superseded_by = "SynPerTextToneClassification.v2"
     metadata = TaskMetadata(
         name="SynPerTextToneClassification",
@@ -462,7 +462,7 @@ class SynPerTextToneClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerTextToneClassificationV2(AbsTaskAnyClassification):
+class SynPerTextToneClassificationV2(AbsTaskClassification):
     superseded_by = "SynPerTextToneClassification.v3"
 
     metadata = TaskMetadata(
@@ -493,7 +493,7 @@ class SynPerTextToneClassificationV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SynPerTextToneClassificationV3(AbsTaskAnyClassification):
+class SynPerTextToneClassificationV3(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SynPerTextToneClassification.v3",
         description="""This version of the Persian text tone classification dataset is an improved version of its predecessors.
@@ -522,7 +522,7 @@ class SynPerTextToneClassificationV3(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SIDClassification(AbsTaskAnyClassification):
+class SIDClassification(AbsTaskClassification):
     superseded_by = "SIDClassification.v2"
     metadata = TaskMetadata(
         name="SIDClassification",
@@ -550,7 +550,7 @@ class SIDClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SIDClassificationV2(AbsTaskAnyClassification):
+class SIDClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SIDClassification.v2",
         description="""SID Classification
@@ -579,7 +579,7 @@ class SIDClassificationV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class DeepSentiPers(AbsTaskAnyClassification):
+class DeepSentiPers(AbsTaskClassification):
     superseded_by = "DeepSentiPers.v2"
     metadata = TaskMetadata(
         name="DeepSentiPers",
@@ -610,7 +610,7 @@ class DeepSentiPers(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("review", "text")
 
 
-class DeepSentiPersV2(AbsTaskAnyClassification):
+class DeepSentiPersV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DeepSentiPers.v2",
         description="""Persian Sentiment Analysis Dataset
@@ -639,7 +639,7 @@ class DeepSentiPersV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class PersianTextEmotion(AbsTaskAnyClassification):
+class PersianTextEmotion(AbsTaskClassification):
     superseded_by = "PersianTextEmotion.v2"
     metadata = TaskMetadata(
         name="PersianTextEmotion",
@@ -667,7 +667,7 @@ class PersianTextEmotion(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class PersianTextEmotionV2(AbsTaskAnyClassification):
+class PersianTextEmotionV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PersianTextEmotion.v2",
         description="""Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.
@@ -696,7 +696,7 @@ class PersianTextEmotionV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SentimentDKSF(AbsTaskAnyClassification):
+class SentimentDKSF(AbsTaskClassification):
     superseded_by = "SentimentDKSF.v2"
     metadata = TaskMetadata(
         name="SentimentDKSF",
@@ -724,7 +724,7 @@ class SentimentDKSF(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class SentimentDKSFV2(AbsTaskAnyClassification):
+class SentimentDKSFV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SentimentDKSF.v2",
         description="""The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.
@@ -753,7 +753,7 @@ class SentimentDKSFV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class NLPTwitterAnalysisClassification(AbsTaskAnyClassification):
+class NLPTwitterAnalysisClassification(AbsTaskClassification):
     superseded_by = "NLPTwitterAnalysisClassification.v2"
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClassification",
@@ -784,7 +784,7 @@ class NLPTwitterAnalysisClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("tweet", "text")
 
 
-class NLPTwitterAnalysisClassificationV2(AbsTaskAnyClassification):
+class NLPTwitterAnalysisClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClassification.v2",
         description="""Twitter Analysis Classification
@@ -813,7 +813,7 @@ class NLPTwitterAnalysisClassificationV2(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class DigikalamagClassification(AbsTaskAnyClassification):
+class DigikalamagClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DigikalamagClassification",
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
@@ -843,7 +843,7 @@ class DigikalamagClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("content", "text")
 
 
-class FaIntentClassification(AbsTaskAnyClassification):
+class FaIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FaIntentClassification",
         description="Questions in 4 different categories that a user might ask their voice assistant to do",
@@ -874,7 +874,7 @@ class FaIntentClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("intent_label", "label")
 
 
-class StyleClassification(AbsTaskAnyClassification):
+class StyleClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="StyleClassification",
         description="A dataset containing formal and informal sentences in Persian for style classification.",
@@ -907,7 +907,7 @@ class StyleClassification(AbsTaskAnyClassification):
         )
 
 
-class PerShopDomainClassification(AbsTaskAnyClassification):
+class PerShopDomainClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PerShopDomainClassification",
         description="PerSHOP - A Persian dataset for shopping dialogue systems modeling",
@@ -942,7 +942,7 @@ class PerShopDomainClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("domain", "label")
 
 
-class PerShopIntentClassification(AbsTaskAnyClassification):
+class PerShopIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PerShopIntentClassification",
         description="PerSHOP - A Persian dataset for shopping dialogue systems modeling",

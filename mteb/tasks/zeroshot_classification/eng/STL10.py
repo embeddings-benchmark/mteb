@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class STL10ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class STL10ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="STL10ZeroShot",
         description="Classifying 96x96 images from 10 classes.",

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class PoemSentimentClassification(AbsTaskAnyClassification):
+class PoemSentimentClassification(AbsTaskClassification):
     superseded_by = "PoemSentimentClassification.v2"
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
@@ -38,7 +38,7 @@ class PoemSentimentClassification(AbsTaskAnyClassification):
     )
 
 
-class PoemSentimentClassificationV2(AbsTaskAnyClassification):
+class PoemSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification.v2",
         description="""Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
