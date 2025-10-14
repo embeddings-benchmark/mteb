@@ -8,7 +8,6 @@ from copy import deepcopy
 import pytest
 
 import mteb
-import mteb.overview
 from mteb.types import PromptType
 from tests.mock_tasks import (
     MockImageClusteringTask,
