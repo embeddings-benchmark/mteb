@@ -36,7 +36,6 @@ class AmazonCounterfactualClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{oneill-etal-2021-wish,
-  abstract = {Counterfactual statements describe events that did not or cannot take place. We consider the problem of counterfactual detection (CFD) in product reviews. For this purpose, we annotate a multilingual CFD dataset from Amazon product reviews covering counterfactual statements written in English, German, and Japanese languages. The dataset is unique as it contains counterfactuals in multiple languages, covers a new application area of e-commerce reviews, and provides high quality professional annotations. We train CFD models using different text representation methods and classifiers. We find that these models are robust against the selectional biases introduced due to cue phrase-based sentence selection. Moreover, our CFD dataset is compatible with prior datasets and can be merged to learn accurate CFD models. Applying machine translation on English counterfactual examples to create multilingual data performs poorly, demonstrating the language-specificity of this problem, which has been ignored so far.},
   address = {Online and Punta Cana, Dominican Republic},
   author = {O{'}Neill, James  and
 Rozenshtein, Polina  and

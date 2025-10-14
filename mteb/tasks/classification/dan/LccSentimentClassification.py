@@ -26,7 +26,6 @@ class LccSentimentClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{quasthoff-etal-2006-corpus,
-  abstract = {A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.},
   address = {Genoa, Italy},
   author = {Quasthoff, Uwe  and
 Richter, Matthias  and

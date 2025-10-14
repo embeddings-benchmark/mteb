@@ -26,7 +26,6 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         sample_creation="created",
         bibtex_citation=r"""
 @misc{Chibb_2022,
-  abstract = {{This paper explores the robustness of multilingual language models against false friends. False friends are words that sound or are written the same in two different languages but have different meaning. Generally, it is argued that multilingual models, such as XLM-RoBERTA, can outperform monolingual models in most tasks on conventional datasets. However, false friends are not considered in these tests. In this paper, experiments with a false friends dataset show that multilingual models are not robust against false friends; they have problems creating monolingual representations and differentiating between meanings of similarly written words in different languages. An attempt of word-based finetuning multilingual models on false friends pairs is promising, however the results do not generally solve the presented problem and still, monolingual models are more robust against false friends.}},
   author = {Chibb, Aaron},
   month = {Sep},
   title = {{German-English False Friends in Multilingual Transformer Models: An Evaluation on Robustness and Word-to-Word Fine-Tuning}},

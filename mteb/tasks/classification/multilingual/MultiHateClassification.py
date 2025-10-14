@@ -44,7 +44,6 @@ class MultiHateClassification(AbsTaskAnyClassification):
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{rottger-etal-2021-hatecheck,
-  abstract = {Detecting online hate is a difficult task that even state-of-the-art models struggle with. Typically, hate speech detection models are evaluated by measuring their performance on held-out test data using metrics such as accuracy and F1 score. However, this approach makes it difficult to identify specific model weak points. It also risks overestimating generalisable model performance due to increasingly well-evidenced systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, we introduce HateCheck, a suite of functional tests for hate speech detection models. We specify 29 model functionalities motivated by a review of previous research and a series of interviews with civil society stakeholders. We craft test cases for each functionality and validate their quality through a structured annotation process. To illustrate HateCheck{'}s utility, we test near-state-of-the-art transformer models as well as two popular commercial models, revealing critical model weaknesses.},
   address = {Online},
   author = {R{\"o}ttger, Paul  and
 Vidgen, Bertie  and
@@ -67,7 +66,6 @@ Navigli, Roberto},
 }
 
 @inproceedings{rottger-etal-2022-multilingual,
-  abstract = {Hate speech detection models are typically evaluated on held-out test sets. However, this risks painting an incomplete and potentially misleading picture of model performance because of increasingly well-documented systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, recent research has thus introduced functional tests for hate speech detection models. However, these tests currently only exist for English-language content, which means that they cannot support the development of more effective models in other languages spoken by billions across the world. To help address this issue, we introduce Multilingual HateCheck (MHC), a suite of functional tests for multilingual hate speech detection models. MHC covers 34 functionalities across ten languages, which is more languages than any other hate speech dataset. To illustrate MHC{'}s utility, we train and test a high-performing multilingual hate speech detection model, and reveal critical model weaknesses for monolingual and cross-lingual applications.},
   address = {Seattle, Washington (Hybrid)},
   author = {R{\"o}ttger, Paul  and
 Seelawi, Haitham  and

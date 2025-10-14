@@ -26,7 +26,6 @@ class ItaCaseholdClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{10.1145/3594536.3595177,
-  abstract = {Legal holdings are used in Italy as a critical component of the legal system, serving to establish legal precedents, provide guidance for future legal decisions, and ensure consistency and predictability in the interpretation and application of the law. They are written by domain experts who describe in a clear and concise manner the principle of law applied in the judgments.We introduce a legal holding extraction method based on Italian-LEGAL-BERT to automatically extract legal holdings from Italian cases. In addition, we present ITA-CaseHold, a benchmark dataset for Italian legal summarization. We conducted several experiments using this dataset, as a valuable baseline for future research on this topic.},
   address = {New York, NY, USA},
   author = {Licari, Daniele and Bushipaka, Praveen and Marino, Gabriele and Comand\'{e}, Giovanni and Cucinotta, Tommaso},
   booktitle = {Proceedings of the Nineteenth International Conference on Artificial Intelligence and Law},

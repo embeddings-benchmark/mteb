@@ -27,7 +27,6 @@ class JSTS(AbsTaskAnySTS):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kurihara-etal-2022-jglue,
-  abstract = {To develop high-performance natural language understanding (NLU) models, it is necessary to have a benchmark to evaluate and analyze NLU ability from various perspectives. While the English NLU benchmark, GLUE, has been the forerunner, benchmarks are now being released for languages other than English, such as CLUE for Chinese and FLUE for French; but there is no such benchmark for Japanese. We build a Japanese NLU benchmark, JGLUE, from scratch without translation to measure the general NLU ability in Japanese. We hope that JGLUE will facilitate NLU research in Japanese.},
   address = {Marseille, France},
   author = {Kurihara, Kentaro  and
 Kawahara, Daisuke  and

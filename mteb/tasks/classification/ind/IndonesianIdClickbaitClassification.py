@@ -27,7 +27,6 @@ class IndonesianIdClickbaitClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{WILLIAM2020106231,
-  abstract = {News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas.},
   author = {Andika William and Yunita Sari},
   doi = {https://doi.org/10.1016/j.dib.2020.106231},
   issn = {2352-3409},
@@ -76,7 +75,6 @@ class IndonesianIdClickbaitClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{WILLIAM2020106231,
-  abstract = {News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas.},
   author = {Andika William and Yunita Sari},
   doi = {https://doi.org/10.1016/j.dib.2020.106231},
   issn = {2352-3409},

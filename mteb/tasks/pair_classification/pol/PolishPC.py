@@ -26,7 +26,6 @@ class SickePLPC(AbsTaskPairClassification):
         sample_creation=None,
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
-  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
   address = {Marseille, France},
   author = {Dadas, Slawomir  and
 Pere{\l}kiewicz, Micha{\l}  and
@@ -135,7 +134,6 @@ class CdscePC(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{wroblewska-krasnowska-kieras-2017-polish,
-  abstract = {The paper presents a procedure of building an evaluation dataset. for the validation of compositional distributional semantics models estimated for languages other than English. The procedure generally builds on steps designed to assemble the SICK corpus, which contains pairs of English sentences annotated for semantic relatedness and entailment, because we aim at building a comparable dataset. However, the implementation of particular building steps significantly differs from the original SICK design assumptions, which is caused by both lack of necessary extraneous resources for an investigated language and the need for language-specific transformation rules. The designed procedure is verified on Polish, a fusional language with a relatively free word order, and contributes to building a Polish evaluation dataset. The resource consists of 10K sentence pairs which are human-annotated for semantic relatedness and entailment. The dataset may be used for the evaluation of compositional distributional semantics models of Polish.},
   address = {Vancouver, Canada},
   author = {Wr{\'o}blewska, Alina  and
 Krasnowska-Kiera{\'s}, Katarzyna},
@@ -182,7 +180,6 @@ class PscPC(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{ogrodniczuk-kopec-2014-polish,
-  abstract = {This article presents the Polish Summaries Corpus, a new resource created to support the development and evaluation of the tools for automated single-document summarization of Polish. The Corpus contains a large number of manual summaries of news articles, with many independently created summaries for a single text. Such approach is supposed to overcome the annotator bias, which is often described as a problem during the evaluation of the summarization algorithms against a single gold standard. There are several summarizers developed specifically for Polish language, but their in-depth evaluation and comparison was impossible without a large, manually created corpus. We present in detail the process of text selection, annotation process and the contents of the corpus, which includes both abstract free-word summaries, as well as extraction-based summaries created by selecting text spans from the original document. Finally, we describe how that resource could be used not only for the evaluation of the existing summarization tools, but also for studies on the human summarization process in Polish language.},
   address = {Reykjavik, Iceland},
   author = {Ogrodniczuk, Maciej  and
 Kope{\'c}, Mateusz},

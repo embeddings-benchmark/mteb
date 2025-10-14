@@ -31,7 +31,6 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{chen-etal-2022-summscreen,
-  abstract = {},
   address = {Dublin, Ireland},
   author = {Chen, Mingda  and
 Chu, Zewei  and

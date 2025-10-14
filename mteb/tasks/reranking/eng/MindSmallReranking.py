@@ -35,18 +35,6 @@ class MindSmallReranking(AbsTaskRetrieval):
         prompt="Retrieve relevant news articles based on user browsing history",
         bibtex_citation=r"""
 @inproceedings{wu-etal-2020-mind,
-  abstract = {News recommendation is an important technique for personalized news
-service. Compared with product and movie recommendations which have been comprehensively studied,
-the research on news recommendation is much more limited, mainly due to the lack of a high-quality benchmark
-dataset. In this paper, we present a large-scale dataset named MIND for news recommendation. Constructed from
-the user click logs of Microsoft News, MIND contains 1 million users and more than 160k English news
-articles, each of which has rich textual content such as title, abstract and body. We demonstrate MIND a good
-testbed for news recommendation through a comparative study of several state-of-the-art news recommendation
-methods which are originally developed on different proprietary datasets. Our results show the performance of
-news recommendation highly relies on the quality of news content understanding and user interest modeling.
-Many natural language processing techniques such as effective text representation methods and pre-trained
-language models can effectively improve the performance of news recommendation. The MIND dataset will be
-available at https://msnews.github.io.},
   address = {Online},
   author = {Wu, Fangzhao  and Qiao, Ying  and Chen, Jiun-Hung  and Wu, Chuhan  and Qi,
 Tao  and Lian, Jianxun  and Liu, Danyang  and Xie, Xing  and Gao, Jianfeng  and Wu, Winnie  and Zhou, Ming},
