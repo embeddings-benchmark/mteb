@@ -8,7 +8,6 @@ from pathlib import Path
 import pytest
 
 import mteb
-import mteb.get_tasks
 
 logging.basicConfig(level=logging.INFO)
 
