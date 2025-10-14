@@ -1675,7 +1675,7 @@ MTEB_NL = Benchmark(
                 "OpenTenderClusteringP2P",
                 "IconclassClusteringS2S",
                 # # Reranking
-                # "WikipediaRerankingMultilingual",
+                "WikipediaRerankingMultilingual",
                 # # Retrieval
                 # "ArguAna-NL",
                 # "SCIDOCS-NL",
@@ -1690,8 +1690,8 @@ MTEB_NL = Benchmark(
                 # "VABBRetrieval",
                 # "WikipediaRetrievalMultilingual",
                 # # STS
-                # "SICK-NL-STS",
-                # "STSBenchmarkMultilingualSTS",
+                "SICK-NL-STS",
+                "STSBenchmarkMultilingualSTS",
             ],
         )
     ),
