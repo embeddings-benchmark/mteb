@@ -1,4 +1,4 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +18,7 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class STS17MultilingualVisualSTS(AbsTaskAnySTS):
+class STS17MultilingualVisualSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STS17MultilingualVisualSTS",
         dataset={

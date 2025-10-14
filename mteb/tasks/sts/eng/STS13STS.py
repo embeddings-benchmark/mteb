@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class STS13STS(AbsTaskAnySTS):
+class STS13STS(AbsTaskSTS):
     min_score = 0
     max_score = 5
 

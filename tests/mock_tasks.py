@@ -5,7 +5,7 @@ from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.any_classification import AbsTaskAnyClassification
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.image.image_text_pair_classification import (
@@ -1075,7 +1075,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockSTSTask(AbsTaskAnySTS):
+class MockSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -1133,7 +1133,7 @@ class MockSTSTask(AbsTaskAnySTS):
     max_score = 1
 
 
-class MockMultilingualSTSTask(AbsTaskAnySTS):
+class MockMultilingualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -3808,7 +3808,7 @@ class MockMultilingualImageTextPairClassificationTask(
         self.data_loaded = True
 
 
-class MockVisualSTSTask(AbsTaskAnySTS):
+class MockVisualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,

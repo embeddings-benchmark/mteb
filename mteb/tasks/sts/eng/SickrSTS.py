@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SickrSTS(AbsTaskAnySTS):
+class SickrSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICK-R",
         dataset={

@@ -1,4 +1,4 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -16,7 +16,7 @@ _LANGUAGES = {
 }
 
 
-class STS17Crosslingual(AbsTaskAnySTS):
+class STS17Crosslingual(AbsTaskSTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="STS17",

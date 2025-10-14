@@ -1,10 +1,10 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
 
-class STSES(AbsTaskAnySTS):
+class STSES(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSES",
         dataset={
