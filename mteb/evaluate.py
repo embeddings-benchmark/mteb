@@ -141,21 +141,6 @@ def _evaluate_task(
 
     task.check_if_dataset_is_superseded()
 
-    if model.mteb_model_meta.modalities is not None and not (
-        # all task modalities are contained within model modalities
-        set(task.metadata.modalities).issubset(model.mteb_model_meta.modalities)
-    ):
-        logger.warning(
-            f"Model {model.mteb_model_meta.name} support modalities {model.mteb_model_meta.modalities} but the task "
-            f"{task.metadata.name} only supports {task.modalities}. Skipping task."
-        )
-        return TaskResult.from_task_results(
-            task,
-            task_results,
-            evaluation_time=0,
-            kg_co2_emissions=None,
-        )
-
     data_loaded = task.data_loaded
     if not data_loaded:
         task.load_data()
@@ -358,6 +343,20 @@ def evaluate(
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
+
+    if model.mteb_model_meta.modalities is not None and not (
+        # all task modalities are contained within model modalities
+        set(task.metadata.modalities).issubset(model.mteb_model_meta.modalities)
+    ):
+        logger.warning(
+            f"Model {model.mteb_model_meta.name} support modalities {model.mteb_model_meta.modalities} but the task "
+            f"{task.metadata.name} only supports {task.modalities}. Skipping task."
+        )
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[],
+        )
 
     if raise_error is False:
         try:
