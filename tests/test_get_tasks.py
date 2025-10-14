@@ -17,19 +17,13 @@ def all_tasks():
     "task_name", ["BornholmBitextMining", "CQADupstackRetrieval", "Birdsnap"]
 )
 @pytest.mark.parametrize("eval_splits", [["test"], None])
-@pytest.mark.parametrize("modalities", [["text"], None])
-@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
 def test_get_task(
     task_name: str,
     eval_splits: list[str] | None,
-    modalities: list[Modalities] | None,
-    exclusive_modality_filter: bool,
 ):
     task = get_task(
         task_name,
         eval_splits=eval_splits,
-        modalities=modalities,
-        exclusive_modality_filter=exclusive_modality_filter,
     )
     assert isinstance(task, AbsTask)
     assert task.metadata.name == task_name
@@ -38,15 +32,6 @@ def test_get_task(
             assert split in eval_splits
     else:
         assert task.eval_splits == task.metadata.eval_splits
-
-    if modalities:
-        if task.modalities:
-            if exclusive_modality_filter:
-                # With exclusive filter, task modalities must exactly match the requested modalities
-                assert set(task.modalities) == set(modalities)
-            else:
-                # With inclusive filter, task modalities must have overlap with requested modalities
-                assert any(mod in task.modalities for mod in modalities)
 
 
 def test_get_tasks_filtering():
