@@ -4587,7 +4587,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 256.0 | 384 | 118000000000000011280095969267987554172280159977171058688.00P | 449.0 MB | 2023-06-22 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, nld-Latn, ... (10) |
+| 256.0 | 384 | 117.7M | 449.0 MB | 2023-06-22 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, nld-Latn, ... (10) |
 
 
 ####  [`silma-ai/silma-embeddding-matryoshka-v0.1`](https://huggingface.co/silma-ai/silma-embeddding-matryoshka-v0.1)
