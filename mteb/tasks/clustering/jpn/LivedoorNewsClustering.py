@@ -1,8 +1,8 @@
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
+class LivedoorNewsClusteringv2(AbsTaskClustering):
     max_document_to_embed = 1107
     max_fraction_of_documents_to_embed = None
 
@@ -32,7 +32,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
     )
 
 
-class LivedoorNewsClustering(AbsTaskClusteringFast):
+class LivedoorNewsClustering(AbsTaskClustering):
     max_document_to_embed = 1107
     max_fraction_of_documents_to_embed = None
     superseded_by = "LivedoorNewsClustering.v2"

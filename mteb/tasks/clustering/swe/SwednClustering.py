@@ -1,9 +1,9 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SwednClustering(AbsTaskAnyClustering):
+class SwednClustering(AbsTaskClusteringLegacy):
     superseded_by = "SwednClusteringP2P"
 
     metadata = TaskMetadata(
@@ -38,7 +38,7 @@ class SwednClustering(AbsTaskAnyClustering):
     )
 
 
-class SwednClusteringP2P(AbsTaskClusteringFast):
+class SwednClusteringP2P(AbsTaskClustering):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 
@@ -75,7 +75,7 @@ class SwednClusteringP2P(AbsTaskClusteringFast):
     )
 
 
-class SwednClusteringFastS2S(AbsTaskClusteringFast):
+class SwednClusteringFastS2S(AbsTaskClustering):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 

@@ -1,6 +1,6 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -8,7 +8,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 NUM_SAMPLES = 2048
 
 
-class BigPatentClustering(AbsTaskAnyClustering):
+class BigPatentClustering(AbsTaskClusteringLegacy):
     superseded_by = "BigPatentClustering.v2"
 
     metadata = TaskMetadata(
@@ -57,7 +57,7 @@ Summarization},
     )
 
 
-class BigPatentClusteringFast(AbsTaskClusteringFast):
+class BigPatentClusteringFast(AbsTaskClustering):
     max_depth = 1
     metadata = TaskMetadata(
         name="BigPatentClustering.v2",

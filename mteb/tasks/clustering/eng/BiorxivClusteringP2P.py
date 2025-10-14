@@ -1,12 +1,12 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
+class BiorxivClusteringP2PFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="BiorxivClusteringP2P.v2",
         description="Clustering of titles+abstract from biorxiv across 26 categories.",
@@ -38,7 +38,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
             check_label_distribution(self.dataset[split])
 
 
-class BiorxivClusteringP2P(AbsTaskAnyClustering):
+class BiorxivClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "BiorxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringP2P",

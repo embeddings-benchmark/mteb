@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CIFAR10Clustering(AbsTaskAnyClustering):
+class CIFAR10Clustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="CIFAR10Clustering",
         description="Clustering images from 10 classes.",
@@ -41,7 +41,7 @@ class CIFAR10Clustering(AbsTaskAnyClustering):
     label_column_name: str = "label"
 
 
-class CIFAR100Clustering(AbsTaskAnyClustering):
+class CIFAR100Clustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="CIFAR100Clustering",
         description="Clustering images from 100 classes.",
