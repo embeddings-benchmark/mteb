@@ -1,7 +1,7 @@
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.clustering_fast import (
+from mteb.abstasks.clustering import (
     AbsTaskClustering,
     check_label_distribution,
 )

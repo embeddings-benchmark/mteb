@@ -3,8 +3,8 @@ from collections import Counter
 import datasets
 import numpy as np
 
-from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
-from mteb.abstasks.clustering_fast import (
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
+from mteb.abstasks.clustering import (
     AbsTaskClustering,
     check_label_distribution,
 )

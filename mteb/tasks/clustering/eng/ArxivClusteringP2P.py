@@ -2,7 +2,7 @@ import random
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
