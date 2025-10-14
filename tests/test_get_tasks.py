@@ -14,10 +14,9 @@ def test_get_tasks_size_differences():
     assert len(default_tasks) >= len(get_tasks(script=["Latn"]))
     assert len(default_tasks) >= len(get_tasks(domains=["Legal"]))
     assert len(default_tasks) >= len(get_tasks(languages=["eng", "deu"]))
-    assert len(default_tasks) >= len(get_tasks(modalities=["text"]))
-    assert len(get_tasks(modalities=["text", "image"])) >= len(
-        get_tasks(modalities=["image"])
-    )
+    text_task = get_tasks(modalities=["text"])
+    assert len(default_tasks) >= len(text_task)
+    assert len(get_tasks(modalities=["text", "image"])) >= len(text_task)
 
 
 @pytest.mark.parametrize(

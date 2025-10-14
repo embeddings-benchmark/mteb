@@ -2,7 +2,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 
 
-class TwitterURLCorpusPC(AbsTaskPairClassification):
+class TwitterURLCorpus(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TwitterURLCorpus",
         dataset={

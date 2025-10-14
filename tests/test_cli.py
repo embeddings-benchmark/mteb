@@ -8,23 +8,30 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb.cli.build_cli import create_meta, run
+from mteb.cli.build_cli import available_benchmarks, available_tasks, create_meta, run
 
 
-def test_available_tasks():
-    command = f"{sys.executable} -m mteb available-tasks"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    assert "LccSentimentClassification" in result.stdout, (
+def test_available_tasks(capsys):
+    args = Namespace(
+        categories=None,
+        task_types=None,
+        languages=None,
+        tasks=None,
+    )
+    available_tasks(args=args)
+
+    captured = capsys.readouterr()
+    assert "LccSentimentClassification" in captured.out, (
         "Sample task LccSentimentClassification task not found in available tasks"
     )
 
 
-def test_available_benchmarks():
-    command = f"{sys.executable} -m mteb available-benchmarks"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    assert "MTEB(eng, v1)" in result.stdout, (
+def test_available_benchmarks(capsys):
+    args = Namespace(benchmarks=None)
+    available_benchmarks(args=args)
+
+    captured = capsys.readouterr()
+    assert "MTEB(eng, v1)" in captured.out, (
         "Sample benchmark MTEB(eng, v1) task not found in available benchmarks"
     )
 
