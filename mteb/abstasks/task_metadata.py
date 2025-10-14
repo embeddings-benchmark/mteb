@@ -179,7 +179,7 @@ PromptDict = TypedDict(
 )
 """A dictionary containing the prompt used for the task.
 
-Args:
+Attributes:
     query: The prompt used for the queries in the task.
     document: The prompt used for the passages in the task.
 """

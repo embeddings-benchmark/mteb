@@ -64,14 +64,14 @@ class AbsTask(ABC):
     Attributes:
         metadata: The metadata describing the task
         dataset: The dataset represented as a dictionary on the form {"hf subset": {"split": Dataset}} where "split" is the dataset split (e.g. "test")
-            and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
+            and Dataset is a datasets.Dataset object. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
             datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
         seed: The random seed used for reproducibility.
         hf_subsets: The list of Huggingface subsets to use.
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
-        abstask_prompt: The potential prompt of the abstask
-        superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+        superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
             This was used only for historical reasons and will be removed in the future.
@@ -86,8 +86,8 @@ class AbsTask(ABC):
     hf_subsets: list[HFSubset]
     fast_loading: bool = False
 
-    support_cross_encoder: bool = False
-    support_search: bool = False
+    _support_cross_encoder: bool = False
+    _support_search: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         """The init function. This is called primarily to set the seed.
@@ -135,7 +135,7 @@ class AbsTask(ABC):
             prediction_folder: Folder to save model predictions
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
-        if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:
+        if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
                 f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
                 "Please use a Encoder model instead."
@@ -145,7 +145,7 @@ class AbsTask(ABC):
         if (
             isinstance(model, SearchProtocol)
             and not isinstance(model, Encoder)
-            and not self.support_search
+            and not self._support_search
         ):
             raise TypeError(
                 f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "

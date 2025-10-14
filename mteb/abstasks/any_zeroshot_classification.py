@@ -60,11 +60,12 @@ class ZeroShotClassificationMetrics(TypedDict):
 
 class AbsTaskAnyZeroShotClassification(AbsTask):
     """Abstract class for ZeroShot Classification tasks for any modality.
-    The similarity between an image (or audio) and candidate text prompts, such as this is a dog/this is a cat.
+    The similarity between an input (can be image or text) and candidate text prompts, such as this is a dog/this is a cat.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        inputs: list of Image.Image or audio
-        label: list of int
+    Attributes:
+        dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by self.input_column_name and self.label_column_name.
+        input_column_name: Name of the column containing the inputs (image or text).
+        label_column_name: Name of the column containing the labels (str).
     """
 
     input_column_name: str = "image"
