@@ -208,7 +208,11 @@ def _check_model_modalities(
             query_overlap = model_modalities & query_mods
             doc_overlap = model_modalities & doc_mods
 
-            if model_modalities == doc_mods and model_modalities == query_mods:
+            if (
+                # both query and document modalities are fully supported by the model
+                doc_mods.issubset(model_modalities)
+                and query_mods.issubset(model_modalities)
+            ):
                 continue
             elif query_overlap and doc_overlap:
                 warnings.append(
