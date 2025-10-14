@@ -28,7 +28,6 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{ivanova-etal-2023-norquad,
-  abstract = {In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.},
   address = {T{\'o}rshavn, Faroe Islands},
   author = {Ivanova, Sardana  and
 Andreassen, Fredrik  and

@@ -29,7 +29,6 @@ class HUMEEmotionClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{saravia-etal-2018-carer,
-  abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
   address = {Brussels, Belgium},
   author = {Saravia, Elvis  and
 Liu, Hsien-Chi Toby  and

@@ -27,7 +27,6 @@ class TweetSarcasmClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{abu-farha-magdy-2020-arabic,
-  abstract = {Sarcasm is one of the main challenges for sentiment analysis systems. Its complexity comes from the expression of opinion using implicit indirect phrasing. In this paper, we present ArSarcasm, an Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. The dataset contains 10,547 tweets, 16{\%} of which are sarcastic. In addition to sarcasm the data was annotated for sentiment and dialects. Our analysis shows the highly subjective nature of these tasks, which is demonstrated by the shift in sentiment labels based on annotators{'} biases. Experiments show the degradation of state-of-the-art sentiment analysers when faced with sarcastic content. Finally, we train a deep learning model for sarcasm detection using BiLSTM. The model achieves an F1 score of 0.46, which shows the challenging nature of the task, and should act as a basic baseline for future research on our dataset.},
   address = {Marseille, France},
   author = {Abu Farha, Ibrahim  and
 Magdy, Walid},
@@ -81,7 +80,6 @@ class TweetSarcasmClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{abu-farha-magdy-2020-arabic,
-  abstract = {Sarcasm is one of the main challenges for sentiment analysis systems. Its complexity comes from the expression of opinion using implicit indirect phrasing. In this paper, we present ArSarcasm, an Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. The dataset contains 10,547 tweets, 16{\%} of which are sarcastic. In addition to sarcasm the data was annotated for sentiment and dialects. Our analysis shows the highly subjective nature of these tasks, which is demonstrated by the shift in sentiment labels based on annotators{'} biases. Experiments show the degradation of state-of-the-art sentiment analysers when faced with sarcastic content. Finally, we train a deep learning model for sarcasm detection using BiLSTM. The model achieves an F1 score of 0.46, which shows the challenging nature of the task, and should act as a basic baseline for future research on our dataset.},
   address = {Marseille, France},
   author = {Abu Farha, Ibrahim  and
 Magdy, Walid},

@@ -26,7 +26,6 @@ class ATEC(AbsTaskAnySTS):
         sample_creation=None,
         bibtex_citation=r"""
 @inproceedings{raghu-etal-2021-end,
-  abstract = {We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.},
   address = {Online and Punta Cana, Dominican Republic},
   author = {Raghu, Dinesh  and
 Agarwal, Shantanu  and
@@ -232,7 +231,6 @@ class AFQMC(AbsTaskAnySTS):
         sample_creation=None,
         bibtex_citation=r"""
 @inproceedings{raghu-etal-2021-end,
-  abstract = {We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.},
   address = {Online and Punta Cana, Dominican Republic},
   author = {Raghu, Dinesh  and
 Agarwal, Shantanu  and

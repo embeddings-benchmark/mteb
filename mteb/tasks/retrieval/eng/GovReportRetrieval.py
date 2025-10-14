@@ -26,7 +26,6 @@ class GovReportRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{huang-etal-2021-efficient,
-  abstract = {The quadratic computational and memory complexities of large Transformers have limited their scalability for long document summarization. In this paper, we propose Hepos, a novel efficient encoder-decoder attention with head-wise positional strides to effectively pinpoint salient information from the source. We further conduct a systematic study of existing efficient self-attentions. Combined with Hepos, we are able to process ten times more tokens than existing models that use full attentions. For evaluation, we present a new dataset, GovReport, with significantly longer documents and summaries. Results show that our models produce significantly higher ROUGE scores than competitive comparisons, including new state-of-the-art results on PubMed. Human evaluation also shows that our models generate more informative summaries with fewer unfaithful errors.},
   address = {Online},
   author = {Huang, Luyang  and
 Cao, Shuyang  and
