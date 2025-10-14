@@ -21,5 +21,5 @@ from tests.mock_tasks import (
 )
 def test_cross_encoder_on_task(task: AbsTask):
     """Ensures that cross-encoders can be run on retrieval and reranking tasks"""
-    model = mteb.get_model("mock/random-crossencoder-baseline")
+    model = mteb.get_model("mteb/random-crossencoder-baseline")
     mteb.evaluate(model, task, cache=None)

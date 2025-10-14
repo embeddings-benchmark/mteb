@@ -197,7 +197,7 @@ class RandomCrossEncoderBaseline:
 
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,  # type: ignore
-    name="mock/random-crossencoder-baseline",
+    name="mteb/random-crossencoder-baseline",
     modalities=["text", "image"],
     is_cross_encoder=True,
     **_common_mock_metadata,
