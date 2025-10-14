@@ -204,12 +204,12 @@ def _check_model_modalities(
             query_mods = set(task.metadata.get_modalities(PromptType.query))
             doc_mods = set(task.metadata.get_modalities(PromptType.document))
 
-            has_query_overlap = bool(model_modalities & query_mods)
-            has_doc_overlap = bool(model_modalities & doc_mods)
+            query_overlap = model_modalities & query_mods
+            doc_overlap = model_modalities & doc_mods
 
             if model_modalities == doc_mods and model_modalities == query_mods:
                 continue
-            elif has_query_overlap and has_doc_overlap:
+            elif query_overlap and doc_overlap and doc_overlap == query_overlap:
                 warnings.append(
                     f"Model {model.name} supports {list(model_modalities)}, partially overlapping "
                     f"with task {task.metadata.name} query={list(query_mods)}, document={list(doc_mods)}. "
@@ -223,7 +223,7 @@ def _check_model_modalities(
         else:
             task_mods = set(task.metadata.modalities)
 
-            if model_modalities == task_mods:
+            if task_mods.issubset(model_modalities):
                 continue
             else:
                 errors.append(
