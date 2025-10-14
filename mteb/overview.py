@@ -19,27 +19,16 @@ from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
 )
-from mteb.tasks import *  # import all tasks
 from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
 
 
+
 # Create task registry
 def _create_task_list() -> list[type[AbsTask]]:
-    # reranking subclasses retrieval to share methods, but is an abstract task
-    tasks_categories_cls = list(AbsTask.__subclasses__()) + [
-        AbsTaskMultilabelClassification,
-        AbsTaskRegression,
-        AbsTaskReranking,
-    ]
-    tasks = []
-    for cat_cls in tasks_categories_cls:
-        for cls in cat_cls.__subclasses__():
-            if cat_cls.__name__.startswith("AbsTask") and not cls.__name__.startswith(
-                "AbsTask"
-            ):
-                tasks.append(cls)
+    import mteb.tasks as tasks
+    tasks = [t for t in tasks.__dict__.values() if isinstance(t, type) and issubclass(t, AbsTask)]
     return tasks
 
 
@@ -51,8 +40,6 @@ def _create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
             raise ValueError(
                 f"Duplicate task name found: {cls.metadata.name}. Please make sure that all task names are unique."
             )
-        if "AbsTask" in cls.__name__:
-            continue
         metadata_names[cls.metadata.name] = cls
     return metadata_names
 

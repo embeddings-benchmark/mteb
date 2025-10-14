@@ -210,7 +210,7 @@ _HISTORIC_DATASETS = [
 
 
 @pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=True, exclude_aggregate=True)
+    "task", get_tasks(exclude_superseded=False, exclude_aggregate=False)
 )
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
@@ -227,6 +227,8 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
     # --- Test is descriptive stats are present for all datasets ---
     if "image" in task.metadata.modalities:
+        return
+    if task.is_aggregate:  # aggregate tasks do not have descriptive stats
         return
 
     # TODO add descriptive_stat for CodeRAGStackoverflowPosts. Required > 128GB of RAM

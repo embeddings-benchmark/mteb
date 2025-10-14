@@ -4,6 +4,8 @@ from .SemRel24STS import SemRel24STS
 from .STS17CrosslingualSTS import STS17Crosslingual
 from .STS22CrosslingualSTS import STS22CrosslingualSTS, STS22CrosslingualSTSv2
 from .STSBenchmarkMultilingualSTS import STSBenchmarkMultilingualSTS
+from .STS17MultilingualVisualSTS import STS17MultilingualVisualSTS
+from .STSBenchmarkMultilingualVisualSTS import STSBenchmarkMultilingualVisualSTS
 
 __all__ = [
     "HUMESTS22",
@@ -13,4 +15,6 @@ __all__ = [
     "STS22CrosslingualSTSv2",
     "STSBenchmarkMultilingualSTS",
     "SemRel24STS",
+    "STS17MultilingualVisualSTS",
+    "STSBenchmarkMultilingualVisualSTS",
 ]
