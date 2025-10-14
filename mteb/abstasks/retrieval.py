@@ -108,11 +108,12 @@ class AbsTaskRetrieval(AbsTask):
                  the second key is the split (e.g., "train", "test"), and the value is a RetrievalSplitData object.
         ignore_identical_ids: If True, identical IDs in queries and corpus are ignored during evaluation.
         k_values: A sequence of integers representing the k values for evaluation metrics.
-        skip_first_result: If True, the first result is skipped during evaluation (useful for
+        skip_first_result: If True, the first result is skipped during evaluation
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     ignore_identical_ids: bool = False
-    _abstask_prompt = "Retrieve text based on user query."
+    abstask_prompt = "Retrieve text based on user query."
     k_values: Sequence[int] = (1, 3, 5, 10, 20, 100, 1000)
     _top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]

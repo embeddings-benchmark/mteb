@@ -99,12 +99,14 @@ class AbsTaskAnyClassification(AbsTask):
         dataset: Hugging Face dataset containing the data for the task. Should have train split (split name can be changed by train_split. Must contain the following columns:
             text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
             label: int. Column name can be changed via `label_column_name` attribute.
-        evaluator_model: The model to use for evaluation. Must implement the [`SklearnModelProtocol`]. Default is `LogisticRegression`.
+        evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LogisticRegression`.
+            Full details of api in [`SklearnModelProtocol`][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol].
         samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
         n_experiments: Number of experiments to run. Default is 10.
         train_split: Name of the split to use for training the evaluator model. Default is "train".
         label_column_name: Name of the column containing the labels. Default is "label".
         input_column_name: Name of the column containing the input data. Default is "text".
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
@@ -118,7 +120,7 @@ class AbsTaskAnyClassification(AbsTask):
     train_split: str = "train"
     label_column_name: str = "label"
     input_column_name: str = "text"
-    _abstask_prompt = "Classify user passages."
+    abstask_prompt = "Classify user passages."
 
     def evaluate(
         self,

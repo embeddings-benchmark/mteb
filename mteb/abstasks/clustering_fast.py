@@ -130,6 +130,7 @@ class AbsTaskClustering(AbsTask):
         max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
         input_column_name: Name of the column containing the input sentences or data points.
         label_column_name: Name of the column containing the true cluster labels.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     max_fraction_of_documents_to_embed: float | None = 0.04
@@ -138,7 +139,7 @@ class AbsTaskClustering(AbsTask):
     n_clusters: int = 10
     k_mean_batch_size: int = 512
     max_depth = None
-    _abstask_prompt = "Identify categories in user passages."
+    abstask_prompt = "Identify categories in user passages."
     input_column_name: str = "sentences"
     label_column_name: str = "labels"
 

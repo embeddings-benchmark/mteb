@@ -88,9 +88,10 @@ class AbsTaskAnySTS(AbsTask):
         column_names: Tuple containing the names of the two columns to compare.
         min_score: Minimum possible score in the dataset.
         max_score: Maximum possible score in the dataset.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
-    _abstask_prompt = "Retrieve semantically similar text."
+    abstask_prompt = "Retrieve semantically similar text."
     column_names: tuple[str, str] = ("sentence1", "sentence2")
     min_score: int = 0
     max_score: int = 5

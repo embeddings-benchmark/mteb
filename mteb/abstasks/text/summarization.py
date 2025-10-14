@@ -59,12 +59,13 @@ class AbsTaskSummarization(AbsTask):
         machine_summaries_column_name: Name of the column containing machine summaries.
         text_column_name: Name of the column containing the original text.
         relevancy_column_name: Name of the column containing relevance scores.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     min_score: int
     max_score: int
 
-    _abstask_prompt = (
+    abstask_prompt = (
         "Given a news summary, retrieve other semantically similar summaries."
     )
     # SummEval has DeprecatedSummarizationEvaluator

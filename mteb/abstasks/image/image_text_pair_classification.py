@@ -62,6 +62,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
             - captions: List of captions.
         images_column_names: Name of the column(s) containing the images.
         texts_column_names: Name of the column(s) containing the captions.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround

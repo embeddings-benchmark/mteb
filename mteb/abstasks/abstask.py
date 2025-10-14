@@ -71,13 +71,14 @@ class AbsTask(ABC):
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
             This was used only for historical reasons and will be removed in the future.
     """
 
     metadata: TaskMetadata
-    _abstask_prompt: str | None = None
+    abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
     superseded_by: str | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None

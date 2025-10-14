@@ -44,7 +44,7 @@ All tasks in `mteb` inherits from the following abstract class.
 
 :::mteb.AbsTask
 
-## Multimodal tasks
+## Multimodal Tasks
 
 Tasks that support any modality (text, image, etc.) inherit from the following abstract class. Retrieval tasks support multimodal input (e.g. image + text queries and image corpus or vice versa).
 
@@ -68,7 +68,7 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 
 :::mteb.abstasks.any_clustering.AbsTaskClusteringLegacy
 
-## Text tasks
+## Text Tasks
 
 :::mteb.abstasks.text.bitext_mining.AbsTaskBitextMining
 
@@ -78,6 +78,6 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 
 :::mteb.abstasks.text.reranking.AbsTaskReranking
 
-## Image tasks
+## Image Tasks
 
 :::mteb.abstasks.image.image_text_pair_classification.AbsTaskImageTextPairClassification

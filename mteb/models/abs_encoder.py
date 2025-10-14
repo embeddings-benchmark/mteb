@@ -207,7 +207,7 @@ class AbsEncoder(ABC):
             return prompt
 
         abstask = mteb.get_task(task_name=task_metadata.name)
-        return abstask._abstask_prompt
+        return abstask.abstask_prompt
 
     def format_instruction(
         self, instruction: str, prompt_type: PromptType | None = None

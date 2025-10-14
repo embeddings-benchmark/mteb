@@ -25,7 +25,10 @@ OLD_FORMAT_RERANKING_TASKS = []
     "You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data."
 )
 class AbsTaskReranking(AbsTaskRetrieval):
-    """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but here to adapt the old format to the new format.
+    """Warning: Deprecated
+    This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead.
+    You can add your task name to mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS to load it in new format.
+    You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data.
     For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 

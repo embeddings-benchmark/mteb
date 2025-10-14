@@ -70,9 +70,10 @@ class AbsTaskClusteringLegacy(AbsTask):
             labels: List of integer labels representing the true cluster assignments. Name can be changed via `label_column_name`.
         input_column_name: The name of the column in the dataset that contains the input sentences or data points.
         label_column_name: The name of the column in the dataset that contains the true cluster labels.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
-    _abstask_prompt = "Identify categories in user passages."
+    abstask_prompt = "Identify categories in user passages."
     evaluator: type[ClusteringEvaluator] = ClusteringEvaluator
     input_column_name: str = "sentences"
     label_column_name: str = "labels"

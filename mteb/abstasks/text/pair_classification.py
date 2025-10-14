@@ -58,9 +58,10 @@ class AbsTaskPairClassification(AbsTask):
         sentence1_column_name: The name of the column containing the first sentence in the pair.
         sentence2_column_name: The name of the column containing the second sentence in the pair.
         label_column_name: The name of the column containing the labels for the pairs. Labels should be 0 or 1.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
-    _abstask_prompt = "Retrieve text that are semantically similar to the given text."
+    abstask_prompt = "Retrieve text that are semantically similar to the given text."
     sentence1_column_name: str = "sentence1"
     sentence2_column_name: str = "sentence2"
     label_column_name: str = "labels"

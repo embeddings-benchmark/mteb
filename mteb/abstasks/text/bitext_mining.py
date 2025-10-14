@@ -59,10 +59,11 @@ class AbsTaskBitextMining(AbsTask):
     Attributes:
         dataset: A HuggingFace dataset containing the data for the task. It must contain the following columns sentence1 and sentence2 for the two texts to be compared.
         parallel_subsets: If true task language pairs should be in one split as column names, otherwise each language pair should be a subset.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     parallel_subsets = False
-    _abstask_prompt = "Retrieve parallel sentences."
+    abstask_prompt = "Retrieve parallel sentences."
     _DEFAULT_PAIR: ClassVar[list[tuple[str, str]]] = [("sentence1", "sentence2")]
 
     def evaluate(
