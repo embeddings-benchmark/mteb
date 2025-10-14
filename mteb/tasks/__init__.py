@@ -9,5 +9,5 @@ from .pair_classification import *
 from .regression import *
 from .reranking import *
 from .retrieval import *
-from .sts import *
+from .sts_ import *
 from .summarization import *
