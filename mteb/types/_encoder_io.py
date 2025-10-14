@@ -130,11 +130,11 @@ Each type is defined as a separate structured input with its own fields.
    {"text": ["Title 1 Body 1", "Title 2 Body 2"], "title": ["Title 1", "Title 2"], "body": ["Body 1", "Body 2"]}
    ```
 3. **[`QueryInput`][mteb.types._encoder_io.QueryInput]**
-   For query–instruction pairs, typically used in retrieval or question answering tasks. Queries and instructions are combined with model's instruction template.
+   For query–instruction pairs, typically used in retrieval or question answering tasks. Queries and instructions are combined with the model's instruction template.
 
    ```python
    {
-       "text": ["Instruction: Your task is find document for this query. Query: What is AI?", "Instruction: Your task is to find term for definition. Query: Define machine learning."],
+       "text": ["Instruction: Your task is to find document for this query. Query: What is AI?", "Instruction: Your task is to find term for definition. Query: Define machine learning."],
        "query": ["What is AI?", "Define machine learning."],
        "instruction": ["Your task is find document for this query.", "Your task is to find term for definition."]
    }
