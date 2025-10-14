@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification_legacy import AbsTaskAnyClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLITS = ["test"]

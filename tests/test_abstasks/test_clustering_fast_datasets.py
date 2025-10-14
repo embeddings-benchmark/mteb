@@ -1,6 +1,6 @@
 import pytest
 
-from mteb.abstasks.clustering_fast import AbsTaskClustering
+from mteb.abstasks.clustering import AbsTaskClustering
 
 
 @pytest.mark.parametrize("dataset", AbsTaskClustering.__subclasses__())

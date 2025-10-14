@@ -17,7 +17,7 @@ from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.create_dataloaders import create_dataloader
 from mteb.models import Encoder
 
-from .any_classification import AbsTaskAnyClassification
+from .classification_legacy import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 

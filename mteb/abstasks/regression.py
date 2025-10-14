@@ -20,7 +20,7 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .any_classification import AbsTaskAnyClassification
+from .classification_legacy import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 

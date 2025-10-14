@@ -4,13 +4,13 @@ from datasets import Dataset, DatasetDict
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification_legacy import AbsTaskAnyClassification
 from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.any_sts import AbsTaskAnySTS
 from mteb.abstasks.any_zeroshot_classification import (
     AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.clustering_fast import AbsTaskClustering
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
