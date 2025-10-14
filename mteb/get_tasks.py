@@ -259,9 +259,10 @@ def get_tasks(
         >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
     if tasks:
-        if languages or script or domains or task_types or categories:
+        if domains or task_types or categories:
             logger.warning(
-                "When `tasks` is provided, other filters (languages, script, domains, task_types, categories) are ignored."
+                "When `tasks` is provided, other filters like domains, task_types, and categories are ignored. "
+                + "If you want to filter a list of tasks, please use `mteb.filter_tasks` instead."
             )
         _tasks = [
             get_task(
