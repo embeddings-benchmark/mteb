@@ -61,7 +61,7 @@ class ClusteringMetrics(TypedDict, total=False):
     cluster_accuracy: float
 
 
-class AbsTaskAnyClustering(AbsTask):
+class AbsTaskClusteringLegacy(AbsTask):
     """Abstract class for Clustering tasks for any modality.
 
     Attributes:

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEWikiCitiesClustering(AbsTaskAnyClustering):
+class HUMEWikiCitiesClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="HUMEWikiCitiesClustering",
         description="Human evaluation subset of Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.",

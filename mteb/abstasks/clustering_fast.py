@@ -106,7 +106,7 @@ class ClusteringFastDescriptiveStatistics(SplitDescriptiveStatistics):
     labels_statistics: LabelStatistics
 
 
-class AbsTaskClusteringFast(AbsTask):
+class AbsTaskClustering(AbsTask):
     """Abstract class for Clustering tasks.
 
     This class embeds the corpus sentences then samples N samples from the corpus and clusters them.

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BuiltBenchClusteringP2P(AbsTaskAnyClustering):
+class BuiltBenchClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="BuiltBenchClusteringP2P",
         description="Clustering of built asset item descriptions based on categories identified within industry classification systems such as IFC, Uniclass, etc.",

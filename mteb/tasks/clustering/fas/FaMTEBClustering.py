@@ -2,13 +2,13 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BeytooteClustering(AbsTaskClusteringFast):
+class BeytooteClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="BeytooteClustering",
         description="Beytoote Website Articles Clustering",
@@ -42,7 +42,7 @@ class BeytooteClustering(AbsTaskClusteringFast):
         )
 
 
-class DigikalamagClustering(AbsTaskClusteringFast):
+class DigikalamagClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="DigikalamagClustering",
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
@@ -68,7 +68,7 @@ class DigikalamagClustering(AbsTaskClusteringFast):
     )
 
 
-class HamshahriClustring(AbsTaskClusteringFast):
+class HamshahriClustring(AbsTaskClustering):
     metadata = TaskMetadata(
         name="HamshahriClustring",
         description="These datasets have been extracted from the RSS feed of two Farsi news agency websites.",
@@ -126,7 +126,7 @@ class HamshahriClustring(AbsTaskClusteringFast):
         )
 
 
-class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
+class NLPTwitterAnalysisClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClustering",
         description="Clustering of tweets from twitter across 26 categories.",
@@ -162,7 +162,7 @@ class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
         )
 
 
-class SIDClustring(AbsTaskClusteringFast):
+class SIDClustring(AbsTaskClustering):
     metadata = TaskMetadata(
         name="SIDClustring",
         description="Clustering of summariesfrom SIDClustring across categories.",

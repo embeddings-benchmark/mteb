@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClustering
+from mteb.abstasks import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TwentyNewsgroupsClusteringVN(AbsTaskAnyClustering):
+class TwentyNewsgroupsClusteringVN(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering-VN",
         description="""A translated dataset from Clustering of the 20 Newsgroups dataset (subject only).

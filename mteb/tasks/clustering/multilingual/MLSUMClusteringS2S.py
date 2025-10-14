@@ -2,8 +2,8 @@ import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +18,7 @@ _LANGUAGES = {
 N_SAMPLES = 2048
 
 
-class MLSUMClusteringS2S(AbsTaskAnyClustering):
+class MLSUMClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "MLSUMClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
@@ -83,7 +83,7 @@ class MLSUMClusteringS2S(AbsTaskAnyClustering):
         self.dataset[lang] = _dataset
 
 
-class MLSUMClusteringS2SFast(AbsTaskClusteringFast):
+class MLSUMClusteringS2SFast(AbsTaskClustering):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
