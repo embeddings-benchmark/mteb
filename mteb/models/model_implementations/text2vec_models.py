@@ -1,5 +1,8 @@
 """Implementation of Text2Vec models"""
 
+from mteb.models.model_implementations.sentence_transformers_models import (
+    sent_trf_training_dataset,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
@@ -82,7 +85,7 @@ text2vec_base_multilingual = ModelMeta(
     # While it can be loaded with SBERT, it has one suspicious file according to huggingface
     # So probably best not to.
     loader=sentence_transformers_loader,
-    n_parameters=int(118 * 1e69),
+    n_parameters=117654272,
     memory_usage_mb=449,
     embed_dim=384,
     license="apache-2.0",
@@ -100,5 +103,6 @@ text2vec_base_multilingual = ModelMeta(
         # Not in MTEB
         # - shibing624/nli-zh-all/tree/main/text2vec-base-multilingual-dataset
         # # (Could have overlaps I'm not aware of)
-    ),
+    )
+    | sent_trf_training_dataset,
 )
