@@ -19,18 +19,18 @@ Retrieve images based on images and specific retrieval instructions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{fu2024blink,
       author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
       journal = {arXiv preprint arXiv:2404.12390},
       title = {Blink: Multimodal large language models can see but not perceive},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -48,18 +48,18 @@ Retrieve images based on images and specific retrieval instructions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{fu2024blink,
       author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
       journal = {arXiv preprint arXiv:2404.12390},
       title = {Blink: Multimodal large language models can see but not perceive},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -77,9 +77,9 @@ Retrieve images based on texts and images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{liu2021image,
       author = {Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen},
       booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
@@ -87,9 +87,9 @@ Retrieve images based on texts and images.
       title = {Image retrieval on real-life images with pre-trained vision-and-language models},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -107,9 +107,9 @@ Retrieve bird images from 200 classes.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{article,
       author = {Welinder, Peter and Branson, Steve and Mita, Takeshi and Wah, Catherine and Schroff, Florian and Belongie, Serge and Perona, Pietro},
       month = {09},
@@ -117,9 +117,9 @@ Retrieve bird images from 200 classes.
       title = {Caltech-UCSD Birds 200},
       year = {2010},
     }
-
+    
     ```
-
+    
 
 
 
@@ -137,9 +137,9 @@ Retrieve news images and titles based on news content.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{liu2023edis,
       author = {Liu, Siqi and Feng, Weixi and Fu, Tsu-Jui and Chen, Wenhu and Wang, William},
       booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
@@ -147,9 +147,9 @@ Retrieve news images and titles based on news content.
       title = {EDIS: Entity-Driven Image Search over Multimodal Web Content},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -167,9 +167,9 @@ Retrieval Wiki passage and image and passage to answer query about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{mensink2023encyclopedic,
       author = {Mensink, Thomas and Uijlings, Jasper and Castrejon, Lluis and Goel, Arushi and Cadar, Felipe and Zhou, Howard and Sha, Fei and Araujo, Andr{\'e} and Ferrari, Vittorio},
       booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
@@ -177,9 +177,9 @@ Retrieval Wiki passage and image and passage to answer query about an image.
       title = {Encyclopedic VQA: Visual questions about detailed properties of fine-grained categories},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -197,9 +197,9 @@ Retrieve flat object images from 8 classes.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wu2023forbflatobjectretrieval,
       archiveprefix = {arXiv},
       author = {Pengxiang Wu and Siman Wang and Kevin Dela Rosa and Derek Hao Hu},
@@ -209,9 +209,9 @@ Retrieve flat object images from 8 classes.
       url = {https://arxiv.org/abs/2309.16249},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -229,9 +229,9 @@ Retrieve clothes based on descriptions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{han2017automatic,
       author = {Han, Xintong and Wu, Zuxuan and Huang, Phoenix X and Zhang, Xiao and Zhu, Menglong and Li, Yuan and Zhao, Yang and Davis, Larry S},
       booktitle = {Proceedings of the IEEE international conference on computer vision},
@@ -239,9 +239,9 @@ Retrieve clothes based on descriptions.
       title = {Automatic spatially-aware fashion concept discovery},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -259,9 +259,9 @@ Retrieve clothes based on descriptions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{han2017automatic,
       author = {Han, Xintong and Wu, Zuxuan and Huang, Phoenix X and Zhang, Xiao and Zhu, Menglong and Li, Yuan and Zhao, Yang and Davis, Larry S},
       booktitle = {Proceedings of the IEEE international conference on computer vision},
@@ -269,9 +269,9 @@ Retrieve clothes based on descriptions.
       title = {Automatic spatially-aware fashion concept discovery},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -289,9 +289,9 @@ Retrieve clothes based on descriptions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wu2021fashion,
       author = {Wu, Hui and Gao, Yupeng and Guo, Xiaoxiao and Al-Halah, Ziad and Rennie, Steven and Grauman, Kristen and Feris, Rogerio},
       booktitle = {Proceedings of the IEEE/CVF Conference on computer vision and pattern recognition},
@@ -299,9 +299,9 @@ Retrieve clothes based on descriptions.
       title = {Fashion iq: A new dataset towards retrieving images by natural language feedback},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -319,9 +319,9 @@ Retrieve captions based on images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Young2014FromID,
       author = {Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier},
       journal = {Transactions of the Association for Computational Linguistics},
@@ -331,9 +331,9 @@ Retrieve captions based on images.
       volume = {2},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -351,9 +351,9 @@ Retrieve images based on captions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Young2014FromID,
       author = {Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier},
       journal = {Transactions of the Association for Computational Linguistics},
@@ -363,9 +363,9 @@ Retrieve images based on captions.
       volume = {2},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -383,9 +383,9 @@ Retrieve names of landmarks based on their image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Weyand_2020_CVPR,
       author = {Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack},
       booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
@@ -393,9 +393,9 @@ Retrieve names of landmarks based on their image.
       title = {Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Level Recognition and Retrieval},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -413,9 +413,9 @@ Retrieve names of landmarks based on their image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Weyand_2020_CVPR,
       author = {Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack},
       booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
@@ -423,9 +423,9 @@ Retrieve names of landmarks based on their image.
       title = {Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Level Recognition and Retrieval},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -443,9 +443,9 @@ Retrieve captions based on memes to assess OCR abilities.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kiela2020hateful,
       author = {Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide},
       journal = {Advances in neural information processing systems},
@@ -454,9 +454,9 @@ Retrieve captions based on memes to assess OCR abilities.
       volume = {33},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -474,9 +474,9 @@ Retrieve captions based on memes to assess OCR abilities.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kiela2020hateful,
       author = {Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide},
       journal = {Advances in neural information processing systems},
@@ -485,9 +485,9 @@ Retrieve captions based on memes to assess OCR abilities.
       volume = {33},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -505,18 +505,18 @@ Retrieve a specific video frame based on a precise caption.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{krojer2022image,
       author = {Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
       journal = {arXiv preprint arXiv:2203.15867},
       title = {Image retrieval from contextual descriptions},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -534,9 +534,9 @@ Retrieve source text and image information to answer questions about images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chen2023can,
       author = {Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei},
       booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
@@ -544,9 +544,9 @@ Retrieve source text and image information to answer questions about images.
       title = {Can Pre-trained Vision and Language Models Answer Visual Information-Seeking Questions?},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -564,9 +564,9 @@ Retrieve source information to answer questions about images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chen2023can,
       author = {Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei},
       booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
@@ -574,9 +574,9 @@ Retrieve source information to answer questions about images.
       title = {Can Pre-trained Vision and Language Models Answer Visual Information-Seeking Questions?},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -594,9 +594,9 @@ Retrieve responses to answer questions about images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{lin-etal-2024-preflmr,
       address = {Bangkok, Thailand},
       author = {Lin, Weizhe  and
@@ -615,9 +615,9 @@ Retrieve responses to answer questions about images.
       url = {https://aclanthology.org/2024.acl-long.289},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -635,18 +635,18 @@ Retrieve photos of more than 224k artworks.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{ypsilantis2021met,
       author = {Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
       title = {The met dataset: Instance-level recognition for artworks},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -664,9 +664,9 @@ Retrieve captions based on images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{lin2014microsoft,
       author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
       booktitle = {Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
@@ -675,9 +675,9 @@ Retrieve captions based on images.
       title = {Microsoft coco: Common objects in context},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -695,9 +695,9 @@ Retrieve images based on captions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{lin2014microsoft,
       author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
       booktitle = {Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
@@ -706,9 +706,9 @@ Retrieve images based on captions.
       title = {Microsoft coco: Common objects in context},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -726,9 +726,9 @@ Retrieve captions based on memes.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sharma2020semeval,
       author = {Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
       booktitle = {Proceedings of the Fourteenth Workshop on Semantic Evaluation},
@@ -736,9 +736,9 @@ Retrieve captions based on memes.
       title = {SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -756,9 +756,9 @@ Retrieve memes based on captions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sharma2020semeval,
       author = {Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
       booktitle = {Proceedings of the Fourteenth Workshop on Semantic Evaluation},
@@ -766,9 +766,9 @@ Retrieve memes based on captions.
       title = {SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -786,9 +786,9 @@ Retrieval identical image to the given image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{fu2024dreamsim,
       author = {Fu, Stephanie and Tamir, Netanel and Sundaram, Shobhita and Chai, Lucy and Zhang, Richard and Dekel, Tali and Isola, Phillip},
       journal = {Advances in Neural Information Processing Systems},
@@ -796,9 +796,9 @@ Retrieval identical image to the given image.
       volume = {36},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -816,9 +816,9 @@ Retrieval a Wiki passage to answer query about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{marino2019ok,
       author = {Marino, Kenneth and Rastegari, Mohammad and Farhadi, Ali and Mottaghi, Roozbeh},
       booktitle = {Proceedings of the IEEE/cvf conference on computer vision and pattern recognition},
@@ -826,9 +826,9 @@ Retrieval a Wiki passage to answer query about an image.
       title = {Ok-vqa: A visual question answering benchmark requiring external knowledge},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -846,9 +846,9 @@ Retrieval a Wiki image and passage to answer query about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hu2023open,
       author = {Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei},
       booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
@@ -856,9 +856,9 @@ Retrieval a Wiki image and passage to answer query about an image.
       title = {Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -876,9 +876,9 @@ Retrieval a Wiki passage to answer query about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hu2023open,
       author = {Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei},
       booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
@@ -886,9 +886,9 @@ Retrieval a Wiki passage to answer query about an image.
       title = {Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -906,9 +906,9 @@ Retrieve photos of landmarks in Oxford, UK.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{radenovic2018revisiting,
       author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -916,9 +916,9 @@ Retrieve photos of landmarks in Oxford, UK.
       title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -936,9 +936,9 @@ Retrieve photos of landmarks in Oxford, UK.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{radenovic2018revisiting,
       author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -946,9 +946,9 @@ Retrieve photos of landmarks in Oxford, UK.
       title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -966,9 +966,9 @@ Retrieve photos of landmarks in Oxford, UK.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{radenovic2018revisiting,
       author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -976,9 +976,9 @@ Retrieve photos of landmarks in Oxford, UK.
       title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -996,18 +996,18 @@ Retrieve photos of 39457 products.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{peng2020rp2k,
       author = {Peng, Jingtian and Xiao, Chang and Li, Yifan},
       journal = {arXiv preprint arXiv:2006.12634},
       title = {RP2K: A large-scale retail product dataset for fine-grained image classification},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1025,9 +1025,9 @@ Retrieve photos of landmarks in Paris, UK.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{radenovic2018revisiting,
       author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -1035,9 +1035,9 @@ Retrieve photos of landmarks in Paris, UK.
       title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1055,9 +1055,9 @@ Retrieve photos of landmarks in Paris, UK.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{radenovic2018revisiting,
       author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -1065,9 +1065,9 @@ Retrieve photos of landmarks in Paris, UK.
       title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1085,9 +1085,9 @@ Retrieve photos of landmarks in Paris, UK.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{radenovic2018revisiting,
       author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -1095,9 +1095,9 @@ Retrieve photos of landmarks in Paris, UK.
       title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1115,9 +1115,9 @@ Retrieval of a Wiki passage to answer a query about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{luo-etal-2023-end,
       address = {Toronto, Canada},
       author = {Luo, Man  and
@@ -1137,9 +1137,9 @@ Retrieval of a Wiki passage to answer a query about an image.
       url = {https://aclanthology.org/2023.acl-long.478},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1157,9 +1157,9 @@ Retrieve product photos of 22634 online products.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{oh2016deep,
       author = {Oh Song, Hyun and Xiang, Yu and Jegelka, Stefanie and Savarese, Silvio},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -1167,9 +1167,9 @@ Retrieve product photos of 22634 online products.
       title = {Deep metric learning via lifted structured feature embedding},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1187,18 +1187,18 @@ Retrieve captions based on figures and tables.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{wu2024scimmir,
       author = {Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others},
       journal = {arXiv preprint arXiv:2401.13478},
       title = {SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1216,18 +1216,18 @@ Retrieve figures and tables based on captions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{wu2024scimmir,
       author = {Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others},
       journal = {arXiv preprint arXiv:2401.13478},
       title = {SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1245,18 +1245,18 @@ Retrieve photos from sketches.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{ypsilantis2021met,
       author = {Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
       title = {The met dataset: Instance-level recognition for artworks},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1274,18 +1274,18 @@ Retrieve car images from 196 makes.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Krause2013CollectingAL,
       author = {Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
       title = {Collecting a Large-scale Dataset of Fine-grained Cars},
       url = {https://api.semanticscholar.org/CorpusID:16632981},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1303,9 +1303,9 @@ Retrieve sketch images based on text descriptions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{eitz2012humans,
       author = {Eitz, Mathias and Hays, James and Alexa, Marc},
       journal = {ACM Transactions on graphics (TOG)},
@@ -1316,9 +1316,9 @@ Retrieve sketch images based on text descriptions.
       volume = {31},
       year = {2012},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1336,9 +1336,9 @@ Retrieve the correct answer for a question about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Goyal_2017_CVPR,
       author = {Goyal, Yash and Khot, Tejas and Summers-Stay, Douglas and Batra, Dhruv and Parikh, Devi},
       booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
@@ -1346,9 +1346,9 @@ Retrieve the correct answer for a question about an image.
       title = {Making the v in VQA Matter: Elevating the Role of Image Understanding in Visual Question Answering},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1366,9 +1366,9 @@ Retrieval entity-rich captions for news images.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{liu2021visual,
       author = {Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
       booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
@@ -1376,9 +1376,9 @@ Retrieval entity-rich captions for news images.
       title = {Visual News: Benchmark and Challenges in News Image Captioning},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1396,9 +1396,9 @@ Retrieve news images with captions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{liu2021visual,
       author = {Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
       booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
@@ -1406,9 +1406,9 @@ Retrieve news images with captions.
       title = {Visual News: Benchmark and Challenges in News Image Captioning},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1426,9 +1426,9 @@ Retrieve the correct answer for a question about an image.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{gurari2018vizwiz,
       author = {Gurari, Danna and Li, Qing and Stangl, Abigale J and Guo, Anhong and Lin, Chi and Grauman, Kristen and Luo, Jiebo and Bigham, Jeffrey P},
       booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
@@ -1436,9 +1436,9 @@ Retrieve the correct answer for a question about an image.
       title = {Vizwiz grand challenge: Answering visual questions from blind people},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1456,9 +1456,9 @@ Retrieve sources of information based on questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chang2022webqa,
       author = {Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
       booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
@@ -1466,9 +1466,9 @@ Retrieve sources of information based on questions.
       title = {Webqa: Multihop and multimodal qa},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1486,9 +1486,9 @@ Retrieve sources of information based on questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chang2022webqa,
       author = {Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
       booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
@@ -1496,5 +1496,5 @@ Retrieve sources of information based on questions.
       title = {Webqa: Multihop and multimodal qa},
       year = {2022},
     }
-
+    
     ```

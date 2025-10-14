@@ -2,7 +2,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of models:** 44
+- **Number of models:** 45
 
 ## Instruction Model
 
@@ -68,18 +68,18 @@
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chen2025mmE5,
       title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
       author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
       journal={arXiv preprint arXiv:2502.08468},
       year={2025}
     }
-
+    
     ```
-
+    
 
 
 
@@ -662,6 +662,16 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 77.0 | 1.0K | 1.4B | 5.1 GB | 2023-03-06 | eng-Latn |
+
+
+####  [`mteb/random-baseline`](https://huggingface.co/mteb/random-baseline)
+
+ **License:** mit
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| infP | 32 | 0 | 0.0 MB | not specified | not specified |
 
 
 ####  [`openai/clip-vit-base-patch16`](https://huggingface.co/openai/clip-vit-base-patch16)

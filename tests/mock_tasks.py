@@ -5,12 +5,12 @@ from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.any_classification import AbsTaskAnyClassification
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.any_sts import AbsTaskAnySTS
 from mteb.abstasks.any_zeroshot_classification import (
     AbsTaskAnyZeroShotClassification,
 )
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
@@ -584,7 +584,7 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         self.data_loaded = True
 
 
-class MockClusteringTask(AbsTaskAnyClustering):
+class MockClusteringTask(AbsTaskClusteringLegacy):
     expected_stats = {
         "test": {
             "num_samples": 3,
@@ -636,7 +636,7 @@ class MockClusteringTask(AbsTaskAnyClustering):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringTask(AbsTaskAnyClustering):
+class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
     expected_stats = {
         "test": {
             "num_samples": 6,
@@ -739,7 +739,7 @@ class MockMultilingualClusteringTask(AbsTaskAnyClustering):
         self.data_loaded = True
 
 
-class MockClusteringFastTask(AbsTaskClusteringFast):
+class MockClusteringFastTask(AbsTaskClustering):
     max_document_to_embed = 4
     max_fraction_of_documents_to_embed = None
     n_clusters = 3
@@ -794,7 +794,7 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
+class MockMultilingualClusteringFastTask(AbsTaskClustering):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
     expected_stats = {
@@ -3244,7 +3244,7 @@ class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
         self.data_loaded = True
 
 
-class MockImageClusteringTask(AbsTaskAnyClustering):
+class MockImageClusteringTask(AbsTaskClusteringLegacy):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -3298,7 +3298,7 @@ class MockImageClusteringTask(AbsTaskAnyClustering):
         self.data_loaded = True
 
 
-class MockImageClusteringFastTask(AbsTaskClusteringFast):
+class MockImageClusteringFastTask(AbsTaskClustering):
     expected_stats = {
         "test": {
             "num_samples": 2,

@@ -19,18 +19,18 @@ Clustering images from 100 classes.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @techreport{Krizhevsky09learningmultiple,
       author = {Alex Krizhevsky},
       institution = {},
       title = {Learning multiple layers of features from tiny images},
       year = {2009},
     }
-
+    
     ```
-
+    
 
 
 
@@ -48,18 +48,18 @@ Clustering images from 10 classes.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @techreport{Krizhevsky09learningmultiple,
       author = {Alex Krizhevsky},
       institution = {},
       title = {Learning multiple layers of features from tiny images},
       year = {2009},
     }
-
+    
     ```
-
+    
 
 
 
@@ -77,9 +77,9 @@ Clustering images from an 10-class subset of ImageNet which are generally easy t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{5206848,
       author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
       booktitle = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
@@ -91,9 +91,9 @@ Clustering images from an 10-class subset of ImageNet which are generally easy t
       volume = {},
       year = {2009},
     }
-
+    
     ```
-
+    
 
 
 
@@ -111,9 +111,9 @@ Clustering images from a 15-class dogs-only subset of the dog classes in ImageNe
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{5206848,
       author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
       booktitle = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
@@ -125,9 +125,9 @@ Clustering images from a 15-class dogs-only subset of the dog classes in ImageNe
       volume = {},
       year = {2009},
     }
-
+    
     ```
-
+    
 
 
 

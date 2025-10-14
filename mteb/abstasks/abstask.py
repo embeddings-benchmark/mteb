@@ -168,7 +168,7 @@ class AbsTask(ABC):
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
+                f"Running task {self.metadata.name} ({split=}, {hf_subset=})..."
             )
             if hf_subset not in self.dataset and hf_subset == "default":
                 data_split = self.dataset[split]

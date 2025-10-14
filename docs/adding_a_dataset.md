@@ -83,7 +83,7 @@ results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
 
 ```python
-class VGClustering(AbsTaskAnyClustering):
+class VGClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="VGClustering",
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
