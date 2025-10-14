@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MarathiNewsClassification(AbsTaskAnyClassification):
+class MarathiNewsClassification(AbsTaskClassification):
     superseded_by = "MarathiNewsClassification.v2"
     metadata = TaskMetadata(
         name="MarathiNewsClassification",
@@ -40,7 +40,7 @@ class MarathiNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class MarathiNewsClassificationV2(AbsTaskAnyClassification):
+class MarathiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MarathiNewsClassification.v2",
         description="""A Marathi dataset for 3-class classification of Marathi news articles

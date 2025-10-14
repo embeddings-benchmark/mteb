@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ToxicConversationsClassification(AbsTaskAnyClassification):
+class ToxicConversationsClassification(AbsTaskClassification):
     superseded_by = "ToxicConversationsClassification.v2"
     metadata = TaskMetadata(
         name="ToxicConversationsClassification",
@@ -48,7 +48,7 @@ class ToxicConversationsClassification(AbsTaskAnyClassification):
         )
 
 
-class ToxicConversationsClassificationV2(AbsTaskAnyClassification):
+class ToxicConversationsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ToxicConversationsClassification.v2",
         description="""Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.

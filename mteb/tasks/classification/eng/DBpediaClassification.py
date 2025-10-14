@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DBpediaClassification(AbsTaskAnyClassification):
+class DBpediaClassification(AbsTaskClassification):
     superseded_by = "DBpediaClassification.v2"
     metadata = TaskMetadata(
         name="DBpediaClassification",
@@ -47,7 +47,7 @@ class DBpediaClassification(AbsTaskAnyClassification):
         )
 
 
-class DBpediaClassificationV2(AbsTaskAnyClassification):
+class DBpediaClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DBpediaClassification.v2",
         description="""DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.

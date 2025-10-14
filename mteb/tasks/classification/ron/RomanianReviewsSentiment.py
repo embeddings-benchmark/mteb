@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RomanianReviewsSentiment(AbsTaskAnyClassification):
+class RomanianReviewsSentiment(AbsTaskClassification):
     superseded_by = "RomanianReviewsSentiment.v2"
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment",
@@ -36,7 +36,7 @@ class RomanianReviewsSentiment(AbsTaskAnyClassification):
     )
 
 
-class RomanianReviewsSentimentV2(AbsTaskAnyClassification):
+class RomanianReviewsSentimentV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment.v2",
         description="""LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian

@@ -3,11 +3,11 @@ import ast
 import datasets
 import numpy as np
 
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IndonesianMongabayConservationClassification(AbsTaskAnyClassification):
+class IndonesianMongabayConservationClassification(AbsTaskClassification):
     superseded_by = "IndonesianMongabayConservationClassification.v2"
     metadata = TaskMetadata(
         name="IndonesianMongabayConservationClassification",
@@ -101,7 +101,7 @@ Purwarianti, Ayu},
         self.dataset = datasets.DatasetDict(ds)
 
 
-class IndonesianMongabayConservationClassificationV2(AbsTaskAnyClassification):
+class IndonesianMongabayConservationClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IndonesianMongabayConservationClassification.v2",
         description="""Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)

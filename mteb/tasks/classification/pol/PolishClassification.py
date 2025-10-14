@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CbdClassification(AbsTaskAnyClassification):
+class CbdClassification(AbsTaskClassification):
     superseded_by = "CBD.v2"
     metadata = TaskMetadata(
         name="CBD",
@@ -39,7 +39,7 @@ class CbdClassification(AbsTaskAnyClassification):
     )
 
 
-class CbdClassificationV2(AbsTaskAnyClassification):
+class CbdClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CBD.v2",
         description="""Polish Tweets annotated for cyberbullying detection.
@@ -77,7 +77,7 @@ class CbdClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class PolEmo2InClassification(AbsTaskAnyClassification):
+class PolEmo2InClassification(AbsTaskClassification):
     superseded_by = "PolEmo2.0-IN.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
@@ -103,7 +103,6 @@ class PolEmo2InClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kocon-etal-2019-multi,
-  abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
   address = {Hong Kong, China},
   author = {Koco{\'n}, Jan  and
 Mi{\l}kowski, Piotr  and
@@ -121,7 +120,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2InClassificationV2(AbsTaskAnyClassification):
+class PolEmo2InClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -146,7 +145,6 @@ class PolEmo2InClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kocon-etal-2019-multi,
-  abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
   address = {Hong Kong, China},
   author = {Koco{\'n}, Jan  and
 Mi{\l}kowski, Piotr  and
@@ -165,7 +163,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2OutClassification(AbsTaskAnyClassification):
+class PolEmo2OutClassification(AbsTaskClassification):
     superseded_by = "PolEmo2.0-OUT.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
@@ -194,7 +192,7 @@ class PolEmo2OutClassification(AbsTaskAnyClassification):
     )
 
 
-class PolEmo2OutClassificationV2(AbsTaskAnyClassification):
+class PolEmo2OutClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -223,7 +221,7 @@ class PolEmo2OutClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class AllegroReviewsClassification(AbsTaskAnyClassification):
+class AllegroReviewsClassification(AbsTaskClassification):
     superseded_by = "AllegroReviews.v2"
     metadata = TaskMetadata(
         name="AllegroReviews",
@@ -251,7 +249,6 @@ class AllegroReviewsClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{rybak-etal-2020-klej,
-  abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
   address = {Online},
   author = {Rybak, Piotr  and
 Mroczkowski, Robert  and
@@ -274,7 +271,7 @@ Tetreault, Joel},
     )
 
 
-class AllegroReviewsClassificationV2(AbsTaskAnyClassification):
+class AllegroReviewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AllegroReviews.v2",
         description="""A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.
@@ -302,7 +299,6 @@ class AllegroReviewsClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{rybak-etal-2020-klej,
-  abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
   address = {Online},
   author = {Rybak, Piotr  and
 Mroczkowski, Robert  and
@@ -326,7 +322,7 @@ Tetreault, Joel},
     )
 
 
-class PacClassification(AbsTaskAnyClassification):
+class PacClassification(AbsTaskClassification):
     superseded_by = "PAC.v2"
     metadata = TaskMetadata(
         name="PAC",
@@ -363,7 +359,7 @@ class PacClassification(AbsTaskAnyClassification):
     )
 
 
-class PacClassificationV2(AbsTaskAnyClassification):
+class PacClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC.v2",
         description="""Polish Paraphrase Corpus

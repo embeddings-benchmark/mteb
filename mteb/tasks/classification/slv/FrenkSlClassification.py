@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FrenkSlClassification(AbsTaskAnyClassification):
+class FrenkSlClassification(AbsTaskClassification):
     superseded_by = "FrenkSlClassification.v2"
     metadata = TaskMetadata(
         name="FrenkSlClassification",
@@ -39,7 +39,7 @@ class FrenkSlClassification(AbsTaskAnyClassification):
     )
 
 
-class FrenkSlClassificationV2(AbsTaskAnyClassification):
+class FrenkSlClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FrenkSlClassification.v2",
         description="""Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub: English subset, Croatian subset.

@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -9,7 +9,7 @@ def _transform(dataset, lang):
     return dataset
 
 
-class AfriSentiClassification(AbsTaskAnyClassification):
+class AfriSentiClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",

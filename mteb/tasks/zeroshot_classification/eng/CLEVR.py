@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class CLEVR(AbsTaskAnyZeroShotClassification):
+class CLEVR(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="CLEVRZeroShot",
         description="CLEVR closest object distance identification task.",
@@ -53,7 +53,7 @@ class CLEVR(AbsTaskAnyZeroShotClassification):
         return [f"{c} shapes." for c in labels]
 
 
-class CLEVRCount(AbsTaskAnyZeroShotClassification):
+class CLEVRCount(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="CLEVRCountZeroShot",
         description="CLEVR count objects task.",

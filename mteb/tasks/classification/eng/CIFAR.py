@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CIFAR10Classification(AbsTaskAnyClassification):
+class CIFAR10Classification(AbsTaskClassification):
     input_column_name: str = "img"
     samples_per_label: int = 16
     n_experiments: int = 5
@@ -42,7 +42,7 @@ class CIFAR10Classification(AbsTaskAnyClassification):
     )
 
 
-class CIFAR100Classification(AbsTaskAnyClassification):
+class CIFAR100Classification(AbsTaskClassification):
     input_column_name: str = "img"
     label_column_name: str = "fine_label"
     samples_per_label: int = 16

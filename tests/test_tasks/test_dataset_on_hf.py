@@ -6,7 +6,7 @@ import pytest
 
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.overview import get_tasks
+from mteb.get_tasks import get_tasks
 from tests.task_grid import (
     MOCK_MIEB_TASK_GRID_AS_STRING,
     MOCK_TASK_TEST_GRID_AS_STRING,

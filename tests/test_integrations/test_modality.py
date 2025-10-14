@@ -3,57 +3,79 @@
 from __future__ import annotations
 
 import logging
-from unittest.mock import patch
+from copy import deepcopy
 
 import pytest
 
 import mteb
-import mteb.overview
-from mteb.MTEB import logger
+from mteb.types import PromptType
 from tests.mock_tasks import (
     MockImageClusteringTask,
     MockImageTextPairClassificationTask,
+    MockMultiChoiceTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
 )
 
 logging.basicConfig(level=logging.INFO)
 
 
-# NOTE: Covers image and image-text tasks. Can be extended to cover new mixed-modality task types.
 @pytest.mark.parametrize(
-    "task", [MockImageTextPairClassificationTask(), MockRetrievalTask()]
+    "task, modalities",
+    [
+        # Task needs image and text, model only text
+        (MockImageTextPairClassificationTask(), ["text"]),
+        # Retrieval task needs text, model only image
+        (MockRetrievalTask(), ["image"]),
+        # Task needs text, model only image
+        (MockPairClassificationTask(), ["image"]),
+        # Task needs text and images for query and image passage, model only text
+        (MockMultiChoiceTask(), ["text"]),
+        # First task needs text only, second image only, model has only text
+        ((MockRetrievalTask(), MockImageClusteringTask()), ["text"]),
+    ],
 )
-@patch.object(logger, "info")
-def test_task_modality_filtering(mock_logger, task):
-    eval = mteb.MTEB(tasks=[task])
-
+def test_task_modality_filtering(task, modalities):
     model_name = "baseline/random-encoder-baseline"
     model = mteb.get_model(model_name)
-    model.mteb_model_meta.modalities = ["image"]
+    model_meta = deepcopy(model.mteb_model_meta)
+    model_meta.modalities = modalities
+    model.mteb_model_meta = model_meta
 
-    # Run the evaluation
-    eval.run(
-        model=model,
-        output_folder="tests/results",
-        overwrite_results=True,
-    )
+    with pytest.raises(ValueError):
+        mteb.evaluate(
+            model,
+            task,
+            cache=None,
+        )
 
-    # Check that the task was skipped and the correct log message was generated
-    task_modalities = ", ".join(
-        f"'{modality}'" for modality in sorted(task.metadata.modalities)
-    )
-    mock_logger.assert_called_with(
-        f"{model_name} only supports ['image'], but the task modalities are [{task_modalities}]."
-    )
+
+@pytest.mark.parametrize("task", [MockMultiChoiceTask()])
+def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, caplog):
+    """Task have it2i, model only image."""
+    with caplog.at_level(logging.WARNING):
+        model = mteb.get_model("baseline/random-encoder-baseline")
+        model_meta = deepcopy(model.mteb_model_meta)
+        model_meta.modalities = ["image"]
+        model.mteb_model_meta = model_meta
+        scores = mteb.evaluate(
+            model,
+            task,
+            cache=None,
+        )
+        assert (
+            f"Model {model.mteb_model_meta.name} supports {model.mteb_model_meta.modalities}, partially overlapping with"
+            f" task {task.metadata.name} query={task.metadata.get_modalities(PromptType.query)},"
+            f" document={task.metadata.get_modalities(PromptType.document)}. Performance might be suboptimal."
+        ) in caplog.text
+    assert len(scores) == 1
 
 
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
 def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
-    eval = mteb.MTEB(tasks=[task])
-
-    # Run the evaluation
-    eval.run(
-        model=mteb.get_model("baseline/random-encoder-baseline"),
-        output_folder="tests/results",
-        overwrite_results=True,
+    scores = mteb.evaluate(
+        mteb.get_model("baseline/random-encoder-baseline"),
+        task,
+        cache=None,
     )
+    assert len(scores) == 1

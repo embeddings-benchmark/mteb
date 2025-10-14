@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpanishNewsClassification(AbsTaskAnyClassification):
+class SpanishNewsClassification(AbsTaskClassification):
     superseded_by = "SpanishNewsClassification.v2"
     metadata = TaskMetadata(
         name="SpanishNewsClassification",
@@ -36,7 +36,7 @@ class SpanishNewsClassification(AbsTaskAnyClassification):
         )
 
 
-class SpanishNewsClassificationV2(AbsTaskAnyClassification):
+class SpanishNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpanishNewsClassification.v2",
         description="""A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories.

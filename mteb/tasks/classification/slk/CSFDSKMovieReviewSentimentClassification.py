@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
 
 
-class CSFDSKMovieReviewSentimentClassification(AbsTaskAnyClassification):
+class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "CSFDSKMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification",
@@ -51,7 +51,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskAnyClassification):
         )
 
 
-class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskAnyClassification):
+class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification.v2",
         description="""The dataset contains 30k user reviews from csfd.cz in Slovak.

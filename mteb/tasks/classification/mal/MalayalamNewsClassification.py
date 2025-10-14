@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MalayalamNewsClassification(AbsTaskAnyClassification):
+class MalayalamNewsClassification(AbsTaskClassification):
     superseded_by = "MalayalamNewsClassification.v2"
     metadata = TaskMetadata(
         name="MalayalamNewsClassification",
@@ -39,7 +39,7 @@ class MalayalamNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_columns({"headings": "text"})
 
 
-class MalayalamNewsClassificationV2(AbsTaskAnyClassification):
+class MalayalamNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MalayalamNewsClassification.v2",
         description="""A Malayalam dataset for 3-class classification of Malayalam news articles

@@ -2,7 +2,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of models:** 45
+- **Number of models:** 46
 
 ## Instruction Model
 
@@ -454,6 +454,26 @@
 | not specified | 768 | 7.8B | 28.9 GB | 2024-03-31 | eng-Latn |
 
 
+####  [`baseline/random-cross-encoder-baseline`](https://huggingface.co/baseline/random-cross-encoder-baseline)
+
+ **License:** mit
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| infP | 32 | 0 | 0.0 MB | not specified | not specified |
+
+
+####  [`baseline/random-encoder-baseline`](https://huggingface.co/baseline/random-encoder-baseline)
+
+ **License:** mit
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| infP | 32 | 0 | 0.0 MB | not specified | not specified |
+
+
 ####  [`cohere/embed-english-v3.0`](https://huggingface.co/Cohere/Cohere-embed-english-v3.0)
 
  **License:** not specified
@@ -662,16 +682,6 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 77.0 | 1.0K | 1.4B | 5.1 GB | 2023-03-06 | eng-Latn |
-
-
-####  [`mteb/random-baseline`](https://huggingface.co/mteb/random-baseline)
-
- **License:** mit
-
-
-| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
-|-------|-------|-------|-------|-------|-------|
-| infP | 32 | 0 | 0.0 MB | not specified | not specified |
 
 
 ####  [`openai/clip-vit-base-patch16`](https://huggingface.co/openai/clip-vit-base-patch16)

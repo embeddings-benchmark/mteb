@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class Caltech101ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="Caltech101ZeroShot",
         description="Classifying images of 101 widely varied objects.",

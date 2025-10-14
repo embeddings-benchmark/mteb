@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KlueTC(AbsTaskAnyClassification):
+class KlueTC(AbsTaskClassification):
     superseded_by = "KLUE-TC.v2"
     metadata = TaskMetadata(
         name="KLUE-TC",
@@ -54,7 +54,7 @@ class KlueTC(AbsTaskAnyClassification):
         self.dataset = self.dataset.map(id2str)
 
 
-class KlueTCV2(AbsTaskAnyClassification):
+class KlueTCV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KLUE-TC.v2",
         dataset={

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YahooAnswersTopicsClassification(AbsTaskAnyClassification):
+class YahooAnswersTopicsClassification(AbsTaskClassification):
     superseded_by = "YahooAnswersTopicsClassification.v2"
     metadata = TaskMetadata(
         name="YahooAnswersTopicsClassification",
@@ -43,7 +43,7 @@ class YahooAnswersTopicsClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class YahooAnswersTopicsClassificationV2(AbsTaskAnyClassification):
+class YahooAnswersTopicsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="YahooAnswersTopicsClassification.v2",
         description="""Dataset composed of questions and answers from Yahoo Answers, categorized into topics.

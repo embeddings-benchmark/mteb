@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuToxicOKMLCUPClassification(AbsTaskAnyClassification):
+class RuToxicOKMLCUPClassification(AbsTaskClassification):
     superseded_by = "RuToxicOKMLCUPClassification.v2"
     metadata = TaskMetadata(
         name="RuToxicOKMLCUPClassification",
@@ -32,7 +32,7 @@ class RuToxicOKMLCUPClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("toxic", "label")
 
 
-class RuToxicOKMLCUPClassificationV2(AbsTaskAnyClassification):
+class RuToxicOKMLCUPClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RuToxicOKMLCUPClassification.v2",
         dataset={

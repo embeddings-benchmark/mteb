@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WongnaiReviewsClassification(AbsTaskAnyClassification):
+class WongnaiReviewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WongnaiReviewsClassification",
         description="Wongnai features over 200,000 restaurants, beauty salons, and spas across Thailand on its platform, with detailed information about each merchant and user reviews. In this dataset there are 5 classes corressponding each star rating",

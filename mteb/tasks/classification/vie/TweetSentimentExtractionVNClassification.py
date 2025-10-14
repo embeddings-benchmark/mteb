@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetSentimentExtractionVNClassification(AbsTaskAnyClassification):
+class TweetSentimentExtractionVNClassification(AbsTaskClassification):
     num_samples = 32
 
     metadata = TaskMetadata(

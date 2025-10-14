@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMETweetSentimentExtractionClassification(AbsTaskAnyClassification):
+class HUMETweetSentimentExtractionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HUMETweetSentimentExtractionClassification",
         description="Human evaluation subset of Tweet Sentiment Extraction dataset.",

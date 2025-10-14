@@ -3,39 +3,27 @@ import pytest
 import mteb
 from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
-from mteb.abstasks.task_metadata import TaskDomain, TaskType
-from mteb.overview import MTEBTasks
+from mteb.abstasks.task_metadata import TaskType
+from mteb.get_tasks import MTEBTasks
 from mteb.types import Modalities
 
 
-def test_get_tasks_size_differences():
-    default_tasks = get_tasks()
-    assert len(default_tasks) > 0
-    assert len(default_tasks) >= len(get_tasks(script=["Latn"]))
-    assert len(default_tasks) >= len(get_tasks(domains=["Legal"]))
-    assert len(default_tasks) >= len(get_tasks(languages=["eng", "deu"]))
-    text_task = get_tasks(modalities=["text"])
-    assert len(default_tasks) >= len(text_task)
-    assert len(get_tasks(modalities=["text", "image"])) >= len(text_task)
+@pytest.fixture
+def all_tasks():
+    return get_tasks()
 
 
 @pytest.mark.parametrize(
     "task_name", ["BornholmBitextMining", "CQADupstackRetrieval", "Birdsnap"]
 )
 @pytest.mark.parametrize("eval_splits", [["test"], None])
-@pytest.mark.parametrize("modalities", [["text"], None])
-@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
 def test_get_task(
     task_name: str,
     eval_splits: list[str] | None,
-    modalities: list[Modalities] | None,
-    exclusive_modality_filter: bool,
 ):
     task = get_task(
         task_name,
         eval_splits=eval_splits,
-        modalities=modalities,
-        exclusive_modality_filter=exclusive_modality_filter,
     )
     assert isinstance(task, AbsTask)
     assert task.metadata.name == task_name
@@ -44,128 +32,6 @@ def test_get_task(
             assert split in eval_splits
     else:
         assert task.eval_splits == task.metadata.eval_splits
-
-    if modalities:
-        if task.modalities:
-            if exclusive_modality_filter:
-                # With exclusive filter, task modalities must exactly match the requested modalities
-                assert set(task.modalities) == set(modalities)
-            else:
-                # With inclusive filter, task modalities must have overlap with requested modalities
-                assert any(mod in task.modalities for mod in modalities)
-
-
-@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])
-@pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
-@pytest.mark.parametrize("domains", [["Legal"], ["Medical", "Non-fiction"], None])
-@pytest.mark.parametrize("task_types", [["Classification"], None])
-def test_get_tasks(
-    languages: list[str],
-    script: list[str],
-    domains: list[TaskDomain],
-    task_types: list[TaskType] | None,  # type: ignore
-):
-    """Tests that get_tasks filters tasks correctly. This could in principle be combined with the following tests, but they have been kept
-    seperate to reduce the grid size.
-    """
-    tasks = mteb.get_tasks(
-        languages=languages,
-        script=script,
-        domains=domains,
-        task_types=task_types,
-    )
-
-    for task in tasks:
-        if languages:
-            assert set(languages).intersection(task.metadata.languages)
-        if script:
-            assert set(script).intersection(task.metadata.scripts)
-        if domains:
-            task_domains = (
-                set(task.metadata.domains) if task.metadata.domains else set()
-            )
-            assert set(domains).intersection(set(task_domains))
-        if task_types:
-            assert task.metadata.type in task_types
-
-
-@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"]])
-@pytest.mark.parametrize("domains", [["Medical", "Non-fiction"], None])
-@pytest.mark.parametrize("task_types", [["Classification"], None])
-@pytest.mark.parametrize("exclude_superseded_datasets", [True, False])
-def test_get_tasks_superseded(
-    languages: list[str],
-    domains: list[TaskDomain],
-    task_types: list[TaskType] | None,  # type: ignore
-    exclude_superseded_datasets: bool,
-):
-    tasks = mteb.get_tasks(
-        languages=languages,
-        domains=domains,
-        task_types=task_types,
-        exclude_superseded=exclude_superseded_datasets,
-    )
-
-    for task in tasks:
-        if languages:
-            assert set(languages).intersection(task.metadata.languages)
-        if domains:
-            task_domains = (
-                set(task.metadata.domains) if task.metadata.domains else set()
-            )
-            assert set(domains).intersection(set(task_domains))
-        if task_types:
-            assert task.metadata.type in task_types
-        if exclude_superseded_datasets:
-            assert task.superseded_by is None
-
-
-@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"]])
-@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
-@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
-def test_get_tasks_modalities(
-    languages: list[str],
-    modalities: list[Modalities] | None,
-    exclusive_modality_filter: bool,
-):
-    tasks = mteb.get_tasks(
-        languages=languages,
-        modalities=modalities,
-        exclusive_modality_filter=exclusive_modality_filter,
-    )
-
-    for task in tasks:
-        if languages:
-            assert set(languages).intersection(task.metadata.languages)
-        if modalities:
-            if exclusive_modality_filter:
-                assert set(task.modalities) == set(modalities)
-            else:
-                assert any(mod in task.modalities for mod in modalities)
-
-
-@pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])
-@pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
-@pytest.mark.parametrize("exclude_aggregate", [True, False])
-def test_get_tasks_exclude_aggregate(
-    languages: list[str],
-    script: list[str],
-    exclude_aggregate: bool,
-):
-    tasks = mteb.get_tasks(
-        languages=languages,
-        script=script,
-        exclude_aggregate=exclude_aggregate,
-    )
-
-    for task in tasks:
-        if languages:
-            assert set(languages).intersection(task.metadata.languages)
-        if script:
-            assert set(script).intersection(task.metadata.scripts)
-        if exclude_aggregate:
-            # Aggregate tasks should be excluded
-            assert not task.is_aggregate
 
 
 def test_get_tasks_filtering():

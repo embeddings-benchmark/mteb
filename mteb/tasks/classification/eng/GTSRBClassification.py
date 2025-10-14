@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GTSRBClassification(AbsTaskAnyClassification):
+class GTSRBClassification(AbsTaskClassification):
     input_column_name = "webp"
     label_column_name = "cls"
     samples_per_label: int = 16

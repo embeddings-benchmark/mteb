@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 
 # type: ignore
 from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
-class HebrewSentimentAnalysis(AbsTaskAnyClassification):
+class HebrewSentimentAnalysis(AbsTaskClassification):
     superseded_by = "HebrewSentimentAnalysis.v2"
     metadata = TaskMetadata(
         name="HebrewSentimentAnalysis",
@@ -43,7 +43,7 @@ class HebrewSentimentAnalysis(AbsTaskAnyClassification):
     )
 
 
-class HebrewSentimentAnalysisV2(AbsTaskAnyClassification):
+class HebrewSentimentAnalysisV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HebrewSentimentAnalysis.v2",
         dataset={

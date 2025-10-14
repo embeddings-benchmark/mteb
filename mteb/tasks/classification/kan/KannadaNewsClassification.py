@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KannadaNewsClassification(AbsTaskAnyClassification):
+class KannadaNewsClassification(AbsTaskClassification):
     superseded_by = "KannadaNewsClassification.v2"
     metadata = TaskMetadata(
         name="KannadaNewsClassification",
@@ -42,7 +42,7 @@ class KannadaNewsClassification(AbsTaskAnyClassification):
         )
 
 
-class KannadaNewsClassificationV2(AbsTaskAnyClassification):
+class KannadaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KannadaNewsClassification.v2",
         description="""The Kannada news dataset contains only the headlines of news article in three categories: Entertainment, Tech, and Sports. The data set contains around 6300 news article headlines which are collected from Kannada news websites. The data set has been cleaned and contains train and test set using which can be used to benchmark topic classification models in Kannada.

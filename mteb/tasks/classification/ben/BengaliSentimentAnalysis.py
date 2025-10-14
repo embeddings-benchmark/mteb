@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BengaliSentimentAnalysis(AbsTaskAnyClassification):
+class BengaliSentimentAnalysis(AbsTaskClassification):
     superseded_by = "BengaliSentimentAnalysis.v2"
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis",
@@ -42,7 +42,7 @@ class BengaliSentimentAnalysis(AbsTaskAnyClassification):
         )
 
 
-class BengaliSentimentAnalysisV2(AbsTaskAnyClassification):
+class BengaliSentimentAnalysisV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis.v2",
         description="""dataset contains 2854 Negative reviews and 7238 Positive reviews collected and manually annotated from Youtube Bengali drama.

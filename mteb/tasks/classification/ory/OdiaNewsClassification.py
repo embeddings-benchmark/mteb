@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OdiaNewsClassification(AbsTaskAnyClassification):
+class OdiaNewsClassification(AbsTaskClassification):
     superseded_by = "OdiaNewsClassification.v2"
     metadata = TaskMetadata(
         name="OdiaNewsClassification",
@@ -40,7 +40,7 @@ class OdiaNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class OdiaNewsClassificationV2(AbsTaskAnyClassification):
+class OdiaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OdiaNewsClassification.v2",
         description="""A Odia dataset for 3-class classification of Odia news articles

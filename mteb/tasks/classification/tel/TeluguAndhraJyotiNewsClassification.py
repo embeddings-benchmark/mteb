@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TeluguAndhraJyotiNewsClassification(AbsTaskAnyClassification):
+class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
     superseded_by = "TeluguAndhraJyotiNewsClassification.v2"
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification",
@@ -33,7 +33,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class TeluguAndhraJyotiNewsClassificationV2(AbsTaskAnyClassification):
+class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification.v2",
         description="""A Telugu dataset for 5-class classification of Telugu news articles

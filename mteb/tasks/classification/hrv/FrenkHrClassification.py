@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FrenkHrClassification(AbsTaskAnyClassification):
+class FrenkHrClassification(AbsTaskClassification):
     superseded_by = "FrenkHrClassification.v2"
     metadata = TaskMetadata(
         name="FrenkHrClassification",
@@ -39,7 +39,7 @@ class FrenkHrClassification(AbsTaskAnyClassification):
     )
 
 
-class FrenkHrClassificationV2(AbsTaskAnyClassification):
+class FrenkHrClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FrenkHrClassification.v2",
         description="""Croatian subset of the FRENK dataset
