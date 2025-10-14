@@ -20,7 +20,7 @@ This section goes through new features added in v2. Below we give an overview of
   - [Converting model to new format](#converting-model-to-new-format)
   - [Reuploading datasets](#reuploading-datasets)
 
-What are the reason for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there is multiple import areas to expand in, e.g. [adding new benchmark for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accessible.
+What are the reasons for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there are multiple important areas to expand in, e.g. [adding new benchmark for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accessible.
 We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.
 
 
@@ -185,7 +185,7 @@ task = mteb.get_task("MIRACLRetrievalHardNegatives")
 task.metadata.descriptive_stats
 ```
 
-And you will get a highly detailed set of descriptive statistics covering everything from number of samples query lengths, duplicates, etc. These not only make it easier for you to examine tasks, but it also make it easier for us to make quality checks on future tasks.
+And you will get a highly detailed set of descriptive statistics covering everything from number of samples query lengths, duplicates, etc. These not only make it easier for you to examine tasks, but it also makes it easier for us to make quality checks on future tasks.
 
 Example for reranking task:
 ```json
@@ -347,7 +347,7 @@ class MyDummyEncoder:
         return embeddings
 ```
 
-Of course, it will be more efficient if work directly with the dataloader.
+Of course, it will be more efficient if you work directly with the dataloader.
 
 ### Reuploading datasets
 
