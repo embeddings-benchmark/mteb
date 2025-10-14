@@ -3,7 +3,7 @@
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-- **Number of tasks:** 355
+- **Number of tasks:** 356
 
 #### AILACasedocs
 
@@ -19,9 +19,9 @@ The task is to retrieve the case document that most closely matches or is most r
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @dataset{paheli_bhattacharya_2020_4063986,
       author = {Paheli Bhattacharya and
     Kripabandhu Ghosh and
@@ -37,9 +37,9 @@ The task is to retrieve the case document that most closely matches or is most r
       url = {https://doi.org/10.5281/zenodo.4063986},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -57,9 +57,9 @@ This dataset is structured for the task of identifying the most relevant statute
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @dataset{paheli_bhattacharya_2020_4063986,
       author = {Paheli Bhattacharya and
     Kripabandhu Ghosh and
@@ -75,9 +75,9 @@ This dataset is structured for the task of identifying the most relevant statute
       url = {https://doi.org/10.5281/zenodo.4063986},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -95,25 +95,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{clark2018think,
       author = {Clark, Peter and Cowhey, Isaac and Etzioni, Oren and Khot, Tushar and Sabharwal, Ashish and Schoenick, Carissa and Tafjord, Oyvind},
       journal = {arXiv preprint arXiv:1803.05457},
       title = {Think you have solved question answering? try arc, the ai2 reasoning challenge},
       year = {2018},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -131,9 +131,9 @@ This dataset was provided by AlloProf, an organisation in Quebec, Canada offerin
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{lef23,
       author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
       copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
@@ -144,9 +144,9 @@ This dataset was provided by AlloProf, an organisation in Quebec, Canada offerin
       url = {https://arxiv.org/abs/2302.07738},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -164,25 +164,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{bhagavatula2019abductive,
       author = {Bhagavatula, Chandra and Bras, Ronan Le and Malaviya, Chaitanya and Sakaguchi, Keisuke and Holtzman, Ari and Rashkin, Hannah and Downey, Doug and Yih, Scott Wen-tau and Choi, Yejin},
       journal = {arXiv preprint arXiv:1908.05739},
       title = {Abductive commonsense reasoning},
       year = {2019},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -200,18 +200,18 @@ The dataset is a collection of natural language queries and their corresponding 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{hendrycksapps2021,
       author = {Dan Hendrycks and Steven Basart and Saurav Kadavath and Mantas Mazeika and Akul Arora and Ethan Guo and Collin Burns and Samir Puranik and Horace He and Dawn Song and Jacob Steinhardt},
       journal = {NeurIPS},
       title = {Measuring Coding Challenge Competence With APPS},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -229,18 +229,18 @@ ArguAna: Retrieval of the Best Counterargument without Prior Topic Knowledge
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wachsmuth2018retrieval,
       author = {Wachsmuth, Henning and Syed, Shahbaz and Stein, Benno},
       booktitle = {ACL},
       title = {Retrieval of the Best Counterargument without Prior Topic Knowledge},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -258,11 +258,11 @@ ArguAna-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -280,11 +280,11 @@ ArguAna-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -302,9 +302,9 @@ ArguAna involves the task of retrieval of the best counterargument to an argumen
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -314,9 +314,9 @@ ArguAna involves the task of retrieval of the best counterargument to an argumen
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -334,9 +334,9 @@ ArguAna-PL
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -345,9 +345,9 @@ ArguAna-PL
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -369,9 +369,9 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -381,9 +381,9 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -401,9 +401,9 @@ This dataset enables the evaluation of Korean RAG performance across various dom
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{kim2024autoragautomatedframeworkoptimization,
       archiveprefix = {arXiv},
       author = {Dongkyu Kim and Byoungwook Kim and Donggeon Han and Matouš Eibich},
@@ -413,9 +413,9 @@ This dataset enables the evaluation of Korean RAG performance across various dom
       url = {https://arxiv.org/abs/2410.20878},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -433,9 +433,9 @@ Retrieval task using the ArguAna dataset from BIRCO. This dataset contains 100 q
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wang2024bircobenchmarkinformationretrieval,
       archiveprefix = {arXiv},
       author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
@@ -445,9 +445,9 @@ Retrieval task using the ArguAna dataset from BIRCO. This dataset contains 100 q
       url = {https://arxiv.org/abs/2402.14151},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -465,9 +465,9 @@ Retrieval task using the Clinical-Trial dataset from BIRCO. This dataset contain
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wang2024bircobenchmarkinformationretrieval,
       archiveprefix = {arXiv},
       author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
@@ -477,9 +477,9 @@ Retrieval task using the Clinical-Trial dataset from BIRCO. This dataset contain
       url = {https://arxiv.org/abs/2402.14151},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -497,9 +497,9 @@ Retrieval task using the DORIS-MAE dataset from BIRCO. This dataset contains 60 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wang2024bircobenchmarkinformationretrieval,
       archiveprefix = {arXiv},
       author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
@@ -509,9 +509,9 @@ Retrieval task using the DORIS-MAE dataset from BIRCO. This dataset contains 60 
       url = {https://arxiv.org/abs/2402.14151},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -529,9 +529,9 @@ Retrieval task using the RELIC dataset from BIRCO. This dataset contains 100 que
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wang2024bircobenchmarkinformationretrieval,
       archiveprefix = {arXiv},
       author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
@@ -541,9 +541,9 @@ Retrieval task using the RELIC dataset from BIRCO. This dataset contains 100 que
       url = {https://arxiv.org/abs/2402.14151},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -561,9 +561,9 @@ Retrieval task using the WhatsThatBook dataset from BIRCO. This dataset contains
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wang2024bircobenchmarkinformationretrieval,
       archiveprefix = {arXiv},
       author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
@@ -573,9 +573,9 @@ Retrieval task using the WhatsThatBook dataset from BIRCO. This dataset contains
       url = {https://arxiv.org/abs/2402.14151},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -593,9 +593,9 @@ The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native datas
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{louis2022statutory,
       address = {Dublin, Ireland},
       author = {Louis, Antoine and Spanakis, Gerasimos},
@@ -608,15 +608,15 @@ The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native datas
       url = {https://aclanthology.org/2022.acl-long.468/},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
 #### BSARDRetrieval.v2
 
-BSARD is a French native dataset for legal information retrieval. BSARDRetrieval.v2 covers multi-article queries, fixing issues (#2906) with the previous data loading.
+BSARD is a French native dataset for legal information retrieval. BSARDRetrieval.v2 covers multi-article queries, fixing issues (#2906) with the previous data loading. 
 
 **Dataset:** [`mteb/BSARDRetrieval.v2`](https://huggingface.co/datasets/mteb/BSARDRetrieval.v2) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/maastrichtlawtech/bsard)
 
@@ -628,9 +628,9 @@ BSARD is a French native dataset for legal information retrieval. BSARDRetrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{louis2022statutory,
       address = {Dublin, Ireland},
       author = {Louis, Antoine and Spanakis, Gerasimos},
@@ -643,9 +643,9 @@ BSARD is a French native dataset for legal information retrieval. BSARDRetrieval
       url = {https://aclanthology.org/2022.acl-long.468/},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -663,9 +663,9 @@ A benchmark for retrieving legal provisions that answer US bar exam questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Zheng_2025,
       author = {Zheng, Lucia and Guha, Neel and Arifov, Javokhir and Zhang, Sarah and Skreta, Michal and Manning, Christopher D. and Henderson, Peter and Ho, Daniel E.},
       booktitle = {Proceedings of the Symposium on Computer Science and Law on ZZZ},
@@ -680,9 +680,9 @@ A benchmark for retrieving legal provisions that answer US bar exam questions.
       url = {http://dx.doi.org/10.1145/3709025.3712219},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -700,18 +700,18 @@ Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanni
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{bandarkar2023belebele,
       author = {Lucas Bandarkar and Davis Liang and Benjamin Muller and Mikel Artetxe and Satya Narayan Shukla and Donald Husa and Naman Goyal and Abhinandan Krishnan and Luke Zettlemoyer and Madian Khabsa},
       journal = {arXiv preprint arXiv:2308.16884},
       title = {The Belebele Benchmark: a Parallel Reading Comprehension Dataset in 122 Language Variants},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -729,9 +729,9 @@ A benchmark for retrieving Californian bills based on their summaries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Eidelman_2019,
       author = {Eidelman, Vladimir},
       booktitle = {Proceedings of the 2nd Workshop on New Frontiers in Summarization},
@@ -742,9 +742,9 @@ A benchmark for retrieving Californian bills based on their summaries.
       url = {http://dx.doi.org/10.18653/v1/D19-5406},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -762,9 +762,9 @@ A benchmark for retrieving US federal bills based on their summaries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Eidelman_2019,
       author = {Eidelman, Vladimir},
       booktitle = {Proceedings of the 2nd Workshop on New Frontiers in Summarization},
@@ -775,9 +775,9 @@ A benchmark for retrieving US federal bills based on their summaries.
       url = {http://dx.doi.org/10.18653/v1/D19-5406},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -795,9 +795,9 @@ Bright retrieval dataset with long documents.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{su2024brightrealisticchallengingbenchmark,
       archiveprefix = {arXiv},
       author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
@@ -807,9 +807,9 @@ Bright retrieval dataset with long documents.
       url = {https://arxiv.org/abs/2407.12883},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -827,9 +827,9 @@ Bright retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{su2024brightrealisticchallengingbenchmark,
       archiveprefix = {arXiv},
       author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
@@ -839,9 +839,9 @@ Bright retrieval dataset.
       url = {https://arxiv.org/abs/2407.12883},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -859,18 +859,18 @@ Retrieval of built asset entity type/class descriptions given a query describing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{shahinmoghadam2024benchmarking,
       author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
       journal = {arXiv preprint arXiv:2411.12056},
       title = {Benchmarking pre-trained text embedding models in aligning built asset information},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -888,18 +888,18 @@ The dataset is a collection of code snippets and their corresponding natural lan
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{husain2019codesearchnet,
       author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
       journal = {arXiv preprint arXiv:1909.09436},
       title = {{CodeSearchNet} challenge: Evaluating the state of semantic code search},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -917,9 +917,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -928,9 +928,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -948,9 +948,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -959,9 +959,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -979,9 +979,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -990,9 +990,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1010,9 +1010,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1021,9 +1021,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1041,9 +1041,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1052,9 +1052,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1072,9 +1072,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1083,9 +1083,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1103,9 +1103,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1114,9 +1114,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1134,9 +1134,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1145,9 +1145,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1165,9 +1165,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1176,9 +1176,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1196,9 +1196,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1207,9 +1207,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1227,9 +1227,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1238,9 +1238,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1258,9 +1258,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -1269,9 +1269,9 @@ CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1289,9 +1289,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -1301,9 +1301,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1325,9 +1325,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1337,9 +1337,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1357,9 +1357,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -1377,9 +1377,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1397,11 +1397,11 @@ CQADupstackAndroidRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -1419,9 +1419,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -1431,9 +1431,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1451,9 +1451,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -1471,9 +1471,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1491,11 +1491,11 @@ CQADupstackEnglishRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -1513,9 +1513,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -1525,9 +1525,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1545,9 +1545,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -1565,9 +1565,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1585,11 +1585,11 @@ CQADupstackGamingRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -1607,9 +1607,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -1619,9 +1619,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1643,9 +1643,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1655,9 +1655,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1675,9 +1675,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -1695,9 +1695,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1715,11 +1715,11 @@ CQADupstackGisRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -1737,9 +1737,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -1749,9 +1749,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1773,9 +1773,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1785,9 +1785,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1805,9 +1805,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -1825,9 +1825,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1845,11 +1845,11 @@ CQADupstackMathematicaRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -1867,9 +1867,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -1879,9 +1879,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1903,9 +1903,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1915,9 +1915,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1935,9 +1935,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -1955,9 +1955,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1975,11 +1975,11 @@ CQADupstackPhysicsRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -1997,9 +1997,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2009,9 +2009,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2033,9 +2033,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2045,9 +2045,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2065,9 +2065,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -2085,9 +2085,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2105,11 +2105,11 @@ CQADupstackProgrammersRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2127,9 +2127,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2139,9 +2139,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2163,9 +2163,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2175,9 +2175,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2195,9 +2195,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -2215,9 +2215,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2235,11 +2235,11 @@ CQADupstackStatsRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2257,9 +2257,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2269,9 +2269,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2293,9 +2293,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2305,9 +2305,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2325,9 +2325,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -2345,9 +2345,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2365,11 +2365,11 @@ CQADupstackTexRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2387,9 +2387,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2399,9 +2399,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2423,9 +2423,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2435,9 +2435,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2455,9 +2455,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -2475,9 +2475,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2495,11 +2495,11 @@ CQADupstackUnixRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2517,9 +2517,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2529,9 +2529,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2553,9 +2553,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2565,9 +2565,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2585,9 +2585,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -2605,9 +2605,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2625,11 +2625,11 @@ CQADupstackWebmastersRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2647,9 +2647,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2659,9 +2659,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research. Thi
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2683,9 +2683,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2695,9 +2695,9 @@ A translated dataset from CQADupStack: A Benchmark Data Set for Community Questi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2715,9 +2715,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{hoogeveen2015,
       acmid = {2838934},
       address = {New York, NY, USA},
@@ -2735,9 +2735,9 @@ CQADupStack: A Benchmark Data Set for Community Question-Answering Research
       url = {http://doi.acm.org/10.1145/2838931.2838934},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2755,11 +2755,11 @@ CQADupstackWordpressRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2789,17 +2789,17 @@ A medical retrieval task based on ChatDoctor_HealthCareMagic dataset containing 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{chatdoctor_healthcaremagic,
       title = {ChatDoctor HealthCareMagic: Medical Question-Answer Retrieval Dataset},
       url = {https://huggingface.co/datasets/lavita/ChatDoctor-HealthCareMagic-100k},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2817,16 +2817,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     @inproceedings{yang-etal-2018-hotpotqa,
       abstract = {Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.},
       address = {Brussels, Belgium},
@@ -2850,9 +2850,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       url = {https://aclanthology.org/D18-1259},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2870,9 +2870,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{47761,
       author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
     and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
@@ -2882,16 +2882,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       title = {Natural Questions: a Benchmark for Question Answering Research},
       year = {2019},
     }
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2909,9 +2909,9 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{diggelmann2021climatefever,
       archiveprefix = {arXiv},
       author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
@@ -2920,9 +2920,9 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
       title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2940,11 +2940,11 @@ ClimateFEVER-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -2962,9 +2962,9 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -2974,9 +2974,9 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2998,9 +2998,9 @@ A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodol
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -3010,15 +3010,15 @@ A translated dataset from CLIMATE-FEVER is a dataset adopting the FEVER methodol
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
 #### ClimateFEVER.v2
 
-CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 real-world climate change claims. This updated version addresses corpus mismatches and qrel inconsistencies in MTEB, restoring labels while refining corpus-query alignment for better accuracy.
+CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 real-world climate change claims. This updated version addresses corpus mismatches and qrel inconsistencies in MTEB, restoring labels while refining corpus-query alignment for better accuracy. 
 
 **Dataset:** [`mteb/climate-fever-v2`](https://huggingface.co/datasets/mteb/climate-fever-v2) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)
 
@@ -3030,9 +3030,9 @@ CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 rea
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{diggelmann2021climatefever,
       archiveprefix = {arXiv},
       author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
@@ -3041,9 +3041,9 @@ CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 rea
       title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3061,9 +3061,9 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{diggelmann2021climatefever,
       archiveprefix = {arXiv},
       author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
@@ -3072,9 +3072,9 @@ CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535
       title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3092,9 +3092,9 @@ Online medical consultation text. Used the CMedQAv2 as its underlying dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{qiu2022dureaderretrievallargescalechinesebenchmark,
       archiveprefix = {arXiv},
       author = {Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
@@ -3104,9 +3104,9 @@ Online medical consultation text. Used the CMedQAv2 as its underlying dataset.
       url = {https://arxiv.org/abs/2203.10232},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3124,18 +3124,18 @@ The dataset is a collection of unified diffs of code changes, paired with a shor
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{muennighoff2023octopack,
       author = {Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre},
       journal = {arXiv preprint arXiv:2308.07124},
       title = {OctoPack: Instruction Tuning Code Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3153,9 +3153,9 @@ The dataset is a collection of user queries and assistant responses. The task is
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{zheng2024opencodeinterpreterintegratingcodegeneration,
       archiveprefix = {arXiv},
       author = {Tianyu Zheng and Ge Zhang and Tianhao Shen and Xueling Liu and Bill Yuchen Lin and Jie Fu and Wenhu Chen and Xiang Yue},
@@ -3165,9 +3165,9 @@ The dataset is a collection of user queries and assistant responses. The task is
       url = {https://arxiv.org/abs/2402.14658},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3185,9 +3185,9 @@ The dataset is a collection of user queries and assistant responses. The task is
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{li2024coircomprehensivebenchmarkcode,
       archiveprefix = {arXiv},
       author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
@@ -3197,9 +3197,9 @@ The dataset is a collection of user queries and assistant responses. The task is
       url = {https://arxiv.org/abs/2407.02883},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3217,9 +3217,9 @@ The dataset is a collection of code snippets. The task is to retrieve the most r
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{li2024coircomprehensivebenchmarkcode,
       archiveprefix = {arXiv},
       author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
@@ -3229,9 +3229,9 @@ The dataset is a collection of code snippets. The task is to retrieve the most r
       url = {https://arxiv.org/abs/2407.02883},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3249,18 +3249,18 @@ The dataset is a collection of code snippets and their corresponding natural lan
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{husain2019codesearchnet,
       author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
       journal = {arXiv preprint arXiv:1909.09436},
       title = {{CodeSearchNet} challenge: Evaluating the state of semantic code search},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3278,9 +3278,9 @@ The dataset is a collection of code snippets and their corresponding natural lan
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{yan2023codetransoceancomprehensivemultilingualbenchmark,
       archiveprefix = {arXiv},
       author = {Weixiang Yan and Yuchen Tian and Yunzhe Li and Qian Chen and Wen Wang},
@@ -3290,9 +3290,9 @@ The dataset is a collection of code snippets and their corresponding natural lan
       url = {https://arxiv.org/abs/2310.04951},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3310,9 +3310,9 @@ The dataset is a collection of equivalent Python Deep Learning code snippets wri
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{yan2023codetransoceancomprehensivemultilingualbenchmark,
       archiveprefix = {arXiv},
       author = {Weixiang Yan and Yuchen Tian and Yunzhe Li and Qian Chen and Wen Wang},
@@ -3322,9 +3322,9 @@ The dataset is a collection of equivalent Python Deep Learning code snippets wri
       url = {https://arxiv.org/abs/2310.04951},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3342,9 +3342,9 @@ The dataset is a collection of natural language queries and their corresponding 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{huang2021cosqa20000webqueries,
       archiveprefix = {arXiv},
       author = {Junjie Huang and Duyu Tang and Linjun Shou and Ming Gong and Ke Xu and Daxin Jiang and Ming Zhou and Nan Duan},
@@ -3354,9 +3354,9 @@ The dataset is a collection of natural language queries and their corresponding 
       url = {https://arxiv.org/abs/2105.13239},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3374,9 +3374,9 @@ COVID-19 news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{long2022multicprmultidomainchinese,
       archiveprefix = {arXiv},
       author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
@@ -3386,9 +3386,9 @@ COVID-19 news articles
       url = {https://arxiv.org/abs/2203.03367},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3430,7 +3430,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3442,7 +3442,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3460,7 +3460,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3472,7 +3472,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3490,7 +3490,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3502,7 +3502,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3520,7 +3520,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3532,7 +3532,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3550,7 +3550,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3562,7 +3562,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3580,7 +3580,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3592,7 +3592,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3610,7 +3610,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3622,7 +3622,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3640,7 +3640,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3652,7 +3652,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3670,7 +3670,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3682,7 +3682,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3700,7 +3700,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3712,7 +3712,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3730,7 +3730,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3742,7 +3742,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3760,7 +3760,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3772,7 +3772,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3790,7 +3790,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3802,7 +3802,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3820,7 +3820,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3832,7 +3832,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3850,7 +3850,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3862,7 +3862,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3880,7 +3880,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3892,7 +3892,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3910,7 +3910,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3922,7 +3922,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3940,7 +3940,7 @@ In this patent family retrieval task, query patent families are represented by T
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{ayaou2025dapfamdomainawarefamilyleveldataset,
       archiveprefix = {arXiv},
@@ -3952,7 +3952,7 @@ In this patent family retrieval task, query patent families are represented by T
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -3970,9 +3970,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Hasibi:2017:DVT,
       author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
       booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
@@ -3983,9 +3983,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
       title = {DBpedia-Entity V2: A Test Collection for Entity Search},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4003,11 +4003,11 @@ DBPedia-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -4025,9 +4025,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -4037,9 +4037,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4057,9 +4057,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Hasibi:2017:DVT,
       author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
       booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
@@ -4070,9 +4070,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
       title = {DBpedia-Entity V2: A Test Collection for Entity Search},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4090,9 +4090,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Hasibi:2017:DVT,
       author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
       booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
@@ -4103,9 +4103,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
       title = {DBpedia-Entity V2: A Test Collection for Entity Search},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4127,9 +4127,9 @@ A translated dataset from DBpedia-Entity is a standard test collection for entit
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -4139,9 +4139,9 @@ A translated dataset from DBpedia-Entity is a standard test collection for entit
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4159,9 +4159,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Hasibi:2017:DVT,
       author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
       booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
@@ -4172,9 +4172,9 @@ DBpedia-Entity is a standard test collection for entity search over the DBpedia 
       title = {DBpedia-Entity V2: A Test Collection for Entity Search},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4192,18 +4192,18 @@ A code retrieval task based on 1,000 data science programming problems from DS-1
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{lai2022ds,
       author = {Lai, Yuhang and Li, Chengxi and Wang, Yiming and Zhang, Tianyi and Zhong, Ruiqi and Zettlemoyer, Luke and Yih, Wen-tau and Fried, Daniel and Wang, Sida and Yu, Tao},
       journal = {arXiv preprint arXiv:2211.11501},
       title = {DS-1000: A Natural and Reliable Benchmark for Data Science Code Generation},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4221,9 +4221,9 @@ A Danish dataset intended for misinformation research. It follows the same forma
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{norregaard-derczynski-2021-danfever,
       abstract = {We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.},
       address = {Reykjavik, Iceland (Online)},
@@ -4239,9 +4239,9 @@ A Danish dataset intended for misinformation research. It follows the same forma
       url = {https://aclanthology.org/2021.nodalida-main.47},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4259,9 +4259,9 @@ A Danish dataset intended for misinformation research. It follows the same forma
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{norregaard-derczynski-2021-danfever,
       abstract = {We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.},
       address = {Reykjavik, Iceland (Online)},
@@ -4277,9 +4277,9 @@ A Danish dataset intended for misinformation research. It follows the same forma
       url = {https://aclanthology.org/2021.nodalida-main.47},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4297,9 +4297,9 @@ A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{qiu2022dureaderretrieval,
       archiveprefix = {arXiv},
       author = {Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
@@ -4308,9 +4308,9 @@ A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine
       title = {DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4328,9 +4328,9 @@ EcomRetrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{long2022multicprmultidomainchinese,
       archiveprefix = {arXiv},
       author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
@@ -4340,9 +4340,9 @@ EcomRetrieval
       url = {https://arxiv.org/abs/2203.03367},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4360,18 +4360,18 @@ EstQA is an Estonian question answering dataset based on Wikipedia.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @mastersthesis{mastersthesis,
       author = {Anu Käver},
       school = {Tallinn University of Technology (TalTech)},
       title = {Extractive Question Answering for Estonian Language},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4389,9 +4389,9 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{thorne-etal-2018-fever,
       abstract = {In this paper we introduce a new publicly available dataset for verification against textual sources, FEVER: Fact Extraction and VERification. It consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The claims are classified as Supported, Refuted or NotEnoughInfo by annotators achieving 0.6841 in Fleiss kappa. For the first two classes, the annotators also recorded the sentence(s) forming the necessary evidence for their judgment. To characterize the challenge of the dataset presented, we develop a pipeline approach and compare it to suitably designed oracles. The best accuracy we achieve on labeling a claim accompanied by the correct evidence is 31.87{\%}, while if we ignore the evidence we achieve 50.91{\%}. Thus we believe that FEVER is a challenging testbed that will help stimulate progress on claim verification against textual sources.},
       address = {New Orleans, Louisiana},
@@ -4411,9 +4411,9 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
       url = {https://aclanthology.org/N18-1074},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4431,11 +4431,11 @@ FEVER-FaHardNegatives
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -4453,9 +4453,9 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -4465,9 +4465,9 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4491,9 +4491,9 @@ A translated dataset from FEVER (Fact Extraction and VERification) consists of 1
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -4503,9 +4503,9 @@ A translated dataset from FEVER (Fact Extraction and VERification) consists of 1
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4523,9 +4523,9 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{thorne-etal-2018-fever,
       abstract = {In this paper we introduce a new publicly available dataset for verification against textual sources, FEVER: Fact Extraction and VERification. It consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The claims are classified as Supported, Refuted or NotEnoughInfo by annotators achieving 0.6841 in Fleiss kappa. For the first two classes, the annotators also recorded the sentence(s) forming the necessary evidence for their judgment. To characterize the challenge of the dataset presented, we develop a pipeline approach and compare it to suitably designed oracles. The best accuracy we achieve on labeling a claim accompanied by the correct evidence is 31.87{\%}, while if we ignore the evidence we achieve 50.91{\%}. Thus we believe that FEVER is a challenging testbed that will help stimulate progress on claim verification against textual sources.},
       address = {New Orleans, Louisiana},
@@ -4545,9 +4545,9 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
       url = {https://aclanthology.org/N18-1074},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4565,9 +4565,9 @@ This dataset has been built from the French SQuad dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dhoffschmidt-etal-2020-fquad,
       address = {Online},
       author = {d{'}Hoffschmidt, Martin  and
@@ -4587,9 +4587,9 @@ This dataset has been built from the French SQuad dataset.
       url = {https://aclanthology.org/2020.findings-emnlp.107},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4607,9 +4607,9 @@ FaithDial is a faithful knowledge-grounded dialogue benchmark.It was curated by 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{dziri2022faithdial,
       author = {Dziri, Nouha and Kamalloo, Ehsan and Milton, Sivan and Zaiane, Osmar and Yu, Mo and Ponti, Edoardo M and Reddy, Siva},
       doi = {10.1162/tacl_a_00529},
@@ -4621,9 +4621,9 @@ FaithDial is a faithful knowledge-grounded dialogue benchmark.It was curated by 
       volume = {10},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4641,9 +4641,9 @@ Using Interactive Feedback to Improve the Accuracy and Explainability of Questio
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{li-etal-2022-using,
       address = {Dublin, Ireland},
       author = {Li, Zichao  and
@@ -4663,9 +4663,9 @@ Using Interactive Feedback to Improve the Accuracy and Explainability of Questio
       url = {https://aclanthology.org/2022.findings-acl.75},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4683,9 +4683,9 @@ Financial Opinion Mining and Question Answering
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{thakur2021beir,
       author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
@@ -4693,9 +4693,9 @@ Financial Opinion Mining and Question Answering
       url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4713,9 +4713,9 @@ Financial Opinion Mining and Question Answering
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{thakur2021beir,
       author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
@@ -4723,9 +4723,9 @@ Financial Opinion Mining and Question Answering
       url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4743,11 +4743,11 @@ FiQA2018-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -4765,11 +4765,11 @@ FiQA2018-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -4787,9 +4787,9 @@ Financial Opinion Mining and Question Answering. FiQA2018-NL is a Dutch translat
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -4799,9 +4799,9 @@ Financial Opinion Mining and Question Answering. FiQA2018-NL is a Dutch translat
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4823,9 +4823,9 @@ A translated dataset from Financial Opinion Mining and Question Answering
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -4835,9 +4835,9 @@ A translated dataset from Financial Opinion Mining and Question Answering
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4855,18 +4855,18 @@ A financial retrieval task based on FinQA dataset containing numerical reasoning
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chen2021finqa,
       author = {Chen, Zhiyu and Chen, Wenhu and Smiley, Charese and Shah, Sameena and Borova, Iana and Langdon, Dylan and Moussa, Reema and Beane, Matt and Huang, Ting-Hao and Routledge, Bryan and Wang, William Yang},
       journal = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
       title = {FinQA: A Dataset of Numerical Reasoning over Financial Data},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4884,18 +4884,18 @@ A financial retrieval task based on FinanceBench dataset containing financial qu
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{islam2023financebench,
       author = {Islam, Pranab and Kannappan, Anand and Kiela, Douwe and Fergus, Rob and Ott, Myle and Wang, Sam and Garimella, Aparna and Garcia, Nino},
       journal = {arXiv preprint arXiv:2311.11944},
       title = {FinanceBench: A New Benchmark for Financial Question Answering},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4913,18 +4913,18 @@ A code retrieval task based on FreshStack dataset containing programming problem
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{freshstack2023,
       author = {FreshStack Authors},
       journal = {arXiv preprint arXiv:2301.12345},
       title = {FreshStack: A Multi-language Code Generation and Retrieval Benchmark},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4954,9 +4954,9 @@ GerDaLIR is a legal information retrieval dataset created from the Open Legal Da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wrzalik-krechel-2021-gerdalir,
       abstract = {We present GerDaLIR, a German Dataset for Legal Information Retrieval based on case documents from the open legal information platform Open Legal Data. The dataset consists of 123K queries, each labelled with at least one relevant document in a collection of 131K case documents. We conduct several baseline experiments including BM25 and a state-of-the-art neural re-ranker. With our dataset, we aim to provide a standardized benchmark for German LIR and promote open research in this area. Beyond that, our dataset comprises sufficient training data to be used as a downstream task for German or multilingual language models.},
       address = {Punta Cana, Dominican Republic},
@@ -4970,9 +4970,9 @@ GerDaLIR is a legal information retrieval dataset created from the Open Legal Da
       url = {https://aclanthology.org/2021.nllp-1.13},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4990,9 +4990,9 @@ The dataset consists of documents, passages and relevance labels in German. In c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wrzalik-krechel-2021-gerdalir,
       abstract = {We present GerDaLIR, a German Dataset for Legal Information Retrieval based on case documents from the open legal information platform Open Legal Data. The dataset consists of 123K queries, each labelled with at least one relevant document in a collection of 131K case documents. We conduct several baseline experiments including BM25 and a state-of-the-art neural re-ranker. With our dataset, we aim to provide a standardized benchmark for German LIR and promote open research in this area. Beyond that, our dataset comprises sufficient training data to be used as a downstream task for German or multilingual language models.},
       address = {Punta Cana, Dominican Republic},
@@ -5006,9 +5006,9 @@ The dataset consists of documents, passages and relevance labels in German. In c
       url = {https://aclanthology.org/2021.nllp-1.13},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5026,9 +5026,9 @@ GermanDPR is a German Question Answering dataset for open-domain QA. It associat
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{möller2021germanquad,
       archiveprefix = {arXiv},
       author = {Timo Möller and Julian Risch and Malte Pietsch},
@@ -5037,9 +5037,9 @@ GermanDPR is a German Question Answering dataset for open-domain QA. It associat
       title = {GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5057,9 +5057,9 @@ LHM-Dienstleistungen-QA is a German question answering dataset for government se
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{lhm-dienstleistungen-qa,
       author = {Schröder, Leon Marius and
     Gutknecht, Clemens and
@@ -5072,9 +5072,9 @@ LHM-Dienstleistungen-QA is a German question answering dataset for government se
       url = {https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5092,9 +5092,9 @@ Context Retrieval for German Question Answering
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{möller2021germanquad,
       archiveprefix = {arXiv},
       author = {Timo Möller and Julian Risch and Malte Pietsch},
@@ -5103,9 +5103,9 @@ Context Retrieval for German Question Answering
       title = {GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5123,9 +5123,9 @@ A dataset for evaluating the ability of information retrieval models to retrieve
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{huang-etal-2021-efficient,
       abstract = {The quadratic computational and memory complexities of large Transformers have limited their scalability for long document summarization. In this paper, we propose Hepos, a novel efficient encoder-decoder attention with head-wise positional strides to effectively pinpoint salient information from the source. We further conduct a systematic study of existing efficient self-attentions. Combined with Hepos, we are able to process ten times more tokens than existing models that use full attentions. For evaluation, we present a new dataset, GovReport, with significantly longer documents and summaries. Results show that our models produce significantly higher ROUGE scores than competitive comparisons, including new state-of-the-art results on PubMed. Human evaluation also shows that our models generate more informative summaries with fewer unfaithful errors.},
       address = {Online},
@@ -5144,9 +5144,9 @@ A dataset for evaluating the ability of information retrieval models to retrieve
       url = {https://aclanthology.org/2021.naacl-main.112},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5188,18 +5188,18 @@ A financial retrieval task based on HC3 Finance dataset containing human vs AI-g
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{guo2023hc3,
       author = {Guo, Biyang and Zhang, Xin and Wang, Zhiyuan and Jiang, Mingyuan and Nie, Jinran and Ding, Yuxuan and Yue, Jianwei and Wu, Yupeng},
       journal = {arXiv preprint arXiv:2301.07597},
       title = {How Close is ChatGPT to Human Experts? Comparison Corpus, Evaluation, and Detection},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5217,18 +5217,18 @@ HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seek
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{hagrid,
       author = {Ehsan Kamalloo and Aref Jafari and Xinyu Zhang and Nandan Thakur and Jimmy Lin},
       journal = {arXiv:2307.16883},
       title = {{HAGRID}: A Human-LLM Collaborative Dataset for Generative Information-Seeking with Attribution},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5246,25 +5246,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     @article{zellers2019hellaswag,
       author = {Zellers, Rowan and Holtzman, Ari and Bisk, Yonatan and Farhadi, Ali and Choi, Yejin},
       journal = {arXiv preprint arXiv:1905.07830},
       title = {Hellaswag: Can a machine really finish your sentence?},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5282,9 +5282,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{yang-etal-2018-hotpotqa,
       abstract = {Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.},
       address = {Brussels, Belgium},
@@ -5308,9 +5308,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
       url = {https://aclanthology.org/D18-1259},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5328,11 +5328,11 @@ HotpotQA-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -5350,17 +5350,17 @@ HotpotQA-FaHardNegatives
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
 #### HotpotQA-NL
 
-HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strongsupervision for supporting facts to enable more explainable question answering systems. HotpotQA-NL is a Dutch translation.
+HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strongsupervision for supporting facts to enable more explainable question answering systems. HotpotQA-NL is a Dutch translation. 
 
 **Dataset:** [`clips/beir-nl-hotpotqa`](https://huggingface.co/datasets/clips/beir-nl-hotpotqa) • **License:** cc-by-sa-4.0 • [Learn more →](https://hotpotqa.github.io/)
 
@@ -5372,9 +5372,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -5384,9 +5384,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5404,9 +5404,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -5415,9 +5415,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5435,9 +5435,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -5446,9 +5446,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5471,9 +5471,9 @@ A translated dataset from HotpotQA is a question answering dataset featuring nat
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -5483,9 +5483,9 @@ A translated dataset from HotpotQA is a question answering dataset featuring nat
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5503,9 +5503,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{yang-etal-2018-hotpotqa,
       abstract = {Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.},
       address = {Brussels, Belgium},
@@ -5529,9 +5529,9 @@ HotpotQA is a question answering dataset featuring natural, multi-hop questions,
       url = {https://aclanthology.org/D18-1259},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5549,7 +5549,7 @@ A code retrieval task based on 164 Python programming problems from HumanEval. E
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{chen2021evaluating,
       archiveprefix = {arXiv},
@@ -5560,7 +5560,7 @@ A code retrieval task based on 164 Python programming problems from HumanEval. E
       year = {2021},
     }
     ```
-
+    
 
 
 
@@ -5578,9 +5578,9 @@ HunSum-2-abstractive is a Hungarian dataset containing news articles along with 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{barta2024news,
       archiveprefix = {arXiv},
       author = {Botond Barta and Dorina Lakatos and Attila Nagy and Milán Konor Nyist and Judit Ács},
@@ -5589,9 +5589,9 @@ HunSum-2-abstractive is a Hungarian dataset containing news articles along with 
       title = {From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5609,9 +5609,9 @@ IndicQA is a manually curated cloze-style reading comprehension dataset that can
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{doddapaneni2022towards,
       author = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
       doi = {10.18653/v1/2023.acl-long.693},
@@ -5619,9 +5619,9 @@ IndicQA is a manually curated cloze-style reading comprehension dataset that can
       title = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5642,17 +5642,17 @@ and that data is used as a positive example for the question text.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{yuichi-tateno-2024-jacwir,
       author = {Yuichi Tateno},
       title = {JaCWIR: Japanese Casual Web IR - 日本語情報検索評価のための小規模でカジュアルなWebタイトルと概要のデータセット},
       url = {https://huggingface.co/datasets/hotchpotch/JaCWIR},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5682,9 +5682,9 @@ Human-annotated question-answer pairs for Japanese wikipedia pages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{so2022jaquad,
       archiveprefix = {arXiv},
       author = {ByungHoon So and Kyuhong Byun and Kyungwon Kang and Seongjin Cho},
@@ -5693,9 +5693,9 @@ Human-annotated question-answer pairs for Japanese wikipedia pages.
       title = {{JaQuAD: Japanese Question Answering Dataset for Machine Reading Comprehension}},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5713,9 +5713,9 @@ JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset that is cre
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Kurihara_nlp2020,
       author = {鈴木正敏 and 鈴木潤 and 松田耕史 and ⻄田京介 and 井之上直也},
       booktitle = {言語処理学会第26回年次大会},
@@ -5724,9 +5724,9 @@ JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset that is cre
       url = {https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5744,18 +5744,18 @@ Ko-StrategyQA
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{geva2021strategyqa,
       author = {Geva, Mor and Khashabi, Daniel and Segal, Elad and Khot, Tushar and Roth, Dan and Berant, Jonathan},
       journal = {Transactions of the Association for Computational Linguistics (TACL)},
       title = {{Did Aristotle Use a Laptop? A Question Answering Benchmark with Implicit Reasoning Strategies}},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5773,9 +5773,9 @@ narrativeqa subset of dwzhu/LongEmbed dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kocisky-etal-2018-narrativeqa,
       abstract = {},
       address = {Cambridge, MA},
@@ -5799,9 +5799,9 @@ narrativeqa subset of dwzhu/LongEmbed dataset.
       volume = {6},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5819,18 +5819,18 @@ needle subset of dwzhu/LongEmbed dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{zhu2024longembed,
       author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
       journal = {arXiv preprint arXiv:2404.12096},
       title = {LongEmbed: Extending Embedding Models for Long Context Retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5848,18 +5848,18 @@ passkey subset of dwzhu/LongEmbed dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{zhu2024longembed,
       author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
       journal = {arXiv preprint arXiv:2404.12096},
       title = {LongEmbed: Extending Embedding Models for Long Context Retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5877,9 +5877,9 @@ qmsum subset of dwzhu/LongEmbed dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{zhong-etal-2021-qmsum,
       abstract = {},
       address = {Online},
@@ -5912,9 +5912,9 @@ qmsum subset of dwzhu/LongEmbed dataset.
       url = {https://aclanthology.org/2021.naacl-main.472},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5932,9 +5932,9 @@ summ_screen_fd subset of dwzhu/LongEmbed dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chen-etal-2022-summscreen,
       abstract = {},
       address = {Dublin, Ireland},
@@ -5954,9 +5954,9 @@ summ_screen_fd subset of dwzhu/LongEmbed dataset.
       url = {https://aclanthology.org/2022.acl-long.589},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5974,9 +5974,9 @@ summ_screen_fd subset of dwzhu/LongEmbed dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{ho2020constructing,
       author = {Ho, Xanh and Nguyen, Anh-Khoa Duong and Sugawara, Saku and Aizawa, Akiko},
       booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},
@@ -5984,9 +5984,9 @@ summ_screen_fd subset of dwzhu/LongEmbed dataset.
       title = {Constructing A Multi-hop QA Dataset for Comprehensive Evaluation of Reasoning Steps},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6004,9 +6004,9 @@ A simple retrieval task designed to test all combinations of top-2 documents. Th
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{weller2025theoreticallimit,
       archiveprefix = {arXiv},
       author = {Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
@@ -6017,7 +6017,7 @@ A simple retrieval task designed to test all combinations of top-2 documents. Th
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -6035,9 +6035,9 @@ A simple retrieval task designed to test all combinations of top-2 documents. Th
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{weller2025theoreticallimit,
       archiveprefix = {arXiv},
       author = {Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
@@ -6048,7 +6048,7 @@ A simple retrieval task designed to test all combinations of top-2 documents. Th
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -6066,9 +6066,9 @@ The task involves identifying and retrieving the case document that best matches
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{li2023lecardv2,
       archiveprefix = {arXiv},
       author = {Haitao Li and Yunqiu Shao and Yueyue Wu and Qingyao Ai and Yixiao Ma and Yiqun Liu},
@@ -6077,9 +6077,9 @@ The task involves identifying and retrieving the case document that best matches
       title = {LeCaRDv2: A Large-Scale Chinese Legal Case Retrieval Dataset},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6097,25 +6097,25 @@ The dataset includes questions and answers related to contracts.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6133,9 +6133,9 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -6144,28 +6144,28 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     @article{holzenberger2021factoring,
       author = {Holzenberger, Nils and Van Durme, Benjamin},
       journal = {arXiv preprint arXiv:2105.07903},
       title = {Factoring statutory reasoning as language understanding challenges},
       year = {2021},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     @article{lippi2019claudette,
       author = {Lippi, Marco and Pa{\l}ka, Przemys{\l}aw and Contissa, Giuseppe and Lagioia, Francesca and Micklitz, Hans-Wolfgang and Sartor, Giovanni and Torroni, Paolo},
       journal = {Artificial Intelligence and Law},
@@ -6175,21 +6175,21 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
       volume = {27},
       year = {2019},
     }
-
+    
     @article{ravichander2019question,
       author = {Ravichander, Abhilasha and Black, Alan W and Wilson, Shomir and Norton, Thomas and Sadeh, Norman},
       journal = {arXiv preprint arXiv:1911.00841},
       title = {Question answering for privacy policies: Combining computational and legal perspectives},
       year = {2019},
     }
-
+    
     @article{wang2023maud,
       author = {Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
       journal = {arXiv preprint arXiv:2301.00876},
       title = {MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -6197,7 +6197,7 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     @inproceedings{zheng2021does,
       author = {Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
       booktitle = {Proceedings of the eighteenth international conference on artificial intelligence and law},
@@ -6205,7 +6205,7 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
       title = {When does pretraining help? assessing self-supervised learning for law and the casehold dataset of 53,000+ legal holdings},
       year = {2021},
     }
-
+    
     @article{zimmeck2019maps,
       author = {Zimmeck, Sebastian and Story, Peter and Smullen, Daniel and Ravichander, Abhilasha and Wang, Ziqi and Reidenberg, Joel R and Russell, N Cameron and Sadeh, Norman},
       journal = {Proc. Priv. Enhancing Tech.},
@@ -6214,9 +6214,9 @@ The dataset includes bill titles and bill summaries related to corporate lobbyin
       volume = {2019},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6234,9 +6234,9 @@ The dataset consists of questions and legal documents in German.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{9723721,
       author = {Hoppe, Christoph and Pelkmann, David and Migenda, Nico and Hötte, Daniel and Schenck, Wolfram},
       booktitle = {2021 IEEE Fourth International Conference on Artificial Intelligence and Knowledge Engineering (AIKE)},
@@ -6248,9 +6248,9 @@ The dataset consists of questions and legal documents in German.
       volume = {},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6268,9 +6268,9 @@ The dataset consistes of 439 pairs of contracts and their summarizations from ht
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{manor-li-2019-plain,
       address = {Minneapolis, Minnesota},
       author = {Manor, Laura  and
@@ -6283,9 +6283,9 @@ The dataset consistes of 439 pairs of contracts and their summarizations from ht
       url = {https://www.aclweb.org/anthology/W19-2201},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6298,7 +6298,7 @@ The dataset consistes of 439 pairs of contracts and their summarizations from ht
         generated by GPT-4 based on paragraphs containing inline citations from research papers and (2) questions about
         recently published papers, manually written by their authors. All LitSearch questions were manually examined or
         edited by experts to ensure high quality.
-
+        
 
 **Dataset:** [`princeton-nlp/LitSearch`](https://huggingface.co/datasets/princeton-nlp/LitSearch) • **License:** mit • [Learn more →](https://github.com/princeton-nlp/LitSearch)
 
@@ -6310,17 +6310,17 @@ The dataset consistes of 439 pairs of contracts and their summarizations from ht
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{ajith2024litsearch,
       author = {Ajith, Anirudh and Xia, Mengzhou and Chevalier, Alexis and Goyal, Tanya and Chen, Danqi and Gao, Tianyu},
       title = {LitSearch: A Retrieval Benchmark for Scientific Literature Search},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6338,9 +6338,9 @@ LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate ret
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{santhanam-etal-2022-colbertv2,
       address = {Seattle, United States},
       author = {Santhanam, Keshav  and
@@ -6360,9 +6360,9 @@ LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate ret
       url = {https://aclanthology.org/2022.naacl-main.272/},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6380,18 +6380,18 @@ A code retrieval task based on 378 Python programming problems from MBPP (Mostly
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{austin2021program,
       author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
       journal = {arXiv preprint arXiv:2108.07732},
       title = {Program Synthesis with Large Language Models},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6409,9 +6409,9 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{10.1162/tacl_a_00595,
       abstract = {{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}},
       author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
@@ -6426,9 +6426,9 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
       volume = {11},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6446,9 +6446,9 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{10.1162/tacl_a_00595,
       abstract = {{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}},
       author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
@@ -6463,9 +6463,46 @@ MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a
       volume = {11},
       year = {2023},
     }
-
+    
     ```
+    
 
+
+
+#### MIRACLRetrievalHardNegatives.v2
+
+MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.V2 uses a more appropriate prompt rather than the default prompt for retrieval.
+
+**Dataset:** [`mteb/MIRACLRetrievalHardNegatives`](https://huggingface.co/datasets/mteb/MIRACLRetrievalHardNegatives) • **License:** cc-by-sa-4.0 • [Learn more →](http://miracl.ai/)
+
+| Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
+|-------|-------|-------|-------|-------|-------|
+| text to text (t2t) | ndcg_at_10 | ara, ben, deu, eng, fas, ... (18) | Encyclopaedic, Written | expert-annotated | created |
+
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{10.1162/tacl_a_00595,
+      abstract = {{MIRACL is a multilingual dataset for ad hoc retrieval across 18 languages that collectively encompass over three billion native speakers around the world. This resource is designed to support monolingual retrieval tasks, where the queries and the corpora are in the same language. In total, we have gathered over 726k high-quality relevance judgments for 78k queries over Wikipedia in these languages, where all annotations have been performed by native speakers hired by our team. MIRACL covers languages that are both typologically close as well as distant from 10 language families and 13 sub-families, associated with varying amounts of publicly available resources. Extensive automatic heuristic verification and manual assessments were performed during the annotation process to control data quality. In total, MIRACL represents an investment of around five person-years of human annotator effort. Our goal is to spur research on improving retrieval across a continuum of languages, thus enhancing information access capabilities for diverse populations around the world, particularly those that have traditionally been underserved. MIRACL is available at http://miracl.ai/.}},
+      author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
+      doi = {10.1162/tacl_a_00595},
+      eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
+      issn = {2307-387X},
+      journal = {Transactions of the Association for Computational Linguistics},
+      month = {09},
+      pages = {1114-1131},
+      title = {{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}},
+      url = {https://doi.org/10.1162/tacl\_a\_00595},
+      volume = {11},
+      year = {2023},
+    }
+    
+    ```
+    
 
 
 
@@ -6484,18 +6521,18 @@ Multilingual Knowledge Questions & Answers (MKQA)contains 10,000 queries sampled
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{mkqa,
       author = {Shayne Longpre and Yi Lu and Joachim Daiber},
       title = {MKQA: A Linguistically Diverse Benchmark for Multilingual Open Domain Question Answering},
       url = {https://arxiv.org/pdf/2007.15207.pdf},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6516,9 +6553,9 @@ MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cro
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{lewis2019mlqa,
       author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
       eid = {arXiv: 1910.07475},
@@ -6526,9 +6563,9 @@ MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cro
       title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6546,9 +6583,9 @@ MLQuestions is a domain adaptation dataset for the machine learning domainIt con
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kulshreshtha-etal-2021-back,
       abstract = {In this work, we introduce back-training, an alternative to self-training for unsupervised domain adaptation (UDA). While self-training generates synthetic training data where natural inputs are aligned with noisy outputs, back-training results in natural outputs aligned with noisy inputs. This significantly reduces the gap between target domain and synthetic data distribution, and reduces model overfitting to source domain. We run UDA experiments on question generation and passage retrieval from the Natural Questions domain to machine learning and biomedical domains. We find that back-training vastly outperforms self-training by a mean improvement of 7.8 BLEU-4 points on generation, and 17.6{\%} top-20 retrieval accuracy across both domains. We further propose consistency filters to remove low-quality synthetic data before training. We also release a new domain-adaptation dataset - MLQuestions containing 35K unaligned questions, 50K unaligned passages, and 3K aligned question-passage pairs.},
       address = {Online and Punta Cana, Dominican Republic},
@@ -6564,9 +6601,9 @@ MLQuestions is a domain adaptation dataset for the machine learning domainIt con
       url = {https://aclanthology.org/2021.emnlp-main.566},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6584,9 +6621,9 @@ MMarcoRetrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xiao2024cpack,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
@@ -6595,9 +6632,9 @@ MMarcoRetrieval
       title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6615,9 +6652,9 @@ MS MARCO is a collection of datasets focused on deep learning in search
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/NguyenRSGTMD16,
       archiveprefix = {arXiv},
       author = {Tri Nguyen and
@@ -6637,9 +6674,9 @@ MS MARCO is a collection of datasets focused on deep learning in search
       volume = {abs/1611.09268},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6657,11 +6694,11 @@ MSMARCO-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -6679,11 +6716,11 @@ MSMARCO-FaHardNegatives
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -6701,9 +6738,9 @@ MS MARCO is a collection of datasets focused on deep learning in search
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -6712,9 +6749,9 @@ MS MARCO is a collection of datasets focused on deep learning in search
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6732,9 +6769,9 @@ MS MARCO is a collection of datasets focused on deep learning in search. The har
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -6743,9 +6780,9 @@ MS MARCO is a collection of datasets focused on deep learning in search. The har
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6767,9 +6804,9 @@ A translated dataset from MS MARCO is a collection of datasets focused on deep l
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -6779,9 +6816,9 @@ A translated dataset from MS MARCO is a collection of datasets focused on deep l
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6799,9 +6836,9 @@ MS MARCO is a collection of datasets focused on deep learning in search. The har
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/NguyenRSGTMD16,
       archiveprefix = {arXiv},
       author = {Tri Nguyen and
@@ -6821,9 +6858,9 @@ MS MARCO is a collection of datasets focused on deep learning in search. The har
       volume = {abs/1611.09268},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6841,9 +6878,9 @@ MS MARCO is a collection of datasets focused on deep learning in search. This ve
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/NguyenRSGTMD16,
       archiveprefix = {arXiv},
       author = {Tri Nguyen and
@@ -6863,9 +6900,9 @@ MS MARCO is a collection of datasets focused on deep learning in search. This ve
       volume = {abs/1611.09268},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6883,9 +6920,9 @@ The dataset consists 2048 medical question and answer pairs.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{BenAbacha-BMC-2019,
       author = {Asma, Ben Abacha and Dina, Demner{-}Fushman},
       journal = {{BMC} Bioinform.},
@@ -6896,9 +6933,9 @@ The dataset consists 2048 medical question and answer pairs.
       volume = {20},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6916,9 +6953,9 @@ MedicalRetrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{long2022multicprmultidomainchinese,
       archiveprefix = {arXiv},
       author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
@@ -6928,15 +6965,15 @@ MedicalRetrieval
       url = {https://arxiv.org/abs/2203.03367},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
 #### MintakaRetrieval
 
-We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers.
+We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers. 
 
 **Dataset:** [`mteb/MintakaRetrieval`](https://huggingface.co/datasets/mteb/MintakaRetrieval) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/mteb/MintakaRetrieval)
 
@@ -6948,9 +6985,9 @@ We introduce Mintaka, a complex, natural, and multilingual dataset designed for 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sen-etal-2022-mintaka,
       address = {Gyeongju, Republic of Korea},
       author = {Sen, Priyanka  and
@@ -6964,9 +7001,9 @@ We introduce Mintaka, a complex, natural, and multilingual dataset designed for 
       url = {https://aclanthology.org/2022.coling-1.138},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6984,18 +7021,18 @@ Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typ
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mrtydi,
       author = {Xinyu Zhang and Xueguang Ma and Peng Shi and Jimmy Lin},
       journal = {arXiv:2108.08787},
       title = {{Mr. TyDi}: A Multi-lingual Benchmark for Dense Retrieval},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7014,9 +7051,9 @@ Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{bge-m3,
       archiveprefix = {arXiv},
       author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
@@ -7025,9 +7062,9 @@ Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wi
       title = {BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7045,9 +7082,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{boteva2016,
       author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
       city = {Padova},
@@ -7058,9 +7095,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
       url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7078,11 +7115,11 @@ NFCorpus-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -7100,9 +7137,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -7112,9 +7149,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7132,9 +7169,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -7143,9 +7180,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7167,9 +7204,9 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -7179,9 +7216,9 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7199,18 +7236,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7228,18 +7265,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7257,18 +7294,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7286,18 +7323,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7315,18 +7352,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7344,18 +7381,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7373,18 +7410,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7402,18 +7439,18 @@ This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jmteb,
       author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan},
       howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB}},
       title = {{J}{M}{T}{E}{B}: {J}apanese {M}assive {T}ext {E}mbedding {B}enchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7431,9 +7468,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{47761,
       author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
     and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
@@ -7444,9 +7481,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
       title = {Natural Questions: a Benchmark for Question Answering Research},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7464,11 +7501,11 @@ NQ-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -7486,11 +7523,11 @@ NQ-FaHardNegatives
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -7508,9 +7545,9 @@ NQ-NL is a translation of NQ
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -7520,9 +7557,9 @@ NQ-NL is a translation of NQ
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7540,9 +7577,9 @@ Natural Questions: A Benchmark for Question Answering Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -7551,9 +7588,9 @@ Natural Questions: A Benchmark for Question Answering Research
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7571,9 +7608,9 @@ Natural Questions: A Benchmark for Question Answering Research. The hard negativ
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -7582,9 +7619,9 @@ Natural Questions: A Benchmark for Question Answering Research. The hard negativ
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7606,9 +7643,9 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -7618,9 +7655,9 @@ A translated dataset from NFCorpus: A Full-Text Learning to Rank Dataset for Med
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7638,9 +7675,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{47761,
       author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
     and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
@@ -7651,9 +7688,9 @@ NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
       title = {Natural Questions: a Benchmark for Question Answering Research},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7671,18 +7708,18 @@ NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wachsmuth2018retrieval,
       author = {Wachsmuth, Henning and Syed, Shahbaz and Stein, Benno},
       booktitle = {ACL},
       title = {Retrieval of the Best Counterargument without Prior Topic Knowledge},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7700,9 +7737,9 @@ NanoClimateFever is a small version of the BEIR dataset adopting the FEVER metho
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{diggelmann2021climatefever,
       archiveprefix = {arXiv},
       author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
@@ -7711,9 +7748,9 @@ NanoClimateFever is a small version of the BEIR dataset adopting the FEVER metho
       title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7731,18 +7768,18 @@ NanoDBPediaRetrieval is a small version of the standard test collection for enti
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{lehmann2015dbpedia,
       author = {Lehmann, Jens and et al.},
       journal = {Semantic Web},
       title = {DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7760,9 +7797,9 @@ NanoFEVER is a smaller version of FEVER (Fact Extraction and VERification), whic
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{thorne-etal-2018-fever,
       abstract = {In this paper we introduce a new publicly available dataset for verification against textual sources, FEVER: Fact Extraction and VERification. It consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The claims are classified as Supported, Refuted or NotEnoughInfo by annotators achieving 0.6841 in Fleiss kappa. For the first two classes, the annotators also recorded the sentence(s) forming the necessary evidence for their judgment. To characterize the challenge of the dataset presented, we develop a pipeline approach and compare it to suitably designed oracles. The best accuracy we achieve on labeling a claim accompanied by the correct evidence is 31.87{\%}, while if we ignore the evidence we achieve 50.91{\%}. Thus we believe that FEVER is a challenging testbed that will help stimulate progress on claim verification against textual sources.},
       address = {New Orleans, Louisiana},
@@ -7782,9 +7819,9 @@ NanoFEVER is a smaller version of FEVER (Fact Extraction and VERification), whic
       url = {https://aclanthology.org/N18-1074},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7802,9 +7839,9 @@ NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question An
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{thakur2021beir,
       author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
@@ -7812,9 +7849,9 @@ NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question An
       url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7832,9 +7869,9 @@ NanoHotpotQARetrieval is a smaller subset of the HotpotQA dataset, which is a qu
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{yang-etal-2018-hotpotqa,
       abstract = {Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.},
       address = {Brussels, Belgium},
@@ -7858,9 +7895,9 @@ NanoHotpotQARetrieval is a smaller subset of the HotpotQA dataset, which is a qu
       url = {https://aclanthology.org/D18-1259},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7878,9 +7915,9 @@ NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets f
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/NguyenRSGTMD16,
       archiveprefix = {arXiv},
       author = {Tri Nguyen and
@@ -7900,9 +7937,9 @@ NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets f
       volume = {abs/1611.09268},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7920,9 +7957,9 @@ NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Datas
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{boteva2016,
       author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
       city = {Padova},
@@ -7933,9 +7970,9 @@ NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Datas
       url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7953,9 +7990,9 @@ NanoNQ is a smaller subset of a dataset which contains questions from real users
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{47761,
       author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
     and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
@@ -7966,9 +8003,9 @@ NanoNQ is a smaller subset of a dataset which contains questions from real users
       title = {Natural Questions: a Benchmark for Question Answering Research},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7986,9 +8023,9 @@ NanoQuoraRetrieval is a smaller subset of the QuoraRetrieval dataset, which is b
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{quora-question-pairs,
       author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
       publisher = {Kaggle},
@@ -7996,9 +8033,9 @@ NanoQuoraRetrieval is a smaller subset of the QuoraRetrieval dataset, which is b
       url = {https://kaggle.com/competitions/quora-question-pairs},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8016,18 +8053,18 @@ NanoFiQA2018 is a smaller subset of SciDocs, a new evaluation benchmark consisti
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{specter2020cohan,
       author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
       booktitle = {ACL},
       title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8045,18 +8082,18 @@ NanoSciFact is a smaller subset of SciFact, which verifies scientific claims usi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{specter2020cohan,
       author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
       booktitle = {ACL},
       title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8074,9 +8111,9 @@ NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Con
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @dataset{potthast_2022_6862281,
       author = {Potthast, Martin and
     Gienapp, Lukas and
@@ -8094,15 +8131,15 @@ NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Con
       url = {https://doi.org/10.5281/zenodo.6862281},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
 #### NarrativeQARetrieval
 
-NarrativeQA is a dataset for the task of question answering on long narratives. It consists of realistic QA instances collected from literature (fiction and non-fiction) and movie scripts.
+NarrativeQA is a dataset for the task of question answering on long narratives. It consists of realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. 
 
 **Dataset:** [`deepmind/narrativeqa`](https://huggingface.co/datasets/deepmind/narrativeqa) • **License:** not specified • [Learn more →](https://metatext.io/datasets/narrativeqa)
 
@@ -8114,9 +8151,9 @@ NarrativeQA is a dataset for the task of question answering on long narratives. 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{kočiský2017narrativeqa,
       archiveprefix = {arXiv},
       author = {Tomáš Kočiský and Jonathan Schwarz and Phil Blunsom and Chris Dyer and Karl Moritz Hermann and Gábor Melis and Edward Grefenstette},
@@ -8125,9 +8162,9 @@ NarrativeQA is a dataset for the task of question answering on long narratives. 
       title = {The NarrativeQA Reading Comprehension Challenge},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8145,18 +8182,18 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{lawrie2023overview,
       author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
       journal = {arXiv preprint arXiv:2304.12367},
       title = {Overview of the TREC 2022 NeuCLIR track},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8174,18 +8211,18 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{lawrie2023overview,
       author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
       journal = {arXiv preprint arXiv:2304.12367},
       title = {Overview of the TREC 2022 NeuCLIR track},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8203,9 +8240,9 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{lawrie2024overview,
       archiveprefix = {arXiv},
       author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
@@ -8214,9 +8251,9 @@ The task involves identifying and retrieving the documents that are relevant to 
       title = {Overview of the TREC 2023 NeuCLIR Track},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8234,9 +8271,9 @@ The task involves identifying and retrieving the documents that are relevant to 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{lawrie2024overview,
       archiveprefix = {arXiv},
       author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
@@ -8245,9 +8282,9 @@ The task involves identifying and retrieving the documents that are relevant to 
       title = {Overview of the TREC 2023 NeuCLIR Track},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8265,9 +8302,9 @@ Human-created question for Norwegian wikipedia passages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{ivanova-etal-2023-norquad,
       abstract = {In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.},
       address = {T{\'o}rshavn, Faroe Islands},
@@ -8286,9 +8323,9 @@ Human-created question for Norwegian wikipedia passages.
       url = {https://aclanthology.org/2023.nodalida-1.17},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8306,9 +8343,9 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{bisk2020piqa,
       author = {Bisk, Yonatan and Zellers, Rowan and Gao, Jianfeng and Choi, Yejin and others},
       booktitle = {Proceedings of the AAAI conference on artificial intelligence},
@@ -8318,16 +8355,16 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
       volume = {34},
       year = {2020},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8345,9 +8382,9 @@ Information Retrieval PUGG dataset for the Polish language.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sawczyn-etal-2024-developing,
       address = {Bangkok, Thailand},
       author = {Sawczyn, Albert  and
@@ -8369,9 +8406,9 @@ Information Retrieval PUGG dataset for the Polish language.
       url = {https://aclanthology.org/2024.findings-acl.652/},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8401,9 +8438,9 @@ A multilingual dataset for public health question answering, based on FAQ source
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xing_han_lu_2024,
       author = { {Xing Han Lu} },
       doi = { 10.57967/hf/2247 },
@@ -8412,9 +8449,9 @@ A multilingual dataset for public health question answering, based on FAQ source
       url = { https://huggingface.co/datasets/xhluca/publichealth-qa },
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8432,9 +8469,9 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{rogers2020getting,
       author = {Rogers, Anna and Kovaleva, Olga and Downey, Matthew and Rumshisky, Anna},
       booktitle = {Proceedings of the AAAI conference on artificial intelligence},
@@ -8444,16 +8481,16 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
       volume = {34},
       year = {2020},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8471,9 +8508,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -8483,9 +8520,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8503,9 +8540,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -8514,9 +8551,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8534,9 +8571,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -8545,9 +8582,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8570,9 +8607,9 @@ A translated dataset from QuoraRetrieval is based on questions that are marked a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -8582,9 +8619,9 @@ A translated dataset from QuoraRetrieval is based on questions that are marked a
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8602,9 +8639,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{quora-question-pairs,
       author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
       publisher = {Kaggle},
@@ -8612,9 +8649,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
       url = {https://kaggle.com/competitions/quora-question-pairs},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8632,11 +8669,11 @@ QuoraRetrieval-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -8654,11 +8691,11 @@ QuoraRetrieval-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -8676,9 +8713,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{quora-question-pairs,
       author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
       publisher = {Kaggle},
@@ -8686,9 +8723,9 @@ QuoraRetrieval is based on questions that are marked as duplicates on the Quora 
       url = {https://kaggle.com/competitions/quora-question-pairs},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8706,18 +8743,18 @@ Bioinformatics retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8735,18 +8772,18 @@ Biology retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8764,18 +8801,18 @@ IIYi-Clinical retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8793,18 +8830,18 @@ MedQA-Diag retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8822,18 +8859,18 @@ MedXpertQA-Exam retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8851,18 +8888,18 @@ Medical-Sciences retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8880,18 +8917,18 @@ PMC-Clinical retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8909,18 +8946,18 @@ PMC-Treatment retrieval dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8938,32 +8975,32 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{husain2019codesearchnet,
       author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
       journal = {arXiv preprint arXiv:1909.09436},
       title = {Codesearchnet challenge: Evaluating the state of semantic code search},
       year = {2019},
     }
-
+    
     @article{muennighoff2023octopack,
       author = {Muennighoff, Niklas and Liu, Qian and Zebaze, Armel and Zheng, Qinkai and Hui, Binyuan and Zhuo, Terry Yue and Singh, Swayam and Tang, Xiangru and Von Werra, Leandro and Longpre, Shayne},
       journal = {arXiv preprint arXiv:2308.07124},
       title = {Octopack: Instruction tuning code large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8981,39 +9018,39 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{cobbe2021training,
       author = {Cobbe, Karl and Kosaraju, Vineet and Bavarian, Mohammad and Chen, Mark and Jun, Heewoo and Kaiser, Lukasz and Plappert, Matthias and Tworek, Jerry and Hilton, Jacob and Nakano, Reiichiro and others},
       journal = {arXiv preprint arXiv:2110.14168},
       title = {Training verifiers to solve math word problems},
       year = {2021},
     }
-
+    
     @article{hendrycks2021measuring,
       author = {Hendrycks, Dan and Burns, Collin and Kadavath, Saurav and Arora, Akul and Basart, Steven and Tang, Eric and Song, Dawn and Steinhardt, Jacob},
       journal = {arXiv preprint arXiv:2103.03874},
       title = {Measuring mathematical problem solving with the math dataset},
       year = {2021},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     @article{yu2023metamath,
       author = {Yu, Longhui and Jiang, Weisen and Shi, Han and Yu, Jincheng and Liu, Zhengying and Zhang, Yu and Kwok, James T and Li, Zhenguo and Weller, Adrian and Liu, Weiyang},
       journal = {arXiv preprint arXiv:2309.12284},
       title = {Metamath: Bootstrap your own mathematical questions for large language models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9031,18 +9068,18 @@ News article retrieval by headline. Based on Rossiya Segodnya dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{gavrilov2018self,
       author = {Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
       booktitle = {Proceedings of the 41st European Conference on Information Retrieval},
       title = {Self-Attentive Model for Headline Generation},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9060,18 +9097,18 @@ News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{gavrilov2018self,
       author = {Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
       booktitle = {Proceedings of the 41st European Conference on Information Retrieval},
       title = {Self-Attentive Model for Headline Generation},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9089,9 +9126,9 @@ Paragraph retrieval based on RuBQ 2.0. Retrieve paragraphs from Wikipedia that a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{RuBQ2021,
       author = {Ivan Rybin and Vladislav Korablinov and Pavel Efimov and Pavel Braslavski},
       booktitle = {ESWC},
@@ -9099,9 +9136,9 @@ Paragraph retrieval based on RuBQ 2.0. Retrieve paragraphs from Wikipedia that a
       title = {RuBQ 2.0: An Innovated Russian Question Answering Dataset},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9123,9 +9160,9 @@ This task is focused on Direct Citation Prediction for scientific papers from eL
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -9139,9 +9176,9 @@ This task is focused on Direct Citation Prediction for scientific papers from eL
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9165,9 +9202,9 @@ This task focuses on Co-citation Prediction for scientific papers from eLibrary,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -9181,9 +9218,9 @@ This task focuses on Co-citation Prediction for scientific papers from eLibrary,
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9201,18 +9238,18 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{specter2020cohan,
       author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
       booktitle = {ACL},
       title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9230,11 +9267,11 @@ SCIDOCS-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -9252,11 +9289,11 @@ SCIDOCS-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -9274,9 +9311,9 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -9286,9 +9323,9 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9306,9 +9343,9 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -9317,9 +9354,9 @@ SciDocs, a new evaluation benchmark consisting of seven document-level tasks ran
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9342,9 +9379,9 @@ A translated dataset from SciDocs, a new evaluation benchmark consisting of seve
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -9354,9 +9391,9 @@ A translated dataset from SciDocs, a new evaluation benchmark consisting of seve
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9374,25 +9411,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{sap2019socialiqa,
       author = {Sap, Maarten and Rashkin, Hannah and Chen, Derek and LeBras, Ronan and Choi, Yejin},
       journal = {arXiv preprint arXiv:1904.09728},
       title = {Socialiqa: Commonsense reasoning about social interactions},
       year = {2019},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9422,18 +9459,18 @@ Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske L
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @mastersthesis{navjord2023beyond,
       author = {Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
       school = {Norwegian University of Life Sciences, {\AA}s},
       title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9451,16 +9488,16 @@ SadeemQuestion: A Benchmark Data Set for Community Question-Retrieval Research
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sadeem-2024-ar-retrieval-questions,
       author = {abubakr.soliman@sadeem.app},
       title = {SadeemQuestionRetrieval: A New Benchmark for Arabic questions-based Articles Searching.},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9478,18 +9515,18 @@ SciFact verifies scientific claims using evidence from the research literature c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{specter2020cohan,
       author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
       booktitle = {ACL},
       title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9507,11 +9544,11 @@ SciFact-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -9529,11 +9566,11 @@ SciFact-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -9551,9 +9588,9 @@ SciFactNL verifies scientific claims in Dutch using evidence from the research l
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -9563,9 +9600,9 @@ SciFactNL verifies scientific claims in Dutch using evidence from the research l
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9583,9 +9620,9 @@ SciFact verifies scientific claims using evidence from the research literature c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -9594,9 +9631,9 @@ SciFact verifies scientific claims using evidence from the research literature c
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9618,9 +9655,9 @@ A translated dataset from SciFact verifies scientific claims using evidence from
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -9630,9 +9667,9 @@ A translated dataset from SciFact verifies scientific claims using evidence from
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9644,7 +9681,7 @@ A translated dataset from SciFact verifies scientific claims using evidence from
 
             Originally intended as a summarization task, but since no human annotations were provided
             here reformulated to a retrieval task.
-
+        
 
 **Dataset:** [`NaiveNeuron/slovaksum`](https://huggingface.co/datasets/NaiveNeuron/slovaksum) • **License:** openrail • [Learn more →](https://huggingface.co/datasets/NaiveNeuron/slovaksum)
 
@@ -9656,18 +9693,18 @@ A translated dataset from SciFact verifies scientific claims using evidence from
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{OndrejowaSlovakSum24,
       author = {Ondrejová, Viktória and Šuppa, Marek},
       booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation},
       date = {2024},
       title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9685,9 +9722,9 @@ Test collection for passage retrieval from health-related Web resources in Spani
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{10.1007/978-3-030-15719-7_19,
       abstract = {This paper describes a new test collection for passage retrieval from health-related Web resources in Spanish. The test collection contains 10,037 health-related documents in Spanish, 37 topics representing complex information needs formulated in a total of 167 natural language questions, and manual relevance assessments of text passages, pooled from multiple systems. This test collection is the first to combine search in a language beyond English, passage retrieval, and health-related resources and topics targeting the general public.},
       address = {Cham},
@@ -9710,9 +9747,9 @@ Test collection for passage retrieval from health-related Web resources in Spani
       title = {A Test Collection for Passage Retrieval Evaluation of Spanish Health-Related Resources},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9730,9 +9767,9 @@ Test collection for passage retrieval from health-related Web resources in Spani
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{10.1007/978-3-030-15719-7_19,
       abstract = {This paper describes a new test collection for passage retrieval from health-related Web resources in Spanish. The test collection contains 10,037 health-related documents in Spanish, 37 topics representing complex information needs formulated in a total of 167 natural language questions, and manual relevance assessments of text passages, pooled from multiple systems. This test collection is the first to combine search in a language beyond English, passage retrieval, and health-related resources and topics targeting the general public.},
       address = {Cham},
@@ -9755,9 +9792,9 @@ Test collection for passage retrieval from health-related Web resources in Spani
       title = {A Test Collection for Passage Retrieval Evaluation of Spanish Health-Related Resources},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9775,25 +9812,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mirzaee2021spartqa,
       author = {Mirzaee, Roshanak and Faghihi, Hossein Rajaby and Ning, Qiang and Kordjmashidi, Parisa},
       journal = {arXiv preprint arXiv:2104.05832},
       title = {Spartqa:: A textual question answering benchmark for spatial reasoning},
       year = {2021},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9811,9 +9848,9 @@ The dataset is a collection of natural language queries and their corresponding 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{li2024coircomprehensivebenchmarkcode,
       archiveprefix = {arXiv},
       author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
@@ -9823,9 +9860,9 @@ The dataset is a collection of natural language queries and their corresponding 
       url = {https://arxiv.org/abs/2407.02883},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9843,9 +9880,9 @@ A Dataset for Retrieving Data Tables through Conversations with Genuine Intents,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{lu-etal-2023-statcan,
       address = {Dubrovnik, Croatia},
       author = {Lu, Xing Han  and
@@ -9859,9 +9896,9 @@ A Dataset for Retrieving Data Tables through Conversations with Genuine Intents,
       url = {https://arxiv.org/abs/2304.01412},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9879,9 +9916,9 @@ A Swedish QA dataset derived from FAQ
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{berdivcevskis2023superlim,
       author = {Berdi{\v{c}}evskis, Aleksandrs and Bouma, Gerlof and Kurtz, Robin and Morger, Felix and {\"O}hman, Joey and Adesam, Yvonne and Borin, Lars and Dann{\'e}lls, Dana and Forsberg, Markus and Isbister, Tim and others},
       booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
@@ -9889,9 +9926,9 @@ A Swedish QA dataset derived from FAQ
       title = {Superlim: A Swedish language understanding evaluation benchmark},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9909,18 +9946,18 @@ The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{monsen2021method,
       author = {Monsen, Julius and J{\"o}nsson, Arne},
       booktitle = {Proceedings of CLARIN Annual Conference},
       title = {A method for building non-english corpora for abstractive text summarization},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9986,9 +10023,9 @@ This dataset has been built from the Syntec Collective bargaining agreement.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ciancone2024extending,
       archiveprefix = {arXiv},
       author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -9997,9 +10034,9 @@ This dataset has been built from the Syntec Collective bargaining agreement.
       title = {Extending the Massive Text Embedding Benchmark to French},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10017,9 +10054,9 @@ The dataset is a collection of natural language queries and their corresponding 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{gretel-synthetic-text-to-sql-2024,
       author = {Meyer, Yev and Emadi, Marjan and Nathawani, Dhruv and Ramaswamy, Lipika and Boyd, Kendrick and Van Segbroeck, Maarten and Grossman, Matthew and Mlocek, Piotr and Newberry, Drew},
       month = {April},
@@ -10027,9 +10064,9 @@ The dataset is a collection of natural language queries and their corresponding 
       url = {https://huggingface.co/datasets/gretelai/synthetic-text-to-sql},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10047,9 +10084,9 @@ T2Ranking: A large-scale Chinese Benchmark for Passage Ranking
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xie2023t2ranking,
       archiveprefix = {arXiv},
       author = {Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
@@ -10058,9 +10095,9 @@ T2Ranking: A large-scale Chinese Benchmark for Passage Ranking
       title = {T2Ranking: A large-scale Chinese Benchmark for Passage Ranking},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10078,9 +10115,9 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{roberts2021searching,
       archiveprefix = {arXiv},
       author = {Kirk Roberts and Tasmeer Alam and Steven Bedrick and Dina Demner-Fushman and Kyle Lo and Ian Soboroff and Ellen Voorhees and Lucy Lu Wang and William R Hersh},
@@ -10089,9 +10126,9 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
       title = {Searching for Scientific Evidence in a Pandemic: An Overview of TREC-COVID},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10109,11 +10146,11 @@ TRECCOVID-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -10131,17 +10168,17 @@ TRECCOVID-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
 #### TRECCOVID-NL
 
-TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic. TRECCOVID-NL is a Dutch translation.
+TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic. TRECCOVID-NL is a Dutch translation. 
 
 **Dataset:** [`clips/beir-nl-trec-covid`](https://huggingface.co/datasets/clips/beir-nl-trec-covid) • **License:** cc-by-4.0 • [Learn more →](https://colab.research.google.com/drive/1R99rjeAGt8S9IfAIRR3wS052sNu3Bjo-#scrollTo=4HduGW6xHnrZ)
 
@@ -10153,9 +10190,9 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -10165,9 +10202,9 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10185,9 +10222,9 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -10196,9 +10233,9 @@ TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10220,9 +10257,9 @@ A translated dataset from TRECCOVID is an ad-hoc search challenge based on the C
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -10232,9 +10269,9 @@ A translated dataset from TRECCOVID is an ad-hoc search challenge based on the C
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10252,9 +10289,9 @@ News Article and corresponding summaries extracted from the Danish newspaper TV2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
       abstract = {To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.},
       address = {Marseille, France},
@@ -10283,9 +10320,9 @@ News Article and corresponding summaries extracted from the Danish newspaper TV2
       url = {https://aclanthology.org/2022.lrec-1.260},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10303,25 +10340,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10339,25 +10376,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10375,25 +10412,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10411,25 +10448,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10447,25 +10484,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10483,25 +10520,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10519,25 +10556,25 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tan2023towards,
       author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
       journal = {arXiv preprint arXiv:2306.08952},
       title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
       year = {2023},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10555,9 +10592,9 @@ TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-se
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{adlakha2022topiocqa,
       archiveprefix = {arXiv},
       author = {Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
@@ -10566,9 +10603,9 @@ TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-se
       title = {TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10586,9 +10623,9 @@ TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-se
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{adlakha2022topiocqa,
       archiveprefix = {arXiv},
       author = {Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
@@ -10597,9 +10634,9 @@ TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-se
       title = {TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10617,9 +10654,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @dataset{potthast_2022_6862281,
       author = {Potthast, Martin and
     Gienapp, Lukas and
@@ -10637,9 +10674,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions
       url = {https://doi.org/10.5281/zenodo.6862281},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10657,11 +10694,11 @@ Touche2020-Fa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -10679,11 +10716,11 @@ Touche2020-Fa.v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -10701,9 +10738,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions. Touche2020-NL is
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -10713,9 +10750,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions. Touche2020-NL is
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10733,9 +10770,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wojtasik2024beirpl,
       archiveprefix = {arXiv},
       author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -10744,9 +10781,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions
       title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10768,9 +10805,9 @@ A translated dataset from Touché Task 1: Argument Retrieval for Controversial Q
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -10780,9 +10817,9 @@ A translated dataset from Touché Task 1: Argument Retrieval for Controversial Q
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10800,9 +10837,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Thakur_etal_SIGIR2024,
       address_ = {Washington, D.C.},
       author = {Nandan Thakur and Luiz Bonifacio and Maik {Fr\"{o}be} and Alexander Bondarenko and Ehsan Kamalloo and Martin Potthast and Matthias Hagen and Jimmy Lin},
@@ -10810,9 +10847,9 @@ Touché Task 1: Argument Retrieval for Controversial Questions
       title = {Systematic Evaluation of Neural Retrieval Models on the {Touch\'{e}} 2020 Argument Retrieval Subset of {BEIR}},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10830,9 +10867,9 @@ Question Answering dataset on Ottoman History in Turkish
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{9559013,
       author = {Soygazi, Fatih and Çiftçi, Okan and Kök, Uğurcan and Cengiz, Soner},
       booktitle = {2021 6th International Conference on Computer Science and Engineering (UBMK)},
@@ -10844,9 +10881,9 @@ Question Answering dataset on Ottoman History in Turkish
       volume = {},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10864,17 +10901,17 @@ Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{holm2024gllms,
       author = {Holm, Soren Vejlgaard},
       title = {Are GLLMs Danoliterate? Benchmarking Generative NLP in Danish},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10892,18 +10929,18 @@ Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Sp
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{llamaindex2024vdrmultilingual,
       author = {LlamaIndex},
       howpublished = {https://huggingface.co/datasets/llamaindex/vdr-multilingual-test},
       title = {Visual Document Retrieval Goes Multilingual},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10921,9 +10958,9 @@ VideoRetrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{long2022multicprmultidomainchinese,
       archiveprefix = {arXiv},
       author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
@@ -10933,9 +10970,9 @@ VideoRetrieval
       url = {https://arxiv.org/abs/2203.03367},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10953,9 +10990,9 @@ A Vietnamese dataset for evaluating Machine Reading Comprehension from Wikipedia
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{nguyen-etal-2020-vietnamese,
       address = {Barcelona, Spain (Online)},
       author = {Nguyen, Kiet  and
@@ -10974,9 +11011,9 @@ A Vietnamese dataset for evaluating Machine Reading Comprehension from Wikipedia
       url = {https://aclanthology.org/2020.coling-main.233},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10994,9 +11031,9 @@ WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languag
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{dinzinger2025webfaq,
       archiveprefix = {arXiv},
       author = {Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
@@ -11006,9 +11043,9 @@ WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languag
       url = {https://arxiv.org/abs/2502.20936},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11026,9 +11063,9 @@ A code retrieval task based on WikiSQL dataset with natural language questions a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{zhong2017seq2sql,
       archiveprefix = {arXiv},
       author = {Zhong, Victor and Xiong, Caiming and Socher, Richard},
@@ -11037,9 +11074,9 @@ A code retrieval task based on WikiSQL dataset with natural language questions a
       title = {Seq2SQL: Generating Structured Queries from Natural Language using Reinforcement Learning},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11069,9 +11106,9 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{sakaguchi2021winogrande,
       author = {Sakaguchi, Keisuke and Bras, Ronan Le and Bhagavatula, Chandra and Choi, Yejin},
       journal = {Communications of the ACM},
@@ -11082,16 +11119,16 @@ Measuring the ability to retrieve the groundtruth answers to reasoning task quer
       volume = {64},
       year = {2021},
     }
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11109,9 +11146,9 @@ XMarket
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Bonab_2021,
       author = {Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
       booktitle = {Proceedings of the 30th ACM International Conference on Information &amp; Knowledge Management},
@@ -11124,9 +11161,9 @@ XMarket
       url = {http://dx.doi.org/10.1145/3459637.3482493},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11144,9 +11181,9 @@ XPQARetrieval
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{shen2023xpqa,
       author = {Shen, Xiaoyu and Asai, Akari and Byrne, Bill and De Gispert, Adria},
       booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 5: Industry Track)},
@@ -11154,9 +11191,9 @@ XPQARetrieval
       title = {xPQA: Cross-Lingual Product Question Answering in 12 Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11174,9 +11211,9 @@ XQuAD is a benchmark dataset for evaluating cross-lingual question answering per
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Artetxe:etal:2019,
       archiveprefix = {arXiv},
       author = {Mikel Artetxe and Sebastian Ruder and Dani Yogatama},
@@ -11186,7 +11223,7 @@ XQuAD is a benchmark dataset for evaluating cross-lingual question answering per
       volume = {abs/1910.11856},
       year = {2019},
     }
-
+    
     @inproceedings{dumitrescu2021liro,
       author = {Stefan Daniel Dumitrescu and Petru Rebeja and Beata Lorincz and Mihaela Gaman and Andrei Avram and Mihai Ilie and Andrei Pruteanu and Adriana Stan and Lorena Rosia and Cristina Iacobescu and Luciana Morogan and George Dima and Gabriel Marchidan and Traian Rebedea and Madalina Chitez and Dani Yogatama and Sebastian Ruder and Radu Tudor Ionescu and Razvan Pascanu and Viorica Patraucean},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -11194,9 +11231,9 @@ XQuAD is a benchmark dataset for evaluating cross-lingual question answering per
       url = {https://openreview.net/forum?id=JH61CD7afTv},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11226,9 +11263,9 @@ mMARCO is a multi-lingual (translated) collection of datasets focused on deep le
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/abs-2108-13897,
       author = {Luiz Bonifacio and
     Israel Campiotti and
@@ -11245,5 +11282,5 @@ mMARCO is a multi-lingual (translated) collection of datasets focused on deep le
       volume = {abs/2108.13897},
       year = {2021},
     }
-
+    
     ```

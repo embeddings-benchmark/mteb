@@ -9,10 +9,12 @@ from .BiorxivClusteringP2P import BiorxivClusteringP2P, BiorxivClusteringP2PFast
 from .BiorxivClusteringS2S import BiorxivClusteringS2S, BiorxivClusteringS2SFast
 from .BuiltBenchClusteringP2P import BuiltBenchClusteringP2P
 from .BuiltBenchClusteringS2S import BuiltBenchClusteringS2S
+from .CIFAR import CIFAR10Clustering, CIFAR100Clustering
 from .ClusTrecCovid import ClusTrecCovid
 from .HUMEArxivClusteringP2P import HUMEArxivClusteringP2P
 from .HUMERedditClusteringP2P import HUMERedditClusteringP2P
 from .HUMEWikiCitiesClustering import HUMEWikiCitiesClustering
+from .ImageNet import ImageNet10Clustering, ImageNetDog15Clustering
 from .MedrxivClusteringP2P import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .MedrxivClusteringS2S import MedrxivClusteringS2S, MedrxivClusteringS2SFast
 from .RedditClustering import RedditClustering, RedditFastClusteringS2S
@@ -25,6 +27,7 @@ from .StackExchangeClusteringP2P import (
     StackExchangeClusteringP2P,
     StackExchangeClusteringP2PFast,
 )
+from .TinyImageNet import TinyImageNet
 from .TwentyNewsgroupsClustering import (
     TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
@@ -49,10 +52,14 @@ __all__ = [
     "BiorxivClusteringS2SFast",
     "BuiltBenchClusteringP2P",
     "BuiltBenchClusteringS2S",
+    "CIFAR10Clustering",
+    "CIFAR100Clustering",
     "ClusTrecCovid",
     "HUMEArxivClusteringP2P",
     "HUMERedditClusteringP2P",
     "HUMEWikiCitiesClustering",
+    "ImageNet10Clustering",
+    "ImageNetDog15Clustering",
     "MedrxivClusteringP2P",
     "MedrxivClusteringP2PFast",
     "MedrxivClusteringS2S",
@@ -65,6 +72,7 @@ __all__ = [
     "StackExchangeClusteringFast",
     "StackExchangeClusteringP2P",
     "StackExchangeClusteringP2PFast",
+    "TinyImageNet",
     "TwentyNewsgroupsClustering",
     "TwentyNewsgroupsClusteringFast",
     "WikiCitiesClustering",

@@ -1,6 +1,6 @@
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks.Image.VisualSTS.multilingual.STS17MultilingualVisualSTS import (
+from mteb.tasks.sts.multilingual.STS17MultilingualVisualSTS import (
     STS17MultilingualVisualSTS,
 )
 

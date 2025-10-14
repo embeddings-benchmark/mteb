@@ -4,18 +4,29 @@ from .AmazonPolarityClassification import (
 )
 from .ArxivClassification import ArxivClassification, ArxivClassificationV2
 from .Banking77Classification import Banking77Classification, Banking77ClassificationV2
+from .BirdsnapClassification import BirdsnapClassification
+from .Caltech101Classification import Caltech101Classification
+from .CIFAR import CIFAR10Classification, CIFAR100Classification
+from .Country211Classification import Country211Classification
 from .DBpediaClassification import DBpediaClassification, DBpediaClassificationV2
+from .DTDClassification import DTDClassification
 from .EmotionClassification import EmotionClassification, EmotionClassificationV2
+from .EuroSATClassification import EuroSATClassification
+from .FER2013Classification import FER2013Classification
+from .FGVCAircraftClassification import FGVCAircraftClassification
 from .FinancialPhrasebankClassification import (
     FinancialPhrasebankClassification,
     FinancialPhrasebankClassificationV2,
 )
+from .Food101Classification import Food101Classification
 from .FrenkEnClassification import FrenkEnClassification, FrenkEnClassificationV2
+from .GTSRBClassification import GTSRBClassification
 from .HUMEEmotionClassification import HUMEEmotionClassification
 from .HUMEToxicConversationsClassification import HUMEToxicConversationsClassification
 from .HUMETweetSentimentExtractionClassification import (
     HUMETweetSentimentExtractionClassification,
 )
+from .Imagenet1k import Imagenet1kClassification
 from .ImdbClassification import ImdbClassification, ImdbClassificationV2
 from .LegalBenchClassification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
@@ -139,17 +150,25 @@ from .LegalBenchClassification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
+from .MNISTClassification import MNISTClassification
 from .NewsClassification import NewsClassification, NewsClassificationV2
+from .OxfordFlowersClassification import OxfordFlowersClassification
+from .OxfordPetsClassification import OxfordPetsClassification
+from .PatchCamelyonClassification import PatchCamelyonClassification
 from .PatentClassification import PatentClassification, PatentClassificationV2
 from .PoemSentimentClassification import (
     PoemSentimentClassification,
     PoemSentimentClassificationV2,
 )
+from .RESISC45Classification import RESISC45Classification
 from .SDSEyeProtectionClassification import (
     SDSEyeProtectionClassification,
     SDSEyeProtectionClassificationV2,
 )
 from .SDSGlovesClassification import SDSGlovesClassification, SDSGlovesClassificationV2
+from .StanfordCarsClassification import StanfordCarsClassification
+from .STL10Classification import STL10Classification
+from .SUN397Classification import SUN397Classification
 from .ToxicChatClassification import ToxicChatClassification, ToxicChatClassificationV2
 from .ToxicConversationsClassification import (
     ToxicConversationsClassification,
@@ -163,6 +182,7 @@ from .TweetTopicSingleClassification import (
     TweetTopicSingleClassification,
     TweetTopicSingleClassificationV2,
 )
+from .UCF101Classification import UCF101Classification
 from .WikipediaBiolumNeurochemClassification import (
     WikipediaBiolumNeurochemClassification,
 )
@@ -227,6 +247,9 @@ __all__ = [
     "ArxivClassificationV2",
     "Banking77Classification",
     "Banking77ClassificationV2",
+    "BirdsnapClassification",
+    "CIFAR10Classification",
+    "CIFAR100Classification",
     "CUADAffiliateLicenseLicenseeLegalBenchClassification",
     "CUADAffiliateLicenseLicensorLegalBenchClassification",
     "CUADAntiAssignmentLegalBenchClassification",
@@ -265,6 +288,7 @@ __all__ = [
     "CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification",
     "CUADVolumeRestrictionLegalBenchClassification",
     "CUADWarrantyDurationLegalBenchClassification",
+    "Caltech101Classification",
     "CanadaTaxCourtOutcomesLegalBenchClassification",
     "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
     "ContractNLIExplicitIdentificationLegalBenchClassification",
@@ -281,8 +305,10 @@ __all__ = [
     "ContractNLISharingWithThirdPartiesLegalBenchClassification",
     "ContractNLISurvivalOfObligationsLegalBenchClassification",
     "CorporateLobbyingLegalBenchClassification",
+    "Country211Classification",
     "DBpediaClassification",
     "DBpediaClassificationV2",
+    "DTDClassification",
     "DefinitionClassificationLegalBenchClassification",
     "Diversity1LegalBenchClassification",
     "Diversity2LegalBenchClassification",
@@ -292,14 +318,20 @@ __all__ = [
     "Diversity6LegalBenchClassification",
     "EmotionClassification",
     "EmotionClassificationV2",
+    "EuroSATClassification",
+    "FER2013Classification",
+    "FGVCAircraftClassification",
     "FinancialPhrasebankClassification",
     "FinancialPhrasebankClassificationV2",
+    "Food101Classification",
     "FrenkEnClassification",
     "FrenkEnClassificationV2",
     "FunctionOfDecisionSectionLegalBenchClassification",
+    "GTSRBClassification",
     "HUMEEmotionClassification",
     "HUMEToxicConversationsClassification",
     "HUMETweetSentimentExtractionClassification",
+    "Imagenet1kClassification",
     "ImdbClassification",
     "ImdbClassificationV2",
     "InsurancePolicyInterpretationLegalBenchClassification",
@@ -326,6 +358,7 @@ __all__ = [
     "LegalReasoningCausalityLegalBenchClassificationV2",
     "MAUDLegalBenchClassification",
     "MAUDLegalBenchClassificationV2",
+    "MNISTClassification",
     "NYSJudicialEthicsLegalBenchClassification",
     "NewsClassification",
     "NewsClassificationV2",
@@ -345,12 +378,16 @@ __all__ = [
     "OralArgumentQuestionPurposeLegalBenchClassificationV2",
     "OverrulingLegalBenchClassification",
     "OverrulingLegalBenchClassificationV2",
+    "OxfordFlowersClassification",
+    "OxfordPetsClassification",
     "PROALegalBenchClassification",
+    "PatchCamelyonClassification",
     "PatentClassification",
     "PatentClassificationV2",
     "PersonalJurisdictionLegalBenchClassification",
     "PoemSentimentClassification",
     "PoemSentimentClassificationV2",
+    "RESISC45Classification",
     "SCDBPAccountabilityLegalBenchClassification",
     "SCDBPAuditsLegalBenchClassification",
     "SCDBPCertificationLegalBenchClassification",
@@ -365,6 +402,9 @@ __all__ = [
     "SDSEyeProtectionClassificationV2",
     "SDSGlovesClassification",
     "SDSGlovesClassificationV2",
+    "STL10Classification",
+    "SUN397Classification",
+    "StanfordCarsClassification",
     "TelemarketingSalesRuleLegalBenchClassification",
     "TextualismToolDictionariesLegalBenchClassification",
     "TextualismToolPlainLegalBenchClassification",
@@ -377,6 +417,7 @@ __all__ = [
     "TweetTopicSingleClassification",
     "TweetTopicSingleClassificationV2",
     "UCCVCommonLawLegalBenchClassification",
+    "UCF101Classification",
     "UnfairTOSLegalBenchClassification",
     "WikipediaBioMetChemClassification",
     "WikipediaBioMetChemClassificationV2",
