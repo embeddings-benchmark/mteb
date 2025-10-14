@@ -285,7 +285,8 @@ class AbsTaskRetrieval(AbsTask):
         """Evaluate the model on the retrieval task.
 
         Args:
-            model: Model to evaluate
+            model: Model to evaluate. Model should implement the [SearchProtocol][mteb.models.models_protocols.SearchProtocol]
+                or be an [Encoder][mteb.models.models_protocols.Encoder] or [CrossEncoderProtocol][mteb.models.models_protocols.CrossEncoderProtocol].
             split: Split to evaluate on
             subsets_to_run: Optional list of subsets to evaluate on
             encode_kwargs: Keyword arguments passed to the encoder
