@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 import mteb
-from mteb.overview import _TASKS_REGISTRY
+from mteb.get_tasks import _TASKS_REGISTRY
 
 logging.basicConfig(level=logging.INFO)
 

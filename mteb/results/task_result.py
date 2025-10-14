@@ -229,7 +229,7 @@ class TaskResult(BaseModel):
     @cached_property
     def task(self) -> AbsTask:
         """Get the task associated with the result."""
-        from mteb.overview import get_task
+        from mteb.get_tasks import get_task
 
         return get_task(self.task_name)
 
@@ -366,7 +366,7 @@ class TaskResult(BaseModel):
 
     @classmethod
     def _convert_from_before_v1_11_0(cls, data: dict) -> Self:
-        from mteb.overview import _TASKS_REGISTRY
+        from mteb.get_tasks import _TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
         lower_case_registry = {k.lower(): v for k, v in _TASKS_REGISTRY.items()}
@@ -571,7 +571,7 @@ class TaskResult(BaseModel):
             task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
                 the scores will be filtered to only include those splits and languages. If None it will attempt to get the task from the task_name.
         """
-        from mteb.overview import get_task
+        from mteb.get_tasks import get_task
 
         if task is None:
             task = get_task(self.task_name)
