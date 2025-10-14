@@ -1666,14 +1666,14 @@ MTEB_NL = Benchmark(
                 # "MultiEURLEXMultilabelClassification",
                 # "VABBMultiLabelClassification",
                 # # Clustering
-                # "DutchNewsArticlesClusteringS2S",
-                # "DutchNewsArticlesClusteringP2P",
-                # "SIB200ClusteringS2S",
-                # "VABBClusteringS2S",
-                # "VABBClusteringP2P",
-                # "OpenTenderClusteringS2S",
-                # "OpenTenderClusteringP2P",
-                # "IconclassClusteringS2S",
+                "DutchNewsArticlesClusteringS2S",
+                "DutchNewsArticlesClusteringP2P",
+                "SIB200ClusteringS2S",
+                "VABBClusteringS2S",
+                "VABBClusteringP2P",
+                "OpenTenderClusteringS2S",
+                "OpenTenderClusteringP2P",
+                "IconclassClusteringS2S",
                 # # Reranking
                 # "WikipediaRerankingMultilingual",
                 # # Retrieval
