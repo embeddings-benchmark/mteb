@@ -1,8 +1,10 @@
 import argparse
 import logging
+import os
 from pathlib import Path
 
 import torch
+from rich.logging import RichHandler
 
 import mteb
 from mteb.cache import ResultCache
@@ -35,6 +37,9 @@ def run(args: argparse.Namespace) -> None:
         logger.warning(
             "`benchmarks` is specified but so is one or more of `tasks`, `eval_splits`, `languages`, `task_types` and `categories`. These will be ignored."
         )
+
+    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     logger.info("Running with parameters: %s", args)
 
@@ -333,7 +338,11 @@ def build_cli() -> argparse.ArgumentParser:
 
 def main() -> None:
     """Main entry point for the MTEB CLI."""
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(
+        level=logging.WARNING,
+        format="%(message)s",
+        handlers=[RichHandler(rich_tracebacks=True)],
+    )
 
     parser = build_cli()
     args = parser.parse_args()

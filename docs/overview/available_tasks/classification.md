@@ -19,9 +19,9 @@ Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets annotate
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{alomari2017arabic,
       author = {Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
       booktitle = {International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
@@ -30,9 +30,9 @@ Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets annotate
       title = {Arabic tweets sentimental analysis using machine learning},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -51,9 +51,9 @@ Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets (900 for
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{alomari2017arabic,
       author = {Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
       booktitle = {International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
@@ -62,9 +62,9 @@ Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets (900 for
       title = {Arabic tweets sentimental analysis using machine learning},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -82,17 +82,17 @@ AfriSenti is the largest sentiment analysis dataset for under-represented Africa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Muhammad2023AfriSentiAT,
       author = {Shamsuddeen Hassan Muhammad and Idris Abdulmumin and Abinew Ali Ayele and Nedjma Ousidhoum and David Ifeoluwa Adelani and Seid Muhie Yimam and Ibrahim Sa'id Ahmad and Meriem Beloucif and Saif Mohammad and Sebastian Ruder and Oumaima Hourrane and Pavel Brazdil and Felermino D'ario M'ario Ant'onio Ali and Davis Davis and Salomey Osei and Bello Shehu Bello and Falalu Ibrahim and Tajuddeen Gwadabe and Samuel Rutunda and Tadesse Belay and Wendimu Baye Messelle and Hailu Beshada Balcha and Sisay Adugna Chala and Hagos Tesfahun Gebremichael and Bernard Opoku and Steven Arthur},
       title = {AfriSenti: A Twitter Sentiment Analysis Benchmark for African Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -110,12 +110,12 @@ AfriSentiLID is the largest LID classification dataset for African Languages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
-
+    
+            
     ```
-
+    
 
 
 
@@ -133,9 +133,9 @@ A Polish dataset for sentiment classification on reviews from e-commerce marketp
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{rybak-etal-2020-klej,
       abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
       address = {Online},
@@ -156,9 +156,9 @@ A Polish dataset for sentiment classification on reviews from e-commerce marketp
       url = {https://aclanthology.org/2020.acl-main.111/},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -177,9 +177,9 @@ A Polish dataset for sentiment classification on reviews from e-commerce marketp
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{rybak-etal-2020-klej,
       abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
       address = {Online},
@@ -200,9 +200,9 @@ A Polish dataset for sentiment classification on reviews from e-commerce marketp
       url = {https://aclanthology.org/2020.acl-main.111/},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -220,9 +220,9 @@ A collection of Amazon customer reviews annotated for counterfactual detection p
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{oneill-etal-2021-wish,
       abstract = {Counterfactual statements describe events that did not or cannot take place. We consider the problem of counterfactual detection (CFD) in product reviews. For this purpose, we annotate a multilingual CFD dataset from Amazon product reviews covering counterfactual statements written in English, German, and Japanese languages. The dataset is unique as it contains counterfactuals in multiple languages, covers a new application area of e-commerce reviews, and provides high quality professional annotations. We train CFD models using different text representation methods and classifiers. We find that these models are robust against the selectional biases introduced due to cue phrase-based sentence selection. Moreover, our CFD dataset is compatible with prior datasets and can be merged to learn accurate CFD models. Applying machine translation on English counterfactual examples to create multilingual data performs poorly, demonstrating the language-specificity of this problem, which has been ignored so far.},
       address = {Online and Punta Cana, Dominican Republic},
@@ -244,9 +244,9 @@ A collection of Amazon customer reviews annotated for counterfactual detection p
       url = {https://aclanthology.org/2021.emnlp-main.568},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -257,7 +257,7 @@ A collection of translated Amazon customer reviews annotated for counterfactual 
         - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
         - Applies advanced embedding models to filter the translations.
         - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
-
+        
 
 **Dataset:** [`GreenNode/amazon-counterfactual-vn`](https://huggingface.co/datasets/GreenNode/amazon-counterfactual-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2104.06893)
 
@@ -269,9 +269,9 @@ A collection of translated Amazon customer reviews annotated for counterfactual 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -281,9 +281,9 @@ A collection of translated Amazon customer reviews annotated for counterfactual 
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -301,9 +301,9 @@ Amazon Polarity Classification Dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{McAuley2013HiddenFA,
       author = {Julian McAuley and Jure Leskovec},
       journal = {Proceedings of the 7th ACM conference on Recommender systems},
@@ -311,9 +311,9 @@ Amazon Polarity Classification Dataset.
       url = {https://api.semanticscholar.org/CorpusID:6440341},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -332,9 +332,9 @@ Amazon Polarity Classification Dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{McAuley2013HiddenFA,
       author = {Julian McAuley and Jure Leskovec},
       journal = {Proceedings of the 7th ACM conference on Recommender systems},
@@ -342,9 +342,9 @@ Amazon Polarity Classification Dataset.
       url = {https://api.semanticscholar.org/CorpusID:6440341},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -355,7 +355,7 @@ A collection of translated Amazon customer reviews annotated for polarity classi
             - The system uses large language models (LLMs), specifically Coherence's Aya model, for translation.
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
-
+            
 
 **Dataset:** [`GreenNode/amazon-polarity-vn`](https://huggingface.co/datasets/GreenNode/amazon-polarity-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/amazon_polarity)
 
@@ -367,9 +367,9 @@ A collection of translated Amazon customer reviews annotated for polarity classi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -379,9 +379,9 @@ A collection of translated Amazon customer reviews annotated for polarity classi
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -399,9 +399,9 @@ A collection of Amazon reviews specifically designed to aid research in multilin
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{keung2020multilingual,
       archiveprefix = {arXiv},
       author = {Phillip Keung and Yichao Lu and György Szarvas and Noah A. Smith},
@@ -410,9 +410,9 @@ A collection of Amazon reviews specifically designed to aid research in multilin
       title = {The Multilingual Amazon Reviews Corpus},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -434,9 +434,9 @@ A collection of translated Amazon reviews specifically designed to aid research 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -446,9 +446,9 @@ A collection of translated Amazon reviews specifically designed to aid research 
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -466,9 +466,9 @@ A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{pauli2021danlp,
       author = {Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
       booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
@@ -476,9 +476,9 @@ A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets
       title = {DaNLP: An open-source toolkit for Danish Natural Language Processing},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -497,9 +497,9 @@ A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{pauli2021danlp,
       author = {Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
       booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
@@ -507,9 +507,9 @@ A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets
       title = {DaNLP: An open-source toolkit for Danish Natural Language Processing},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -527,9 +527,9 @@ Classification Dataset of Arxiv Papers
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{8675939,
       author = {He, Jun and Wang, Liqun and Liu, Liu and Feng, Jiao and Wu, Hao},
       doi = {10.1109/ACCESS.2019.2907992},
@@ -540,9 +540,9 @@ Classification Dataset of Arxiv Papers
       volume = {7},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -561,9 +561,9 @@ Classification Dataset of Arxiv Papers
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{8675939,
       author = {He, Jun and Wang, Liqun and Liu, Liu and Feng, Jiao and Wu, Hao},
       doi = {10.1109/ACCESS.2019.2907992},
@@ -574,9 +574,9 @@ Classification Dataset of Arxiv Papers
       volume = {7},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -594,9 +594,9 @@ Dataset composed of online banking queries annotated with their corresponding in
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{casanueva-etal-2020-efficient,
       address = {Online},
       author = {Casanueva, I{\~n}igo  and
@@ -621,9 +621,9 @@ Dataset composed of online banking queries annotated with their corresponding in
       url = {https://aclanthology.org/2020.nlp4convai-1.5},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -642,9 +642,9 @@ Dataset composed of online banking queries annotated with their corresponding in
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{casanueva-etal-2020-efficient,
       address = {Online},
       author = {Casanueva, I{\~n}igo  and
@@ -669,9 +669,9 @@ Dataset composed of online banking queries annotated with their corresponding in
       url = {https://aclanthology.org/2020.nlp4convai-1.5},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -693,9 +693,9 @@ A translated dataset composed of online banking queries annotated with their cor
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -705,9 +705,9 @@ A translated dataset composed of online banking queries annotated with their cor
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -725,9 +725,9 @@ Dataset for News Classification, categorized with 13 domains.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{akash-etal-2023-shironaam,
       address = {Dubrovnik, Croatia},
       author = {Akash, Abu Ubaida  and
@@ -742,9 +742,9 @@ Dataset for News Classification, categorized with 13 domains.
       url = {https://aclanthology.org/2023.eacl-main.4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -763,9 +763,9 @@ Dataset for News Classification, categorized with 13 domains.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{akash-etal-2023-shironaam,
       address = {Dubrovnik, Croatia},
       author = {Akash, Abu Ubaida  and
@@ -780,9 +780,9 @@ Dataset for News Classification, categorized with 13 domains.
       url = {https://aclanthology.org/2023.eacl-main.4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -800,9 +800,9 @@ The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{karim2020BengaliNLP,
       author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
       booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
@@ -810,9 +810,9 @@ The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles c
       title = {Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -831,9 +831,9 @@ The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{karim2020BengaliNLP,
       author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
       booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
@@ -841,9 +841,9 @@ The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles c
       title = {Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -861,9 +861,9 @@ dataset contains 3307 Negative reviews and 8500 Positive reviews collected and m
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sazzed2020cross,
       author = {Sazzed, Salim},
       booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
@@ -871,9 +871,9 @@ dataset contains 3307 Negative reviews and 8500 Positive reviews collected and m
       title = {Cross-lingual sentiment classification in low-resource Bengali language},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -892,9 +892,9 @@ dataset contains 2854 Negative reviews and 7238 Positive reviews collected and m
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sazzed2020cross,
       author = {Sazzed, Salim},
       booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
@@ -902,9 +902,9 @@ dataset contains 2854 Negative reviews and 7238 Positive reviews collected and m
       title = {Cross-lingual sentiment classification in low-resource Bengali language},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -922,9 +922,9 @@ Bulgarian online store review dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @data{DVN/TXIK9P_2018,
       author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
       doi = {10.7910/DVN/TXIK9P},
@@ -934,9 +934,9 @@ Bulgarian online store review dataset for sentiment classification.
       version = {V1},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -954,9 +954,9 @@ Polish Tweets annotated for cyberbullying detection.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @proceedings{ogr:kob:19:poleval,
       address = {Warsaw, Poland},
       editor = {Maciej Ogrodniczuk and Łukasz Kobyliński},
@@ -966,9 +966,9 @@ Polish Tweets annotated for cyberbullying detection.
       url = {http://2019.poleval.pl/files/poleval2019.pdf},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -987,9 +987,9 @@ Polish Tweets annotated for cyberbullying detection.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @proceedings{ogr:kob:19:poleval,
       address = {Warsaw, Poland},
       editor = {Maciej Ogrodniczuk and Łukasz Kobyliński},
@@ -999,9 +999,9 @@ Polish Tweets annotated for cyberbullying detection.
       url = {http://2019.poleval.pl/files/poleval2019.pdf},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1019,9 +1019,9 @@ The dataset contains 30k user reviews from csfd.cz in Czech.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{štefánik2023resources,
       archiveprefix = {arXiv},
       author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
@@ -1030,9 +1030,9 @@ The dataset contains 30k user reviews from csfd.cz in Czech.
       title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1051,9 +1051,9 @@ The dataset contains 30k user reviews from csfd.cz in Czech.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{štefánik2023resources,
       archiveprefix = {arXiv},
       author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
@@ -1062,9 +1062,9 @@ The dataset contains 30k user reviews from csfd.cz in Czech.
       title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1082,9 +1082,9 @@ The dataset contains 30k user reviews from csfd.cz in Slovak.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{štefánik2023resources,
       archiveprefix = {arXiv},
       author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
@@ -1093,9 +1093,9 @@ The dataset contains 30k user reviews from csfd.cz in Slovak.
       title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1114,9 +1114,9 @@ The dataset contains 30k user reviews from csfd.cz in Slovak.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{štefánik2023resources,
       archiveprefix = {arXiv},
       author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
@@ -1125,9 +1125,9 @@ The dataset contains 30k user reviews from csfd.cz in Slovak.
       title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1145,9 +1145,9 @@ This task was constructed from the CUAD dataset. It consists of determining if a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1156,16 +1156,16 @@ This task was constructed from the CUAD dataset. It consists of determining if a
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1183,9 +1183,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1194,16 +1194,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1221,9 +1221,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1232,16 +1232,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1259,9 +1259,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1270,16 +1270,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1297,9 +1297,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1308,16 +1308,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1335,9 +1335,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1346,16 +1346,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1373,9 +1373,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1384,16 +1384,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1411,9 +1411,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1422,16 +1422,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1449,9 +1449,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1460,16 +1460,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1487,9 +1487,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1498,16 +1498,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1525,9 +1525,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1536,16 +1536,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1563,9 +1563,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1574,16 +1574,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1601,9 +1601,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1612,16 +1612,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1639,9 +1639,9 @@ This task was constructed from the CUAD dataset. It consists of determining if c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1650,16 +1650,16 @@ This task was constructed from the CUAD dataset. It consists of determining if c
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1677,9 +1677,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1688,16 +1688,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1715,9 +1715,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1726,16 +1726,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1753,9 +1753,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1764,16 +1764,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1791,9 +1791,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1802,16 +1802,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1829,9 +1829,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1840,16 +1840,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1867,9 +1867,9 @@ This task was constructed from the CUAD dataset. It consists of determining if a
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1878,16 +1878,16 @@ This task was constructed from the CUAD dataset. It consists of determining if a
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1905,9 +1905,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1916,16 +1916,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1943,9 +1943,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1954,16 +1954,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1981,9 +1981,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -1992,16 +1992,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2019,9 +2019,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2030,16 +2030,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2057,9 +2057,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2068,16 +2068,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2095,9 +2095,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2106,16 +2106,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2133,9 +2133,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2144,16 +2144,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2171,9 +2171,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2182,16 +2182,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2209,9 +2209,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2220,16 +2220,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2247,9 +2247,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2258,16 +2258,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2285,9 +2285,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2296,16 +2296,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2323,9 +2323,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2334,16 +2334,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2361,9 +2361,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2372,16 +2372,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2399,9 +2399,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2410,16 +2410,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2437,9 +2437,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2448,16 +2448,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2475,9 +2475,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2486,16 +2486,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2513,9 +2513,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2524,16 +2524,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2551,9 +2551,9 @@ This task was constructed from the CUAD dataset. It consists of determining if t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2562,16 +2562,16 @@ This task was constructed from the CUAD dataset. It consists of determining if t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{hendrycks2021cuad,
       author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
       journal = {arXiv preprint arXiv:2103.06268},
       title = {Cuad: An expert-annotated nlp dataset for legal contract review},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2589,9 +2589,9 @@ The input is an excerpt of text from Tax Court of Canada decisions involving app
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2600,9 +2600,9 @@ The input is an excerpt of text from Tax Court of Canada decisions involving app
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2613,7 +2613,7 @@ This dataset contains two corpora in Spanish and Catalan that consist of annotat
         of 2019 from tweets posted in Barcelona, and during September of 2018 from tweets posted in the town of Terrassa, Catalonia.
         Each corpus is annotated with three classes: AGAINST, FAVOR and NEUTRAL, which express the stance
         towards the target - independence of Catalonia.
-
+        
 
 **Dataset:** [`community-datasets/catalonia_independence`](https://huggingface.co/datasets/community-datasets/catalonia_independence) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2020.lrec-1.171/)
 
@@ -2625,9 +2625,9 @@ This dataset contains two corpora in Spanish and Catalan that consist of annotat
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{zotova-etal-2020-multilingual,
       author = {Zotova, Elena  and
     Agerri, Rodrigo  and
@@ -2655,9 +2655,9 @@ This dataset contains two corpora in Spanish and Catalan that consist of annotat
       title = {Multilingual Stance Detection in Tweets: The {C}atalonia Independence Corpus},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2675,9 +2675,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2686,16 +2686,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2713,9 +2713,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2724,16 +2724,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2751,9 +2751,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2762,16 +2762,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2789,9 +2789,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2800,16 +2800,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2827,9 +2827,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2838,16 +2838,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2865,9 +2865,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2876,16 +2876,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2903,9 +2903,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2914,16 +2914,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2941,9 +2941,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2952,16 +2952,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2979,9 +2979,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -2990,16 +2990,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3017,9 +3017,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3028,16 +3028,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3055,9 +3055,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3066,16 +3066,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3093,9 +3093,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3104,16 +3104,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3131,9 +3131,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3142,16 +3142,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3169,9 +3169,9 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3180,16 +3180,16 @@ This task is a subset of ContractNLI, and consists of determining whether a clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{koreeda2021contractnli,
       author = {Koreeda, Yuta and Manning, Christopher D},
       journal = {arXiv preprint arXiv:2110.01799},
       title = {ContractNLI: A dataset for document-level natural language inference for contracts},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3207,9 +3207,9 @@ The Corporate Lobbying task consists of determining whether a proposed Congressi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3218,9 +3218,9 @@ The Corporate Lobbying task consists of determining whether a proposed Congressi
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3238,18 +3238,18 @@ Cyrillic dataset of 8 Turkic languages spoken in Russia and former USSR
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{goldhahn2012building,
       author = {Goldhahn, Dirk and Eckart, Thomas and Quasthoff, Uwe},
       booktitle = {Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)},
       title = {Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},
       year = {2012},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3267,9 +3267,9 @@ User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (posit
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{habernal-etal-2013-sentiment,
       address = {Atlanta, Georgia},
       author = {Habernal, Ivan  and
@@ -3286,9 +3286,9 @@ User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (posit
       url = {https://aclanthology.org/W13-1609},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3307,9 +3307,9 @@ User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (posit
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{habernal-etal-2013-sentiment,
       address = {Atlanta, Georgia},
       author = {Habernal, Ivan  and
@@ -3326,9 +3326,9 @@ User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (posit
       url = {https://aclanthology.org/W13-1609},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3346,9 +3346,9 @@ User comments on Facebook
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{habernal-etal-2013-sentiment,
       address = {Atlanta, Georgia},
       author = {Habernal, Ivan  and
@@ -3365,9 +3365,9 @@ User comments on Facebook
       url = {https://aclanthology.org/W13-1609},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3386,9 +3386,9 @@ User comments on Facebook
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{habernal-etal-2013-sentiment,
       address = {Atlanta, Georgia},
       author = {Habernal, Ivan  and
@@ -3405,9 +3405,9 @@ User comments on Facebook
       url = {https://aclanthology.org/W13-1609},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3425,9 +3425,9 @@ An Czech dataset for subjectivity classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{priban-steinberger-2022-czech,
       address = {Marseille, France},
       author = {P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
@@ -3440,9 +3440,9 @@ An Czech dataset for subjectivity classification.
       url = {https://aclanthology.org/2022.lrec-1.148},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3460,9 +3460,9 @@ DBpedia14 is a dataset of English texts from Wikipedia articles, categorized int
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -3474,9 +3474,9 @@ DBpedia14 is a dataset of English texts from Wikipedia articles, categorized int
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3495,9 +3495,9 @@ DBpedia14 is a dataset of English texts from Wikipedia articles, categorized int
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -3509,9 +3509,9 @@ DBpedia14 is a dataset of English texts from Wikipedia articles, categorized int
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3529,9 +3529,9 @@ Danish Tweets annotated for Hate Speech either being Offensive or not
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sigurbergsson-derczynski-2020-offensive,
       abstract = {The presence of offensive language on social media platforms and the implications this poses is becoming a major concern in modern society. Given the enormous amount of content created every day, automatic methods are required to detect and deal with this type of content. Until now, most of the research has focused on solving the problem for the English language, while the problem is multilingual. We construct a Danish dataset DKhate containing user-generated comments from various social media platforms, and to our knowledge, the first of its kind, annotated for various types and target of offensive language. We develop four automatic classification systems, each designed to work for both the English and the Danish language. In the detection of offensive language in English, the best performing system achieves a macro averaged F1-score of 0.74, and the best performing system for Danish achieves a macro averaged F1-score of 0.70. In the detection of whether or not an offensive post is targeted, the best performing system for English achieves a macro averaged F1-score of 0.62, while the best performing system for Danish achieves a macro averaged F1-score of 0.73. Finally, in the detection of the target type in a targeted offensive post, the best performing system for English achieves a macro averaged F1-score of 0.56, and the best performing system for Danish achieves a macro averaged F1-score of 0.63. Our work for both the English and the Danish language captures the type and targets of offensive language, and present automatic methods for detecting different kinds of offensive language such as hate speech and cyberbullying.},
       address = {Marseille, France},
@@ -3561,9 +3561,9 @@ Danish Tweets annotated for Hate Speech either being Offensive or not
       url = {https://aclanthology.org/2020.lrec-1.430},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3582,9 +3582,9 @@ Danish Tweets annotated for Hate Speech either being Offensive or not
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sigurbergsson-derczynski-2020-offensive,
       abstract = {The presence of offensive language on social media platforms and the implications this poses is becoming a major concern in modern society. Given the enormous amount of content created every day, automatic methods are required to detect and deal with this type of content. Until now, most of the research has focused on solving the problem for the English language, while the problem is multilingual. We construct a Danish dataset DKhate containing user-generated comments from various social media platforms, and to our knowledge, the first of its kind, annotated for various types and target of offensive language. We develop four automatic classification systems, each designed to work for both the English and the Danish language. In the detection of offensive language in English, the best performing system achieves a macro averaged F1-score of 0.74, and the best performing system for Danish achieves a macro averaged F1-score of 0.70. In the detection of whether or not an offensive post is targeted, the best performing system for English achieves a macro averaged F1-score of 0.62, while the best performing system for Danish achieves a macro averaged F1-score of 0.73. Finally, in the detection of the target type in a targeted offensive post, the best performing system for English achieves a macro averaged F1-score of 0.56, and the best performing system for Danish achieves a macro averaged F1-score of 0.63. Our work for both the English and the Danish language captures the type and targets of offensive language, and present automatic methods for detecting different kinds of offensive language such as hate speech and cyberbullying.},
       address = {Marseille, France},
@@ -3614,9 +3614,9 @@ Danish Tweets annotated for Hate Speech either being Offensive or not
       url = {https://aclanthology.org/2020.lrec-1.430},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3634,9 +3634,9 @@ The DaDoEval dataset is a curated collection of 2,759 documents authored by Alci
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{menini2020dadoeval,
       author = {Menini, Stefano and Moretti, Giovanni and Sprugnoli, Rachele and Tonelli, Sara and others},
       booktitle = {Proceedings of the Seventh Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop (EVALITA 2020)},
@@ -3645,9 +3645,9 @@ The DaDoEval dataset is a curated collection of 2,759 documents authored by Alci
       title = {DaDoEval@ EVALITA 2020: Same-genre and cross-genre dating of historical documents},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3665,18 +3665,18 @@ A Swedish dataset for linguistic acceptability. Available as a part of Superlim.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{2105.06681,
       author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
       eprint = {arXiv:2105.06681},
       title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3695,18 +3695,18 @@ A Swedish dataset for linguistic acceptability. Available as a part of Superlim.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{2105.06681,
       author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
       eprint = {arXiv:2105.06681},
       title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3724,18 +3724,18 @@ A dataset of Danish political comments rated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @techreport{SAMsentiment,
       author = {Mads Guldborg Kjeldgaard Kongsbak and Steffan Eybye Christensen and Lucas Høyberg Puvis~de~Chavannes and Peter Due Jensen},
       institution = {IT University of Copenhagen},
       title = {Sentiment Analysis Multitool, SAM},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3754,18 +3754,18 @@ A dataset of Danish political comments rated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @techreport{SAMsentiment,
       author = {Mads Guldborg Kjeldgaard Kongsbak and Steffan Eybye Christensen and Lucas Høyberg Puvis~de~Chavannes and Peter Due Jensen},
       institution = {IT University of Copenhagen},
       title = {Sentiment Analysis Multitool, SAM},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3783,9 +3783,9 @@ A Danish Discourse dataset with values for coherence and source (Wikipedia or Re
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
       abstract = {To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.},
       address = {Marseille, France},
@@ -3814,9 +3814,9 @@ A Danish Discourse dataset with values for coherence and source (Wikipedia or Re
       url = {https://aclanthology.org/2022.lrec-1.260},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3835,9 +3835,9 @@ A Danish Discourse dataset with values for coherence and source (Wikipedia or Re
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
       abstract = {To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.},
       address = {Marseille, France},
@@ -3866,9 +3866,9 @@ A Danish Discourse dataset with values for coherence and source (Wikipedia or Re
       url = {https://aclanthology.org/2022.lrec-1.260},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3886,11 +3886,11 @@ Persian Sentiment Analysis Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -3909,11 +3909,11 @@ Persian Sentiment Analysis Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -3931,9 +3931,9 @@ This task consists of determining whether or not a sentence from a Supreme Court
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3942,9 +3942,9 @@ This task consists of determining whether or not a sentence from a Supreme Court
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3962,11 +3962,11 @@ A total of 8,515 articles scraped from Digikala Online Magazine. This dataset in
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -3984,9 +3984,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -3995,9 +3995,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4015,9 +4015,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -4026,9 +4026,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4046,9 +4046,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -4057,9 +4057,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4077,9 +4077,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -4088,9 +4088,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4108,9 +4108,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -4119,9 +4119,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4139,9 +4139,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -4150,9 +4150,9 @@ Given a set of facts about the citizenships of plaintiffs and defendants and the
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4170,9 +4170,9 @@ A Dutch book review for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/abs-1910-00896,
       archiveprefix = {arXiv},
       author = {Benjamin, van der Burgh and
@@ -4188,9 +4188,9 @@ A Dutch book review for sentiment classification.
       volume = {abs/1910.00896},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4209,9 +4209,9 @@ A Dutch book review for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/abs-1910-00896,
       archiveprefix = {arXiv},
       author = {Benjamin, van der Burgh and
@@ -4227,9 +4227,9 @@ A Dutch book review for sentiment classification.
       volume = {abs/1910.00896},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4247,9 +4247,9 @@ Emotion is a dataset of English Twitter messages with six basic emotions: anger,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{saravia-etal-2018-carer,
       abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
       address = {Brussels, Belgium},
@@ -4271,9 +4271,9 @@ Emotion is a dataset of English Twitter messages with six basic emotions: anger,
       url = {https://aclanthology.org/D18-1404},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4292,9 +4292,9 @@ Emotion is a dataset of English Twitter messages with six basic emotions: anger,
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{saravia-etal-2018-carer,
       abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
       address = {Brussels, Belgium},
@@ -4316,9 +4316,9 @@ Emotion is a dataset of English Twitter messages with six basic emotions: anger,
       url = {https://aclanthology.org/D18-1404},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4340,9 +4340,9 @@ Emotion is a translated dataset of Vietnamese from English Twitter messages with
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -4352,9 +4352,9 @@ Emotion is a translated dataset of Vietnamese from English Twitter messages with
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4372,9 +4372,9 @@ Dataset containing annotated Estonian news data from the Postimees and Õhtuleht
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Pajupuu2023,
       author = {Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri},
       doi = {10.6084/m9.figshare.24517054.v1},
@@ -4383,9 +4383,9 @@ Dataset containing annotated Estonian news data from the Postimees and Õhtuleht
       url = {https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4404,9 +4404,9 @@ Dataset containing annotated Estonian news data from the Postimees and Õhtuleht
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Pajupuu2023,
       author = {Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri},
       doi = {10.6084/m9.figshare.24517054.v1},
@@ -4415,9 +4415,9 @@ Dataset containing annotated Estonian news data from the Postimees and Õhtuleht
       url = {https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4435,11 +4435,11 @@ Questions in 4 different categories that a user might ask their voice assistant 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -4457,9 +4457,9 @@ Filipino Twitter dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Cabasag-2019-hate-speech,
       author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
       journal = {Philippine Computing Journal},
@@ -4469,9 +4469,9 @@ Filipino Twitter dataset for sentiment classification.
       volume = {XIV},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4490,9 +4490,9 @@ Filipino Twitter dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Cabasag-2019-hate-speech,
       author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
       journal = {Philippine Computing Journal},
@@ -4502,9 +4502,9 @@ Filipino Twitter dataset for sentiment classification.
       volume = {XIV},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4522,9 +4522,9 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{riegoenhancement,
       author = {Riego, Neil Christian R. and Villarba, Danny Bell and Sison, Ariel Antwaun Rolando C. and Pineda, Fernandez C. and Lagunzad, Herminiño C.},
       issue = {08},
@@ -4533,9 +4533,9 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
       title = {Enhancement to Low-Resource Text Classification via Sequential Transfer Learning},
       volume = {04},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4545,7 +4545,7 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
         This dataset is a DeepL -based machine translated version of the Jigsaw toxicity dataset for Finnish. The dataset is originally from a Kaggle competition https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data.
         The original dataset poses a multi-label text classification problem and includes the labels identity_attack, insult, obscene, severe_toxicity, threat and toxicity.
         Here adapted for toxicity classification, which is the most represented class.
-
+        
 
 **Dataset:** [`TurkuNLP/jigsaw_toxicity_pred_fi`](https://huggingface.co/datasets/TurkuNLP/jigsaw_toxicity_pred_fi) • **License:** cc-by-sa-4.0 • [Learn more →](https://aclanthology.org/2023.nodalida-1.68)
 
@@ -4557,9 +4557,9 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{eskelinen-etal-2023-toxicity,
       author = {Eskelinen, Anni  and
     Silvala, Laura  and
@@ -4571,9 +4571,9 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
       title = {Toxicity Detection in {F}innish Using Machine Translation},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4596,9 +4596,9 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{eskelinen-etal-2023-toxicity,
       author = {Eskelinen, Anni  and
     Silvala, Laura  and
@@ -4610,9 +4610,9 @@ The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training
       title = {Toxicity Detection in {F}innish Using Machine Translation},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4630,9 +4630,9 @@ Polar sentiment dataset of sentences from financial news, categorized by sentime
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Malo2014GoodDO,
       author = {P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
       journal = {Journal of the Association for Information Science and Technology},
@@ -4640,9 +4640,9 @@ Polar sentiment dataset of sentences from financial news, categorized by sentime
       volume = {65},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4661,9 +4661,9 @@ Polar sentiment dataset of sentences from financial news, categorized by sentime
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Malo2014GoodDO,
       author = {P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
       journal = {Journal of the Association for Information Science and Technology},
@@ -4671,9 +4671,9 @@ Polar sentiment dataset of sentences from financial news, categorized by sentime
       volume = {65},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4691,12 +4691,12 @@ It is a French book reviews dataset containing a huge number of reader reviews o
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
-
+    
+            
     ```
-
+    
 
 
 
@@ -4715,12 +4715,12 @@ It is a French book reviews dataset containing a huge number of reader reviews o
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
-
+    
+            
     ```
-
+    
 
 
 
@@ -4738,9 +4738,9 @@ English subset of the FRENK dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ljubešić2019frenk,
       archiveprefix = {arXiv},
       author = {Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
@@ -4750,9 +4750,9 @@ English subset of the FRENK dataset
       url = {https://arxiv.org/abs/1906.02045},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4771,9 +4771,9 @@ English subset of the FRENK dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ljubešić2019frenk,
       archiveprefix = {arXiv},
       author = {Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
@@ -4783,9 +4783,9 @@ English subset of the FRENK dataset
       url = {https://arxiv.org/abs/1906.02045},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4803,9 +4803,9 @@ Croatian subset of the FRENK dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ljubešić2019frenk,
       archiveprefix = {arXiv},
       author = {Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
@@ -4815,9 +4815,9 @@ Croatian subset of the FRENK dataset
       url = {https://arxiv.org/abs/1906.02045},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4836,9 +4836,9 @@ Croatian subset of the FRENK dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ljubešić2019frenk,
       archiveprefix = {arXiv},
       author = {Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
@@ -4848,9 +4848,9 @@ Croatian subset of the FRENK dataset
       url = {https://arxiv.org/abs/1906.02045},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4868,9 +4868,9 @@ Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ljubešić2019frenk,
       archiveprefix = {arXiv},
       author = {Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
@@ -4880,9 +4880,9 @@ Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub
       url = {https://arxiv.org/abs/1906.02045},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4901,9 +4901,9 @@ Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ljubešić2019frenk,
       archiveprefix = {arXiv},
       author = {Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
@@ -4913,9 +4913,9 @@ Slovenian subset of the FRENK dataset. Also available on HuggingFace dataset hub
       url = {https://arxiv.org/abs/1906.02045},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4929,7 +4929,7 @@ The task is to classify a paragraph extracted from a written court decision into
             5. Analysis - The paragraph analyzes the legal issue by applying the relevant legal principles to the facts of the present dispute.
             6. Conclusion - The paragraph presents a conclusion of the court.
             7. Decree - The paragraph constitutes a decree resolving the dispute.
-
+        
 
 **Dataset:** [`mteb/FunctionOfDecisionSectionLegalBenchClassification`](https://huggingface.co/datasets/mteb/FunctionOfDecisionSectionLegalBenchClassification) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/nguha/legalbench)
 
@@ -4941,9 +4941,9 @@ The task is to classify a paragraph extracted from a written court decision into
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -4952,9 +4952,9 @@ The task is to classify a paragraph extracted from a written court decision into
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -4997,9 +4997,9 @@ Goergian Sentiment Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{stefanovitch-etal-2022-resources,
       abstract = {This paper presents, to the best of our knowledge, the first ever publicly available annotated dataset for sentiment classification and semantic polarity dictionary for Georgian. The characteristics of these resources and the process of their creation are described in detail. The results of various experiments on the performance of both lexicon- and machine learning-based models for Georgian sentiment classification are also reported. Both 3-label (positive, neutral, negative) and 4-label settings (same labels + mixed) are considered. The machine learning models explored include, i.a., logistic regression, SVMs, and transformed-based models. We also explore transfer learning- and translation-based (to a well-supported language) approaches. The obtained results for Georgian are on par with the state-of-the-art results in sentiment classification for well studied languages when using training data of comparable size.},
       address = {Marseille, France},
@@ -5027,9 +5027,9 @@ Goergian Sentiment Dataset
       url = {https://aclanthology.org/2022.lrec-1.173},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5047,9 +5047,9 @@ GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{schmidt-etal-2022-sentiment,
       address = {Potsdam, Germany},
       author = {Schmidt, Thomas  and
@@ -5070,9 +5070,9 @@ GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with
       url = {https://aclanthology.org/2022.konvens-1.9},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5091,9 +5091,9 @@ GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{schmidt-etal-2022-sentiment,
       address = {Potsdam, Germany},
       author = {Schmidt, Thomas  and
@@ -5114,9 +5114,9 @@ GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with
       url = {https://aclanthology.org/2022.konvens-1.9},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5134,9 +5134,9 @@ Greek Legal Code Dataset for Classification. (subset = chapter)
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{papaloukas-etal-2021-glc,
       address = {Punta Cana, Dominican Republic},
       author = {Papaloukas, Christos and Chalkidis, Ilias and Athinaios, Konstantinos and Pantazi, Despina-Athanasia and Koubarakis, Manolis},
@@ -5148,9 +5148,9 @@ Greek Legal Code Dataset for Classification. (subset = chapter)
       url = {https://arxiv.org/abs/2109.15298},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5193,9 +5193,9 @@ Human evaluation subset of Emotion is a dataset of English Twitter messages with
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{saravia-etal-2018-carer,
       abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
       address = {Brussels, Belgium},
@@ -5217,9 +5217,9 @@ Human evaluation subset of Emotion is a dataset of English Twitter messages with
       url = {https://aclanthology.org/D18-1404},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5237,9 +5237,9 @@ Human evaluation subset of Sentiment classification dataset with binary (positiv
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{mollanorozy-etal-2023-cross,
       address = {Dubrovnik, Croatia},
       author = {Mollanorozy, Sepideh  and
@@ -5263,9 +5263,9 @@ Human evaluation subset of Sentiment classification dataset with binary (positiv
       url = {https://aclanthology.org/2023.sigtyp-1.9},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5283,9 +5283,9 @@ Human evaluation subset of Collection of comments from the Civil Comments platfo
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jigsaw-unintended-bias-in-toxicity-classification,
       author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
       publisher = {Kaggle},
@@ -5293,9 +5293,9 @@ Human evaluation subset of Collection of comments from the Civil Comments platfo
       url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5313,9 +5313,9 @@ Human evaluation subset of Tweet Sentiment Extraction dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{tweet-sentiment-extraction,
       author = {Maggie, Phil Culliton, Wei Chen},
       publisher = {Kaggle},
@@ -5323,9 +5323,9 @@ Human evaluation subset of Tweet Sentiment Extraction dataset.
       url = {https://kaggle.com/competitions/tweet-sentiment-extraction},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5343,9 +5343,9 @@ HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{fortuna-etal-2019-hierarchically,
       address = {Florence, Italy},
       author = {Fortuna, Paula  and
@@ -5366,9 +5366,9 @@ HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized
       url = {https://aclanthology.org/W19-3510},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5386,9 +5386,9 @@ Headline rubric classification based on the paraphraser plus dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{gudkov-etal-2020-automatically,
       abstract = {The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.},
       address = {Online},
@@ -5413,9 +5413,9 @@ Headline rubric classification based on the paraphraser plus dataset.
       url = {https://aclanthology.org/2020.ngt-1.6},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5434,9 +5434,9 @@ Headline rubric classification based on the paraphraser plus dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{gudkov-etal-2020-automatically,
       abstract = {The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.},
       address = {Online},
@@ -5461,9 +5461,9 @@ Headline rubric classification based on the paraphraser plus dataset.
       url = {https://aclanthology.org/2020.ngt-1.6},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5481,9 +5481,9 @@ HebrewSentiment is a data set consists of 12,804 user comments to posts on the o
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{amram-etal-2018-representations,
       address = {Santa Fe, New Mexico, USA},
       author = {Amram, Adam and Ben David, Anat and Tsarfaty, Reut},
@@ -5495,9 +5495,9 @@ HebrewSentiment is a data set consists of 12,804 user comments to posts on the o
       url = {https://www.aclweb.org/anthology/C18-1190},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5516,9 +5516,9 @@ HebrewSentiment is a data set consists of 12,804 user comments to posts on the o
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{amram-etal-2018-representations,
       address = {Santa Fe, New Mexico, USA},
       author = {Amram, Adam and Ben David, Anat and Tsarfaty, Reut},
@@ -5530,9 +5530,9 @@ HebrewSentiment is a data set consists of 12,804 user comments to posts on the o
       url = {https://www.aclweb.org/anthology/C18-1190},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5550,9 +5550,9 @@ HinDialect: 26 Hindi-related languages and dialects of the Indic Continuum in No
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{11234/1-4839,
       author = {Bafna, Niyati and {\v Z}abokrtsk{\'y}, Zden{\v e}k and Espa{\~n}a-Bonet, Cristina and van Genabith, Josef and Kumar, Lalit "Samyak Lalit" and Suman, Sharda and Shivay, Rahul},
       copyright = {Creative Commons - Attribution-{NonCommercial}-{ShareAlike} 4.0 International ({CC} {BY}-{NC}-{SA} 4.0)},
@@ -5561,9 +5561,9 @@ HinDialect: 26 Hindi-related languages and dialects of the Indic Continuum in No
       url = {http://hdl.handle.net/11234/1-4839},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5581,9 +5581,9 @@ A Hindi Discourse dataset in Hindi with values for coherence.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dhanwal-etal-2020-annotated,
       address = {Marseille, France},
       author = {Dhanwal, Swapnil  and
@@ -5606,9 +5606,9 @@ A Hindi Discourse dataset in Hindi with values for coherence.
       url = {https://www.aclweb.org/anthology/2020.lrec-1.149},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5627,9 +5627,9 @@ A Hindi Discourse dataset in Hindi with values for coherence.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dhanwal-etal-2020-annotated,
       address = {Marseille, France},
       author = {Dhanwal, Swapnil  and
@@ -5652,9 +5652,9 @@ A Hindi Discourse dataset in Hindi with values for coherence.
       url = {https://www.aclweb.org/anthology/2020.lrec-1.149},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5672,9 +5672,9 @@ HARD is a dataset of Arabic hotel reviews collected from the Booking.com website
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{elnagar2018hotel,
       author = {Elnagar, Ashraf and Khalifa, Yasmin S and Einea, Anas},
       journal = {Intelligent natural language processing: Trends and applications},
@@ -5683,9 +5683,9 @@ HARD is a dataset of Arabic hotel reviews collected from the Booking.com website
       title = {Hotel Arabic-reviews dataset construction for sentiment analysis applications},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5704,9 +5704,9 @@ HARD is a dataset of Arabic hotel reviews collected from the Booking.com website
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{elnagar2018hotel,
       author = {Elnagar, Ashraf and Khalifa, Yasmin S and Einea, Anas},
       journal = {Intelligent natural language processing: Trends and applications},
@@ -5715,9 +5715,9 @@ HARD is a dataset of Arabic hotel reviews collected from the Booking.com website
       title = {Hotel Arabic-reviews dataset construction for sentiment analysis applications},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5735,9 +5735,9 @@ Long Text classification for the description of Apps
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{xu-etal-2020-clue,
       abstract = {The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com},
       address = {Barcelona, Spain (Online)},
@@ -5782,9 +5782,9 @@ Long Text classification for the description of Apps
       url = {https://aclanthology.org/2020.coling-main.419},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5803,9 +5803,9 @@ Long Text classification for the description of Apps
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{xu-etal-2020-clue,
       abstract = {The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com},
       address = {Barcelona, Spain (Online)},
@@ -5850,9 +5850,9 @@ Long Text classification for the description of Apps
       url = {https://aclanthology.org/2020.coling-main.419},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5870,9 +5870,9 @@ Large Movie Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{maas-etal-2011-learning,
       address = {Portland, Oregon, USA},
       author = {Maas, Andrew L.  and
@@ -5892,9 +5892,9 @@ Large Movie Review Dataset
       url = {https://aclanthology.org/P11-1015},
       year = {2011},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5913,9 +5913,9 @@ Large Movie Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{maas-etal-2011-learning,
       address = {Portland, Oregon, USA},
       author = {Maas, Andrew L.  and
@@ -5935,9 +5935,9 @@ Large Movie Review Dataset
       url = {https://aclanthology.org/P11-1015},
       year = {2011},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5959,9 +5959,9 @@ A translated dataset of large movie reviews annotated for sentiment classificati
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -5971,9 +5971,9 @@ A translated dataset of large movie reviews annotated for sentiment classificati
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -5991,9 +5991,9 @@ Inappropriateness identification in the form of binary classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{babakov-etal-2021-detecting,
       abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
@@ -6022,9 +6022,9 @@ Inappropriateness identification in the form of binary classification
       url = {https://aclanthology.org/2021.bsnlp-1.4},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6043,9 +6043,9 @@ Inappropriateness identification in the form of binary classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{babakov-etal-2021-detecting,
       abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
@@ -6074,9 +6074,9 @@ Inappropriateness identification in the form of binary classification
       url = {https://aclanthology.org/2021.bsnlp-1.4},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6094,9 +6094,9 @@ Inappropriateness identification in the form of binary classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{babakov-etal-2021-detecting,
       abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
@@ -6125,9 +6125,9 @@ Inappropriateness identification in the form of binary classification
       url = {https://aclanthology.org/2021.bsnlp-1.4},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6145,9 +6145,9 @@ A language identification test set for native-script as well as Romanized text w
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{madhani-etal-2023-bhasa,
       address = {Toronto, Canada},
       author = {Madhani, Yash  and
@@ -6165,9 +6165,9 @@ A language identification test set for native-script as well as Romanized text w
       url = {https://aclanthology.org/2023.acl-short.71},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6185,18 +6185,18 @@ A News classification dataset in multiple Indian regional languages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6214,9 +6214,9 @@ A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Ind
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{doddapaneni2022towards,
       author = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
       doi = {10.18653/v1/2023.acl-long.693},
@@ -6224,9 +6224,9 @@ A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Ind
       title = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6244,9 +6244,9 @@ The CLICK-ID dataset is a collection of Indonesian news headlines that was colle
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{WILLIAM2020106231,
       abstract = {News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas.},
       author = {Andika William and Yunita Sari},
@@ -6260,9 +6260,9 @@ The CLICK-ID dataset is a collection of Indonesian news headlines that was colle
       volume = {32},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6281,9 +6281,9 @@ The CLICK-ID dataset is a collection of Indonesian news headlines that was colle
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{WILLIAM2020106231,
       abstract = {News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas.},
       author = {Andika William and Yunita Sari},
@@ -6297,9 +6297,9 @@ The CLICK-ID dataset is a collection of Indonesian news headlines that was colle
       volume = {32},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6317,9 +6317,9 @@ Conservation dataset that was collected from mongabay.co.id contains topic-class
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{fransiska-etal-2023-utilizing,
       address = {Nusa Dua, Bali, Indonesia},
       author = {Fransiska, Mega  and
@@ -6341,9 +6341,9 @@ Conservation dataset that was collected from mongabay.co.id contains topic-class
       url = {https://aclanthology.org/2023.sealp-1.4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6362,9 +6362,9 @@ Conservation dataset that was collected from mongabay.co.id contains topic-class
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{fransiska-etal-2023-utilizing,
       address = {Nusa Dua, Bali, Indonesia},
       author = {Fransiska, Mega  and
@@ -6386,9 +6386,9 @@ Conservation dataset that was collected from mongabay.co.id contains topic-class
       url = {https://aclanthology.org/2023.sealp-1.4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6406,9 +6406,9 @@ Given an insurance claim and policy, determine whether the claim is covered by t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -6417,9 +6417,9 @@ Given an insurance claim and policy, determine whether the claim is covered by t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6437,9 +6437,9 @@ Answer questions about citizenship law from across the world. Dataset was made u
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -6448,7 +6448,7 @@ Answer questions about citizenship law from across the world. Dataset was made u
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @misc{vink2023globalcit,
       author = {Vink, Maarten and van der Baaren, Luuk and Bauböck, Rainer and Džankić, Jelena and Honohan, Iseult and Manby, Bronwen},
       howpublished = {https://hdl.handle.net/1814/73190},
@@ -6456,9 +6456,9 @@ Answer questions about citizenship law from across the world. Dataset was made u
       title = {GLOBALCIT Citizenship Law Dataset, v2.0, Country-Year-Mode Data (Acquisition)},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6476,9 +6476,9 @@ isiZulu News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Madodonga_Marivate_Adendorff_2023,
       author = {Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew},
       doi = {10.55492/dhasa.v4i01.4449},
@@ -6488,9 +6488,9 @@ isiZulu News Classification Dataset
       volume = {4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6509,9 +6509,9 @@ isiZulu News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Madodonga_Marivate_Adendorff_2023,
       author = {Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew},
       doi = {10.55492/dhasa.v4i01.4449},
@@ -6521,9 +6521,9 @@ isiZulu News Classification Dataset
       volume = {4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6541,9 +6541,9 @@ An Italian Dataset consisting of 1101 pairs of judgments and their official hold
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{10.1145/3594536.3595177,
       abstract = {Legal holdings are used in Italy as a critical component of the legal system, serving to establish legal precedents, provide guidance for future legal decisions, and ensure consistency and predictability in the interpretation and application of the law. They are written by domain experts who describe in a clear and concise manner the principle of law applied in the judgments.We introduce a legal holding extraction method based on Italian-LEGAL-BERT to automatically extract legal holdings from Italian cases. In addition, we present ITA-CaseHold, a benchmark dataset for Italian legal summarization. We conducted several experiments using this dataset, as a valuable baseline for future research on this topic.},
       address = {New York, NY, USA},
@@ -6561,9 +6561,9 @@ An Italian Dataset consisting of 1101 pairs of judgments and their official hold
       url = {https://doi.org/10.1145/3594536.3595177},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6581,9 +6581,9 @@ An Italian Corpus of Linguistic Acceptability taken from linguistic literature w
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{trotta-etal-2021-monolingual-cross,
       address = {Punta Cana, Dominican Republic},
       author = {Trotta, Daniela  and
@@ -6599,9 +6599,9 @@ An Italian Corpus of Linguistic Acceptability taken from linguistic literature w
       url = {https://aclanthology.org/2021.findings-emnlp.250},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6620,9 +6620,9 @@ An Italian Corpus of Linguistic Acceptability taken from linguistic literature w
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{trotta-etal-2021-monolingual-cross,
       address = {Punta Cana, Dominican Republic},
       author = {Trotta, Daniela  and
@@ -6638,9 +6638,9 @@ An Italian Corpus of Linguistic Acceptability taken from linguistic literature w
       url = {https://aclanthology.org/2021.findings-emnlp.250},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6658,9 +6658,9 @@ The J.Crew Blocker, also known as the J.Crew Protection, is a provision included
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -6669,9 +6669,9 @@ The J.Crew Blocker, also known as the J.Crew Protection, is a provision included
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6690,9 +6690,9 @@ The J.Crew Blocker, also known as the J.Crew Protection, is a provision included
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -6701,9 +6701,9 @@ The J.Crew Blocker, also known as the J.Crew Protection, is a provision included
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6721,18 +6721,18 @@ review for iphone
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2023c,
       author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighof, Niklas},
       journal = {arXiv preprint arXiv:2309.07597},
       title = {C-pack: Packaged resources to advance general chinese embedding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6751,18 +6751,18 @@ review for iphone
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2023c,
       author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighof, Niklas},
       journal = {arXiv preprint arXiv:2309.07597},
       title = {C-pack: Packaged resources to advance general chinese embedding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6784,9 +6784,9 @@ to restore natural Japanese text without artificial spaces.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{mollanorozy-etal-2023-cross,
       address = {Dubrovnik, Croatia},
       author = {Mollanorozy, Sepideh  and
@@ -6809,9 +6809,9 @@ to restore natural Japanese text without artificial spaces.
       url = {https://aclanthology.org/2023.sigtyp-1.9},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6829,9 +6829,9 @@ Large Movie Review Dataset translated to Javanese. This is a dataset for binary 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wongso2021causal,
       author = {Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
       booktitle = {2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
@@ -6840,9 +6840,9 @@ Large Movie Review Dataset translated to Javanese. This is a dataset for binary 
       title = {Causal and Masked Language Modeling of Javanese Language using Transformer-based Architectures},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6861,9 +6861,9 @@ Large Movie Review Dataset translated to Javanese. This is a dataset for binary 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wongso2021causal,
       author = {Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
       booktitle = {2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
@@ -6872,9 +6872,9 @@ Large Movie Review Dataset translated to Javanese. This is a dataset for binary 
       title = {Causal and Masked Language Modeling of Javanese Language using Transformer-based Architectures},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6892,9 +6892,9 @@ Topic classification dataset of human-annotated news headlines. Part of the Kore
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{park2021klue,
       archiveprefix = {arXiv},
       author = {Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
@@ -6903,9 +6903,9 @@ Topic classification dataset of human-annotated news headlines. Part of the Kore
       title = {KLUE: Korean Language Understanding Evaluation},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6924,9 +6924,9 @@ Topic classification dataset of human-annotated news headlines. Part of the Kore
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{park2021klue,
       archiveprefix = {arXiv},
       author = {Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
@@ -6935,9 +6935,9 @@ Topic classification dataset of human-annotated news headlines. Part of the Kore
       title = {KLUE: Korean Language Understanding Evaluation},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6955,18 +6955,18 @@ The Kannada news dataset contains only the headlines of news article in three ca
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -6985,18 +6985,18 @@ The Kannada news dataset contains only the headlines of news article in three ca
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7014,9 +7014,9 @@ Kinopoisk review sentiment classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{blinov2013research,
       author = {Blinov, PD and Klekovkina, Maria and Kotelnikov, Eugeny and Pestov, Oleg},
       journal = {Computational Linguistics and Intellectual Technologies},
@@ -7026,9 +7026,9 @@ Kinopoisk review sentiment classification
       volume = {2},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7046,18 +7046,18 @@ The KorFin-ASC is an extension of KorFin-ABSA, which is a financial sentiment an
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{son2023removing,
       author = {Son, Guijin and Lee, Hanwool and Kang, Nahyeon and Hahm, Moonjeong},
       journal = {arXiv preprint arXiv:2301.03136},
       title = {Removing Non-Stationary Knowledge From Pre-Trained Language Models for Entity-Level Sentiment Classification in Finance},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7070,7 +7070,7 @@ The dataset was created to provide the first human-labeled Korean corpus for
         serves as a temporary solution, and the fundamental issue has not been solved yet. This dataset
         hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators,
         consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.
-
+        
 
 **Dataset:** [`mteb/KorHateClassification`](https://huggingface.co/datasets/mteb/KorHateClassification) • **License:** cc-by-sa-4.0 • [Learn more →](https://paperswithcode.com/dataset/korean-hatespeech-dataset)
 
@@ -7082,9 +7082,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{moon2020beep,
       archiveprefix = {arXiv},
       author = {Jihyung Moon and Won Ik Cho and Junbum Lee},
@@ -7093,9 +7093,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
       title = {BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7121,9 +7121,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{moon2020beep,
       archiveprefix = {arXiv},
       author = {Jihyung Moon and Won Ik Cho and Junbum Lee},
@@ -7132,9 +7132,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
       title = {BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7148,7 +7148,7 @@ The dataset was created to provide the first human-labeled Korean corpus for
         The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm
         and variants of it were used to return tweets. It was preprocessed by removing the keyword
         hashtag, urls and mentions of the user to preserve anonymity.
-
+        
 
 **Dataset:** [`mteb/KorSarcasmClassification`](https://huggingface.co/datasets/mteb/KorSarcasmClassification) • **License:** mit • [Learn more →](https://github.com/SpellOnYou/korean-sarcasm)
 
@@ -7160,9 +7160,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{kim2019kocasm,
       author = {Kim, Jiwon and Cho, Won Ik},
       howpublished = {https://github.com/SpellOnYou/korean-sarcasm},
@@ -7171,9 +7171,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
       title = {Kocasm: Korean Automatic Sarcasm Detection},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7200,9 +7200,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{kim2019kocasm,
       author = {Kim, Jiwon and Cho, Won Ik},
       howpublished = {https://github.com/SpellOnYou/korean-sarcasm},
@@ -7211,9 +7211,9 @@ The dataset was created to provide the first human-labeled Korean corpus for
       title = {Kocasm: Korean Automatic Sarcasm Detection},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7231,9 +7231,9 @@ Kurdish Sentiment Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{article,
       author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
       doi = {10.1007/s10579-023-09716-6},
@@ -7243,9 +7243,9 @@ Kurdish Sentiment Dataset
       title = {KurdiSent: a corpus for kurdish sentiment analysis},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7264,9 +7264,9 @@ Kurdish Sentiment Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{article,
       author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
       doi = {10.1007/s10579-023-09716-6},
@@ -7276,9 +7276,9 @@ Kurdish Sentiment Dataset
       title = {KurdiSent: a corpus for kurdish sentiment analysis},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7296,9 +7296,9 @@ A language identification dataset for 20 languages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{conneau2018xnli,
       author = {Conneau, Alexis
     and Rinott, Ruty
@@ -7314,9 +7314,9 @@ A language identification dataset for 20 languages.
       title = {XNLI: Evaluating Cross-lingual Sentence Representations},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7334,9 +7334,9 @@ The leipzig corpora collection, annotated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{quasthoff-etal-2006-corpus,
       abstract = {A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.},
       address = {Genoa, Italy},
@@ -7357,9 +7357,9 @@ The leipzig corpora collection, annotated for sentiment
       url = {http://www.lrec-conf.org/proceedings/lrec2006/pdf/641_pdf.pdf},
       year = {2006},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7377,9 +7377,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7388,7 +7388,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7397,9 +7397,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7417,9 +7417,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7428,7 +7428,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7437,9 +7437,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7457,9 +7457,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7468,7 +7468,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7477,9 +7477,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7497,9 +7497,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7508,7 +7508,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7517,9 +7517,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7537,9 +7537,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7548,7 +7548,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7557,9 +7557,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7577,9 +7577,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7588,7 +7588,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7597,9 +7597,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7617,9 +7617,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7628,7 +7628,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7637,9 +7637,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7657,9 +7657,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7668,7 +7668,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7677,9 +7677,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7697,9 +7697,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7708,7 +7708,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7717,9 +7717,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7737,9 +7737,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7748,7 +7748,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7757,9 +7757,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7777,9 +7777,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7788,7 +7788,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7797,9 +7797,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7817,9 +7817,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7828,7 +7828,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7837,9 +7837,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7857,9 +7857,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7868,7 +7868,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7877,9 +7877,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7897,9 +7897,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7908,7 +7908,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7917,9 +7917,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7937,9 +7937,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7948,7 +7948,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7957,9 +7957,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -7977,9 +7977,9 @@ This is a binary classification task in which the model must determine if a user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -7988,7 +7988,7 @@ This is a binary classification task in which the model must determine if a user
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @dataset{learned_hands,
       author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
       note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
@@ -7997,9 +7997,9 @@ This is a binary classification task in which the model must determine if a user
       urldate = {2022-05-21},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8017,9 +8017,9 @@ Given an excerpt from a district court opinion, classify if it relies on statist
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -8028,9 +8028,9 @@ Given an excerpt from a district court opinion, classify if it relies on statist
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8049,9 +8049,9 @@ Given an excerpt from a district court opinion, classify if it relies on statist
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -8060,9 +8060,9 @@ Given an excerpt from a district court opinion, classify if it relies on statist
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8105,7 +8105,7 @@ This task was constructed from the MAUD dataset, which consists of over 47,000 l
         32. MAUD Specific Performance: Given an excerpt from a merger agreement and the task is to answer: what is the wording of the Specific Performance clause regarding the parties' entitlement in the event of a contractual breach, amongst the multiple choice options.
         33. MAUD Tail Period Length: Given an excerpt from a merger agreement and the task is to answer: how long is the Tail Period, amongst the multiple choice options.
         34. MAUD Type Of Consideration: Given an excerpt from a merger agreement and the task is to answer: what type of consideration is specified in this agreement, amongst the multiple choice options.
-
+        
 
 **Dataset:** [`mteb/MAUDLegalBenchClassification`](https://huggingface.co/datasets/mteb/MAUDLegalBenchClassification) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/nguha/legalbench)
 
@@ -8117,9 +8117,9 @@ This task was constructed from the MAUD dataset, which consists of over 47,000 l
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -8128,16 +8128,16 @@ This task was constructed from the MAUD dataset, which consists of over 47,000 l
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{wang2023maud,
       author = {Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
       journal = {arXiv preprint arXiv:2301.00876},
       title = {MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8193,9 +8193,9 @@ This task was constructed from the MAUD dataset, which consists of over 47,000 l
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -8204,16 +8204,16 @@ This task was constructed from the MAUD dataset, which consists of over 47,000 l
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{wang2023maud,
       author = {Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
       journal = {arXiv preprint arXiv:2301.00876},
       title = {MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8231,9 +8231,9 @@ MTOP: Multilingual Task-Oriented Semantic Parsing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{li-etal-2021-mtop,
       abstract = {Scaling semantic parsing models for task-oriented dialog systems to new languages is often expensive and time-consuming due to the lack of available datasets. Available datasets suffer from several shortcomings: a) they contain few languages b) they contain small amounts of labeled examples per language c) they are based on the simple intent and slot detection paradigm for non-compositional queries. In this paper, we present a new multilingual dataset, called MTOP, comprising of 100k annotated utterances in 6 languages across 11 domains. We use this dataset and other publicly available datasets to conduct a comprehensive benchmarking study on using various state-of-the-art multilingual pre-trained models for task-oriented semantic parsing. We achieve an average improvement of +6.3 points on Slot F1 for the two existing multilingual datasets, over best results reported in their experiments. Furthermore, we demonstrate strong zero-shot performance using pre-trained models combined with automatic translation and alignment, and a proposed distant supervision method to reduce the noise in slot label projection.},
       address = {Online},
@@ -8255,9 +8255,9 @@ MTOP: Multilingual Task-Oriented Semantic Parsing
       url = {https://aclanthology.org/2021.eacl-main.257},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8279,9 +8279,9 @@ A translated dataset from MTOP: Multilingual Task-Oriented Semantic Parsing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -8291,9 +8291,9 @@ A translated dataset from MTOP: Multilingual Task-Oriented Semantic Parsing
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8311,9 +8311,9 @@ MTOP: Multilingual Task-Oriented Semantic Parsing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{li-etal-2021-mtop,
       abstract = {Scaling semantic parsing models for task-oriented dialog systems to new languages is often expensive and time-consuming due to the lack of available datasets. Available datasets suffer from several shortcomings: a) they contain few languages b) they contain small amounts of labeled examples per language c) they are based on the simple intent and slot detection paradigm for non-compositional queries. In this paper, we present a new multilingual dataset, called MTOP, comprising of 100k annotated utterances in 6 languages across 11 domains. We use this dataset and other publicly available datasets to conduct a comprehensive benchmarking study on using various state-of-the-art multilingual pre-trained models for task-oriented semantic parsing. We achieve an average improvement of +6.3 points on Slot F1 for the two existing multilingual datasets, over best results reported in their experiments. Furthermore, we demonstrate strong zero-shot performance using pre-trained models combined with automatic translation and alignment, and a proposed distant supervision method to reduce the noise in slot label projection.},
       address = {Online},
@@ -8335,9 +8335,9 @@ MTOP: Multilingual Task-Oriented Semantic Parsing
       url = {https://aclanthology.org/2021.eacl-main.257},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8359,9 +8359,9 @@ A translated dataset from MTOP: Multilingual Task-Oriented Semantic Parsing
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -8371,9 +8371,9 @@ A translated dataset from MTOP: Multilingual Task-Oriented Semantic Parsing
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8391,9 +8391,9 @@ An Macedonian dataset for tweet sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{jovanoski-etal-2015-sentiment,
       address = {Hissar, Bulgaria},
       author = {Jovanoski, Dame  and
@@ -8410,9 +8410,9 @@ An Macedonian dataset for tweet sentiment classification.
       url = {https://aclanthology.org/R15-1034},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8431,9 +8431,9 @@ An Macedonian dataset for tweet sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{jovanoski-etal-2015-sentiment,
       address = {Hissar, Bulgaria},
       author = {Jovanoski, Dame  and
@@ -8450,9 +8450,9 @@ An Macedonian dataset for tweet sentiment classification.
       url = {https://aclanthology.org/R15-1034},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8470,18 +8470,18 @@ A Malayalam dataset for 3-class classification of Malayalam news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8500,18 +8500,18 @@ A Malayalam dataset for 3-class classification of Malayalam news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8529,18 +8529,18 @@ A Marathi dataset for 3-class classification of Marathi news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8559,18 +8559,18 @@ A Marathi dataset for 3-class classification of Marathi news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8588,9 +8588,9 @@ MasakhaNEWS is the largest publicly available dataset for news topic classificat
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{adelani2023masakhanews,
       archiveprefix = {arXiv},
       author = {David Ifeoluwa Adelani and Marek Masiak and Israel Abebe Azime and Jesujoba Alabi and Atnafu Lambebo Tonja and Christine Mwase and Odunayo Ogundepo and Bonaventure F. P. Dossou and Akintunde Oladipo and Doreen Nixdorf and Chris Chinenye Emezue and sana al-azzawi and Blessing Sibanda and Davis David and Lolwethu Ndolela and Jonathan Mukiibi and Tunde Ajayi and Tatiana Moteu and Brian Odhiambo and Abraham Owodunni and Nnaemeka Obiefuna and Muhidin Mohamed and Shamsuddeen Hassan Muhammad and Teshome Mulugeta Ababu and Saheed Abdullahi Salahudeen and Mesay Gemeda Yigezu and Tajuddeen Gwadabe and Idris Abdulmumin and Mahlet Taye and Oluwabusayo Awoyomi and Iyanuoluwa Shode and Tolulope Adelani and Habiba Abdulganiyu and Abdul-Hakeem Omotayo and Adetola Adeeko and Abeeb Afolabi and Anuoluwapo Aremu and Olanrewaju Samuel and Clemencia Siro and Wangari Kimotho and Onyekachi Ogbu and Chinedu Mbonu and Chiamaka Chukwuneke and Samuel Fanijo and Jessica Ojo and Oyinkansola Awosan and Tadesse Kebede and Toadoum Sari Sakayo and Pamela Nyatsine and Freedmore Sidume and Oreen Yousuf and Mardiyyah Oduwole and Tshinu Tshinu and Ussen Kimanuka and Thina Diko and Siyanda Nxakama and Sinodos Nigusse and Abdulmejid Johar and Shafie Mohamed and Fuad Mire Hassan and Moges Ahmed Mehamed and Evrard Ngabire and Jules Jules and Ivan Ssenkungu and Pontus Stenetorp},
@@ -8599,9 +8599,9 @@ MasakhaNEWS is the largest publicly available dataset for news topic classificat
       title = {MasakhaNEWS: News Topic Classification for African languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8619,9 +8619,9 @@ MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 5
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{fitzgerald2022massive,
       archiveprefix = {arXiv},
       author = {Jack FitzGerald and Christopher Hench and Charith Peris and Scott Mackie and Kay Rottmann and Ana Sanchez and Aaron Nash and Liam Urbach and Vishesh Kakarala and Richa Singh and Swetha Ranganath and Laurie Crist and Misha Britan and Wouter Leeuwis and Gokhan Tur and Prem Natarajan},
@@ -8630,9 +8630,9 @@ MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 5
       title = {MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8654,9 +8654,9 @@ A translated dataset from MASSIVE: A 1M-Example Multilingual Natural Language Un
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -8666,9 +8666,9 @@ A translated dataset from MASSIVE: A 1M-Example Multilingual Natural Language Un
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8686,9 +8686,9 @@ MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 5
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{fitzgerald2022massive,
       archiveprefix = {arXiv},
       author = {Jack FitzGerald and Christopher Hench and Charith Peris and Scott Mackie and Kay Rottmann and Ana Sanchez and Aaron Nash and Liam Urbach and Vishesh Kakarala and Richa Singh and Swetha Ranganath and Laurie Crist and Misha Britan and Wouter Leeuwis and Gokhan Tur and Prem Natarajan},
@@ -8697,9 +8697,9 @@ MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 5
       title = {MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8721,9 +8721,9 @@ A translated dataset from MASSIVE: A 1M-Example Multilingual Natural Language Un
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -8733,9 +8733,9 @@ A translated dataset from MASSIVE: A 1M-Example Multilingual Natural Language Un
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8753,9 +8753,9 @@ The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldav
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Butnaru-ACL-2019,
       author = {Andrei M. Butnaru and Radu Tudor Ionescu},
       booktitle = {Proceedings of ACL},
@@ -8763,9 +8763,9 @@ The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldav
       title = {{MOROCO: The Moldavian and Romanian Dialectal Corpus}},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8784,9 +8784,9 @@ The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldav
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Butnaru-ACL-2019,
       author = {Andrei M. Butnaru and Radu Tudor Ionescu},
       booktitle = {Proceedings of ACL},
@@ -8794,9 +8794,9 @@ The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldav
       title = {{MOROCO: The Moldavian and Romanian Dialectal Corpus}},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8814,18 +8814,18 @@ The Allociné dataset is a French-language dataset for sentiment analysis that c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{blard2020,
       author = {Théophile Blard},
       title = {French sentiment analysis with BERT},
       url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8844,18 +8844,18 @@ The Allociné dataset is a French-language dataset for sentiment analysis that c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{blard2020,
       author = {Théophile Blard},
       title = {French sentiment analysis with BERT},
       url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8864,7 +8864,7 @@ The Allociné dataset is a French-language dataset for sentiment analysis that c
 Hate speech detection dataset with binary
                        (hateful vs non-hateful) labels. Includes 25+ distinct types of hate
                        and challenging non-hate, and 11 languages.
-
+                     
 
 **Dataset:** [`mteb/multi-hatecheck`](https://huggingface.co/datasets/mteb/multi-hatecheck) • **License:** cc-by-4.0 • [Learn more →](https://aclanthology.org/2022.woah-1.15/)
 
@@ -8876,9 +8876,9 @@ Hate speech detection dataset with binary
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{rottger-etal-2021-hatecheck,
       abstract = {Detecting online hate is a difficult task that even state-of-the-art models struggle with. Typically, hate speech detection models are evaluated by measuring their performance on held-out test data using metrics such as accuracy and F1 score. However, this approach makes it difficult to identify specific model weak points. It also risks overestimating generalisable model performance due to increasingly well-evidenced systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, we introduce HateCheck, a suite of functional tests for hate speech detection models. We specify 29 model functionalities motivated by a review of previous research and a series of interviews with civil society stakeholders. We craft test cases for each functionality and validate their quality through a structured annotation process. To illustrate HateCheck{'}s utility, we test near-state-of-the-art transformer models as well as two popular commercial models, revealing critical model weaknesses.},
       address = {Online},
@@ -8901,7 +8901,7 @@ Hate speech detection dataset with binary
       url = {https://aclanthology.org/2021.acl-long.4},
       year = {2021},
     }
-
+    
     @inproceedings{rottger-etal-2022-multilingual,
       abstract = {Hate speech detection models are typically evaluated on held-out test sets. However, this risks painting an incomplete and potentially misleading picture of model performance because of increasingly well-documented systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, recent research has thus introduced functional tests for hate speech detection models. However, these tests currently only exist for English-language content, which means that they cannot support the development of more effective models in other languages spoken by billions across the world. To help address this issue, we introduce Multilingual HateCheck (MHC), a suite of functional tests for multilingual hate speech detection models. MHC covers 34 functionalities across ten languages, which is more languages than any other hate speech dataset. To illustrate MHC{'}s utility, we train and test a high-performing multilingual hate speech detection model, and reveal critical model weaknesses for monolingual and cross-lingual applications.},
       address = {Seattle, Washington (Hybrid)},
@@ -8924,9 +8924,9 @@ Hate speech detection dataset with binary
       url = {https://aclanthology.org/2022.woah-1.15},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -8969,9 +8969,9 @@ Sentiment classification dataset with binary (positive vs negative sentiment) la
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{mollanorozy-etal-2023-cross,
       address = {Dubrovnik, Croatia},
       author = {Mollanorozy, Sepideh  and
@@ -8995,9 +8995,9 @@ Sentiment classification dataset with binary (positive vs negative sentiment) la
       url = {https://aclanthology.org/2023.sigtyp-1.9},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9015,9 +9015,9 @@ The Myanmar News dataset on Hugging Face contains news articles in Burmese. It i
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Khine2017,
       author = {A. H. Khine and K. T. Nwet and K. M. Soe},
       booktitle = {15th Proceedings of International Conference on Computer Applications},
@@ -9026,9 +9026,9 @@ The Myanmar News dataset on Hugging Face contains news articles in Burmese. It i
       title = {Automatic Myanmar News Classification},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9047,9 +9047,9 @@ The Myanmar News dataset on Hugging Face contains news articles in Burmese. It i
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Khine2017,
       author = {A. H. Khine and K. T. Nwet and K. M. Soe},
       booktitle = {15th Proceedings of International Conference on Computer Applications},
@@ -9058,9 +9058,9 @@ The Myanmar News dataset on Hugging Face contains news articles in Burmese. It i
       title = {Automatic Myanmar News Classification},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9078,11 +9078,11 @@ Twitter Analysis Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -9101,11 +9101,11 @@ Twitter Analysis Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -9123,9 +9123,9 @@ Answer questions on judicial ethics from the New York State Unified Court System
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9134,9 +9134,9 @@ Answer questions on judicial ethics from the New York State Unified Court System
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9154,9 +9154,9 @@ NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset fo
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{muhammad-etal-2022-naijasenti,
       address = {Marseille, France},
       author = {Muhammad, Shamsuddeen Hassan  and
@@ -9179,15 +9179,15 @@ NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset fo
       url = {https://aclanthology.org/2022.lrec-1.63},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
 #### NepaliNewsClassification
 
-A Nepali dataset for 7500 news articles
+A Nepali dataset for 7500 news articles 
 
 **Dataset:** [`bpHigh/iNLTK_Nepali_News_Dataset`](https://huggingface.co/datasets/bpHigh/iNLTK_Nepali_News_Dataset) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/goru001/nlp-for-nepali)
 
@@ -9199,9 +9199,9 @@ A Nepali dataset for 7500 news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{arora-2020-inltk,
       abstract = {We present iNLTK, an open-source NLP library consisting of pre-trained language models and out-of-the-box support for Data Augmentation, Textual Similarity, Sentence Embeddings, Word Embeddings, Tokenization and Text Generation in 13 Indic Languages. By using pre-trained models from iNLTK for text classification on publicly available datasets, we significantly outperform previously reported results. On these datasets, we also show that by using pre-trained models and data augmentation from iNLTK, we can achieve more than 95{\%} of the previous best performance by using less than 10{\%} of the training data. iNLTK is already being widely used by the community and has 40,000+ downloads, 600+ stars and 100+ forks on GitHub.},
       address = {Online},
@@ -9221,9 +9221,9 @@ A Nepali dataset for 7500 news articles
       url = {https://aclanthology.org/2020.nlposs-1.10},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9242,9 +9242,9 @@ A Nepali dataset for 7500 news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{arora-2020-inltk,
       abstract = {We present iNLTK, an open-source NLP library consisting of pre-trained language models and out-of-the-box support for Data Augmentation, Textual Similarity, Sentence Embeddings, Word Embeddings, Tokenization and Text Generation in 13 Indic Languages. By using pre-trained models from iNLTK for text classification on publicly available datasets, we significantly outperform previously reported results. On these datasets, we also show that by using pre-trained models and data augmentation from iNLTK, we can achieve more than 95{\%} of the previous best performance by using less than 10{\%} of the training data. iNLTK is already being widely used by the community and has 40,000+ downloads, 600+ stars and 100+ forks on GitHub.},
       address = {Online},
@@ -9264,9 +9264,9 @@ A Nepali dataset for 7500 news articles
       url = {https://aclanthology.org/2020.nlposs-1.10},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9284,9 +9284,9 @@ Large News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -9298,9 +9298,9 @@ Large News Classification Dataset
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9319,9 +9319,9 @@ Large News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -9333,9 +9333,9 @@ Large News Classification Dataset
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9353,9 +9353,9 @@ A Norwegian dataset for sentiment classification on review
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{velldal-etal-2018-norec,
       address = {Miyazaki, Japan},
       author = {Velldal, Erik  and
@@ -9385,9 +9385,9 @@ A Norwegian dataset for sentiment classification on review
       url = {https://aclanthology.org/L18-1661},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9406,9 +9406,9 @@ A Norwegian dataset for sentiment classification on review
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{velldal-etal-2018-norec,
       address = {Miyazaki, Japan},
       author = {Velldal, Erik  and
@@ -9438,9 +9438,9 @@ A Norwegian dataset for sentiment classification on review
       url = {https://aclanthology.org/L18-1661},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9458,9 +9458,9 @@ A dataset for Nordic language identification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{haas-derczynski-2021-discriminating,
       abstract = {Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.},
       address = {Kiyv, Ukraine},
@@ -9480,9 +9480,9 @@ A dataset for Nordic language identification.
       url = {https://aclanthology.org/2021.vardial-1.8},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9500,9 +9500,9 @@ Norwegian parliament speeches annotated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kummervold-etal-2021-operationalizing,
       abstract = {In this work, we show the process of building a large-scale training set from digital and digitized collections at a national library. The resulting Bidirectional Encoder Representations from Transformers (BERT)-based language model for Norwegian outperforms multilingual BERT (mBERT) models in several token and sequence classification tasks for both Norwegian Bokm{\aa}l and Norwegian Nynorsk. Our model also improves the mBERT performance for other languages present in the corpus such as English, Swedish, and Danish. For languages not included in the corpus, the weights degrade moderately while keeping strong multilingual properties. Therefore, we show that building high-quality models within a memory institution using somewhat noisy optical character recognition (OCR) content is feasible, and we hope to pave the way for other memory institutions to follow.},
       address = {Reykjavik, Iceland (Online)},
@@ -9520,9 +9520,9 @@ Norwegian parliament speeches annotated for sentiment
       url = {https://aclanthology.org/2021.nodalida-main.3},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9541,9 +9541,9 @@ Norwegian parliament speeches annotated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kummervold-etal-2021-operationalizing,
       abstract = {In this work, we show the process of building a large-scale training set from digital and digitized collections at a national library. The resulting Bidirectional Encoder Representations from Transformers (BERT)-based language model for Norwegian outperforms multilingual BERT (mBERT) models in several token and sequence classification tasks for both Norwegian Bokm{\aa}l and Norwegian Nynorsk. Our model also improves the mBERT performance for other languages present in the corpus such as English, Swedish, and Danish. For languages not included in the corpus, the weights degrade moderately while keeping strong multilingual properties. Therefore, we show that building high-quality models within a memory institution using somewhat noisy optical character recognition (OCR) content is feasible, and we hope to pave the way for other memory institutions to follow.},
       address = {Reykjavik, Iceland (Online)},
@@ -9561,9 +9561,9 @@ Norwegian parliament speeches annotated for sentiment
       url = {https://aclanthology.org/2021.nodalida-main.3},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9581,9 +9581,9 @@ NusaParagraphEmotionClassification is a multi-class emotion classification on 10
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{cahyawijaya-etal-2023-nusawrites,
       address = {Nusa Dua, Bali},
       author = {Cahyawijaya, Samuel  and  Lovenia, Holy  and Koto, Fajri  and  Adhista, Dea  and  Dave, Emmanuel  and  Oktavianti, Sarah  and  Akbar, Salsabil  and  Lee, Jhonson  and  Shadieq, Nuur  and  Cenggoro, Tjeng Wawan  and  Linuwih, Hanung  and  Wilie, Bryan  and  Muridan, Galih  and  Winata, Genta  and  Moeljadi, David  and  Aji, Alham Fikri  and  Purwarianti, Ayu  and  Fung, Pascale},
@@ -9596,9 +9596,9 @@ NusaParagraphEmotionClassification is a multi-class emotion classification on 10
       url = {https://aclanthology.org/2023.ijcnlp-main.60},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9616,9 +9616,9 @@ NusaParagraphTopicClassification is a multi-class topic classification on 10 Ind
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{cahyawijaya-etal-2023-nusawrites,
       address = {Nusa Dua, Bali},
       author = {Cahyawijaya, Samuel  and  Lovenia, Holy  and Koto, Fajri  and  Adhista, Dea  and  Dave, Emmanuel  and  Oktavianti, Sarah  and  Akbar, Salsabil  and  Lee, Jhonson  and  Shadieq, Nuur  and  Cenggoro, Tjeng Wawan  and  Linuwih, Hanung  and  Wilie, Bryan  and  Muridan, Galih  and  Winata, Genta  and  Moeljadi, David  and  Aji, Alham Fikri  and  Purwarianti, Ayu  and  Fung, Pascale},
@@ -9631,9 +9631,9 @@ NusaParagraphTopicClassification is a multi-class topic classification on 10 Ind
       url = {https://aclanthology.org/2023.ijcnlp-main.60},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9651,9 +9651,9 @@ NusaX is a high-quality multilingual parallel corpus that covers 12 languages, I
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{winata2022nusax,
       archiveprefix = {arXiv},
       author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya,
@@ -9666,9 +9666,9 @@ NusaX is a high-quality multilingual parallel corpus that covers 12 languages, I
       title = {NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9686,9 +9686,9 @@ Given a clause from a privacy policy, classify if the clause describes how long 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9697,7 +9697,7 @@ Given a clause from a privacy policy, classify if the clause describes how long 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9705,9 +9705,9 @@ Given a clause from a privacy policy, classify if the clause describes how long 
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9725,9 +9725,9 @@ Given a clause from a privacy policy, classify if the clause describes how user 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9736,7 +9736,7 @@ Given a clause from a privacy policy, classify if the clause describes how user 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9744,9 +9744,9 @@ Given a clause from a privacy policy, classify if the clause describes how user 
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9765,9 +9765,9 @@ Given a clause from a privacy policy, classify if the clause describes how user 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9776,7 +9776,7 @@ Given a clause from a privacy policy, classify if the clause describes how user 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9784,9 +9784,9 @@ Given a clause from a privacy policy, classify if the clause describes how user 
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9804,9 +9804,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9815,7 +9815,7 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9823,9 +9823,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9844,9 +9844,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9855,7 +9855,7 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9863,9 +9863,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9883,9 +9883,9 @@ Given a clause from a privacy policy, classify if the clause describes how and w
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9894,7 +9894,7 @@ Given a clause from a privacy policy, classify if the clause describes how and w
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9902,9 +9902,9 @@ Given a clause from a privacy policy, classify if the clause describes how and w
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9922,9 +9922,9 @@ Given a clause from a privacy policy, classify if the clause describe practices 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9933,7 +9933,7 @@ Given a clause from a privacy policy, classify if the clause describe practices 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9941,9 +9941,9 @@ Given a clause from a privacy policy, classify if the clause describe practices 
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -9961,9 +9961,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -9972,7 +9972,7 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -9980,9 +9980,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10000,9 +10000,9 @@ Given a clause from a privacy policy, classify if the clause describe how user i
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10011,7 +10011,7 @@ Given a clause from a privacy policy, classify if the clause describe how user i
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -10019,9 +10019,9 @@ Given a clause from a privacy policy, classify if the clause describe how user i
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10039,9 +10039,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10050,7 +10050,7 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -10058,9 +10058,9 @@ Given a clause from a privacy policy, classify if the clause describes if and ho
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10078,9 +10078,9 @@ Given a clause fro ma privacy policy, classify if the clause describes the choic
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10089,7 +10089,7 @@ Given a clause fro ma privacy policy, classify if the clause describes the choic
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -10097,9 +10097,9 @@ Given a clause fro ma privacy policy, classify if the clause describes the choic
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10118,9 +10118,9 @@ Given a clause fro ma privacy policy, classify if the clause describes the choic
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10129,7 +10129,7 @@ Given a clause fro ma privacy policy, classify if the clause describes the choic
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{wilson2016creation,
       author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
       booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
@@ -10137,9 +10137,9 @@ Given a clause fro ma privacy policy, classify if the clause describes the choic
       title = {The creation and analysis of a website privacy policy corpus},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10157,18 +10157,18 @@ A Odia dataset for 3-class classification of Odia news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10187,18 +10187,18 @@ A Odia dataset for 3-class classification of Odia news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10216,18 +10216,18 @@ Sentiment Analysis of User Reviews on Online Shopping Websites
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2023c,
       author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighof, Niklas},
       journal = {arXiv preprint arXiv:2309.07597},
       title = {C-pack: Packaged resources to advance general chinese embedding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10266,7 +10266,7 @@ This task classifies questions asked by Supreme Court justices at oral argument 
         5. Criticism - questions criticizing an advocate’s position
         6. Communicate - question designed primarily to communicate with other justices
         7. Humor - questions designed to interject humor into the argument and relieve tension
-
+        
 
 **Dataset:** [`mteb/OralArgumentQuestionPurposeLegalBenchClassification`](https://huggingface.co/datasets/mteb/OralArgumentQuestionPurposeLegalBenchClassification) • **License:** cc-by-4.0 • [Learn more →](https://huggingface.co/datasets/nguha/legalbench)
 
@@ -10278,9 +10278,9 @@ This task classifies questions asked by Supreme Court justices at oral argument 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10289,9 +10289,9 @@ This task classifies questions asked by Supreme Court justices at oral argument 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10318,9 +10318,9 @@ This task classifies questions asked by Supreme Court justices at oral argument 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10329,9 +10329,9 @@ This task classifies questions asked by Supreme Court justices at oral argument 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10349,9 +10349,9 @@ This task consists of classifying whether or not a particular sentence of case l
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10360,7 +10360,7 @@ This task consists of classifying whether or not a particular sentence of case l
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{zheng2021does,
       author = {Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
       booktitle = {Proceedings of the eighteenth international conference on artificial intelligence and law},
@@ -10368,9 +10368,9 @@ This task consists of classifying whether or not a particular sentence of case l
       title = {When does pretraining help? assessing self-supervised learning for law and the casehold dataset of 53,000+ legal holdings},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10389,9 +10389,9 @@ This task consists of classifying whether or not a particular sentence of case l
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10400,7 +10400,7 @@ This task consists of classifying whether or not a particular sentence of case l
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @inproceedings{zheng2021does,
       author = {Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
       booktitle = {Proceedings of the eighteenth international conference on artificial intelligence and law},
@@ -10408,9 +10408,9 @@ This task consists of classifying whether or not a particular sentence of case l
       title = {When does pretraining help? assessing self-supervised learning for law and the casehold dataset of 53,000+ legal holdings},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10428,9 +10428,9 @@ Polish Paraphrase Corpus
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{augustyniak2022waydesigningcompilinglepiszcze,
       archiveprefix = {arXiv},
       author = {Łukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Szymczak and Marcin Wątroba and Arkadiusz Janz and Piotr Szymański and Mikołaj Morzy and Tomasz Kajdanowicz and Maciej Piasecki},
@@ -10440,9 +10440,9 @@ Polish Paraphrase Corpus
       url = {https://arxiv.org/abs/2211.13112},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10461,9 +10461,9 @@ Polish Paraphrase Corpus
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{augustyniak2022waydesigningcompilinglepiszcze,
       archiveprefix = {arXiv},
       author = {Łukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Szymczak and Marcin Wątroba and Arkadiusz Janz and Piotr Szymański and Mikołaj Morzy and Tomasz Kajdanowicz and Maciej Piasecki},
@@ -10473,9 +10473,9 @@ Polish Paraphrase Corpus
       url = {https://arxiv.org/abs/2211.13112},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10493,9 +10493,9 @@ Given a statute, determine if the text contains an explicit private right of act
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10504,9 +10504,9 @@ Given a statute, determine if the text contains an explicit private right of act
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10524,9 +10524,9 @@ Classification Dataset of Patents and Abstract
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sharma-etal-2019-bigpatent,
       abstract = {Most existing text summarization datasets are compiled from the news domain, where summaries have a flattened discourse structure. In such datasets, summary-worthy content often appears in the beginning of input articles. Moreover, large segments from input articles are present verbatim in their respective summaries. These issues impede the learning and evaluation of systems that can understand an article{'}s global content structure as well as produce abstractive summaries with high compression ratio. In this work, we present a novel dataset, BIGPATENT, consisting of 1.3 million records of U.S. patent documents along with human written abstractive summaries. Compared to existing summarization datasets, BIGPATENT has the following properties: i) summaries contain a richer discourse structure with more recurring entities, ii) salient content is evenly distributed in the input, and iii) lesser and shorter extractive fragments are present in the summaries. Finally, we train and evaluate baselines and popular learning models on BIGPATENT to shed light on new challenges and motivate future directions for summarization research.},
       address = {Florence, Italy},
@@ -10545,9 +10545,9 @@ Classification Dataset of Patents and Abstract
       url = {https://aclanthology.org/P19-1212},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10566,9 +10566,9 @@ Classification Dataset of Patents and Abstract
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{sharma-etal-2019-bigpatent,
       abstract = {Most existing text summarization datasets are compiled from the news domain, where summaries have a flattened discourse structure. In such datasets, summary-worthy content often appears in the beginning of input articles. Moreover, large segments from input articles are present verbatim in their respective summaries. These issues impede the learning and evaluation of systems that can understand an article{'}s global content structure as well as produce abstractive summaries with high compression ratio. In this work, we present a novel dataset, BIGPATENT, consisting of 1.3 million records of U.S. patent documents along with human written abstractive summaries. Compared to existing summarization datasets, BIGPATENT has the following properties: i) summaries contain a richer discourse structure with more recurring entities, ii) salient content is evenly distributed in the input, and iii) lesser and shorter extractive fragments are present in the summaries. Finally, we train and evaluate baselines and popular learning models on BIGPATENT to shed light on new challenges and motivate future directions for summarization research.},
       address = {Florence, Italy},
@@ -10587,9 +10587,9 @@ Classification Dataset of Patents and Abstract
       url = {https://aclanthology.org/P19-1212},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10607,7 +10607,7 @@ PerSHOP - A Persian dataset for shopping dialogue systems modeling
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{mahmoudi2024pershop,
       author = {Mahmoudi, Keyvan and Faili, Heshaam},
@@ -10616,7 +10616,7 @@ PerSHOP - A Persian dataset for shopping dialogue systems modeling
       year = {2024},
     }
     ```
-
+    
 
 
 
@@ -10634,7 +10634,7 @@ PerSHOP - A Persian dataset for shopping dialogue systems modeling
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{mahmoudi2024pershop,
       author = {Mahmoudi, Keyvan and Faili, Heshaam},
@@ -10643,7 +10643,7 @@ PerSHOP - A Persian dataset for shopping dialogue systems modeling
       year = {2024},
     }
     ```
-
+    
 
 
 
@@ -10661,9 +10661,9 @@ Persian Food Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{ParsBERT,
       author = {Mehrdad Farahani, Mohammad Gharachorloo, Marzieh Farahani, Mohammad Manthouri},
       journal = {ArXiv},
@@ -10671,9 +10671,9 @@ Persian Food Review Dataset
       volume = {abs/2005.12515},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10691,11 +10691,11 @@ Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -10714,11 +10714,11 @@ Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sa
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -10736,9 +10736,9 @@ Given a fact pattern describing the set of contacts between a plaintiff, defenda
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -10747,9 +10747,9 @@ Given a fact pattern describing the set of contacts between a plaintiff, defenda
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10767,9 +10767,9 @@ Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{sheng2020investigating,
       archiveprefix = {arXiv},
       author = {Emily Sheng and David Uthus},
@@ -10778,9 +10778,9 @@ Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
       title = {Investigating Societal Biases in a Poetry Composition System},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10799,9 +10799,9 @@ Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{sheng2020investigating,
       archiveprefix = {arXiv},
       author = {Emily Sheng and David Uthus},
@@ -10810,9 +10810,9 @@ Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
       title = {Investigating Societal Biases in a Poetry Composition System},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10830,9 +10830,9 @@ A collection of Polish online reviews from four domains: medicine, hotels, produ
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kocon-etal-2019-multi,
       abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
       address = {Hong Kong, China},
@@ -10848,9 +10848,9 @@ A collection of Polish online reviews from four domains: medicine, hotels, produ
       url = {https://aclanthology.org/K19-1092},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10868,9 +10868,9 @@ A collection of Polish online reviews from four domains: medicine, hotels, produ
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kocon-etal-2019-multi,
       abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
       address = {Hong Kong, China},
@@ -10886,9 +10886,9 @@ A collection of Polish online reviews from four domains: medicine, hotels, produ
       url = {https://aclanthology.org/K19-1092},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10930,18 +10930,18 @@ A Punjabi dataset for 2-class classification of Punjabi news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10959,9 +10959,9 @@ Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{elsahar2015building,
       author = {ElSahar, Hady and El-Beltagy, Samhaa R},
       booktitle = {International conference on intelligent text processing and computational linguistics},
@@ -10970,9 +10970,9 @@ Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysi
       title = {Building large arabic multi-domain resources for sentiment analysis},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -10991,9 +10991,9 @@ Dataset of 8156 restaurant reviews from qaym.com in Arabic for sentiment analysi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{elsahar2015building,
       author = {ElSahar, Hady and El-Beltagy, Samhaa R},
       booktitle = {International conference on intelligent text processing and computational linguistics},
@@ -11002,9 +11002,9 @@ Dataset of 8156 restaurant reviews from qaym.com in Arabic for sentiment analysi
       title = {Building large arabic multi-domain resources for sentiment analysis},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11022,18 +11022,18 @@ LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written i
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tache2101clustering,
       author = {Anca Maria Tache and Mihaela Gaman and Radu Tudor Ionescu},
       journal = {ArXiv},
       title = {Clustering Word Embeddings with Self-Organizing Maps. Application on LaRoSeDa -- A Large Romanian Sentiment Data Set},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11052,18 +11052,18 @@ LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written i
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{tache2101clustering,
       author = {Anca Maria Tache and Mihaela Gaman and Radu Tudor Ionescu},
       journal = {ArXiv},
       title = {Clustering Word Embeddings with Self-Organizing Maps. Application on LaRoSeDa -- A Large Romanian Sentiment Data Set},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11081,18 +11081,18 @@ An Romanian dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{dumitrescu2020birth,
       author = {Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
       journal = {arXiv preprint arXiv:2009.08712},
       title = {The birth of Romanian BERT},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11111,18 +11111,18 @@ An Romanian dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{dumitrescu2020birth,
       author = {Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
       journal = {arXiv preprint arXiv:2009.08712},
       title = {The birth of Romanian BERT},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11140,9 +11140,9 @@ Contains natural language data for human-robot interaction in home domain which 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{liu2019benchmarkingnaturallanguageunderstanding,
       archiveprefix = {arXiv},
       author = {Xingkun Liu and Arash Eshghi and Pawel Swietojanski and Verena Rieser},
@@ -11152,9 +11152,9 @@ Contains natural language data for human-robot interaction in home domain which 
       url = {https://arxiv.org/abs/1903.05566},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11172,9 +11172,9 @@ Product review classification (3-point scale) based on RuRevies dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Smetanin-SA-2019,
       author = {Sergey Smetanin and Michail Komarov},
       booktitle = {2019 IEEE 21st Conference on Business Informatics (CBI)},
@@ -11187,9 +11187,9 @@ Product review classification (3-point scale) based on RuRevies dataset
       volume = {01},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11208,9 +11208,9 @@ Product review classification (3-point scale) based on RuRevies dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Smetanin-SA-2019,
       author = {Sergey Smetanin and Michail Komarov},
       booktitle = {2019 IEEE 21st Conference on Business Informatics (CBI)},
@@ -11223,9 +11223,9 @@ Product review classification (3-point scale) based on RuRevies dataset
       volume = {01},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11247,9 +11247,9 @@ This binary classification task aims to determine whether a scientific paper
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -11263,9 +11263,9 @@ This binary classification task aims to determine whether a scientific paper
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11289,7 +11289,7 @@ Classification of scientific papers based on the GRNTI (State Rubricator of Scie
         This task uses the first level of the GRNTI hierarchy and top 28 classes by frequency.
 
         In this version, English language support has been added and data partitioning has been slightly modified.
-
+        
 
 **Dataset:** [`mlsa-iai-msu-lab/ru_sci_bench_mteb`](https://huggingface.co/datasets/mlsa-iai-msu-lab/ru_sci_bench_mteb) • **License:** mit • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb)
 
@@ -11301,9 +11301,9 @@ Classification of scientific papers based on the GRNTI (State Rubricator of Scie
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -11317,9 +11317,9 @@ Classification of scientific papers based on the GRNTI (State Rubricator of Scie
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11343,7 +11343,7 @@ Classification of scientific papers based on the OECD
         This task uses the first two levels of the OECD hierarchy, top 29 classes.
 
         In this version, English language support has been added and data partitioning has been slightly modified.
-
+        
 
 **Dataset:** [`mlsa-iai-msu-lab/ru_sci_bench_mteb`](https://huggingface.co/datasets/mlsa-iai-msu-lab/ru_sci_bench_mteb) • **License:** mit • [Learn more →](https://github.com/mlsa-iai-msu-lab/ru_sci_bench_mteb)
 
@@ -11355,9 +11355,9 @@ Classification of scientific papers based on the OECD
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -11371,9 +11371,9 @@ Classification of scientific papers based on the OECD
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11394,9 +11394,9 @@ This task involves classifying scientific papers (based on their title and abstr
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -11410,9 +11410,9 @@ This task involves classifying scientific papers (based on their title and abstr
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11467,9 +11467,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11479,7 +11479,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11488,9 +11488,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11508,9 +11508,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11520,7 +11520,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11529,9 +11529,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11549,9 +11549,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11561,7 +11561,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11570,9 +11570,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11590,9 +11590,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11602,7 +11602,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11611,9 +11611,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11631,9 +11631,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11643,7 +11643,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11652,9 +11652,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11672,9 +11672,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11684,7 +11684,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11693,9 +11693,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11713,9 +11713,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11725,7 +11725,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11734,9 +11734,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11754,9 +11754,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11766,7 +11766,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11775,9 +11775,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11795,9 +11795,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11807,7 +11807,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11816,9 +11816,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11836,9 +11836,9 @@ This is a binary classification task in which the LLM must determine if a supply
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chilton2017limitations,
       author = {Chilton, Adam S and Sarfaty, Galit A},
       journal = {Stan. J. Int'l L.},
@@ -11848,7 +11848,7 @@ This is a binary classification task in which the LLM must determine if a supply
       volume = {53},
       year = {2017},
     }
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -11857,9 +11857,9 @@ This is a binary classification task in which the LLM must determine if a supply
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11877,16 +11877,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     @inproceedings{pereira2020msds,
       author = {Pereira, Eliseu},
       booktitle = {15th Doctoral Symposium},
@@ -11894,9 +11894,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       title = {MSDS-OPP: Operator Procedures Prediction in Material Safety Data Sheets},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11915,16 +11915,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     @inproceedings{pereira2020msds,
       author = {Pereira, Eliseu},
       booktitle = {15th Doctoral Symposium},
@@ -11932,9 +11932,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       title = {MSDS-OPP: Operator Procedures Prediction in Material Safety Data Sheets},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11952,16 +11952,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     @inproceedings{pereira2020msds,
       author = {Pereira, Eliseu},
       booktitle = {15th Doctoral Symposium},
@@ -11969,9 +11969,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       title = {MSDS-OPP: Operator Procedures Prediction in Material Safety Data Sheets},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -11990,16 +11990,16 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     @inproceedings{pereira2020msds,
       author = {Pereira, Eliseu},
       booktitle = {15th Doctoral Symposium},
@@ -12007,9 +12007,9 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
       title = {MSDS-OPP: Operator Procedures Prediction in Material Safety Data Sheets},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12020,7 +12020,7 @@ SIB-200 is the largest publicly available topic classification
         annotated in English for the topics,  science/technology, travel, politics, sports,
         health, entertainment, and geography. The labels are then transferred to the other languages
         in Flores-200 which are human-translated.
-
+        
 
 **Dataset:** [`mteb/sib200`](https://huggingface.co/datasets/mteb/sib200) • **License:** cc-by-sa-4.0 • [Learn more →](https://arxiv.org/abs/2309.07445)
 
@@ -12032,18 +12032,18 @@ SIB-200 is the largest publicly available topic classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{adelani2023sib,
       author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
       journal = {arXiv preprint arXiv:2309.07445},
       title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12061,11 +12061,11 @@ SID Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -12084,17 +12084,17 @@ SID Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
 #### SanskritShlokasClassification
 
-This data set contains ~500 Shlokas
+This data set contains ~500 Shlokas  
 
 **Dataset:** [`bpHigh/iNLTK_Sanskrit_Shlokas_Dataset`](https://huggingface.co/datasets/bpHigh/iNLTK_Sanskrit_Shlokas_Dataset) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/goru001/nlp-for-sanskrit)
 
@@ -12106,9 +12106,9 @@ This data set contains ~500 Shlokas
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{arora-2020-inltk,
       abstract = {We present iNLTK, an open-source NLP library consisting of pre-trained language models and out-of-the-box support for Data Augmentation, Textual Similarity, Sentence Embeddings, Word Embeddings, Tokenization and Text Generation in 13 Indic Languages. By using pre-trained models from iNLTK for text classification on publicly available datasets, we significantly outperform previously reported results. On these datasets, we also show that by using pre-trained models and data augmentation from iNLTK, we can achieve more than 95{\%} of the previous best performance by using less than 10{\%} of the training data. iNLTK is already being widely used by the community and has 40,000+ downloads, 600+ stars and 100+ forks on GitHub.},
       address = {Online},
@@ -12128,9 +12128,9 @@ This data set contains ~500 Shlokas
       url = {https://aclanthology.org/2020.nlposs-1.10},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12148,9 +12148,9 @@ SardiStance is a unique dataset designed for the task of stance detection in Ita
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{cignarella2020sardistance,
       author = {Cignarella, Alessandra Teresa and Lai, Mirko and Bosco, Cristina and Patti, Viviana and Rosso, Paolo and others},
       booktitle = {CEUR WORKSHOP PROCEEDINGS},
@@ -12159,9 +12159,9 @@ SardiStance is a unique dataset designed for the task of stance detection in Ita
       title = {Sardistance@ evalita2020: Overview of the task on stance detection in italian tweets},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12180,9 +12180,9 @@ ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{nielsen-2023-scandeval,
       address = {T{\'o}rshavn, Faroe Islands},
       author = {Nielsen, Dan},
@@ -12196,9 +12196,9 @@ ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages
       url = {https://aclanthology.org/2023.nodalida-1.20},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12216,9 +12216,9 @@ The corpus is crawled from se.trustpilot.com, no.trustpilot.com, dk.trustpilot.c
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{isbister-etal-2021-stop,
       address = {Reykjavik, Iceland (Online)},
       author = {Isbister, Tim  and
@@ -12234,9 +12234,9 @@ The corpus is crawled from se.trustpilot.com, no.trustpilot.com, dk.trustpilot.c
       url = {https://aclanthology.org/2021.nodalida-main.42/},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12254,9 +12254,9 @@ Russian sentiment analysis evaluation SentiRuEval-2016 devoted to reputation mon
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{loukachevitch2016sentirueval,
       author = {Loukachevitch, NV and Rubtsova, Yu V},
       booktitle = {Computational Linguistics and Intellectual Technologies},
@@ -12264,9 +12264,9 @@ Russian sentiment analysis evaluation SentiRuEval-2016 devoted to reputation mon
       title = {SentiRuEval-2016: overcoming time gap and data sparsity in tweet sentiment analysis},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12285,9 +12285,9 @@ Russian sentiment analysis evaluation SentiRuEval-2016 devoted to reputation mon
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{loukachevitch2016sentirueval,
       author = {Loukachevitch, NV and Rubtsova, Yu V},
       booktitle = {Computational Linguistics and Intellectual Technologies},
@@ -12295,9 +12295,9 @@ Russian sentiment analysis evaluation SentiRuEval-2016 devoted to reputation mon
       title = {SentiRuEval-2016: overcoming time gap and data sparsity in tweet sentiment analysis},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12315,9 +12315,9 @@ Hindi Sentiment Analysis Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{OdiaGenAI,
       author = {Shantipriya Parida and Sambit Sekhar and Soumendra Kumar Sahoo and Swateek Jena and Abhijeet Parida and Satya Ranjan Dash and Guneet Singh Kohli},
       howpublished = {{https://huggingface.co/OdiaGenAI}},
@@ -12326,9 +12326,9 @@ Hindi Sentiment Analysis Dataset
       title = {OdiaGenAI: Generative AI and LLM Initiative for the Odia Language},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12347,9 +12347,9 @@ Hindi Sentiment Analysis Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{OdiaGenAI,
       author = {Shantipriya Parida and Sambit Sekhar and Soumendra Kumar Sahoo and Swateek Jena and Abhijeet Parida and Satya Ranjan Dash and Guneet Singh Kohli},
       howpublished = {{https://huggingface.co/OdiaGenAI}},
@@ -12358,9 +12358,9 @@ Hindi Sentiment Analysis Dataset
       title = {OdiaGenAI: Generative AI and LLM Initiative for the Odia Language},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12378,11 +12378,11 @@ The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment anal
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -12401,11 +12401,11 @@ The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment anal
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -12423,25 +12423,25 @@ This file contains news texts (sentences) belonging to 5 different news categori
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{deSilva2015,
       author = {Nisansa de Silva},
       journal = {Year of Publication},
       title = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
       year = {2015},
     }
-
+    
     @article{dhananjaya2022,
       author = {Dhananjaya et al.},
       journal = {Year of Publication},
       title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12460,25 +12460,25 @@ This file contains news texts (sentences) belonging to 5 different news categori
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{deSilva2015,
       author = {Nisansa de Silva},
       journal = {Year of Publication},
       title = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
       year = {2015},
     }
-
+    
     @article{dhananjaya2022,
       author = {Dhananjaya et al.},
       journal = {Year of Publication},
       title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12496,18 +12496,18 @@ This dataset contains Sinhala news headlines extracted from 9 news sources (webs
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{dhananjaya2022,
       author = {Dhananjaya et al.},
       journal = {Year of Publication},
       title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12526,18 +12526,18 @@ This dataset contains Sinhala news headlines extracted from 9 news sources (webs
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{dhananjaya2022,
       author = {Dhananjaya et al.},
       journal = {Year of Publication},
       title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12555,9 +12555,9 @@ Siswati News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Madodonga_Marivate_Adendorff_2023,
       author = {Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew},
       doi = {10.55492/dhasa.v4i01.4449},
@@ -12567,9 +12567,9 @@ Siswati News Classification Dataset
       volume = {4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12588,9 +12588,9 @@ Siswati News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{Madodonga_Marivate_Adendorff_2023,
       author = {Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew},
       doi = {10.55492/dhasa.v4i01.4449},
@@ -12600,9 +12600,9 @@ Siswati News Classification Dataset
       volume = {4},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12639,24 +12639,24 @@ User reviews of movies on the CSFD movie database, with 2 sentiment classes (pos
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | accuracy | svk | Reviews, Written | derived | found |
+| text to category (t2c) | accuracy | slk | Reviews, Written | derived | found |
 
 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vstefanik2023resources,
       author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
       journal = {arXiv preprint arXiv:2304.01922},
       title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12669,24 +12669,24 @@ User reviews of movies on the CSFD movie database, with 2 sentiment classes (pos
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
-| text to category (t2c) | accuracy | svk | Reviews, Written | derived | found |
+| text to category (t2c) | accuracy | slk | Reviews, Written | derived | found |
 
 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vstefanik2023resources,
       author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
       journal = {arXiv preprint arXiv:2304.01922},
       title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12704,9 +12704,9 @@ A language identification test set for 11 South African Languages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{south-african-language-identification,
       author = {ExploreAI Academy, Joanne M},
       publisher = {Kaggle},
@@ -12714,9 +12714,9 @@ A language identification test set for 11 South African Languages.
       url = {https://kaggle.com/competitions/south-african-language-identification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12734,12 +12734,12 @@ A Spanish dataset for news classification. The dataset includes articles from re
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
-
+    
+            
     ```
-
+    
 
 
 
@@ -12758,12 +12758,12 @@ A Spanish dataset for news classification. The dataset includes articles from re
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
-
+    
+            
     ```
-
+    
 
 
 
@@ -12781,9 +12781,9 @@ A Spanish dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{mollanorozy-etal-2023-cross,
       address = {Dubrovnik, Croatia},
       author = {Mollanorozy, Sepideh  and
@@ -12807,9 +12807,9 @@ A Spanish dataset for sentiment classification.
       url = {https://aclanthology.org/2023.sigtyp-1.9},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12828,9 +12828,9 @@ A Spanish dataset for sentiment classification.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{mollanorozy-etal-2023-cross,
       address = {Dubrovnik, Croatia},
       author = {Mollanorozy, Sepideh  and
@@ -12854,9 +12854,9 @@ A Spanish dataset for sentiment classification.
       url = {https://aclanthology.org/2023.sigtyp-1.9},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12874,11 +12874,11 @@ A dataset containing formal and informal sentences in Persian for style classifi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -12896,9 +12896,9 @@ Dataset for Swahili News Classification, categorized with 6 domains (Local News 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{davis2020swahili,
       author = {Davis, David},
       doi = {10.5281/zenodo.5514203},
@@ -12907,9 +12907,9 @@ Dataset for Swahili News Classification, categorized with 6 domains (Local News 
       url = {https://doi.org/10.5281/zenodo.5514203},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12928,9 +12928,9 @@ Dataset for Swahili News Classification, categorized with 6 domains (Local News 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{davis2020swahili,
       author = {Davis, David},
       doi = {10.5281/zenodo.5514203},
@@ -12939,9 +12939,9 @@ Dataset for Swahili News Classification, categorized with 6 domains (Local News 
       url = {https://doi.org/10.5281/zenodo.5514203},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12959,9 +12959,9 @@ A Swedish dataset for sentiment classification on review
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{nielsen-2023-scandeval,
       address = {T{\'o}rshavn, Faroe Islands},
       author = {Nielsen, Dan},
@@ -12975,9 +12975,9 @@ A Swedish dataset for sentiment classification on review
       url = {https://aclanthology.org/2023.nodalida-1.20},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -12996,9 +12996,9 @@ A Swedish dataset for sentiment classification on review
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{nielsen-2023-scandeval,
       address = {T{\'o}rshavn, Faroe Islands},
       author = {Nielsen, Dan},
@@ -13012,9 +13012,9 @@ A Swedish dataset for sentiment classification on review
       url = {https://aclanthology.org/2023.nodalida-1.20},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13057,9 +13057,9 @@ Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{niklaus2022empirical,
       archiveprefix = {arXiv},
       author = {Joel Niklaus and Matthias Stürmer and Ilias Chalkidis},
@@ -13068,9 +13068,9 @@ Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated 
       title = {An Empirical Study on Cross-X Transfer for Legal Judgment Prediction},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13088,11 +13088,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Anger
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13110,11 +13110,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Fear
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13132,11 +13132,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Friendship
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13154,11 +13154,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Happiness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13176,11 +13176,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Jealousy
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13198,11 +13198,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Love
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13220,11 +13220,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Sadness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13242,11 +13242,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Satisfaction
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13264,11 +13264,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Surprise
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13286,11 +13286,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Tone Chatbot Classif
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13308,11 +13308,11 @@ Synthetic Persian Chatbot Conversational Sentiment Analysis Tone User
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13330,11 +13330,11 @@ Synthetic Persian Chatbot RAG Tone Chatbot Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13352,11 +13352,11 @@ Synthetic Persian Chatbot RAG Tone User Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13374,11 +13374,11 @@ Synthetic Persian Chatbot Satisfaction Level Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13396,11 +13396,11 @@ Synthetic Persian Chatbot Tone Chatbot Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13418,11 +13418,11 @@ Synthetic Persian Chatbot Tone User Classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13440,11 +13440,11 @@ Persian Text Tone
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13463,11 +13463,11 @@ Persian Text Tone
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13486,11 +13486,11 @@ This version of the Persian text tone classification dataset is an improved vers
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -13508,9 +13508,9 @@ Short Text Classification for News
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{xu-etal-2020-clue,
       address = {Barcelona, Spain (Online)},
       author = {Xu, Liang  and
@@ -13554,9 +13554,9 @@ Short Text Classification for News
       url = {https://aclanthology.org/2020.coling-main.419},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13575,9 +13575,9 @@ Short Text Classification for News
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{xu-etal-2020-clue,
       address = {Barcelona, Spain (Online)},
       author = {Xu, Liang  and
@@ -13621,9 +13621,9 @@ Short Text Classification for News
       url = {https://aclanthology.org/2020.coling-main.419},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13641,18 +13641,18 @@ A Tamil dataset for 6-class classification of Tamil news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13671,18 +13671,18 @@ A Tamil dataset for 6-class classification of Tamil news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kunchukuttan2020indicnlpcorpus,
       author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
       journal = {arXiv preprint arXiv:2005.00085},
       title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13700,9 +13700,9 @@ Determine how 16 C.F.R. § 310.3(a)(1) and 16 C.F.R. § 310.3(a)(2) (governing d
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -13711,9 +13711,9 @@ Determine how 16 C.F.R. § 310.3(a)(1) and 16 C.F.R. § 310.3(a)(2) (governing d
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13756,9 +13756,9 @@ A Telugu dataset for 5-class classification of Telugu news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Schabus2017,
       address = {Tokyo, Japan},
       author = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
@@ -13769,9 +13769,9 @@ A Telugu dataset for 5-class classification of Telugu news articles
       title = {One Million Posts: A Data Set of German Online Discussions},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13790,9 +13790,9 @@ A Telugu dataset for 5-class classification of Telugu news articles
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Schabus2017,
       address = {Tokyo, Japan},
       author = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
@@ -13803,9 +13803,9 @@ A Telugu dataset for 5-class classification of Telugu news articles
       title = {One Million Posts: A Data Set of German Online Discussions},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13823,9 +13823,9 @@ Determine if a paragraph from a judicial opinion is applying a form textualism t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -13834,9 +13834,9 @@ Determine if a paragraph from a judicial opinion is applying a form textualism t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13854,9 +13854,9 @@ Determine if a paragraph from a judicial opinion is applying a form textualism t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -13865,9 +13865,9 @@ Determine if a paragraph from a judicial opinion is applying a form textualism t
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13893,9 +13893,9 @@ This dataset contains toxicity annotations on 10K user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{lin2023toxicchat,
       archiveprefix = {arXiv},
       author = {Zi Lin and Zihan Wang and Yongqi Tong and Yangkun Wang and Yuxin Guo and Yujia Wang and Jingbo Shang},
@@ -13904,9 +13904,9 @@ This dataset contains toxicity annotations on 10K user
       title = {ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13933,9 +13933,9 @@ This dataset contains toxicity annotations on 10K user
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{lin2023toxicchat,
       archiveprefix = {arXiv},
       author = {Zi Lin and Zihan Wang and Yongqi Tong and Yangkun Wang and Yuxin Guo and Yujia Wang and Jingbo Shang},
@@ -13944,9 +13944,9 @@ This dataset contains toxicity annotations on 10K user
       title = {ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13964,9 +13964,9 @@ Collection of comments from the Civil Comments platform together with annotation
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jigsaw-unintended-bias-in-toxicity-classification,
       author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
       publisher = {Kaggle},
@@ -13974,9 +13974,9 @@ Collection of comments from the Civil Comments platform together with annotation
       url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -13995,9 +13995,9 @@ Collection of comments from the Civil Comments platform together with annotation
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{jigsaw-unintended-bias-in-toxicity-classification,
       author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
       publisher = {Kaggle},
@@ -14005,9 +14005,9 @@ Collection of comments from the Civil Comments platform together with annotation
       url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14029,9 +14029,9 @@ A translated dataset from Collection of comments from the Civil Comments platfor
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -14041,9 +14041,9 @@ A translated dataset from Collection of comments from the Civil Comments platfor
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14061,9 +14061,9 @@ Tswana News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{marivate2023puoberta,
       author = {Vukosi Marivate and Moseli Mots'Oehli and Valencia Wagner and Richard Lastrucci and Isheanesu Dzingirai},
       booktitle = {SACAIR 2023 (To Appear)},
@@ -14074,9 +14074,9 @@ Tswana News Classification Dataset
       title = {PuoBERTa: Training and evaluation of a curated language model for Setswana},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14095,9 +14095,9 @@ Tswana News Classification Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{marivate2023puoberta,
       author = {Vukosi Marivate and Moseli Mots'Oehli and Valencia Wagner and Richard Lastrucci and Isheanesu Dzingirai},
       booktitle = {SACAIR 2023 (To Appear)},
@@ -14108,9 +14108,9 @@ Tswana News Classification Dataset
       title = {PuoBERTa: Training and evaluation of a curated language model for Setswana},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14128,12 +14128,12 @@ A dataset of news classification in three Turkic languages.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
-
+    
+            
     ```
-
+    
 
 
 
@@ -14151,9 +14151,9 @@ Turkish Movie Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Demirtas2013CrosslingualPD,
       author = {Erkin Demirtas and Mykola Pechenizkiy},
       booktitle = {wisdom},
@@ -14161,9 +14161,9 @@ Turkish Movie Review Dataset
       url = {https://api.semanticscholar.org/CorpusID:3912960},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14182,9 +14182,9 @@ Turkish Movie Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Demirtas2013CrosslingualPD,
       author = {Erkin Demirtas and Mykola Pechenizkiy},
       booktitle = {wisdom},
@@ -14192,9 +14192,9 @@ Turkish Movie Review Dataset
       url = {https://api.semanticscholar.org/CorpusID:3912960},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14212,9 +14212,9 @@ Turkish Product Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Demirtas2013CrosslingualPD,
       author = {Erkin Demirtas and Mykola Pechenizkiy},
       booktitle = {wisdom},
@@ -14222,9 +14222,9 @@ Turkish Product Review Dataset
       url = {https://api.semanticscholar.org/CorpusID:3912960},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14243,9 +14243,9 @@ Turkish Product Review Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Demirtas2013CrosslingualPD,
       author = {Erkin Demirtas and Mykola Pechenizkiy},
       booktitle = {wisdom},
@@ -14253,9 +14253,9 @@ Turkish Product Review Dataset
       url = {https://api.semanticscholar.org/CorpusID:3912960},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14273,9 +14273,9 @@ A dataset of 10,000 tweets that was created with the aim of covering the most fr
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{al2018emotional,
       author = {Al-Khatib, Amr and El-Beltagy, Samhaa R},
       booktitle = {Computational Linguistics and Intelligent Text Processing: 18th International Conference, CICLing 2017, Budapest, Hungary, April 17--23, 2017, Revised Selected Papers, Part II 18},
@@ -14284,9 +14284,9 @@ A dataset of 10,000 tweets that was created with the aim of covering the most fr
       title = {Emotional tone detection in arabic tweets},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14305,9 +14305,9 @@ A dataset of 10,012 tweets that was created with the aim of covering the most fr
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{al2018emotional,
       author = {Al-Khatib, Amr and El-Beltagy, Samhaa R},
       booktitle = {Computational Linguistics and Intelligent Text Processing: 18th International Conference, CICLing 2017, Budapest, Hungary, April 17--23, 2017, Revised Selected Papers, Part II 18},
@@ -14316,9 +14316,9 @@ A dataset of 10,012 tweets that was created with the aim of covering the most fr
       title = {Emotional tone detection in arabic tweets},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14336,9 +14336,9 @@ Arabic sarcasm detection dataset, which was created through the reannotation of 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{abu-farha-magdy-2020-arabic,
       abstract = {Sarcasm is one of the main challenges for sentiment analysis systems. Its complexity comes from the expression of opinion using implicit indirect phrasing. In this paper, we present ArSarcasm, an Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. The dataset contains 10,547 tweets, 16{\%} of which are sarcastic. In addition to sarcasm the data was annotated for sentiment and dialects. Our analysis shows the highly subjective nature of these tasks, which is demonstrated by the shift in sentiment labels based on annotators{'} biases. Experiments show the degradation of state-of-the-art sentiment analysers when faced with sarcastic content. Finally, we train a deep learning model for sarcasm detection using BiLSTM. The model achieves an F1 score of 0.46, which shows the challenging nature of the task, and should act as a basic baseline for future research on our dataset.},
       address = {Marseille, France},
@@ -14359,9 +14359,9 @@ Arabic sarcasm detection dataset, which was created through the reannotation of 
       url = {https://aclanthology.org/2020.osact-1.5},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14380,9 +14380,9 @@ Arabic sarcasm detection dataset, which was created through the reannotation of 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{abu-farha-magdy-2020-arabic,
       abstract = {Sarcasm is one of the main challenges for sentiment analysis systems. Its complexity comes from the expression of opinion using implicit indirect phrasing. In this paper, we present ArSarcasm, an Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. The dataset contains 10,547 tweets, 16{\%} of which are sarcastic. In addition to sarcasm the data was annotated for sentiment and dialects. Our analysis shows the highly subjective nature of these tasks, which is demonstrated by the shift in sentiment labels based on annotators{'} biases. Experiments show the degradation of state-of-the-art sentiment analysers when faced with sarcastic content. Finally, we train a deep learning model for sarcasm detection using BiLSTM. The model achieves an F1 score of 0.46, which shows the challenging nature of the task, and should act as a basic baseline for future research on our dataset.},
       address = {Marseille, France},
@@ -14403,9 +14403,9 @@ Arabic sarcasm detection dataset, which was created through the reannotation of 
       url = {https://aclanthology.org/2020.osact-1.5},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14423,9 +14423,9 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{barbieri-etal-2022-xlm,
       abstract = {Language models are ubiquitous in current NLP, and their multilingual capacity has recently attracted considerable attention. However, current analyses have almost exclusively focused on (multilingual variants of) standard benchmarks, and have relied on clean pre-training and task-specific corpora as multilingual signals. In this paper, we introduce XLM-T, a model to train and evaluate multilingual language models in Twitter. In this paper we provide: (1) a new strong multilingual baseline consisting of an XLM-R (Conneau et al. 2020) model pre-trained on millions of tweets in over thirty languages, alongside starter code to subsequently fine-tune on a target task; and (2) a set of unified sentiment analysis Twitter datasets in eight different languages and a XLM-T model trained on this dataset.},
       address = {Marseille, France},
@@ -14440,9 +14440,9 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
       url = {https://aclanthology.org/2022.lrec-1.27},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14460,9 +14460,9 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{tweet-sentiment-extraction,
       author = {Maggie, Phil Culliton, Wei Chen},
       publisher = {Kaggle},
@@ -14470,9 +14470,9 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
       url = {https://kaggle.com/competitions/tweet-sentiment-extraction},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14491,9 +14491,9 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{tweet-sentiment-extraction,
       author = {Maggie, Phil Culliton, Wei Chen},
       publisher = {Kaggle},
@@ -14501,9 +14501,9 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
       url = {https://kaggle.com/competitions/tweet-sentiment-extraction},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14525,9 +14525,9 @@ A collection of translated tweets annotated for sentiment extraction.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -14537,9 +14537,9 @@ A collection of translated tweets annotated for sentiment extraction.
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14550,7 +14550,7 @@ Topic classification dataset on Twitter with 6 labels. Each instance of
         Tweets were preprocessed before the annotation to normalize some artifacts, converting
         URLs into a special token {{URL}} and non-verified usernames into {{USERNAME}}. For verified
         usernames, we replace its display name (or account name) with symbols {@}.
-
+        
 
 **Dataset:** [`mteb/TweetTopicSingleClassification`](https://huggingface.co/datasets/mteb/TweetTopicSingleClassification) • **License:** not specified • [Learn more →](https://arxiv.org/abs/2209.09824)
 
@@ -14562,9 +14562,9 @@ Topic classification dataset on Twitter with 6 labels. Each instance of
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dimosthenis-etal-2022-twitter,
       address = {Gyeongju, Republic of Korea},
       author = {Antypas, Dimosthenis  and
@@ -14579,9 +14579,9 @@ Topic classification dataset on Twitter with 6 labels. Each instance of
       title = {{T}witter {T}opic {C}lassification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14605,9 +14605,9 @@ Topic classification dataset on Twitter with 6 labels. Each instance of
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dimosthenis-etal-2022-twitter,
       address = {Gyeongju, Republic of Korea},
       author = {Antypas, Dimosthenis  and
@@ -14622,9 +14622,9 @@ Topic classification dataset on Twitter with 6 labels. Each instance of
       title = {{T}witter {T}opic {C}lassification},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14642,9 +14642,9 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -14653,9 +14653,9 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14667,7 +14667,7 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
         English data source: https://aclanthology.org/N18-1012/
         Translation into Ukrainian language using model: https://huggingface.co/facebook/nllb-200-distilled-600M
         Additionally, the dataset was balanced, witha labels: 0 - informal, 1 - formal.
-
+        
 
 **Dataset:** [`ukr-detect/ukr-formality-dataset-translated-gyafc`](https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc) • **License:** openrail++ • [Learn more →](https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc)
 
@@ -14679,9 +14679,9 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{rao-tetreault-2018-dear,
       author = {Rao, Sudha  and
     Tetreault, Joel},
@@ -14692,9 +14692,9 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
       url = {https://aclanthology.org/N18-1012},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14719,9 +14719,9 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{rao-tetreault-2018-dear,
       author = {Rao, Sudha  and
     Tetreault, Joel},
@@ -14732,9 +14732,9 @@ Determine if a contract is governed by the Uniform Commercial Code (UCC) or the 
       url = {https://aclanthology.org/N18-1012},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14752,9 +14752,9 @@ Given a clause from a terms-of-service contract, determine the category the clau
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{guha2023legalbench,
       archiveprefix = {arXiv},
       author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
@@ -14763,7 +14763,7 @@ Given a clause from a terms-of-service contract, determine the category the clau
       title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
       year = {2023},
     }
-
+    
     @article{lippi2019claudette,
       author = {Lippi, Marco and Pa{\l}ka, Przemys{\l}aw and Contissa, Giuseppe and Lagioia, Francesca and Micklitz, Hans-Wolfgang and Sartor, Giovanni and Torroni, Paolo},
       journal = {Artificial Intelligence and Law},
@@ -14773,9 +14773,9 @@ Given a clause from a terms-of-service contract, determine the category the clau
       volume = {27},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14793,9 +14793,9 @@ The Roman Urdu dataset is a data corpus comprising of more than 20000 records ta
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{misc_roman_urdu_data_set_458,
       author = {Sharf,Zareen},
       howpublished = {UCI Machine Learning Repository},
@@ -14803,9 +14803,9 @@ The Roman Urdu dataset is a data corpus comprising of more than 20000 records ta
       title = {{Roman Urdu Data Set}},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14824,9 +14824,9 @@ The Roman Urdu dataset is a data corpus comprising of more than 20000 records ta
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{misc_roman_urdu_data_set_458,
       author = {Sharf,Zareen},
       howpublished = {UCI Machine Learning Repository},
@@ -14834,9 +14834,9 @@ The Roman Urdu dataset is a data corpus comprising of more than 20000 records ta
       title = {{Roman Urdu Data Set}},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14854,9 +14854,9 @@ A Vietnamese dataset for classification of student feedback
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{8573337,
       author = {Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
       booktitle = {2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
@@ -14867,9 +14867,9 @@ A Vietnamese dataset for classification of student feedback
       volume = {},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14888,9 +14888,9 @@ A Vietnamese dataset for classification of student feedback
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{8573337,
       author = {Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
       booktitle = {2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
@@ -14901,9 +14901,9 @@ A Vietnamese dataset for classification of student feedback
       volume = {},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14921,9 +14921,9 @@ A dataset of Japanese social network rated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kajiwara-etal-2021-wrime,
       abstract = {We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.},
       address = {Online},
@@ -14950,9 +14950,9 @@ A dataset of Japanese social network rated for sentiment
       url = {https://aclanthology.org/2021.naacl-main.169},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -14971,9 +14971,9 @@ A dataset of Japanese social network rated for sentiment
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kajiwara-etal-2021-wrime,
       abstract = {We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.},
       address = {Online},
@@ -15000,9 +15000,9 @@ A dataset of Japanese social network rated for sentiment
       url = {https://aclanthology.org/2021.naacl-main.169},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15020,18 +15020,18 @@ Sentiment Analysis of user reviews on takeaway platforms
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2023c,
       author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighof, Niklas},
       journal = {arXiv preprint arXiv:2309.07597},
       title = {C-pack: Packaged resources to advance general chinese embedding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15050,18 +15050,18 @@ Sentiment Analysis of user reviews on takeaway platforms
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2023c,
       author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighof, Niklas},
       journal = {arXiv preprint arXiv:2309.07597},
       title = {C-pack: Packaged resources to advance general chinese embedding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15079,18 +15079,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15109,18 +15109,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15138,18 +15138,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15167,18 +15167,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15196,18 +15196,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15226,18 +15226,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15255,18 +15255,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15284,18 +15284,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15314,18 +15314,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15343,18 +15343,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15372,18 +15372,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15402,18 +15402,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15431,18 +15431,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15460,18 +15460,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15489,18 +15489,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15518,18 +15518,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15547,18 +15547,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15576,18 +15576,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15605,18 +15605,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15635,18 +15635,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15664,9 +15664,9 @@ Wisesight Sentiment Corpus: Social media messages in Thai language with sentimen
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{bact_2019_3457447,
       author = {Suriyawongkul, Arthit and
     Chuangsuwanich, Ekapol and
@@ -15680,9 +15680,9 @@ Wisesight Sentiment Corpus: Social media messages in Thai language with sentimen
       version = {v1.0},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15701,9 +15701,9 @@ Wisesight Sentiment Corpus: Social media messages in Thai language with sentimen
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{bact_2019_3457447,
       author = {Suriyawongkul, Arthit and
     Chuangsuwanich, Ekapol and
@@ -15717,9 +15717,9 @@ Wisesight Sentiment Corpus: Social media messages in Thai language with sentimen
       version = {v1.0},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15737,9 +15737,9 @@ Wongnai features over 200,000 restaurants, beauty salons, and spas across Thaila
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @software{cstorm125_2020_3852912,
       author = {cstorm125 and lukkiddd},
       doi = {10.5281/zenodo.3852912},
@@ -15750,9 +15750,9 @@ Wongnai features over 200,000 restaurants, beauty salons, and spas across Thaila
       version = {v0.1-alpha},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15770,9 +15770,9 @@ Dataset composed of questions and answers from Yahoo Answers, categorized into t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -15784,9 +15784,9 @@ Dataset composed of questions and answers from Yahoo Answers, categorized into t
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15805,9 +15805,9 @@ Dataset composed of questions and answers from Yahoo Answers, categorized into t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -15819,9 +15819,9 @@ Dataset composed of questions and answers from Yahoo Answers, categorized into t
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15839,9 +15839,9 @@ Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corre
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -15853,9 +15853,9 @@ Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corre
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15874,9 +15874,9 @@ Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corre
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{NIPS2015_250cf8b5,
       author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -15888,9 +15888,9 @@ Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corre
       volume = {28},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15908,9 +15908,9 @@ A Cantonese dataset for review classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{xiang2019sentiment,
       author = {Xiang, Rong and Jiao, Ying and Lu, Qin},
       booktitle = {Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
@@ -15919,9 +15919,9 @@ A Cantonese dataset for review classification
       title = {Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
       year = {2019},
     }
-
+    
     ```
-
+    
 
 
 
@@ -15940,9 +15940,9 @@ A Cantonese dataset for review classification
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{xiang2019sentiment,
       author = {Xiang, Rong and Jiao, Ying and Lu, Qin},
       booktitle = {Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
@@ -15951,5 +15951,5 @@ A Cantonese dataset for review classification
       title = {Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
       year = {2019},
     }
-
+    
     ```

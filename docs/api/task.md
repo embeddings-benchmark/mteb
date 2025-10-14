@@ -43,6 +43,41 @@ All tasks in `mteb` inherits from the following abstract class.
 
 
 :::mteb.AbsTask
-<!--
-TODO: we probably need to hide some of the method and potentially add a docstring to the class.
--->
+
+## Multimodal Tasks
+
+Tasks that support any modality (text, image, etc.) inherit from the following abstract class. Retrieval tasks support multimodal input (e.g. image + text queries and image corpus or vice versa).
+
+:::mteb.abstasks.retrieval.AbsTaskRetrieval
+
+:::mteb.abstasks.retrieval_dataset_loaders.RetrievalSplitData
+    options:
+        show_root_toc_entry: false
+
+:::mteb.abstasks.any_classification.AbsTaskAnyClassification
+
+:::mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification
+
+:::mteb.abstasks.clustering_fast.AbsTaskClustering
+
+:::mteb.abstasks.any_sts.AbsTaskAnySTS
+
+:::mteb.abstasks.any_zeroshot_classification.AbsTaskAnyZeroShotClassification
+
+:::mteb.abstasks.regression.AbsTaskRegression
+
+:::mteb.abstasks.any_clustering.AbsTaskClusteringLegacy
+
+## Text Tasks
+
+:::mteb.abstasks.text.bitext_mining.AbsTaskBitextMining
+
+:::mteb.abstasks.text.pair_classification.AbsTaskPairClassification
+
+:::mteb.abstasks.text.summarization.AbsTaskSummarization
+
+:::mteb.abstasks.text.reranking.AbsTaskReranking
+
+## Image Tasks
+
+:::mteb.abstasks.image.image_text_pair_classification.AbsTaskImageTextPairClassification

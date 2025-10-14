@@ -12,7 +12,7 @@
         a pool of 129 volunteers. Annotators were selected aiming to create a plural group in terms of demographics (ethnicity,
         sexual orientation, age, gender). Each tweet was labeled by three annotators in 6 possible categories: LGBTQ+phobia,
         Xenophobia, Obscene, Insult, Misogyny and Racism.
-
+        
 
 **Dataset:** [`mteb/BrazilianToxicTweetsClassification`](https://huggingface.co/datasets/mteb/BrazilianToxicTweetsClassification) • **License:** cc-by-sa-4.0 • [Learn more →](https://paperswithcode.com/dataset/told-br)
 
@@ -24,9 +24,9 @@
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{DBLP:journals/corr/abs-2010-04543,
       author = {Joao Augusto Leite and
     Diego F. Silva and
@@ -42,9 +42,9 @@
       volume = {abs/2010.04543},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -62,9 +62,9 @@ Classification of sentences by emotions, labeled into 5 categories (joy, sadness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{sboev2021data,
       author = {Sboev, Alexander and Naumov, Aleksandr and Rybka, Roman},
       journal = {Procedia Computer Science},
@@ -74,9 +74,9 @@ Classification of sentences by emotions, labeled into 5 categories (joy, sadness
       volume = {190},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -86,7 +86,7 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
         The EMit dataset consists of social media messages about TV shows, TV series, music videos, and advertisements.
         Each message is annotated with one or more of the 8 primary emotions defined by Plutchik
         (anger, anticipation, disgust, fear, joy, sadness, surprise, trust), as well as an additional label “love.”
-
+        
 
 **Dataset:** [`MattiaSangermano/emit`](https://huggingface.co/datasets/MattiaSangermano/emit) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/oaraque/emit)
 
@@ -98,9 +98,9 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{araque2023emit,
       author = {Araque, O and Frenda, S and Sprugnoli, R and Nozza, D and Patti, V and others},
       booktitle = {CEUR WORKSHOP PROCEEDINGS},
@@ -110,9 +110,9 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
       volume = {3473},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -126,7 +126,7 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
         This dataset is based on the Korean online news comments available on Kaggle and Github.
         The unlabeled raw data was collected between January 2018 and June 2020.
         The language producers are users who left the comments on the Korean online news platform between 2018 and 2020.
-
+        
 
 **Dataset:** [`mteb/KorHateSpeechMLClassification`](https://huggingface.co/datasets/mteb/KorHateSpeechMLClassification) • **License:** cc-by-sa-4.0 • [Learn more →](https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset)
 
@@ -138,9 +138,9 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{lee-etal-2022-k,
       address = {Gyeongju, Republic of Korea},
       author = {Lee, Jean  and
@@ -158,9 +158,9 @@ The EMit dataset is a comprehensive resource for the detection of emotions in It
       url = {https://aclanthology.org/2022.coling-1.311},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -171,7 +171,7 @@ A multi-label topic classification dataset for Maltese News
         Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS,
         & repeated non-Maltese sub-headings. The labels are based on the category
         field from this corpus.
-
+        
 
 **Dataset:** [`MLRS/maltese_news_categories`](https://huggingface.co/datasets/MLRS/maltese_news_categories) • **License:** cc-by-nc-sa-4.0 • [Learn more →](https://huggingface.co/datasets/MLRS/maltese_news_categories)
 
@@ -183,9 +183,9 @@ A multi-label topic classification dataset for Maltese News
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{maltese-news-datasets,
       author = {Chaudhary, Amit Kumar  and
     Micallef, Kurt  and
@@ -196,9 +196,9 @@ A multi-label topic classification dataset for Maltese News
       title = {Topic Classification and Headline Generation for {M}altese using a Public News Corpus},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -216,9 +216,9 @@ EU laws in 23 EU languages containing annotated labels for 21 EUROVOC concepts.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chalkidis-etal-2021-multieurlex,
       author = {Chalkidis, Ilias
     and Fergadiotis, Manos
@@ -232,9 +232,9 @@ EU laws in 23 EU languages containing annotated labels for 21 EUROVOC concepts.
       url = {https://arxiv.org/abs/2109.00904},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -252,9 +252,9 @@ Multilabel classification of sentences across 18 sensitive topics.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{babakov-etal-2021-detecting,
       abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
@@ -283,9 +283,9 @@ Multilabel classification of sentences across 18 sensitive topics.
       url = {https://aclanthology.org/2021.bsnlp-1.4},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -303,9 +303,9 @@ This dataset contains historical Swedish patent documents (1885-1972) classified
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @mastersthesis{Salim1987995,
       author = {Salim, Atheer},
       institution = {KTH, School of Electrical Engineering and Computer Science (EECS)},
@@ -318,9 +318,9 @@ This dataset contains historical Swedish patent documents (1885-1972) classified
       url = {https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-368254},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -339,9 +339,9 @@ This dataset contains historical Swedish patent documents (1885-1972) classified
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @mastersthesis{Salim1987995,
       author = {Salim, Atheer},
       institution = {KTH, School of Electrical Engineering and Computer Science (EECS)},
@@ -354,5 +354,5 @@ This dataset contains historical Swedish patent documents (1885-1972) classified
       url = {https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-368254},
       year = {2025},
     }
-
+    
     ```

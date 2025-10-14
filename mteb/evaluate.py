@@ -321,7 +321,7 @@ def evaluate(
         and overwrite_strategy != OverwriteStrategy.ALWAYS
     ):
         # if there are no missing evals we can just return the results
-        logger.debug(
+        logger.info(
             f"Results for {task.metadata.name} already exist in cache. Skipping evaluation and loading results."
         )
         return ModelResult(
@@ -335,6 +335,11 @@ def evaluate(
     ]:
         raise ValueError(
             f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+        )
+
+    if existing_results:
+        logger.info(
+            f"Found existing results for {task.metadata.name}, only running missing splits: {list(missing_eval.keys())}"
         )
 
     if isinstance(model, ModelMeta):

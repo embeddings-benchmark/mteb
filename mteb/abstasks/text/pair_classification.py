@@ -53,10 +53,12 @@ class AbsTaskPairClassification(AbsTask):
     The similarity is computed between pairs and the results are ranked. Average precision
     is computed to measure how well the methods can be used for pairwise pair classification.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        sentence1: list[str]
-        sentence2: list[str]
-        labels: list[int]
+    Attributes:
+        dataset: A HuggingFace dataset containing the data for the task. Should contain the following columns: sentence1, sentence2, labels.
+        sentence1_column_name: The name of the column containing the first sentence in the pair.
+        sentence2_column_name: The name of the column containing the second sentence in the pair.
+        label_column_name: The name of the column containing the labels for the pairs. Labels should be 0 or 1.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."

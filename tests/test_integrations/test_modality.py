@@ -8,10 +8,6 @@ import pytest
 
 import mteb
 import mteb.overview
-from tests.mock_models import (
-    MockCLIPEncoder,
-    MockMocoEncoder,
-)
 from tests.mock_tasks import (
     MockImageClusteringTask,
     MockImageTextPairClassificationTask,
@@ -26,7 +22,10 @@ logging.basicConfig(level=logging.INFO)
 )
 def test_task_modality_filtering(task, caplog):
     with caplog.at_level(logging.WARNING):
-        model = MockMocoEncoder()
+        model_name = "baseline/random-encoder-baseline"
+        model = mteb.get_model(model_name)
+        model.mteb_model_meta.modalities = ["image"]
+
         results = mteb.evaluate(
             model,
             task,
@@ -42,7 +41,7 @@ def test_task_modality_filtering(task, caplog):
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
 def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
     scores = mteb.evaluate(
-        MockCLIPEncoder(),
+        mteb.get_model("baseline/random-encoder-baseline"),
         task,
         cache=None,
     )

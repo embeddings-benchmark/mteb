@@ -19,7 +19,7 @@ Retrieve rendered tables from Airbnb listings based on templated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -31,7 +31,7 @@ Retrieve rendered tables from Airbnb listings based on templated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -49,7 +49,7 @@ Retrieve Arabic charts based on queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -61,7 +61,7 @@ Retrieve Arabic charts based on queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -79,7 +79,7 @@ Retrieve Arabic infographics based on queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -91,7 +91,7 @@ Retrieve Arabic infographics based on queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -109,7 +109,7 @@ Retrieve figures from scientific papers from arXiv based on LLM generated querie
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -121,7 +121,7 @@ Retrieve figures from scientific papers from arXiv based on LLM generated querie
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -139,7 +139,7 @@ Retrieve automobile marketing documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -151,7 +151,7 @@ Retrieve automobile marketing documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -169,7 +169,7 @@ Retrieve beverages marketing documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -181,7 +181,7 @@ Retrieve beverages marketing documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -199,7 +199,7 @@ Retrieve charts from scientific papers based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -211,7 +211,7 @@ Retrieve charts from scientific papers based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -229,7 +229,7 @@ Retrieve charts based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -241,7 +241,7 @@ Retrieve charts based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -259,7 +259,7 @@ Retrieve AI documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -271,7 +271,7 @@ Retrieve AI documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -289,7 +289,7 @@ Retrieve energy industry documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -301,7 +301,7 @@ Retrieve energy industry documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -319,7 +319,7 @@ Retrieve government reports based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -331,7 +331,7 @@ Retrieve government reports based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -349,7 +349,7 @@ Retrieve healthcare industry documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -361,7 +361,7 @@ Retrieve healthcare industry documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -379,7 +379,7 @@ Retrieve industry documents based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -391,7 +391,7 @@ Retrieve industry documents based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -409,7 +409,7 @@ Retrieve medical records based on templated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -421,7 +421,7 @@ Retrieve medical records based on templated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -439,7 +439,7 @@ Retrieve German news articles based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -451,7 +451,7 @@ Retrieve German news articles based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -469,7 +469,7 @@ Retrieve Spanish news articles based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -481,7 +481,7 @@ Retrieve Spanish news articles based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -499,7 +499,7 @@ Retrieve French news articles from Europeana based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -511,7 +511,7 @@ Retrieve French news articles from Europeana based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -529,7 +529,7 @@ Retrieve Italian historical articles based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -541,7 +541,7 @@ Retrieve Italian historical articles based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -559,7 +559,7 @@ Retrieve Dutch historical legal documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -571,7 +571,7 @@ Retrieve Dutch historical legal documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -589,7 +589,7 @@ Retrieve GitHub readme files based their description.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -601,7 +601,7 @@ Retrieve GitHub readme files based their description.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -619,7 +619,7 @@ Retrieve Hindi government documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -631,7 +631,7 @@ Retrieve Hindi government documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -649,7 +649,7 @@ Retrieve Hungarian documents in various formats based on human annotated queries
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -661,7 +661,7 @@ Retrieve Hungarian documents in various formats based on human annotated queries
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -679,7 +679,7 @@ Retrieve infographics based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -691,7 +691,7 @@ Retrieve infographics based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -709,7 +709,7 @@ Retrieve Japanese documents in various formats based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -721,7 +721,7 @@ Retrieve Japanese documents in various formats based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -739,7 +739,7 @@ Retrieve pages from the 2024 Jina yearbook based on human annotated questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -751,7 +751,7 @@ Retrieve pages from the 2024 Jina yearbook based on human annotated questions.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -769,7 +769,7 @@ Retrieve tables from the MMTab dataset based on queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -781,7 +781,7 @@ Retrieve tables from the MMTab dataset based on queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -799,7 +799,7 @@ Retrieve product manuals based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -811,7 +811,7 @@ Retrieve product manuals based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -829,7 +829,7 @@ Retrieve medical prescriptions based on templated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -841,7 +841,7 @@ Retrieve medical prescriptions based on templated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -859,7 +859,7 @@ Retrieve charts from the OWID dataset based on accompanied text snippets.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -871,7 +871,7 @@ Retrieve charts from the OWID dataset based on accompanied text snippets.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -889,7 +889,7 @@ Retrieve news articles from the OpenAI news website based on human annotated que
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -901,7 +901,7 @@ Retrieve news articles from the OpenAI news website based on human annotated que
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -919,7 +919,7 @@ Retrieve plots from the PlotQA dataset based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -931,7 +931,7 @@ Retrieve plots from the PlotQA dataset based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -949,7 +949,7 @@ Retrieve ramen restaurant marketing documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -961,7 +961,7 @@ Retrieve ramen restaurant marketing documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -979,7 +979,7 @@ Retrieve pages from the Shanghai Master Plan based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -991,7 +991,7 @@ Retrieve pages from the Shanghai Master Plan based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1009,7 +1009,7 @@ Retrieve documents with graphs from the Shift Project based on LLM generated que
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1021,7 +1021,7 @@ Retrieve documents with graphs from the Shift Project based on LLM generated que
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1039,7 +1039,7 @@ Retrieve scientific and engineering slides based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1051,7 +1051,7 @@ Retrieve scientific and engineering slides based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1069,7 +1069,7 @@ Retrieve student enrollment data based on templated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1081,7 +1081,7 @@ Retrieve student enrollment data based on templated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1099,7 +1099,7 @@ Retrieve textbook pages (images and text) based on LLM generated queries from th
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1111,7 +1111,7 @@ Retrieve textbook pages (images and text) based on LLM generated queries from th
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1129,7 +1129,7 @@ Retrieve tables from industry documents based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1141,7 +1141,7 @@ Retrieve tables from industry documents based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1159,7 +1159,7 @@ Retrieve scientific tables based on LLM generated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1171,7 +1171,7 @@ Retrieve scientific tables based on LLM generated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1189,7 +1189,7 @@ Retrieve financial reports based on human annotated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1201,7 +1201,7 @@ Retrieve financial reports based on human annotated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1219,7 +1219,7 @@ Retrieve rendered tables of stock prices based on templated queries.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1231,7 +1231,7 @@ Retrieve rendered tables of stock prices based on templated queries.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1249,7 +1249,7 @@ Retrieve historical documents from Wikimedia Commons based on their description.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1261,7 +1261,7 @@ Retrieve historical documents from Wikimedia Commons based on their description.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1279,7 +1279,7 @@ Retrieve maps from Wikimedia Commons based on their description.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -1291,7 +1291,7 @@ Retrieve maps from Wikimedia Commons based on their description.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1309,9 +1309,9 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{osmulski2025miraclvisionlargemultilingualvisual,
       author = {Radek Osmulski and Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Benedikt Schifferer and Even Oldridge},
       eprint = {2505.11651},
@@ -1320,9 +1320,9 @@ Retrieve associated pages according to questions.
       url = {https://arxiv.org/abs/2505.11651},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1340,18 +1340,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1369,18 +1369,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1398,18 +1398,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1427,18 +1427,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1456,18 +1456,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1485,18 +1485,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1514,18 +1514,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1543,18 +1543,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1572,18 +1572,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1601,18 +1601,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1630,18 +1630,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1659,18 +1659,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1688,18 +1688,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1717,14 +1717,14 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
