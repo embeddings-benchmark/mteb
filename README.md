@@ -49,7 +49,7 @@ model_name = "sentence-transformers/all-MiniLM-L6-v2"
 model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 
 # Select tasks
-tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+tasks = mteb.get_tasks(tasks=["Banking77Classification.v2"])
 
 # evaluate
 results = mteb.evaluate(model, tasks=tasks)
@@ -60,7 +60,7 @@ You can also run it using the CLI:
 ```bash
 mteb run \
     -m sentence-transformers/all-MiniLM-L6-v2 \
-    -t Banking77Classification \
+    -t "Banking77Classification.v2" \
     --output-folder results
 ```
 
