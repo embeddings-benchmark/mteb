@@ -26,7 +26,7 @@ We have already been able to add many new feature in v2.0, but hope that this ne
 
 ### Easier evaluation
 
-Evaluations are not a lot easier using [`mteb.evaluate`][mteb.evaluate.evaluate],
+Evaluations are now a lot easier using [`mteb.evaluate`][mteb.evaluate.evaluate],
 
 ```py
 results = mteb.evaluate(model, tasks)
