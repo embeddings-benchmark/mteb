@@ -16,7 +16,7 @@ class NamaaMrTydiReranking(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2023-11-01", "2024-05-15"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],

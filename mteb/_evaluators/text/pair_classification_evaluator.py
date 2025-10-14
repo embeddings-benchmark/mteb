@@ -8,12 +8,11 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import Encoder
 from mteb.similarity_functions import compute_pairwise_similarity
-
-from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 

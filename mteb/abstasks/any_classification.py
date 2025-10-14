@@ -15,6 +15,7 @@ from sklearn.metrics import (
     recall_score,
 )
 
+from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
@@ -24,10 +25,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .._evaluators.sklearn_evaluator import (
-    SklearnEvaluator,
-    SklearnModelProtocol,
-)
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,

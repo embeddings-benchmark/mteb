@@ -1,6 +1,5 @@
+from mteb.abstasks.any_clustering import AbsTaskAnyClustering
 from mteb.abstasks.task_metadata import TaskMetadata
-
-from ....abstasks.any_clustering import AbsTaskAnyClustering
 
 
 class ArxivClusteringS2S(AbsTaskAnyClustering):

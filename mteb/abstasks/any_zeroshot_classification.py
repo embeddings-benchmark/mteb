@@ -2,10 +2,12 @@ import logging
 from pathlib import Path
 from typing import Any, TypedDict
 
+import torch
 from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
+from mteb.models import Encoder
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -13,7 +15,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..models import Encoder
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,
@@ -143,7 +144,7 @@ class AbsTaskAnyZeroShotClassification(AbsTask):
 
         return self._calculate_scores(
             data_split[self.label_column_name],
-            probs.argmax(dim=1).tolist(),
+            torch.tensor(probs).argmax(dim=1).tolist(),
         )
 
     def _calculate_scores(

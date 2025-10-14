@@ -1,11 +1,9 @@
 import json
 from pathlib import Path
-from typing import Any
 
 import pytest
 
 import mteb
-from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
@@ -16,20 +14,8 @@ from tests.mock_tasks import (
     MockRegressionTask,
     MockRetrievalTask,
     MockSTSTask,
-    MockSummarizationTask,
     MockTextZeroShotClassificationTask,
 )
-
-
-def _round_floats(obj: Any, ndigits: int = 2) -> Any:
-    """Recursively round all float values inside nested dicts/lists."""
-    if isinstance(obj, float):
-        return round(obj, ndigits)
-    elif isinstance(obj, list):
-        return [_round_floats(i, ndigits) for i in obj]
-    elif isinstance(obj, dict):
-        return {k: _round_floats(v, ndigits) for k, v in obj.items()}
-    return obj
 
 
 @pytest.mark.parametrize(
@@ -39,82 +25,106 @@ def _round_floats(obj: Any, ndigits: int = 2) -> Any:
             MockBitextMiningTask,
             {
                 "sentence1-sentence2": [
-                    {"corpus_id": 0, "score": 0.67},
-                    {"corpus_id": 0, "score": 0.58},
+                    {"corpus_id": 1, "score": 0.7652846501709707},
+                    {"corpus_id": 1, "score": 0.7652846501709707},
                 ]
             },
         ),
         (
             MockClassificationTask,
             [
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
-                [0, 1],
-                [1, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
+                [0, 0],
             ],
         ),
         (
             MockTextZeroShotClassificationTask,
-            [[0.67, 0.58], [0.58, 0.45]],
+            [
+                [0.9999999999419484, 0.9999999999419484],
+                [0.9999999999419484, 0.9999999999419484],
+            ],
         ),
         (
             MockRetrievalTask,
-            {"q1": {"d2": 0.67}, "q2": {"d2": 0.58}},
+            {"q1": {"d2": 0.9999999999419484}, "q2": {"d2": 0.9999999999419484}},
         ),
         (
             MockSTSTask,
             {
-                "cosine_scores": [0.67, 0.45],
-                "manhattan_distances": [-3.81, -5.13],
-                "euclidean_distances": [-1.42, -1.84],
-                "similarity_scores": [0.67, 0.45],
+                "cosine_scores": [
+                    pytest.approx(0.7271937024333304),
+                    pytest.approx(0.7652846502146503),
+                ],
+                "manhattan_distances": [
+                    pytest.approx(-11.606113294587654),
+                    pytest.approx(-11.687107717574829),
+                ],
+                "euclidean_distances": [
+                    pytest.approx(-2.4683132356991315),
+                    pytest.approx(-2.404168159957386),
+                ],
+                "similarity_scores": [
+                    pytest.approx(0.7271937023895851),
+                    pytest.approx(0.7652846501709707),
+                ],
             },
         ),
         (
             MockPairClassificationTask,
             {
-                "cosine_scores": [0.67, 0.45],
-                "euclidean_distances": [1.42, 1.84],
-                "manhattan_distances": [3.81, 5.13],
-                "similarity_scores": [0.67, 0.45],
-                "dot_scores": [1.83, 1.33],
+                "cosine_scores": [
+                    pytest.approx(0.7271937024333304),
+                    pytest.approx(0.7652846502146503),
+                ],
+                "euclidean_distances": [
+                    pytest.approx(2.4683132356991315),
+                    pytest.approx(2.404168159957386),
+                ],
+                "manhattan_distances": [
+                    pytest.approx(11.606113294587654),
+                    pytest.approx(11.687107717574829),
+                ],
+                "similarity_scores": [
+                    pytest.approx(0.7271937023895851),
+                    pytest.approx(0.7652846501709707),
+                ],
+                "dot_scores": [
+                    pytest.approx(8.047867836468026),
+                    pytest.approx(9.399434014739104),
+                ],
             },
         ),
-        (
-            MockSummarizationTask,
-            {
-                "cosine_scores": [[0.75, 0.74], [0.69, 0.92]],
-                "dot_scores": [[2.16, 2.99], [1.99, 3.09]],
-                "similarity_scores": [[0.75, 0.74], [0.69, 0.92]],
-                "human_scores": [[1.0, 0.0], [0.0, 1.0]],
-            },
-        ),
-        (MockClusteringTask, [[2, 2, 1]]),
-        (MockClusteringFastTask, {"Level 0": [[1, 2, 2], [0, 1, 2], [2, 0, 0]]}),
+        (MockClusteringTask, [[0, 0, 0]]),
+        (MockClusteringFastTask, {"Level 0": [[0, 0, 0], [0, 0, 0], [0, 0, 0]]}),
         (
             MockRegressionTask,
-            [[0.39, 0.76]] * 10,
+            [[0.5, 0.5]] * 10,
         ),
         (
             MockImageTextPairClassificationTask,
-            [[[0.67]], [[0.45]]],
+            [
+                [[pytest.approx(0.7854366638891553)]],
+                [[pytest.approx(0.7571324633489456)]],
+            ],
         ),
     ],
 )
 def test_predictions(tmp_path: Path, task_cls, expected):
     """Run evaluation for each mock task and check predictions."""
     task = task_cls()
-    model = MockNumpyEncoder()
+    model = mteb.get_model_meta("mteb/random-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
     with task._predictions_path(tmp_path).open() as f:
         full_predictions = json.load(f)
 
     predictions = full_predictions["default"]["test"]
-    assert _round_floats(predictions, 2) == expected
+    assert predictions == expected

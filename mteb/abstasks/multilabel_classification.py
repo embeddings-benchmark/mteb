@@ -13,10 +13,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from typing_extensions import override
 
+from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
+from mteb.create_dataloaders import create_dataloader
 from mteb.models import Encoder
 
-from .._evaluators.sklearn_evaluator import SklearnModelProtocol
-from ..create_dataloaders import create_dataloader
 from .any_classification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)

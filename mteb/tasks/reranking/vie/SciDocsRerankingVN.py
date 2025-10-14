@@ -19,7 +19,7 @@ class SciDocsRerankingVN(AbsTaskReranking):
         category="t2t",
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2025-07-29", "2025-07-30"),
         license="cc-by-sa-4.0",
         annotations_creators="derived",

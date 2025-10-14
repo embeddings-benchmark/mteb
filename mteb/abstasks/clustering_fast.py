@@ -10,6 +10,7 @@ from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
 
+from mteb.create_dataloaders import create_dataloader
 from mteb.models import Encoder
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
@@ -19,7 +20,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from ..create_dataloaders import create_dataloader
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_label_statistics,

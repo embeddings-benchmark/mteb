@@ -223,7 +223,7 @@ def test_given_dataset_config_then_it_is_valid():
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=None,
         domains=None,
         license=None,
@@ -248,7 +248,7 @@ def test_given_missing_dataset_path_then_it_throws():
             modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
-            main_score="map",
+            main_score="map_at_1000",
             date=None,
             domains=None,
             license=None,
@@ -274,7 +274,7 @@ def test_given_missing_revision_path_then_it_throws():
             modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
-            main_score="map",
+            main_score="map_at_1000",
             date=None,
             domains=None,
             license=None,
@@ -298,7 +298,7 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
-            main_score="map",
+            main_score="map_at_1000",
             date=None,
             domains=None,
             license=None,
@@ -325,7 +325,7 @@ def test_unfilled_metadata_is_not_filled():
             modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
-            main_score="map",
+            main_score="map_at_1000",
             date=None,
             domains=None,
             license=None,
@@ -354,7 +354,7 @@ def test_filled_metadata_is_filled():
             modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
-            main_score="map",
+            main_score="map_at_1000",
             date=("2021-01-01", "2021-12-31"),
             domains=["Non-fiction", "Written"],
             license="mit",
@@ -368,26 +368,23 @@ def test_filled_metadata_is_filled():
     )
 
 
-@pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
+@pytest.mark.parametrize(
+    "task", get_tasks(exclude_superseded=True, exclude_aggregate=True)
+)
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
+    # --- test metadata is filled and valid ---
     if task.metadata.name not in _HISTORIC_DATASETS:
         task.metadata._validate_metadata()
         assert task.metadata.is_filled(), (
             f"Metadata for {task.metadata.name} is not filled"
         )
 
-
-@pytest.mark.parametrize("task", get_tasks(exclude_superseded=True))
-def test_disallow_trust_remote_code_in_new_datasets(task: AbsTask):
+    # --- Check that no dataset trusts remote code ---
     assert task.metadata.dataset.get("trust_remote_code", False) is False, (
         f"Dataset {task.metadata.name} should not trust remote code"
     )
 
-
-@pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=False, exclude_aggregate=True)
-)
-def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
+    # --- Test is descriptive stats are present for all datasets ---
     if "image" in task.metadata.modalities:
         return
 

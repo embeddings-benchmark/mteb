@@ -6,11 +6,10 @@ import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
+from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import Encoder
-
-from ..evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +117,7 @@ class BitextMiningEvaluator(Evaluator):
 
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                    similarity_scores,
+                    torch.tensor(similarity_scores),
                     1,
                     dim=1,
                     largest=True,

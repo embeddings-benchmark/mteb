@@ -7,12 +7,11 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb._evaluators import BitextMiningEvaluator
+from mteb.abstasks._statistics_calculation import calculate_text_statistics
+from mteb.abstasks.abstask import AbsTask
 from mteb.models import Encoder, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
-
-from .._statistics_calculation import calculate_text_statistics
-from ..abstask import AbsTask
 
 logger = logging.getLogger(__name__)
 

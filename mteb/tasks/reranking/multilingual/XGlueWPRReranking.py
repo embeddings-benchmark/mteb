@@ -91,7 +91,7 @@ class XGlueWPRReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
-        main_score="map",
+        main_score="map_at_1000",
         domains=["Written"],
         task_subtypes=[],
         license="http://hdl.handle.net/11234/1-3105",

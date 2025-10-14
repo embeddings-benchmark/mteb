@@ -48,24 +48,21 @@ from .mock_tasks import (
     MockZeroShotClassificationTask,
 )
 
-TASK_TEST_GRID = (
-    mteb.get_tasks(
-        tasks=[
-            "BornholmBitextMining",  # bitext mining + just supplying a task class instead of a string
-            "TwentyNewsgroupsClustering",  # clustering and string instead of class
-            "TwentyNewsgroupsClustering.v2",  # fast clustering
-            "Banking77Classification",  # classification
-            "FarsTail",  # pair classification
-            "BrazilianToxicTweetsClassification",  # multilabel classification
-            "FaroeseSTS",  # STS
-            "SummEval",  # summarization
-            "TwitterHjerneRetrieval",  # retrieval
-            "SciDocsRR",  # reranking
-            "Core17InstructionRetrieval",  # instruction reranking
-            "IFIRNFCorpus",  # instruction retrieval
-        ]
-    )
-    + mteb.get_tasks(tasks=["IndicSentimentClassification"], languages=["asm-Beng"])
+TASK_TEST_GRID = mteb.get_tasks(
+    tasks=[
+        "BornholmBitextMining",  # bitext mining + just supplying a task class instead of a string
+        "TwentyNewsgroupsClustering",  # clustering and string instead of class
+        "TwentyNewsgroupsClustering.v2",  # fast clustering
+        "LccSentimentClassification",  # classification
+        "FarsTail",  # pair classification
+        "BrazilianToxicTweetsClassification",  # multilabel classification
+        "FaroeseSTS",  # STS
+        "SummEval",  # summarization
+        "TwitterHjerneRetrieval",  # retrieval
+        "SciDocsRR",  # reranking
+        "Core17InstructionRetrieval",  # instruction reranking
+        "IFIRNFCorpus",  # instruction retrieval
+    ]
 )
 
 TASK_TEST_GRID_AS_STRING = [
@@ -75,36 +72,43 @@ TASK_TEST_GRID_AS_STRING = [
 
 # Mock tasks for testing - intended to be faster and avoid downloading data leading to false positive potential failures in CI
 # Not all tasks are implemented as Mock tasks yet
-MOCK_TASK_TEST_GRID = [
-    MockBitextMiningTask(),
+MOCK_TASK_TEST_GRID_MULTILINGUAL = [
     MockMultilingualBitextMiningTask(),
     MockMultilingualParallelBitextMiningTask(),
+    MockMultilingualClassificationTask(),
+    MockMultilingualClusteringTask(),
+    MockMultilingualClusteringFastTask(),
+    MockMultilingualPairClassificationTask(),
+    MockMultilingualRerankingTask(),
+    MockMultilingualRetrievalTask(),
+    MockMultilingualSTSTask(),
+    MockMultilingualMultilabelClassification(),
+    MockMultilingualSummarizationTask(),
+    MockMultilingualInstructionRetrieval(),
+    MockMultilingualInstructionReranking(),
+]
+
+MOCK_TASK_TEST_GRID_MONOLINGUAL = [
+    MockBitextMiningTask(),
     MockClassificationTask(),
     MockRegressionTask(),
-    MockMultilingualClassificationTask(),
     MockClusteringTask(),
-    MockMultilingualClusteringTask(),
     MockClusteringFastTask(),
-    MockMultilingualClusteringFastTask(),
     MockPairClassificationTask(),
-    MockMultilingualPairClassificationTask(),
     MockRerankingTask(),
-    MockMultilingualRerankingTask(),
     MockRetrievalTask(),
-    MockMultilingualRetrievalTask(),
     MockSTSTask(),
     MockMultilingualSTSTask(),
     MockMultilabelClassification(),
-    MockMultilingualMultilabelClassification(),
     MockSummarizationTask(),
-    MockMultilingualSummarizationTask(),
     MockInstructionRetrieval(),
-    MockMultilingualInstructionRetrieval(),
-    MockMultilingualInstructionReranking(),
     MockInstructionReranking(),
     MockRetrievalDialogTask(),
     MockTextZeroShotClassificationTask(),
 ]
+
+
+MOCK_TASK_TEST_GRID = MOCK_TASK_TEST_GRID_MULTILINGUAL + MOCK_TASK_TEST_GRID_MONOLINGUAL
 
 MOCK_TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_TASK_TEST_GRID

@@ -6,6 +6,7 @@ from datasets import Dataset
 from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
+from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
 from mteb.models import Encoder
 from mteb.types.statistics import (
     ImageStatistics,
@@ -14,7 +15,6 @@ from mteb.types.statistics import (
     TextStatistics,
 )
 
-from .._evaluators.any_sts_evaluator import STSEvaluatorScores
 from ._statistics_calculation import (
     calculate_image_statistics,
     calculate_score_statistics,
