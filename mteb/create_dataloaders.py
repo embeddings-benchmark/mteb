@@ -290,13 +290,13 @@ def create_queries_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
 ) -> DataLoader[BatchedInput]:
-    queries_type, _ = task_metadata.category.split("2")
-    if queries_type == "t":  # text only
+    queries_type = task_metadata.get_modalities(PromptType.query)
+    if queries_type == ["text"]:  # text only
         return create_text_queries_dataloader(
             dataset,
             batch_size=batch_size,
         )
-    if "i" in queries_type:  # contains image
+    if "image" in queries_type:  # contains image
         return create_image_dataloader(
             dataset,
             image_column_name="image",
@@ -311,16 +311,13 @@ def create_document_dataloader(
     input_column: str | None = None,
     batch_size: int = 32,
 ) -> DataLoader[BatchedInput]:
-    if task_metadata.category is None:
-        document_type = "t"
-    else:
-        _, document_type = task_metadata.category.split("2")
-    if document_type == "t":  # text only
+    document_type = task_metadata.get_modalities(PromptType.document)
+    if document_type == ["text"]:  # text only
         return create_dataloader_for_retrieval_corpus(
             dataset,
             batch_size=batch_size,
         )
-    if "i" in document_type:  # contains image
+    if "image" in document_type:  # contains image
         return create_image_dataloader(
             dataset,
             image_column_name="image",

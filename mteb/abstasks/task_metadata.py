@@ -410,6 +410,33 @@ class TaskMetadata(BaseModel):
         """Return the dataset revision."""
         return self.dataset["revision"]
 
+    def get_modalities(self, prompt_type: PromptType | None = None) -> list[Modalities]:
+        """Get the modalities for the task based category if prompt_type provided.
+
+        Args:
+            prompt_type: The prompt type to get the modalities for.
+
+        Returns:
+            A list of modalities for the task.
+        """
+        if prompt_type is None:
+            return self.modalities
+        query_modalities, doc_modalities = self.category.split("2")
+        category_to_modality: dict[str, Modalities] = {
+            "t": "text",
+            "i": "image",
+        }
+        if prompt_type == PromptType.query:
+            return [
+                category_to_modality[query_modality]
+                for query_modality in query_modalities
+            ]
+        if prompt_type == PromptType.document:
+            return [
+                category_to_modality[doc_modality] for doc_modality in doc_modalities
+            ]
+        raise ValueError(f"Unknown prompt type: {prompt_type}")
+
     def _create_dataset_card_data(
         self,
         existing_dataset_card_data: DatasetCardData | None = None,

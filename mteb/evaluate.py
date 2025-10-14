@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any, cast
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.cache import ResultCache
@@ -24,7 +25,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
-from mteb.types import HFSubset, SplitName
+from mteb.types import HFSubset, PromptType, SplitName
 from mteb.types._metadata import ModelName, Revision
 
 if TYPE_CHECKING:
@@ -176,6 +177,66 @@ def _evaluate_task(
     return result
 
 
+def _check_model_modalities(
+    model: ModelMeta,
+    tasks: AbsTask | Iterable[AbsTask],
+) -> None:
+    """Check that model modalities are compatible with task modalities.
+
+    Logs warnings for partial overlaps and raises errors for mismatches.
+
+    Args:
+        model: The model metadata containing supported modalities.
+        tasks: A single task or an iterable of tasks to check against the model.
+    """
+    if model.modalities is None:
+        return
+
+    model_modalities = set(model.modalities)
+    if isinstance(tasks, AbsTask):
+        tasks = [tasks]
+
+    warnings, errors = [], []
+
+    for task in tasks:
+        # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
+        if isinstance(task, AbsTaskRetrieval):
+            query_mods = set(task.metadata.get_modalities(PromptType.query))
+            doc_mods = set(task.metadata.get_modalities(PromptType.document))
+
+            has_query_overlap = bool(model_modalities & query_mods)
+            has_doc_overlap = bool(model_modalities & doc_mods)
+
+            if model_modalities == doc_mods and model_modalities == query_mods:
+                continue
+            elif has_query_overlap and has_doc_overlap:
+                warnings.append(
+                    f"Model {model.name} supports {list(model_modalities)}, partially overlapping "
+                    f"with task {task.metadata.name} query={list(query_mods)}, document={list(doc_mods)}. "
+                    "Performance might be suboptimal."
+                )
+            else:
+                errors.append(
+                    f"Model {model.name} supports {list(model_modalities)}, but none overlap with "
+                    f"task {task.metadata.name} query={list(query_mods)}, document={list(doc_mods)}."
+                )
+        else:
+            task_mods = set(task.metadata.modalities)
+
+            if model_modalities == task_mods:
+                continue
+            else:
+                errors.append(
+                    f"Model {model.name} supports {list(model_modalities)}, but none overlap with "
+                    f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                )
+
+    if errors:
+        raise ValueError("\n".join(errors))
+    for msg in warnings:
+        logger.warning(msg)
+
+
 def evaluate(
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
@@ -245,6 +306,9 @@ def evaluate(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
 
+    model, meta, model_name, model_revision = _sanitize_model(model)
+    _check_model_modalities(meta, tasks)
+
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         task = cast(AbsTaskAggregate, tasks)
@@ -297,8 +361,6 @@ def evaluate(
 
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
-    model, meta, model_name, model_revision = _sanitize_model(model)
-
     existing_results = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
         results = cache.load_task_result(task.metadata.name, meta)
@@ -348,20 +410,6 @@ def evaluate(
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
-
-    if model.mteb_model_meta.modalities is not None and not (
-        # all task modalities are contained within model modalities
-        set(task.metadata.modalities).issubset(model.mteb_model_meta.modalities)
-    ):
-        logger.warning(
-            f"Model {model.mteb_model_meta.name} support modalities {model.mteb_model_meta.modalities} but the task "
-            f"{task.metadata.name} contains the following {task.modalities}. Skipping task."
-        )
-        return ModelResult(
-            model_name=model_name,
-            model_revision=model_revision,
-            task_results=[],
-        )
 
     if raise_error is False:
         try:
