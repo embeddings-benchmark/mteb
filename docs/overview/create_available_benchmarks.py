@@ -50,7 +50,7 @@ def create_table(benchmark: mteb.Benchmark) -> str:
     # add links to task names:
     # format: http://127.0.0.1:8000/overview/available_tasks/retrieval/#treccovid
     df["name"] = df.apply(
-        lambda row: f"[{row['name']}](../available_tasks/{row['type'].lower()}/#{row['name'].lower()})",
+        lambda row: f"[{row['name']}](./available_tasks/{row['type'].lower()}.md#{row['name'].lower()})",
         axis=1,
     )
     df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))

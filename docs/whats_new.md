@@ -149,15 +149,15 @@ class SearchProtocol(Protocol):
         ...
 ```
 
-We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for [colbert-like models][mteb.models.model_implementations.pylate_models.PylateSearchEncoder].
+We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like was done for colbert-like models. <!-- [colbert-like models][mteb.models.model_implementations.pylate_models.PylateSearchEncoder]. -->
 
 ### New Documentation
 
 We've added a lot of new documentation to make it easier to get started with MTEB.
 
-- You can see api of our models in tasks in [API documentation](../api/).
-- We've added a [getting started guide](../usage/get_started.md) to help you get started with MTEB.
-- You can see implemented [tasks](./overview/available_tasks) and [models](./overview/available_models) in MTEB.
+- You can see api of our models in tasks in [API documentation](./api/index.md).
+- We've added a [getting started guide](./usage/get_started.md) to help you get started with MTEB.
+- You can see implemented [tasks](./overview/available_tasks/retrieval.md) and [models](./overview/available_models/text.md) in MTEB.
 
 ### Better support for loading and comparing results
 
