@@ -11,7 +11,7 @@ import pytest
 from torch.utils.data import DataLoader
 
 import mteb
-import mteb.overview
+import mteb.get_tasks
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import Array, BatchedInput, PromptType

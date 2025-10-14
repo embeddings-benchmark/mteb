@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 
 import mteb
-import mteb.overview
+import mteb.get_tasks
 from mteb.MTEB import logger
 from tests.mock_models import (
     MockCLIPEncoder,

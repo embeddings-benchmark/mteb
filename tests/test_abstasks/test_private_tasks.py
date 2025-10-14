@@ -1,4 +1,4 @@
-from mteb.overview import get_tasks
+from mteb.get_tasks import get_tasks
 
 # List of accepted private tasks - update this list as needed
 ACCEPTED_PRIVATE_TASKS = [

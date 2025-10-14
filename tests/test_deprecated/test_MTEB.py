@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 import mteb
-import mteb.overview
+import mteb.get_tasks
 from tests.mock_models import MockNumpyEncoder
 
 logging.basicConfig(level=logging.INFO)
