@@ -3,7 +3,7 @@ import logging
 import pytest
 
 from mteb.abstasks import AbsTask
-from tests.mock_models import AbsMockEncoder
+from mteb.models.abs_encoder import AbsEncoder
 from tests.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
@@ -41,12 +41,12 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
         "query": "prompt_name",
         "document": "prompt_name",
     }
-    AbsMockEncoder.validate_task_to_prompt_name(model_prompts)
+    AbsEncoder.validate_task_to_prompt_name(model_prompts)
 
 
 @pytest.mark.parametrize("raise_for_invalid_keys", (True, False))
 def test_validate_task_to_prompt_name_for_none(raise_for_invalid_keys: bool):
-    result = AbsMockEncoder.validate_task_to_prompt_name(
+    result = AbsEncoder.validate_task_to_prompt_name(
         None, raise_for_invalid_keys=raise_for_invalid_keys
     )
     assert result is None if raise_for_invalid_keys else (None, None)
@@ -64,7 +64,7 @@ def test_validate_task_to_prompt_name_fails_and_raises(
     task_prompt_dict: dict[str, str],
 ):
     with pytest.raises(KeyError):
-        AbsMockEncoder.validate_task_to_prompt_name(task_prompt_dict)
+        AbsEncoder.validate_task_to_prompt_name(task_prompt_dict)
 
 
 @pytest.mark.parametrize(
@@ -87,7 +87,7 @@ def test_validate_task_to_prompt_name_fails_and_raises(
 def test_validate_task_to_prompt_name_filters_and_reports(
     task_prompt_dict: dict[str, str], expected_valid: int, expected_invalid: int
 ):
-    valid, invalid = AbsMockEncoder.validate_task_to_prompt_name(
+    valid, invalid = AbsEncoder.validate_task_to_prompt_name(
         task_prompt_dict, raise_for_invalid_keys=False
     )
     assert len(valid) == expected_valid

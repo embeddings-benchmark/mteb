@@ -258,7 +258,9 @@ def create_image_dataloader(
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
     This should mirror the behavior of the old code.
     """
-    dataset = prepare_image_dataset(dataset, image_column_name, transform)
+    dataset = prepare_image_dataset(
+        dataset, image_column_name, transform
+    ).select_columns(["image"])
     return DataLoader(
         dataset,
         batch_size=batch_size,

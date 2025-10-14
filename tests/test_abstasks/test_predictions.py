@@ -19,108 +19,104 @@ from tests.mock_tasks import (
 
 
 @pytest.mark.parametrize(
-    "task_cls, expected",
+    "task, expected",
     [
         (
-            MockBitextMiningTask,
+            MockBitextMiningTask(),
             {
                 "sentence1-sentence2": [
-                    {"corpus_id": 1, "score": 0.7652846501709707},
-                    {"corpus_id": 1, "score": 0.7652846501709707},
+                    pytest.approx({"corpus_id": 0, "score": 0.7375020384788513}),
+                    pytest.approx({"corpus_id": 1, "score": 0.7731509208679199}),
                 ]
             },
         ),
         (
-            MockClassificationTask,
+            MockClassificationTask(),
             [
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
-                [0, 0],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
+                [0, 1],
             ],
         ),
         (
-            MockTextZeroShotClassificationTask,
+            MockTextZeroShotClassificationTask(),
             [
-                [0.9999999999419484, 0.9999999999419484],
-                [0.9999999999419484, 0.9999999999419484],
+                pytest.approx([0.9999998807907104, 0.6840636730194092]),
+                pytest.approx([0.6840636730194092, 1.0]),
             ],
         ),
         (
-            MockRetrievalTask,
-            {"q1": {"d2": 0.9999999999419484}, "q2": {"d2": 0.9999999999419484}},
-        ),
-        (
-            MockSTSTask,
+            MockRetrievalTask(),
             {
-                "cosine_scores": [
-                    pytest.approx(0.7271937024333304),
-                    pytest.approx(0.7652846502146503),
-                ],
-                "manhattan_distances": [
-                    pytest.approx(-11.606113294587654),
-                    pytest.approx(-11.687107717574829),
-                ],
-                "euclidean_distances": [
-                    pytest.approx(-2.4683132356991315),
-                    pytest.approx(-2.404168159957386),
-                ],
-                "similarity_scores": [
-                    pytest.approx(0.7271937023895851),
-                    pytest.approx(0.7652846501709707),
-                ],
+                "q1": {"d1": pytest.approx(0.7787374258041382)},
+                "q2": {"d1": pytest.approx(0.7900890707969666)},
             },
         ),
         (
-            MockPairClassificationTask,
+            MockSTSTask(),
+            pytest.approx(
+                {
+                    "cosine_scores": pytest.approx(
+                        [0.7375020980834961, 0.7731508016586304]
+                    ),
+                    "euclidean_distances": pytest.approx(
+                        [-2.4108424186706543, -2.1905980110168457]
+                    ),
+                    "manhattan_distances": pytest.approx(
+                        [-11.177837371826172, -10.721406936645508]
+                    ),
+                    "similarity_scores": pytest.approx(
+                        [0.7375020384788513, 0.7731509208679199]
+                    ),
+                }
+            ),
+        ),
+        (
+            MockPairClassificationTask(),
             {
-                "cosine_scores": [
-                    pytest.approx(0.7271937024333304),
-                    pytest.approx(0.7652846502146503),
-                ],
-                "euclidean_distances": [
-                    pytest.approx(2.4683132356991315),
-                    pytest.approx(2.404168159957386),
-                ],
-                "manhattan_distances": [
-                    pytest.approx(11.606113294587654),
-                    pytest.approx(11.687107717574829),
-                ],
-                "similarity_scores": [
-                    pytest.approx(0.7271937023895851),
-                    pytest.approx(0.7652846501709707),
-                ],
-                "dot_scores": [
-                    pytest.approx(8.047867836468026),
-                    pytest.approx(9.399434014739104),
-                ],
+                "cosine_scores": pytest.approx(
+                    [0.7375020980834961, 0.7731508016586304]
+                ),
+                "dot_scores": pytest.approx([7.974165916442871, 8.176445960998535]),
+                "euclidean_distances": pytest.approx(
+                    [2.4108424186706543, 2.1905980110168457]
+                ),
+                "manhattan_distances": pytest.approx(
+                    [11.177837371826172, 10.721406936645508]
+                ),
+                "similarity_scores": pytest.approx(
+                    [0.7375020384788513, 0.7731509208679199]
+                ),
             },
         ),
-        (MockClusteringTask, [[0, 0, 0]]),
-        (MockClusteringFastTask, {"Level 0": [[0, 0, 0], [0, 0, 0], [0, 0, 0]]}),
+        (MockClusteringTask(), [[1, 2, 0]]),
         (
-            MockRegressionTask,
-            [[0.5, 0.5]] * 10,
+            MockClusteringFastTask(),
+            {"Level 0": [[1, 0, 0, 2], [0, 1, 0, 0], [1, 0, 0, 1]]},
         ),
         (
-            MockImageTextPairClassificationTask,
+            MockRegressionTask(),
+            [pytest.approx([1.0000001192092896, 0.33665788173675537])] * 10,
+        ),
+        (
+            MockImageTextPairClassificationTask(),
             [
-                [[pytest.approx(0.7854366638891553)]],
-                [[pytest.approx(0.7571324633489456)]],
+                [pytest.approx([0.8081411123275757])],
+                [pytest.approx([0.6950531601905823])],
             ],
         ),
     ],
 )
-def test_predictions(tmp_path: Path, task_cls, expected):
+def test_predictions(tmp_path: Path, task, expected):
     """Run evaluation for each mock task and check predictions."""
-    task = task_cls()
-    model = mteb.get_model_meta("mteb/random-baseline")
+    model = mteb.get_model_meta("baseline/random-encoder-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
     with task._predictions_path(tmp_path).open() as f:

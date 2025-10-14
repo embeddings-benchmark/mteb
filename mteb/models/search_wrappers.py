@@ -249,6 +249,7 @@ class SearchEncoderWrapper:
                 query_embedding,
                 query_doc_embeddings,
             )
+            scores = torch.as_tensor(scores)
 
             # Handle NaN values
             is_nan = torch.isnan(scores)
