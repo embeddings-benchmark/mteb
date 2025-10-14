@@ -5,12 +5,9 @@ from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.any_classification import AbsTaskAnyClassification
-from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.any_sts import AbsTaskAnySTS
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.clustering import AbsTaskClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
@@ -23,6 +20,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.text.summarization import AbsTaskSummarization
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 general_args = {
     "description": "a mock task for testing",
@@ -3869,7 +3869,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
         self.data_loaded = True
 
 
-class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
+class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -3934,7 +3934,7 @@ class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
         return ["This is a test sentence", "This is another test sentence"]
 
 
-class MockTextZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
+class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,

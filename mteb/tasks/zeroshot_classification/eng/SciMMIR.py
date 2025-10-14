@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class SciMMIR(AbsTaskAnyZeroShotClassification):
+class SciMMIR(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="SciMMIR",
         description="SciMMIR.",
