@@ -740,15 +740,15 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
 
 
 class MockClusteringFastTask(AbsTaskClustering):
-    max_document_to_embed = 4
+    max_document_to_embed = 20
     max_fraction_of_documents_to_embed = None
     n_clusters = 3
     max_documents_per_cluster = 4
     expected_stats = {
         "test": {
-            "num_samples": 4,
+            "num_samples": 20,
             "text_statistics": {
-                "total_text_length": 110,
+                "total_text_length": 550,
                 "min_text_length": 23,
                 "average_text_length": 27.5,
                 "max_text_length": 29,
@@ -760,7 +760,7 @@ class MockClusteringFastTask(AbsTaskClustering):
                 "average_label_per_text": 1.0,
                 "max_labels_per_text": 1,
                 "unique_labels": 3,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 2}},
+                "labels": {"0": {"count": 5}, "1": {"count": 5}, "2": {"count": 10}},
             },
         }
     }
@@ -778,8 +778,8 @@ class MockClusteringFastTask(AbsTaskClustering):
             "This is another test sentence",
             "This is a third test sentence",
             "This is a third test sentence",
-        ]
-        labels = [0, 1, 2, 2]
+        ] * 5
+        labels = [0, 1, 2, 2] * 5
 
         self.dataset = DatasetDict(
             {

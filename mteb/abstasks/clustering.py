@@ -72,7 +72,8 @@ def _evaluate_clustering_bootstrapped(
         clustering_model = MiniBatchKMeans(
             n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
-            n_init="auto",
+            init="k-means++",
+            n_init=1,  # default when kmeans++ is used
             random_state=seed,
         )
         for _ in range(n_clusters):
