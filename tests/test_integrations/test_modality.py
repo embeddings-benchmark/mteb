@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from copy import deepcopy
 
 import pytest
 
@@ -38,7 +39,9 @@ logging.basicConfig(level=logging.INFO)
 def test_task_modality_filtering(task, modalities):
     model_name = "baseline/random-encoder-baseline"
     model = mteb.get_model(model_name)
-    model.mteb_model_meta.modalities = modalities
+    model_meta = deepcopy(model.mteb_model_meta)
+    model_meta.modalities = ["image"]
+    model.mteb_model_meta = model_meta
 
     with pytest.raises(ValueError):
         mteb.evaluate(
@@ -52,7 +55,9 @@ def test_task_modality_filtering(task, modalities):
 def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, caplog):
     with caplog.at_level(logging.WARNING):
         model = mteb.get_model("baseline/random-encoder-baseline")
-        model.mteb_model_meta.modalities = ["image"]
+        model_meta = deepcopy(model.mteb_model_meta)
+        model_meta.modalities = ["image"]
+        model.mteb_model_meta = model_meta
         scores = mteb.evaluate(
             model,
             task,
