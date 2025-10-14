@@ -59,6 +59,7 @@ empty_model_meta = ModelMeta(
     public_training_data=None,
     use_instructions=None,
     training_datasets=None,
+    modalities=[],
 )
 
 
@@ -189,7 +190,7 @@ def _check_model_modalities(
         model: The model metadata containing supported modalities.
         tasks: A single task or an iterable of tasks to check against the model.
     """
-    if model.modalities is None:
+    if model.modalities is None or len(model.modalities) == 0:
         return
 
     model_modalities = set(model.modalities)
