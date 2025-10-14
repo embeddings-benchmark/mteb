@@ -209,7 +209,7 @@ def _check_model_modalities(
 
             if model_modalities == doc_mods and model_modalities == query_mods:
                 continue
-            elif query_overlap and doc_overlap and doc_overlap == query_overlap:
+            elif query_overlap and doc_overlap:
                 warnings.append(
                     f"Model {model.name} supports {list(model_modalities)}, partially overlapping "
                     f"with task {task.metadata.name} query={list(query_mods)}, document={list(doc_mods)}. "
