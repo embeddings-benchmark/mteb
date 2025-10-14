@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 def test_task_modality_filtering(mock_logger, task):
     eval = mteb.MTEB(tasks=[task])
 
-    model_name = "mteb/random-encoder-baseline"
+    model_name = "baseline/random-encoder-baseline"
     model = mteb.get_model(model_name)
     model.mteb_model_meta.modalities = ["image"]
 
@@ -53,7 +53,7 @@ def test_task_modality_filtering_model_modalities_more_than_task_modalities(task
 
     # Run the evaluation
     eval.run(
-        model=mteb.get_model("mteb/random-encoder-baseline"),
+        model=mteb.get_model("baseline/random-encoder-baseline"),
         output_folder="tests/results",
         overwrite_results=True,
     )
