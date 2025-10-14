@@ -36,7 +36,7 @@ def test_task_modality_filtering(task, caplog):
             f"Model {model.mteb_model_meta.name} support modalities {model.mteb_model_meta.modalities}"
             f" but the task {task.metadata.name} only supports {task.metadata.modalities}. Skipping task."
         ) in caplog.text
-        assert len(results[0].scores) == 0
+        assert len(results) == 0
 
 
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
