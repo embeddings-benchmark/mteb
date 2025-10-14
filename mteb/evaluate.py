@@ -350,7 +350,7 @@ def evaluate(
     ):
         logger.warning(
             f"Model {model.mteb_model_meta.name} support modalities {model.mteb_model_meta.modalities} but the task "
-            f"{task.metadata.name} only supports {task.modalities}. Skipping task."
+            f"{task.metadata.name} contains the following {task.modalities}. Skipping task."
         )
         return ModelResult(
             model_name=model_name,
