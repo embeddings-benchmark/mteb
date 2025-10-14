@@ -1659,8 +1659,8 @@ MTEB_NL = Benchmark(
                 "OpenTenderClassification",
                 "IconclassClassification",
                 # # PairClassification
-                # "SICKNLPairClassification",
-                # "XLWICNLPairClassification",
+                "SICKNLPairClassification",
+                "XLWICNLPairClassification",
                 # # MultiLabelClassification
                 "CovidDisinformationNLMultiLabelClassification",
                 "MultiEURLEXMultilabelClassification",
