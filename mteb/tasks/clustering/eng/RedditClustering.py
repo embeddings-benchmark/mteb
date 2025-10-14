@@ -2,15 +2,15 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditFastClusteringS2S(AbsTaskClusteringFast):
+class RedditFastClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="RedditClustering.v2",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
@@ -70,7 +70,7 @@ Iryna Gurevych},
         self.max_fraction_of_documents_to_embed = None
 
 
-class RedditClustering(AbsTaskAnyClustering):
+class RedditClustering(AbsTaskClusteringLegacy):
     superseded_by = "RedditClustering.v2"
     metadata = TaskMetadata(
         name="RedditClustering",

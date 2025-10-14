@@ -1,9 +1,9 @@
 from .abstask import AbsTask
 from .any_classification import AbsTaskAnyClassification
-from .any_clustering import AbsTaskAnyClustering
+from .any_clustering import AbsTaskClusteringLegacy
 from .any_sts import AbsTaskAnySTS
 from .any_zeroshot_classification import AbsTaskAnyZeroShotClassification
-from .clustering_fast import AbsTaskClusteringFast
+from .clustering_fast import AbsTaskClustering
 from .image.image_text_pair_classification import AbsTaskImageTextPairClassification
 from .multilabel_classification import AbsTaskMultilabelClassification
 from .regression import AbsTaskRegression
@@ -16,11 +16,11 @@ from .text.summarization import AbsTaskSummarization
 __all__ = [
     "AbsTask",
     "AbsTaskAnyClassification",
-    "AbsTaskAnyClustering",
     "AbsTaskAnySTS",
     "AbsTaskAnyZeroShotClassification",
     "AbsTaskBitextMining",
-    "AbsTaskClusteringFast",
+    "AbsTaskClustering",
+    "AbsTaskClusteringLegacy",
     "AbsTaskImageTextPairClassification",
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",

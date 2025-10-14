@@ -1,4 +1,4 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -10,7 +10,7 @@ _LANGUAGES = {
 }
 
 
-class HUMESIB200ClusteringS2S(AbsTaskAnyClustering):
+class HUMESIB200ClusteringS2S(AbsTaskClusteringLegacy):
     fast_loading = True
     metadata = TaskMetadata(
         name="HUMESIB200ClusteringS2S",

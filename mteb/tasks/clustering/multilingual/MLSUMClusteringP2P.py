@@ -2,8 +2,8 @@ import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +18,7 @@ _LANGUAGES = {
 N_SAMPLES = 2048
 
 
-class MLSUMClusteringP2P(AbsTaskAnyClustering):
+class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "MLSUMClusteringP2P.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P",
@@ -88,7 +88,7 @@ class MLSUMClusteringP2P(AbsTaskAnyClustering):
         self.dataset[lang] = _dataset
 
 
-class MLSUMClusteringP2PFast(AbsTaskClusteringFast):
+class MLSUMClusteringP2PFast(AbsTaskClustering):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 

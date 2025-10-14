@@ -61,7 +61,7 @@ class ClusteringMetrics(TypedDict, total=False):
     cluster_accuracy: float
 
 
-class AbsTaskAnyClustering(AbsTask):
+class AbsTaskClusteringLegacy(AbsTask):
     """Abstract class for Clustering tasks for any modality.
     The similarity is computed between pairs and the results are ranked.
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:

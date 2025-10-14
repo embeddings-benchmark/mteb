@@ -3,9 +3,9 @@ from collections import Counter
 import datasets
 import numpy as np
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 NUM_SAMPLES = 2048
 
 
-class HALClusteringS2S(AbsTaskAnyClustering):
+class HALClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "HALClusteringS2S.v2"
 
     metadata = TaskMetadata(
@@ -61,7 +61,7 @@ class HALClusteringS2S(AbsTaskAnyClustering):
         self.dataset["test"] = datasets.Dataset.from_dict(new_format)
 
 
-class HALClusteringS2SFast(AbsTaskClusteringFast):
+class HALClusteringS2SFast(AbsTaskClustering):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 

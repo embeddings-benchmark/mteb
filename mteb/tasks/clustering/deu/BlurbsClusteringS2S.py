@@ -3,9 +3,9 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 NUM_SAMPLES = 2048
 
 
-class BlurbsClusteringS2S(AbsTaskAnyClustering):
+class BlurbsClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "BlurbsClusteringS2S.v2"
 
     metadata = TaskMetadata(
@@ -49,8 +49,8 @@ class BlurbsClusteringS2S(AbsTaskAnyClustering):
     )
 
 
-class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
-    # a faster version of the task, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
+class BlurbsClusteringS2SFast(AbsTaskClustering):
+    # a faster version of the task, since it does not sample from the same distribution we can't use the AbsTaskClustering, instead we
     # simply downsample each cluster.
 
     max_document_to_embed = NUM_SAMPLES

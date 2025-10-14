@@ -1,11 +1,11 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AlloProfClusteringP2P(AbsTaskAnyClustering):
+class AlloProfClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "AlloProfClusteringP2P.v2"
 
     metadata = TaskMetadata(
@@ -44,7 +44,7 @@ class AlloProfClusteringP2P(AbsTaskAnyClustering):
     )
 
 
-class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
+class AlloProfClusteringP2PFast(AbsTaskClustering):
     max_document_to_embed = 2556
     max_fraction_of_documents_to_embed = None
 
