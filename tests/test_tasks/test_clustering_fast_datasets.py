@@ -1,9 +1,9 @@
 import pytest
 
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 
 
-@pytest.mark.parametrize("dataset", AbsTaskClusteringFast.__subclasses__())
+@pytest.mark.parametrize("dataset", AbsTaskClustering.__subclasses__())
 def test_clustering_fast_datasets(dataset):
     assert (
         dataset.max_document_to_embed is None

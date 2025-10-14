@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEArxivClusteringP2P(AbsTaskAnyClustering):
+class HUMEArxivClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="HUMEArxivClusteringP2P",
         description="Human evaluation subset of Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",

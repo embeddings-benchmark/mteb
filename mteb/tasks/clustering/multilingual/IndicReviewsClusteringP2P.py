@@ -1,4 +1,4 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +18,7 @@ _LANGUAGES = {
 }
 
 
-class IndicReviewsClusteringP2P(AbsTaskAnyClustering):
+class IndicReviewsClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="IndicReviewsClusteringP2P",
         dataset={

@@ -1,4 +1,4 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +21,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClusteringS2S(AbsTaskAnyClustering):
+class MasakhaNEWSClusteringS2S(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",
         dataset={
