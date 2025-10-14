@@ -1,0 +1,45 @@
+{
+    "test": {
+        "num_samples": 1200,
+        "text_statistics": {
+            "total_text_length": 59242,
+            "min_text_length": 18,
+            "average_text_length": 49.36833333333333,
+            "max_text_length": 94,
+            "unique_texts": 1200
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 8,
+            "labels": {
+                "Opmerkelijk": {
+                    "count": 150
+                },
+                "Buitenland": {
+                    "count": 150
+                },
+                "Cultuur & Media": {
+                    "count": 150
+                },
+                "Binnenland": {
+                    "count": 150
+                },
+                "Politiek": {
+                    "count": 150
+                },
+                "Economie": {
+                    "count": 150
+                },
+                "Tech": {
+                    "count": 150
+                },
+                "Regionaal nieuws": {
+                    "count": 150
+                }
+            }
+        }
+    }
+}
