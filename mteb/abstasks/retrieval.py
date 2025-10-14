@@ -103,43 +103,22 @@ def _filter_queries_without_positives(
 class AbsTaskRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
-    Child-classes must implement the following properties:
-
-    self.dataset: dict[str, dict[str, dict[str, Any]]]
-        A dictionary containing all dataset components with the following structure:
-        {
-            hf_subset: {
-                split: {
-                    'corpus': dict[str, dict[str, str]],  # doc_id -> doc
-                        Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
-                        E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
-                    'queries': dict[str, str | list[str]]],  # query_id -> query
-                        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
-                        E.g. {"test": {"q1": "query"}}
-                        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
-                    'relevant_docs': dict[str, dict[str, int]],  # query_id -> doc_id -> score
-                        Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
-                        E.g.: {"test": {"q1": {"document_one": 1}}}
-                    'instructions': Optional[dict[str, str]],  # query_id -> instruction
-                        Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
-                        E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
-                    'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
-                        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
-                        E.g. {"test": {"query-id1": "instruction text"}}
-                }
-            }
-        }
+    Attributes:
+        dataset: A nested dictionary where the first key is the subset (language or "default"),
+                 the second key is the split (e.g., "train", "test"), and the value is a RetrievalSplitData object.
+        ignore_identical_ids: If True, identical IDs in queries and corpus are ignored during evaluation.
+        k_values: A sequence of integers representing the k values for evaluation metrics.
+        skip_first_result: If True, the first result is skipped during evaluation (useful for
     """
 
     ignore_identical_ids: bool = False
-    abstask_prompt = "Retrieve text based on user query."
+    _abstask_prompt = "Retrieve text based on user query."
     k_values: Sequence[int] = (1, 3, 5, 10, 20, 100, 1000)
-    top_k: int = max(k_values)
+    _top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
-    cross_encoder_top_k: int = 100
-    support_cross_encoder: bool = True
-    support_search: bool = True
-    previous_results_model_meta: dict[str, Any] | None = None
+    _support_cross_encoder: bool = True
+    _support_search: bool = True
+    _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
 
     def __init__(self, **kwargs):
@@ -368,7 +347,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
-            top_k=self.top_k,
+            top_k=self._top_k,
             **kwargs,
         )
 
@@ -438,7 +417,7 @@ class AbsTaskRetrieval(AbsTask):
             naucs_mrr,
             cv_recall,
             task_specific_scores,
-            self.previous_results_model_meta,
+            self._previous_results_model_meta,
         )
 
     def task_specific_scores(
@@ -664,7 +643,7 @@ class AbsTaskRetrieval(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        self.previous_results_model_meta = previous_results["mteb_model_meta"]
+        self._previous_results_model_meta = previous_results["mteb_model_meta"]
 
         for subset in self.dataset:
             for split in self.dataset[subset]:
@@ -675,10 +654,10 @@ class AbsTaskRetrieval(AbsTask):
                 top_k_sorted = defaultdict(list)
                 for query_id, values in top_ranked.items():
                     sorted_keys = sorted(values, key=values.get, reverse=True)
-                    top_k_sorted[query_id] = sorted_keys[: self.top_k]
+                    top_k_sorted[query_id] = sorted_keys[: self._top_k]
 
                 self.dataset[subset][split]["top_ranked"] = top_k_sorted
-        self.top_k = top_k
+        self._top_k = top_k
         return self
 
 

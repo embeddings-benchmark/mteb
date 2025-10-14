@@ -94,16 +94,17 @@ class FullClassificationMetrics(ClassificationMetrics):
 
 class AbsTaskAnyClassification(AbsTask):
     """Abstract class for classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
-    must contain the following columns:
-        input_column_name: input (str | image)
-        label_column_name: int
 
     Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
+        dataset: Hugging Face dataset containing the data for the task. Should have train split (split name can be changed by train_split. Must contain the following columns:
+            text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
+            label: int. Column name can be changed via `label_column_name` attribute.
+        evaluator_model: The model to use for evaluation. Must implement the [`SklearnModelProtocol`]. Default is `LogisticRegression`.
+        samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
+        n_experiments: Number of experiments to run. Default is 10.
+        train_split: Name of the split to use for training the evaluator model. Default is "train".
+        label_column_name: Name of the column containing the labels. Default is "label".
+        input_column_name: Name of the column containing the input data. Default is "text".
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
@@ -117,7 +118,7 @@ class AbsTaskAnyClassification(AbsTask):
     train_split: str = "train"
     label_column_name: str = "label"
     input_column_name: str = "text"
-    abstask_prompt = "Classify user passages."
+    _abstask_prompt = "Classify user passages."
 
     def evaluate(
         self,

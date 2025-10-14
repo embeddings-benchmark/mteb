@@ -56,14 +56,13 @@ class AbsTaskBitextMining(AbsTask):
     """Abstract class for BitextMining tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        id: str
-        sentence1: str
-        sentence2: str
+    Attributes:
+        dataset: A HuggingFace dataset containing the data for the task. It must contain the following columns sentence1 and sentence2 for the two texts to be compared.
+        parallel_subsets: If true task language pairs should be in one split as column names, otherwise each language pair should be a subset.
     """
 
     parallel_subsets = False
-    abstask_prompt = "Retrieve parallel sentences."
+    _abstask_prompt = "Retrieve parallel sentences."
     _DEFAULT_PAIR: ClassVar[list[tuple[str, str]]] = [("sentence1", "sentence2")]
 
     def evaluate(

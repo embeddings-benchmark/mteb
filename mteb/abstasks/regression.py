@@ -71,6 +71,15 @@ class AbsTaskRegression(AbsTaskAnyClassification):
     must contain the following columns:
         text: str
         value: float
+
+    Attributes:
+        dataset: A HuggingFace Dataset containing the data for the regression task. It must contain the following columns: input_column_name and label_column_name.
+            Input can be any text or images, and label must be a continuous value.
+        input_column_name: Name of the column containing the text inputs.
+        label_column_name: Name of the column containing the continuous values.
+        train_split: Name of the training split in the dataset.
+        n_experiments: Number of experiments to run with different random seeds.
+        n_samples: Number of samples to use for training the regression model. If the dataset has fewer samples than n_samples, all samples are used.
     """
 
     evaluator: type[SklearnModelProtocol] = SklearnEvaluator
@@ -79,7 +88,7 @@ class AbsTaskRegression(AbsTaskAnyClassification):
     train_split: str = "train"
     label_column_name: str = "value"
     input_column_name: str = "text"
-    abstask_prompt = "Predict the value of the user passage."
+    _abstask_prompt = "Predict the value of the user passage."
 
     n_experiments: int = 10
     n_samples: int = 2048
