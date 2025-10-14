@@ -1636,6 +1636,81 @@ BEIR_NL = Benchmark(
 """,
 )
 
+MTEB_NL = Benchmark(
+    name="MTEB(nld, v1)",
+    display_name="MTEB-NL",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["nld"],
+            exclusive_language_filter=True,
+            tasks=[
+                # Classification
+                "DutchBookReviewSentimentClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "SIB200Classification",
+                "MultiHateClassification",
+                "VaccinChatNLClassification",
+                "DutchColaClassification",
+                "DutchGovernmentBiasClassification",
+                "DutchSarcasticHeadlinesClassification",
+                "DutchNewsArticlesClassification",
+                "OpenTenderClassification",
+                "IconclassClassification",
+                # # PairClassification
+                # "SICKNLPairClassification",
+                # "XLWICNLPairClassification",
+                # # MultiLabelClassification
+                # "CovidDisinformationNLMultiLabelClassification",
+                # "MultiEURLEXMultilabelClassification",
+                # "VABBMultiLabelClassification",
+                # # Clustering
+                # "DutchNewsArticlesClusteringS2S",
+                # "DutchNewsArticlesClusteringP2P",
+                # "SIB200ClusteringS2S",
+                # "VABBClusteringS2S",
+                # "VABBClusteringP2P",
+                # "OpenTenderClusteringS2S",
+                # "OpenTenderClusteringP2P",
+                # "IconclassClusteringS2S",
+                # # Reranking
+                # "WikipediaRerankingMultilingual",
+                # # Retrieval
+                # "ArguAna-NL",
+                # "SCIDOCS-NL",
+                # "SciFact-NL",
+                # "NFCorpus-NL",
+                # "BelebeleRetrieval",
+                # "WebFAQRetrieval",
+                # "DutchNewsArticlesRetrieval",
+                # "bBSARDNLRetrieval",
+                # "LegalQANLRetrieval",
+                # "OpenTenderRetrieval",
+                # "VABBRetrieval",
+                # "WikipediaRetrievalMultilingual",
+                # # STS
+                # "SICK-NL-STS",
+                # "STSBenchmarkMultilingualSTS",
+            ],
+        )
+    ),
+    description="MTEB-NL",
+    reference="https://arxiv.org/abs/2509.12340",
+    contacts=["nikolay-banar"],
+    citation=r"""
+@misc{banar2025mtebnle5nlembeddingbenchmark,
+  archiveprefix = {arXiv},
+  author = {Nikolay Banar and Ehsan Lotfi and Jens Van Nooten and Cristina Arhiliuc and Marija Kliocaite and Walter Daelemans},
+  eprint = {22509.12340},
+  primaryclass = {cs.CL},
+  title = {MTEB-NL and E5-NL: Embedding Benchmark and Models for Dutch},
+  url = {https://arxiv.org/abs/2509.12340},
+  year = {2025},
+}
+""",
+)
+
 MIEB_common_tasks = [
     # Image Classification
     "Birdsnap",  # fine
