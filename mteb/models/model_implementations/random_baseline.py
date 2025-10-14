@@ -92,13 +92,13 @@ class RandomEncoderBaseline:
         self,
         model_name: str,
         revision: str | None,
-        is_torch: bool = False,
+        use_torch: bool = False,
         torch_dtype: torch.dtype | None = None,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
         self.embedding_dim = _EMBEDDING_DIM
-        self.is_torch = is_torch
+        self.use_torch = use_torch
         self.torch_dtype = torch_dtype if torch_dtype is not None else torch.float32
 
     def encode(
@@ -112,7 +112,7 @@ class RandomEncoderBaseline:
         **kwargs: Any,
     ) -> Array:
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
-        if self.is_torch:
+        if self.use_torch:
             return torch.tensor(embedding, dtype=self.torch_dtype)
         return embedding
 
@@ -153,37 +153,8 @@ class RandomEncoderBaseline:
 
 random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,  # type: ignore
-    name="mock/random-encoder-baseline",
+    name="mteb/random-encoder-baseline",
     modalities=["text", "image"],
-    **_common_mock_metadata,
-)
-
-random_torch_encoder_baseline = ModelMeta(
-    loader=RandomEncoderBaseline,  # type: ignore
-    loader_kwargs=dict(
-        is_torch=True,
-        torch_dtype=torch.float32,
-    ),
-    name="mock/random-torch-encoder-baseline",
-    modalities=["text", "image"],
-    **_common_mock_metadata,
-)
-
-random_torch_fp16_encoder_baseline = ModelMeta(
-    loader=RandomEncoderBaseline,  # type: ignore
-    loader_kwargs=dict(
-        is_torch=True,
-        torch_dtype=torch.float16,
-    ),
-    name="mock/random-torch-fp16-encoder-baseline",
-    modalities=["text", "image"],
-    **_common_mock_metadata,
-)
-
-random_image_only_encoder_baseline = ModelMeta(
-    loader=RandomEncoderBaseline,  # type: ignore
-    name="mock/random-image-only-encoder-baseline",
-    modalities=["image"],
     **_common_mock_metadata,
 )
 

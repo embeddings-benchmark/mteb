@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 
 import pytest
+import torch
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -18,9 +19,11 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "model",
     [
-        mteb.get_model("mock/random-encoder-baseline"),
-        mteb.get_model("mock/random-torch-encoder-baseline"),
-        mteb.get_model("mock/random-torch-fp16-encoder-baseline"),
+        mteb.get_model("mteb/random-encoder-baseline"),
+        mteb.get_model("mteb/random-encoder-baseline", use_torch=True),
+        mteb.get_model(
+            "mteb/random-encoder-baseline", use_torch=True, torch_dtype=torch.float16
+        ),
         MockSentenceTransformersbf16Encoder(),
     ],
 )

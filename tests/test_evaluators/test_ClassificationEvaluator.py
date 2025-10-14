@@ -10,7 +10,7 @@ from tests.mock_tasks import MockClassificationTask
 # Fixtures
 @pytest.fixture
 def model():
-    return mteb.get_model("mock/random-encoder-baseline")
+    return mteb.get_model("mteb/random-encoder-baseline")
 
 
 @pytest.fixture

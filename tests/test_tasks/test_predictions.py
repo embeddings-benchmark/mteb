@@ -113,7 +113,7 @@ from tests.mock_tasks import (
 )
 def test_predictions(tmp_path: Path, task, expected):
     """Run evaluation for each mock task and check predictions."""
-    model = mteb.get_model_meta("mock/random-encoder-baseline")
+    model = mteb.get_model_meta("mteb/random-encoder-baseline")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
     with task._predictions_path(tmp_path).open() as f:

@@ -146,8 +146,8 @@ class TestCachedEmbeddingWrapper:
 @pytest.mark.parametrize(
     "task, model",
     [
-        (MockMultiChoiceTask(), mteb.get_model("mock/random-encoder-baseline")),  # ti2i
-        (MockRetrievalTask(), mteb.get_model("mock/random-encoder-baseline")),  # t2t
+        (MockMultiChoiceTask(), mteb.get_model("mteb/random-encoder-baseline")),  # ti2i
+        (MockRetrievalTask(), mteb.get_model("mteb/random-encoder-baseline")),  # t2t
     ],
 )
 def test_wrapper_mock_tasks(task: AbsTask, model: Encoder, tmp_path: Path):
