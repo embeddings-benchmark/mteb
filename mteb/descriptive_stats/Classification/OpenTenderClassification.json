@@ -1,0 +1,222 @@
+{
+    "test": {
+        "num_samples": 4500,
+        "number_texts_intersect_with_train": 79,
+        "text_statistics": {
+            "total_text_length": 2180640,
+            "min_text_length": 18,
+            "average_text_length": 484.58666666666664,
+            "max_text_length": 12193,
+            "unique_texts": 4485
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 30,
+            "labels": {
+                "Kantoormachines en gegevensverwerkende apparatuur, kantooruitrusting en -benodigdheden, uitgez. meubilair en softwarepakketten": {
+                    "count": 150
+                },
+                "Medische apparatuur, farmaceutische artikelen en artikelen voor lichaamsverzorging": {
+                    "count": 150
+                },
+                "Onderzoek en ontwikkeling, en aanverwante adviezen": {
+                    "count": 150
+                },
+                "Zakelijke dienstverlening: juridisch, marketing, consulting, drukkerij en beveiliging": {
+                    "count": 150
+                },
+                "Uitrusting voor veiligheid, brandweer, politie en leger": {
+                    "count": 150
+                },
+                "Structuren en materialen voor de bouw; ondersteunende producten voor de bouw (uitgezonderd elektrische apparatuur)": {
+                    "count": 150
+                },
+                "Diensten voor land-, bos- en tuinbouw, aquicultuur en imkerij": {
+                    "count": 150
+                },
+                "Reparatie- en onderhoudsdiensten": {
+                    "count": 150
+                },
+                "Overige gemeenschaps-, sociale en persoonlijke diensten": {
+                    "count": 150
+                },
+                "IT-diensten: adviezen, softwareontwikkeling, internet en ondersteuning": {
+                    "count": 150
+                },
+                "Kleding, schoeisel, bagageartikelen en accessoires": {
+                    "count": 150
+                },
+                "Meubelen (m.i.v. kantoormeubelen), inrichtingsartikelen, huishoudelijke apparaten (uitgez. verlichting) en schoonmaakproducten": {
+                    "count": 150
+                },
+                "Gezondheidszorg en maatschappelijk werk": {
+                    "count": 150
+                },
+                "Laboratoriuminstrumenten, optische en precisie-instrumenten (uitgezonderd brillen)": {
+                    "count": 150
+                },
+                "Voeding, dranken, tabak en aanverwante producten": {
+                    "count": 150
+                },
+                "Bouwwerkzaamheden": {
+                    "count": 150
+                },
+                "Bedrijfsmachines": {
+                    "count": 150
+                },
+                "Elektrische machines, apparaten, uitrusting en verbruiksartikelen; verlichting": {
+                    "count": 150
+                },
+                "Vervoersdiensten (uitg. vervoer van afval)": {
+                    "count": 150
+                },
+                "Financi\u00eble en verzekeringsdiensten": {
+                    "count": 150
+                },
+                "Radio-, televisie-, communicatie-, telecommunicatietoestellen en aanverwante apparatuur": {
+                    "count": 150
+                },
+                "Diensten voor onderwijs en opleiding": {
+                    "count": 150
+                },
+                "Drukwerk en aanverwante producten": {
+                    "count": 150
+                },
+                "Vervoersmaterieel en bijbehorende producten": {
+                    "count": 150
+                },
+                "Software en informatiesystemen": {
+                    "count": 150
+                },
+                "Dienstverlening op het gebied van architectuur, bouwkunde, civiele techniek en inspectie": {
+                    "count": 150
+                },
+                "Diensten inzake afvalwater, afval, reiniging en milieu": {
+                    "count": 150
+                },
+                "Post- en telecommunicatiediensten": {
+                    "count": 150
+                },
+                "Aardolieproducten, brandstof, elektriciteit en andere energiebronnen": {
+                    "count": 150
+                },
+                "Diensten voor hotel, restaurant en detailhandel": {
+                    "count": 150
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 21000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 10160376,
+            "min_text_length": 13,
+            "average_text_length": 483.8274285714286,
+            "max_text_length": 13655,
+            "unique_texts": 20777
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 30,
+            "labels": {
+                "Radio-, televisie-, communicatie-, telecommunicatietoestellen en aanverwante apparatuur": {
+                    "count": 700
+                },
+                "Diensten voor hotel, restaurant en detailhandel": {
+                    "count": 700
+                },
+                "Kleding, schoeisel, bagageartikelen en accessoires": {
+                    "count": 700
+                },
+                "Kantoormachines en gegevensverwerkende apparatuur, kantooruitrusting en -benodigdheden, uitgez. meubilair en softwarepakketten": {
+                    "count": 700
+                },
+                "Post- en telecommunicatiediensten": {
+                    "count": 700
+                },
+                "Bouwwerkzaamheden": {
+                    "count": 700
+                },
+                "Aardolieproducten, brandstof, elektriciteit en andere energiebronnen": {
+                    "count": 700
+                },
+                "Voeding, dranken, tabak en aanverwante producten": {
+                    "count": 700
+                },
+                "Bedrijfsmachines": {
+                    "count": 700
+                },
+                "Structuren en materialen voor de bouw; ondersteunende producten voor de bouw (uitgezonderd elektrische apparatuur)": {
+                    "count": 700
+                },
+                "Elektrische machines, apparaten, uitrusting en verbruiksartikelen; verlichting": {
+                    "count": 700
+                },
+                "Meubelen (m.i.v. kantoormeubelen), inrichtingsartikelen, huishoudelijke apparaten (uitgez. verlichting) en schoonmaakproducten": {
+                    "count": 700
+                },
+                "Drukwerk en aanverwante producten": {
+                    "count": 700
+                },
+                "Dienstverlening op het gebied van architectuur, bouwkunde, civiele techniek en inspectie": {
+                    "count": 700
+                },
+                "Financi\u00eble en verzekeringsdiensten": {
+                    "count": 700
+                },
+                "Vervoersmaterieel en bijbehorende producten": {
+                    "count": 700
+                },
+                "Diensten voor onderwijs en opleiding": {
+                    "count": 700
+                },
+                "Gezondheidszorg en maatschappelijk werk": {
+                    "count": 700
+                },
+                "Zakelijke dienstverlening: juridisch, marketing, consulting, drukkerij en beveiliging": {
+                    "count": 700
+                },
+                "Medische apparatuur, farmaceutische artikelen en artikelen voor lichaamsverzorging": {
+                    "count": 700
+                },
+                "IT-diensten: adviezen, softwareontwikkeling, internet en ondersteuning": {
+                    "count": 700
+                },
+                "Onderzoek en ontwikkeling, en aanverwante adviezen": {
+                    "count": 700
+                },
+                "Overige gemeenschaps-, sociale en persoonlijke diensten": {
+                    "count": 700
+                },
+                "Diensten inzake afvalwater, afval, reiniging en milieu": {
+                    "count": 700
+                },
+                "Diensten voor land-, bos- en tuinbouw, aquicultuur en imkerij": {
+                    "count": 700
+                },
+                "Laboratoriuminstrumenten, optische en precisie-instrumenten (uitgezonderd brillen)": {
+                    "count": 700
+                },
+                "Reparatie- en onderhoudsdiensten": {
+                    "count": 700
+                },
+                "Software en informatiesystemen": {
+                    "count": 700
+                },
+                "Vervoersdiensten (uitg. vervoer van afval)": {
+                    "count": 700
+                },
+                "Uitrusting voor veiligheid, brandweer, politie en leger": {
+                    "count": 700
+                }
+            }
+        }
+    }
+}

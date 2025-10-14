@@ -1,0 +1,156 @@
+{
+    "test": {
+        "num_samples": 3245,
+        "number_texts_intersect_with_train": 2265,
+        "text_statistics": {
+            "total_text_length": 2933733,
+            "min_text_length": 47,
+            "average_text_length": 904.0779661016949,
+            "max_text_length": 35167,
+            "unique_texts": 3235
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.8594761171032357,
+            "max_labels_per_text": 8,
+            "unique_labels": 19,
+            "labels": {
+                "Social Sciences (General)": {
+                    "count": 473
+                },
+                "Sociology": {
+                    "count": 367
+                },
+                "Other Disciplines": {
+                    "count": 558
+                },
+                "Educational Sciences": {
+                    "count": 302
+                },
+                "Economics & Business": {
+                    "count": 393
+                },
+                "Social Health Sciences": {
+                    "count": 255
+                },
+                "Political Sciences": {
+                    "count": 202
+                },
+                "Communication Studies": {
+                    "count": 155
+                },
+                "History": {
+                    "count": 288
+                },
+                "Humanities (General)": {
+                    "count": 399
+                },
+                "Law": {
+                    "count": 1007
+                },
+                "Philosophy": {
+                    "count": 235
+                },
+                "Art History": {
+                    "count": 350
+                },
+                "Theology": {
+                    "count": 58
+                },
+                "Psychology": {
+                    "count": 174
+                },
+                "Criminology": {
+                    "count": 285
+                },
+                "Linguistics": {
+                    "count": 254
+                },
+                "Literature": {
+                    "count": 140
+                },
+                "Archaeology": {
+                    "count": 139
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 6517,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 5869381,
+            "min_text_length": 38,
+            "average_text_length": 900.6262083780881,
+            "max_text_length": 35167,
+            "unique_texts": 6471
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.8815405861592758,
+            "max_labels_per_text": 11,
+            "unique_labels": 19,
+            "labels": {
+                "Social Sciences (General)": {
+                    "count": 1026
+                },
+                "Sociology": {
+                    "count": 666
+                },
+                "Other Disciplines": {
+                    "count": 1130
+                },
+                "Educational Sciences": {
+                    "count": 542
+                },
+                "Economics & Business": {
+                    "count": 758
+                },
+                "Linguistics": {
+                    "count": 505
+                },
+                "Humanities (General)": {
+                    "count": 1002
+                },
+                "Political Sciences": {
+                    "count": 383
+                },
+                "Communication Studies": {
+                    "count": 337
+                },
+                "Psychology": {
+                    "count": 376
+                },
+                "Philosophy": {
+                    "count": 438
+                },
+                "Art History": {
+                    "count": 706
+                },
+                "History": {
+                    "count": 522
+                },
+                "Law": {
+                    "count": 2173
+                },
+                "Theology": {
+                    "count": 116
+                },
+                "Social Health Sciences": {
+                    "count": 491
+                },
+                "Criminology": {
+                    "count": 580
+                },
+                "Literature": {
+                    "count": 276
+                },
+                "Archaeology": {
+                    "count": 235
+                }
+            }
+        }
+    }
+}
