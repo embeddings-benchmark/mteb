@@ -270,8 +270,6 @@ def get_tasks(
                 script,
                 eval_splits=eval_splits,
                 exclusive_language_filter=exclusive_language_filter,
-                modalities=modalities,
-                exclusive_modality_filter=exclusive_modality_filter,
             )
             for task in tasks
         ]
@@ -308,8 +306,6 @@ def get_task(
     eval_splits: list[str] | None = None,
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[Modalities] | None = None,
-    exclusive_modality_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
 
@@ -323,10 +319,6 @@ def get_task(
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
-        modalities: A list of modalities to include. If None, all modalities are included.
-        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
-            task's modalities and ALL task modalities are in filter modalities (exact match).
-            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
 
     Returns:
         An initialized task object.
@@ -352,8 +344,6 @@ def get_task(
     task = _TASKS_REGISTRY[task_name]()
     if eval_splits:
         task.filter_eval_splits(eval_splits=eval_splits)
-    if modalities:
-        task.filter_modalities(modalities, exclusive_modality_filter)
     return task.filter_languages(
         languages,
         script,
