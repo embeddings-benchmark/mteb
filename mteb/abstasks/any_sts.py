@@ -82,10 +82,13 @@ class STSMetrics(TypedDict):
 class AbsTaskAnySTS(AbsTask):
     """Abstract class for STS experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns::
-        sentence1: str
-        sentence2: str
-        score: float
+    Attributes:
+        dataset: Dataset or dict of Datasets for different subsets (e.g., languages). Dataset must contain columns specified in column_names and a 'score' column.
+            Columns in column_names should contain the text or image data to be compared.
+        column_names: Tuple containing the names of the two columns to compare.
+        min_score: Minimum possible score in the dataset.
+        max_score: Maximum possible score in the dataset.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     abstask_prompt = "Retrieve semantically similar text."

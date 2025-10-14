@@ -59,15 +59,14 @@ class FullMultilabelClassificationMetrics(MultilabelClassificationMetrics):
 
 class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     """Abstract class for multioutput classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        text: str
-        label: list[list[int]]
 
     Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
+        dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by input_column_name and label_column_name.
+            Input column must contain the text or image to be classified, and label column must contain a list of labels for each example.
+        input_column_name: Name of the column containing the input text.
+        label_column_name: Name of the column containing the labels.
+        samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+        evaluator: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
     """
 
     evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)

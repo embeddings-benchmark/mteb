@@ -14,19 +14,19 @@ import mteb
 import mteb.get_tasks
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
-from tests.mock_models import AbsMockEncoder, MockCLIPEncoder
 from tests.task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: Path):
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+def test_encode_kwargs_passed_to_all_encodes(task: AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
-    class MockEncoderWithKwargs(AbsMockEncoder):
+    class MockEncoderWithKwargs(AbsEncoder):
         def encode(self, sentences: DataLoader, task_name: str | None = None, **kwargs):
             assert "no_one_uses_this_args" in kwargs
             assert (
@@ -35,31 +35,22 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
             )
             return np.zeros((len(sentences.dataset), 10))
 
-    if isinstance(task_name, AbsTask):
-        tasks = [task_name]
-    else:
-        tasks = mteb.get_tasks(tasks=[task_name])
-
-    eval = mteb.MTEB(tasks=tasks)
-
     # Test that the task_name is passed down to the encoder
     model = MockEncoderWithKwargs()
-    eval.run(
+    mteb.evaluate(
         model,
-        output_folder=tmp_path.as_posix(),
-        overwrite_results=True,
+        task,
         encode_kwargs=my_encode_kwargs,
+        cache=None,
     )
 
 
-@pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID)
-def test_task_metadata_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID)
+def test_task_metadata_passed_encoder(task: mteb.AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the task_name to the encoder."""
-    _task_name = (
-        task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
-    )
+    _task_name = task.metadata.name
 
-    class MockEncoder(MockCLIPEncoder):
+    class MockEncoder(AbsEncoder):
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
@@ -75,15 +66,8 @@ def test_task_metadata_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
             assert isinstance(hf_subset, str)
             return np.zeros((len(inputs.dataset), 10))
 
-    if isinstance(task_name, mteb.AbsTask):
-        tasks = [task_name]
-    else:
-        tasks = mteb.get_tasks(tasks=[task_name])
-
-    eval = mteb.MTEB(tasks=tasks)
-
-    eval.run(
+    mteb.evaluate(
         MockEncoder(),
-        output_folder=tmp_path.as_posix(),
-        overwrite_results=True,
+        task,
+        cache=None,
     )

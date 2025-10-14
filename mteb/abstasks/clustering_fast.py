@@ -33,14 +33,15 @@ logger = logging.getLogger(__name__)
 MultilingualDataset = dict[HFSubset, DatasetDict]
 
 
-def evaluate_clustering_bootstrapped(
+def _evaluate_clustering_bootstrapped(
     embeddings: np.ndarray,
     labels: list[list[str]],
     n_clusters: int,
     cluster_size: int,
     kmean_batch_size: int,
     max_depth: int | None,
-    rng_state: random.Random = random.Random(),
+    rng_state: random.Random,
+    seed: int,
 ) -> tuple[dict[str, list[float]], dict[str, list[list[int]]]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
 
@@ -72,6 +73,7 @@ def evaluate_clustering_bootstrapped(
             n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
+            random_state=seed,
         )
         for _ in range(n_clusters):
             # sample N samples from the corpus with replacement
@@ -113,19 +115,24 @@ class AbsTaskClustering(AbsTask):
     The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
-    There are two ways to specify how a dataset is downsampled:
-        - max_document_to_embed (int): default to None
-        - max_fraction_of_documents_to_embed (float): default to 4%.
+    There are two ways to specify how a dataset is downsampled `max_document_to_embed` and `max_fraction_of_documents_to_embed`.
     If both parameters are set to None, no downsampling is done in self._evaluate_subset().
     Only one of these two parameters can be not None at the same time.
 
     If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset.
-    It must contain the following columns:
-        sentences: list[str]
-        labels: list[str] | list[list[str]]
+    Attributes:
+        dataset: A HuggingFace Dataset containing the data for the clustering task. Must contain the following columns `sentences` that contains inputs (texts or images) and labels columns.
+        max_fraction_of_documents_to_embed: Fraction of documents to embed for clustering.
+        max_document_to_embed: Maximum number of documents to embed for clustering.
+        max_documents_per_cluster: Number of documents to sample for each clustering experiment.
+        n_clusters: Number of clustering experiments to run.
+        k_mean_batch_size: Batch size to use for k-means clustering.
+        max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
+        input_column_name: Name of the column containing the input sentences or data points.
+        label_column_name: Name of the column containing the true cluster labels.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     max_fraction_of_documents_to_embed: float | None = 0.04
@@ -202,7 +209,7 @@ class AbsTaskClustering(AbsTask):
                 label = [label]
             labels.append(label)
 
-        all_v_scores, all_assignments = evaluate_clustering_bootstrapped(
+        all_v_scores, all_assignments = _evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,
@@ -210,6 +217,7 @@ class AbsTaskClustering(AbsTask):
             kmean_batch_size=self.k_mean_batch_size,
             max_depth=self.max_depth,
             rng_state=self.rng_state,
+            seed=self.seed,
         )
 
         if prediction_folder:

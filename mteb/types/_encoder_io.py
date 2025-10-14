@@ -15,7 +15,12 @@ Array = np.ndarray | torch.Tensor
 
 # --- Input types ---
 class PromptType(str, Enum):
-    """The type of prompt used in the input for retrieval models. Used to differentiate between queries and documents."""
+    """The type of prompt used in the input for retrieval models. Used to differentiate between queries and documents.
+
+    Attributes:
+        query: A prompt that is a query.
+        document: A prompt that is a document.
+    """
 
     query = "query"
     document = "document"
@@ -50,7 +55,7 @@ class TextInput(TypedDict):
 class CorpusInput(TextInput):
     """The input to the encoder for retrieval corpus.
 
-    Args:
+    Attributes:
         title: The title of the text to encode. Can be a list of titles or a
             list of lists of titles.
         body: The body of the text to encode. Can be a list of bodies or a
@@ -64,7 +69,7 @@ class CorpusInput(TextInput):
 class QueryInput(TextInput):
     """The input to the encoder for queries.
 
-    Args:
+    Attributes:
         query: The query to encode. Can be a list of queries or a list of lists of queries.
         conversation: Optional. A list of conversations, each conversation is a list of messages.
         instruction: Optional. A list of instructions to encode.
@@ -78,7 +83,7 @@ class QueryInput(TextInput):
 class ImageInput(TypedDict):
     """The input to the encoder for images.
 
-    Args:
+    Attributes:
         image: The image to encode. Can be a list of images or a list of lists of images.
     """
 
@@ -88,7 +93,7 @@ class ImageInput(TypedDict):
 class AudioInput(TypedDict):
     """The input to the encoder for audio.
 
-    Args:
+    Attributes:
         audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
     """
 
