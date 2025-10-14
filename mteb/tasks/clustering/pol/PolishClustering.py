@@ -3,9 +3,9 @@ from itertools import chain
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+    AbsTaskClustering,
     check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 N_SAMPLES = 2048
 
 
-class EightTagsClustering(AbsTaskAnyClustering):
+class EightTagsClustering(AbsTaskClusteringLegacy):
     superseded_by = "EightTagsClustering.v2"
     metadata = TaskMetadata(
         name="EightTagsClustering",
@@ -72,7 +72,7 @@ Piperidis, Stelios},
     )
 
 
-class EightTagsClusteringFast(AbsTaskClusteringFast):
+class EightTagsClusteringFast(AbsTaskClustering):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -151,7 +151,7 @@ Piperidis, Stelios},
         )
 
 
-class PlscClusteringS2S(AbsTaskClusteringFast):
+class PlscClusteringS2S(AbsTaskClustering):
     superseded_by = "PlscClusteringS2S.v2"
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
@@ -179,7 +179,7 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
     )
 
 
-class PlscClusteringS2SFast(AbsTaskClusteringFast):
+class PlscClusteringS2SFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringS2S.v2",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
@@ -233,7 +233,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         )
 
 
-class PlscClusteringP2P(AbsTaskClusteringFast):
+class PlscClusteringP2P(AbsTaskClustering):
     superseded_by = "PlscClusteringP2P.v2"
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
@@ -261,7 +261,7 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
     )
 
 
-class PlscClusteringP2PFast(AbsTaskClusteringFast):
+class PlscClusteringP2PFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringP2P.v2",
         description="Clustering of Polish article titles+abstracts from Library of Science "

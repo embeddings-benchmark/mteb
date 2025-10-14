@@ -1,8 +1,8 @@
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering_fast import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MewsC16JaClustering(AbsTaskClusteringFast):
+class MewsC16JaClustering(AbsTaskClustering):
     max_document_to_embed = 992
     max_fraction_of_documents_to_embed = None
 
