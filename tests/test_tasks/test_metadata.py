@@ -3,7 +3,7 @@
 import pytest
 
 from mteb.abstasks import AbsTask
-from mteb.overview import get_tasks
+from mteb.get_tasks import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 _HISTORIC_DATASETS = [

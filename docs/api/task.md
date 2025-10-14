@@ -14,6 +14,8 @@ A task is an implementation of a dataset for evaluation. It could, for instance,
 
 :::mteb.get_task
 
+:::mteb.filter_tasks
+
 ## Metadata
 
 Each task also contains extensive metadata. We annotate this using the following object, which allows us to use [pydantic](https://docs.pydantic.dev/latest/) to validate the metadata.

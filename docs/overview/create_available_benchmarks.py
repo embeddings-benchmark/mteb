@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import cast
 
 import mteb
-from mteb.overview import MTEBTasks
+from mteb.get_tasks import MTEBTasks
 
 START_INSERT = "<!-- START TASK DESCRIPTION -->"
 END_INSERT = "<!-- END TASK DESCRIPTION -->"
