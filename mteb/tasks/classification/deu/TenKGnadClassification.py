@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TenKGnadClassification(AbsTaskAnyClassification):
+class TenKGnadClassification(AbsTaskClassification):
     superseded_by = "TenKGnadClassification.v2"
     metadata = TaskMetadata(
         name="TenKGnadClassification",
@@ -40,7 +40,7 @@ class TenKGnadClassification(AbsTaskAnyClassification):
     )
 
 
-class TenKGnadClassificationV2(AbsTaskAnyClassification):
+class TenKGnadClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TenKGnadClassification.v2",
         description="""10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).

@@ -4,8 +4,7 @@ from datasets import Dataset, DatasetDict
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
-from mteb.abstasks.sts import AbsTaskSTS
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.image.image_text_pair_classification import (
@@ -16,6 +15,7 @@ from mteb.abstasks.multilabel_classification import (
 )
 from mteb.abstasks.regression import AbsTaskRegression
 from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
@@ -109,7 +109,7 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
     return base_ds
 
 
-class MockClassificationTask(AbsTaskAnyClassification):
+class MockClassificationTask(AbsTaskClassification):
     classifier = LogisticRegression(n_jobs=1, max_iter=10)  # type: ignore
 
     expected_stats = {
@@ -185,7 +185,7 @@ class MockClassificationTask(AbsTaskAnyClassification):
         self.data_loaded = True
 
 
-class MockMultilingualClassificationTask(AbsTaskAnyClassification):
+class MockMultilingualClassificationTask(AbsTaskClassification):
     classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
     expected_stats = {
@@ -2983,7 +2983,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockImageClassificationTask(AbsTaskAnyClassification):
+class MockImageClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -3067,7 +3067,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
         self.data_loaded = True
 
 
-class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
+class MockMultilingualImageClassificationTask(AbsTaskClassification):
     n_experiments = 1
     samples_per_label = 5
     expected_stats = {

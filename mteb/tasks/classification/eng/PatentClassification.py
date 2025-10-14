@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class PatentClassification(AbsTaskAnyClassification):
+class PatentClassification(AbsTaskClassification):
     superseded_by = "PatentClassification.v2"
     metadata = TaskMetadata(
         name="PatentClassification",
@@ -48,7 +48,7 @@ M{\`a}rquez, Llu{\'\i}s},
     )
 
 
-class PatentClassificationV2(AbsTaskAnyClassification):
+class PatentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PatentClassification.v2",
         description="""Classification Dataset of Patents and Abstract

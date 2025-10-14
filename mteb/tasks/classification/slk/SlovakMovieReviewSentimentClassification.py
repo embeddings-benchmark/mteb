@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SlovakMovieReviewSentimentClassification(AbsTaskAnyClassification):
+class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "SlovakMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification",
@@ -43,7 +43,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskAnyClassification):
         )
 
 
-class SlovakMovieReviewSentimentClassificationV2(AbsTaskAnyClassification):
+class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification.v2",
         description="""User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)

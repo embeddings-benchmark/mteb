@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MacedonianTweetSentimentClassification(AbsTaskAnyClassification):
+class MacedonianTweetSentimentClassification(AbsTaskClassification):
     superseded_by = "MacedonianTweetSentimentClassification.v2"
     metadata = TaskMetadata(
         name="MacedonianTweetSentimentClassification",
@@ -46,7 +46,7 @@ Bontcheva, Kalina},
     )
 
 
-class MacedonianTweetSentimentClassificationV2(AbsTaskAnyClassification):
+class MacedonianTweetSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MacedonianTweetSentimentClassification.v2",
         description="""An Macedonian dataset for tweet sentiment classification.

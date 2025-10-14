@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BulgarianStoreReviewSentimentClassfication(AbsTaskAnyClassification):
+class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BulgarianStoreReviewSentimentClassfication",
         description="Bulgarian online store review dataset for sentiment classification.",

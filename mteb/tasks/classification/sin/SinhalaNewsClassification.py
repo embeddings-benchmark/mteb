@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SinhalaNewsClassification(AbsTaskAnyClassification):
+class SinhalaNewsClassification(AbsTaskClassification):
     superseded_by = "SinhalaNewsClassification.v2"
     metadata = TaskMetadata(
         name="SinhalaNewsClassification",
@@ -51,7 +51,7 @@ class SinhalaNewsClassification(AbsTaskAnyClassification):
         )
 
 
-class SinhalaNewsClassificationV2(AbsTaskAnyClassification):
+class SinhalaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsClassification.v2",
         description="""This file contains news texts (sentences) belonging to 5 different news categories (political, business, technology, sports and Entertainment). The original dataset was released by Nisansa de Silva (Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language, 2015).

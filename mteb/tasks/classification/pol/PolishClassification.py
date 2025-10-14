@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CbdClassification(AbsTaskAnyClassification):
+class CbdClassification(AbsTaskClassification):
     superseded_by = "CBD.v2"
     metadata = TaskMetadata(
         name="CBD",
@@ -39,7 +39,7 @@ class CbdClassification(AbsTaskAnyClassification):
     )
 
 
-class CbdClassificationV2(AbsTaskAnyClassification):
+class CbdClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CBD.v2",
         description="""Polish Tweets annotated for cyberbullying detection.
@@ -77,7 +77,7 @@ class CbdClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class PolEmo2InClassification(AbsTaskAnyClassification):
+class PolEmo2InClassification(AbsTaskClassification):
     superseded_by = "PolEmo2.0-IN.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
@@ -121,7 +121,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2InClassificationV2(AbsTaskAnyClassification):
+class PolEmo2InClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -165,7 +165,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2OutClassification(AbsTaskAnyClassification):
+class PolEmo2OutClassification(AbsTaskClassification):
     superseded_by = "PolEmo2.0-OUT.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
@@ -194,7 +194,7 @@ class PolEmo2OutClassification(AbsTaskAnyClassification):
     )
 
 
-class PolEmo2OutClassificationV2(AbsTaskAnyClassification):
+class PolEmo2OutClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -223,7 +223,7 @@ class PolEmo2OutClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class AllegroReviewsClassification(AbsTaskAnyClassification):
+class AllegroReviewsClassification(AbsTaskClassification):
     superseded_by = "AllegroReviews.v2"
     metadata = TaskMetadata(
         name="AllegroReviews",
@@ -274,7 +274,7 @@ Tetreault, Joel},
     )
 
 
-class AllegroReviewsClassificationV2(AbsTaskAnyClassification):
+class AllegroReviewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AllegroReviews.v2",
         description="""A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.
@@ -326,7 +326,7 @@ Tetreault, Joel},
     )
 
 
-class PacClassification(AbsTaskAnyClassification):
+class PacClassification(AbsTaskClassification):
     superseded_by = "PAC.v2"
     metadata = TaskMetadata(
         name="PAC",
@@ -363,7 +363,7 @@ class PacClassification(AbsTaskAnyClassification):
     )
 
 
-class PacClassificationV2(AbsTaskAnyClassification):
+class PacClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC.v2",
         description="""Polish Paraphrase Corpus

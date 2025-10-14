@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WRIMEClassification(AbsTaskAnyClassification):
+class WRIMEClassification(AbsTaskClassification):
     superseded_by = "WRIMEClassification.v2"
     metadata = TaskMetadata(
         name="WRIMEClassification",
@@ -56,7 +56,7 @@ Zhou, Yichao},
     )
 
 
-class WRIMEClassificationV2(AbsTaskAnyClassification):
+class WRIMEClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WRIMEClassification.v2",
         dataset={

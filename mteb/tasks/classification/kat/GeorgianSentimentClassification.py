@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GeorgianSentimentClassification(AbsTaskAnyClassification):
+class GeorgianSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GeorgianSentimentClassification",
         description="Goergian Sentiment Dataset",

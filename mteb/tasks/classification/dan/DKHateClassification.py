@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DKHateClassification(AbsTaskAnyClassification):
+class DKHateClassification(AbsTaskClassification):
     superseded_by = "DKHateClassification.v2"
     metadata = TaskMetadata(
         name="DKHateClassification",
@@ -70,7 +70,7 @@ Piperidis, Stelios},
         )
 
 
-class DKHateClassificationV2(AbsTaskAnyClassification):
+class DKHateClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DKHateClassification.v2",
         dataset={

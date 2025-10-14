@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OnlineStoreReviewSentimentClassification(AbsTaskAnyClassification):
+class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "OnlineStoreReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification",
@@ -34,7 +34,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskAnyClassification):
         )
 
 
-class OnlineStoreReviewSentimentClassificationV2(AbsTaskAnyClassification):
+class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification.v2",
         dataset={

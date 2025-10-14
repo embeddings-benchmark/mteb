@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DutchBookReviewSentimentClassification(AbsTaskAnyClassification):
+class DutchBookReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "DutchBookReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification",
@@ -45,7 +45,7 @@ Suzan, Verberne},
     )
 
 
-class DutchBookReviewSentimentClassificationV2(AbsTaskAnyClassification):
+class DutchBookReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification.v2",
         description="""A Dutch book review for sentiment classification.

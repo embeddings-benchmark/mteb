@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ImdbClassification(AbsTaskAnyClassification):
+class ImdbClassification(AbsTaskClassification):
     superseded_by = "ImdbClassification.v2"
     metadata = TaskMetadata(
         name="ImdbClassification",
@@ -53,7 +53,7 @@ Mihalcea, Rada},
     )
 
 
-class ImdbClassificationV2(AbsTaskAnyClassification):
+class ImdbClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ImdbClassification.v2",
         description="""Large Movie Review Dataset

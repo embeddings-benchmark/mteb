@@ -344,7 +344,7 @@ class AbsTask(ABC):
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset."""
-        from mteb.abstasks import AbsTaskAnyClassification
+        from mteb.abstasks import AbsTaskClassification
 
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
@@ -356,7 +356,7 @@ class AbsTask(ABC):
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskAnyClassification):
+        if isinstance(self, AbsTaskClassification):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")

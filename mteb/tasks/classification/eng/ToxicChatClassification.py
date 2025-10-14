@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLITS = ["test"]
 
 
-class ToxicChatClassification(AbsTaskAnyClassification):
+class ToxicChatClassification(AbsTaskClassification):
     superseded_by = "ToxicChatClassification.v2"
     metadata = TaskMetadata(
         name="ToxicChatClassification",
@@ -65,7 +65,7 @@ class ToxicChatClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.remove_columns(remove_cols)
 
 
-class ToxicChatClassificationV2(AbsTaskAnyClassification):
+class ToxicChatClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification.v2",
         description="""This dataset contains toxicity annotations on 10K user

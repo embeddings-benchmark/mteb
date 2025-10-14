@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NorwegianParliamentClassification(AbsTaskAnyClassification):
+class NorwegianParliamentClassification(AbsTaskClassification):
     superseded_by = "NorwegianParliamentClassification.v2"
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification",
@@ -49,7 +49,7 @@ Brygfjeld, Svein Arne},
     )
 
 
-class NorwegianParliamentClassificationV2(AbsTaskAnyClassification):
+class NorwegianParliamentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification.v2",
         description="""Norwegian parliament speeches annotated for sentiment

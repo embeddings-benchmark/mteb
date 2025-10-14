@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BengaliHateSpeechClassification(AbsTaskAnyClassification):
+class BengaliHateSpeechClassification(AbsTaskClassification):
     superseded_by = "BengaliHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification",
@@ -42,7 +42,7 @@ class BengaliHateSpeechClassification(AbsTaskAnyClassification):
         )
 
 
-class BengaliHateSpeechClassificationV2(AbsTaskAnyClassification):
+class BengaliHateSpeechClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification.v2",
         description="""The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.

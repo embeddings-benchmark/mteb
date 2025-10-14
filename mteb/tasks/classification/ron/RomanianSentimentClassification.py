@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class RomanianSentimentClassification(AbsTaskAnyClassification):
+class RomanianSentimentClassification(AbsTaskClassification):
     superseded_by = "RomanianSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
@@ -38,7 +38,7 @@ class RomanianSentimentClassification(AbsTaskAnyClassification):
     )
 
 
-class RomanianSentimentClassificationV2(AbsTaskAnyClassification):
+class RomanianSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification.v2",
         description="""An Romanian dataset for sentiment classification.

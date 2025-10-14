@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AfriSentiLangClassification(AbsTaskAnyClassification):
+class AfriSentiLangClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AfriSentiLangClassification",
         description="AfriSentiLID is the largest LID classification dataset for African Languages.",

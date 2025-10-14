@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UkrFormalityClassification(AbsTaskAnyClassification):
+class UkrFormalityClassification(AbsTaskClassification):
     superseded_by = "UkrFormalityClassification.v2"
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
@@ -53,7 +53,7 @@ Tetreault, Joel},
         )
 
 
-class UkrFormalityClassificationV2(AbsTaskAnyClassification):
+class UkrFormalityClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification.v2",
         description="""

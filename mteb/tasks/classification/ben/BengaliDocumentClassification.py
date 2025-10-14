@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class BengaliDocumentClassification(AbsTaskAnyClassification):
+class BengaliDocumentClassification(AbsTaskClassification):
     superseded_by = "BengaliDocumentClassification.v2"
     metadata = TaskMetadata(
         name="BengaliDocumentClassification",
@@ -52,7 +52,7 @@ Islam, Tanvir},
         )
 
 
-class BengaliDocumentClassificationV2(AbsTaskAnyClassification):
+class BengaliDocumentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BengaliDocumentClassification.v2",
         description="""Dataset for News Classification, categorized with 13 domains.

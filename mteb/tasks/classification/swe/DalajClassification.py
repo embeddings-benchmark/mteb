@@ -1,11 +1,11 @@
 # SuperLIM tasks
 
 
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DalajClassification(AbsTaskAnyClassification):
+class DalajClassification(AbsTaskClassification):
     superseded_by = "DalajClassification.v2"
     metadata = TaskMetadata(
         name="DalajClassification",
@@ -42,7 +42,7 @@ class DalajClassification(AbsTaskAnyClassification):
     samples_per_label = 16
 
 
-class DalajClassificationV2(AbsTaskAnyClassification):
+class DalajClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DalajClassification.v2",
         dataset={

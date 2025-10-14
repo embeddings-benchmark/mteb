@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AngryTweetsClassification(AbsTaskAnyClassification):
+class AngryTweetsClassification(AbsTaskClassification):
     superseded_by = "AngryTweetsClassification.v2"
     metadata = TaskMetadata(
         name="AngryTweetsClassification",
@@ -40,7 +40,7 @@ class AngryTweetsClassification(AbsTaskAnyClassification):
     samples_per_label = 16
 
 
-class AngryTweetsClassificationV2(AbsTaskAnyClassification):
+class AngryTweetsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AngryTweetsClassification.v2",
         dataset={

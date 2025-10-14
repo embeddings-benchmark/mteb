@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmotionClassification(AbsTaskAnyClassification):
+class EmotionClassification(AbsTaskClassification):
     superseded_by = "EmotionClassification.v2"
     metadata = TaskMetadata(
         name="EmotionClassification",
@@ -57,7 +57,7 @@ Tsujii, Jun{'}ichi},
     samples_per_label = 16
 
 
-class EmotionClassificationV2(AbsTaskAnyClassification):
+class EmotionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="EmotionClassification.v2",
         description="""Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FinancialPhrasebankClassification(AbsTaskAnyClassification):
+class FinancialPhrasebankClassification(AbsTaskClassification):
     superseded_by = "FinancialPhrasebankClassification.v2"
     metadata = TaskMetadata(
         name="FinancialPhrasebankClassification",
@@ -40,7 +40,7 @@ class FinancialPhrasebankClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("sentence", "text")
 
 
-class FinancialPhrasebankClassificationV2(AbsTaskAnyClassification):
+class FinancialPhrasebankClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FinancialPhrasebankClassification.v2",
         description="""Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral.

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
+class DanishPoliticalCommentsClassification(AbsTaskClassification):
     superseded_by = "DanishPoliticalCommentsClassification.v2"
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification",
@@ -42,7 +42,7 @@ class DanishPoliticalCommentsClassification(AbsTaskAnyClassification):
     samples_per_label = 16
 
 
-class DanishPoliticalCommentsClassificationV2(AbsTaskAnyClassification):
+class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification.v2",
         dataset={

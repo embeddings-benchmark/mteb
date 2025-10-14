@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AJGT(AbsTaskAnyClassification):
+class AJGT(AbsTaskClassification):
     superseded_by = "AJGT.v2"
     metadata = TaskMetadata(
         name="AJGT",
@@ -38,7 +38,7 @@ class AJGT(AbsTaskAnyClassification):
     )
 
 
-class AJGTV2(AbsTaskAnyClassification):
+class AJGTV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AJGT.v2",
         dataset={
