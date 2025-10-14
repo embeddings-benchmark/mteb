@@ -748,11 +748,11 @@ class MockClusteringFastTask(AbsTaskClustering):
         "test": {
             "num_samples": 20,
             "text_statistics": {
-                "total_text_length": 540,
+                "total_text_length": 550,
                 "min_text_length": 23,
-                "average_text_length": 27.0,
+                "average_text_length": 27.5,
                 "max_text_length": 29,
-                "unique_texts": 4,
+                "unique_texts": 3,
             },
             "image_statistics": None,
             "labels_statistics": {
@@ -777,7 +777,7 @@ class MockClusteringFastTask(AbsTaskClustering):
             "This is a test sentence",
             "This is another test sentence",
             "This is a third test sentence",
-            "This is third test sentence",
+            "This is a third test sentence",
         ] * 5
         labels = [0, 1, 2, 2] * 5
 
