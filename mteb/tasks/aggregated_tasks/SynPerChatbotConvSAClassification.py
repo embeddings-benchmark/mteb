@@ -1,6 +1,6 @@
 from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks.Classification import (
+from mteb.tasks.classification import (
     SynPerChatbotConvSAAnger,
     SynPerChatbotConvSAFear,
     SynPerChatbotConvSAFriendship,

@@ -28,7 +28,6 @@ __all__ = [
     "SWEPolyBenchReranking",
     "SWEbenchLiteReranking",
     "SWEbenchMultilingualRR",
-    "SWEbenchMultilingualReranking",
     "SWEbenchVerifiedReranking",
     "SciDocsReranking",
     "StackOverflowDupQuestions",
