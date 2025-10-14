@@ -97,7 +97,10 @@ from tests.mock_tasks import (
             },
         ),
         (MockClusteringTask(), [[1, 2, 0]]),
-        (MockClusteringFastTask(), {"Level 0": [[1, 0, 0], [2, 1, 0], [1, 0, 0]]}),
+        (
+            MockClusteringFastTask(),
+            {"Level 0": [[1, 0, 0, 2], [0, 1, 0, 0], [1, 0, 0, 1]]},
+        ),
         (
             MockRegressionTask(),
             [pytest.approx([1.0000001192092896, 0.33665788173675537])] * 10,
