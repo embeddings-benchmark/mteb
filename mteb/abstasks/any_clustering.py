@@ -62,7 +62,7 @@ class ClusteringMetrics(TypedDict, total=False):
 
 
 class AbsTaskClusteringLegacy(AbsTask):
-    """Abstract class for Clustering tasks for any modality.
+    """Legacy abstract task for clustering. For new tasks, we recommend using AbsTaskClustering because it is faster, more sample-efficient, and produces more robust statistical estimates.
 
     Attributes:
         dataset: A HuggingFace Dataset containing the data for the clustering task. It must contain the following columns:
