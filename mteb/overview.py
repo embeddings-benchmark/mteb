@@ -10,11 +10,8 @@ import pandas as pd
 
 from mteb.abstasks import (
     AbsTask,
-    AbsTaskMultilabelClassification,
-    AbsTaskRegression,
 )
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
-from mteb.abstasks.text.reranking import AbsTaskReranking
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
@@ -24,11 +21,15 @@ from mteb.types import Modalities
 logger = logging.getLogger(__name__)
 
 
-
 # Create task registry
 def _create_task_list() -> list[type[AbsTask]]:
     import mteb.tasks as tasks
-    tasks = [t for t in tasks.__dict__.values() if isinstance(t, type) and issubclass(t, AbsTask)]
+
+    tasks = [
+        t
+        for t in tasks.__dict__.values()
+        if isinstance(t, type) and issubclass(t, AbsTask)
+    ]
     return tasks
 
 

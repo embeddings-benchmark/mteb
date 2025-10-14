@@ -1,7 +1,7 @@
+from mteb.abstasks.any_clustering import AbsTaskAnyClustering
 from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
 from mteb.abstasks.task_metadata import TaskMetadata
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
 
 class SwednClustering(AbsTaskAnyClustering):
     superseded_by = "SwednClusteringP2P"
