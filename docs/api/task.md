@@ -58,15 +58,15 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 
 :::mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification
 
-:::mteb.abstasks.any_clustering.AbsTaskAnyClustering
+:::mteb.abstasks.clustering_fast.AbsTaskClustering
 
 :::mteb.abstasks.any_sts.AbsTaskAnySTS
 
 :::mteb.abstasks.any_zeroshot_classification.AbsTaskAnyZeroShotClassification
 
-:::mteb.abstasks.clustering_fast.AbsTaskClusteringFast
-
 :::mteb.abstasks.regression.AbsTaskRegression
+
+:::mteb.abstasks.any_clustering.AbsTaskClusteringLegacy
 
 ## Text tasks
 
