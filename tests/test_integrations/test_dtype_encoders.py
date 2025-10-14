@@ -19,10 +19,16 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize(
     "model",
     [
-        mteb.get_model("mteb/random-encoder-baseline"),
-        mteb.get_model("mteb/random-encoder-baseline", use_torch=True),
+        mteb.get_model("baseline/random-encoder-baseline"),
         mteb.get_model(
-            "mteb/random-encoder-baseline", use_torch=True, torch_dtype=torch.float16
+            "baseline/random-encoder-baseline",
+            array_framework="torch",
+            dtype=torch.float32,
+        ),
+        mteb.get_model(
+            "baseline/random-encoder-baseline",
+            array_framework="torch",
+            dtype=torch.float16,
         ),
         MockSentenceTransformersbf16Encoder(),
     ],

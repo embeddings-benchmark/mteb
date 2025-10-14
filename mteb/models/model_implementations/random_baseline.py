@@ -1,5 +1,5 @@
 import hashlib
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import torch
@@ -92,14 +92,14 @@ class RandomEncoderBaseline:
         self,
         model_name: str,
         revision: str | None,
-        use_torch: bool = False,
-        torch_dtype: torch.dtype | None = None,
+        array_framework: Literal["numpy", "torch"] = "numpy",
+        dtype: torch.dtype | np.floating = np.float32,
         **kwargs: Any,
     ) -> None:
         self.rng_state = np.random.default_rng(42)
         self.embedding_dim = _EMBEDDING_DIM
-        self.use_torch = use_torch
-        self.torch_dtype = torch_dtype if torch_dtype is not None else torch.float32
+        self.array_framework = array_framework
+        self.dtype = dtype
 
     def encode(
         self,
@@ -112,9 +112,9 @@ class RandomEncoderBaseline:
         **kwargs: Any,
     ) -> Array:
         embedding = _batch_to_embeddings(inputs, self.embedding_dim)
-        if self.use_torch:
-            return torch.tensor(embedding, dtype=self.torch_dtype)
-        return embedding
+        if self.array_framework == "torch":
+            return torch.tensor(embedding, dtype=self.dtype)
+        return embedding.astype(self.dtype)
 
     def similarity(
         self,
@@ -153,7 +153,7 @@ class RandomEncoderBaseline:
 
 random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,  # type: ignore
-    name="mteb/random-encoder-baseline",
+    name="baseline/random-encoder-baseline",
     modalities=["text", "image"],
     **_common_mock_metadata,
 )
@@ -197,7 +197,7 @@ class RandomCrossEncoderBaseline:
 
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,  # type: ignore
-    name="mteb/random-crossencoder-baseline",
+    name="baseline/random-cross-encoder-baseline",
     modalities=["text", "image"],
     is_cross_encoder=True,
     **_common_mock_metadata,

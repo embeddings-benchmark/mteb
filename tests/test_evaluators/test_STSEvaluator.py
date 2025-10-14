@@ -8,7 +8,7 @@ from tests.mock_tasks import MockSTSTask
 # Fixtures
 @pytest.fixture
 def model():
-    return mteb.get_model("mteb/random-encoder-baseline")
+    return mteb.get_model("baseline/random-encoder-baseline")
 
 
 @pytest.fixture
