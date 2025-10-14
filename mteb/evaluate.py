@@ -212,14 +212,14 @@ def _check_model_modalities(
                 continue
             elif query_overlap and doc_overlap:
                 warnings.append(
-                    f"Model {model.name} supports {list(model_modalities)}, partially overlapping "
-                    f"with task {task.metadata.name} query={list(query_mods)}, document={list(doc_mods)}. "
+                    f"Model {model.name} supports {model.modalities}, partially overlapping "
+                    f"with task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}. "
                     "Performance might be suboptimal."
                 )
             else:
                 errors.append(
-                    f"Model {model.name} supports {list(model_modalities)}, but none overlap with "
-                    f"task {task.metadata.name} query={list(query_mods)}, document={list(doc_mods)}."
+                    f"Model {model.name} supports {model.modalities}, but none overlap with "
+                    f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
                 )
         else:
             task_mods = set(task.metadata.modalities)
@@ -228,7 +228,7 @@ def _check_model_modalities(
                 continue
             else:
                 errors.append(
-                    f"Model {model.name} supports {list(model_modalities)}, but none overlap with "
+                    f"Model {model.name} supports {model.modalities}, but none overlap with "
                     f"task {task.metadata.name} modalities={task.metadata.modalities}."
                 )
 
