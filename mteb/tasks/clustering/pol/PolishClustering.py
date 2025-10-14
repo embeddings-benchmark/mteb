@@ -3,11 +3,11 @@ from itertools import chain
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048

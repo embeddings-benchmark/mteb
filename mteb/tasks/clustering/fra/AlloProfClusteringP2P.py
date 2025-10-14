@@ -1,7 +1,7 @@
-from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
