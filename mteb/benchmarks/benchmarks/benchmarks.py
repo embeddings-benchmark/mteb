@@ -1662,9 +1662,9 @@ MTEB_NL = Benchmark(
                 # "SICKNLPairClassification",
                 # "XLWICNLPairClassification",
                 # # MultiLabelClassification
-                # "CovidDisinformationNLMultiLabelClassification",
-                # "MultiEURLEXMultilabelClassification",
-                # "VABBMultiLabelClassification",
+                "CovidDisinformationNLMultiLabelClassification",
+                "MultiEURLEXMultilabelClassification",
+                "VABBMultiLabelClassification",
                 # # Clustering
                 "DutchNewsArticlesClusteringS2S",
                 "DutchNewsArticlesClusteringP2P",
