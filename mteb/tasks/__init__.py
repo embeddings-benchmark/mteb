@@ -1,7 +1,9 @@
 from .aggregated_tasks import *
+from .any2any_multichoice import *
 from .bitext_mining import *
 from .classification import *
 from .clustering import *
+from .image_text_pair_classification import *
 from .instruction_reranking import *
 from .instruction_retrieval import *
 from .multilabel_classification import *
@@ -11,3 +13,4 @@ from .reranking import *
 from .retrieval import *
 from .sts import *
 from .summarization import *
+from .zeroshot_classification import *

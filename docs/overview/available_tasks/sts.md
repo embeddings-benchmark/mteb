@@ -19,9 +19,9 @@ A Chinese dataset for textual relatedness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{raghu-etal-2021-end,
       abstract = {We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.},
       address = {Online and Punta Cana, Dominican Republic},
@@ -42,9 +42,9 @@ A Chinese dataset for textual relatedness
       url = {https://aclanthology.org/2021.emnlp-main.357},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -62,9 +62,9 @@ A Chinese dataset for textual relatedness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{raghu-etal-2021-end,
       abstract = {We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.},
       address = {Online and Punta Cana, Dominican Republic},
@@ -85,9 +85,9 @@ A Chinese dataset for textual relatedness
       url = {https://aclanthology.org/2021.emnlp-main.357},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -105,9 +105,9 @@ Semantic Textual Similarity part of the ASSIN 2, an evaluation shared task collo
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{real2020assin,
       author = {Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
       booktitle = {International Conference on Computational Processing of the Portuguese Language},
@@ -116,9 +116,9 @@ Semantic Textual Similarity part of the ASSIN 2, an evaluation shared task collo
       title = {The assin 2 shared task: a quick overview},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -136,9 +136,9 @@ Biomedical Semantic Similarity Estimation.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{10.1093/bioinformatics/btx238,
       abstract = {{The amount of information available in textual format is rapidly increasing in the biomedical domain. Therefore, natural language processing (NLP) applications are becoming increasingly important to facilitate the retrieval and analysis of these data. Computing the semantic similarity between sentences is an important component in many NLP tasks including text retrieval and summarization. A number of approaches have been proposed for semantic sentence similarity estimation for generic English. However, our experiments showed that such approaches do not effectively cover biomedical knowledge and produce poor results for biomedical text.We propose several approaches for sentence-level semantic similarity computation in the biomedical domain, including string similarity measures and measures based on the distributed vector representations of sentences learned in an unsupervised manner from a large biomedical corpus. In addition, ontology-based approaches are presented that utilize general and domain-specific ontologies. Finally, a supervised regression based model is developed that effectively combines the different similarity computation metrics. A benchmark data set consisting of 100 sentence pairs from the biomedical literature is manually annotated by five human experts and used for evaluating the proposed methods.The experiments showed that the supervised semantic sentence similarity computation approach obtained the best performance (0.836 correlation with gold standard human annotations) and improved over the state-of-the-art domain-independent systems up to 42.6\\% in terms of the Pearson correlation metric.A web-based system for biomedical semantic sentence similarity computation, the source code, and the annotated benchmark data set are available at: http://tabilab.cmpe.boun.edu.tr/BIOSSES/.}},
       author = {Soğancıoğlu, Gizem and Öztürk, Hakime and Özgür, Arzucan},
@@ -154,9 +154,9 @@ Biomedical Semantic Similarity Estimation.
       volume = {33},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -178,9 +178,9 @@ A translated dataset from Biomedical Semantic Similarity Estimation.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -190,9 +190,9 @@ A translated dataset from Biomedical Semantic Similarity Estimation.
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -210,9 +210,9 @@ A Chinese dataset for textual relatedness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xiao2024cpackpackagedresourcesadvance,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
@@ -222,9 +222,9 @@ A Chinese dataset for textual relatedness
       url = {https://arxiv.org/abs/2309.07597},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -242,9 +242,9 @@ Compositional Distributional Semantics Corpus for textual relatedness.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{wroblewska-krasnowska-kieras-2017-polish,
       address = {Vancouver, Canada},
       author = {Wr{\'o}blewska, Alina  and
@@ -260,9 +260,9 @@ Compositional Distributional Semantics Corpus for textual relatedness.
       url = {https://aclanthology.org/P17-1073},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -280,9 +280,9 @@ Semantic Text Similarity (STS) corpus for Faroese.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{snaebjarnarson-etal-2023-transfer,
       address = {Tórshavn, Faroe Islands},
       author = {Snæbjarnarson, Vésteinn  and
@@ -295,9 +295,9 @@ Semantic Text Similarity (STS) corpus for Faroese.
       title = {{T}ransfer to a Low-Resource Language via Close Relatives: The Case Study on Faroese},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -315,11 +315,11 @@ A Persian Semantic Textual Similarity And Natural Language Inference Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -337,9 +337,9 @@ Finnish paraphrase-based semantic similarity corpus
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kanerva-etal-2021-finnish,
       address = {Reykjavik, Iceland (Online)},
       author = {Kanerva, Jenna  and
@@ -362,9 +362,9 @@ Finnish paraphrase-based semantic similarity corpus
       url = {https://aclanthology.org/2021.nodalida-main.29},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -382,18 +382,18 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Ger
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{huggingface:dataset:stsb_multi_mt,
       author = {Philip May},
       title = {Machine translated multilingual STS benchmark dataset.},
       url = {https://github.com/PhilipMay/stsb-multi-mt},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -411,9 +411,9 @@ Human evaluation subset of Semantic Textual Similarity SICK-R dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{marelli-etal-2014-sick,
       abstract = {Shared and internationally recognized benchmarks are fundamental for the development of any computational system. We aim to help the research community working on compositional distributional semantic models (CDSMs) by providing SICK (Sentences Involving Compositional Knowldedge), a large size English benchmark tailored for them. SICK consists of about 10,000 English sentence pairs that include many examples of the lexical, syntactic and semantic phenomena that CDSMs are expected to account for, but do not require dealing with other aspects of existing sentential data sets (idiomatic multiword expressions, named entities, telegraphic language) that are not within the scope of CDSMs. By means of crowdsourcing techniques, each pair was annotated for two crucial semantic tasks: relatedness in meaning (with a 5-point rating scale as gold score) and entailment relation between the two elements (with three possible gold labels: entailment, contradiction, and neutral). The SICK data set was used in SemEval-2014 Task 1, and it freely available for research purposes.},
       address = {Reykjavik, Iceland},
@@ -440,9 +440,9 @@ Human evaluation subset of Semantic Textual Similarity SICK-R dataset
       url = {http://www.lrec-conf.org/proceedings/lrec2014/pdf/363_Paper.pdf},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -460,9 +460,9 @@ Human evaluation subset of SemEval-2012 Task 6.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{10.5555/2387636.2387697,
       abstract = {Semantic Textual Similarity (STS) measures the degree of semantic equivalence between two texts. This paper presents the results of the STS pilot task in Semeval. The training data contained 2000 sentence pairs from previously existing paraphrase datasets and machine translation evaluation resources. The test data also comprised 2000 sentences pairs for those datasets, plus two surprise datasets with 400 pairs from a different machine translation evaluation corpus and 750 pairs from a lexical resource mapping exercise. The similarity of pairs of sentences was rated on a 0-5 scale (low to high similarity) by human judges using Amazon Mechanical Turk, with high Pearson correlation scores, around 90\%. 35 teams participated in the task, submitting 88 runs. The best results scored a Pearson correlation >80\%, well above a simple lexical baseline that only scored a 31\% correlation. This pilot task opens an exciting way ahead, although there are still open issues, specially the evaluation metric.},
       address = {USA},
@@ -476,9 +476,9 @@ Human evaluation subset of SemEval-2012 Task 6.
       title = {SemEval-2012 task 6: a pilot on semantic textual similarity},
       year = {2012},
     }
-
+    
     ```
-
+    
 
 
 
@@ -496,9 +496,9 @@ Human evaluation subset of SemEval 2022 Task 8: Multilingual News Article Simila
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chen-etal-2022-semeval,
       address = {Seattle, United States},
       author = {Chen, Xi  and
@@ -527,9 +527,9 @@ Human evaluation subset of SemEval 2022 Task 8: Multilingual News Article Simila
       url = {https://aclanthology.org/2022.semeval-1.155},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -547,18 +547,18 @@ Human evaluation subset of Semantic Textual Similarity Benchmark (STSbenchmark) 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{huggingface:dataset:stsb_multi_mt,
       author = {Philip May},
       title = {Machine translated multilingual STS benchmark dataset.},
       url = {https://github.com/PhilipMay/stsb-multi-mt},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -576,9 +576,9 @@ This is a Semantic Textual Similarity testset between English and 12 high-resour
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{10.1162/tacl_a_00452,
       author = {Ramesh, Gowtham and Doddapaneni, Sumanth and Bheemaraj, Aravinth and Jobanputra, Mayank and AK, Raghavan and Sharma, Ajitesh and Sahoo, Sujit and Diddee, Harshita and J, Mahalakshmi and Kakwani, Divyanshu and Kumar, Navneet and Pradeep, Aswin and Nagaraj, Srihari and Deepak, Kumar and Raghavan, Vivek and Kunchukuttan, Anoop and Kumar, Pratyush and Khapra, Mitesh Shantadevi},
       doi = {10.1162/tacl_a_00452},
@@ -592,9 +592,9 @@ This is a Semantic Textual Similarity testset between English and 12 high-resour
       volume = {10},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -612,9 +612,9 @@ JSICK is the Japanese NLI and STS dataset by manually translating the English da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{yanaka2022compositional,
       author = {Yanaka, Hitomi and Mineshima, Koji},
       journal = {Transactions of the Association for Computational Linguistics},
@@ -624,9 +624,9 @@ JSICK is the Japanese NLI and STS dataset by manually translating the English da
       volume = {10},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -644,9 +644,9 @@ Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image C
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{kurihara-etal-2022-jglue,
       abstract = {To develop high-performance natural language understanding (NLU) models, it is necessary to have a benchmark to evaluate and analyze NLU ability from various perspectives. While the English NLU benchmark, GLUE, has been the forerunner, benchmarks are now being released for languages other than English, such as CLUE for Chinese and FLUE for French; but there is no such benchmark for Japanese. We build a Japanese NLU benchmark, JGLUE, from scratch without translation to measure the general NLU ability in Japanese. We hope that JGLUE will facilitate NLU research in Japanese.},
       address = {Marseille, France},
@@ -674,9 +674,9 @@ Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image C
       url = {https://aclanthology.org/2022.lrec-1.317},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -694,9 +694,9 @@ Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{park2021klue,
       archiveprefix = {arXiv},
       author = {Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
@@ -705,9 +705,9 @@ Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part 
       title = {KLUE: Korean Language Understanding Evaluation},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -725,18 +725,18 @@ Benchmark dataset for STS in Korean. Created by machine translation and human po
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{ham2020kornli,
       author = {Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
       journal = {arXiv preprint arXiv:2004.03289},
       title = {KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -754,9 +754,9 @@ A Chinese dataset for textual relatedness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xiao2024cpackpackagedresourcesadvance,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
@@ -766,9 +766,9 @@ A Chinese dataset for textual relatedness
       url = {https://arxiv.org/abs/2309.07597},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -786,9 +786,9 @@ A Chinese dataset for textual relatedness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xiao2024cpackpackagedresourcesadvance,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
@@ -798,9 +798,9 @@ A Chinese dataset for textual relatedness
       url = {https://arxiv.org/abs/2309.07597},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -830,11 +830,11 @@ Query to Query Datasets.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
-
+    
 
 
 
@@ -852,9 +852,9 @@ ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{gudkov-etal-2020-automatically,
       address = {Online},
       author = {Gudkov, Vadim  and
@@ -869,7 +869,7 @@ ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.
       url = {https://aclanthology.org/2020.ngt-1.6},
       year = {2020},
     }
-
+    
     @inproceedings{pivovarova2017paraphraser,
       author = {Pivovarova, Lidia and Pronoza, Ekaterina and Yagunova, Elena and Pronoza, Anton},
       booktitle = {Conference on artificial intelligence and natural language},
@@ -878,9 +878,9 @@ ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.
       title = {ParaPhraser: Russian paraphrase corpus and shared task},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -898,18 +898,18 @@ High-quality Romanian translation of STSBenchmark.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dumitrescu2021liro,
       author = {Dumitrescu, Stefan Daniel and Rebeja, Petru and Lorincz, Beata and Gaman, Mihaela and Avram, Andrei and Ilie, Mihai and Pruteanu, Andrei and Stan, Adriana and Rosia, Lorena and Iacobescu, Cristina and others},
       booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
       title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -927,18 +927,18 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Rus
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{huggingface:dataset:stsb_multi_mt,
       author = {Philip May},
       title = {Machine translated multilingual STS benchmark dataset.},
       url = {https://github.com/PhilipMay/stsb-multi-mt},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -956,9 +956,9 @@ SICK-BR is a Portuguese inference corpus, human translated from SICK
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{real18,
       author = {Real, Livy
     and Rodrigues, Ana
@@ -978,9 +978,9 @@ SICK-BR is a Portuguese inference corpus, human translated from SICK
       title = {{SICK-BR: A Portuguese Corpus for Inference}},
       year = {2018},
     }
-
+    
     ```
-
+    
 
 
 
@@ -998,9 +998,9 @@ Semantic Textual Similarity SICK-R dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{marelli-etal-2014-sick,
       abstract = {Shared and internationally recognized benchmarks are fundamental for the development of any computational system. We aim to help the research community working on compositional distributional semantic models (CDSMs) by providing SICK (Sentences Involving Compositional Knowldedge), a large size English benchmark tailored for them. SICK consists of about 10,000 English sentence pairs that include many examples of the lexical, syntactic and semantic phenomena that CDSMs are expected to account for, but do not require dealing with other aspects of existing sentential data sets (idiomatic multiword expressions, named entities, telegraphic language) that are not within the scope of CDSMs. By means of crowdsourcing techniques, each pair was annotated for two crucial semantic tasks: relatedness in meaning (with a 5-point rating scale as gold score) and entailment relation between the two elements (with three possible gold labels: entailment, contradiction, and neutral). The SICK data set was used in SemEval-2014 Task 1, and it freely available for research purposes.},
       address = {Reykjavik, Iceland},
@@ -1027,9 +1027,9 @@ Semantic Textual Similarity SICK-R dataset
       url = {http://www.lrec-conf.org/proceedings/lrec2014/pdf/363_Paper.pdf},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1047,9 +1047,9 @@ Polish version of SICK dataset for textual relatedness.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{dadas-etal-2020-evaluation,
       address = {Marseille, France},
       author = {Dadas, Slawomir  and
@@ -1079,9 +1079,9 @@ Polish version of SICK dataset for textual relatedness.
       url = {https://aclanthology.org/2020.lrec-1.207},
       year = {2020},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1103,9 +1103,9 @@ A translated dataset from Semantic Textual Similarity SICK-R dataset as describe
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1115,9 +1115,9 @@ A translated dataset from Semantic Textual Similarity SICK-R dataset as describe
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1147,9 +1147,9 @@ SemEval-2012 Task 6.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{10.5555/2387636.2387697,
       abstract = {Semantic Textual Similarity (STS) measures the degree of semantic equivalence between two texts. This paper presents the results of the STS pilot task in Semeval. The training data contained 2000 sentence pairs from previously existing paraphrase datasets and machine translation evaluation resources. The test data also comprised 2000 sentences pairs for those datasets, plus two surprise datasets with 400 pairs from a different machine translation evaluation corpus and 750 pairs from a lexical resource mapping exercise. The similarity of pairs of sentences was rated on a 0-5 scale (low to high similarity) by human judges using Amazon Mechanical Turk, with high Pearson correlation scores, around 90\%. 35 teams participated in the task, submitting 88 runs. The best results scored a Pearson correlation >80\%, well above a simple lexical baseline that only scored a 31\% correlation. This pilot task opens an exciting way ahead, although there are still open issues, specially the evaluation metric.},
       address = {USA},
@@ -1163,9 +1163,9 @@ SemEval-2012 Task 6.
       title = {SemEval-2012 task 6: a pilot on semantic textual similarity},
       year = {2012},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1183,9 +1183,9 @@ SemEval STS 2013 dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{Agirre2013SEM2S,
       author = {Eneko Agirre and Daniel Matthew Cer and Mona T. Diab and Aitor Gonzalez-Agirre and Weiwei Guo},
       booktitle = {International Workshop on Semantic Evaluation},
@@ -1193,9 +1193,9 @@ SemEval STS 2013 dataset.
       url = {https://api.semanticscholar.org/CorpusID:10241043},
       year = {2013},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1213,9 +1213,9 @@ SemEval STS 2014 dataset. Currently only the English dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{bandhakavi-etal-2014-generating,
       address = {Dublin, Ireland},
       author = {Bandhakavi, Anil  and
@@ -1234,9 +1234,9 @@ SemEval STS 2014 dataset. Currently only the English dataset
       url = {https://aclanthology.org/S14-1002},
       year = {2014},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1254,9 +1254,9 @@ SemEval STS 2015 dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{bicici-2015-rtm,
       address = {Denver, Colorado},
       author = {Bi{\c{c}}ici, Ergun},
@@ -1273,9 +1273,9 @@ SemEval STS 2015 dataset
       url = {https://aclanthology.org/S15-2010},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1293,9 +1293,9 @@ SemEval-2016 Task 4
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{nakov-etal-2016-semeval,
       address = {San Diego, California},
       author = {Nakov, Preslav  and
@@ -1318,9 +1318,9 @@ SemEval-2016 Task 4
       url = {https://aclanthology.org/S16-1001},
       year = {2016},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1338,9 +1338,9 @@ Semeval-2017 task 1: Semantic textual similarity-multilingual and cross-lingual 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{cer-etal-2017-semeval,
       abstract = {Semantic Textual Similarity (STS) measures the meaning similarity of sentences. Applications include machine translation (MT), summarization, generation, question answering (QA), short answer grading, semantic search, dialog and conversational systems. The STS shared task is a venue for assessing the current state-of-the-art. The 2017 task focuses on multilingual and cross-lingual pairs with one sub-track exploring MT quality estimation (MTQE) data. The task obtained strong participation from 31 teams, with 17 participating in \textit{all language tracks}. We summarize performance and review a selection of well performing methods. Analysis highlights common errors, providing insight into the limitations of existing models. To support ongoing work on semantic representations, the \textit{STS Benchmark} is introduced as a new shared training and evaluation set carefully selected from the corpus of English STS shared task data (2012-2017).},
       address = {Vancouver, Canada},
@@ -1364,9 +1364,9 @@ Semeval-2017 task 1: Semantic textual similarity-multilingual and cross-lingual 
       url = {https://aclanthology.org/S17-2001},
       year = {2017},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1384,9 +1384,9 @@ SemEval 2022 Task 8: Multilingual News Article Similarity
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chen-etal-2022-semeval,
       address = {Seattle, United States},
       author = {Chen, Xi  and
@@ -1415,9 +1415,9 @@ SemEval 2022 Task 8: Multilingual News Article Similarity
       url = {https://aclanthology.org/2022.semeval-1.155},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1435,9 +1435,9 @@ SemEval 2022 Task 8: Multilingual News Article Similarity. Version 2 filters upd
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{chen-etal-2022-semeval,
       address = {Seattle, United States},
       author = {Chen, Xi  and
@@ -1466,9 +1466,9 @@ SemEval 2022 Task 8: Multilingual News Article Similarity. Version 2 filters upd
       url = {https://aclanthology.org/2022.semeval-1.155},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1486,9 +1486,9 @@ A Chinese dataset for textual relatedness
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{xiao2024cpackpackagedresourcesadvance,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
@@ -1498,9 +1498,9 @@ A Chinese dataset for textual relatedness
       url = {https://arxiv.org/abs/2309.07597},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1518,18 +1518,18 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{huggingface:dataset:stsb_multi_mt,
       author = {Philip May},
       title = {Machine translated multilingual STS benchmark dataset.},
       url = {https://github.com/PhilipMay/stsb-multi-mt},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1551,9 +1551,9 @@ A translated dataset from Semantic Textual Similarity Benchmark (STSbenchmark) d
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -1563,9 +1563,9 @@ A translated dataset from Semantic Textual Similarity Benchmark (STSbenchmark) d
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1583,18 +1583,18 @@ Semantic Textual Similarity Benchmark (STSbenchmark) dataset, but translated usi
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{huggingface:dataset:stsb_multi_mt,
       author = {Philip May},
       title = {Machine translated multilingual STS benchmark dataset.},
       url = {https://github.com/PhilipMay/stsb-multi-mt},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1612,9 +1612,9 @@ Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agir
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{agirre2014semeval,
       author = {Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel M and Diab, Mona T and Gonzalez-Agirre, Aitor and Guo, Weiwei and Mihalcea, Rada and Rigau, German and Wiebe, Janyce},
       booktitle = {SemEval@ COLING},
@@ -1622,7 +1622,7 @@ Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agir
       title = {SemEval-2014 Task 10: Multilingual Semantic Textual Similarity.},
       year = {2014},
     }
-
+    
     @inproceedings{agirre2015semeval,
       author = {Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel and Diab, Mona and Gonzalez-Agirre, Aitor and Guo, Weiwei and Lopez-Gazpio, Inigo and Maritxalar, Montse and Mihalcea, Rada and others},
       booktitle = {Proceedings of the 9th international workshop on semantic evaluation (SemEval 2015)},
@@ -1630,9 +1630,9 @@ Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agir
       title = {Semeval-2015 task 2: Semantic textual similarity, english, spanish and pilot on interpretability},
       year = {2015},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1650,9 +1650,9 @@ SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ousidhoum2024semrel2024,
       archiveprefix = {arXiv},
       author = {Nedjma Ousidhoum and Shamsuddeen Hassan Muhammad and Mohamed Abdalla and Idris Abdulmumin and Ibrahim Said Ahmad and
@@ -1666,9 +1666,9 @@ SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14
       title = {SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 14 Languages},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1686,7 +1686,7 @@ Synthetic Persian Semantic Textual Similarity Dataset
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+     
     ```
