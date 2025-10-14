@@ -7,6 +7,7 @@ from .fra import *
 from .jpn import *
 from .kor import *
 from .multilingual import *
+from .nld import *
 from .pol import *
 from .por import *
 from .ron import *
