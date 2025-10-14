@@ -64,6 +64,7 @@ GP_BENCHMARK_ENTRIES = [
                         "MTEB(jpn, v1)",
                         "MTEB(kor, v1)",
                         "MTEB(pol, v1)",
+                        "MTEB(nld, v1)",
                         "MTEB(rus, v1)",
                         "MTEB(fas, v2)",
                         "VN-MTEB (vie, v1)",
