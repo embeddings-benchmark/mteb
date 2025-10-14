@@ -100,7 +100,14 @@ def filter_tasks(
         exclude_private: If True (default), exclude private/closed datasets (is_public=False). If False, include both public and private datasets.
 
     Returns:
-        A list of all initialized tasks objects which pass all of the filters (AND operation).
+        A list of tasks objects which pass all of the filters.
+
+    Examples:
+        >>> text_classification_tasks = filter_tasks(my_tasks, task_types=["Classification"], modalities=["text"])
+        >>> medical_tasks = filter_tasks(my_tasks, domains=["Medical"])
+        >>> english_tasks = filter_tasks(my_tasks, languages=["eng"])
+        >>> latin_script_tasks = filter_tasks(my_tasks, script=["Latn"])
+        >>> text_image_tasks = filter_tasks(my_tasks, modalities=["text", "image"], exclusive_modality_filter=True)
 
     """
     langs_to_keep = None
