@@ -7,6 +7,7 @@ from typing import overload
 from mteb.abstasks import (
     AbsTask,
 )
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.task_metadata import TaskCategory, TaskDomain, TaskType
 from mteb.languages import (
     ISO_TO_LANGUAGE,
@@ -141,30 +142,39 @@ def filter_tasks(
 
     _tasks = []
     for t in tasks:
-        if langs_to_keep and not langs_to_keep.intersection(t.metadata.languages):
+        # For metadata and superseded_by, we can access them directly
+        metadata = t.metadata
+        superseded_by = t.superseded_by
+
+        if langs_to_keep and not langs_to_keep.intersection(metadata.languages):
             continue
-        if script_to_keep and not script_to_keep.intersection(t.metadata.scripts):
+        if script_to_keep and not script_to_keep.intersection(metadata.scripts):
             continue
         if domains_to_keep and not domains_to_keep.intersection(
-            _convert_to_set(t.metadata.domains)
+            _convert_to_set(metadata.domains)
         ):
             continue
-        if task_types_to_keep and t.metadata.type not in task_types_to_keep:
+        if task_types_to_keep and metadata.type not in task_types_to_keep:
             continue
-        if categories_to_keep and t.metadata.category not in categories_to_keep:
+        if categories_to_keep and metadata.category not in categories_to_keep:
             continue
         if modalities_to_keep:
             if exclusive_modality_filter:
-                if set(t.metadata.modalities) != modalities_to_keep:
+                if set(metadata.modalities) != modalities_to_keep:
                     continue
             else:
-                if not modalities_to_keep.intersection(t.metadata.modalities):
+                if not modalities_to_keep.intersection(metadata.modalities):
                     continue
-        if exclude_superseded and t.superseded_by is not None:
+        if exclude_superseded and superseded_by is not None:
             continue
-        if exclude_aggregate and t.is_aggregate:
+        is_aggregate = (
+            issubclass(t, AbsTaskAggregate)
+            if isinstance(t, type)
+            else isinstance(t, AbsTaskAggregate)
+        )
+        if exclude_aggregate and is_aggregate:
             continue
-        if exclude_private and not t.metadata.is_public:
+        if exclude_private and not metadata.is_public:
             continue
 
         _tasks.append(t)
