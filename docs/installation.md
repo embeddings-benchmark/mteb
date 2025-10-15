@@ -20,8 +20,4 @@ If you want to run certain models implemented within mteb you will often need so
 pip install mteb[cohere]
 ```
 
-If a specific model requires a dependency it will raise an error with the recommended installation.
-
-<!-- TODO: add this
-To get an overview of the implemented models see [here](missing).
--->
+If a specific model requires a dependency it will raise an error with the recommended installation. To see full list of available models you can look at the [models overview](./overview/available_models/text.md).

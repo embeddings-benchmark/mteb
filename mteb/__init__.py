@@ -4,7 +4,7 @@ from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.evaluate import evaluate
 from mteb.load_results import load_results
-from mteb.models import Encoder, SentenceTransformerEncoderWrapper
+from mteb.models import EncoderProtocol, SentenceTransformerEncoderWrapper
 from mteb.models.get_model_meta import get_model, get_model_meta, get_model_metas
 from mteb.MTEB import MTEB
 from mteb.overview import get_task, get_tasks
@@ -20,7 +20,7 @@ __all__ = [
     "AbsTask",
     "Benchmark",
     "BenchmarkResults",
-    "Encoder",
+    "EncoderProtocol",
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",
     "TaskResult",

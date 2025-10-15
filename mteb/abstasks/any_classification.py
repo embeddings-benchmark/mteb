@@ -16,7 +16,7 @@ from sklearn.metrics import (
 )
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
-from mteb.models import Encoder, MTEBModels
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
@@ -132,7 +132,7 @@ class AbsTaskAnyClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
-        if not isinstance(model, Encoder):
+        if not isinstance(model, EncoderProtocol):
             raise TypeError(
                 f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "
                 "Please use a Encoder model instead."
@@ -177,7 +177,7 @@ class AbsTaskAnyClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],

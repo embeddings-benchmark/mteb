@@ -8,7 +8,7 @@ from typing_extensions import Self
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types import BatchedInput
 
 from .evaluator import Evaluator
@@ -81,7 +81,7 @@ class SklearnEvaluator(Evaluator):
 
     def __call__(  # type: ignore[override]
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         *,
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,

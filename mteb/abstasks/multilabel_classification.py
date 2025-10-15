@@ -15,7 +15,7 @@ from typing_extensions import override
 
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.create_dataloaders import create_dataloader
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 
 from .any_classification import AbsTaskAnyClassification
 
@@ -76,7 +76,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     @override
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],

@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import Encoder, MTEBModels
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
 
@@ -127,7 +127,7 @@ class AbsTaskBitextMining(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,

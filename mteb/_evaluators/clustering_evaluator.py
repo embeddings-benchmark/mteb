@@ -6,7 +6,7 @@ from sklearn import cluster
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 
 from .evaluator import Evaluator
 
@@ -36,7 +36,7 @@ class ClusteringEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         *,
         encode_kwargs: dict[str, Any],
     ) -> list[int]:

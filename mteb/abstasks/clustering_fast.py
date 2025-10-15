@@ -11,7 +11,7 @@ from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
 
 from mteb.create_dataloaders import create_dataloader
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
@@ -147,7 +147,7 @@ class AbsTaskClustering(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],

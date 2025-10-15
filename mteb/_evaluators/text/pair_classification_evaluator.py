@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import (
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
 
 logger = logging.getLogger(__name__)
@@ -73,7 +73,7 @@ class PairClassificationEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         encode_kwargs: dict[str, Any],
     ) -> PairClassificationDistances:
         logger.info("Running pair classification - Encoding sentences...")
@@ -117,7 +117,7 @@ class PairClassificationEvaluator(Evaluator):
     @staticmethod
     def _encode_unique_texts(
         all_texts: list[str],
-        model: Encoder,
+        model: EncoderProtocol,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,

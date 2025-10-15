@@ -16,7 +16,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
-    Encoder,
+    EncoderProtocol,
     MTEBModels,
     SearchProtocol,
 )
@@ -144,7 +144,7 @@ class AbsTask(ABC):
         # encoders might implement search protocols
         if (
             isinstance(model, SearchProtocol)
-            and not isinstance(model, Encoder)
+            and not isinstance(model, EncoderProtocol)
             and not self._support_search
         ):
             raise TypeError(
@@ -189,7 +189,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],

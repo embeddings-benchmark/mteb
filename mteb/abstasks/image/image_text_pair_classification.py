@@ -12,7 +12,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
     ImageStatistics,
     SplitDescriptiveStatistics,
@@ -116,7 +116,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],

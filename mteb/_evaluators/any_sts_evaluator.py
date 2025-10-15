@@ -10,7 +10,7 @@ from sklearn.metrics.pairwise import (
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
 
 from .evaluator import Evaluator
@@ -61,7 +61,7 @@ class AnySTSEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         *,
         encode_kwargs: dict[str, Any],
     ) -> STSEvaluatorScores:

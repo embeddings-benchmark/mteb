@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from mteb.abstasks.abstask import set_seed
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 
 
 class Evaluator(ABC):
@@ -16,7 +16,7 @@ class Evaluator(ABC):
 
     @abstractmethod
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> dict[str, float]:
         """This is called during training to evaluate the model.
         It returns scores.

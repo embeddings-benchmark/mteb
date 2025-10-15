@@ -9,7 +9,7 @@ from mteb._requires_package import requires_package, suggest_package
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -102,10 +102,10 @@ class LLM2VecModel(AbsEncoder):
         return self.model.encode(sentences, **kwargs)
 
 
-def _loader(wrapper: type[LLM2VecModel], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[LLM2VecModel], **kwargs) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
-    def loader_inner(**kwargs: Any) -> Encoder:
+    def loader_inner(**kwargs: Any) -> EncoderProtocol:
         return wrapper(**_kwargs, **kwargs)
 
     return loader_inner
