@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SICKNLSTS(AbsTaskAnySTS):
+class SICKNLSTS(AbsTaskSTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="SICK-NL-STS",

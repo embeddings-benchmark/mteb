@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DutchSarcasticHeadlinesClassification(AbsTaskAnyClassification):
+class DutchSarcasticHeadlinesClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DutchSarcasticHeadlinesClassification",
         description="This dataset contains news headlines of two Dutch news websites. All sarcastic headlines were "

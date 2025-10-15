@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class VaccinChatNLClassification(AbsTaskAnyClassification):
+class VaccinChatNLClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VaccinChatNLClassification",
         description="VaccinChatNL is a Flemish Dutch FAQ dataset on the topic of COVID-19 vaccinations in Flanders.",
