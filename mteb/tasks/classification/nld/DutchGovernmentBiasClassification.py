@@ -9,8 +9,8 @@ class DutchGovernmentBiasClassification(AbsTaskClassification):
         description="The Dutch Government Data for Bias Detection (DGDB) is a dataset sourced from the Dutch House of Representatives and annotated for bias by experts",
         reference="https://dl.acm.org/doi/pdf/10.1145/3696410.3714526",
         dataset={
-            "path": "milenamileentje/Dutch-Government-Data-for-Bias-detection",
-            "revision": "3c4f325ccedeefbd93e47540adbefe1b19a778e5",
+            "path": "clips/mteb-nl-dutch-government-bias-detection",
+            "revision": "2ad9520e28999b6b8859beef4b2a712f00e74f42",
         },
         type="Classification",
         category="t2c",
