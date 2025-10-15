@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DutchColaClassification(AbsTaskAnyClassification):
+class DutchColaClassification(AbsTaskClassification):
     samples_per_label = 128
     metadata = TaskMetadata(
         name="DutchColaClassification",
@@ -21,7 +21,7 @@ class DutchColaClassification(AbsTaskAnyClassification):
         main_score="f1",
         domains=["Written"],
         task_subtypes=["Linguistic acceptability"],
-        license="not specified", # specified as unknown
+        license="not specified",  # specified as unknown
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

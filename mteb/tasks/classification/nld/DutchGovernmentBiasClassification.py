@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DutchGovernmentBiasClassification(AbsTaskAnyClassification):
+class DutchGovernmentBiasClassification(AbsTaskClassification):
     samples_per_label = 32
     metadata = TaskMetadata(
         name="DutchGovernmentBiasClassification",

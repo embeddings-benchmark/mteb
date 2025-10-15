@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class IconclassClassification(AbsTaskAnyClassification):
+class IconclassClassification(AbsTaskClassification):
     samples_per_label = 32
     metadata = TaskMetadata(
         name="IconclassClassification",

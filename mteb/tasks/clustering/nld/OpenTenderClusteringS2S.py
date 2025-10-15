@@ -1,8 +1,8 @@
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class OpenTenderClusteringS2S(AbsTaskClusteringFast):
+class OpenTenderClusteringS2S(AbsTaskClustering):
     max_fraction_of_documents_to_embed = 1.0
     metadata = TaskMetadata(
         name="OpenTenderClusteringS2S",
