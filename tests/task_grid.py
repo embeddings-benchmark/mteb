@@ -14,6 +14,7 @@ from .mock_tasks import (
     MockImageClusteringFastTask,
     MockImageClusteringTask,
     MockImageMultilabelClassificationTask,
+    MockImageRegressionTask,
     MockImageTextPairClassificationTask,
     MockInstructionReranking,
     MockInstructionRetrieval,
@@ -86,6 +87,7 @@ MOCK_TASK_TEST_GRID_MULTILINGUAL = [
     MockMultilingualSummarizationTask(),
     MockMultilingualInstructionRetrieval(),
     MockMultilingualInstructionReranking(),
+    MockImageRegressionTask(),
 ]
 
 MOCK_TASK_TEST_GRID_MONOLINGUAL = [

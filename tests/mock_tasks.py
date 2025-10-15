@@ -3998,7 +3998,6 @@ class MockRegressionTask(AbsTaskRegression):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "number_of_characters": 52,
             "num_texts_in_train": 1,
             "text_statistics": {
                 "total_text_length": 52,
@@ -4007,11 +4006,11 @@ class MockRegressionTask(AbsTaskRegression):
                 "max_text_length": 29,
                 "unique_texts": 2,
             },
+            "image_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
         "train": {
             "num_samples": 2,
-            "number_of_characters": 53,
             "num_texts_in_train": None,
             "text_statistics": {
                 "total_text_length": 53,
@@ -4020,6 +4019,7 @@ class MockRegressionTask(AbsTaskRegression):
                 "max_text_length": 30,
                 "unique_texts": 2,
             },
+            "image_statistics": None,
             "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
         },
     }
@@ -4048,6 +4048,85 @@ class MockRegressionTask(AbsTaskRegression):
                 "train": Dataset.from_dict(
                     {
                         "text": train_texts,
+                        "value": train_values,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+
+class MockImageRegressionTask(AbsTaskRegression):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "num_texts_in_train": None,
+            "text_statistics": None,
+            "image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
+        },
+        "train": {
+            "num_samples": 2,
+            "num_texts_in_train": None,
+            "text_statistics": None,
+            "image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "values_statistics": {"min_score": 0.0, "avg_score": 0.5, "max_score": 1.0},
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="Regression",
+        name="MockRegressionTask",
+        main_score="kendalltau",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["image"]
+    metadata.category = "i2c"
+    input_column_name = "image"
+
+    def load_data(self, **kwargs):
+        train_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        train_images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA")
+            for image in train_images
+        ]
+
+        test_images = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        test_images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA")
+            for image in test_images
+        ]
+
+        train_values = [1.0, 0.0]
+        test_values = [1.0, 0.0]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "image": test_images,
+                        "value": test_values,
+                    }
+                ),
+                "train": Dataset.from_dict(
+                    {
+                        "image": train_images,
                         "value": train_values,
                     }
                 ),
