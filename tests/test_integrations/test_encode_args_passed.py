@@ -11,7 +11,6 @@ import pytest
 from torch.utils.data import DataLoader
 
 import mteb
-import mteb.get_tasks
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
