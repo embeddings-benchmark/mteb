@@ -18,12 +18,11 @@ If you have any questions regarding this process feel free to open a discussion 
 To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).
 
 ```python
-from mteb import MTEB
-from mteb.abstasks.text.reranking import AbsTaskReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from sentence_transformers import SentenceTransformer
 from mteb.abstasks.task_metadata import TaskMetadata
 
-class SciDocsReranking(AbsTaskReranking):
+class SciDocsReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
@@ -70,11 +69,11 @@ class SciDocsReranking(AbsTaskReranking):
 )
 
 # testing the task with a model:
-model = SentenceTransformer("average_word_embeddings_komninos")
+model = mteb.get_model("intfloat/multilingual-e5-small")
 results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
+> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/classification/multilingual/MTOPIntentClassification.py).
 
 
 

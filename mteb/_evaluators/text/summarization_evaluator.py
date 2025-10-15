@@ -10,7 +10,7 @@ from tqdm.auto import tqdm
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.similarity_functions import cos_sim, dot_score
 
 # if later than python 3.13 use typing module
@@ -92,7 +92,7 @@ class SummarizationEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         *,
         encode_kwargs: dict[str, Any],
     ) -> SummarizationDistances:

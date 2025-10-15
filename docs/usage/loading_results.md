@@ -61,7 +61,7 @@ cache.download_from_remote() # download results from the remote repository. Migh
 
 results = cache.load_results(
     models=model_names,
-    tasks=tasks
+    tasks=tasks,
     include_remote=True, # default
 )
 ```

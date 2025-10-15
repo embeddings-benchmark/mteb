@@ -18,7 +18,7 @@ from mteb.types import (
     TopRankedDocumentsType,
 )
 
-from .models_protocols import CrossEncoderProtocol, Encoder
+from .models_protocols import CrossEncoderProtocol, EncoderProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class SearchEncoderWrapper:
     corpus_chunk_size = 50_000
     task_corpus: CorpusDatasetType | None
 
-    def __init__(self, model: Encoder):
+    def __init__(self, model: EncoderProtocol):
         self.model = model
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta

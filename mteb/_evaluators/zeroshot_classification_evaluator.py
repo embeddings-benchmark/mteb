@@ -8,7 +8,7 @@ from mteb.create_dataloaders import (
     create_dataloader,
     create_dataloader_from_texts,
 )
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.similarity_functions import similarity
 from mteb.types import Array
 
@@ -37,7 +37,9 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]) -> Array:
+    def __call__(
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
+    ) -> Array:
         dataloader = create_dataloader(
             self.dataset,
             batch_size=encode_kwargs["batch_size"],

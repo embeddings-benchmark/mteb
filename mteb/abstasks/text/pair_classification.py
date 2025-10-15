@@ -16,7 +16,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
     LabelStatistics,
     SplitDescriptiveStatistics,
@@ -68,7 +68,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,

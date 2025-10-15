@@ -5,8 +5,8 @@ watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
   name: material
-  favicon: images/logos/mteb_logo/dots-icon.png 
-  logo: images/logos/mteb_logo/dots-icon.png 
+  favicon: images/logos/mteb_logo/dots-icon.png
+  logo: images/logos/mteb_logo/dots-icon.png
   features:
     - navigation.tracking
     - navigation.instant
@@ -80,13 +80,13 @@ nav:
         - Loading Results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
         - Running the Leaderboard: usage/leaderboard.md
-  - Overview: 
+  - Overview:
       - overview/index.md
       - Benchmarks:
         - Available Benchmarks: overview/available_benchmarks.md
-      - Tasks: 
+      - Tasks:
         - Available Tasks: overview/available_tasks
-      - Models: 
+      - Models:
         - Available Models: overview/available_models
   # - Contribute: # TODO: Add contributions
   #     - Adding a Model: adding_a_model.md
@@ -95,6 +95,7 @@ nav:
   #     - Development Setup: CONTRIBUTING.md
   - API:
       - Overview: api/index.md
+      - Evaluation: api/evaluation.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md

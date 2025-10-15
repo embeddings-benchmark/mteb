@@ -33,5 +33,5 @@ logging.basicConfig(level=logging.INFO)
         MockSentenceTransformersbf16Encoder(),
     ],
 )
-def test_encoder_dtype_on_task(task: AbsTask, model: mteb.Encoder):
+def test_encoder_dtype_on_task(task: AbsTask, model: mteb.EncoderProtocol):
     mteb.evaluate(model, task, cache=None)

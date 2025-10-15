@@ -18,7 +18,7 @@ from mteb.create_dataloaders import (
 )
 from mteb.models import (
     CrossEncoderProtocol,
-    Encoder,
+    EncoderProtocol,
     MTEBModels,
     SearchCrossEncoderWrapper,
     SearchEncoderWrapper,
@@ -353,7 +353,7 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-        if isinstance(model, Encoder) and not isinstance(model, SearchProtocol):
+        if isinstance(model, EncoderProtocol) and not isinstance(model, SearchProtocol):
             search_model = SearchEncoderWrapper(model)
         elif isinstance(model, CrossEncoderProtocol):
             search_model = SearchCrossEncoderWrapper(model)

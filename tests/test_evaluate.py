@@ -5,7 +5,7 @@ import pytest
 import mteb
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from tests.mock_models import MockSentenceTransformer
 from tests.mock_tasks import (
     MockClassificationTask,
@@ -22,7 +22,7 @@ mock_retrieval = (MockSentenceTransformer(), MockRetrievalTask(), 0.0)
     [mock_classification, mock_retrieval],
     ids=["mock_classification", "mock_retrieval"],
 )
-def test_evaluate(model: Encoder, task: AbsTask, expected_score: float):
+def test_evaluate(model: EncoderProtocol, task: AbsTask, expected_score: float):
     results = mteb.evaluate(model, task, cache=None, co2_tracker=False)
 
     assert len(results) == 1, "should return exactly one result"
@@ -40,7 +40,7 @@ def test_evaluate(model: Encoder, task: AbsTask, expected_score: float):
     [(MockSentenceTransformer(), [MockClassificationTask(), MockRetrievalTask()])],
     ids=["mock_clf_and_retrieval"],
 )
-def test_evaluate_w_multiple_tasks(model: Encoder, tasks: list[AbsTask]):
+def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask]):
     results = mteb.evaluate(model, tasks, cache=None, co2_tracker=False)
     assert len(results) == len(tasks), "should return exactly one result per task"
 
@@ -49,7 +49,7 @@ def test_evaluate_w_multiple_tasks(model: Encoder, tasks: list[AbsTask]):
     "model, task, expected_score", [mock_classification], ids=["mock_classification"]
 )
 def test_evaluate_with_cache(
-    model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
+    model: EncoderProtocol, task: AbsTask, expected_score: float, tmp_path: Path
 ):
     cache = ResultCache(tmp_path)
     results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
@@ -81,7 +81,7 @@ def test_evaluate_with_cache(
     ids=["mock_classification"],
 )
 def test_evaluate_w_missing_splits(
-    model: Encoder,
+    model: EncoderProtocol,
     task: AbsTask,
     expected_score: float,
     splits: list[str],
@@ -115,7 +115,7 @@ def test_evaluate_w_missing_splits(
     ids=["mock_retrieval"],
 )
 def test_evaluate_w_missing_subset(
-    model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
+    model: EncoderProtocol, task: AbsTask, expected_score: float, tmp_path: Path
 ):
     cache = ResultCache(tmp_path)
 
@@ -147,7 +147,7 @@ def test_evaluate_w_missing_subset(
     ids=["mock_classification"],
 )
 def test_evaluate_overwrites(
-    model: Encoder,
+    model: EncoderProtocol,
     task: AbsTask,
     expected_score: float,
     splits: list[str],

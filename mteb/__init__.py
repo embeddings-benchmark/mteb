@@ -6,7 +6,7 @@ from mteb.evaluate import evaluate
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import get_task, get_tasks
 from mteb.load_results import load_results
-from mteb.models import Encoder, SentenceTransformerEncoderWrapper
+from mteb.models import EncoderProtocol, SentenceTransformerEncoderWrapper
 from mteb.models.get_model_meta import get_model, get_model_meta, get_model_metas
 from mteb.MTEB import MTEB
 from mteb.results import BenchmarkResults, TaskResult
@@ -21,7 +21,7 @@ __all__ = [
     "AbsTask",
     "Benchmark",
     "BenchmarkResults",
-    "Encoder",
+    "EncoderProtocol",
     "SentenceTransformerEncoderWrapper",
     "TaskMetadata",
     "TaskResult",

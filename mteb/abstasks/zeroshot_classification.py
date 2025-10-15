@@ -7,7 +7,7 @@ from datasets import Dataset
 from sklearn import metrics
 
 from mteb._evaluators import ZeroShotClassificationEvaluator
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
     ImageStatistics,
     LabelStatistics,
@@ -110,7 +110,7 @@ class AbsTaskZeroShotClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,

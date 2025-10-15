@@ -68,18 +68,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{chen2025mmE5,
       title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
       author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
       journal={arXiv preprint arXiv:2502.08468},
       year={2025}
     }
-    
+
     ```
-    
+
 
 
 

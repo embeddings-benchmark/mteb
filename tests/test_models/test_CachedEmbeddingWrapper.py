@@ -10,11 +10,11 @@ import mteb
 from mteb import TaskMetadata
 from mteb.abstasks import AbsTask
 from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 
-class DummyModel(Encoder):
+class DummyModel(EncoderProtocol):
     def __init__(self, embedding_dim=768):
         self.embedding_dim = embedding_dim
         self.call_count = 0
@@ -156,7 +156,7 @@ class TestCachedEmbeddingWrapper:
         ),  # t2t
     ],
 )
-def test_wrapper_mock_tasks(task: AbsTask, model: Encoder, tmp_path: Path):
+def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Path):
     cached_model = CachedEmbeddingWrapper(model, tmp_path)
     mteb.evaluate(cached_model, task, cache=None)
     assert len(list((tmp_path / task.metadata.name).glob("*"))) == 3

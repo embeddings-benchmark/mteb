@@ -17,7 +17,7 @@ from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import (
     CrossEncoderProtocol,
-    Encoder,
+    EncoderProtocol,
     MTEBModels,
 )
 from mteb.models.sentence_transformer_wrapper import (
@@ -79,7 +79,7 @@ def _sanitize_model(
     if isinstance(model, SentenceTransformer):
         _mdl = SentenceTransformerEncoderWrapper(model)
         meta = _mdl.mteb_model_meta
-        _mdl = cast(Encoder, _mdl)
+        _mdl = cast(EncoderProtocol, _mdl)
         model = _mdl
     elif isinstance(model, CrossEncoder):
         _mdl = CrossEncoderWrapper(model)

@@ -12,7 +12,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -77,7 +77,7 @@ class AbsTaskSummarization(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,

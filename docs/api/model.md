@@ -26,7 +26,7 @@ length, valid frameworks, license, and degree of openness.
 
 ## Model Protocols
 
-:::mteb.models.Encoder
+:::mteb.models.EncoderProtocol
 
 :::mteb.models.SearchProtocol
 

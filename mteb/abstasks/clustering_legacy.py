@@ -8,7 +8,7 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
@@ -80,7 +80,7 @@ class AbsTaskClusteringLegacy(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],

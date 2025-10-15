@@ -7,7 +7,7 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb._evaluators import AnySTSEvaluator
 from mteb._evaluators.any_sts_evaluator import STSEvaluatorScores
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
     ImageStatistics,
     ScoreStatistics,
@@ -98,7 +98,7 @@ class AbsTaskSTS(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         encode_kwargs: dict[str, Any],
         hf_split: str,

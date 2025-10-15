@@ -15,7 +15,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -130,10 +130,10 @@ class RepLLaMAModel(AbsEncoder):
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
-    def loader_inner(**kwargs: Any) -> Encoder:
+    def loader_inner(**kwargs: Any) -> EncoderProtocol:
         return wrapper(**_kwargs, **kwargs)
 
     return loader_inner

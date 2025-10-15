@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder, PromptType
+from mteb.models.models_protocols import EncoderProtocol, PromptType
 
 
 def instruction_template(
@@ -107,7 +107,9 @@ training_data = {
 }
 
 
-def q3e_instruct_loader(model_name_or_path: str, revision: str, **kwargs) -> Encoder:
+def q3e_instruct_loader(
+    model_name_or_path: str, revision: str, **kwargs
+) -> EncoderProtocol:
     model = InstructSentenceTransformerModel(
         model_name_or_path,
         revision=revision,
