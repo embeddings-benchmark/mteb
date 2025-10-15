@@ -87,7 +87,6 @@ MOCK_TASK_TEST_GRID_MULTILINGUAL = [
     MockMultilingualSummarizationTask(),
     MockMultilingualInstructionRetrieval(),
     MockMultilingualInstructionReranking(),
-    MockImageRegressionTask(),
 ]
 
 MOCK_TASK_TEST_GRID_MONOLINGUAL = [
@@ -133,6 +132,7 @@ MOCK_MIEB_TASK_GRID = [
     MockMultilingualMultiChoiceTask(),
     MockMultilingualImageMultilabelClassificationTask(),
     MockImageClusteringFastTask(),
+    MockImageRegressionTask(),
 ]
 
 MOCK_MIEB_TASK_GRID_AS_STRING = [
