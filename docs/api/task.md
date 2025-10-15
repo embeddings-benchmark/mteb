@@ -14,6 +14,8 @@ A task is an implementation of a dataset for evaluation. It could, for instance,
 
 :::mteb.get_task
 
+:::mteb.filter_tasks
+
 ## Metadata
 
 Each task also contains extensive metadata. We annotate this using the following object, which allows us to use [pydantic](https://docs.pydantic.dev/latest/) to validate the metadata.
@@ -54,19 +56,19 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
     options:
         show_root_toc_entry: false
 
-:::mteb.abstasks.any_classification.AbsTaskAnyClassification
+:::mteb.abstasks.classification.AbsTaskClassification
 
 :::mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification
 
-:::mteb.abstasks.clustering_fast.AbsTaskClustering
+:::mteb.abstasks.clustering.AbsTaskClustering
 
-:::mteb.abstasks.any_sts.AbsTaskAnySTS
+:::mteb.abstasks.sts.AbsTaskSTS
 
-:::mteb.abstasks.any_zeroshot_classification.AbsTaskAnyZeroShotClassification
+:::mteb.abstasks.zeroshot_classification.AbsTaskZeroShotClassification
 
 :::mteb.abstasks.regression.AbsTaskRegression
 
-:::mteb.abstasks.any_clustering.AbsTaskClusteringLegacy
+:::mteb.abstasks.clustering_legacy.AbsTaskClusteringLegacy
 
 ## Text Tasks
 

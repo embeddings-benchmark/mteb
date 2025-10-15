@@ -3,11 +3,11 @@ from itertools import chain
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
-from mteb.abstasks.clustering_fast import (
+from mteb.abstasks.clustering import (
     AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
@@ -39,7 +39,6 @@ class EightTagsClustering(AbsTaskClusteringLegacy):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
-  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
   address = {Marseille, France},
   author = {Dadas, Slawomir  and
 Pere{\\l}kiewicz, Micha{\\l}  and
@@ -100,7 +99,6 @@ class EightTagsClusteringFast(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
-  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
   address = {Marseille, France},
   author = {Dadas, Slawomir  and
 Pere{\\l}kiewicz, Micha{\\l}  and

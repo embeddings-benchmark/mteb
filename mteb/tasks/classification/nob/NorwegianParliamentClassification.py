@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NorwegianParliamentClassification(AbsTaskAnyClassification):
+class NorwegianParliamentClassification(AbsTaskClassification):
     superseded_by = "NorwegianParliamentClassification.v2"
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification",
@@ -28,7 +28,6 @@ class NorwegianParliamentClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kummervold-etal-2021-operationalizing,
-  abstract = {In this work, we show the process of building a large-scale training set from digital and digitized collections at a national library. The resulting Bidirectional Encoder Representations from Transformers (BERT)-based language model for Norwegian outperforms multilingual BERT (mBERT) models in several token and sequence classification tasks for both Norwegian Bokm{\aa}l and Norwegian Nynorsk. Our model also improves the mBERT performance for other languages present in the corpus such as English, Swedish, and Danish. For languages not included in the corpus, the weights degrade moderately while keeping strong multilingual properties. Therefore, we show that building high-quality models within a memory institution using somewhat noisy optical character recognition (OCR) content is feasible, and we hope to pave the way for other memory institutions to follow.},
   address = {Reykjavik, Iceland (Online)},
   author = {Kummervold, Per E  and
 De la Rosa, Javier  and
@@ -49,7 +48,7 @@ Brygfjeld, Svein Arne},
     )
 
 
-class NorwegianParliamentClassificationV2(AbsTaskAnyClassification):
+class NorwegianParliamentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification.v2",
         description="""Norwegian parliament speeches annotated for sentiment
@@ -75,7 +74,6 @@ class NorwegianParliamentClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kummervold-etal-2021-operationalizing,
-  abstract = {In this work, we show the process of building a large-scale training set from digital and digitized collections at a national library. The resulting Bidirectional Encoder Representations from Transformers (BERT)-based language model for Norwegian outperforms multilingual BERT (mBERT) models in several token and sequence classification tasks for both Norwegian Bokm{\aa}l and Norwegian Nynorsk. Our model also improves the mBERT performance for other languages present in the corpus such as English, Swedish, and Danish. For languages not included in the corpus, the weights degrade moderately while keeping strong multilingual properties. Therefore, we show that building high-quality models within a memory institution using somewhat noisy optical character recognition (OCR) content is feasible, and we hope to pave the way for other memory institutions to follow.},
   address = {Reykjavik, Iceland (Online)},
   author = {Kummervold, Per E  and
 De la Rosa, Javier  and

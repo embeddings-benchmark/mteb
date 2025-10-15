@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HUMEToxicConversationsClassification(AbsTaskAnyClassification):
+class HUMEToxicConversationsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HUMEToxicConversationsClassification",
         description="Human evaluation subset of Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",

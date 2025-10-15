@@ -31,7 +31,6 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{zhong-etal-2021-qmsum,
-  abstract = {},
   address = {Online},
   author = {Zhong, Ming  and
 Yin, Da  and

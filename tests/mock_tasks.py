@@ -4,13 +4,9 @@ from datasets import Dataset, DatasetDict
 from PIL import Image
 from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
-from mteb.abstasks.any_clustering import AbsTaskClusteringLegacy
-from mteb.abstasks.any_sts import AbsTaskAnySTS
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
-from mteb.abstasks.clustering_fast import AbsTaskClustering
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.clustering import AbsTaskClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.image.image_text_pair_classification import (
     AbsTaskImageTextPairClassification,
 )
@@ -19,10 +15,14 @@ from mteb.abstasks.multilabel_classification import (
 )
 from mteb.abstasks.regression import AbsTaskRegression
 from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.text.summarization import AbsTaskSummarization
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 general_args = {
     "description": "a mock task for testing",
@@ -109,7 +109,7 @@ def instruction_retrieval_datasplit() -> RetrievalSplitData:
     return base_ds
 
 
-class MockClassificationTask(AbsTaskAnyClassification):
+class MockClassificationTask(AbsTaskClassification):
     classifier = LogisticRegression(n_jobs=1, max_iter=10)  # type: ignore
 
     expected_stats = {
@@ -185,7 +185,7 @@ class MockClassificationTask(AbsTaskAnyClassification):
         self.data_loaded = True
 
 
-class MockMultilingualClassificationTask(AbsTaskAnyClassification):
+class MockMultilingualClassificationTask(AbsTaskClassification):
     classifier = LogisticRegression(n_jobs=1, max_iter=10)
 
     expected_stats = {
@@ -740,15 +740,15 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
 
 
 class MockClusteringFastTask(AbsTaskClustering):
-    max_document_to_embed = 4
+    max_document_to_embed = 20
     max_fraction_of_documents_to_embed = None
     n_clusters = 3
     max_documents_per_cluster = 4
     expected_stats = {
         "test": {
-            "num_samples": 4,
+            "num_samples": 20,
             "text_statistics": {
-                "total_text_length": 110,
+                "total_text_length": 550,
                 "min_text_length": 23,
                 "average_text_length": 27.5,
                 "max_text_length": 29,
@@ -760,7 +760,7 @@ class MockClusteringFastTask(AbsTaskClustering):
                 "average_label_per_text": 1.0,
                 "max_labels_per_text": 1,
                 "unique_labels": 3,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 2}},
+                "labels": {"0": {"count": 5}, "1": {"count": 5}, "2": {"count": 10}},
             },
         }
     }
@@ -778,8 +778,8 @@ class MockClusteringFastTask(AbsTaskClustering):
             "This is another test sentence",
             "This is a third test sentence",
             "This is a third test sentence",
-        ]
-        labels = [0, 1, 2, 2]
+        ] * 5
+        labels = [0, 1, 2, 2] * 5
 
         self.dataset = DatasetDict(
             {
@@ -1075,7 +1075,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockSTSTask(AbsTaskAnySTS):
+class MockSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -1133,7 +1133,7 @@ class MockSTSTask(AbsTaskAnySTS):
     max_score = 1
 
 
-class MockMultilingualSTSTask(AbsTaskAnySTS):
+class MockMultilingualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -2983,7 +2983,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockImageClassificationTask(AbsTaskAnyClassification):
+class MockImageClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -3067,7 +3067,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
         self.data_loaded = True
 
 
-class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
+class MockMultilingualImageClassificationTask(AbsTaskClassification):
     n_experiments = 1
     samples_per_label = 5
     expected_stats = {
@@ -3808,7 +3808,7 @@ class MockMultilingualImageTextPairClassificationTask(
         self.data_loaded = True
 
 
-class MockVisualSTSTask(AbsTaskAnySTS):
+class MockVisualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -3869,7 +3869,7 @@ class MockVisualSTSTask(AbsTaskAnySTS):
         self.data_loaded = True
 
 
-class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
+class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -3934,7 +3934,7 @@ class MockZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
         return ["This is a test sentence", "This is another test sentence"]
 
 
-class MockTextZeroShotClassificationTask(AbsTaskAnyZeroShotClassification):
+class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,

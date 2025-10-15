@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class UCF101ZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class UCF101ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="UCF101ZeroShot",
         description="""UCF101 is an action recognition data set of realistic

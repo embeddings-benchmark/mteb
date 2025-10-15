@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NoRecClassification(AbsTaskAnyClassification):
+class NoRecClassification(AbsTaskClassification):
     superseded_by = "NoRecClassification.v2"
     metadata = TaskMetadata(
         name="NoRecClassification",
@@ -61,7 +61,7 @@ Tokunaga, Takenobu},
     )
 
 
-class NoRecClassificationV2(AbsTaskAnyClassification):
+class NoRecClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NoRecClassification.v2",
         description="""A Norwegian dataset for sentiment classification on review

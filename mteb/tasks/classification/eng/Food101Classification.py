@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Food101Classification(AbsTaskAnyClassification):
+class Food101Classification(AbsTaskClassification):
     input_column_name: str = "image"
     samples_per_label: int = 16
     n_experiments: int = 5

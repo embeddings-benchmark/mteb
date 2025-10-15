@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -7,7 +7,7 @@ _LANGS = {
 }
 
 
-class CataloniaTweetClassification(AbsTaskAnyClassification):
+class CataloniaTweetClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CataloniaTweetClassification",
         description="""This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter

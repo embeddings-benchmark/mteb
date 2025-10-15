@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TswanaNewsClassification(AbsTaskAnyClassification):
+class TswanaNewsClassification(AbsTaskClassification):
     superseded_by = "TswanaNewsClassification.v2"
     metadata = TaskMetadata(
         name="TswanaNewsClassification",
@@ -40,7 +40,7 @@ class TswanaNewsClassification(AbsTaskAnyClassification):
     )
 
 
-class TswanaNewsClassificationV2(AbsTaskAnyClassification):
+class TswanaNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TswanaNewsClassification.v2",
         description="""Tswana News Classification Dataset

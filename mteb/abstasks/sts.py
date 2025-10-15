@@ -79,7 +79,7 @@ class STSMetrics(TypedDict):
     euclidean_spearman: float
 
 
-class AbsTaskAnySTS(AbsTask):
+class AbsTaskSTS(AbsTask):
     """Abstract class for STS experiments.
 
     Attributes:

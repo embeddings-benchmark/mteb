@@ -17,7 +17,7 @@ from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 
-from .any_classification import AbsTaskAnyClassification
+from .classification import AbsTaskClassification
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class FullMultilabelClassificationMetrics(MultilabelClassificationMetrics):
     scores_per_experiment: list[MultilabelClassificationMetrics]
 
 
-class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
+class AbsTaskMultilabelClassification(AbsTaskClassification):
     """Abstract class for multioutput classification tasks
 
     Attributes:

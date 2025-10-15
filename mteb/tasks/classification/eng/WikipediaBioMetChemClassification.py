@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaBioMetChemClassification(AbsTaskAnyClassification):
+class WikipediaBioMetChemClassification(AbsTaskClassification):
     superseded_by = "WikipediaBioMetChemClassification.v2"
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification",
@@ -36,7 +36,7 @@ class WikipediaBioMetChemClassification(AbsTaskAnyClassification):
     )
 
 
-class WikipediaBioMetChemClassificationV2(AbsTaskAnyClassification):
+class WikipediaBioMetChemClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.

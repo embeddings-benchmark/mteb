@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WisesightSentimentClassification(AbsTaskAnyClassification):
+class WisesightSentimentClassification(AbsTaskClassification):
     superseded_by = "WisesightSentimentClassification.v2"
     metadata = TaskMetadata(
         name="WisesightSentimentClassification",
@@ -43,7 +43,7 @@ Polpanumas, Charin},
     )
 
 
-class WisesightSentimentClassificationV2(AbsTaskAnyClassification):
+class WisesightSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WisesightSentimentClassification.v2",
         description="""Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)

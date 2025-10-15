@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CzechProductReviewSentimentClassification(AbsTaskAnyClassification):
+class CzechProductReviewSentimentClassification(AbsTaskClassification):
     superseded_by = "CzechProductReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CzechProductReviewSentimentClassification",
@@ -55,7 +55,7 @@ Montoyo, Andres},
         )
 
 
-class CzechProductReviewSentimentClassificationV2(AbsTaskAnyClassification):
+class CzechProductReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CzechProductReviewSentimentClassification.v2",
         description="""User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (positive, neutral, negative)

@@ -1,12 +1,12 @@
 from pathlib import Path
 
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class GTSRBZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="GTSRBZeroShot",
         description="""The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.""",

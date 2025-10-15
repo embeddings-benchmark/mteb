@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class YueOpenriceReviewClassification(AbsTaskAnyClassification):
+class YueOpenriceReviewClassification(AbsTaskClassification):
     superseded_by = "YueOpenriceReviewClassification.v2"
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification",
@@ -45,7 +45,7 @@ class YueOpenriceReviewClassification(AbsTaskAnyClassification):
         )
 
 
-class YueOpenriceReviewClassificationV2(AbsTaskAnyClassification):
+class YueOpenriceReviewClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification.v2",
         description="""A Cantonese dataset for review classification

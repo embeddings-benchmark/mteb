@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SickrPLSTS(AbsTaskAnySTS):
+class SickrPLSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICK-R-PL",
         dataset={
@@ -61,7 +61,7 @@ Piperidis, Stelios},
     max_score = 5
 
 
-class CdscrSTS(AbsTaskAnySTS):
+class CdscrSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="CDSC-R",
         dataset={

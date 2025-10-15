@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskAnyClassification):
+class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CanadaTaxCourtOutcomesLegalBenchClassification",
         description="The input is an excerpt of text from Tax Court of Canada decisions involving appeals of tax related matters. The task is to classify whether the excerpt includes the outcome of the appeal, and if so, to specify whether the appeal was allowed or dismissed. Partial success (e.g. appeal granted on one tax year but dismissed on another) counts as allowed (with the exception of costs orders which are disregarded). Where the excerpt does not clearly articulate an outcome, the system should indicate other as the outcome. Categorizing case outcomes is a common task that legal researchers complete in order to gather datasets involving outcomes in legal processes for the purposes of quantitative empirical legal research.",
@@ -38,7 +38,7 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskAnyClassification):
 
 
 class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLIConfidentialityOfAgreementLegalBenchClassification",
@@ -81,9 +81,7 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
     )
 
 
-class ContractNLIExplicitIdentificationLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLIExplicitIdentificationLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that all Confidential Information shall be expressly identified by the Disclosing Party.",
@@ -126,7 +124,7 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(
 
 
 class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
@@ -169,7 +167,7 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
     )
 
 
-class ContractNLILimitedUseLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLILimitedUseLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
@@ -211,7 +209,7 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class ContractNLINoLicensingLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLINoLicensingLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Agreement shall not grant Receiving Party any right to Confidential Information.",
@@ -254,7 +252,7 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskAnyClassification):
 
 
 class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
@@ -298,7 +296,7 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
 
 
 class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
@@ -341,7 +339,7 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
     )
 
 
-class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLIPermissibleCopyLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may create a copy of some Confidential Information in some circumstances.",
@@ -384,7 +382,7 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskAnyClassificatio
 
 
 class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
@@ -428,7 +426,7 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
 
 
 class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
@@ -472,7 +470,7 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
 
 
 class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="ContractNLIReturnOfConfidentialInformationLegalBenchClassification",
@@ -515,7 +513,7 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
     )
 
 
-class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskAnyClassification):
+class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLISharingWithEmployeesLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
@@ -557,9 +555,7 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskAnyClassifi
     )
 
 
-class ContractNLISharingWithThirdPartiesLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLISharingWithThirdPartiesLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
@@ -601,9 +597,7 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(
     )
 
 
-class ContractNLISurvivalOfObligationsLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLISurvivalOfObligationsLegalBenchClassification",
         description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that some obligations of Agreement may survive termination of Agreement.",
@@ -645,7 +639,7 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(
     )
 
 
-class CorporateLobbyingLegalBenchClassification(AbsTaskAnyClassification):
+class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CorporateLobbyingLegalBenchClassification",
         description="The Corporate Lobbying task consists of determining whether a proposed Congressional bill may be relevant to a company based on a company's self-description in its SEC 10K filing.",
@@ -680,7 +674,7 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskAnyClassification):
+class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAffiliateLicenseLicenseeLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if a clause describes a license grant to a licensee (incl. sublicensor) and the affiliates of such licensee/sublicensor.",
@@ -722,7 +716,7 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskAnyClassificat
     )
 
 
-class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskAnyClassification):
+class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAffiliateLicenseLicensorLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause describes a license grant by affiliates of the licensor or that includes intellectual property of affiliates of the licensor.",
@@ -764,7 +758,7 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskAnyClassificat
     )
 
 
-class CUADAntiAssignmentLegalBenchClassification(AbsTaskAnyClassification):
+class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAntiAssignmentLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause requires consent or notice of a party if the contract is assigned to a third party.",
@@ -806,7 +800,7 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADAuditRightsLegalBenchClassification(AbsTaskAnyClassification):
+class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAuditRightsLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause gives a party the right to audit the books, records, or physical locations of the counterparty to ensure compliance with the contract.",
@@ -848,7 +842,7 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADCapOnLiabilityLegalBenchClassification(AbsTaskAnyClassification):
+class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADCapOnLiabilityLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a cap on liability upon the breach of a party's obligation. This includes time limitation for the counterparty to bring claims or maximum amount for recovery.",
@@ -890,7 +884,7 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADChangeOfControlLegalBenchClassification(AbsTaskAnyClassification):
+class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADChangeOfControlLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause gives one party the right to terminate or is consent or notice required of the counterparty if such party undergoes a change of control, such as a merger, stock sale, transfer of all or substantially all of its assets or business, or assignment by operation of law.",
@@ -933,7 +927,7 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskAnyClassification):
 
 
 class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="CUADCompetitiveRestrictionExceptionLegalBenchClassification",
@@ -976,7 +970,7 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
     )
 
 
-class CUADCovenantNotToSueLegalBenchClassification(AbsTaskAnyClassification):
+class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADCovenantNotToSueLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies that a party is restricted from contesting the validity of the counterparty's ownership of intellectual property or otherwise bringing a claim against the counterparty for matters unrelated to the contract.",
@@ -1018,7 +1012,7 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADEffectiveDateLegalBenchClassification(AbsTaskAnyClassification):
+class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADEffectiveDateLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies the date upon which the agreement becomes effective.",
@@ -1060,7 +1054,7 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADExclusivityLegalBenchClassification(AbsTaskAnyClassification):
+class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADExclusivityLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies exclusive dealing commitment with the counterparty. This includes a commitment to procure all 'requirements' from one party of certain technology, goods, or services or a prohibition on licensing or selling technology, goods or services to third parties, or a prohibition on collaborating or working with other parties), whether during the contract or after the contract ends (or both).",
@@ -1102,7 +1096,7 @@ class CUADExclusivityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADExpirationDateLegalBenchClassification(AbsTaskAnyClassification):
+class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADExpirationDateLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies the date upon which the initial term expires.",
@@ -1144,7 +1138,7 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADGoverningLawLegalBenchClassification(AbsTaskAnyClassification):
+class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADGoverningLawLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies which state/country’s law governs the contract.",
@@ -1186,7 +1180,7 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADInsuranceLegalBenchClassification(AbsTaskAnyClassification):
+class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADInsuranceLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if clause creates a requirement for insurance that must be maintained by one party for the benefit of the counterparty.",
@@ -1228,7 +1222,7 @@ class CUADInsuranceLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskAnyClassification):
+class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADIPOwnershipAssignmentLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies that intellectual property created by one party become the property of the counterparty, either per the terms of the contract or upon the occurrence of certain events.",
@@ -1270,9 +1264,7 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskAnyClassification
     )
 
 
-class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADIrrevocableOrPerpetualLicenseLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a license grant that is irrevocable or perpetual.",
@@ -1314,7 +1306,7 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(
     )
 
 
-class CUADJointIPOwnershipLegalBenchClassification(AbsTaskAnyClassification):
+class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADJointIPOwnershipLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause provides for joint or shared ownership of intellectual property between the parties to the contract.",
@@ -1356,7 +1348,7 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADLicenseGrantLegalBenchClassification(AbsTaskAnyClassification):
+class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADLicenseGrantLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause contains a license granted by one party to its counterparty.",
@@ -1398,7 +1390,7 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskAnyClassification):
+class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADLiquidatedDamagesLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause awards either party liquidated damages for breach or a fee upon the termination of a contract (termination fee).",
@@ -1440,7 +1432,7 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADMinimumCommitmentLegalBenchClassification(AbsTaskAnyClassification):
+class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADMinimumCommitmentLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a minimum order size or minimum amount or units per time period that one party must buy from the counterparty.",
@@ -1482,7 +1474,7 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADMostFavoredNationLegalBenchClassification(AbsTaskAnyClassification):
+class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADMostFavoredNationLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if a third party gets better terms on the licensing or sale of technology/goods/services described in the contract, the buyer of such technology/goods/services under the contract shall be entitled to those better terms.",
@@ -1524,7 +1516,7 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskAnyClassification):
+class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADNoSolicitOfCustomersLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause restricts a party from contracting or soliciting customers or partners of the counterparty, whether during the contract or after the contract ends (or both).",
@@ -1566,7 +1558,7 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskAnyClassification)
     )
 
 
-class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskAnyClassification):
+class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADNoSolicitOfEmployeesLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause restricts a party's soliciting or hiring employees and/or contractors from the counterparty, whether during the contract or after the contract ends (or both).",
@@ -1608,7 +1600,7 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskAnyClassification)
     )
 
 
-class CUADNonCompeteLegalBenchClassification(AbsTaskAnyClassification):
+class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADNonCompeteLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause restricts the ability of a party to compete with the counterparty or operate in a certain geography or business or technology sector.",
@@ -1650,7 +1642,7 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADNonDisparagementLegalBenchClassification(AbsTaskAnyClassification):
+class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADNonDisparagementLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause requires a party not to disparage the counterparty.",
@@ -1692,7 +1684,7 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskAnyClassification):
+class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADNonTransferableLicenseLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause limits the ability of a party to transfer the license being granted to a third party.",
@@ -1734,9 +1726,7 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskAnyClassificatio
     )
 
 
-class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADNoticePeriodToTerminateRenewalLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a notice period required to terminate renewal.",
@@ -1778,7 +1768,7 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(
     )
 
 
-class CUADPostTerminationServicesLegalBenchClassification(AbsTaskAnyClassification):
+class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADPostTerminationServicesLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause subjects a party to obligations after the termination or expiration of a contract, including any post-termination transition, payment, transfer of IP, wind-down, last-buy, or similar commitments.",
@@ -1820,7 +1810,7 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskAnyClassificati
     )
 
 
-class CUADPriceRestrictionsLegalBenchClassification(AbsTaskAnyClassification):
+class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADPriceRestrictionsLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause places a restriction on the ability of a party to raise or reduce prices of technology, goods, or services provided.",
@@ -1862,7 +1852,7 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADRenewalTermLegalBenchClassification(AbsTaskAnyClassification):
+class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADRenewalTermLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a renewal term.",
@@ -1904,7 +1894,7 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskAnyClassification):
+class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADRevenueProfitSharingLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause require a party to share revenue or profit with the counterparty for any technology, goods, or services.",
@@ -1946,7 +1936,7 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskAnyClassification)
     )
 
 
-class CUADRofrRofoRofnLegalBenchClassification(AbsTaskAnyClassification):
+class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADRofrRofoRofnLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause grant one party a right of first refusal, right of first offer or right of first negotiation to purchase, license, market, or distribute equity interest, technology, assets, products or services.",
@@ -1988,7 +1978,7 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskAnyClassification):
+class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADSourceCodeEscrowLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause requires one party to deposit its source code into escrow with a third party, which can be released to the counterparty upon the occurrence of certain events (bankruptcy, insolvency, etc.).",
@@ -2030,7 +2020,7 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskAnyClassification):
+class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADTerminationForConvenienceLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies that one party can terminate this contract without cause (solely by giving a notice and allowing a waiting period to expire).",
@@ -2072,7 +2062,7 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskAnyClassifica
     )
 
 
-class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskAnyClassification):
+class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADThirdPartyBeneficiaryLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies that that there a non-contracting party who is a beneficiary to some or all of the clauses in the contract and therefore can enforce its rights against a contracting party.",
@@ -2114,7 +2104,7 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskAnyClassification
     )
 
 
-class CUADUncappedLiabilityLegalBenchClassification(AbsTaskAnyClassification):
+class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADUncappedLiabilityLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies that a party's liability is uncapped upon the breach of its obligation in the contract. This also includes uncap liability for a particular type of breach such as IP infringement or breach of confidentiality obligation.",
@@ -2156,9 +2146,7 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause grants one party an “enterprise,” “all you can eat” or unlimited usage license.",
@@ -2200,7 +2188,7 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(
     )
 
 
-class CUADVolumeRestrictionLegalBenchClassification(AbsTaskAnyClassification):
+class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADVolumeRestrictionLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a fee increase or consent requirement, etc. if one party's use of the product/services exceeds certain threshold.",
@@ -2242,7 +2230,7 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class CUADWarrantyDurationLegalBenchClassification(AbsTaskAnyClassification):
+class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADWarrantyDurationLegalBenchClassification",
         description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a duration of any warranty against defects or errors in technology, products, or services provided under the contract.",
@@ -2284,7 +2272,7 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class DefinitionClassificationLegalBenchClassification(AbsTaskAnyClassification):
+class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DefinitionClassificationLegalBenchClassification",
         description="This task consists of determining whether or not a sentence from a Supreme Court opinion offers a definition of a term.",
@@ -2319,7 +2307,7 @@ class DefinitionClassificationLegalBenchClassification(AbsTaskAnyClassification)
     )
 
 
-class Diversity1LegalBenchClassification(AbsTaskAnyClassification):
+class Diversity1LegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Diversity1LegalBenchClassification",
         description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 1).",
@@ -2354,7 +2342,7 @@ class Diversity1LegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class Diversity2LegalBenchClassification(AbsTaskAnyClassification):
+class Diversity2LegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Diversity2LegalBenchClassification",
         description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 2).",
@@ -2389,7 +2377,7 @@ class Diversity2LegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class Diversity3LegalBenchClassification(AbsTaskAnyClassification):
+class Diversity3LegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Diversity3LegalBenchClassification",
         description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 3).",
@@ -2424,7 +2412,7 @@ class Diversity3LegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class Diversity4LegalBenchClassification(AbsTaskAnyClassification):
+class Diversity4LegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Diversity4LegalBenchClassification",
         description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 4).",
@@ -2459,7 +2447,7 @@ class Diversity4LegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class Diversity5LegalBenchClassification(AbsTaskAnyClassification):
+class Diversity5LegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Diversity5LegalBenchClassification",
         description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 5).",
@@ -2494,7 +2482,7 @@ class Diversity5LegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class Diversity6LegalBenchClassification(AbsTaskAnyClassification):
+class Diversity6LegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Diversity6LegalBenchClassification",
         description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 6).",
@@ -2529,7 +2517,7 @@ class Diversity6LegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskAnyClassification):
+class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FunctionOfDecisionSectionLegalBenchClassification",
         description="""The task is to classify a paragraph extracted from a written court decision into one of seven possible categories:
@@ -2572,7 +2560,7 @@ class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskAnyClassification
     )
 
 
-class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskAnyClassification):
+class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="InsurancePolicyInterpretationLegalBenchClassification",
         description="Given an insurance claim and policy, determine whether the claim is covered by the policy.",
@@ -2607,9 +2595,7 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskAnyClassifica
     )
 
 
-class InternationalCitizenshipQuestionsLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="InternationalCitizenshipQuestionsLegalBenchClassification",
         description="Answer questions about citizenship law from across the world. Dataset was made using the GLOBALCIT citizenship law dataset, by constructing questions about citizenship law as Yes or No questions.",
@@ -2652,7 +2638,7 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(
     )
 
 
-class JCrewBlockerLegalBenchClassification(AbsTaskAnyClassification):
+class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
     superseded_by = "JCrewBlockerLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="JCrewBlockerLegalBenchClassification",
@@ -2688,7 +2674,7 @@ class JCrewBlockerLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class JCrewBlockerLegalBenchClassificationV2(AbsTaskAnyClassification):
+class JCrewBlockerLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JCrewBlockerLegalBenchClassification.v2",
         description="""The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of detemining whether the J.Crew Blocker is present in the document.
@@ -2725,7 +2711,7 @@ class JCrewBlockerLegalBenchClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsBenefitsLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsBenefitsLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's legal post discusses public benefits and social services that people can get from the government, like for food, disability, old age, housing, medical help, unemployment, child care, or other social needs.",
@@ -2769,7 +2755,7 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsBusinessLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsBusinessLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's legal question discusses issues faced by people who run small businesses or nonprofits, including around incorporation, licenses, taxes, regulations, and other concerns. It also includes options when there are disasters, bankruptcies, or other problems.",
@@ -2813,7 +2799,7 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsConsumerLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsConsumerLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues people face regarding money, insurance, consumer goods and contracts, taxes, and small claims about quality of service.",
@@ -2857,7 +2843,7 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsCourtsLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsCourtsLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses the logistics of how a person can interact with a lawyer or the court system. It applies to situations about procedure, rules, how to file lawsuits, how to hire lawyers, how to represent oneself, and other practical matters about dealing with these systems.",
@@ -2901,7 +2887,7 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsCrimeLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsCrimeLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues in the criminal system including when people are charged with crimes, go to a criminal trial, go to prison, or are a victim of a crime.",
@@ -2945,7 +2931,7 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsDivorceLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsDivorceLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues around filing for divorce, separation, or annulment, getting spousal support, splitting money and property, and following the court processes.",
@@ -2989,7 +2975,7 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsDomesticViolenceLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses dealing with domestic violence and abuse, including getting protective orders, enforcing them, understanding abuse, reporting abuse, and getting resources and status if there is abuse.",
@@ -3033,7 +3019,7 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskAnyClassificat
     )
 
 
-class LearnedHandsEducationLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsEducationLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues around school, including accommodations for special needs, discrimination, student debt, discipline, and other issues in education.",
@@ -3077,7 +3063,7 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsEmploymentLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsEmploymentLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues related to working at a job, including discrimination and harassment, worker's compensation, workers rights, unions, getting paid, pensions, being fired, and more.",
@@ -3121,7 +3107,7 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsEstatesLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsEstatesLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses planning for end-of-life, possible incapacitation, and other special circumstances that would prevent a person from making decisions about their own well-being, finances, and property. This includes issues around wills, powers of attorney, advance directives, trusts, guardianships, conservatorships, and other estate issues that people and families deal with.",
@@ -3165,7 +3151,7 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsFamilyLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsFamilyLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues that arise within a family, like divorce, adoption, name change, guardianship, domestic violence, child custody, and other issues.",
@@ -3209,7 +3195,7 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsHealthLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsHealthLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues with accessing health services, paying for medical care, getting public benefits for health care, protecting one's rights in medical settings, and other issues related to health.",
@@ -3253,7 +3239,7 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsHousingLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsHousingLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses issues with paying your rent or mortgage, landlord-tenant issues, housing subsidies and public housing, eviction, and other problems with your apartment, mobile home, or house.",
@@ -3297,7 +3283,7 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsImmigrationLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsImmigrationLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's post discusses visas, asylum, green cards, citizenship, migrant work and benefits, and other issues faced by people who are not full citizens in the US.",
@@ -3341,7 +3327,7 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsTortsLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsTortsLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's legal question discusses problems that one person has with another person (or animal), like when there is a car accident, a dog bite, bullying or possible harassment, or neighbors treating each other badly.",
@@ -3385,7 +3371,7 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LearnedHandsTrafficLegalBenchClassification(AbsTaskAnyClassification):
+class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsTrafficLegalBenchClassification",
         description="This is a binary classification task in which the model must determine if a user's legal post discusses problems with traffic and parking tickets, fees, driver's licenses, and other issues experienced with the traffic system. It also concerns issues with car accidents and injuries, cars' quality, repairs, purchases, and other contracts.",
@@ -3429,7 +3415,7 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LegalReasoningCausalityLegalBenchClassification(AbsTaskAnyClassification):
+class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
     superseded_by = "LegalReasoningCausalityLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="LegalReasoningCausalityLegalBenchClassification",
@@ -3465,7 +3451,7 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class LegalReasoningCausalityLegalBenchClassificationV2(AbsTaskAnyClassification):
+class LegalReasoningCausalityLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LegalReasoningCausalityLegalBenchClassification.v2",
         description="""Given an excerpt from a district court opinion, classify if it relies on statistical evidence in its reasoning.
@@ -3610,7 +3596,7 @@ _MAUD_DATASET_MAP = [
 ]
 
 
-class MAUDLegalBenchClassification(AbsTaskAnyClassification):
+class MAUDLegalBenchClassification(AbsTaskClassification):
     superseded_by = "MAUDLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="MAUDLegalBenchClassification",
@@ -3690,7 +3676,7 @@ class MAUDLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class MAUDLegalBenchClassificationV2(AbsTaskAnyClassification):
+class MAUDLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MAUDLegalBenchClassification.v2",
         description="""This task was constructed from the MAUD dataset, which consists of over 47,000 labels across 152 merger agreements annotated to identify 92 questions in each agreement used by the 2021 American Bar Association (ABA) Public Target Deal Points Study. Each dataset is formatted as a series of multiple-choice questions, where given a segment of the merger agreement and a Deal Point question, the model is to choose the answer that best characterizes the agreement as response.
@@ -3771,7 +3757,7 @@ class MAUDLegalBenchClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class NYSJudicialEthicsLegalBenchClassification(AbsTaskAnyClassification):
+class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NYSJudicialEthicsLegalBenchClassification",
         description="Answer questions on judicial ethics from the New York State Unified Court System Advisory Committee.",
@@ -3806,7 +3792,7 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OPP115DataRetentionLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115DataRetentionLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describes how long user information is stored.",
@@ -3849,7 +3835,7 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OPP115DataSecurityLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
     superseded_by = "OPP115DataSecurityLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OPP115DataSecurityLegalBenchClassification",
@@ -3893,7 +3879,7 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskAnyClassification):
+class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115DataSecurityLegalBenchClassification.v2",
         description="""Given a clause from a privacy policy, classify if the clause describes how user information is protected.
@@ -3938,7 +3924,7 @@ class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class OPP115DoNotTrackLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
     superseded_by = "OPP115DoNotTrackLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OPP115DoNotTrackLegalBenchClassification",
@@ -3982,7 +3968,7 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskAnyClassification):
+class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115DoNotTrackLegalBenchClassification.v2",
         description="""Given a clause from a privacy policy, classify if the clause describes if and how Do Not Track signals for online tracking and advertising are honored.
@@ -4027,7 +4013,7 @@ class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115FirstPartyCollectionUseLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describes how and why a service provider collects user information.",
@@ -4071,7 +4057,7 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskAnyClassifica
 
 
 class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
-    AbsTaskAnyClassification
+    AbsTaskClassification
 ):
     metadata = TaskMetadata(
         name="OPP115InternationalAndSpecificAudiencesLegalBenchClassification",
@@ -4115,7 +4101,7 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
     )
 
 
-class OPP115PolicyChangeLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115PolicyChangeLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describes if and how users will be informed about changes to the privacy policy.",
@@ -4158,9 +4144,7 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OPP115ThirdPartySharingCollectionLegalBenchClassification(
-    AbsTaskAnyClassification
-):
+class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115ThirdPartySharingCollectionLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describe how user information may be shared with or collected by third parties.",
@@ -4203,7 +4187,7 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(
     )
 
 
-class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115UserAccessEditAndDeletionLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describes if and how users may access, edit, or delete their information.",
@@ -4246,7 +4230,7 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskAnyClassifi
     )
 
 
-class OPP115UserChoiceControlLegalBenchClassification(AbsTaskAnyClassification):
+class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
     superseded_by = "OPP115UserChoiceControlLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OPP115UserChoiceControlLegalBenchClassification",
@@ -4290,7 +4274,7 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskAnyClassification):
+class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115UserChoiceControlLegalBenchClassification.v2",
         description="""Given a clause fro ma privacy policy, classify if the clause describes the choices and control options available to users.
@@ -4335,7 +4319,7 @@ class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskAnyClassification
     )
 
 
-class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskAnyClassification):
+class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification):
     superseded_by = "OralArgumentQuestionPurposeLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OralArgumentQuestionPurposeLegalBenchClassification",
@@ -4379,7 +4363,7 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskAnyClassificati
     )
 
 
-class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskAnyClassification):
+class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OralArgumentQuestionPurposeLegalBenchClassification.v2",
         description="""This task classifies questions asked by Supreme Court justices at oral argument into seven categories:
@@ -4424,7 +4408,7 @@ class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskAnyClassifica
     )
 
 
-class OverrulingLegalBenchClassification(AbsTaskAnyClassification):
+class OverrulingLegalBenchClassification(AbsTaskClassification):
     superseded_by = "OverrulingLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OverrulingLegalBenchClassification",
@@ -4468,7 +4452,7 @@ class OverrulingLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class OverrulingLegalBenchClassificationV2(AbsTaskAnyClassification):
+class OverrulingLegalBenchClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OverrulingLegalBenchClassification.v2",
         description="""This task consists of classifying whether or not a particular sentence of case law overturns the decision of a previous case.
@@ -4513,7 +4497,7 @@ class OverrulingLegalBenchClassificationV2(AbsTaskAnyClassification):
     )
 
 
-class PersonalJurisdictionLegalBenchClassification(AbsTaskAnyClassification):
+class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PersonalJurisdictionLegalBenchClassification",
         description="""Given a fact pattern describing the set of contacts between a plaintiff, defendant, and forum, determine if a court in that forum could excercise personal jurisdiction over the defendant.""",
@@ -4548,7 +4532,7 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class PROALegalBenchClassification(AbsTaskAnyClassification):
+class PROALegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PROALegalBenchClassification",
         description="""Given a statute, determine if the text contains an explicit private right of action. Given a privacy policy clause and a description of the clause, determine if the description is correct. A private right of action (PROA) exists when a statute empowers an ordinary individual (i.e., a private person) to legally enforce their rights by bringing an action in court. In short, a PROA creates the ability for an individual to sue someone in order to recover damages or halt some offending conduct. PROAs are ubiquitous in antitrust law (in which individuals harmed by anti-competitive behavior can sue offending firms for compensation) and environmental law (in which individuals can sue entities which release hazardous substances for damages).""",
@@ -4583,7 +4567,7 @@ class PROALegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDBPAccountabilityLegalBenchClassification(AbsTaskAnyClassification):
+class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPAccountabilityLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose whether the retail seller or manufacturer maintains internal compliance procedures on company standards regarding human trafficking and slavery? This includes any type of internal accountability mechanism. Requiring independently of the supply to comply with laws does not qualify or asking for documentary evidence of compliance does not count either.'",
@@ -4628,7 +4612,7 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDBPAuditsLegalBenchClassification(AbsTaskAnyClassification):
+class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPAuditsLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose whether the retail seller or manufacturer  performs any type of audit, or reserves the right to audit?'",
@@ -4673,7 +4657,7 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDBPCertificationLegalBenchClassification(AbsTaskAnyClassification):
+class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPCertificationLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose whether the retail seller or manufacturer  performs any type of audit, or reserves the right to audit?'",
@@ -4718,7 +4702,7 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDBPTrainingLegalBenchClassification(AbsTaskAnyClassification):
+class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPTrainingLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose whether the retail seller or manufacturer  provides training to employees on human trafficking and slavery? Broad policies such as ongoing dialogue on mitigating risks of human trafficking and slavery or increasing managers and purchasers knowledge about health, safety and labor practices qualify as training. Providing training to contractors who failed to comply with human trafficking laws counts as training.'",
@@ -4763,7 +4747,7 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDBPVerificationLegalBenchClassification(AbsTaskAnyClassification):
+class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPVerificationLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose whether the retail seller or manufacturer engages in verification and auditing as one practice, expresses that it may conduct an audit, or expressess that it is assessing supplier risks through a review of the US Dept. of Labor's List?'",
@@ -4808,7 +4792,7 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDDAccountabilityLegalBenchClassification(AbsTaskAnyClassification):
+class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDAccountabilityLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose to what extent, if any, that the retail seller or manufacturer maintains internal accountability standards and procedures for employees or contractors failing to meet company standards regarding slavery and trafficking?'",
@@ -4853,7 +4837,7 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDDAuditsLegalBenchClassification(AbsTaskAnyClassification):
+class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDAuditsLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose to what extent, if any, that the retail seller or manufacturer conducts audits of suppliers to evaluate supplier compliance with company standards for trafficking and slavery in supply chains? The disclosure shall specify if the verification was not an independent, unannounced audit.'",
@@ -4898,7 +4882,7 @@ class SCDDAuditsLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDDCertificationLegalBenchClassification(AbsTaskAnyClassification):
+class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDCertificationLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose to what extent, if any, that the retail seller or manufacturer requires direct suppliers to certify that materials incorporated into the product comply with the laws regarding slavery and human trafficking of the country or countries in which they are doing business?'",
@@ -4943,7 +4927,7 @@ class SCDDCertificationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDDTrainingLegalBenchClassification(AbsTaskAnyClassification):
+class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDTrainingLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose to what extent, if any, that the retail seller or manufacturer provides company employees and management, who have direct responsibility for supply chain management, training on human trafficking and slavery, particularly with respect to mitigating risks within the supply chains of products?'",
@@ -4988,7 +4972,7 @@ class SCDDTrainingLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class SCDDVerificationLegalBenchClassification(AbsTaskAnyClassification):
+class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDVerificationLegalBenchClassification",
         description="This is a binary classification task in which the LLM must determine if a supply chain disclosure meets the following coding criteria: 'Does the above statement disclose to what extent, if any, that the retail seller or manufacturer engages in verification of product supply chains to evaluate and address risks of human trafficking and slavery? If the company conducts verification], the disclosure shall specify if the verification was not conducted by a third party.'",
@@ -5033,7 +5017,7 @@ class SCDDVerificationLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class TelemarketingSalesRuleLegalBenchClassification(AbsTaskAnyClassification):
+class TelemarketingSalesRuleLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TelemarketingSalesRuleLegalBenchClassification",
         description="Determine how 16 C.F.R. § 310.3(a)(1) and 16 C.F.R. § 310.3(a)(2) (governing deceptive practices) apply to different fact patterns. This dataset is designed to test a model’s ability to apply 16 C.F.R. § 310.3(a)(1) and 16 C.F.R. § 310.3(a)(2) of the Telemarketing Sales Rule to a simple fact pattern with a clear outcome. Each fact pattern ends with the question: “Is this a violation of the Telemarketing Sales Rule?” Each fact pattern is paired with the answer “Yes” or the answer “No.” Fact patterns are listed in the column “text,” and answers are listed in the column “label.”",
@@ -5068,7 +5052,7 @@ class TelemarketingSalesRuleLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class TextualismToolDictionariesLegalBenchClassification(AbsTaskAnyClassification):
+class TextualismToolDictionariesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TextualismToolDictionariesLegalBenchClassification",
         description="Determine if a paragraph from a judicial opinion is applying a form textualism that relies on the dictionary meaning of terms.",
@@ -5103,7 +5087,7 @@ class TextualismToolDictionariesLegalBenchClassification(AbsTaskAnyClassificatio
     )
 
 
-class TextualismToolPlainLegalBenchClassification(AbsTaskAnyClassification):
+class TextualismToolPlainLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TextualismToolPlainLegalBenchClassification",
         description="Determine if a paragraph from a judicial opinion is applying a form textualism that relies on the ordinary (“plain”) meaning of terms.",
@@ -5138,7 +5122,7 @@ class TextualismToolPlainLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class UCCVCommonLawLegalBenchClassification(AbsTaskAnyClassification):
+class UCCVCommonLawLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UCCVCommonLawLegalBenchClassification",
         description="Determine if a contract is governed by the Uniform Commercial Code (UCC) or the common law of contracts.",
@@ -5173,7 +5157,7 @@ class UCCVCommonLawLegalBenchClassification(AbsTaskAnyClassification):
     )
 
 
-class UnfairTOSLegalBenchClassification(AbsTaskAnyClassification):
+class UnfairTOSLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="UnfairTOSLegalBenchClassification",
         description="Given a clause from a terms-of-service contract, determine the category the clause belongs to. The purpose of this task is classifying clauses in Terms of Service agreements. Clauses have been annotated by into nine categories: ['Arbitration', 'Unilateral change', 'Content removal', 'Jurisdiction', 'Choice of law', 'Limitation of liability', 'Unilateral termination', 'Contract by using', 'Other']. The first eight categories correspond to clauses that would potentially be deemed potentially unfair. The last category (Other) corresponds to clauses in agreements which don’t fit into these categories.",

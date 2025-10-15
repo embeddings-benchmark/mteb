@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SardiStanceClassification(AbsTaskAnyClassification):
+class SardiStanceClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SardiStanceClassification",
         dataset={

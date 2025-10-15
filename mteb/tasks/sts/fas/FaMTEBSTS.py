@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Farsick(AbsTaskAnySTS):
+class Farsick(AbsTaskSTS):
     metadata = TaskMetadata(
         name="Farsick",
         description="A Persian Semantic Textual Similarity And Natural Language Inference Dataset",
@@ -29,7 +29,7 @@ class Farsick(AbsTaskAnySTS):
     min_score = 1
 
 
-class SynPerSTS(AbsTaskAnySTS):
+class SynPerSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SynPerSTS",
         description="Synthetic Persian Semantic Textual Similarity Dataset",
@@ -56,7 +56,7 @@ class SynPerSTS(AbsTaskAnySTS):
     min_score = 1
 
 
-class Query2Query(AbsTaskAnySTS):
+class Query2Query(AbsTaskSTS):
     metadata = TaskMetadata(
         name="Query2Query",
         description="Query to Query Datasets.",

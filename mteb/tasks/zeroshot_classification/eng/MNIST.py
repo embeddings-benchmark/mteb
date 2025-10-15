@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class MNISTZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="MNISTZeroShot",
         description="Classifying handwritten digits.",

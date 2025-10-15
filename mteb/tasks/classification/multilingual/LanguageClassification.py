@@ -1,4 +1,4 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = [
@@ -25,7 +25,7 @@ _LANGUAGES = [
 ]
 
 
-class LanguageClassification(AbsTaskAnyClassification):
+class LanguageClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LanguageClassification",
         dataset={

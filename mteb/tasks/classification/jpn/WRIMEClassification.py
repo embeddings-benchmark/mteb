@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WRIMEClassification(AbsTaskAnyClassification):
+class WRIMEClassification(AbsTaskClassification):
     superseded_by = "WRIMEClassification.v2"
     metadata = TaskMetadata(
         name="WRIMEClassification",
@@ -27,7 +27,6 @@ class WRIMEClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kajiwara-etal-2021-wrime,
-  abstract = {We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.},
   address = {Online},
   author = {Kajiwara, Tomoyuki  and
 Chu, Chenhui  and
@@ -56,7 +55,7 @@ Zhou, Yichao},
     )
 
 
-class WRIMEClassificationV2(AbsTaskAnyClassification):
+class WRIMEClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WRIMEClassification.v2",
         dataset={
@@ -82,7 +81,6 @@ class WRIMEClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{kajiwara-etal-2021-wrime,
-  abstract = {We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.},
   address = {Online},
   author = {Kajiwara, Tomoyuki  and
 Chu, Chenhui  and

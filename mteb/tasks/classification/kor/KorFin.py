@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 
 # type: ignore
 from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
 
 
-class KorFin(AbsTaskAnyClassification):
+class KorFin(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KorFin",
         dataset={

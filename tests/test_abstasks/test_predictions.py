@@ -98,8 +98,8 @@ from tests.mock_tasks import (
         ),
         (MockClusteringTask(), [[1, 2, 0]]),
         (
-            MockClusteringFastTask(),
-            {"Level 0": [[1, 0, 0, 2], [0, 1, 0, 0], [1, 0, 0, 1]]},
+            MockClusteringFastTask(seed=1),
+            {"Level 0": [[0, 0, 0, 0], [0, 0, 1, 0], [0, 1, 2, 1]]},
         ),
         (
             MockRegressionTask(),

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GujaratiNewsClassification(AbsTaskAnyClassification):
+class GujaratiNewsClassification(AbsTaskClassification):
     superseded_by = "GujaratiNewsClassification.v2"
     metadata = TaskMetadata(
         name="GujaratiNewsClassification",
@@ -32,7 +32,7 @@ class GujaratiNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_column("headline", "text")
 
 
-class GujaratiNewsClassificationV2(AbsTaskAnyClassification):
+class GujaratiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GujaratiNewsClassification.v2",
         description="""A Gujarati dataset for 3-class classification of Gujarati news articles

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class JavaneseIMDBClassification(AbsTaskAnyClassification):
+class JavaneseIMDBClassification(AbsTaskClassification):
     superseded_by = "JavaneseIMDBClassification.v2"
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification",
@@ -38,7 +38,7 @@ class JavaneseIMDBClassification(AbsTaskAnyClassification):
     )
 
 
-class JavaneseIMDBClassificationV2(AbsTaskAnyClassification):
+class JavaneseIMDBClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification.v2",
         description="""Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.

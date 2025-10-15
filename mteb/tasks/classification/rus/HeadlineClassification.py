@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HeadlineClassification(AbsTaskAnyClassification):
+class HeadlineClassification(AbsTaskClassification):
     superseded_by = "HeadlineClassification.v2"
     metadata = TaskMetadata(
         name="HeadlineClassification",
@@ -27,7 +27,6 @@ class HeadlineClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{gudkov-etal-2020-automatically,
-  abstract = {The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.},
   address = {Online},
   author = {Gudkov, Vadim  and
 Mitrofanova, Olga  and
@@ -60,7 +59,7 @@ Oda, Yusuke},
         )
 
 
-class HeadlineClassificationV2(AbsTaskAnyClassification):
+class HeadlineClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HeadlineClassification.v2",
         dataset={
@@ -85,7 +84,6 @@ class HeadlineClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{gudkov-etal-2020-automatically,
-  abstract = {The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.},
   address = {Online},
   author = {Gudkov, Vadim  and
 Mitrofanova, Olga  and

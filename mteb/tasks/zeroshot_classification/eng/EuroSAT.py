@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class EuroSATZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class EuroSATZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="EuroSATZeroShot",
         description="Classifying satellite images.",

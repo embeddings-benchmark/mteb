@@ -122,7 +122,7 @@ class MTEB:
 
     def mteb_benchmarks(self):
         """Get all benchmarks available in the MTEB."""
-        from mteb.overview import MTEBTasks
+        from mteb.get_tasks import MTEBTasks
 
         # get all the MTEB specific benchmarks:
         sorted_mteb_benchmarks = sorted(

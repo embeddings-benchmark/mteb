@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class FinToxicityClassification(AbsTaskAnyClassification):
+class FinToxicityClassification(AbsTaskClassification):
     superseded_by = "FinToxicityClassification.v2"
     metadata = TaskMetadata(
         name="FinToxicityClassification",
@@ -54,7 +54,7 @@ Laippala, Veronika},
         self.dataset = self.dataset.remove_columns(remove_cols)
 
 
-class FinToxicityClassificationV2(AbsTaskAnyClassification):
+class FinToxicityClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FinToxicityClassification.v2",
         description="""

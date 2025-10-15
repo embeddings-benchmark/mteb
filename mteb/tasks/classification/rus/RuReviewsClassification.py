@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RuReviewsClassification(AbsTaskAnyClassification):
+class RuReviewsClassification(AbsTaskClassification):
     superseded_by = "RuReviewsClassification.v2"
     metadata = TaskMetadata(
         name="RuReviewsClassification",
@@ -48,7 +48,7 @@ class RuReviewsClassification(AbsTaskAnyClassification):
         )
 
 
-class RuReviewsClassificationV2(AbsTaskAnyClassification):
+class RuReviewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RuReviewsClassification.v2",
         dataset={

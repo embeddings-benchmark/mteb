@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ItalianLinguisticAcceptabilityClassification(AbsTaskAnyClassification):
+class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     superseded_by = "Itacola.v2"
     metadata = TaskMetadata(
         name="Itacola",
@@ -45,7 +45,7 @@ Tonelli, Sara},
     )
 
 
-class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskAnyClassification):
+class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Itacola.v2",
         dataset={

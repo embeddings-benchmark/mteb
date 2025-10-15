@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class STL10Classification(AbsTaskAnyClassification):
+class STL10Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="STL10",
         description="Classifying 96x96 images from 10 classes.",

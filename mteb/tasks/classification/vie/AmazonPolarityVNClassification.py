@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmazonPolarityVNClassification(AbsTaskAnyClassification):
+class AmazonPolarityVNClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmazonPolarityVNClassification",
         description="""A collection of translated Amazon customer reviews annotated for polarity classification.

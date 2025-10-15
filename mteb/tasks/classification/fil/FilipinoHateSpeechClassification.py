@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class FilipinoHateSpeechClassification(AbsTaskAnyClassification):
+class FilipinoHateSpeechClassification(AbsTaskClassification):
     superseded_by = "FilipinoHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification",
@@ -41,7 +41,7 @@ class FilipinoHateSpeechClassification(AbsTaskAnyClassification):
     )
 
 
-class FilipinoHateSpeechClassificationV2(AbsTaskAnyClassification):
+class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification.v2",
         description="""Filipino Twitter dataset for sentiment classification.

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TurkishProductSentimentClassification(AbsTaskAnyClassification):
+class TurkishProductSentimentClassification(AbsTaskClassification):
     superseded_by = "TurkishProductSentimentClassification.v2"
     metadata = TaskMetadata(
         name="TurkishProductSentimentClassification",
@@ -37,7 +37,7 @@ class TurkishProductSentimentClassification(AbsTaskAnyClassification):
     )
 
 
-class TurkishProductSentimentClassificationV2(AbsTaskAnyClassification):
+class TurkishProductSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TurkishProductSentimentClassification.v2",
         description="""Turkish Product Review Dataset

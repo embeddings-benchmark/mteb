@@ -344,7 +344,7 @@ class AbsTask(ABC):
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset."""
-        from mteb.abstasks import AbsTaskAnyClassification
+        from mteb.abstasks import AbsTaskClassification
 
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
@@ -356,7 +356,7 @@ class AbsTask(ABC):
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskAnyClassification):
+        if isinstance(self, AbsTaskClassification):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")
@@ -430,32 +430,6 @@ class AbsTask(ABC):
             The filtered task
         """
         self._eval_splits = eval_splits
-        return self
-
-    def filter_modalities(
-        self, modalities: list[str] | None, exclusive_modality_filter: bool = False
-    ) -> Self:
-        """Filter the modalities of the task.
-
-        Args:
-            modalities: A list of modalities to filter by. If None, the task is returned unchanged.
-            exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
-                task's modalities and ALL task modalities are in filter modalities (exact match).
-                If False, keep tasks if _any_ of the task's modalities match the filter modalities.
-
-        Returns:
-            The filtered task
-        """
-        if modalities is None:
-            return self
-        filter_modalities_set = set(modalities)
-        task_modalities_set = set(self.modalities)
-        if exclusive_modality_filter:
-            if not (filter_modalities_set == task_modalities_set):
-                self.metadata.modalities = []
-        else:
-            if not filter_modalities_set.intersection(task_modalities_set):
-                self.metadata.modalities = []
         return self
 
     def filter_languages(

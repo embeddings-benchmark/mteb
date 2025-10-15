@@ -1,10 +1,10 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class VieStudentFeedbackClassification(AbsTaskAnyClassification):
+class VieStudentFeedbackClassification(AbsTaskClassification):
     superseded_by = "VieStudentFeedbackClassification.v2"
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification",
@@ -42,7 +42,7 @@ class VieStudentFeedbackClassification(AbsTaskAnyClassification):
     )
 
 
-class VieStudentFeedbackClassificationV2(AbsTaskAnyClassification):
+class VieStudentFeedbackClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification.v2",
         description="""A Vietnamese dataset for classification of student feedback

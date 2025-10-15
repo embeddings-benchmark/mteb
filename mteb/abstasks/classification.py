@@ -92,7 +92,7 @@ class FullClassificationMetrics(ClassificationMetrics):
     scores_per_experiment: list[ClassificationMetrics]
 
 
-class AbsTaskAnyClassification(AbsTask):
+class AbsTaskClassification(AbsTask):
     """Abstract class for classification tasks
 
     Attributes:
@@ -350,9 +350,7 @@ class AbsTaskAnyClassification(AbsTask):
 
         return ClassificationDescriptiveStatistics(
             num_samples=len(inputs),
-            number_texts_intersect_with_train=num_texts_in_train
-            if num_texts_in_train
-            else None,
+            number_texts_intersect_with_train=num_texts_in_train,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             label_statistics=label_statistics,

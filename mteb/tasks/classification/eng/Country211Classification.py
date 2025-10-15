@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Country211Classification(AbsTaskAnyClassification):
+class Country211Classification(AbsTaskClassification):
     input_column_name: str = "jpg"
     label_column_name: str = "cls"
     samples_per_label: int = 16

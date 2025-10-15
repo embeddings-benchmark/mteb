@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class NordicLangClassification(AbsTaskAnyClassification):
+class NordicLangClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",
@@ -33,7 +33,6 @@ class NordicLangClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{haas-derczynski-2021-discriminating,
-  abstract = {Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.},
   address = {Kiyv, Ukraine},
   author = {Haas, Ren{\'e}  and
 Derczynski, Leon},

@@ -305,7 +305,7 @@ class ModelMeta(BaseModel):
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     """Recursively collect all similar tasks for a given dataset."""
-    from mteb.overview import _SIMILAR_TASKS
+    from mteb.get_tasks import _SIMILAR_TASKS
 
     if dataset in visited:
         return set()

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpanishSentimentClassification(AbsTaskAnyClassification):
+class SpanishSentimentClassification(AbsTaskClassification):
     superseded_by = "SpanishSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SpanishSentimentClassification",
@@ -53,7 +53,7 @@ Vylomova, Ekaterina},
     )
 
 
-class SpanishSentimentClassificationV2(AbsTaskAnyClassification):
+class SpanishSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SpanishSentimentClassification.v2",
         description="""A Spanish dataset for sentiment classification.

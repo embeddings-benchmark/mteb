@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SwedishSentimentClassification(AbsTaskAnyClassification):
+class SwedishSentimentClassification(AbsTaskClassification):
     superseded_by = "SwedishSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SwedishSentimentClassification",
@@ -29,7 +29,7 @@ class SwedishSentimentClassification(AbsTaskAnyClassification):
     )
 
 
-class SwedishSentimentClassificationV2(AbsTaskAnyClassification):
+class SwedishSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwedishSentimentClassification.v2",
         description="""Dataset of Swedish reviews scarped from various public available websites

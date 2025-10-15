@@ -18,7 +18,7 @@ from .bge_models import bge_full_data
 
 if TYPE_CHECKING:
     from mteb.abstasks import (
-        AbsTaskAnyClassification,
+        AbsTaskClassification,
         AbsTaskRetrieval,
         AbsTaskSummarization,
     )
@@ -149,7 +149,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
             sentences = cur_ds.map(corpus_to_dict)["text"]
         elif task_metadata.type in self.classification_task_types:
-            task: AbsTaskAnyClassification = mteb.get_task(task_metadata.name)
+            task: AbsTaskClassification = mteb.get_task(task_metadata.name)
             task.load_data()
             if hf_subset in task.dataset:
                 cur_ds = task.dataset[hf_subset][task.train_split]

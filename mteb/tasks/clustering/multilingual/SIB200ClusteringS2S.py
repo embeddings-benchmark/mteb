@@ -1,6 +1,6 @@
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.clustering_fast import AbsTaskClustering
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
