@@ -9,8 +9,8 @@ class DutchColaClassification(AbsTaskClassification):
         description="Dutch CoLA is a corpus of linguistic acceptability for Dutch.",
         reference="https://huggingface.co/datasets/GroNLP/dutch-cola",
         dataset={
-            "path": "GroNLP/dutch-cola",
-            "revision": "5a4196c41f2b66e02a761d4702f3a7fbee70ef77",
+            "path": "clips/mteb-nl-dutch-cola",
+            "revision": "2269ed7d95d8abaab829f1592b4b2047372e9f81",
         },
         type="Classification",
         category="t2c",
@@ -36,9 +36,3 @@ class DutchColaClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].rename_columns(
-                {"Sentence": "text", "Acceptability": "label"}
-            )
