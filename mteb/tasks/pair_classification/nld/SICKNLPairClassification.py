@@ -6,7 +6,7 @@ class SICKNLPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="SICKNLPairClassification",
         dataset={
-            "path": "nicolaebanari/mteb-nl-sick",
+            "path": "clips/mteb-nl-sick",
             "revision": "main",
         },
         description="SICK-NL is a Dutch translation of SICK ",
