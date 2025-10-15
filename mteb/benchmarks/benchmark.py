@@ -1,5 +1,5 @@
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import pandas as pd
@@ -11,7 +11,6 @@ from mteb.benchmarks._create_table import (
     _create_summary_table_mean_subset,
     _create_summary_table_mean_task_type,
 )
-from mteb.cache import ResultCache
 from mteb.results import BenchmarkResults
 from mteb.types import StrURL
 
@@ -51,7 +50,6 @@ class Benchmark:
     display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
-    _results_cache: dict = field(default_factory=dict, init=False, repr=False)
 
     def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
@@ -61,17 +59,6 @@ class Benchmark:
 
     def __getitem__(self, index: int) -> "AbsTask":
         return self.tasks[index]
-
-    def load_results(
-        self,
-        base_results: BenchmarkResults | None = None,
-        cache: ResultCache = ResultCache(),
-    ) -> BenchmarkResults:
-        if base_results in self._results_cache:
-            return self._results_cache[base_results]
-        results = cache.load_results(tasks=self.tasks)
-        self._results_cache[base_results] = results
-        return results
 
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
