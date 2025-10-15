@@ -21,7 +21,7 @@ class DutchColaClassification(AbsTaskAnyClassification):
         main_score="f1",
         domains=["Written"],
         task_subtypes=["Linguistic acceptability"],
-        license="not specified",
+        license="not specified", # specified as unknown
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
