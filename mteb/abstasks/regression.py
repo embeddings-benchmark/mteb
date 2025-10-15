@@ -11,10 +11,12 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
 from mteb.abstasks._statistics_calculation import (
+    calculate_image_statistics,
     calculate_score_statistics,
     calculate_text_statistics,
 )
 from mteb.types.statistics import (
+    ImageStatistics,
     ScoreStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
@@ -30,19 +32,19 @@ class RegressionDescriptiveStatistics(SplitDescriptiveStatistics):
 
     Attributes:
       num_samples: number of samples in the dataset.
-      number_of_characters: Total number of symbols in the dataset.
       num_texts_in_train: Number of texts in the train split
 
       text_statistics: Statistics of texts
+      image_statistics: Statistics of images
 
       values_statistics: Statistics of values
     """
 
     num_samples: int
-    number_of_characters: int
     num_texts_in_train: int | None
 
-    text_statistics: TextStatistics
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
     values_statistics: ScoreStatistics
 
 
@@ -207,17 +209,21 @@ class AbsTaskRegression(AbsTaskClassification):
             if split != "train":
                 train_text = self.dataset[self.train_split][self.input_column_name]
 
-        text_lengths = [len(t) for t in texts]
-        total_text_length = sum(text_lengths)
-
-        num_texts_in_train_val = (
-            len(set(texts) & set(train_text)) if split != self.train_split else None
-        )
+        text_statistics = None
+        image_statistics = None
+        num_texts_in_train = None
+        if self.metadata.modalities == ["text"]:
+            text_statistics = calculate_text_statistics(texts)
+            num_texts_in_train = (
+                len(set(texts) & set(train_text)) if split != self.train_split else None
+            )
+        elif self.metadata.modalities == ["image"]:
+            image_statistics = calculate_image_statistics(texts)
 
         return RegressionDescriptiveStatistics(
             num_samples=len(texts),
-            number_of_characters=total_text_length,
-            num_texts_in_train=num_texts_in_train_val,
-            text_statistics=calculate_text_statistics(texts),
+            num_texts_in_train=num_texts_in_train,
+            text_statistics=text_statistics,
+            image_statistics=image_statistics,
             values_statistics=calculate_score_statistics(values),
         )
