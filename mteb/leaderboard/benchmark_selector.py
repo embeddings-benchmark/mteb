@@ -182,7 +182,7 @@ def _create_button(
     return button
 
 
-def make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
+def _make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
     """Creates a UI selector from menu entries with up to 3 levels of nesting.
 
     Args:
@@ -246,5 +246,5 @@ def _render_benchmark_item(
 
 if __name__ == "__main__":
     with gr.Blocks() as b:
-        selector = make_selector(GP_BENCHMARK_ENTRIES)
+        selector = _make_selector(GP_BENCHMARK_ENTRIES)
     b.launch()
