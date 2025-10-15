@@ -39,16 +39,3 @@ class XLWICNLPairClassification(AbsTaskPairClassification):
 }
 """,
     )
-
-    # def dataset_transform(self) -> None:
-    #     _dataset = {}
-    #
-    #     for split in self.dataset:
-    #         _dataset[split] = [
-    #             {
-    #                 "sentence1": self.dataset[split]["context_1"],
-    #                 "sentence2": self.dataset[split]["context_2"],
-    #                 "labels": self.dataset[split]["label"],
-    #             }
-    #         ]
-    #     self.dataset = _dataset
