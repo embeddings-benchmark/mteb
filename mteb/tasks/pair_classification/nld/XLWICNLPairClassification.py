@@ -12,9 +12,8 @@ class XLWICNLPairClassification(AbsTaskPairClassification):
         "availability, opening room for evaluation scenarios such as zero-shot cross-lingual transfer. ",
         reference="https://aclanthology.org/2020.emnlp-main.584.pdf",
         dataset={
-            "path": "pasinit/xlwic",
-            "revision": "main",
-            "name": "xlwic_en_nl",
+            "path": "clips/mteb-nl-xlwic",
+            "revision": "0b33ce358b1b5d500ff3715ba3d777b4d2c21cb0",
         },
         type="PairClassification",
         category="t2t",
@@ -41,15 +40,15 @@ class XLWICNLPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self) -> None:
-        _dataset = {}
-
-        for split in self.dataset:
-            _dataset[split] = [
-                {
-                    "sentence1": self.dataset[split]["context_1"],
-                    "sentence2": self.dataset[split]["context_2"],
-                    "labels": self.dataset[split]["label"],
-                }
-            ]
-        self.dataset = _dataset
+    # def dataset_transform(self) -> None:
+    #     _dataset = {}
+    #
+    #     for split in self.dataset:
+    #         _dataset[split] = [
+    #             {
+    #                 "sentence1": self.dataset[split]["context_1"],
+    #                 "sentence2": self.dataset[split]["context_2"],
+    #                 "labels": self.dataset[split]["label"],
+    #             }
+    #         ]
+    #     self.dataset = _dataset
