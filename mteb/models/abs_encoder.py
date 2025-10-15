@@ -50,10 +50,12 @@ class AbsEncoder(ABC):
             4. Specific task type prompt
             5. Specific prompt type (query or passage)
 
-
         Args:
             task_metadata: The task name to use for building the encoding prompt
             prompt_type: The prompt type (e.g. "query" | "document") to use for building the encoding prompt
+
+        Returns:
+            The name of the prompt to use, or None if no prompt is found.
         """
         if self.model_prompts is None:
             return None
@@ -152,7 +154,7 @@ class AbsEncoder(ABC):
         prompt_types = [e.value for e in PromptType]
         valid_keys_msg = f"Valid keys are task types [{task_types}], prompt types [{prompt_types}], and task names"
         valid_prompt_type_endings = tuple(
-            [f"-{prompt_type}" for prompt_type in prompt_types]
+            f"-{prompt_type}" for prompt_type in prompt_types
         )
 
         invalid_keys: set[str] = set()
@@ -190,7 +192,23 @@ class AbsEncoder(ABC):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None,
     ) -> str:
-        """Get the instruction/prompt to be used for encoding sentences."""
+        """Get the instruction/prompt to be used for encoding sentences.
+
+        Args:
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
+                    6. Default prompt from the task definition
+            prompt_type: The name type of prompt. (query or passage)
+
+        Returns:
+            The instruction/prompt to be used for encoding sentences.
+        """
         prompt = task_metadata.prompt
         if self.prompts_dict and task_metadata.name in self.prompts_dict:
             prompt = self.prompts_dict[task_metadata.name]

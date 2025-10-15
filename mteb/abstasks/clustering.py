@@ -47,6 +47,11 @@ def _evaluate_clustering_bootstrapped(
 
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
+
+    Returns:
+        A tuple containing:
+        - A dictionary where keys are level names (e.g., "Level 0", "Level 1", etc.) and values are lists of V-measure scores for each clustering experiment at that level.
+        - A dictionary where keys are level names and values are lists of cluster assignments for each clustering experiment at that level.
     """
     v_measures = defaultdict(list)
     cluster_assignments = defaultdict(list)
@@ -293,6 +298,16 @@ def convert_to_fast(
 ) -> DatasetDict:
     """Converts a clustering dataset to a fast version. This concats the cluster into two columns, sentences and labels.
     It additionally downsamples the dataset to max_size.
+
+    Args:
+        dataset: A DatasetDict containing the data for the clustering task. Must contain the following columns
+        input_column_name: Name of the column containing the input sentences or data points.
+        label_column_name: Name of the column containing the true cluster labels.
+        seed: Random seed for downsampling.
+        max_size: Maximum number of samples in the returned dataset.
+
+    Returns:
+        A downsampled DatasetDict with two columns, sentences and labels.
     """
     rng_state = random.Random(seed)
 

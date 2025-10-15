@@ -78,6 +78,9 @@ class SearchEncoderWrapper:
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
+
+        Raises:
+            ValueError: If the corpus has not been indexed before searching.
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
@@ -213,7 +216,14 @@ class SearchEncoderWrapper:
         hf_split: str,
         encode_kwargs: dict[str, Any],
     ) -> dict[str, list[tuple[float, str]]]:
-        """Rerank documents based on pre-ranked documents."""
+        """Rerank documents based on pre-ranked documents.
+
+        Returns:
+            A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a
+
+        Raises:
+            ValueError: If NaN values are detected in the similarity scores.
+        """
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
 

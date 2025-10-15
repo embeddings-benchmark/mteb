@@ -335,6 +335,9 @@ class AbsTaskRetrieval(AbsTask):
 
         Returns:
             Dictionary of evaluation scores
+
+        Raises:
+            TypeError: If the model does not implement the required protocols.
         """
         # ensure queries format (see #3030)
         data_split["relevant_docs"], data_split["queries"] = (
@@ -556,6 +559,9 @@ class AbsTaskRetrieval(AbsTask):
                 subset_item: Select which part to take. E. g. corpus, queries etc
                 hf_subset_name: Name of the current item on HF
                 converter: Function to convert dict to datasets format
+
+            Raises:
+                ValueError: If the subset_item is not a Dataset and no converter is provided
             """
             sections = {}
             for split in data.keys():
@@ -629,6 +635,10 @@ class AbsTaskRetrieval(AbsTask):
 
         Returns:
             The current task reformulated as a reranking task
+
+        Raises:
+            FileNotFoundError: If the specified path does not exist.
+            ValueError: If the loaded top ranked results are not in the expected format.
         """
         top_ranked_path = Path(top_ranked_path)
         if top_ranked_path.is_dir():
@@ -668,7 +678,11 @@ def _process_relevant_docs(
     hf_subset: str,
     split: str,
 ) -> dict[str, dict[str, float]]:
-    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
+    """Collections can contain overlapping ids in different splits. Prepend split and subset to avoid this
+
+    Returns:
+        A new collection with split and subset prepended to ids
+    """
     return_collection = {}
     for query_id, relevant in collection.items():
         return_collection[f"{split}_{hf_subset}_{query_id}"] = {

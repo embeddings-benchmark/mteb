@@ -111,6 +111,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
             add_eos_token: Whether to add the eos token to each input example.
             prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
             **kwargs: Kwargs for Sentence Transformer model.
+
+        Raises:
+            ValueError: If the instruction template does not contain the string '{instruction}'.
         """
         from sentence_transformers import SentenceTransformer
 

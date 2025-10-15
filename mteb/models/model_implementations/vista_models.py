@@ -76,9 +76,15 @@ def vista_loader(model_name, **kwargs):
             )
             self.eval()
 
-        def encode_text(self, texts):
+        def encode_text(self, texts: dict[str, torch.Tensor]) -> Array:
             """Currently override Visualized_BGE's the original implementation
             to fix attention_mask & embedding_output dtype misalignment
+
+            Args:
+                texts (dict): {"input_ids": ..., "attention_mask": ...}
+
+            Returns:
+                Array: text embeddings
             """
             input_ids = texts["input_ids"]
             attention_mask = texts["attention_mask"]

@@ -26,10 +26,19 @@ def requires_package(
 
 
 def suggest_package(
-    obj, package_name: str, model_name: str, install_instruction: str
+    obj: object, package_name: str, model_name: str, install_instruction: str
 ) -> bool:
     """Check if a package is available and log a warning with installation instructions if it's not.
     Unlike requires_package, this doesn't raise an error but returns True if the package is available.
+
+    Args:
+        obj: The object (class or function) that requires the package.
+        package_name: The name of the package to check.
+        model_name: The name of the model that benefits from the package.
+        install_instruction: The instruction to install the package.
+
+    Returns:
+        bool: True if the package is available, False otherwise.
     """
     if not _is_package_available(package_name):
         name = obj.__name__ if hasattr(obj, "__name__") else obj.__class__.__name__

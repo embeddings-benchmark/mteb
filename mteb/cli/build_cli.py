@@ -318,7 +318,11 @@ def _add_create_meta_parser(subparsers) -> None:
 
 
 def build_cli() -> argparse.ArgumentParser:
-    """Builds the argument parser for the MTEB CLI."""
+    """Builds the argument parser for the MTEB CLI.
+
+    Returns:
+        An argparse.ArgumentParser object configured with subcommands and options.
+    """
     parser = argparse.ArgumentParser(
         description="MTEB Command Line Interface",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,

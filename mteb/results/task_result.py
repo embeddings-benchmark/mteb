@@ -265,12 +265,23 @@ class TaskResult(BaseModel):
         return list(self.scores.keys())
 
     def to_dict(self) -> dict:
-        """Convert the TaskResult to a dictionary."""
+        """Convert the TaskResult to a dictionary.
+
+        Returns:
+            The TaskResult as a dictionary.
+        """
         return self.model_dump()
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
-        """Create a TaskResult from a dictionary."""
+        """Create a TaskResult from a dictionary.
+
+        Args:
+            data: The dictionary to create the TaskResult from.
+
+        Returns:
+            The created TaskResult object.
+        """
         return cls.model_validate(data)
 
     def _round_scores(self, scores: dict[SplitName, list[ScoresDict]], n: int) -> None:
@@ -302,6 +313,12 @@ class TaskResult(BaseModel):
         Args:
             path: The path to the file to load.
             load_historic_data: Whether to attempt to load historic data from before v1.11.0.
+
+        Returns:
+            The loaded TaskResult object.
+
+        Raises:
+            ValueError: If the file could not be loaded and load_historic_data is False.
         """
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
@@ -477,6 +494,9 @@ class TaskResult(BaseModel):
 
         Returns:
             The result of the aggregation function on the scores.
+
+        Raises:
+            ValueError: If no splits had scores for the specified languages.
         """
         if splits is None:
             splits = list(self.scores.keys())
@@ -503,7 +523,19 @@ class TaskResult(BaseModel):
         languages: str | None = None,
         subsets: Iterable[str] | None = None,
     ) -> float:
-        """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
+        """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified.
+
+        Args:
+            splits: The splits to consider.
+            languages: The languages to consider. Can be ISO language codes or ISO language script codes.
+            subsets: The hf_subsets to consider.
+
+        Returns:
+            The mean main score for the specified splits, languages and subsets.
+
+        Raises:
+            ValueError: If no splits had scores for the specified languages.
+        """
         if splits is None:
             splits = self.scores.keys()
         val_sum = 0
@@ -570,6 +602,9 @@ class TaskResult(BaseModel):
         Args:
             task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
                 the scores will be filtered to only include those splits and languages. If None it will attempt to get the task from the task_name.
+
+        Returns:
+            A new TaskResult object with the validated and filtered scores.
         """
         from mteb.get_tasks import get_task
 
@@ -631,6 +666,9 @@ class TaskResult(BaseModel):
 
         Returns:
             True if the TaskResult object can be merged with the other object, False otherwise.
+
+        Raises:
+            ValueError: If the objects cannot be merged and raise_error is True.
         """
         criteria = [
             Criterias.from_str(c) if isinstance(c, str) else c for c in criteria

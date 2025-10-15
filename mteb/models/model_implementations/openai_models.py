@@ -33,6 +33,9 @@ class OpenAIModel(AbsEncoder):
         """Wrapper for OpenAIs embedding API.
         To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the docuement is empty we return a
         zero vector.
+
+        Raises:
+            ValueError: If the model does not have a default embed_dim and no embed_dim is provided.
         """
         requires_package(
             self,
@@ -65,8 +68,15 @@ class OpenAIModel(AbsEncoder):
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
 
-    def truncate_text_tokens(self, text):
-        """Truncate a string to have `max_tokens` according to the given encoding."""
+    def truncate_text_tokens(self, text: str) -> str:
+        """Truncate a string to have `max_tokens` according to the given encoding.
+
+        Args:
+            text: The input string to truncate.
+
+        Returns:
+            The truncated string.
+        """
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 

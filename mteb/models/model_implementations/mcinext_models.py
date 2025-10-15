@@ -254,7 +254,14 @@ class HakimModelWrapper(AbsEncoder):
         return sample
 
     def _make_api_request(self, data: dict[str, Any]) -> list[list[float]]:
-        """Makes an API request with retry logic."""
+        """Makes an API request with retry logic.
+
+        Raises:
+            APIError: If the API request fails after retries or returns an error.
+
+        Returns:
+            A list of embeddings.
+        """
         for attempt in range(self.max_retries):
             try:
                 response = requests.post(
@@ -290,7 +297,15 @@ class HakimModelWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> np.ndarray:
-        """Encodes sentences using the API."""
+        """Encodes sentences using the API.
+
+        Raises:
+            ValueError: If input is not a non-empty list of strings.
+            APIError: If the API request fails after retries or returns an error.
+
+        Returns:
+            A 2D numpy array of shape (num_sentences, embedding_dim) containing the embeddings.
+        """
         if not sentences or not all(isinstance(s, str) for s in sentences):
             raise ValueError("Input must be a non-empty list of strings.")
 

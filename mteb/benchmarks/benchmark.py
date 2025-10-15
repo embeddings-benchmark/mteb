@@ -77,13 +77,21 @@ class Benchmark:
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
+        """Create summary table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the summary results.
+        """
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
     def _create_per_task_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create per-task table. Called by the leaderboard app."""
+        """Create per-task table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the per-task results.
+        """
         return _create_per_task_table_from_benchmark_results(benchmark_results)
 
 
@@ -91,7 +99,6 @@ class RtebBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
         return _create_summary_table_mean_public_private(benchmark_results)
 
 
@@ -99,7 +106,6 @@ class HUMEBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
         return _create_summary_table_mean_subset(benchmark_results)
 
 
@@ -107,5 +113,4 @@ class MIEBBenchmark(Benchmark):
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
         return _create_summary_table_mean_task_type(benchmark_results)

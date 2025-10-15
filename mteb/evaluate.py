@@ -108,7 +108,14 @@ def _evaluate_task(
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
 ) -> TaskResult:
-    """The core logic to run a model on a given task. See `evaluate` for more details."""
+    """The core logic to run a model on a given task. See `evaluate` for more details.
+
+    Returns:
+        The results of the evaluation.
+
+    Raises:
+        ImportError: If co2_tracker is True but codecarbon is not installed.
+    """
     if co2_tracker is None or co2_tracker is True:
         try:
             from codecarbon import EmissionsTracker  # type: ignore[import]
@@ -189,6 +196,9 @@ def _check_model_modalities(
     Args:
         model: The model metadata containing supported modalities.
         tasks: A single task or an iterable of tasks to check against the model.
+
+    Raises:
+        ValueError: If there are no overlapping modalities between the model and any task.
     """
     if model.modalities is None or len(model.modalities) == 0:
         return
@@ -279,6 +289,9 @@ def evaluate(
 
     Returns:
         The results of the evaluation.
+
+    Raises:
+        ValueError: If the model modalities do not match the task modalities.
 
     Examples:
         >>> import mteb

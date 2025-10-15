@@ -121,7 +121,11 @@ def apply_per_task_styling_from_benchmark(
 
 
 def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw summary DataFrame"""
+    """Apply styling to a raw summary DataFrame
+
+    Returns:
+        Styled gr.DataFrame ready for display in the leaderboard
+    """
     excluded_columns = [
         "Rank (Borda)",
         "Rank",
@@ -207,7 +211,11 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
 
 
 def _apply_per_task_table_styling(per_task: pd.DataFrame) -> gr.DataFrame:
-    """Apply styling to a raw per-task DataFrame"""
+    """Apply styling to a raw per-task DataFrame
+
+    Returns:
+        Styled gr.DataFrame ready for display in the leaderboard
+    """
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
 

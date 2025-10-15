@@ -128,9 +128,11 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 4. Specific task type prompt
                 5. Specific prompt type (query or passage)
 
-
         Returns:
             The encoded sentences.
+
+        Raises:
+            ValueError: If an unknown prompt type is provided when using query/document specific encoding.
         """
         from sentence_transformers import __version__ as st_version
 

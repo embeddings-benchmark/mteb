@@ -185,7 +185,16 @@ def evaluate_p_mrr_change(
     k_values: list[int],
 ) -> dict[str, float | dict[str, float]]:
     """Computes the scores needed for FollowIR datasets, including p-MRR (measuring change in instruction) and
-    details about the original instruction run and changed instruction run.
+    details about the original instruction run and changed instruction run. Used by IntructionRetrieval/Reranking tasks.
+
+    Args:
+        qrels: Ground truth relevance judgments for the queries
+        results: Predicted relevance scores for the queries
+        changed_qrels: A mapping from query IDs (without -og or -changed) to a list of document IDs that have changed relevance
+        k_values: The k values for which to compute the scores
+
+    Returns:
+        A dictionary with the scores, including "p-MRR", "og" and "changed" keys.
     """
     followir_scores = defaultdict(dict)
 
@@ -342,6 +351,9 @@ def paired_accuracy(
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
         scores: The scores for the queries, to extract top_1 recall for each query
+
+    Returns:
+        The paired accuracy score
     """
     # group the queries by the query id
     query_keys = set()
@@ -371,6 +383,9 @@ def robustness_at_10(
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
         scores: The scores for the queries, to extract ndcg@10 for each query
+
+    Returns:
+        The robustness at 10 score
     """
     query_keys = defaultdict(list)
     for key in qrels.keys():
@@ -485,6 +500,9 @@ def max_over_subqueries(
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
         k_values: The k values for which to compute the scores
+
+    Returns:
+        A dictionary with the scores, prefixed with "max_over_subqueries_"
     """
     query_keys = defaultdict(list)
     for key in qrels.keys():
@@ -566,7 +584,15 @@ def evaluate_abstention(
     results: dict[str, dict[str, float]],
     metric_scores: dict[str, list[float]],
 ) -> dict[str, float]:
-    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
+    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
+
+    Args:
+        results: A mapping from query IDs to a dictionary of document IDs and their scores.
+        metric_scores: A dictionary mapping metric names to lists of scores for each query.
+
+    Returns:
+        A dictionary mapping metric names to their corresponding nAUC scores.
+    """
     all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
     all_conf_scores = [confidence_scores(sim_scores) for sim_scores in all_sim_scores]
     conf_fcts = list(all_conf_scores[0].keys())

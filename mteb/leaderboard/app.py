@@ -55,7 +55,11 @@ def _load_results():
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
-    """Produces a URL for the selected benchmark."""
+    """Produces a URL for the selected benchmark.
+
+    Returns:
+        A markdown string containing the URL.
+    """
     params = urlencode(
         {
             "benchmark_name": benchmark_name,

@@ -23,8 +23,16 @@ def _convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
 def compute_pairwise_similarity(
     model: EncoderProtocol, embedding1: Array, embedding2: Array
 ) -> Array:
-    """Computes pairwise similarity. It first attempts to use the model.simarity_pairwise method if it exists
-    otherwise it uses the model.similarity method
+    """Compute pairwise similarity between two sets of embeddings using the model's
+    built-in similarity function if available, otherwise using cosine similarity.
+
+    Args:
+        model: An instance of EncoderProtocol which may have a custom similarity function.
+        embedding1: The first set of embeddings.
+        embedding2: The second set of embeddings.
+
+    Returns:
+        Array: The computed pairwise similarity scores.
     """
     if hasattr(model, "similarity_pairwise"):
         return model.similarity_pairwise(embedding1, embedding2)
@@ -49,7 +57,11 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
 
     Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
 
-    Return:
+    Args:
+        a: The first tensor.
+        b: The second tensor.
+
+    Returns:
         Matrix with res[i][j]  = cos_sim(a[i], b[j])
     """
     # Move tensor conversion outside the compiled function
@@ -98,12 +110,19 @@ def pairwise_cos_sim(a: Array, b: Array) -> Array:
 
 
 def max_sim(a: Array, b: Array) -> torch.Tensor:
-    """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
-    Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
+    """Compute the maximum pairwise similarity between tokens.
 
-    Return:
-        Matrix with res[i][j]  = max_sim(a[i], b[j])
-    """  # noqa: D402
+    Given two tensors `a` and `b` of shape (batch_size, num_tokens, token_dim),
+    this function computes the maximum similarity `max_sim(a[i], b[j])` for all
+    pairs of tokens `i` and `j` across the two inputs.
+
+    Args:
+        a: Tensor of shape (batch_size, num_tokens, token_dim).
+        b: Tensor of shape (batch_size, num_tokens, token_dim).
+
+    Returns:
+        A tensor containing the maximum similarity values for each batch.
+    """
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
@@ -133,6 +152,9 @@ def pairwise_max_sim(
     Args:
         queries_embeddings: The first tensor. The queries embeddings. Shape: (batch_size, num tokens queries, embedding_size)
         documents_embeddings: The second tensor. The documents embeddings. Shape: (batch_size, num tokens documents, embedding_size)
+
+    Returns:
+        Tensor: Vector with res[i] = max_sim(queries_embeddings[i], documents_embeddings[i])
     """
     scores = []
 
@@ -154,8 +176,16 @@ def pairwise_max_sim(
 
 
 def dot_score(a: Array, b: Array) -> torch.Tensor:
-    """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
-    :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
+    """Calculate pairwise dot products between two sets of vectors.
+
+    Computes the dot product dot_prod(a[i], b[j]) for all i and j.
+
+    Args:
+        a: The first tensor.
+        b: The second tensor.
+
+    Returns:
+        Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
     # Move tensor conversion outside the compiled function
     a = _convert_to_tensor(a)

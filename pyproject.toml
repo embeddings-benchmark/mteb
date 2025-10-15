@@ -91,7 +91,7 @@ youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lk
 
 [dependency-groups]
 lint = [
-    "ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
+    "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
     "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
@@ -151,7 +151,7 @@ exclude_also = [
 
     # Don't complain about abstract methods, they aren't run:
     "@(abc\\.)?abstractmethod",
-    ]
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -224,7 +224,10 @@ select = [
     "RUF200",  # invalid-pyproject-toml
     "PTH",     # use pathlib
     "TID",     # tidy-imports
+    "D",       # pydocstyle
+    "DOC",     # pydoclint
 ]
+preview = true
 
 ignore = [
     "E501",   # line too long
@@ -243,8 +246,11 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = ["PTH"]
-"tests/*" = ["RUF012"]
+"scripts/*" = ["PTH", "D", "DOC"]
+"docs/*" = ["D", "DOC"]
+"tests/*" = ["RUF012", "D", "DOC"]
+"mteb/tasks/*" = ["D", "DOC"]
+"mteb/models/model_implementations/*" = ["D", "DOC"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false

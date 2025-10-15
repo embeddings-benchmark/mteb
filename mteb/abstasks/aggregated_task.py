@@ -31,7 +31,14 @@ class AbsTaskAggregate(AbsTask):
     def task_results_to_scores(
         self, task_results: list[TaskResult]
     ) -> dict[str, dict[HFSubset, ScoresDict]]:
-        """The function that aggregated scores. Can be redefined to allow for custom aggregations."""
+        """The function that aggregated scores. Can be redefined to allow for custom aggregations.
+
+        Args:
+            task_results: List of TaskResult objects from the individual tasks.
+
+        Returns:
+            A dictionary with the aggregated scores.
+        """
         scores = {}
         subsets = (
             self.metadata.eval_langs.keys()
@@ -65,7 +72,13 @@ class AbsTaskAggregate(AbsTask):
 
     def combine_task_results(self, task_results: list[TaskResult]) -> TaskResult:
         """Combined the task results for using `task_results_to_scores`. Do not redefine this function if you want to implement a custom aggregation.
-        Instead redefin `task_results_to_scores`.
+        Instead, redefine `task_results_to_scores`.
+
+        Args:
+            task_results: List of TaskResult objects from the individual tasks.
+
+        Returns:
+            A TaskResult object for the aggregate task.
         """
         eval_times = [tr.evaluation_time for tr in task_results if tr.evaluation_time]
         if len(eval_times) != len(task_results):
@@ -112,7 +125,15 @@ class AbsTaskAggregate(AbsTask):
             )
 
     def filter_eval_splits(self, eval_splits: list[str] | None) -> Self:
-        """Filter the evaluation splits of the task."""
+        """Filter the evaluation splits of the task.
+
+        Args:
+            eval_splits: List of splits to evaluate on. If None, all splits in metadata
+                are used.
+
+        Returns:
+            The task with filtered evaluation splits.
+        """
         self._eval_splits = eval_splits
         return self
 

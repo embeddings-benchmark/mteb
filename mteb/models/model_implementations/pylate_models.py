@@ -205,6 +205,12 @@ class PylateSearchEncoder:
         """Rerank with PyLate's rank.rerank using per-query candidates.
 
         Keeps dense rerank untouched by using a PyLate-only path.
+
+        Returns:
+            A dictionary mapping query IDs to a list of tuples, each containing a score and a document ID.
+
+        Raises:
+            ValueError: If corpus is not set prior to reranking.
         """
         from pylate import rank
 

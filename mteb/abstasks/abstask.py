@@ -43,6 +43,9 @@ def _multilabel_subsampling(
         splits: the splits of the dataset.
         label: the label with which the stratified sampling is based on.
         n_samples: Optional, number of samples to subsample. Default is max_n_samples.
+
+    Returns:
+        A subsampled DatasetDict object.
     """
     from ._stratification import _iterative_train_test_split
 
@@ -89,7 +92,7 @@ class AbsTask(ABC):
     _support_cross_encoder: bool = False
     _support_search: bool = False
 
-    def __init__(self, seed: int = 42, **kwargs: Any):
+    def __init__(self, seed: int = 42, **kwargs: Any) -> None:
         """The init function. This is called primarily to set the seed.
 
         Args:
@@ -100,7 +103,7 @@ class AbsTask(ABC):
         self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
 
-    def check_if_dataset_is_superseded(self):
+    def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
             logger.warning(
@@ -134,6 +137,13 @@ class AbsTask(ABC):
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
+
+        Returns:
+            A dictionary with the scores for each subset.
+
+        Raises:
+            TypeError: If the model is a CrossEncoder and the task does not support CrossEncoders.
+            TypeError: If the model is a SearchProtocol and the task does not support Search.
         """
         if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
@@ -269,8 +279,11 @@ class AbsTask(ABC):
             splits: the splits of the dataset.
             label: the label with which the stratified sampling is based on.
             n_samples: Optional, number of samples to subsample. Default is max_n_samples.
+
+        Returns:
+            A subsampled DatasetDict object.
         """
-        ## Can only do this if the label column is of ClassLabel.
+        # Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], ClassLabel):
             try:
                 dataset_dict = dataset_dict.class_encode_column(label)
@@ -294,7 +307,7 @@ class AbsTask(ABC):
                         test_size=n_samples, seed=seed, stratify_by_column=label
                     )["test"]
                 }
-            )  ## only take the specified test split.
+            )  # only take the specified test split.
         return dataset_dict
 
     def load_data(self) -> None:
@@ -343,7 +356,14 @@ class AbsTask(ABC):
     def calculate_descriptive_statistics(
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics]:
-        """Calculates descriptive statistics from the dataset."""
+        """Calculates descriptive statistics from the dataset.
+
+        Args:
+            overwrite_results: Whether to overwrite existing results. If False and results already exist, the existing results will be loaded from cache.
+
+        Returns:
+            A dictionary containing descriptive statistics for each split.
+        """
         from mteb.abstasks import AbsTaskClassification
 
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:

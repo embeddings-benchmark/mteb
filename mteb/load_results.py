@@ -64,6 +64,9 @@ def load_results(
         validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
             splits from the results object that are not default in the task metadata. Defaults to True.
         only_main_score: If True, only the main score will be loaded.
+
+    Returns:
+        A BenchmarkResults object containing the results for the specified models and tasks.
     """
     from mteb.cache import ResultCache
 

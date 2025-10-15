@@ -189,7 +189,15 @@ def create_dataloader_for_queries_conversation(
 def transform_image_to_rgb(
     image: Any, transform: Callable[[Any], Any] | None = None
 ) -> Any:
-    """Convert image to RGB and apply a transformation (e.g. PILToTensor)."""
+    """Convert image to RGB and apply a transformation (e.g. PILToTensor).
+
+    Args:
+        image: The input image, either a PIL image or a tensor.
+        transform: An optional transformation function to apply to the image.
+
+    Returns:
+        The transformed image in RGB format.
+    """
     # For PIL images: ensure RGB format.
     if hasattr(image, "mode") and image.mode != "RGB":
         image = image.convert("RGB")
@@ -234,9 +242,11 @@ def prepare_image_dataset(
 
 
 def custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
-    """Custom collate function that mimics the old pipeline:
-    - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
-    - For other keys, use the default collate.
+    """Args:
+        batch: A list of dictionaries to collate.
+
+    Returns:
+        A collated dictionary.
     """
     collated: dict[str, Any] = {}
     for key in batch[0]:
@@ -256,7 +266,16 @@ def create_image_dataloader(
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
 ) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
-    This should mirror the behavior of the old code.
+
+    Args:
+        dataset: The dataset containing images.
+        image_column_name: The name of the column containing images. If None, defaults to "image".
+        batch_size: Batch size for the dataloader.
+        transform: A transformation function to apply to each image (e.g., converting to tensor).
+        collate_fn: A custom collate function to handle batching.
+
+    Returns:
+        A DataLoader with the image dataset.
     """
     dataset = prepare_image_dataset(
         dataset, image_column_name, transform

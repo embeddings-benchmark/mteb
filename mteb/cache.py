@@ -103,6 +103,9 @@ class ResultCache:
 
         Returns:
             The results of the task, or None if not found.
+
+        Raises:
+            FileNotFoundError: If the results are not found and raise_if_not_found is True
         """
         result_path = self.get_task_result_path(
             model_name=model_name,
@@ -187,6 +190,9 @@ class ResultCache:
 
         Returns:
             The path to the local cache directory.
+
+        Raises:
+            ValueError: If the remote repository does not match the existing one in the cache directory.
         """
         if not self.cache_path.exists() and not self.cache_path.is_dir():
             logger.info(
@@ -310,7 +316,16 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[tuple[ModelName, Revision]]:
-        """Get all models in the cache directory."""
+        """Get all models in the cache directory.
+
+        Args:
+            tasks: A list of task names to filter the models.
+            require_model_meta: If True, only return models that have a model_meta.json file.
+            include_remote: If True, include remote results in the returned models.
+
+        Returns:
+            A list of tuples containing the model name and revision.
+        """
         cache_paths = self.get_cache_paths(
             tasks=tasks,
             require_model_meta=require_model_meta,
@@ -325,7 +340,16 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[str]:
-        """Get all task names in the cache directory."""
+        """Get all task names in the cache directory.
+
+        Args:
+            models: A list of model names or ModelMeta objects to filter the task names.
+            require_model_meta: If True, only return task names that have a model_meta.json file
+            include_remote: If True, include remote results in the returned task names.
+
+        Returns:
+            A list of task names in the cache directory.
+        """
         cache_paths = self.get_cache_paths(
             models=models,
             require_model_meta=require_model_meta,
@@ -359,7 +383,11 @@ class ResultCache:
         paths: list[Path],
         models: Sequence[str] | Sequence[ModelMeta] | None = None,
     ) -> list[Path]:
-        """Filter a list of paths by model name and optional revision."""
+        """Filter a list of paths by model name and optional revision.
+
+        Returns:
+            A list of paths that match the specified model names and revisions.
+        """
         if not models:
             return paths
 

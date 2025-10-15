@@ -286,6 +286,9 @@ class MTEB:
 
         Returns:
             A list of TaskResult objects, one for each task evaluated.
+
+        Raises:
+            ImportError: If codecarbon is not installed and co2_tracker is set to True.
         """
         # update logging to account for different levels of Verbosity (similar to the command line)
         from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -314,7 +317,7 @@ class MTEB:
         elif isinstance(model, CrossEncoder):
             model = CrossEncoderWrapper(model)
 
-        ## Disable co2_tracker for API models
+        # Disable co2_tracker for API models
         if "API" in meta.framework:
             co2_tracker = False
 
@@ -568,7 +571,15 @@ class MTEB:
     def create_output_folder(
         self, model_meta: ModelMeta, output_folder: str | None
     ) -> Path | None:
-        """Create output folder for the results."""
+        """Create output folder for the results.
+
+        Args:
+            model_meta: ModelMeta object of the model being evaluated.
+            output_folder: Base output folder. If None, no folder is created and results are not saved.
+
+        Returns:
+            Path to the created output folder or None if output_folder is None.
+        """
         if output_folder is None:
             return None
 

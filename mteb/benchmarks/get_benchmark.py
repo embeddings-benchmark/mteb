@@ -74,6 +74,12 @@ def get_benchmark(
 
     Args:
         benchmark_name: The name of the benchmark to retrieve.
+
+    Returns:
+        The Benchmark instance corresponding to the given name.
+
+    Raises:
+        KeyError: If the benchmark name is not found. Suggests the closest matching benchmark name if available.
     """
     previous_benchmark_names = _get_previous_benchmark_names()
     benchmark_registry = _build_registry()
@@ -103,6 +109,9 @@ def get_benchmarks(
     Args:
         names: A list of benchmark names to retrieve. If None, all benchmarks are returned.
         display_on_leaderboard: If specified, filters benchmarks by whether they are displayed on the leaderboard.
+
+    Returns:
+        A list of Benchmark instances.
     """
     benchmark_registry = _build_registry()
 

@@ -94,8 +94,12 @@ class MTEBTasks(tuple[AbsTask]):
                 langs.add(lg)
         return langs
 
-    def count_languages(self) -> dict:
-        """Summarize count of all languages from tasks"""
+    def count_languages(self) -> Counter:
+        """Summarize count of all languages from tasks
+
+        Returns:
+            Counter with language as key and count as value.
+        """
         langs = []
         for task in self:
             langs.extend(task.languages)
@@ -181,6 +185,9 @@ class MTEBTasks(tuple[AbsTask]):
             include_citation_in_name: Whether to include the citation in the name.
             limit_n_entries: Limit the number of entries for cell values, e.g. number of languages and domains. Will use "..." to indicate that
                 there are more entries.
+
+        Returns:
+            string with a LaTeX table.
         """
         if include_citation_in_name and "name" in properties:
             properties += ["intext_citation"]
@@ -323,6 +330,9 @@ def get_task(
 
     Returns:
         An initialized task object.
+
+    Raises:
+        KeyError: If the task name is not found.
 
     Examples:
         >>> get_task("BornholmBitextMining")
