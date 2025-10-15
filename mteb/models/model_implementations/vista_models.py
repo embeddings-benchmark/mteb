@@ -81,10 +81,10 @@ def vista_loader(model_name, **kwargs):
             to fix attention_mask & embedding_output dtype misalignment
 
             Args:
-                texts (dict): {"input_ids": ..., "attention_mask": ...}
+                texts: {"input_ids": ..., "attention_mask": ...}
 
             Returns:
-                Array: text embeddings
+                Array of text embeddings
             """
             input_ids = texts["input_ids"]
             attention_mask = texts["attention_mask"]
