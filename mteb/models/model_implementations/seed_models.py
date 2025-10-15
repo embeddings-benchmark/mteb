@@ -65,7 +65,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
         self._available_embed_dims = available_embed_dims
         self._encoding = tiktoken.get_encoding(tokenizer_name)
 
-    def _truncate_text_tokens(self, text: str) -> str:
+    def truncate_text_tokens(self, text: str) -> str:
         """Truncate a string to have `max_tokens` according to the given encoding.
 
         Returns:
@@ -115,7 +115,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
         for sentence in sentences:
             encoded_sentence = self._encoding.encode(sentence)
             if len(encoded_sentence) > self._max_tokens:
-                truncated_sentence = self._truncate_text_tokens(sentence)
+                truncated_sentence = self.truncate_text_tokens(sentence)
                 trimmed_sentences.append(truncated_sentence)
             else:
                 trimmed_sentences.append(sentence)

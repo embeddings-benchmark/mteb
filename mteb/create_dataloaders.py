@@ -242,7 +242,10 @@ def prepare_image_dataset(
 
 
 def custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
-    """Args:
+    """- For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
+    - For other keys, use the default collate.
+
+    Args:
         batch: A list of dictionaries to collate.
 
     Returns:
