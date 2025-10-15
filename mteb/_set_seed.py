@@ -12,7 +12,7 @@ import torch
 logger = logging.getLogger(__name__)
 
 
-def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
+def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     """Helper function for reproducible behavior to set the seed in `random`, `numpy`, `torch` and/or `tf` (if installed).
 
     If does not set the seed for npu, musa, mlu, hpu, xpu devices. To set the seed for those devices, we recommend using:

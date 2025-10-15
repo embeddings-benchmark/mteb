@@ -12,6 +12,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 from typing_extensions import Self
 
+from mteb._set_seed import _set_seed
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -20,7 +21,6 @@ from mteb.models import (
     MTEBModels,
     SearchProtocol,
 )
-from mteb.set_seed import set_seed
 from mteb.types import HFSubset, Modalities, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
@@ -97,7 +97,7 @@ class AbsTask(ABC):
             kwargs: arguments passed to subclasses.
         """
         self.seed = seed
-        self.rng_state, self.np_rng = set_seed(seed)
+        self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
 
     def check_if_dataset_is_superseded(self):

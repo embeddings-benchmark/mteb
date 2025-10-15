@@ -9,24 +9,24 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.results.benchmark_results import BenchmarkResults
 
 
-def borda_count(scores: pd.Series) -> pd.Series:
+def _borda_count(scores: pd.Series) -> pd.Series:
     n = len(scores)
     ranks = scores.rank(method="average", ascending=False)
     counts = n - ranks
     return counts
 
 
-def get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
-    borda_counts = score_table.apply(borda_count, axis="index")
+def _get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
+    borda_counts = score_table.apply(_borda_count, axis="index")
     mean_borda = borda_counts.sum(axis=1)
     return mean_borda.rank(method="min", ascending=False).astype(int)
 
 
-def format_scores(score: float) -> float:
+def _format_scores(score: float) -> float:
     return round(score * 100, 2)
 
 
-def get_column_types(df: pd.DataFrame) -> list[str]:
+def _get_column_types(df: pd.DataFrame) -> list[str]:
     types = []
     for column_name in df.columns:
         if is_numeric_dtype(df[column_name]):
@@ -36,7 +36,7 @@ def get_column_types(df: pd.DataFrame) -> list[str]:
     return types
 
 
-def get_column_widths(df: pd.DataFrame) -> list[str]:
+def _get_column_widths(df: pd.DataFrame) -> list[str]:
     # Please do not remove this function when refactoring.
     # Column width calculation seeminlgy changes regularly with Gradio releases,
     # and this piece of logic is good enough to quickly fix related issues.
@@ -53,13 +53,13 @@ def get_column_widths(df: pd.DataFrame) -> list[str]:
     return widths
 
 
-def format_zero_shot(zero_shot_percentage: int):
+def _format_zero_shot(zero_shot_percentage: int):
     if zero_shot_percentage == -1:
         return "⚠️ NA"
     return f"{zero_shot_percentage:.0f}%"
 
 
-def create_light_green_cmap():
+def _create_light_green_cmap():
     cmap = plt.cm.get_cmap("Greens")
     num_colors = 256
     half_colors = np.linspace(0, 0.5, num_colors)
@@ -135,7 +135,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
     gradient_columns = [
         col for col in joint_table.columns if col not in excluded_columns
     ]
-    light_green_cmap = create_light_green_cmap()
+    light_green_cmap = _create_light_green_cmap()
 
     # Determine score columns (before formatting)
     score_columns = [
@@ -148,8 +148,8 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
 
     # Format data for display
     if "Zero-shot" in joint_table.columns:
-        joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
-    joint_table[score_columns] = joint_table[score_columns].map(format_scores)
+        joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(_format_zero_shot)
+    joint_table[score_columns] = joint_table[score_columns].map(_format_scores)
 
     joint_table_style = joint_table.style.format(
         {**dict.fromkeys(score_columns, "{:.2f}"), "Rank (Borda)": "{:.0f}"},
@@ -182,12 +182,12 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
                     gmap=gmap_values.loc[mask],
                 )
 
-    column_types = get_column_types(joint_table_style.data)
+    column_types = _get_column_types(joint_table_style.data)
     # setting model name column to markdown
     if len(column_types) > 1:
         column_types[1] = "markdown"
 
-    column_widths = get_column_widths(joint_table_style.data)
+    column_widths = _get_column_widths(joint_table_style.data)
     if len(column_widths) > 0:
         column_widths[0] = "100px"
     if len(column_widths) > 1:
