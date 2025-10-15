@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -15,8 +13,8 @@ class BBSARDNLRetrieval(AbsTaskRetrieval):
         "translation.",
         reference="https://aclanthology.org/2025.regnlp-1.3.pdf",
         dataset={
-            "path": "clips/bBSARD",
-            "revision": "3f2554a64f15cabdccd72844008200e9a9279100",
+            "path": "clips/mteb-nl-bbsard",
+            "revision": "01b759e92194a95979a9359e3dccafa5c4b0db57",
         },
         type="Retrieval",
         category="t2t",
@@ -41,41 +39,3 @@ class BBSARDNLRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-        # fetch both subsets of the dataset, only test split
-        corpus_raw = datasets.load_dataset(
-            name="corpus",
-            split="nl",
-            **self.metadata.dataset,
-            # **self.metadata_dict["dataset"],
-        )
-        queries_raw = datasets.load_dataset(
-            name=self.metadata.eval_splits[0],
-            split="nl",
-            **self.metadata.dataset,
-            # **self.metadata_dict["dataset"],
-        )
-
-        self.queries = {
-            self.metadata.eval_splits[0]: {
-                str(q["id"]): q["question"].strip() for q in queries_raw
-            }
-        }
-
-        self.corpus = {
-            self.metadata.eval_splits[0]: {
-                str(d["id"]): {"text": d["article"]} for d in corpus_raw
-            }
-        }
-
-        self.relevant_docs = {"test": {str(q["id"]): {} for q in queries_raw}}
-        for q in queries_raw:
-            for doc_id in q["article_ids"].split(","):
-                self.relevant_docs[self.metadata.eval_splits[0]][str(q["id"])][
-                    doc_id
-                ] = 1
-
-        self.data_loaded = True
