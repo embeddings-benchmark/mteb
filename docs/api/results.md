@@ -20,7 +20,7 @@ type(models_results) # mteb.results.TaskResult
 
 ## Results cache
 
-::mteb.cache.ResultCache
+:::mteb.cache.ResultCache
 
 ## Result Objects
 
