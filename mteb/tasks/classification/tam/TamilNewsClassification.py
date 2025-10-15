@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TamilNewsClassification(AbsTaskAnyClassification):
+class TamilNewsClassification(AbsTaskClassification):
     superseded_by = "TamilNewsClassification.v2"
     metadata = TaskMetadata(
         name="TamilNewsClassification",
@@ -42,7 +42,7 @@ class TamilNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
 
 
-class TamilNewsClassificationV2(AbsTaskAnyClassification):
+class TamilNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TamilNewsClassification.v2",
         description="""A Tamil dataset for 6-class classification of Tamil news articles

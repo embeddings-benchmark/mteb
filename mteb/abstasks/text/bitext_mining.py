@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import Encoder, MTEBModels
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import SplitDescriptiveStatistics, TextStatistics
 
@@ -56,10 +56,10 @@ class AbsTaskBitextMining(AbsTask):
     """Abstract class for BitextMining tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        id: str
-        sentence1: str
-        sentence2: str
+    Attributes:
+        dataset: A HuggingFace dataset containing the data for the task. It must contain the following columns sentence1 and sentence2 for the two texts to be compared.
+        parallel_subsets: If true task language pairs should be in one split as column names, otherwise each language pair should be a subset.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     parallel_subsets = False
@@ -127,7 +127,7 @@ class AbsTaskBitextMining(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,

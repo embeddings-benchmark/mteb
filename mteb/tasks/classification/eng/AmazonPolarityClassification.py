@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class AmazonPolarityClassification(AbsTaskAnyClassification):
+class AmazonPolarityClassification(AbsTaskClassification):
     superseded_by = "AmazonPolarityClassification.v2"
     metadata = TaskMetadata(
         name="AmazonPolarityClassification",
@@ -41,7 +41,7 @@ class AmazonPolarityClassification(AbsTaskAnyClassification):
     )
 
 
-class AmazonPolarityClassificationV2(AbsTaskAnyClassification):
+class AmazonPolarityClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmazonPolarityClassification.v2",
         description="""Amazon Polarity Classification Dataset.

@@ -1,9 +1,9 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast, convert_to_fast
+from mteb.abstasks.clustering import AbsTaskClustering, convert_to_fast
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TenKGnadClusteringS2S(AbsTaskAnyClustering):
+class TenKGnadClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "TenKGnadClusteringS2S.v2"
 
     metadata = TaskMetadata(
@@ -31,7 +31,7 @@ class TenKGnadClusteringS2S(AbsTaskAnyClustering):
     )
 
 
-class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
+class TenKGnadClusteringS2SFast(AbsTaskClustering):
     max_document_to_embed = 10267
     max_fraction_of_documents_to_embed = None
 

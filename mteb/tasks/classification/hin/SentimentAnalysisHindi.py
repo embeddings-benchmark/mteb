@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SentimentAnalysisHindi(AbsTaskAnyClassification):
+class SentimentAnalysisHindi(AbsTaskClassification):
     superseded_by = "SentimentAnalysisHindi.v2"
     metadata = TaskMetadata(
         name="SentimentAnalysisHindi",
@@ -43,7 +43,7 @@ class SentimentAnalysisHindi(AbsTaskAnyClassification):
         )
 
 
-class SentimentAnalysisHindiV2(AbsTaskAnyClassification):
+class SentimentAnalysisHindiV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SentimentAnalysisHindi.v2",
         description="""Hindi Sentiment Analysis Dataset

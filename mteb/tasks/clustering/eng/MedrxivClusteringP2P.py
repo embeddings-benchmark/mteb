@@ -2,15 +2,15 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
+class MedrxivClusteringP2PFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MedrxivClusteringP2P.v2",
         description="Clustering of titles+abstract from medrxiv across 51 categories.",
@@ -49,7 +49,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         self.dataset = DatasetDict(ds)
 
 
-class MedrxivClusteringP2P(AbsTaskAnyClustering):
+class MedrxivClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "MedrxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="MedrxivClusteringP2P",

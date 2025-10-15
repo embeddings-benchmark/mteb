@@ -1,8 +1,8 @@
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class GeoreviewClusteringP2P(AbsTaskClusteringFast):
+class GeoreviewClusteringP2P(AbsTaskClustering):
     max_document_to_embed = 2000
     max_fraction_of_documents_to_embed = None
 

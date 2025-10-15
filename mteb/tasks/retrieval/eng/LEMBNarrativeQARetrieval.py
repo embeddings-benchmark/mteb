@@ -31,7 +31,6 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @article{kocisky-etal-2018-narrativeqa,
-  abstract = {},
   address = {Cambridge, MA},
   author = {Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
 Schwarz, Jonathan  and

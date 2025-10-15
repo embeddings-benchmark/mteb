@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CzechSoMeSentimentClassification(AbsTaskAnyClassification):
+class CzechSoMeSentimentClassification(AbsTaskClassification):
     superseded_by = "CzechSoMeSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification",
@@ -52,7 +52,7 @@ Montoyo, Andres},
         )
 
 
-class CzechSoMeSentimentClassificationV2(AbsTaskAnyClassification):
+class CzechSoMeSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification.v2",
         description="""User comments on Facebook

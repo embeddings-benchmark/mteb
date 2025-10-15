@@ -1,10 +1,10 @@
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ClusTrecCovid(AbsTaskClusteringFast):
+class ClusTrecCovid(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ClusTREC-Covid",
         description="A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-19 related topics.",

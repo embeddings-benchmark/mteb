@@ -1,4 +1,4 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -9,7 +9,7 @@ _LANGUAGES = {
 }
 
 
-class HUMEMultilingualSentimentClassification(AbsTaskAnyClassification):
+class HUMEMultilingualSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HUMEMultilingualSentimentClassification",
         dataset={

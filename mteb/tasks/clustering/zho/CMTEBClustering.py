@@ -2,17 +2,17 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
 
-class CLSClusteringFastS2S(AbsTaskClusteringFast):
+class CLSClusteringFastS2S(AbsTaskClustering):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -71,7 +71,7 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
         )
 
 
-class CLSClusteringFastP2P(AbsTaskClusteringFast):
+class CLSClusteringFastP2P(AbsTaskClustering):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -130,7 +130,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
         )
 
 
-class CLSClusteringS2S(AbsTaskAnyClustering):
+class CLSClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "CLSClusteringS2S.v2"
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
@@ -165,7 +165,7 @@ class CLSClusteringS2S(AbsTaskAnyClustering):
     )
 
 
-class CLSClusteringP2P(AbsTaskAnyClustering):
+class CLSClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "CLSClusteringP2P.v2"
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
@@ -200,7 +200,7 @@ class CLSClusteringP2P(AbsTaskAnyClustering):
     )
 
 
-class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
+class ThuNewsClusteringFastS2S(AbsTaskClustering):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -259,7 +259,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         )
 
 
-class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
+class ThuNewsClusteringFastP2P(AbsTaskClustering):
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -318,7 +318,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         )
 
 
-class ThuNewsClusteringS2S(AbsTaskAnyClustering):
+class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "ThuNewsClusteringS2S.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S",
@@ -361,7 +361,7 @@ class ThuNewsClusteringS2S(AbsTaskAnyClustering):
     )
 
 
-class ThuNewsClusteringP2P(AbsTaskAnyClustering):
+class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "ThuNewsClusteringP2P.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringP2P",

@@ -1,7 +1,7 @@
 import pytest
 
+import mteb
 from mteb._evaluators import PairClassificationEvaluator
-from tests.mock_models import MockNumpyEncoder
 from tests.mock_tasks import (
     MockClassificationTask,
     MockPairClassificationTask,
@@ -21,19 +21,22 @@ class TestPairClassificationEvaluator:
             "test",
             "test",
         )
-        distances = evaluator(MockNumpyEncoder(), encode_kwargs={"batch_size": 32})
+        distances = evaluator(
+            mteb.get_model("baseline/random-encoder-baseline"),
+            encode_kwargs={"batch_size": 32},
+        )
         assert distances["cosine_scores"] == pytest.approx(
-            [0.6676752688013152, 0.44889138491964875], TOL
+            [0.7375020980834961, 0.7731508016586304], TOL
         )
         assert distances["euclidean_distances"] == pytest.approx(
-            [1.4245895965840156, 1.8406867696540525], TOL
+            [2.4108424186706543, 2.1905980110168457], TOL
         )
         assert distances["manhattan_distances"] == pytest.approx(
-            [3.8137664259525317, 5.127750669852312], TOL
+            [11.177837371826172, 10.721406936645508], TOL
         )
         assert distances["similarity_scores"] == pytest.approx(
-            [0.6676753163337708, 0.44889140129089355], TOL
+            [0.7375020384788513, 0.7731509208679199], TOL
         )
         assert distances["dot_scores"] == pytest.approx(
-            [1.834609502285649, 1.3250427203346034], TOL
+            [7.974165916442871, 8.176445960998535], TOL
         )

@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 import mteb
-from mteb.overview import get_task, get_tasks
+from mteb.get_tasks import get_task, get_tasks
 from mteb.results.benchmark_results import BenchmarkResults
 
 

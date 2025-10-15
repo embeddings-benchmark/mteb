@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SlovakHateSpeechClassification(AbsTaskAnyClassification):
+class SlovakHateSpeechClassification(AbsTaskClassification):
     superseded_by = "SlovakHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="SlovakHateSpeechClassification",
@@ -29,7 +29,7 @@ class SlovakHateSpeechClassification(AbsTaskAnyClassification):
     )
 
 
-class SlovakHateSpeechClassificationV2(AbsTaskAnyClassification):
+class SlovakHateSpeechClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SlovakHateSpeechClassification.v2",
         description="""The dataset contains posts from a social network with human annotations for hateful or offensive language in Slovak.

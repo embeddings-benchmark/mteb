@@ -1,4 +1,4 @@
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
@@ -9,7 +9,7 @@ def split_labels(record: dict) -> dict:
     return record
 
 
-class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
+class SNLHierarchicalClusteringP2P(AbsTaskClustering):
     max_document_to_embed = 1300
     max_fraction_of_documents_to_embed = None
 
@@ -47,7 +47,7 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
     max_depth = 5
 
 
-class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
+class SNLHierarchicalClusteringS2S(AbsTaskClustering):
     max_document_to_embed = 1300
     max_fraction_of_documents_to_embed = None
 

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class HindiDiscourseClassification(AbsTaskAnyClassification):
+class HindiDiscourseClassification(AbsTaskClassification):
     superseded_by = "HindiDiscourseClassification.v2"
     metadata = TaskMetadata(
         name="HindiDiscourseClassification",
@@ -52,7 +52,7 @@ Stent, Amanda},
     )
 
 
-class HindiDiscourseClassificationV2(AbsTaskAnyClassification):
+class HindiDiscourseClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HindiDiscourseClassification.v2",
         dataset={

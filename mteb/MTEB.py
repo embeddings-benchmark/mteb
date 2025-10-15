@@ -30,7 +30,7 @@ from mteb.abstasks import AbsTask
 from mteb.benchmarks import Benchmark
 from mteb.models import (
     CrossEncoderWrapper,
-    Encoder,
+    EncoderProtocol,
     ModelMeta,
     MTEBModels,
     SentenceTransformerEncoderWrapper,
@@ -122,7 +122,7 @@ class MTEB:
 
     def mteb_benchmarks(self):
         """Get all benchmarks available in the MTEB."""
-        from mteb.overview import MTEBTasks
+        from mteb.get_tasks import MTEBTasks
 
         # get all the MTEB specific benchmarks:
         sorted_mteb_benchmarks = sorted(
@@ -648,7 +648,7 @@ class MTEB:
         return missing_evaluations
 
     @staticmethod
-    def _get_model_meta(model: Encoder) -> ModelMeta:
+    def _get_model_meta(model: EncoderProtocol) -> ModelMeta:
         from sentence_transformers import CrossEncoder, SentenceTransformer
 
         if isinstance(model, CrossEncoder):

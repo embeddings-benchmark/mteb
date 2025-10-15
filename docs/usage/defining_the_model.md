@@ -60,14 +60,18 @@ class CustomModel:
         self,
         inputs: DataLoader[BatchedInput],
         task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
-            task_name: The name of the task.
+            inputs: The inputs to encode.
+            task_metadata: The name of the task.
+            hf_subset: The subset of the dataset.
+            hf_split: The split of the dataset.
             prompt_type: The prompt type to use.
             **kwargs: Additional arguments to pass to the encoder.
 

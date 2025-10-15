@@ -1,8 +1,8 @@
-from mteb.abstasks import AbsTaskAnyClassification
+from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class DadoEvalCoarseClassification(AbsTaskAnyClassification):
+class DadoEvalCoarseClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DadoEvalCoarseClassification",
         dataset={

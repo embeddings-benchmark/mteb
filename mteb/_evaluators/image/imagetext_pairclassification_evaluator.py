@@ -13,7 +13,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import (
     transform_image_to_rgb,
 )
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         encode_kwargs: dict[str, Any],
     ) -> list[torch.Tensor]:
         images = []

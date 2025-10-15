@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaChemistrySpecialtiesClustering(AbsTaskAnyClustering):
+class WikipediaChemistrySpecialtiesClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="WikipediaSpecialtiesInChemistryClustering",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",

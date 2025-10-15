@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StackExchangeClusteringP2PVN(AbsTaskAnyClustering):
+class StackExchangeClusteringP2PVN(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P-VN",
         description="""A translated Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.

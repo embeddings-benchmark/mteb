@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StackExchangeClusteringVN(AbsTaskAnyClustering):
+class StackExchangeClusteringVN(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="StackExchangeClustering-VN",
         description="""A translated dataset from Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.

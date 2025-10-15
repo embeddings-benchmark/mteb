@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ArxivClusteringS2S(AbsTaskAnyClustering):
+class ArxivClusteringS2S(AbsTaskClusteringLegacy):
     superseded_by = "ArXivHierarchicalClusteringS2S"
     metadata = TaskMetadata(
         name="ArxivClusteringS2S",

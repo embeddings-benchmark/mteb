@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class CyrillicTurkicLangClassification(AbsTaskAnyClassification):
+class CyrillicTurkicLangClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CyrillicTurkicLangClassification",
         description="Cyrillic dataset of 8 Turkic languages spoken in Russia and former USSR",

@@ -76,7 +76,7 @@ class SearchProtocol(Protocol):
 
 
 @runtime_checkable
-class Encoder(Protocol):
+class EncoderProtocol(Protocol):
     """The interface for an encoder in MTEB.
 
     Besides the required functions specified below, the encoder can additionally specify the following signatures seen below.
@@ -224,5 +224,5 @@ class CrossEncoderProtocol(Protocol):
         ...
 
 
-MTEBModels = Encoder | CrossEncoderProtocol | SearchProtocol
+MTEBModels = EncoderProtocol | CrossEncoderProtocol | SearchProtocol
 """Type alias for all MTEB model types as many models implement multiple protocols and many tasks can be solved by multiple model types."""

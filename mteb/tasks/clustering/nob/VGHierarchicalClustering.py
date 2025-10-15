@@ -1,4 +1,4 @@
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
@@ -9,7 +9,7 @@ def split_labels(record: dict) -> dict:
     return record
 
 
-class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
+class VGHierarchicalClusteringP2P(AbsTaskClustering):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -56,7 +56,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
         )["test"]
 
 
-class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
+class VGHierarchicalClusteringS2S(AbsTaskClustering):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 

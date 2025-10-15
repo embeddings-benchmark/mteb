@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
 
 from .repllama_models import RepLLaMAModel, model_prompts
@@ -41,10 +41,12 @@ class PromptrieverModel(RepLLaMAModel, AbsEncoder):
         )
 
 
-def _loader(wrapper: type[PromptrieverModel], **kwargs) -> Callable[..., Encoder]:
+def _loader(
+    wrapper: type[PromptrieverModel], **kwargs
+) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
-    def loader_inner(**kwargs: Any) -> Encoder:
+    def loader_inner(**kwargs: Any) -> EncoderProtocol:
         return wrapper(**_kwargs, **kwargs)
 
     return loader_inner

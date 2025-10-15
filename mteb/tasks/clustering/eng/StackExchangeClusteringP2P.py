@@ -3,15 +3,15 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
+class StackExchangeClusteringP2PFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P.v2",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",
@@ -75,7 +75,7 @@ Iryna Gurevych},
         self.dataset = DatasetDict(ds)
 
 
-class StackExchangeClusteringP2P(AbsTaskAnyClustering):
+class StackExchangeClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "StackExchangeClusteringP2P.v2"
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P",

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpanishNewsClusteringP2P(AbsTaskAnyClustering):
+class SpanishNewsClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="SpanishNewsClusteringP2P",
         description="Clustering of news articles, 7 topics in total.",

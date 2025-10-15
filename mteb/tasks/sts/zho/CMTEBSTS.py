@@ -1,8 +1,8 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ATEC(AbsTaskAnySTS):
+class ATEC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="ATEC",
         dataset={
@@ -26,7 +26,6 @@ class ATEC(AbsTaskAnySTS):
         sample_creation=None,
         bibtex_citation=r"""
 @inproceedings{raghu-etal-2021-end,
-  abstract = {We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.},
   address = {Online and Punta Cana, Dominican Republic},
   author = {Raghu, Dinesh  and
 Agarwal, Shantanu  and
@@ -52,7 +51,7 @@ Yih, Scott Wen-tau},
     max_score = 1
 
 
-class BQ(AbsTaskAnySTS):
+class BQ(AbsTaskSTS):
     metadata = TaskMetadata(
         name="BQ",
         dataset={
@@ -91,7 +90,7 @@ class BQ(AbsTaskAnySTS):
     max_score = 1
 
 
-class LCQMC(AbsTaskAnySTS):
+class LCQMC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="LCQMC",
         dataset={
@@ -130,7 +129,7 @@ class LCQMC(AbsTaskAnySTS):
     max_score = 1
 
 
-class PAWSX(AbsTaskAnySTS):
+class PAWSX(AbsTaskSTS):
     metadata = TaskMetadata(
         name="PAWSX",
         dataset={
@@ -169,7 +168,7 @@ class PAWSX(AbsTaskAnySTS):
     max_score = 1
 
 
-class STSB(AbsTaskAnySTS):
+class STSB(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSB",
         dataset={
@@ -208,7 +207,7 @@ class STSB(AbsTaskAnySTS):
     max_score = 5
 
 
-class AFQMC(AbsTaskAnySTS):
+class AFQMC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="AFQMC",
         dataset={
@@ -232,7 +231,6 @@ class AFQMC(AbsTaskAnySTS):
         sample_creation=None,
         bibtex_citation=r"""
 @inproceedings{raghu-etal-2021-end,
-  abstract = {We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.},
   address = {Online and Punta Cana, Dominican Republic},
   author = {Raghu, Dinesh  and
 Agarwal, Shantanu  and
@@ -258,7 +256,7 @@ Yih, Scott Wen-tau},
     max_score = 1
 
 
-class QBQTC(AbsTaskAnySTS):
+class QBQTC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="QBQTC",
         dataset={

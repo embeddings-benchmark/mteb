@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class ImageNetDog15Clustering(AbsTaskAnyClustering):
+class ImageNetDog15Clustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="ImageNetDog15Clustering",
         description="Clustering images from a 15-class dogs-only subset of the dog classes in ImageNet.",
@@ -42,7 +42,7 @@ class ImageNetDog15Clustering(AbsTaskAnyClustering):
     label_column_name = "label"
 
 
-class ImageNet10Clustering(AbsTaskAnyClustering):
+class ImageNet10Clustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="ImageNet10Clustering",
         description="Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.",

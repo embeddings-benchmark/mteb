@@ -16,7 +16,7 @@ from sklearn.metrics import (
 )
 
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator, SklearnModelProtocol
-from mteb.models import Encoder, MTEBModels
+from mteb.models import EncoderProtocol, MTEBModels
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
@@ -92,18 +92,21 @@ class FullClassificationMetrics(ClassificationMetrics):
     scores_per_experiment: list[ClassificationMetrics]
 
 
-class AbsTaskAnyClassification(AbsTask):
+class AbsTaskClassification(AbsTask):
     """Abstract class for classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
-    must contain the following columns:
-        input_column_name: input (str | image)
-        label_column_name: int
 
     Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
+        dataset: Hugging Face dataset containing the data for the task. Should have train split (split name can be changed by train_split. Must contain the following columns:
+            text: str (for text) or PIL.Image (for image). Column name can be changed via `input_column_name` attribute.
+            label: int. Column name can be changed via `label_column_name` attribute.
+        evaluator_model: The model to use for evaluation. Can be any sklearn compatible model. Default is `LogisticRegression`.
+            Full details of api in [`SklearnModelProtocol`][mteb._evaluators.sklearn_evaluator.SklearnModelProtocol].
+        samples_per_label: Number of samples per label to use for training the evaluator model. Default is 8.
+        n_experiments: Number of experiments to run. Default is 10.
+        train_split: Name of the split to use for training the evaluator model. Default is "train".
+        label_column_name: Name of the column containing the labels. Default is "label".
+        input_column_name: Name of the column containing the input data. Default is "text".
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     evaluator: type[SklearnEvaluator] = SklearnEvaluator
@@ -129,7 +132,7 @@ class AbsTaskAnyClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
-        if not isinstance(model, Encoder):
+        if not isinstance(model, EncoderProtocol):
             raise TypeError(
                 f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "
                 "Please use a Encoder model instead."
@@ -174,7 +177,7 @@ class AbsTaskAnyClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],
@@ -347,9 +350,7 @@ class AbsTaskAnyClassification(AbsTask):
 
         return ClassificationDescriptiveStatistics(
             num_samples=len(inputs),
-            number_texts_intersect_with_train=num_texts_in_train
-            if num_texts_in_train
-            else None,
+            number_texts_intersect_with_train=num_texts_in_train,
             text_statistics=text_statistics,
             image_statistics=image_statistics,
             label_statistics=label_statistics,

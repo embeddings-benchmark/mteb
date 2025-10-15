@@ -12,7 +12,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_text_statistics,
 )
 from mteb.abstasks.abstask import AbsTask
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types.statistics import (
     ScoreStatistics,
     SplitDescriptiveStatistics,
@@ -47,11 +47,19 @@ class SummarizationDescriptiveStatistics(SplitDescriptiveStatistics):
 class AbsTaskSummarization(AbsTask):
     """Abstract class for summarization experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        text: str
-        human_summaries: list[str]
-        machine_summaries: list[str]
-        relevance: list[list[float]] (the score of the machine generated summaries)
+    Attributes:
+        dataset: HuggingFace dataset containing the data for the task. Should have columns:
+            - text: The original text to be summarized.
+            - human_summaries: A list of human-written summaries for the text.
+            - machine_summaries: A list of machine-generated summaries for the text.
+            - relevance: A list of relevance scores (integers) corresponding to each machine summary, indicating how relevant each summary is to the original text.
+        min_score: Minimum possible relevance score (inclusive).
+        max_score: Maximum possible relevance score (inclusive).
+        human_summaries_column_name: Name of the column containing human summaries.
+        machine_summaries_column_name: Name of the column containing machine summaries.
+        text_column_name: Name of the column containing the original text.
+        relevancy_column_name: Name of the column containing relevance scores.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     min_score: int
@@ -69,7 +77,7 @@ class AbsTaskSummarization(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         hf_split: str,

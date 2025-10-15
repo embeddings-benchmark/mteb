@@ -12,15 +12,15 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 from typing_extensions import Self
 
+from mteb._set_seed import _set_seed
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models import (
     CrossEncoderProtocol,
-    Encoder,
+    EncoderProtocol,
     MTEBModels,
     SearchProtocol,
 )
-from mteb.set_seed import set_seed
 from mteb.types import HFSubset, Modalities, ScoresDict
 from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
@@ -64,14 +64,14 @@ class AbsTask(ABC):
     Attributes:
         metadata: The metadata describing the task
         dataset: The dataset represented as a dictionary on the form {"hf subset": {"split": Dataset}} where "split" is the dataset split (e.g. "test")
-            and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
+            and Dataset is a datasets.Dataset object. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
             datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
         seed: The random seed used for reproducibility.
         hf_subsets: The list of Huggingface subsets to use.
         data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
-        abstask_prompt: The potential prompt of the abstask
-        superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+        superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
         fast_loading: **Deprecated**. Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
             This was used only for historical reasons and will be removed in the future.
@@ -86,8 +86,8 @@ class AbsTask(ABC):
     hf_subsets: list[HFSubset]
     fast_loading: bool = False
 
-    support_cross_encoder: bool = False
-    support_search: bool = False
+    _support_cross_encoder: bool = False
+    _support_search: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         """The init function. This is called primarily to set the seed.
@@ -97,7 +97,7 @@ class AbsTask(ABC):
             kwargs: arguments passed to subclasses.
         """
         self.seed = seed
-        self.rng_state, self.np_rng = set_seed(seed)
+        self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
 
     def check_if_dataset_is_superseded(self):
@@ -135,7 +135,7 @@ class AbsTask(ABC):
             prediction_folder: Folder to save model predictions
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
-        if isinstance(model, CrossEncoderProtocol) and not self.support_cross_encoder:
+        if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
                 f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
                 "Please use a Encoder model instead."
@@ -144,8 +144,8 @@ class AbsTask(ABC):
         # encoders might implement search protocols
         if (
             isinstance(model, SearchProtocol)
-            and not isinstance(model, Encoder)
-            and not self.support_search
+            and not isinstance(model, EncoderProtocol)
+            and not self._support_search
         ):
             raise TypeError(
                 f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "
@@ -189,7 +189,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],
@@ -344,7 +344,7 @@ class AbsTask(ABC):
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics]:
         """Calculates descriptive statistics from the dataset."""
-        from mteb.abstasks import AbsTaskAnyClassification
+        from mteb.abstasks import AbsTaskClassification
 
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
@@ -356,7 +356,7 @@ class AbsTask(ABC):
         descriptive_stats: dict[str, DescriptiveStatistics] = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskAnyClassification):
+        if isinstance(self, AbsTaskClassification):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")
@@ -430,32 +430,6 @@ class AbsTask(ABC):
             The filtered task
         """
         self._eval_splits = eval_splits
-        return self
-
-    def filter_modalities(
-        self, modalities: list[str] | None, exclusive_modality_filter: bool = False
-    ) -> Self:
-        """Filter the modalities of the task.
-
-        Args:
-            modalities: A list of modalities to filter by. If None, the task is returned unchanged.
-            exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
-                task's modalities and ALL task modalities are in filter modalities (exact match).
-                If False, keep tasks if _any_ of the task's modalities match the filter modalities.
-
-        Returns:
-            The filtered task
-        """
-        if modalities is None:
-            return self
-        filter_modalities_set = set(modalities)
-        task_modalities_set = set(self.modalities)
-        if exclusive_modality_filter:
-            if not (filter_modalities_set == task_modalities_set):
-                self.metadata.modalities = []
-        else:
-            if not filter_modalities_set.intersection(task_modalities_set):
-                self.metadata.modalities = []
         return self
 
     def filter_languages(

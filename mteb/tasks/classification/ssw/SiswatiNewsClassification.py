@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SiswatiNewsClassification(AbsTaskAnyClassification):
+class SiswatiNewsClassification(AbsTaskClassification):
     superseded_by = "SiswatiNewsClassification.v2"
     metadata = TaskMetadata(
         name="SiswatiNewsClassification",
@@ -42,7 +42,7 @@ class SiswatiNewsClassification(AbsTaskAnyClassification):
         self.dataset = self.dataset.rename_columns({"title": "text"})
 
 
-class SiswatiNewsClassificationV2(AbsTaskAnyClassification):
+class SiswatiNewsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SiswatiNewsClassification.v2",
         description="""Siswati News Classification Dataset

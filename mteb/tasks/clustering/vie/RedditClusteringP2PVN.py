@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditClusteringP2PVN(AbsTaskAnyClustering):
+class RedditClusteringP2PVN(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="RedditClusteringP2P-VN",
         description="""A translated dataset from Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.

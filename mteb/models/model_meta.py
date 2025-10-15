@@ -15,7 +15,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 from mteb.languages import check_language_code
 from mteb.types import ISOLanguageScript, Licenses, Modalities, StrDate, StrURL
 
-from .models_protocols import Encoder, MTEBModels
+from .models_protocols import EncoderProtocol, MTEBModels
 
 if TYPE_CHECKING:
     from mteb.abstasks import AbsTask
@@ -47,7 +47,7 @@ class ScoringFunction(str, Enum):
 
 
 def _get_loader_name(
-    loader: Callable[..., Encoder] | None,
+    loader: Callable[..., EncoderProtocol] | None,
 ) -> str | None:
     if loader is None:
         return None
@@ -172,7 +172,7 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, **kwargs: Any) -> Encoder:
+    def load_model(self, **kwargs: Any) -> EncoderProtocol:
         if self.loader is None:
             raise NotImplementedError(
                 "No model implementation is available for this model."
@@ -184,7 +184,9 @@ class ModelMeta(BaseModel):
         _kwargs = self.loader_kwargs.copy()
         _kwargs.update(kwargs)
 
-        model: Encoder = self.loader(self.name, revision=self.revision, **_kwargs)
+        model: EncoderProtocol = self.loader(
+            self.name, revision=self.revision, **_kwargs
+        )
         model.mteb_model_meta = self  # type: ignore
         return model
 
@@ -303,7 +305,7 @@ class ModelMeta(BaseModel):
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     """Recursively collect all similar tasks for a given dataset."""
-    from mteb.overview import _SIMILAR_TASKS
+    from mteb.get_tasks import _SIMILAR_TASKS
 
     if dataset in visited:
         return set()

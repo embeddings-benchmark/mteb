@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 import mteb
-import mteb.overview
+import mteb.get_tasks
 
 logging.basicConfig(level=logging.INFO)
 

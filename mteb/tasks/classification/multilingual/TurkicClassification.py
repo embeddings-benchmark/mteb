@@ -3,11 +3,11 @@ from collections import Counter
 import datasets
 from datasets import DatasetDict
 
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TurkicClassification(AbsTaskAnyClassification):
+class TurkicClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TurkicClassification",
         description="A dataset of news classification in three Turkic languages.",

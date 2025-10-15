@@ -14,6 +14,8 @@ A task is an implementation of a dataset for evaluation. It could, for instance,
 
 :::mteb.get_task
 
+:::mteb.filter_tasks
+
 ## Metadata
 
 Each task also contains extensive metadata. We annotate this using the following object, which allows us to use [pydantic](https://docs.pydantic.dev/latest/) to validate the metadata.
@@ -43,6 +45,41 @@ All tasks in `mteb` inherits from the following abstract class.
 
 
 :::mteb.AbsTask
-<!--
-TODO: we probably need to hide some of the method and potentially add a docstring to the class.
--->
+
+## Multimodal Tasks
+
+Tasks that support any modality (text, image, etc.) inherit from the following abstract class. Retrieval tasks support multimodal input (e.g. image + text queries and image corpus or vice versa).
+
+:::mteb.abstasks.retrieval.AbsTaskRetrieval
+
+:::mteb.abstasks.retrieval_dataset_loaders.RetrievalSplitData
+    options:
+        show_root_toc_entry: false
+
+:::mteb.abstasks.classification.AbsTaskClassification
+
+:::mteb.abstasks.multilabel_classification.AbsTaskMultilabelClassification
+
+:::mteb.abstasks.clustering.AbsTaskClustering
+
+:::mteb.abstasks.sts.AbsTaskSTS
+
+:::mteb.abstasks.zeroshot_classification.AbsTaskZeroShotClassification
+
+:::mteb.abstasks.regression.AbsTaskRegression
+
+:::mteb.abstasks.clustering_legacy.AbsTaskClusteringLegacy
+
+## Text Tasks
+
+:::mteb.abstasks.text.bitext_mining.AbsTaskBitextMining
+
+:::mteb.abstasks.text.pair_classification.AbsTaskPairClassification
+
+:::mteb.abstasks.text.summarization.AbsTaskSummarization
+
+:::mteb.abstasks.text.reranking.AbsTaskReranking
+
+## Image Tasks
+
+:::mteb.abstasks.image.image_text_pair_classification.AbsTaskImageTextPairClassification

@@ -1,10 +1,10 @@
 import torch
 
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types import Array
 
 
-def use_torch_compile():
+def _use_torch_compile():
     gpu_ok = False
     if torch.cuda.is_available():
         device_cap = torch.cuda.get_device_capability()
@@ -14,14 +14,14 @@ def use_torch_compile():
     return gpu_ok
 
 
-def convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
+def _convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a, dtype=dtype)
     return a
 
 
 def compute_pairwise_similarity(
-    model: Encoder, embedding1: Array, embedding2: Array
+    model: EncoderProtocol, embedding1: Array, embedding2: Array
 ) -> Array:
     """Computes pairwise similarity. It first attempts to use the model.simarity_pairwise method if it exists
     otherwise it uses the model.similarity method
@@ -31,7 +31,7 @@ def compute_pairwise_similarity(
     return pairwise_cos_sim(embedding1, embedding2)
 
 
-def normalize_embeddings(embeddings: Array) -> torch.Tensor:
+def _normalize_embeddings(embeddings: Array) -> torch.Tensor:
     """Normalizes the embeddings matrix, so that each sentence embedding has unit length.
 
     Args:
@@ -40,7 +40,7 @@ def normalize_embeddings(embeddings: Array) -> torch.Tensor:
     Returns:
         Tensor: The normalized embeddings matrix.
     """
-    embeddings = convert_to_tensor(embeddings)
+    embeddings = _convert_to_tensor(embeddings)
     return torch.nn.functional.normalize(embeddings, p=2, dim=1)
 
 
@@ -54,8 +54,8 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
     """
     # Move tensor conversion outside the compiled function
     # since compile works better with pure tensor operations
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
 
     # The actual function to compile
     def _cos_sim_core(a_tensor, b_tensor):
@@ -64,14 +64,14 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
         if len(b_tensor.shape) == 1:
             b_tensor = b_tensor.reshape(1, *b_tensor.shape)
 
-        a_norm = normalize_embeddings(a_tensor)
-        b_norm = normalize_embeddings(b_tensor)
+        a_norm = _normalize_embeddings(a_tensor)
+        b_norm = _normalize_embeddings(b_tensor)
         return a_norm @ b_norm.transpose(0, 1)
 
     # Compile the core function once
     should_compile = (
         hasattr(torch, "compile")
-        and use_torch_compile()
+        and _use_torch_compile()
         and (isinstance(a, torch.Tensor) and isinstance(b, torch.Tensor))
     )
     if should_compile:
@@ -92,9 +92,9 @@ def pairwise_cos_sim(a: Array, b: Array) -> Array:
     Returns:
         Tensor: Vector with res[i] = cos_sim(a[i], b[i])
     """
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
-    return pairwise_dot_score(normalize_embeddings(a), normalize_embeddings(b))
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
+    return pairwise_dot_score(_normalize_embeddings(a), _normalize_embeddings(b))
 
 
 def max_sim(a: Array, b: Array) -> torch.Tensor:
@@ -104,8 +104,8 @@ def max_sim(a: Array, b: Array) -> torch.Tensor:
     Return:
         Matrix with res[i][j]  = max_sim(a[i], b[j])
     """  # noqa: D402
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
 
     if len(a.shape) == 2:
         a = a.reshape(1, *a.shape)  # eq. to a.unsqueeze(0)
@@ -139,8 +139,8 @@ def pairwise_max_sim(
     for query_embedding, document_embedding in zip(
         queries_embeddings, documents_embeddings
     ):
-        query_embedding = convert_to_tensor(query_embedding)
-        document_embedding = convert_to_tensor(document_embedding)
+        query_embedding = _convert_to_tensor(query_embedding)
+        document_embedding = _convert_to_tensor(document_embedding)
 
         query_document_score = torch.einsum(
             "sh,th->st",
@@ -158,8 +158,8 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
     # Move tensor conversion outside the compiled function
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
 
     # The actual function to compile
     def _dot_score_core(a_tensor, b_tensor):
@@ -173,7 +173,7 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
     # Compile the core function once
     if (
         hasattr(torch, "compile")
-        and use_torch_compile()
+        and _use_torch_compile()
         and isinstance(a, torch.Tensor)
     ):
         _dot_score_core_compiled = torch.compile(_dot_score_core)
@@ -192,8 +192,8 @@ def pairwise_dot_score(a: Array, b: Array) -> Array:
     Returns:
         Tensor: Vector with res[i] = dot_prod(a[i], b[i])
     """
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
     return (a * b).sum(dim=-1)
 
 
@@ -208,8 +208,8 @@ def euclidean_sim(a: Array, b: Array) -> Array:
     Returns:
         Tensor: Matrix with res[i][j] = -euclidean_distance(a[i], b[j])
     """
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
 
     return -torch.cdist(a, b, p=2.0)
 
@@ -224,15 +224,15 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
     Returns:
         Tensor: Vector with res[i] = -euclidean_distance(a[i], b[i])
     """
-    a = convert_to_tensor(a)
-    b = convert_to_tensor(b)
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
 
     return -torch.sqrt(torch.sum((a - b) ** 2, dim=-1))
 
 
 def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
-    text_embeddings = convert_to_tensor(text_embeddings)
-    input_embeddings = convert_to_tensor(input_embeddings)
+    text_embeddings = _convert_to_tensor(text_embeddings)
+    input_embeddings = _convert_to_tensor(input_embeddings)
 
     text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
     input_embeddings = input_embeddings / input_embeddings.norm(dim=-1, keepdim=True)

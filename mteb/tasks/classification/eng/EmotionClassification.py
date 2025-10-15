@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class EmotionClassification(AbsTaskAnyClassification):
+class EmotionClassification(AbsTaskClassification):
     superseded_by = "EmotionClassification.v2"
     metadata = TaskMetadata(
         name="EmotionClassification",
@@ -30,7 +30,6 @@ class EmotionClassification(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{saravia-etal-2018-carer,
-  abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
   address = {Brussels, Belgium},
   author = {Saravia, Elvis  and
 Liu, Hsien-Chi Toby  and
@@ -57,7 +56,7 @@ Tsujii, Jun{'}ichi},
     samples_per_label = 16
 
 
-class EmotionClassificationV2(AbsTaskAnyClassification):
+class EmotionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="EmotionClassification.v2",
         description="""Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.
@@ -85,7 +84,6 @@ class EmotionClassificationV2(AbsTaskAnyClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{saravia-etal-2018-carer,
-  abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
   address = {Brussels, Belgium},
   author = {Saravia, Elvis  and
 Liu, Hsien-Chi Toby  and

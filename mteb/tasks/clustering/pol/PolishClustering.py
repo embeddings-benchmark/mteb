@@ -3,17 +3,17 @@ from itertools import chain
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
 
 
-class EightTagsClustering(AbsTaskAnyClustering):
+class EightTagsClustering(AbsTaskClusteringLegacy):
     superseded_by = "EightTagsClustering.v2"
     metadata = TaskMetadata(
         name="EightTagsClustering",
@@ -39,7 +39,6 @@ class EightTagsClustering(AbsTaskAnyClustering):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
-  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
   address = {Marseille, France},
   author = {Dadas, Slawomir  and
 Pere{\\l}kiewicz, Micha{\\l}  and
@@ -72,7 +71,7 @@ Piperidis, Stelios},
     )
 
 
-class EightTagsClusteringFast(AbsTaskClusteringFast):
+class EightTagsClusteringFast(AbsTaskClustering):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -100,7 +99,6 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
-  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
   address = {Marseille, France},
   author = {Dadas, Slawomir  and
 Pere{\\l}kiewicz, Micha{\\l}  and
@@ -151,7 +149,7 @@ Piperidis, Stelios},
         )
 
 
-class PlscClusteringS2S(AbsTaskClusteringFast):
+class PlscClusteringS2S(AbsTaskClustering):
     superseded_by = "PlscClusteringS2S.v2"
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
@@ -179,7 +177,7 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
     )
 
 
-class PlscClusteringS2SFast(AbsTaskClusteringFast):
+class PlscClusteringS2SFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringS2S.v2",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
@@ -233,7 +231,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         )
 
 
-class PlscClusteringP2P(AbsTaskClusteringFast):
+class PlscClusteringP2P(AbsTaskClustering):
     superseded_by = "PlscClusteringP2P.v2"
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
@@ -261,7 +259,7 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
     )
 
 
-class PlscClusteringP2PFast(AbsTaskClusteringFast):
+class PlscClusteringP2PFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringP2P.v2",
         description="Clustering of Polish article titles+abstracts from Library of Science "

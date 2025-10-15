@@ -2,7 +2,7 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 N_SAMPLES = 2048
@@ -13,7 +13,7 @@ def split_labels(record: dict) -> dict:
     return record
 
 
-class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
+class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringP2P",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -53,7 +53,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         )["test"]
 
 
-class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
+class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringS2S",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",

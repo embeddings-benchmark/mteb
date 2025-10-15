@@ -3,8 +3,8 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -25,7 +25,7 @@ _LANGUAGES = {
 }
 
 
-class WikiClusteringP2P(AbsTaskAnyClustering):
+class WikiClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
@@ -52,7 +52,7 @@ class WikiClusteringP2P(AbsTaskAnyClustering):
     )
 
 
-class WikiClusteringFastP2P(AbsTaskClusteringFast):
+class WikiClusteringFastP2P(AbsTaskClustering):
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 

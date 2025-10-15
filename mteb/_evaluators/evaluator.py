@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from mteb.abstasks.abstask import set_seed
-from mteb.models import Encoder
+from mteb.abstasks.abstask import _set_seed
+from mteb.models import EncoderProtocol
 
 
 class Evaluator(ABC):
@@ -12,11 +12,11 @@ class Evaluator(ABC):
 
     def __init__(self, seed: int = 42, **kwargs: Any) -> None:
         self.seed = seed
-        self.rng_state, self.np_rng = set_seed(seed)
+        self.rng_state, self.np_rng = _set_seed(seed)
 
     @abstractmethod
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> dict[str, float]:
         """This is called during training to evaluate the model.
         It returns scores.

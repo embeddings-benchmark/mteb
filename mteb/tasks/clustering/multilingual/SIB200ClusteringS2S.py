@@ -1,6 +1,6 @@
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast
+from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGS = {
@@ -204,7 +204,7 @@ _LANGS = {
 }
 
 
-class SIB200ClusteringFast(AbsTaskClusteringFast):
+class SIB200ClusteringFast(AbsTaskClustering):
     max_document_to_embed = 1004
     max_fraction_of_documents_to_embed = None
 

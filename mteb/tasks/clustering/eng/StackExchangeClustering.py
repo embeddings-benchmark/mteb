@@ -2,15 +2,15 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class StackExchangeClusteringFast(AbsTaskClusteringFast):
+class StackExchangeClusteringFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="StackExchangeClustering.v2",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
@@ -72,7 +72,7 @@ Iryna Gurevych},
         self.max_fraction_of_documents_to_embed = None
 
 
-class StackExchangeClustering(AbsTaskAnyClustering):
+class StackExchangeClustering(AbsTaskClusteringLegacy):
     superseded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(
         name="StackExchangeClustering",

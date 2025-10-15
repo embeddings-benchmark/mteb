@@ -8,14 +8,12 @@ from pathlib import Path
 import pytest
 
 import mteb
-import mteb.overview
-from tests.mock_models import MockNumpyEncoder
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_run_using_benchmark(model: mteb.Encoder, tmp_path: Path):
+@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+def test_run_using_benchmark(model: mteb.EncoderProtocol, tmp_path: Path):
     """Test that a benchmark object can be run using the MTEB class."""
     bench = mteb.Benchmark(
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
@@ -27,8 +25,8 @@ def test_run_using_benchmark(model: mteb.Encoder, tmp_path: Path):
     )  # we just want to test that it runs
 
 
-@pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_run_using_list_of_benchmark(model: mteb.Encoder, tmp_path: Path):
+@pytest.mark.parametrize("model", [mteb.get_model("baseline/random-encoder-baseline")])
+def test_run_using_list_of_benchmark(model: mteb.EncoderProtocol, tmp_path: Path):
     """Test that a list of benchmark objects can be run using the MTEB class."""
     bench = [
         mteb.Benchmark(

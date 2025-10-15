@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class TweetSentimentExtractionClassification(AbsTaskAnyClassification):
+class TweetSentimentExtractionClassification(AbsTaskClassification):
     superseded_by = "TweetSentimentExtractionClassification.v2"
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification",
@@ -43,7 +43,7 @@ class TweetSentimentExtractionClassification(AbsTaskAnyClassification):
     samples_per_label = 32
 
 
-class TweetSentimentExtractionClassificationV2(AbsTaskAnyClassification):
+class TweetSentimentExtractionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification.v2",
         description="""

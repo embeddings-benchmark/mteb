@@ -3,15 +3,15 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import (
-    AbsTaskClusteringFast,
+from mteb.abstasks.clustering import (
+    AbsTaskClustering,
     check_label_distribution,
 )
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RedditClusteringP2P(AbsTaskAnyClustering):
+class RedditClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "RedditClusteringP2P.v2"
     metadata = TaskMetadata(
         name="RedditClusteringP2P",
@@ -53,7 +53,7 @@ Iryna Gurevych},
     )
 
 
-class RedditFastClusteringP2P(AbsTaskClusteringFast):
+class RedditFastClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="RedditClusteringP2P.v2",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",

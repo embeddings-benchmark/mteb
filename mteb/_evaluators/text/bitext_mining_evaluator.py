@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader_from_texts
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class BitextMiningEvaluator(Evaluator):
         self.task_metadata = task_metadata
 
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any]
+        self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
@@ -68,7 +68,7 @@ class BitextMiningEvaluator(Evaluator):
         self,
         query_embeddings: np.ndarray,
         corpus_embeddings: np.ndarray,
-        model: Encoder,
+        model: EncoderProtocol,
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
     ) -> list[dict[str, float]]:

@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class Banking77Classification(AbsTaskAnyClassification):
+class Banking77Classification(AbsTaskClassification):
     superseded_by = "Banking77Classification.v2"
     metadata = TaskMetadata(
         name="Banking77Classification",
@@ -58,7 +58,7 @@ Shah, Rushin},
     )
 
 
-class Banking77ClassificationV2(AbsTaskAnyClassification):
+class Banking77ClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Banking77Classification.v2",
         description="""Dataset composed of online banking queries annotated with their corresponding intents.

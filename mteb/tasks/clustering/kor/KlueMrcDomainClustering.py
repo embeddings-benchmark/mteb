@@ -1,10 +1,10 @@
 import datasets
 
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class KlueMrcDomainClustering(AbsTaskAnyClustering):
+class KlueMrcDomainClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="KlueMrcDomainClustering",
         description="this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education",

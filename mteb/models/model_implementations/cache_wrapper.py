@@ -14,7 +14,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.create_dataloaders import create_dataloader
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.models.models_protocols import Encoder
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -221,7 +221,7 @@ class CachedEmbeddingWrapper(AbsEncoder):
         >>> mteb.evaluate(cached_model, task)
     """
 
-    def __init__(self, model: Encoder, cache_path: str | Path):
+    def __init__(self, model: EncoderProtocol, cache_path: str | Path):
         """Args:
         model: Model to be wrapped.
         cache_path: Path to the directory where cached embeddings are stored.

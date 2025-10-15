@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SDSEyeProtectionClassification(AbsTaskAnyClassification):
+class SDSEyeProtectionClassification(AbsTaskClassification):
     superseded_by = "SDSEyeProtectionClassification.v2"
     metadata = TaskMetadata(
         name="SDSEyeProtectionClassification",
@@ -44,7 +44,7 @@ class SDSEyeProtectionClassification(AbsTaskAnyClassification):
     )
 
 
-class SDSEyeProtectionClassificationV2(AbsTaskAnyClassification):
+class SDSEyeProtectionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SDSEyeProtectionClassification.v2",
         description="""ChemTEB evaluates the performance of text embedding models on chemical domain data.

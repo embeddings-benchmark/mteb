@@ -1,4 +1,4 @@
-from mteb.abstasks.any_sts import AbsTaskAnySTS
+from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LANGUAGES = {
@@ -23,7 +23,7 @@ _LANGUAGES = {
 }
 
 
-class STS22CrosslingualSTSv2(AbsTaskAnySTS):
+class STS22CrosslingualSTSv2(AbsTaskSTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="STS22.v2",
@@ -83,7 +83,7 @@ Ratan, Shyam},
     max_score = 4
 
 
-class STS22CrosslingualSTS(AbsTaskAnySTS):
+class STS22CrosslingualSTS(AbsTaskSTS):
     superseded_by = "STS22.v2"
     fast_loading = True
     metadata = TaskMetadata(

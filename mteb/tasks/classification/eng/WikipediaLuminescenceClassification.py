@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikipediaLuminescenceClassification(AbsTaskAnyClassification):
+class WikipediaLuminescenceClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaLuminescenceClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",

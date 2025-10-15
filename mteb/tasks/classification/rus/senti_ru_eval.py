@@ -1,8 +1,8 @@
-from mteb.abstasks.any_classification import AbsTaskAnyClassification
+from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SentiRuEval2016Classification(AbsTaskAnyClassification):
+class SentiRuEval2016Classification(AbsTaskClassification):
     superseded_by = "SentiRuEval2016.v2"
     metadata = TaskMetadata(
         name="SentiRuEval2016",
@@ -39,7 +39,7 @@ class SentiRuEval2016Classification(AbsTaskAnyClassification):
     )
 
 
-class SentiRuEval2016ClassificationV2(AbsTaskAnyClassification):
+class SentiRuEval2016ClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SentiRuEval2016.v2",
         dataset={

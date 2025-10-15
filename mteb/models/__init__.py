@@ -1,5 +1,10 @@
 from .model_meta import ModelMeta
-from .models_protocols import CrossEncoderProtocol, Encoder, MTEBModels, SearchProtocol
+from .models_protocols import (
+    CrossEncoderProtocol,
+    EncoderProtocol,
+    MTEBModels,
+    SearchProtocol,
+)
 from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
@@ -10,7 +15,7 @@ from .sentence_transformer_wrapper import (
 __all__ = [
     "CrossEncoderProtocol",
     "CrossEncoderWrapper",
-    "Encoder",
+    "EncoderProtocol",
     "MTEBModels",
     "ModelMeta",
     "SearchCrossEncoderWrapper",

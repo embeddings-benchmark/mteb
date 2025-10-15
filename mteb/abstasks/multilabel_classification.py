@@ -15,9 +15,9 @@ from typing_extensions import override
 
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
 from mteb.create_dataloaders import create_dataloader
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 
-from .any_classification import AbsTaskAnyClassification
+from .classification import AbsTaskClassification
 
 logger = logging.getLogger(__name__)
 
@@ -57,17 +57,16 @@ class FullMultilabelClassificationMetrics(MultilabelClassificationMetrics):
     scores_per_experiment: list[MultilabelClassificationMetrics]
 
 
-class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
+class AbsTaskMultilabelClassification(AbsTaskClassification):
     """Abstract class for multioutput classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        text: str
-        label: list[list[int]]
 
     Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
+        dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by input_column_name and label_column_name.
+            Input column must contain the text or image to be classified, and label column must contain a list of labels for each example.
+        input_column_name: Name of the column containing the input text.
+        label_column_name: Name of the column containing the labels.
+        samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+        evaluator: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
     """
 
     evaluator: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
@@ -77,7 +76,7 @@ class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     @override
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: DatasetDict,
         *,
         encode_kwargs: dict[str, Any],

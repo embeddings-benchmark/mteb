@@ -1,11 +1,11 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
-from mteb.abstasks.clustering_fast import AbsTaskClusteringFast, convert_to_fast
+from mteb.abstasks.clustering import AbsTaskClustering, convert_to_fast
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 NUM_SAMPLES = 2048
 
 
-class BlurbsClusteringP2P(AbsTaskAnyClustering):
+class BlurbsClusteringP2P(AbsTaskClusteringLegacy):
     superseded_by = "BlurbsClusteringP2P.v2"
 
     metadata = TaskMetadata(
@@ -41,8 +41,8 @@ class BlurbsClusteringP2P(AbsTaskAnyClustering):
     )
 
 
-class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
-    # a faster version of BlurbsClusteringP2P, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
+class BlurbsClusteringP2PFast(AbsTaskClustering):
+    # a faster version of BlurbsClusteringP2P, since it does not sample from the same distribution we can't use the AbsTaskClustering, instead we
     # simply downsample each cluster.
     max_document_to_embed = NUM_SAMPLES
     max_fraction_of_documents_to_embed = None

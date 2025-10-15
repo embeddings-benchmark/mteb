@@ -96,11 +96,12 @@ See [how to add a new task](https://github.com/embeddings-benchmark/mteb/blob/ma
 
 ```python
 import mteb
-from mteb.abstasks.text.reranking import AbsTaskReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class MyCustomTask(AbsTaskReranking):
-    ...
+class MyCustomTask(AbsTaskRetrieval):
+    metadata = TaskMetadata(...)
 
 model = mteb.get_model(...)
 results = mteb.evaluate(model, tasks=[MyCustomTask()])

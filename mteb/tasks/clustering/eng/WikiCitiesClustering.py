@@ -1,8 +1,8 @@
-from mteb.abstasks.any_clustering import AbsTaskAnyClustering
+from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class WikiCitiesClustering(AbsTaskAnyClustering):
+class WikiCitiesClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="WikiCitiesClustering",
         description="Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.",

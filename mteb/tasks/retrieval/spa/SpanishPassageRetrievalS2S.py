@@ -26,7 +26,6 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         sample_creation=None,
         bibtex_citation=r"""
 @inproceedings{10.1007/978-3-030-15719-7_19,
-  abstract = {This paper describes a new test collection for passage retrieval from health-related Web resources in Spanish. The test collection contains 10,037 health-related documents in Spanish, 37 topics representing complex information needs formulated in a total of 167 natural language questions, and manual relevance assessments of text passages, pooled from multiple systems. This test collection is the first to combine search in a language beyond English, passage retrieval, and health-related resources and topics targeting the general public.},
   address = {Cham},
   author = {Kamateri, Eleni
 and Tsikrika, Theodora

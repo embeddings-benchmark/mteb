@@ -8,7 +8,7 @@ from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.models import Encoder
+from mteb.models import EncoderProtocol
 from mteb.types import ScoresDict
 from mteb.types.statistics import (
     ImageStatistics,
@@ -61,12 +61,16 @@ class ClusteringMetrics(TypedDict, total=False):
     cluster_accuracy: float
 
 
-class AbsTaskAnyClustering(AbsTask):
-    """Abstract class for Clustering tasks for any modality.
-    The similarity is computed between pairs and the results are ranked.
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
-        input_column_name: list of inputs (str | image).
-        label_column_name: list of str or class labels.
+class AbsTaskClusteringLegacy(AbsTask):
+    """Legacy abstract task for clustering. For new tasks, we recommend using AbsTaskClustering because it is faster, more sample-efficient, and produces more robust statistical estimates.
+
+    Attributes:
+        dataset: A HuggingFace Dataset containing the data for the clustering task. It must contain the following columns:
+            sentences: List of inputs to be clustered. Can be text, images, etc. Name can be changed via `input_column_name`.
+            labels: List of integer labels representing the true cluster assignments. Name can be changed via `label_column_name`.
+        input_column_name: The name of the column in the dataset that contains the input sentences or data points.
+        label_column_name: The name of the column in the dataset that contains the true cluster labels.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     abstask_prompt = "Identify categories in user passages."
@@ -76,7 +80,7 @@ class AbsTaskAnyClustering(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder,
+        model: EncoderProtocol,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any],

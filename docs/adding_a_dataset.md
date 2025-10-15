@@ -18,12 +18,11 @@ If you have any questions regarding this process feel free to open a discussion 
 To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).
 
 ```python
-from mteb import MTEB
-from mteb.abstasks.text.reranking import AbsTaskReranking
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from sentence_transformers import SentenceTransformer
 from mteb.abstasks.task_metadata import TaskMetadata
 
-class SciDocsReranking(AbsTaskReranking):
+class SciDocsReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
@@ -65,17 +64,16 @@ class SciDocsReranking(AbsTaskReranking):
     url = "https://aclanthology.org/2020.acl-main.207",
     doi = "10.18653/v1/2020.acl-main.207",
     pages = "2270--2282",
-    abstract = "Representation learning is a critical ingredient for natural language processing systems. Recent Transformer language models like BERT learn powerful textual representations, but these models are targeted towards token- and sentence-level training objectives and do not leverage information on inter-document relatedness, which limits their document-level representation power. For applications on scientific documents, such as classification and recommendation, accurate embeddings of documents are a necessity. We propose SPECTER, a new method to generate document-level embedding of scientific papers based on pretraining a Transformer language model on a powerful signal of document-level relatedness: the citation graph. Unlike existing pretrained language models, Specter can be easily applied to downstream applications without task-specific fine-tuning. Additionally, to encourage further research on document-level models, we introduce SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. We show that Specter outperforms a variety of competitive baselines on the benchmark.",
 }
 """,
 )
 
 # testing the task with a model:
-model = SentenceTransformer("average_word_embeddings_komninos")
+model = mteb.get_model("intfloat/multilingual-e5-small")
 results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
+> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/classification/multilingual/MTOPIntentClassification.py).
 
 
 
@@ -83,7 +81,7 @@ results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
 
 ```python
-class VGClustering(AbsTaskAnyClustering):
+class VGClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="VGClustering",
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",

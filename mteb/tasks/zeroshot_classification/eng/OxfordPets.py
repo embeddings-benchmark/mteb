@@ -1,10 +1,10 @@
-from mteb.abstasks.any_zeroshot_classification import (
-    AbsTaskAnyZeroShotClassification,
-)
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class OxfordPetsZeroShotClassification(AbsTaskAnyZeroShotClassification):
+class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="OxfordPetsZeroShot",
         description="Classifying animal images.",
