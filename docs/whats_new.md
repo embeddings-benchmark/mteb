@@ -6,6 +6,7 @@ This section goes through new features added in v2. Below we give an overview of
 - [Easier evaluation using `mteb.evaluate`](#easier-evaluation)
 - [Easier caching and results loading using the `ResultCache`](#better-local-and-online-caching)
 - [Support for multimodal evaluation](#multimodal-input-format)
+- [Better support for CrossEncoders](#better-support-for-crossencoders)
 - [Unified Retrieval, Reranking and instruction variants](#unified-retrieval-reranking-and-instruction-variants)
 - [Search Interface](#search-interface)
 - [New documentation](#new-documentation)
@@ -19,6 +20,7 @@ This section goes through new features added in v2. Below we give an overview of
   - [Replacing `mteb.load_results()`](#replacing-mtebload_results)
   - [Converting model to new format](#converting-model-to-new-format)
   - [Reuploading datasets](#reuploading-datasets)
+  - [Converting Reranking datasets to new format](#converting-reranking-datasets-to-new-format)
 
 What are the reasons for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there are multiple important areas to expand in, e.g. [adding new benchmark for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accessible.
 We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.
@@ -56,35 +58,21 @@ results = mteb.evaluate(model, tasks, cache=cache)
 
 ### Multimodal Input format
 
-Models in mteb who implements the [`Encoder`][mteb.models.Encoder] protocol now supports multimodal input With the model protocol roughly looking like so:
+Models in mteb who implements the [`Encoder`][mteb.models.EncoderProtocol] protocol now supports multimodal input With the model protocol roughly looking like so:
 
 ```py
-class Encoder(Protocol): # simplified
+class EncoderProtocol(Protocol): # simplified
     """The interface for an encoder in MTEB."""
 
     def encode(self, inputs: DataLoader[BatchedInput], ...) -> Array: ...
 ```
-
-Also, we've introduced a new [`CrossEncoderProtocol`][mteb.models.CrossEncoderProtocol] for cross-encoders and now all cross-encoders have better support for future evaluation:
-
-```python
-
-class CrossEncoderProtocol(Protocol):
-    def predict(
-        self,
-        inputs1: DataLoader[BatchedInput],
-        inputs2: DataLoader[BatchedInput],
-        ...
-    ) -> Array:
-```
-
 Not only does this allow more efficient loading using the torch dataloader, but it also allows keys for multiple modalities:
 
 ```py
 batch_input: BatchedInput = {
-    text: list[str],
-    images: list[images],
-    audio: list[list[audio]], # upcoming
+    "text": list[str],
+    "images": list[PIL.Image],
+    "audio": list[list[audio]], # upcoming
     # + optional fields such as document title
 }
 ```
@@ -98,6 +86,21 @@ Where `text` is a batch of texts and `list[images]` is a batch for that texts. T
 
 However, this also allows no text, multi-image inputs (e.g. for PDFs). Overall this greatly expands the possible tasks that can now be evaluated in MTEB.
 To see how to convert a legacy model see the [converting model](#converting-model-to-new-format) section.
+
+### Better support for CrossEncoders
+
+Also, we've introduced a new [`CrossEncoderProtocol`][mteb.models.CrossEncoderProtocol] for cross-encoders and now all cross-encoders have better support for evaluation:
+
+```python
+
+class CrossEncoderProtocol(Protocol):
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        ...
+    ) -> Array:
+```
 
 ### Unified Retrieval, Reranking and instruction variants
 
@@ -359,4 +362,20 @@ import mteb
 
 task = mteb.get_task("MyOldTask")
 task.push_dataset_to_hub("my-username/my-new-task")
+```
+
+### Converting Reranking datasets to new format
+
+If you have a reranking dataset, you can convert it to the retrieval format. To do this you need to add your task name to the `mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS`
+and after this it would be converted to the new format automatically. To reupload them in new reranking format you refer to the [reuploading datasets](#reuploading-datasets) section.
+
+```py
+import mteb
+from mteb.abstasks.text.reranking import OLD_FORMAT_RERANKING_TASKS
+
+OLD_FORMAT_RERANKING_TASKS.append("MyOldRerankingTask")
+
+task = mteb.get_task("MyOldRerankingTask")
+model = ...
+mteb.evaluate(model, task)
 ```
