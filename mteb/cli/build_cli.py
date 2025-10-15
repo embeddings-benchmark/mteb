@@ -8,8 +8,8 @@ from rich.logging import RichHandler
 
 import mteb
 from mteb.cache import ResultCache
+from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
-from mteb.results.generate_model_card import generate_model_card
 
 from ._display_tasks import _display_benchmarks, _display_tasks
 
