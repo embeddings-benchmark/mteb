@@ -225,9 +225,7 @@ select = [
     "PTH",     # use pathlib
     "TID",     # tidy-imports
     "D",       # pydocstyle
-    "DOC",     # pydoclint
 ]
-preview = true
 
 ignore = [
     "E501",   # line too long
