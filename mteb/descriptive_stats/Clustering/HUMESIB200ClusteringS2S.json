@@ -1,7 +1,6 @@
 {
     "test": {
         "num_samples": 150,
-        "number_of_characters": 0,
         "text_statistics": {
             "total_text_length": 19344,
             "min_text_length": 55,
@@ -57,7 +56,6 @@
         "hf_subset_descriptive_stats": {
             "eng_Latn": {
                 "num_samples": 30,
-                "number_of_characters": 0,
                 "text_statistics": {
                     "total_text_length": 3658,
                     "min_text_length": 59,
@@ -95,7 +93,6 @@
             },
             "arb_Arab": {
                 "num_samples": 30,
-                "number_of_characters": 0,
                 "text_statistics": {
                     "total_text_length": 3692,
                     "min_text_length": 55,
@@ -133,7 +130,6 @@
             },
             "dan_Latn": {
                 "num_samples": 30,
-                "number_of_characters": 0,
                 "text_statistics": {
                     "total_text_length": 3854,
                     "min_text_length": 58,
@@ -171,7 +167,6 @@
             },
             "fra_Latn": {
                 "num_samples": 30,
-                "number_of_characters": 0,
                 "text_statistics": {
                     "total_text_length": 4093,
                     "min_text_length": 83,
@@ -209,7 +204,6 @@
             },
             "rus_Cyrl": {
                 "num_samples": 30,
-                "number_of_characters": 0,
                 "text_statistics": {
                     "total_text_length": 4047,
                     "min_text_length": 57,

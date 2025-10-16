@@ -3,13 +3,19 @@
         "num_samples": 228,
         "number_of_characters": 37441,
         "unique_pairs": 228,
-        "min_sentence1_length": 13,
-        "average_sentence1_length": 82.19736842105263,
-        "max_sentence1_length": 272,
-        "unique_sentence1": 227,
-        "min_sentence2_length": 10,
-        "average_sentence2_length": 82.01754385964912,
-        "max_sentence2_length": 269,
-        "unique_sentence2": 226
+        "sentence1_statistics": {
+            "total_text_length": 18741,
+            "min_text_length": 13,
+            "average_text_length": 82.19736842105263,
+            "max_text_length": 272,
+            "unique_texts": 227
+        },
+        "sentence2_statistics": {
+            "total_text_length": 18700,
+            "min_text_length": 10,
+            "average_text_length": 82.01754385964912,
+            "max_text_length": 269,
+            "unique_texts": 226
+        }
     }
 }
