@@ -212,7 +212,6 @@ select = [
 ignore = [
     "E501",   # line too long
     "E741",     # ambiguous variable name
-    "F403",     # undefined import
     "D100",     # Missing docstring in public module
     "D101",     # Missing docstring in public class
     "D102",     # Missing docstring in public method
@@ -228,7 +227,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["PTH", "N"]
 "tests/*" = ["RUF012"]
-"mteb/tasks/*" = ["N999"]
+"mteb/tasks/*" = ["N999"]  # no camelcase in module name
+"mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/MTEB.py" = ["N999"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
