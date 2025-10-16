@@ -22,7 +22,7 @@ The second step will be to rerank the top-k candidates using a cross-encoder mod
 
 ```python
 task = task.convert_to_reranking(task.predictions_path(prediction_folder), top_k=100)
-model = mteb.get_model("jinaai/jina-reranker-v2-base-multilingual")
+model = mteb.get_model("jinaai/jina-reranker-v2-base-multilingual")  # cross-encoder model
 results = mteb.evaluate(
     model,
     task,
