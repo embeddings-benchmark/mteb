@@ -18,6 +18,10 @@ task_result = models_results.task_results
 type(models_results) # mteb.results.TaskResult
 ```
 
+## Results cache
+
+:::mteb.cache.ResultCache
+
 ## Result Objects
 
 :::mteb.results.TaskResult

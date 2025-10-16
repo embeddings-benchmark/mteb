@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 160,
-        "number_texts_intersect_with_train": null,
+        "number_texts_intersect_with_train": 0,
         "text_statistics": {
             "total_text_length": 169701,
             "min_text_length": 14,
@@ -27,7 +27,7 @@
         "hf_subset_descriptive_stats": {
             "eng": {
                 "num_samples": 40,
-                "number_texts_intersect_with_train": null,
+                "number_texts_intersect_with_train": 0,
                 "text_statistics": {
                     "total_text_length": 4334,
                     "min_text_length": 33,
@@ -53,7 +53,7 @@
             },
             "ara": {
                 "num_samples": 40,
-                "number_texts_intersect_with_train": null,
+                "number_texts_intersect_with_train": 0,
                 "text_statistics": {
                     "total_text_length": 2869,
                     "min_text_length": 16,
@@ -79,7 +79,7 @@
             },
             "nor": {
                 "num_samples": 40,
-                "number_texts_intersect_with_train": null,
+                "number_texts_intersect_with_train": 0,
                 "text_statistics": {
                     "total_text_length": 3658,
                     "min_text_length": 14,
@@ -105,7 +105,7 @@
             },
             "rus": {
                 "num_samples": 40,
-                "number_texts_intersect_with_train": null,
+                "number_texts_intersect_with_train": 0,
                 "text_statistics": {
                     "total_text_length": 158840,
                     "min_text_length": 143,

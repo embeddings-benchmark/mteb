@@ -105,7 +105,7 @@
         "hf_subset_descriptive_stats": {
             "grnti_ru": {
                 "num_samples": 2764,
-                "number_texts_intersect_with_train": null,
+                "number_texts_intersect_with_train": 0,
                 "text_statistics": {
                     "total_text_length": 2397897,
                     "min_text_length": 102,
