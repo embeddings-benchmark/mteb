@@ -201,13 +201,13 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "--co2-tracker",
         dest="co2_tracker",
         action="store_true",
-        help="Enable CO2 tracker. If no argument is passed, the CO2 tracker will be run if installed.",
+        help="Enable CO₂ tracker. If no argument is passed, the CO₂ tracker will be run if installed.",
     )
     group.add_argument(
         "--no-co2-tracker",
         dest="co2_tracker",
         action="store_false",
-        help="Disable CO2 tracker. If no argument is passed, the CO2 tracker will be run if installed.",
+        help="Disable CO₂ tracker. If no argument is passed, the CO₂ tracker will be run if installed.",
     )
     parser.set_defaults(co2_tracker=None)
 
