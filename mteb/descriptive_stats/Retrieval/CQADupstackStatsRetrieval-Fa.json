@@ -1,31 +1,30 @@
 {
     "test": {
         "num_samples": 42921,
-        "number_of_characters": 37808958,
-        "num_documents": 42269,
-        "min_document_length": 0,
-        "average_document_length": 893.7330904445338,
-        "max_document_length": 7532,
-        "unique_documents": 42269,
-        "num_queries": 652,
-        "min_query_length": 11,
-        "average_query_length": 48.70245398773006,
-        "max_query_length": 133,
-        "unique_queries": 652,
-        "none_queries": 0,
-        "num_relevant_docs": 913,
-        "min_relevant_docs_per_query": 1,
-        "average_relevant_docs_per_query": 1.4003067484662577,
-        "max_relevant_docs_per_query": 18,
-        "unique_relevant_docs": 913,
-        "num_instructions": null,
-        "min_instruction_length": null,
-        "average_instruction_length": null,
-        "max_instruction_length": null,
-        "unique_instructions": null,
-        "num_top_ranked": null,
-        "min_top_ranked_per_query": null,
-        "average_top_ranked_per_query": null,
-        "max_top_ranked_per_query": null
+        "number_of_characters": 37807965,
+        "documents_text_statistics": {
+            "total_text_length": 37776211,
+            "min_text_length": 0,
+            "average_text_length": 893.7095980505808,
+            "max_text_length": 7532,
+            "unique_texts": 42114
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 31754,
+            "min_text_length": 11,
+            "average_text_length": 48.70245398773006,
+            "max_text_length": 133,
+            "unique_texts": 652
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 913,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.4003067484662577,
+            "max_relevant_docs_per_query": 18,
+            "unique_relevant_docs": 913
+        },
+        "top_ranked_statistics": null
     }
 }
