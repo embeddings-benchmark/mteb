@@ -1,7 +1,6 @@
 {
     "test": {
         "num_samples": 117581,
-        "number_of_characters": 0,
         "text_statistics": {
             "total_text_length": 9256898,
             "min_text_length": 9,

@@ -1,31 +1,30 @@
 {
     "test": {
         "num_samples": 25978,
-        "number_of_characters": 10097941,
-        "num_documents": 16072,
-        "min_document_length": 35,
-        "average_document_length": 609.031981085117,
-        "max_document_length": 1699,
-        "unique_documents": 16072,
-        "num_queries": 9906,
-        "min_query_length": 24,
-        "average_query_length": 31.25166565717747,
-        "max_query_length": 40,
-        "unique_queries": 9906,
-        "none_queries": 0,
-        "num_relevant_docs": 9906,
-        "min_relevant_docs_per_query": 1,
-        "average_relevant_docs_per_query": 1.0,
-        "max_relevant_docs_per_query": 1,
-        "unique_relevant_docs": 9906,
-        "num_instructions": 9906,
-        "min_instruction_length": 146,
-        "average_instruction_length": 3063330,
-        "max_instruction_length": 616,
-        "unique_instructions": 9906,
-        "num_top_ranked": null,
-        "min_top_ranked_per_query": null,
-        "average_top_ranked_per_query": null,
-        "max_top_ranked_per_query": null
+        "number_of_characters": 13171177,
+        "documents_text_statistics": {
+            "total_text_length": 9788362,
+            "min_text_length": 35,
+            "average_text_length": 609.031981085117,
+            "max_text_length": 1699,
+            "unique_texts": 16072
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 3382815,
+            "min_text_length": 172,
+            "average_text_length": 341.49152029073286,
+            "max_text_length": 648,
+            "unique_texts": 9906
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 9906,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 9906
+        },
+        "top_ranked_statistics": null
     }
 }
