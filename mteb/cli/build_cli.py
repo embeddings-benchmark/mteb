@@ -66,8 +66,6 @@ def run(args: argparse.Namespace) -> None:
     if args.batch_size is not None:
         encode_kwargs["batch_size"] = args.batch_size
 
-    enable_co2_tracker = not args.disable_co2_tracker
-
     overwrite_strategy = args.overwrite_strategy
     if args.overwrite:
         logger.warning(
@@ -86,7 +84,7 @@ def run(args: argparse.Namespace) -> None:
         model,
         tasks,
         cache=ResultCache(args.output_folder),
-        co2_tracker=enable_co2_tracker,
+        co2_tracker=args.co2_tracker,
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
@@ -186,7 +184,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     _add_benchmark_selection_args(parser)
 
     parser.add_argument(
-        "--device", type=int, default=None, help="Device to use for computation"
+        "--device", type=int, default=None, help="Device to use for computation."
     )
     parser.add_argument(
         "--output-folder",
@@ -198,19 +196,28 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.add_argument(
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
-    parser.add_argument(
-        "--disable-co2-tracker",
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "--co2-tracker",
+        dest="co2_tracker",
         action="store_true",
-        default=False,
-        help="Disable CO₂ tracker, enabled by default",
+        help="Enable CO2 tracker. If no argument is passed, the CO2 tracker will be run if installed.",
     )
+    group.add_argument(
+        "--no-co2-tracker",
+        dest="co2_tracker",
+        action="store_false",
+        help="Disable CO2 tracker. If no argument is passed, the CO2 tracker will be run if installed.",
+    )
+    parser.set_defaults(co2_tracker=None)
+
     parser.add_argument(
         "--eval-splits",
         "--eval_splits",  # for backward compatibility
         nargs="+",
         type=str,
         default=None,
-        help="Evaluation splits to use (train, dev, test..). If None, all splits will be used",
+        help="Evaluation splits to use (train, dev, test..). If None, all splits will be used.",
     )
     parser.add_argument(
         "--model-revision",
@@ -224,7 +231,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "--batch_size",  # for backward compatibility
         type=int,
         default=None,
-        help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs = {'batch_size': value})`.",
+        help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs={'batch_size': value})`.",
     )
     # for backward compatibility
     parser.add_argument(

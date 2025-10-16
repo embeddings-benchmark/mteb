@@ -63,7 +63,7 @@ def test_run_task(
         languages=None,
         batch_size=None,
         verbosity=3,
-        disable_co2_tracker=None,
+        co2_tracker=None,
         overwrite_strategy="always",
         eval_splits=None,
         prediction_folder=None,
