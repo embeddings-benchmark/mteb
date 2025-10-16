@@ -11,7 +11,6 @@ from mteb.benchmarks._create_table import (
     _create_summary_table_mean_subset,
     _create_summary_table_mean_task_type,
 )
-from mteb.load_results import load_results
 from mteb.results import BenchmarkResults
 from mteb.types import StrURL
 
@@ -60,19 +59,6 @@ class Benchmark:
 
     def __getitem__(self, index: int) -> "AbsTask":
         return self.tasks[index]
-
-    def load_results(
-        self, base_results: BenchmarkResults | None = None
-    ) -> BenchmarkResults:
-        if not hasattr(self, "results_cache"):
-            self.results_cache = {}
-        if base_results in self.results_cache:
-            return self.results_cache[base_results]
-        if base_results is None:
-            base_results = load_results()
-        results = base_results.select_tasks(self.tasks)
-        self.results_cache[base_results] = results
-        return results
 
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
