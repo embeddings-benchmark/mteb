@@ -77,8 +77,6 @@ def calculate_label_statistics(labels: list[int | list[int]]) -> LabelStatistics
     Returns:
         LabelStatistics: A dictionary containing the descriptive statistics.
 
-    Raises:
-        ValueError: If the input is not a list of integers or a list of lists of integers.
     """
     if not isinstance(labels[0], list):
         label_len = [1] * len(labels)

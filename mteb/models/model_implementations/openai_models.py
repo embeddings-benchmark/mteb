@@ -31,11 +31,8 @@ class OpenAIModel(AbsEncoder):
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
-        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the docuement is empty we return a
-        zero vector.
 
-        Raises:
-            ValueError: If the model does not have a default embed_dim and no embed_dim is provided.
+        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the docuement is empty we return a zero vector.
         """
         requires_package(
             self,

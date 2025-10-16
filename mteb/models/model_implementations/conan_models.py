@@ -63,9 +63,6 @@ class RateLimiter:
 
         Returns:
             The result of the function execution
-
-        Raises:
-            Exception: When max retries are reached and still failing
         """
         retries = 0
         while retries < self.max_retries:

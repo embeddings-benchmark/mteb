@@ -12,9 +12,6 @@ def check_language_code(code: str) -> None:
 
     Args:
         code: The language code to check.
-
-    Raises:
-        ValueError: If the language code is not valid.
     """
     lang, script = code.split("-")
     if script == "Code":

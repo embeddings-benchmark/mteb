@@ -134,10 +134,6 @@ def get_model_meta(
 
     Returns:
         A model metadata object
-
-    Raises:
-        KeyError: If the model is not found in the registry or on HuggingFace Hub
-        ValueError: If the specified revision does not match the model's revision
     """
     if model_name in MODEL_REGISTRY:
         model_meta = MODEL_REGISTRY[model_name]

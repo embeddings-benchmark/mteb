@@ -77,9 +77,6 @@ def get_benchmark(
 
     Returns:
         The Benchmark instance corresponding to the given name.
-
-    Raises:
-        KeyError: If the benchmark name is not found. Suggests the closest matching benchmark name if available.
     """
     previous_benchmark_names = _get_previous_benchmark_names()
     benchmark_registry = _build_registry()

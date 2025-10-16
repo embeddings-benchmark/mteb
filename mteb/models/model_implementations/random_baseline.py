@@ -81,9 +81,6 @@ def _batch_to_embeddings(
 
     Returns:
         A 2D numpy array of shape (num_samples, embedding_dim) containing the embeddings
-
-    Raises:
-        KeyError: If neither 'text' nor 'image' keys are present in the input batch.
     """
     embeddings = []
     for batch in inputs:
