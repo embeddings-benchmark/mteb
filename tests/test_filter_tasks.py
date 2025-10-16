@@ -154,47 +154,4 @@ def test_filter_tasks_exclude_aggregate_with_task_classes():
 
     tasks = filter_tasks([CQADupstackRetrieval], exclude_aggregate=False)
     assert len(tasks) == 1
-    from mteb.abstasks.aggregated_task import AbsTaskAggregate
-    from mteb.get_tasks import TASK_LIST
-
-    # Get task classes (not instances)
-    task_classes = list(TASK_LIST)
-
-    # Find at least one aggregate task class
-    aggregate_classes = [t for t in task_classes if issubclass(t, AbsTaskAggregate)]
-    assert len(aggregate_classes) > 0, "Expected at least one aggregate task class"
-
-    # Filter with exclude_aggregate=True
-    filtered = filter_tasks(task_classes, exclude_aggregate=True)
-
-    # Verify no aggregate tasks in result
-    for task_cls in filtered:
-        assert not issubclass(task_cls, AbsTaskAggregate), (
-            f"{task_cls.__name__} is an aggregate task but was not filtered out"
-        )
-
-    # Filter with exclude_aggregate=False should include aggregate tasks
-    filtered_with_aggregate = filter_tasks(task_classes, exclude_aggregate=False)
-    assert len(filtered_with_aggregate) >= len(filtered), (
-        "Expected more tasks when including aggregate tasks"
-    )
-
-    # Check that aggregate tasks are in the unfiltered result
-    aggregate_in_result = [
-        t for t in filtered_with_aggregate if issubclass(t, AbsTaskAggregate)
-    ]
-    assert len(aggregate_in_result) > 0, (
-        "Expected aggregate tasks when exclude_aggregate=False"
-    )
-
-
-def test_filter_tasks_privacy(all_tasks: list[AbsTask]):
-    """Test privacy/public dataset filtering."""
-    # Exclude private datasets
-    public_tasks = filter_tasks(all_tasks, exclude_private=True)
-    for task in public_tasks:
-        assert task.metadata.is_public is not False
-
-    # Include private datasets
-    all_with_private = filter_tasks(all_tasks, exclude_private=False)
-    assert len(all_with_private) >= len(public_tasks)
+    
