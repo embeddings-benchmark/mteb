@@ -6,8 +6,8 @@ class SICKNLPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="SICKNLPairClassification",
         dataset={
-            "path": "clips/mteb-nl-sick",
-            "revision": "main",
+            "path": "clips/mteb-nl-sick-pcls-pr",
+            "revision": "a13a1892bcb4c077dc416d390389223eea5f20f0",
         },
         description="SICK-NL is a Dutch translation of SICK ",
         reference="https://aclanthology.org/2021.eacl-main.126/",
@@ -34,24 +34,3 @@ class SICKNLPairClassification(AbsTaskPairClassification):
 }
 """,
     )
-
-    def dataset_transform(self) -> None:
-        _dataset = {}
-
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].filter(
-                lambda ex: ex["label"] != "neutral"
-            )
-            self.dataset[split] = self.dataset[split].map(
-                lambda ex: {"labels": 1 if ex["label"] == "entailment" else 0}
-            )
-
-            _dataset[split] = [
-                {
-                    "sentence1": self.dataset[split]["sentence1"],
-                    "sentence2": self.dataset[split]["sentence2"],
-                    "labels": self.dataset[split]["labels"],
-                }
-            ]
-
-        self.dataset = _dataset
