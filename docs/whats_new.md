@@ -35,7 +35,7 @@ results = mteb.evaluate(model, tasks)
 ```
 
 ### Better local and online caching
-The new `mteb.ResultCache` makes managing the cache notably easier:
+The new [`mteb.ResultCache`][mteb.cache.ResultCache] makes managing the cache notably easier:
 ```py
 from mteb.cache import ResultCache
 

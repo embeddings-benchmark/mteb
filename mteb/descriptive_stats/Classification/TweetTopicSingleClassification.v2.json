@@ -1,7 +1,7 @@
 {
     "test_2021": {
         "num_samples": 1692,
-        "number_texts_intersect_with_train": null,
+        "number_texts_intersect_with_train": 0,
         "text_statistics": {
             "total_text_length": 283769,
             "min_text_length": 48,

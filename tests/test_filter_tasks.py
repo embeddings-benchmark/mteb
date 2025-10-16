@@ -4,6 +4,7 @@ from mteb import get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.filter_tasks import filter_tasks
+from mteb.tasks.aggregated_tasks import CQADupstackRetrieval
 from mteb.types import Modalities
 
 
@@ -141,3 +142,15 @@ def test_filter_tasks_exclude_aggregate(
         if exclude_aggregate:
             # Aggregate tasks should be excluded
             assert not task.is_aggregate
+
+
+def test_filter_tasks_exclude_aggregate_with_task_classes():
+    """Test that filter_tasks correctly handles aggregate tasks when passed task classes.
+
+    Regression test for PR #3372
+    """
+    tasks = filter_tasks([CQADupstackRetrieval], exclude_aggregate=True)
+    assert len(tasks) == 0
+
+    tasks = filter_tasks([CQADupstackRetrieval], exclude_aggregate=False)
+    assert len(tasks) == 1
