@@ -7,8 +7,8 @@ class SICKNLSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICK-NL-STS",
         dataset={
-            "path": "clips/mteb-nl-sick",
-            "revision": "29c4b3e9e80f2c6bd1c314d94453a28666122bb4",
+            "path": "clips/mteb-nl-sick-sts-pr",
+            "revision": "7f88f003fc4e37ed8cd9ade84e390d871b032fef",
         },
         description="SICK-NL (read: signal), a dataset targeting Natural Language Inference in Dutch. SICK-NL is "
         "obtained by translating the SICK dataset of (Marelli et al., 2014) from English into Dutch.",
@@ -39,11 +39,3 @@ class SICKNLSTS(AbsTaskSTS):
 
     min_score = 0
     max_score = 5
-
-    def dataset_transform(self) -> None:
-        for split in self.dataset:
-            self.dataset[split] = (
-                self.dataset[split]
-                .remove_columns(["label"])
-                .rename_column("similarity_score", "score")
-            )
