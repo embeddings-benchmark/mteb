@@ -10,7 +10,7 @@ class DutchGovernmentBiasClassification(AbsTaskClassification):
         reference="https://dl.acm.org/doi/pdf/10.1145/3696410.3714526",
         dataset={
             "path": "clips/mteb-nl-dutch-government-bias-detection",
-            "revision": "2ad9520e28999b6b8859beef4b2a712f00e74f42",
+            "revision": "bf5e20ee2d3ce2e24e4de50f5dd8573e0e0e2fec",
         },
         type="Classification",
         category="t2c",

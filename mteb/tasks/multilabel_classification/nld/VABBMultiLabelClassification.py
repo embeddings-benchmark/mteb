@@ -9,8 +9,8 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="VABBMultiLabelClassification",
         dataset={
-            "path": "clips/mteb-nl-vabb",
-            "revision": "dcce58815eb39f5edcd48d8dcffc54f7c9752e29",
+            "path": "clips/mteb-nl-vabb-mlcls-pr",
+            "revision": "584c70f5104671772119f21e9f8a3c912ac07d4a",
         },
         description="This dataset contains the fourteenth edition of the Flemish Academic Bibliography for the Social "
         "Sciences and Humanities (VABB-SHW), a database of academic publications from the social sciences "
@@ -42,12 +42,3 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
 }
 """,
     )
-
-    def dataset_transform(self) -> None:
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].rename_columns(
-                {"org_discipline": "label"}
-            )
-            self.dataset[split] = self.dataset[split].map(
-                lambda ex: {"text": f"{ex['title']}\n{ex['abstract']}"}
-            )

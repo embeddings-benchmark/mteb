@@ -6,8 +6,8 @@ class OpenTenderClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OpenTenderClassification",
         dataset={
-            "path": "clips/mteb-nl-opentender-cls",
-            "revision": "53221b9d10649a531dceccdab8155ab795a59bbb",
+            "path": "clips/mteb-nl-opentender-cls-pr",
+            "revision": "9af5657575a669dc18c7f897a67287ff7d1a0c65",
         },
         description="This dataset contains Belgian and Dutch tender calls from OpenTender in Dutch",
         reference="https://arxiv.org/abs/2509.12340",
@@ -36,9 +36,3 @@ class OpenTenderClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self) -> None:
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].map(
-                lambda ex: {"text": f"{ex['title']}\n{ex['description']}"}
-            )
