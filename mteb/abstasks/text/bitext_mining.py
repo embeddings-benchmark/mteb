@@ -54,6 +54,7 @@ class BitextMiningMetrics(TypedDict):
 
 class AbsTaskBitextMining(AbsTask):
     """Abstract class for BitextMining tasks
+
     The similarity is computed between pairs and the results are ranked.
 
     Attributes:
@@ -76,6 +77,7 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
+        """Added load for "parallel" datasets"""
         if not self.data_loaded:
             self.load_data()
 
@@ -119,7 +121,7 @@ class AbsTaskBitextMining(AbsTask):
 
         return scores
 
-    def get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
+    def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
         if parallel:
             pairs = [langpair.split("-") for langpair in self.hf_subsets]
@@ -137,7 +139,7 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> ScoresDict:
-        pairs = self.get_pairs(parallel)
+        pairs = self._get_pairs(parallel)
 
         evaluator = BitextMiningEvaluator(
             data_split,
@@ -205,7 +207,7 @@ class AbsTaskBitextMining(AbsTask):
     def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> BitextDescriptiveStatistics:
-        pairs_cols = self.get_pairs(self.parallel_subsets)
+        pairs_cols = self._get_pairs(self.parallel_subsets)
         if hf_subset:
             if self.parallel_subsets:
                 sent_1, sent_2 = hf_subset.split("-")
@@ -259,7 +261,7 @@ class AbsTaskBitextMining(AbsTask):
                         dataset[split][sent_1] = self.dataset[split][sent_1]
                         dataset[split][sent_2] = self.dataset[split][sent_2]
                 else:
-                    sent_1, sent_2 = self.get_pairs(self.parallel_subsets)[0]
+                    sent_1, sent_2 = self._get_pairs(self.parallel_subsets)[0]
                     lang_1, lang_2 = config.split("-")
                     for split in self.dataset[config]:
                         dataset[split][lang_1] = self.dataset[config][split][sent_1]
@@ -271,7 +273,7 @@ class AbsTaskBitextMining(AbsTask):
         else:
             sentences = {}
             for split in self.dataset:
-                sent_1, sent_2 = self.get_pairs(self.parallel_subsets)[0]
+                sent_1, sent_2 = self._get_pairs(self.parallel_subsets)[0]
                 sentences[split] = Dataset.from_dict(
                     {
                         "sentence1": self.dataset[split][sent_1],

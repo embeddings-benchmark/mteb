@@ -7,6 +7,7 @@ from mteb.models import EncoderProtocol
 
 class Evaluator(ABC):
     """Base class for all evaluators
+
     Extend this class and implement __call__ for custom evaluators.
     """
 
@@ -19,6 +20,7 @@ class Evaluator(ABC):
         self, model: EncoderProtocol, *, encode_kwargs: dict[str, Any]
     ) -> dict[str, float]:
         """This is called during training to evaluate the model.
+
         It returns scores.
 
         Args:

@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 
 
 class Criterias(HelpfulStrEnum):
+    """Enum for criteria to check when merging TaskResult objects."""
+
     MTEB_VERSION = "mteb_version"
     DATASET_REVISION = "dataset_revision"
 
@@ -168,6 +170,16 @@ class TaskResult(BaseModel):
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
     ) -> Self:
+        """Create a TaskResult from the task and scores.
+
+        Args:
+            task: The task to create the TaskResult from.
+            scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[SplitName, dict[HFSubset, Scores]].
+                Where Scores is a dictionary with the following structure; dict[str, Any]. Where the keys and values are scores. Split is the split of
+                the dataset.
+            evaluation_time: The time taken to evaluate the model.
+            kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
+        """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         flat_scores = defaultdict(list)
@@ -248,6 +260,7 @@ class TaskResult(BaseModel):
 
     @property
     def is_public(self) -> bool:
+        """Check if the task is public."""
         return self.task.metadata.is_public
 
     @property
@@ -300,6 +313,11 @@ class TaskResult(BaseModel):
                 scores[key] = round(value, n)
 
     def to_disk(self, path: Path) -> None:
+        """Save TaskResult to disk.
+
+        Args:
+            path: The path to the file to save.
+        """
         json_obj = self.model_dump()
         self._round_scores(json_obj["scores"], 6)
 
@@ -316,9 +334,6 @@ class TaskResult(BaseModel):
 
         Returns:
             The loaded TaskResult object.
-
-        Raises:
-            ValueError: If the file could not be loaded and load_historic_data is False.
         """
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
@@ -494,9 +509,6 @@ class TaskResult(BaseModel):
 
         Returns:
             The result of the aggregation function on the scores.
-
-        Raises:
-            ValueError: If no splits had scores for the specified languages.
         """
         if splits is None:
             splits = list(self.scores.keys())
@@ -532,9 +544,6 @@ class TaskResult(BaseModel):
 
         Returns:
             The mean main score for the specified splits, languages and subsets.
-
-        Raises:
-            ValueError: If no splits had scores for the specified languages.
         """
         if splits is None:
             splits = self.scores.keys()
@@ -573,12 +582,22 @@ class TaskResult(BaseModel):
 
     @classmethod
     def from_validated(cls, **data) -> Self:
+        """Create a TaskResult from validated data.
+
+        Returns:
+            The created TaskResult object.
+        """
         return cls.model_construct(**data)
 
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
     def only_main_score(self) -> Self:
+        """Return a new TaskResult object with only the main score.
+
+        Returns:
+            A new TaskResult object with only the main score.
+        """
         new_scores = {}
         for split in self.scores:
             new_scores[split] = []
@@ -595,7 +614,9 @@ class TaskResult(BaseModel):
         return new_res
 
     def validate_and_filter_scores(self, task: AbsTask | None = None) -> Self:
-        """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
+        """Validate and filter the scores against the task metadata.
+
+        This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.
 
@@ -666,9 +687,6 @@ class TaskResult(BaseModel):
 
         Returns:
             True if the TaskResult object can be merged with the other object, False otherwise.
-
-        Raises:
-            ValueError: If the objects cannot be merged and raise_error is True.
         """
         criteria = [
             Criterias.from_str(c) if isinstance(c, str) else c for c in criteria

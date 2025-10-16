@@ -50,6 +50,7 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
 
 class AbsTaskPairClassification(AbsTask):
     """Abstract class for PairClassificationTasks
+
     The similarity is computed between pairs and the results are ranked. Average precision
     is computed to measure how well the methods can be used for pairwise pair classification.
 

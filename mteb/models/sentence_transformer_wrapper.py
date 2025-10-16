@@ -27,12 +27,21 @@ SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, **kwargs
 ) -> SentenceTransformerEncoderWrapper:
+    """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
+
+    Args:
+        model_name: The name of the SentenceTransformer model to load.
+        revision: The revision of the model to load.
+        kwargs: Additional arguments to pass to the SentenceTransformer model.
+    """
     return SentenceTransformerEncoderWrapper(
         model=model_name, revision=revision, **kwargs
     )
 
 
 class SentenceTransformerEncoderWrapper(AbsEncoder):
+    """Multimodal wrapper for SentenceTransformer models."""
+
     mteb_model_meta: ModelMeta
 
     def __init__(
@@ -130,9 +139,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
         Returns:
             The encoded sentences.
-
-        Raises:
-            ValueError: If an unknown prompt type is provided when using query/document specific encoding.
         """
         from sentence_transformers import __version__ as st_version
 
@@ -180,6 +186,8 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
+    """Wrapper for multimodal SentenceTransformer models."""
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -250,6 +258,8 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
 
 
 class CrossEncoderWrapper:
+    """Wrapper for CrossEncoder models."""
+
     def __init__(
         self,
         model: CrossEncoder | str,
@@ -278,6 +288,21 @@ class CrossEncoderWrapper:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
+
+        Args:
+            inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
+            inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
+            task_metadata: Metadata of the current task.
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the cross-encoder.
+
+        Returns:
+            The predicted relevance scores for each inputs pair.
+        """
         all_queries_with_instructions = [
             text for batch in inputs1 for text in batch["text"]
         ]

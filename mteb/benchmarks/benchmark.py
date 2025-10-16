@@ -61,7 +61,7 @@ class Benchmark:
     def __getitem__(self, index: int) -> "AbsTask":
         return self.tasks[index]
 
-    def load_results(
+    def _load_results(
         self, base_results: BenchmarkResults | None = None
     ) -> BenchmarkResults:
         if not hasattr(self, "results_cache"):
@@ -96,6 +96,8 @@ class Benchmark:
 
 
 class RtebBenchmark(Benchmark):
+    """Wrapper for RTEB benchmark."""
+
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
@@ -103,6 +105,8 @@ class RtebBenchmark(Benchmark):
 
 
 class HUMEBenchmark(Benchmark):
+    """Wrapper for HUME benchmark."""
+
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
@@ -110,6 +114,8 @@ class HUMEBenchmark(Benchmark):
 
 
 class MIEBBenchmark(Benchmark):
+    """Wrapper for MIEB benchmark."""
+
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:

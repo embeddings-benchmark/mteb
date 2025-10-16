@@ -10,7 +10,7 @@ from datasets import Dataset, DatasetDict
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics.cluster import v_measure_score
 
-from mteb.create_dataloaders import create_dataloader
+from mteb._create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 from mteb.types import HFSubset, ScoresDict
 from mteb.types.statistics import (
@@ -289,15 +289,16 @@ class AbsTaskClustering(AbsTask):
         )
 
 
-def convert_to_fast(
+def _convert_to_fast(
     dataset: DatasetDict,
     input_column_name: str,
     label_column_name: str,
     seed: int,
     max_size: int = 100_000,
 ) -> DatasetDict:
-    """Converts a clustering dataset to a fast version. This concats the cluster into two columns, sentences and labels.
-    It additionally downsamples the dataset to max_size.
+    """Converts a clustering dataset to a fast version.
+
+    This concat the cluster into two columns, sentences and labels. It additionally downsamples the dataset to max_size.
 
     Args:
         dataset: A DatasetDict containing the data for the clustering task. Must contain the following columns
@@ -347,12 +348,17 @@ def convert_to_fast(
     return DatasetDict(ds)
 
 
-def check_label_distribution(
+def _check_label_distribution(
     ds: DatasetDict,
     label_column_name: str = "labels",
 ) -> None:
     """For older clustering dataset versions.
-    ds is a DatasetDict at the split level
+
+    Checks that all clusters are sampled from the same distribution by checking that the set of labels is the same across clusters.
+
+    Args:
+        ds: A DatasetDict containing the data for the clustering task. Must contain the following columns
+        label_column_name: Name of the column containing the true cluster labels.
     """
     n_clusters = len(ds)
     if n_clusters > 50:

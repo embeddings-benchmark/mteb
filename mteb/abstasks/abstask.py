@@ -35,7 +35,6 @@ def _multilabel_subsampling(
     n_samples: int = 2048,
 ) -> DatasetDict:
     """Multilabel subsampling the dataset with stratification by the supplied label.
-    Returns a DatasetDict object.
 
     Args:
         dataset_dict: the DatasetDict object.
@@ -260,6 +259,7 @@ class AbsTask(ABC):
 
     @property
     def prediction_file_name(self) -> str:
+        """The name of the prediction file in format {task_name}_predictions.json"""
         return f"{self.metadata.name}_predictions.json"
 
     @staticmethod
@@ -271,7 +271,6 @@ class AbsTask(ABC):
         n_samples: int = 2048,
     ) -> DatasetDict:
         """Subsamples the dataset with stratification by the supplied label.
-        Returns a datasetDict object.
 
         Args:
             dataset_dict: the DatasetDict object.
@@ -414,6 +413,7 @@ class AbsTask(ABC):
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics]:
+        """Old name of `calculate_descriptive_statistics`, kept for backward compatibility."""
         return self.calculate_descriptive_statistics(
             overwrite_results=overwrite_results
         )
@@ -573,6 +573,7 @@ class AbsTask(ABC):
 
     @property
     def eval_splits(self) -> list[str]:
+        """Returns the evaluation splits of the task."""
         if self._eval_splits:
             return self._eval_splits
         return self.metadata.eval_splits

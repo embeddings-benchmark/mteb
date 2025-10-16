@@ -12,6 +12,14 @@ def _is_package_available(pkg_name: str) -> bool:
 def requires_package(
     obj, package_name: str, model_name: str, install_instruction: str | None = None
 ) -> None:
+    """Check if a package is available and raise an error with installation instructions if it's not.
+
+    Args:
+        obj: The object (class or function) that requires the package.
+        package_name: The name of the package to check.
+        model_name: The name of the model that benefits from the package.
+        install_instruction: The instruction to install the package. If None, defaults to "pip install {package_name}".
+    """
     if not _is_package_available(package_name):
         install_instruction = (
             f"pip install {package_name}"
@@ -28,7 +36,9 @@ def requires_package(
 def suggest_package(
     obj: object, package_name: str, model_name: str, install_instruction: str
 ) -> bool:
-    """Check if a package is available and log a warning with installation instructions if it's not.
+    """Suggestion to install a package.
+
+    Check if a package is available and log a warning with installation instructions if it's not.
     Unlike requires_package, this doesn't raise an error but returns True if the package is available.
 
     Args:
@@ -51,6 +61,7 @@ def suggest_package(
 
 
 def requires_image_dependencies() -> None:
+    """Check if the required dependencies for image tasks are available."""
     if not _is_package_available("torchvision"):
         raise ImportError(
             "You are trying to running the image subset of mteb without having installed the required dependencies (`torchvision`). "

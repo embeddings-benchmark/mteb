@@ -8,7 +8,12 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb.cli.build_cli import available_benchmarks, available_tasks, create_meta, run
+from mteb.cli.build_cli import (
+    _available_benchmarks,
+    _available_tasks,
+    _create_meta,
+    run,
+)
 
 
 def test_available_tasks(capsys):
@@ -18,7 +23,7 @@ def test_available_tasks(capsys):
         languages=None,
         tasks=None,
     )
-    available_tasks(args=args)
+    _available_tasks(args=args)
 
     captured = capsys.readouterr()
     assert "LccSentimentClassification" in captured.out, (
@@ -28,7 +33,7 @@ def test_available_tasks(capsys):
 
 def test_available_benchmarks(capsys):
     args = Namespace(benchmarks=None)
-    available_benchmarks(args=args)
+    _available_benchmarks(args=args)
 
     captured = capsys.readouterr()
     assert "MTEB(eng, v1)" in captured.out, (
@@ -100,7 +105,7 @@ def test_create_meta(tmp_path):
         benchmarks=None,
     )
 
-    create_meta(args)
+    _create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 
@@ -155,7 +160,7 @@ def test_create_meta_from_existing(
         benchmarks=None,
     )
 
-    create_meta(args)
+    _create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 

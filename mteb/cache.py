@@ -23,7 +23,7 @@ class ResultCache:
         >>> from mteb.cache import ResultCache
         >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
-        >>> result = cache.load_results("task_name", "model_name")
+        >>> result = cache._load_results("task_name", "model_name")
     """
 
     cache_path: Path
@@ -51,6 +51,17 @@ class ResultCache:
         model_revision: str | None = None,
         remote: bool = False,
     ) -> Path:
+        """Get the path to the results of a specific task for a specific model and revision.
+
+        Args:
+            task_name: The name of the task.
+            model_name: The name of the model as a valid directory name or a ModelMeta object.
+            model_revision: The revision of the model. Must be specified if model_name is a string.
+            remote: If True, it will return the path to the remote results repository, otherwise it will return the path to the local results repository.
+
+        Returns:
+            The path to the results of the task.
+        """
         results_folder = "results" if not remote else "remote"
 
         if isinstance(model_name, ModelMeta):
@@ -103,9 +114,6 @@ class ResultCache:
 
         Returns:
             The results of the task, or None if not found.
-
-        Raises:
-            FileNotFoundError: If the results are not found and raise_if_not_found is True
         """
         result_path = self.get_task_result_path(
             model_name=model_name,
@@ -140,8 +148,10 @@ class ResultCache:
         model_name: str | ModelMeta,
         model_revision: str | None = None,
     ) -> None:
-        """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json. Where model_name is a
-        path-normalized model name. In addition we also save a model_meta.json in the revision folder to preserve the model metadata.
+        """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
+
+        Where model_name is a path-normalized model name.
+        In addition we also save a model_meta.json in the revision folder to preserve the model metadata.
 
         Args:
             task_result: The results of the task.
@@ -190,9 +200,6 @@ class ResultCache:
 
         Returns:
             The path to the local cache directory.
-
-        Raises:
-            ValueError: If the remote repository does not match the existing one in the cache directory.
         """
         if not self.cache_path.exists() and not self.cache_path.is_dir():
             logger.info(
@@ -254,8 +261,10 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
-        """Get all paths to result JSON files in the cache directory. These paths can then be used to fetch task results, like:
-        ```
+        """Get all paths to result JSON files in the cache directory.
+
+        These paths can then be used to fetch task results, like:
+        ```python
         for path in paths:
             task_result = TaskResult.from_disk(path)
         ```
@@ -452,7 +461,7 @@ class ResultCache:
             >>> cache = ResultCache()
             >>>
             >>> # Load results for specific models and tasks
-            >>> results = cache.load_results(
+            >>> results = cache._load_results(
             ...     models=["sentence-transformers/all-MiniLM-L6-v2"],
             ...     tasks=["STS12"],
             ...     require_model_meta=True,

@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskAggregate(AbsTask):
+    """Abstract class for aggregate tasks."""
+
     metadata: AggregateTaskMetadata
     superseded_by: None | str = None
     hf_subset = "default"  # since there is no subset we use the "default" naming scheme
@@ -71,8 +73,9 @@ class AbsTaskAggregate(AbsTask):
         return scores
 
     def combine_task_results(self, task_results: list[TaskResult]) -> TaskResult:
-        """Combined the task results for using `task_results_to_scores`. Do not redefine this function if you want to implement a custom aggregation.
-        Instead, redefine `task_results_to_scores`.
+        """Combined the task results for using `task_results_to_scores`.
+
+        Do not redefine this function if you want to implement a custom aggregation. Instead, redefine `task_results_to_scores`.
 
         Args:
             task_results: List of TaskResult objects from the individual tasks.
@@ -147,6 +150,7 @@ class AbsTaskAggregate(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
+        """Evaluate the model on the aggregate task. This function is not implemented for aggregate tasks."""
         # TODO: If we refactor the runner to at least have a subfunction mteb.run_task(model, task) we could use that here
         raise NotImplementedError(
             "Aggregate tasks can't be evaluated directly. Instead run it using the MTEB class."
@@ -171,5 +175,6 @@ class AbsTaskAggregate(AbsTask):
         )
 
     @property
-    def is_aggregate(self) -> bool:  # Overrides the is_aggregate method on AbsTask
+    def is_aggregate(self) -> bool:
+        """Overrides the is_aggregate method on AbsTask"""
         return True

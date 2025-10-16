@@ -38,6 +38,8 @@ FRAMEWORKS = Literal[
 
 
 class ScoringFunction(str, Enum):
+    """The scoring function used by the models."""
+
     COSINE = "cosine"
     DOT_PRODUCT = "dot"
     MAX_SIM = "MaxSim"
@@ -124,7 +126,8 @@ class ModelMeta(BaseModel):
     @classmethod
     def _validate_similarity_fn_name(cls, value: str) -> ScoringFunction | None:
         """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'],
+
+        Sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'],
         and pylate uses Literal['MaxSim']
 
         Args:
@@ -132,9 +135,6 @@ class ModelMeta(BaseModel):
 
         Returns:
             The corresponding ScoringFunction enum value.
-
-        Raises:
-            ValueError: If the similarity function name is not recognized.
         """
         if type(value) is ScoringFunction or value is None:
             return value
@@ -148,6 +148,7 @@ class ModelMeta(BaseModel):
         raise ValueError(f"Invalid similarity function name: {value}")
 
     def to_dict(self):
+        """Returns a dictionary representation of the model metadata."""
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
@@ -160,7 +161,7 @@ class ModelMeta(BaseModel):
 
     @field_validator("languages")
     @classmethod
-    def languages_are_valid(
+    def _languages_are_valid(
         cls, languages: list[ISOLanguageScript] | None
     ) -> list[ISOLanguageScript] | None:
         if languages is None:
@@ -172,7 +173,7 @@ class ModelMeta(BaseModel):
 
     @field_validator("name")
     @classmethod
-    def check_name(cls, v: str | None) -> str | None:
+    def _check_name(cls, v: str | None) -> str | None:
         if v is None or v in ("bm25s", "Human"):
             return v
         if "/" not in v:
@@ -181,7 +182,8 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, **kwargs: Any) -> EncoderProtocol:
+    def load_model(self, **kwargs: Any) -> MTEBModels:
+        """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
                 "No model implementation is available for this model."
@@ -200,6 +202,10 @@ class ModelMeta(BaseModel):
         return model
 
     def model_name_as_path(self) -> str:
+        """Returns the model name in a format that can be used as a file path.
+
+        Replaces "/" with "__" and spaces with "_".
+        """
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
@@ -207,8 +213,7 @@ class ModelMeta(BaseModel):
     def is_zero_shot_on(
         self, tasks: Sequence["AbsTask"] | Sequence[str]
     ) -> bool | None:
-        """Indicates whether the given model can be considered
-        zero-shot or not on the given tasks.
+        """Indicates whether the given model can be considered zero-shot or not on the given tasks.
 
         Returns:
              None if no training data is specified on the model.

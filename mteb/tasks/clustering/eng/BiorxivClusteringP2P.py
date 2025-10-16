@@ -1,6 +1,6 @@
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
-    check_label_distribution,
+    _check_label_distribution,
 )
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -35,7 +35,7 @@ class BiorxivClusteringP2PFast(AbsTaskClustering):
 
     def dataset_transform(self):
         for split in self.metadata.eval_splits:
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
 
 class BiorxivClusteringP2P(AbsTaskClusteringLegacy):

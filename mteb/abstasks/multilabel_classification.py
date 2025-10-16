@@ -13,8 +13,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from typing_extensions import override
 
+from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
-from mteb.create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 
 from .classification import AbsTaskClassification

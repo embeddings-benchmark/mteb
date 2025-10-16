@@ -13,6 +13,7 @@ from pathlib import Path
 from time import time
 from typing import TYPE_CHECKING, Any
 
+from mteb.abstasks.task_metadata import TaskCategory, TaskType
 from mteb.models.get_model_meta import (
     _model_meta_from_cross_encoder,
     _model_meta_from_sentence_transformers,
@@ -45,6 +46,8 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
+    """Deprecated. Massive Text Embedding Benchmark (MTEB) evaluation pipeline."""
+
     _tasks: Iterable[str | AbsTask] | None
     tasks: list[AbsTask]
 
@@ -57,7 +60,7 @@ class MTEB:
         tasks: Iterable[AbsTask | Benchmark],
         *,
         err_logs_path: str = "error_logs.txt",
-    ):
+    ) -> None:
         """Create an Evaluation pipeline, based on the provided tasks.
 
         Args:
@@ -76,16 +79,18 @@ class MTEB:
         self.last_evaluated_splits = {}
 
     @property
-    def available_tasks(self):
+    def available_tasks(self) -> list[str]:
+        """List of available task names."""
         return [x.metadata.name for x in self.tasks]
 
     @property
-    def available_task_types(self):
-        # sort the task types
+    def available_task_types(self) -> list[TaskType]:
+        """List of available task types."""
         return sorted({x.metadata.type for x in self.tasks})
 
     @property
-    def available_task_categories(self):
+    def available_task_categories(self) -> set[TaskCategory]:
+        """Set of available task categories."""
         return {x.metadata.category for x in self.tasks}
 
     def _display_tasks(self, task_list: Iterable[AbsTask], name: str | None = None):
@@ -286,9 +291,6 @@ class MTEB:
 
         Returns:
             A list of TaskResult objects, one for each task evaluated.
-
-        Raises:
-            ImportError: If codecarbon is not installed and co2_tracker is set to True.
         """
         # update logging to account for different levels of Verbosity (similar to the command line)
         from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -310,7 +312,7 @@ class MTEB:
             datasets.logging.set_verbosity(logging.DEBUG)
 
         meta = self.create_model_meta(model)
-        output_path = self.create_output_folder(meta, output_folder)
+        output_path = self._create_output_folder(meta, output_folder)
 
         if isinstance(model, SentenceTransformer):
             model = SentenceTransformerEncoderWrapper(model)
@@ -556,6 +558,7 @@ class MTEB:
 
     @staticmethod
     def create_model_meta(model: MTEBModels) -> ModelMeta:
+        """Create a ModelMeta object for the given model."""
         if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None:
             meta = model.mteb_model_meta  # type: ignore
         else:
@@ -568,7 +571,7 @@ class MTEB:
 
         return meta
 
-    def create_output_folder(
+    def _create_output_folder(
         self, model_meta: ModelMeta, output_folder: str | None
     ) -> Path | None:
         """Create output folder for the results.
@@ -597,9 +600,12 @@ class MTEB:
         with save_path.open("w") as f:
             json.dump(model_meta.to_dict(), f, default=str)
 
-    def get_last_evaluated_splits(self):
-        """Returns a dictionary of tasks and their evaluated splits from the most recent run.
-        Tasks with empty lists indicate that results already existed and no splits were evaluated.
+    def _get_last_evaluated_splits(self) -> dict[str, list[str]]:
+        """Last evaluated splits.
+
+        Returns:
+             a dictionary of tasks and their evaluated splits from the most recent run.
+             Tasks with empty lists indicate that results already existed and no splits were evaluated.
         """
         return deepcopy(
             {task: list(splits) for task, splits in self.last_evaluated_splits.items()}

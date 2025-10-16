@@ -73,6 +73,8 @@ _DEFAULT_PROPRIETIES = (
 
 
 class MTEBTasks(tuple[AbsTask]):
+    """A tuple of tasks with additional methods to get an overview of the tasks."""
+
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
@@ -330,9 +332,6 @@ def get_task(
 
     Returns:
         An initialized task object.
-
-    Raises:
-        KeyError: If the task name is not found.
 
     Examples:
         >>> get_task("BornholmBitextMining")

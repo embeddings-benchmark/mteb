@@ -132,11 +132,13 @@ class EncoderProtocol(Protocol):
         embeddings1: Array,
         embeddings2: Array,
     ) -> Array:
-        """Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings
-        from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
+        """Compute the similarity between two collections of embeddings.
+
+        The output will be a matrix with the similarity scores between all embeddings from the first parameter and all
+        embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
         between corresponding pairs of embeddings.
 
-        read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity
+        Read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity
 
         Args:
             embeddings1: [num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
@@ -152,10 +154,9 @@ class EncoderProtocol(Protocol):
         embeddings1: Array,
         embeddings2: Array,
     ) -> Array:
-        """Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of
-        embeddings.
+        """Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of embeddings.
 
-        read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity_pairwise
+        Read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity_pairwise
 
         Args:
             embeddings1: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.

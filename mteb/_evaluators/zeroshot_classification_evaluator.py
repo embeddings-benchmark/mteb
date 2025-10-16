@@ -3,11 +3,11 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import (
+from mteb._create_dataloaders import (
+    _create_dataloader_from_texts,
     create_dataloader,
-    create_dataloader_from_texts,
 )
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import similarity
 from mteb.types import Array
@@ -49,7 +49,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
 
         logger.info("Running zero-shot classification - Encoding labels...")
         text_label_embeddings = model.encode(
-            create_dataloader_from_texts(self.candidate_labels),
+            _create_dataloader_from_texts(self.candidate_labels),
             task_metadata=self.task_metadata,
             hf_subset=self.hf_subset,
             hf_split=self.hf_split,

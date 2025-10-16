@@ -23,8 +23,7 @@ def _convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
 def compute_pairwise_similarity(
     model: EncoderProtocol, embedding1: Array, embedding2: Array
 ) -> Array:
-    """Compute pairwise similarity between two sets of embeddings using the model's
-    built-in similarity function if available, otherwise using cosine similarity.
+    """Compute pairwise similarity between two sets of embeddings using the model's built-in similarity function if available, otherwise using cosine similarity.
 
     Args:
         model: An instance of EncoderProtocol which may have a custom similarity function.
@@ -146,8 +145,7 @@ def pairwise_max_sim(
     queries_embeddings: Array,
     documents_embeddings: Array,
 ) -> torch.Tensor:
-    """Computes the ColBERT score for each query-document pair. The score is computed as the sum of maximum similarities
-    between the query and the document for corresponding pairs.
+    """Computes the ColBERT score for each query-document pair. The score is computed as the sum of maximum similarities between the query and the document for corresponding pairs.
 
     Args:
         queries_embeddings: The first tensor. The queries embeddings. Shape: (batch_size, num tokens queries, embedding_size)
@@ -216,8 +214,8 @@ def pairwise_dot_score(a: Array, b: Array) -> Array:
     """Computes the pairwise dot-product dot_prod(a[i], b[i]).
 
     Args:
-        a (Union[list, np.ndarray, Tensor]): The first tensor.
-        b (Union[list, np.ndarray, Tensor]): The second tensor.
+        a: The first tensor.
+        b: The second tensor.
 
     Returns:
         Tensor: Vector with res[i] = dot_prod(a[i], b[i])
@@ -232,8 +230,8 @@ def euclidean_sim(a: Array, b: Array) -> Array:
     """Computes the euclidean similarity (i.e., negative distance) between two tensors.
 
     Args:
-        a (Union[list, np.ndarray, Tensor]): The first tensor.
-        b (Union[list, np.ndarray, Tensor]): The second tensor.
+        a: The first tensor.
+        b: The second tensor.
 
     Returns:
         Tensor: Matrix with res[i][j] = -euclidean_distance(a[i], b[j])
@@ -248,11 +246,11 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
     """Computes the euclidean distance (i.e., negative distance) between pairs of tensors.
 
     Args:
-        a (Union[list, np.ndarray, Tensor]): The first tensor.
-        b (Union[list, np.ndarray, Tensor]): The second tensor.
+        a: The first tensor.
+        b: The second tensor.
 
     Returns:
-        Tensor: Vector with res[i] = -euclidean_distance(a[i], b[i])
+        Vector with res[i] = -euclidean_distance(a[i], b[i])
     """
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
@@ -261,6 +259,15 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
 
 
 def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
+    """Similarity function used in ImageTextPair classification
+
+    Args:
+        text_embeddings: Embeddings of the text inputs
+        input_embeddings: Embeddings of the image inputs
+
+    Returns:
+        Matrix with similarities
+    """
     text_embeddings = _convert_to_tensor(text_embeddings)
     input_embeddings = _convert_to_tensor(input_embeddings)
 

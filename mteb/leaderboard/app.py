@@ -214,6 +214,7 @@ def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
 
 
 def get_leaderboard_app() -> gr.Blocks:
+    """Returns a Gradio Blocks app for the MTEB leaderboard."""
     logger.info("Loading all benchmark results")
     all_results = _load_results()
 
@@ -221,7 +222,7 @@ def get_leaderboard_app() -> gr.Blocks:
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
     )
     all_benchmark_results = {
-        benchmark.name: benchmark.load_results(
+        benchmark.name: benchmark._load_results(
             base_results=all_results
         ).join_revisions()
         for benchmark in benchmarks

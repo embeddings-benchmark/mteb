@@ -3,7 +3,7 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
-    check_label_distribution,
+    _check_label_distribution,
 )
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -105,7 +105,7 @@ class HamshahriClustring(AbsTaskClustering):
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)

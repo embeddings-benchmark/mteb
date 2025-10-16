@@ -17,6 +17,7 @@ def _text_plot(text: str):
 
 def _failsafe_plot(fun):
     """Decorator that turns the function producing a figure failsafe.
+
     This is necessary, because once a Callback encounters an exception it
     becomes useless in Gradio.
 

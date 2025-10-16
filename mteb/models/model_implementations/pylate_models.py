@@ -8,11 +8,11 @@ from typing import Any
 import torch
 from torch.utils.data import DataLoader
 
-from mteb._requires_package import requires_package
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import (
+from mteb._create_dataloaders import (
     create_dataloader,
 )
+from mteb._requires_package import requires_package
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import (
@@ -208,9 +208,6 @@ class PylateSearchEncoder:
 
         Returns:
             A dictionary mapping query IDs to a list of tuples, each containing a score and a document ID.
-
-        Raises:
-            ValueError: If corpus is not set prior to reranking.
         """
         from pylate import rank
 

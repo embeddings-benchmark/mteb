@@ -28,7 +28,16 @@ logger = logging.getLogger(__name__)
 
 class AbsEncoder(ABC):
     """Base class to indicate that this is a wrapper for a model.
+
     Also contains some utility functions for wrappers for working with prompts and instructions.
+
+    Attributes:
+        model: The model to be wrapped.
+        mteb_model_meta: Metadata about the model.
+        model_prompts: A dictionary of prompts to be used for encoding sentences.
+        instruction_template: A template for formatting instructions. Can be a string with '{instruction}' or
+            a callable that takes the instruction and prompt type and returns a formatted instruction.
+        prompts_dict: A dictionary of prompts to be used for encoding sentences, overrides model_prompts if provided.
     """
 
     model: Any
@@ -43,6 +52,7 @@ class AbsEncoder(ABC):
         prompt_type: PromptType | None,
     ) -> str | None:
         """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
+
         The order of priorities for prompt selection are:
             1. Composed prompt of task name + prompt type (query or passage)
             2. Specific task prompt
@@ -91,6 +101,12 @@ class AbsEncoder(ABC):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None,
     ) -> str | None:
+        """Get the prompt to be used for encoding sentences.
+
+        Args:
+            task_metadata: The metadata of the task.
+            prompt_type: The name type of prompt. (query or passage)
+        """
         if not self.model_prompts:
             return None
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
@@ -138,14 +154,10 @@ class AbsEncoder(ABC):
                 for backward compatibility.
 
         Returns:
-            *   None if `task_to_prompt` is None or empty;
-            *   Only a dictionary of validated prompts if `raise_for_invalid_keys` is `True`; or
-            *   A tuple continaing the filtered dictionary of valid prompts and the set of error messages for the
+            - None if `task_to_prompt` is None or empty;
+            - Only a dictionary of validated prompts if `raise_for_invalid_keys` is `True`; or
+            - A tuple containing the filtered dictionary of valid prompts and the set of error messages for the
                 invalid prompts `raise_for_invalid` is `False`
-
-        Raises:
-            KeyError: If any invlaid keys are encountered and `raise_for_invalid_keys` is `True`, this function will
-            raise a single `KeyError` contianing the
         """
         if not task_to_prompt:
             return None if raise_for_invalid_keys else (None, None)
@@ -230,6 +242,12 @@ class AbsEncoder(ABC):
     def format_instruction(
         self, instruction: str, prompt_type: PromptType | None = None
     ) -> str:
+        """Format the instruction using the instruction template.
+
+        Args:
+            instruction: The instruction to be formatted.
+            prompt_type: The name type of prompt. (query or passage)
+        """
         if self.instruction_template is None:
             raise ValueError(
                 "Attempting to format an instruction without an instruction template."
@@ -247,12 +265,36 @@ class AbsEncoder(ABC):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None,
     ) -> str:
+        """Create the instruction to be used for encoding sentences.
+
+        Args:
+            task_metadata: The metadata of the task
+            prompt_type: The name type of prompt. (query or passage)
+
+        Returns:
+            The instruction to be used for encoding sentences.
+        """
         instruction = self.get_instruction(task_metadata, prompt_type)
         if self.instruction_template and len(instruction) > 0:
             return self.format_instruction(instruction, prompt_type)
         return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between two collections of embeddings.
+
+        The output will be a matrix with the similarity scores between all embeddings from the first parameter and all
+        embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
+        between corresponding pairs of embeddings.
+
+        Read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity
+
+        Args:
+            embeddings1: [num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
+            embeddings2: [num_embeddings_2, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
+
+        Returns:
+            A [num_embeddings_1, num_embeddings_2]-shaped torch tensor with similarity scores.
+        """
         if self.mteb_model_meta is None or (
             self.mteb_model_meta is not None
             and self.mteb_model_meta.similarity_fn_name is None
@@ -280,6 +322,17 @@ class AbsEncoder(ABC):
         embeddings1: Array,
         embeddings2: Array,
     ) -> Array:
+        """Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of embeddings.
+
+        Read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity_pairwise
+
+        Args:
+            embeddings1: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
+            embeddings2: [num_embeddings, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
+
+        Returns:
+            A [num_embeddings]-shaped torch tensor with pairwise similarity scores.
+        """
         if self.mteb_model_meta is None or (
             self.mteb_model_meta is not None
             and self.mteb_model_meta.similarity_fn_name is None

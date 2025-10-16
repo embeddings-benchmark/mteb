@@ -20,6 +20,16 @@ def instruct_wrapper(
     instruction_template: str | Callable[[str], str] | None = None,
     **kwargs,
 ):
+    """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
+
+    It's recommended to use `InstructSentenceTransformerModel` instead of this wrapper for models.
+
+    Args:
+        model_name_or_path: Model name or path.
+        mode: Mode of the model. Either 'query' or 'passage'.
+        instruction_template: Instruction template. Should contain the string '{instruction}'.
+        **kwargs: Additional arguments to pass to the model.
+    """
     requires_package(
         instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
     )
@@ -84,6 +94,8 @@ def instruct_wrapper(
 
 
 class InstructSentenceTransformerModel(AbsEncoder):
+    """Instruction wrapper for Sentence Transformer models."""
+
     def __init__(
         self,
         model_name: str,
@@ -99,7 +111,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
         **kwargs: Any,
     ):
         """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
-        Applied for models like NV-Embed, gte-Qwen, e5-mistral, etc.
+
+        Applied for models like e5-instruct, jasper, etc.
 
         Arguments:
             model_name: Model name of the sentence transformers model.
@@ -111,9 +124,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
             add_eos_token: Whether to add the eos token to each input example.
             prompts_dict: Dictionary of task names to prompt names. If None, the prompts will be read from the model config.
             **kwargs: Kwargs for Sentence Transformer model.
-
-        Raises:
-            ValueError: If the instruction template does not contain the string '{instruction}'.
         """
         from sentence_transformers import SentenceTransformer
 
@@ -156,6 +166,28 @@ class InstructSentenceTransformerModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: Batch of inputs to encode.
+            task_metadata: The metadata of the task. Encoders (e.g. SentenceTransformers) use to
+                select the appropriate prompts, with priority given to more specific task/prompt combinations over general ones.
+
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
+        """
         sentences = [text for batch in inputs for text in batch["text"]]
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 

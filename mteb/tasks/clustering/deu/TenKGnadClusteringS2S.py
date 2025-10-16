@@ -1,4 +1,4 @@
-from mteb.abstasks.clustering import AbsTaskClustering, convert_to_fast
+from mteb.abstasks.clustering import AbsTaskClustering, _convert_to_fast
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -65,5 +65,5 @@ class TenKGnadClusteringS2SFast(AbsTaskClustering):
     )
 
     def dataset_transform(self) -> None:
-        ds = convert_to_fast(self.dataset, self.seed)  # type: ignore
+        ds = _convert_to_fast(self.dataset, self.seed)  # type: ignore
         self.dataset = ds

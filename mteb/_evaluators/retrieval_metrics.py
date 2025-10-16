@@ -184,8 +184,9 @@ def evaluate_p_mrr_change(
     changed_qrels: dict[str, list[str]],
     k_values: list[int],
 ) -> dict[str, float | dict[str, float]]:
-    """Computes the scores needed for FollowIR datasets, including p-MRR (measuring change in instruction) and
-    details about the original instruction run and changed instruction run. Used by IntructionRetrieval/Reranking tasks.
+    """Computes the scores needed for FollowIR datasets.
+
+    Including p-MRR (measuring change in instruction) and details about the original instruction run and changed instruction run. Used by IntructionRetrieval/Reranking tasks.
 
     Args:
         qrels: Ground truth relevance judgments for the queries
@@ -279,11 +280,12 @@ def nauc(
     abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
-    1/ Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
-    2/ Computes the oracle abstention curve, i.e., the best theoretical abstention curve (e.g.: at a 10% abstention rate, the oracle abstains on the bottom-10% instances with regard to the evaluation metric)
-    3/ Computes the flat abstention curve, i.e., the one remains flat for all abstention rates (ineffective abstention)
-    4/ Computes the area under the three curves
-    5/ Finally scales the raw AUC between the oracle and the flat AUCs to get normalized AUC
+
+    1. Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
+    2. Computes the oracle abstention curve, i.e., the best theoretical abstention curve (e.g.: at a 10% abstention rate, the oracle abstains on the bottom-10% instances with regard to the evaluation metric)
+    3. Computes the flat abstention curve, i.e., the one remains flat for all abstention rates (ineffective abstention)
+    4. Computes the area under the three curves
+    5. Finally scales the raw AUC between the oracle and the flat AUCs to get normalized AUC
 
     Args:
         conf_scores: Instance confidence scores used for abstention thresholding, with shape `(num_test_instances,)`
@@ -343,9 +345,11 @@ def paired_accuracy(
     results: dict[str, dict[str, float]],
     scores: dict[str, dict[str, float]],
 ) -> float:
-    """Computes the paired accuracy. This means both queries for an instance have to be correct for it to count.
-        This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
-        For more details, see https://arxiv.org/abs/2305.07614
+    """Computes the paired accuracy.
+
+    This means both queries for an instance have to be correct for it to count.
+    This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
+    For more details, see https://arxiv.org/abs/2305.07614
 
     Args:
         qrels: Ground truth relevance judgments for the queries

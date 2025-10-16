@@ -19,7 +19,7 @@ from mteb.types._encoder_io import CorpusInput, ImageInput, QueryInput, TextInpu
 logger = logging.getLogger(__name__)
 
 
-def create_dataloader_from_texts(
+def _create_dataloader_from_texts(
     text: list[str],
     batch_size: int = 32,
 ) -> DataLoader[TextInput]:
@@ -39,7 +39,7 @@ def create_dataloader_from_texts(
     )
 
 
-def corpus_to_dict(
+def _corpus_to_dict(
     row: dict[str, str],
 ) -> dict[str, str]:
     text = (
@@ -58,7 +58,7 @@ def corpus_to_dict(
     return new_row
 
 
-def create_dataloader_for_retrieval_corpus(
+def _create_dataloader_for_retrieval_corpus(
     dataset: Dataset,
     batch_size: int = 32,
 ) -> DataLoader[CorpusInput]:
@@ -71,14 +71,14 @@ def create_dataloader_for_retrieval_corpus(
     Returns:
         A dataloader with the corpus.
     """
-    new_ds = dataset.map(corpus_to_dict, desc="Converting corpus dict")
+    new_ds = dataset.map(_corpus_to_dict, desc="Converting corpus dict")
     return torch.utils.data.DataLoader(
         new_ds,
         batch_size=batch_size,
     )
 
 
-def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
+def _combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]:
     row["query"] = row["text"]
 
     if "instruction" in row and row["instruction"] is not None:
@@ -88,7 +88,7 @@ def combine_queries_with_instruction_text(row: dict[str, str]) -> dict[str, str]
     return row
 
 
-def create_text_dataloader_for_queries(
+def _create_text_dataloader_for_queries(
     queries: QueryDatasetType,
     batch_size: int = 32,
 ) -> DataLoader[QueryInput]:
@@ -102,7 +102,8 @@ def create_text_dataloader_for_queries(
         A dataloader with the queries.
     """
     queries = queries.map(
-        combine_queries_with_instruction_text, desc="Processing queries for dataloading"
+        _combine_queries_with_instruction_text,
+        desc="Processing queries for dataloading",
     )
     return torch.utils.data.DataLoader(
         queries,
@@ -110,9 +111,17 @@ def create_text_dataloader_for_queries(
     )
 
 
-def convert_conv_history_to_query(
+def _convert_conv_history_to_query(
     row: dict[str, list[str] | Conversation],
 ) -> dict[str, str | Conversation]:
+    """Convert a conversation history to a single query string.
+
+    If row "conversation" is a list of strings, it will be joined with "; " and the role will be set to "user".
+    If row "conversation" is a list of dictionaries, it will be converted to a string with the format "role: content; role: content; ...".
+
+    Returns:
+        The updated row with the "query" and "text" fields set to the conversation string, and the "conversation" field set to the list of ConversationTurn.
+    """
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
@@ -164,7 +173,7 @@ def convert_conv_history_to_query(
     return row
 
 
-def create_dataloader_for_queries_conversation(
+def _create_dataloader_for_queries_conversation(
     queries: QueryDatasetType,
     batch_size: int = 32,
 ) -> DataLoader[QueryInput]:
@@ -179,14 +188,14 @@ def create_dataloader_for_queries_conversation(
     """
     return DataLoader(
         queries.map(
-            convert_conv_history_to_query, desc="Converting conversations to queries"
+            _convert_conv_history_to_query, desc="Converting conversations to queries"
         ),
-        collate_fn=custom_collate_fn,
+        collate_fn=_custom_collate_fn,
         batch_size=batch_size,
     )
 
 
-def transform_image_to_rgb(
+def _transform_image_to_rgb(
     image: Any, transform: Callable[[Any], Any] | None = None
 ) -> Any:
     """Convert image to RGB and apply a transformation (e.g. PILToTensor).
@@ -210,22 +219,25 @@ def transform_image_to_rgb(
     return image
 
 
-def convert_images_to_rgb(
+def _convert_images_to_rgb(
     example: dict[str, Any],
     image_col_name: str = "image",
     transform: Callable[[Any], Any] | None = None,
 ) -> dict[str, Any]:
     if image_col_name not in example:
         return example
-    example[image_col_name] = transform_image_to_rgb(example[image_col_name], transform)
+    example[image_col_name] = _transform_image_to_rgb(
+        example[image_col_name], transform
+    )
     return example
 
 
-def prepare_image_dataset(
+def _prepare_image_dataset(
     dataset: Dataset,
     image_column_name: str | None = None,
     transform: Callable[[Any], Any] | None = None,
 ) -> Dataset:
+    """Prepare the image dataset by converting images to RGB and applying transformations."""
     # If the dataset uses a different column name for images, rename it to "image".
     if (
         image_column_name
@@ -235,14 +247,16 @@ def prepare_image_dataset(
         dataset = dataset.rename_column(image_column_name, "image")
     # Map the conversion function over the dataset.
     return dataset.map(
-        convert_images_to_rgb,
+        _convert_images_to_rgb,
         fn_kwargs={"image_col_name": "image", "transform": transform},
         desc="Converting images to RGB",
     )
 
 
-def custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
-    """- For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
+def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
+    """Custom collate function for DataLoader.
+
+    - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
     - For other keys, use the default collate.
 
     Args:
@@ -261,12 +275,12 @@ def custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
     return collated
 
 
-def create_image_dataloader(
+def _create_image_dataloader(
     dataset: Dataset,
     image_column_name: str | None = None,
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
-    collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
+    collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = _custom_collate_fn,
 ) -> DataLoader[ImageInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
 
@@ -280,7 +294,7 @@ def create_image_dataloader(
     Returns:
         A DataLoader with the image dataset.
     """
-    dataset = prepare_image_dataset(
+    dataset = _prepare_image_dataset(
         dataset, image_column_name, transform
     ).select_columns(["image"])
     return DataLoader(
@@ -291,35 +305,36 @@ def create_image_dataloader(
     )
 
 
-def create_text_queries_dataloader(
+def _create_text_queries_dataloader(
     dataset: Dataset,
     batch_size: int = 32,
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[QueryInput]:
     if not isinstance(dataset["text"][0], list):
-        return create_text_dataloader_for_queries(
+        return _create_text_dataloader_for_queries(
             dataset,
             batch_size=batch_size,
         )
-    return create_dataloader_for_queries_conversation(
+    return _create_dataloader_for_queries_conversation(
         dataset,
         batch_size=batch_size,
     )
 
 
-def create_queries_dataloader(
+def _create_queries_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[QueryInput | ImageInput]:
+    """Create a dataloader for queries."""
     queries_type = task_metadata.get_modalities(PromptType.query)
     if queries_type == ["text"]:  # text only
-        return create_text_queries_dataloader(
+        return _create_text_queries_dataloader(
             dataset,
             batch_size=batch_size,
         )
     if "image" in queries_type:  # contains image
-        return create_image_dataloader(
+        return _create_image_dataloader(
             dataset,
             image_column_name="image",
             batch_size=batch_size,
@@ -327,20 +342,28 @@ def create_queries_dataloader(
     raise ValueError(f"Can't handle queries type {queries_type}")
 
 
-def create_document_dataloader(
+def _create_document_dataloader(
     dataset: Dataset,
     task_metadata: TaskMetadata,
     input_column: str | None = None,
     batch_size: int = 32,
-) -> DataLoader[BatchedInput]:
+) -> DataLoader[CorpusInput | ImageInput]:
+    """Create a dataloader for documents.
+
+    Args:
+        dataset: The dataset containing the documents.
+        task_metadata: Metadata of the task to determine the document type.
+        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        batch_size: Batch size for the dataloader.
+    """
     document_type = task_metadata.get_modalities(PromptType.document)
     if document_type == ["text"]:  # text only
-        return create_dataloader_for_retrieval_corpus(
+        return _create_dataloader_for_retrieval_corpus(
             dataset,
             batch_size=batch_size,
         )
     if "image" in document_type:  # contains image
-        return create_image_dataloader(
+        return _create_image_dataloader(
             dataset,
             image_column_name="image",
             batch_size=batch_size,
@@ -356,15 +379,31 @@ def create_dataloader(
     batch_size: int = 32,
     **kwargs: dict[str, Any],
 ) -> DataLoader[BatchedInput]:
+    """Create a dataloader from a dataset.
+
+    If prompt_type is None, it will create a dataloader based on the modalities of the task.
+    if prompt_type is provided, it will create a dataloader for the specified prompt type.
+
+    Args:
+        dataset: The dataset to create a dataloader from.
+        task_metadata: The metadata of the task.
+        prompt_type: The type of prompt to create a dataloader for. If None, it will be inferred from the task metadata.
+        input_column: The column to use as input. If None, it will use the first column that matches the modality.
+        batch_size: The batch size for the dataloader.
+        **kwargs: Additional arguments to pass to the dataloader creation functions.
+
+    Returns:
+        A dataloader for the dataset.
+    """
     if prompt_type == PromptType.query:
-        return create_queries_dataloader(
+        return _create_queries_dataloader(
             dataset,
             task_metadata,
             batch_size=batch_size,
             input_column=input_column,
         )
     if prompt_type == PromptType.document:
-        return create_document_dataloader(
+        return _create_document_dataloader(
             dataset,
             task_metadata,
             input_column=input_column,
@@ -372,13 +411,13 @@ def create_dataloader(
         )
 
     if "image" in task_metadata.modalities:
-        return create_image_dataloader(
+        return _create_image_dataloader(
             dataset,
             image_column_name=input_column,
             batch_size=batch_size,
         )
     if "text" in task_metadata.modalities and input_column is not None:
-        return create_dataloader_from_texts(
+        return _create_dataloader_from_texts(
             dataset[input_column],
             batch_size=batch_size,
         )

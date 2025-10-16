@@ -5,10 +5,10 @@ from typing import Any
 import torch
 from datasets import Dataset
 
-from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import (
+from mteb._create_dataloaders import (
     create_dataloader,
 )
+from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
     Array,
     CorpusDatasetType,
@@ -24,6 +24,8 @@ logger = logging.getLogger(__name__)
 
 
 class SearchEncoderWrapper:
+    """Wrapper for Encoder models to be used in search tasks."""
+
     corpus_chunk_size = 50_000
     task_corpus: CorpusDatasetType | None
 
@@ -78,9 +80,6 @@ class SearchEncoderWrapper:
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
-
-        Raises:
-            ValueError: If the corpus has not been indexed before searching.
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
@@ -220,9 +219,6 @@ class SearchEncoderWrapper:
 
         Returns:
             A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a
-
-        Raises:
-            ValueError: If NaN values are detected in the similarity scores.
         """
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
@@ -292,6 +288,8 @@ class SearchEncoderWrapper:
 
 
 class SearchCrossEncoderWrapper:
+    """Wrapper for CrossEncoder models to be used in search tasks."""
+
     task_corpus: CorpusDatasetType | None
 
     def __init__(self, model: CrossEncoderProtocol):
@@ -308,6 +306,15 @@ class SearchCrossEncoderWrapper:
         hf_subset: str,
         encode_kwargs: dict[str, Any],
     ) -> None:
+        """Index the corpus for retrieval.
+
+        Args:
+            corpus: Corpus dataset to index.
+            task_metadata: Metadata of the task, used to determine how to index the corpus.
+            hf_split: Split of current task, allows to know some additional information about current split.
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+        """
         self.task_corpus = corpus
 
     def search(
@@ -321,6 +328,21 @@ class SearchCrossEncoderWrapper:
         encode_kwargs: dict[str, Any],
         top_ranked: TopRankedDocumentsType | None = None,
     ) -> RetrievalOutputType:
+        """Search the corpus using the given queries.
+
+        Args:
+            queries: Queries to find
+            task_metadata: Task metadata
+            hf_split: split of the dataset
+            hf_subset: subset of the dataset
+            top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
+                Passed only from Reranking tasks.
+            top_k: Number of top documents to return for each query.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+
+        Returns:
+            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
+        """
         if top_ranked is None:
             raise ValueError(
                 "CrossEncoder search requires top_ranked documents for reranking."

@@ -104,9 +104,6 @@ class BenchmarkResults(BaseModel):
 
         Returns:
             A new BenchmarkResults object with the filtered models.
-
-        Raises:
-            ValueError: If the length of names and revisions is not the same and revisions is not
         """
         models_res = []
         _revisions = revisions if revisions is not None else [None] * len(names)
@@ -305,6 +302,7 @@ class BenchmarkResults(BaseModel):
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
+
         The DataFrame will have the following columns in addition to the metadata columns:
 
         - model_name: The name of the model.
@@ -316,7 +314,7 @@ class BenchmarkResults(BaseModel):
         - split: The split of the task. E.g. "test", "train", "validation".
         - subset: The subset of the task. E.g. "en", "fr-en".
 
-        Afterwards, the DataFrame will be aggregated according to the aggregation method and pivoted to either a wide format.
+        Afterward, the DataFrame will be aggregated according to the aggregation method and pivoted to either a wide format.
 
         Args:
             aggregation_level: The aggregation to use. Can be one of:
@@ -370,10 +368,12 @@ class BenchmarkResults(BaseModel):
         return self.model_results[index]
 
     def to_dict(self) -> dict:
+        """Convert BenchmarkResults to a dictionary."""
         return self.model_dump()
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
+        """Create BenchmarkResults from a dictionary."""
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:

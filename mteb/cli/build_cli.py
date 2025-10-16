@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def run(args: argparse.Namespace) -> None:
+    """Run a model on a set of tasks."""
     # set logging based on verbosity level
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
@@ -79,12 +80,12 @@ def run(args: argparse.Namespace) -> None:
     )
 
 
-def available_benchmarks(args: argparse.Namespace) -> None:
+def _available_benchmarks(args: argparse.Namespace) -> None:
     benchmarks = mteb.get_benchmarks(names=args.benchmarks)
     _display_benchmarks(benchmarks)
 
 
-def available_tasks(args: argparse.Namespace) -> None:
+def _available_tasks(args: argparse.Namespace) -> None:
     tasks = mteb.get_tasks(
         categories=args.categories,
         task_types=args.task_types,
@@ -146,7 +147,7 @@ def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
     )
     _add_task_selection_args(parser)
 
-    parser.set_defaults(func=available_tasks)
+    parser.set_defaults(func=_available_tasks)
 
 
 def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> None:
@@ -155,7 +156,7 @@ def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> 
     )
     _add_benchmark_selection_args(parser)
 
-    parser.set_defaults(func=available_benchmarks)
+    parser.set_defaults(func=_available_benchmarks)
 
 
 def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
@@ -228,7 +229,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.set_defaults(func=run)
 
 
-def create_meta(args: argparse.Namespace) -> None:
+def _create_meta(args: argparse.Namespace) -> None:
     model_name = args.model_name
     tasks_names = args.tasks
     benchmarks = args.benchmarks
@@ -314,7 +315,7 @@ def _add_create_meta_parser(subparsers) -> None:
         default=None,
     )
 
-    parser.set_defaults(func=create_meta)
+    parser.set_defaults(func=_create_meta)
 
 
 def build_cli() -> argparse.ArgumentParser:
