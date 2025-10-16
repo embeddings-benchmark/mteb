@@ -154,4 +154,3 @@ def test_filter_tasks_exclude_aggregate_with_task_classes():
 
     tasks = filter_tasks([CQADupstackRetrieval], exclude_aggregate=False)
     assert len(tasks) == 1
-    
