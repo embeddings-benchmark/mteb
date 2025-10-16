@@ -1,3 +1,3 @@
-from .ter_ra import TERRa
+from .terra import TERRa
 
 __all__ = ["TERRa"]
