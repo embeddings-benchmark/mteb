@@ -1,8 +1,8 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
-class AskUbuntuDupQuestionsVN(AbsTaskReranking):
+class AskUbuntuDupQuestionsVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AskUbuntuDupQuestions-VN",
         description="""A translated dataset from AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar

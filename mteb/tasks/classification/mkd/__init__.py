@@ -1,4 +1,4 @@
-from .MacedonianTweetSentimentClassification import (
+from .macedonian_tweet_sentiment_classification import (
     MacedonianTweetSentimentClassification,
     MacedonianTweetSentimentClassificationV2,
 )

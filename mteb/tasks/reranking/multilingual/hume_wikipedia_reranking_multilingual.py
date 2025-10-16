@@ -1,5 +1,5 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -8,7 +8,7 @@ _LANGUAGES = {
 }
 
 
-class HUMEWikipediaRerankingMultilingual(AbsTaskReranking):
+class HUMEWikipediaRerankingMultilingual(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HUMEWikipediaRerankingMultilingual",
         description="Human evaluation subset of Wikipedia reranking dataset across multiple languages.",

@@ -1,3 +1,3 @@
-from .GeorgianFAQRetrieval import GeorgianFAQRetrieval
+from .georgian_faq_retrieval import GeorgianFAQRetrieval
 
 __all__ = ["GeorgianFAQRetrieval"]

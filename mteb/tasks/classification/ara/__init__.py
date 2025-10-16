@@ -1,21 +1,21 @@
-from .AJGT import AJGT, AJGTV2
-from .HotelReviewSentimentClassification import (
+from .ajgt import AJGT, AJGTV2
+from .hotel_review_sentiment_classification import (
     HotelReviewSentimentClassification,
     HotelReviewSentimentClassificationV2,
 )
-from .OnlineStoreReviewSentimentClassification import (
+from .online_store_review_sentiment_classification import (
     OnlineStoreReviewSentimentClassification,
     OnlineStoreReviewSentimentClassificationV2,
 )
-from .RestaurantReviewSentimentClassification import (
+from .restaurant_review_sentiment_classification import (
     RestaurantReviewSentimentClassification,
     RestaurantReviewSentimentClassificationV2,
 )
-from .TweetEmotionClassification import (
+from .tweet_emotion_classification import (
     TweetEmotionClassification,
     TweetEmotionClassificationV2,
 )
-from .TweetSarcasmClassification import (
+from .tweet_sarcasm_classification import (
     TweetSarcasmClassification,
     TweetSarcasmClassificationV2,
 )

@@ -1,4 +1,4 @@
-from .UkrFormalityClassification import (
+from .ukr_formality_classification import (
     UkrFormalityClassification,
     UkrFormalityClassificationV2,
 )

@@ -1,5 +1,5 @@
-from .NoRecClassification import NoRecClassification, NoRecClassificationV2
-from .NorwegianParliamentClassification import (
+from .no_rec_classification import NoRecClassification, NoRecClassificationV2
+from .norwegian_parliament_classification import (
     NorwegianParliamentClassification,
     NorwegianParliamentClassificationV2,
 )

@@ -1,4 +1,4 @@
-from .KurdishSentimentClassification import (
+from .kurdish_sentiment_classification import (
     KurdishSentimentClassification,
     KurdishSentimentClassificationV2,
 )

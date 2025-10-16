@@ -1,12 +1,12 @@
-from .BengaliDocumentClassification import (
+from .bengali_document_classification import (
     BengaliDocumentClassification,
     BengaliDocumentClassificationV2,
 )
-from .BengaliHateSpeechClassification import (
+from .bengali_hate_speech_classification import (
     BengaliHateSpeechClassification,
     BengaliHateSpeechClassificationV2,
 )
-from .BengaliSentimentAnalysis import (
+from .bengali_sentiment_analysis import (
     BengaliSentimentAnalysis,
     BengaliSentimentAnalysisV2,
 )

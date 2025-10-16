@@ -1,4 +1,4 @@
-from .DutchBookReviewSentimentClassification import (
+from .dutch_book_review_sentiment_classification import (
     DutchBookReviewSentimentClassification,
     DutchBookReviewSentimentClassificationV2,
 )

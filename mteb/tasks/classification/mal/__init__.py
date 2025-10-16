@@ -1,4 +1,4 @@
-from .MalayalamNewsClassification import (
+from .malayalam_news_classification import (
     MalayalamNewsClassification,
     MalayalamNewsClassificationV2,
 )

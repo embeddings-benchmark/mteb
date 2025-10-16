@@ -1,4 +1,4 @@
-from .GujaratiNewsClassification import (
+from .gujarati_news_classification import (
     GujaratiNewsClassification,
     GujaratiNewsClassificationV2,
 )
