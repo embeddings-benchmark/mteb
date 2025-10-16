@@ -68,6 +68,7 @@ def test_run_task(
         eval_splits=None,
         prediction_folder=None,
         benchmarks=None,
+        overwrite=False,
     )
 
     run(args)
