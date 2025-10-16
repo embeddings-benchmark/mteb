@@ -10,8 +10,8 @@ readme = "README.md"
 authors = [
     { name = "MTEB Contributors", email = "niklas@huggingface.co" },
     { name = "Kenneth Enevoldsen", email = "kenneth.enevoldsen@cas.au.dk" },
-    { email = "nouamane@huggingface.co" },
-    { email = "info@nils-reimers.de" },
+    { name = "Nouamane Tazi", email = "nouamane@huggingface.co" },
+    { name = "Nils Reimers", email = "info@nils-reimers.de" },
 ]
 maintainers = [
     { name = "Kenneth Enevoldsen", email = "kenneth.enevoldsen@cas.au.dk" },
@@ -51,7 +51,7 @@ dependencies = [
 Homepage = "https://github.com/embeddings-benchmark/mteb"
 Documentation = "https://embeddings-benchmark.github.io/mteb/"
 Repository = "https://github.com/embeddings-benchmark/mteb"
-"Huggingface Organization" = "https://huggingface.co/mteb"
+"Hugging Face Organization" = "https://huggingface.co/mteb"
 
 [project.scripts]
 mteb = "mteb.cli:main"
