@@ -218,7 +218,7 @@ class SearchEncoderWrapper:
         """Rerank documents based on pre-ranked documents.
 
         Returns:
-            A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a
+            A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a document ID.
         """
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
