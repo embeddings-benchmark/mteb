@@ -2,7 +2,7 @@
 
 The two-stage reranking approach is a powerful technique used in information retrieval and natural language processing to improve the quality of search results or recommendations. It involves two main stages: an initial retrieval stage and a subsequent reranking stage.
 
-First step, will be to retrieve a broad set of candidate items using an encoder and efficient method.
+The first step will be to retrieve a broad set of candidate items using an encoder and efficient method.
 
 ```python
 import mteb
@@ -18,7 +18,7 @@ results = mteb.evaluate(
 )
 ```
 
-Second step, will be to rerank the top-k candidates using a cross-encoder model. You can specify the `top_k` parameter to control how many candidates to rerank.
+The second step will be to rerank the top-k candidates using a cross-encoder model. You can specify the `top_k` parameter to control how many candidates to rerank.
 
 ```python
 task = task.convert_to_reranking(task.predictions_path(prediction_folder), top_k=100)
