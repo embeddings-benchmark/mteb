@@ -23,7 +23,7 @@ class ResultCache:
         >>> from mteb.cache import ResultCache
         >>> cache = ResultCache(cache_path="~/.cache/mteb") # default
         >>> cache.download_from_remote() # download the latest results from the remote repository
-        >>> result = cache._load_results("task_name", "model_name")
+        >>> result = cache.load_results("task_name", "model_name")
     """
 
     cache_path: Path
@@ -461,7 +461,7 @@ class ResultCache:
             >>> cache = ResultCache()
             >>>
             >>> # Load results for specific models and tasks
-            >>> results = cache._load_results(
+            >>> results = cache.load_results(
             ...     models=["sentence-transformers/all-MiniLM-L6-v2"],
             ...     tasks=["STS12"],
             ...     require_model_meta=True,
