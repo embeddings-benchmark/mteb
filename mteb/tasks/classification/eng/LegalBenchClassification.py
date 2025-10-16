@@ -2639,7 +2639,6 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
 
 
 class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "JCrewBlockerLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="JCrewBlockerLegalBenchClassification",
         description="The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of detemining whether the J.Crew Blocker is present in the document.",
@@ -2671,6 +2670,7 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="JCrewBlockerLegalBenchClassification.v2",
     )
 
 
@@ -3416,7 +3416,6 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
 
 
 class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "LegalReasoningCausalityLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="LegalReasoningCausalityLegalBenchClassification",
         description="Given an excerpt from a district court opinion, classify if it relies on statistical evidence in its reasoning.",
@@ -3448,6 +3447,7 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="LegalReasoningCausalityLegalBenchClassification.v2",
     )
 
 
@@ -3597,7 +3597,6 @@ _MAUD_DATASET_MAP = [
 
 
 class MAUDLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "MAUDLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="MAUDLegalBenchClassification",
         description="""This task was constructed from the MAUD dataset, which consists of over 47,000 labels across 152 merger agreements annotated to identify 92 questions in each agreement used by the 2021 American Bar Association (ABA) Public Target Deal Points Study. Each dataset is formatted as a series of multiple-choice questions, where given a segment of the merger agreement and a Deal Point question, the model is to choose the answer that best characterizes the agreement as response.
@@ -3673,6 +3672,7 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="MAUDLegalBenchClassification.v2",
     )
 
 
@@ -3836,7 +3836,6 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
 
 
 class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "OPP115DataSecurityLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OPP115DataSecurityLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describes how user information is protected.",
@@ -3876,6 +3875,7 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
   year = {2016},
 }
 """,
+        superseded_by="OPP115DataSecurityLegalBenchClassification.v2",
     )
 
 
@@ -3925,7 +3925,6 @@ class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskClassification):
 
 
 class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "OPP115DoNotTrackLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OPP115DoNotTrackLegalBenchClassification",
         description="Given a clause from a privacy policy, classify if the clause describes if and how Do Not Track signals for online tracking and advertising are honored.",
@@ -3965,6 +3964,7 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
   year = {2016},
 }
 """,
+        superseded_by="OPP115DoNotTrackLegalBenchClassification.v2",
     )
 
 
@@ -4231,7 +4231,6 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
 
 
 class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "OPP115UserChoiceControlLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OPP115UserChoiceControlLegalBenchClassification",
         description="Given a clause fro ma privacy policy, classify if the clause describes the choices and control options available to users.",
@@ -4271,6 +4270,7 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
   year = {2016},
 }
 """,
+        superseded_by="OPP115UserChoiceControlLegalBenchClassification.v2",
     )
 
 
@@ -4320,7 +4320,6 @@ class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskClassification):
 
 
 class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "OralArgumentQuestionPurposeLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OralArgumentQuestionPurposeLegalBenchClassification",
         description="""This task classifies questions asked by Supreme Court justices at oral argument into seven categories:
@@ -4360,6 +4359,7 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
   year = {2023},
 }
 """,
+        superseded_by="OralArgumentQuestionPurposeLegalBenchClassification.v2",
     )
 
 
@@ -4409,7 +4409,6 @@ class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskClassificatio
 
 
 class OverrulingLegalBenchClassification(AbsTaskClassification):
-    superseded_by = "OverrulingLegalBenchClassification.v2"
     metadata = TaskMetadata(
         name="OverrulingLegalBenchClassification",
         description="""This task consists of classifying whether or not a particular sentence of case law overturns the decision of a previous case.""",
@@ -4449,6 +4448,7 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
   year = {2021},
 }
 """,
+        superseded_by="OverrulingLegalBenchClassification.v2",
     )
 
 

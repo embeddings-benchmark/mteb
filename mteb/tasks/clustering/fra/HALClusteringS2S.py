@@ -14,8 +14,6 @@ NUM_SAMPLES = 2048
 
 
 class HALClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "HALClusteringS2S.v2"
-
     metadata = TaskMetadata(
         name="HALClusteringS2S",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
@@ -47,6 +45,7 @@ class HALClusteringS2S(AbsTaskClusteringLegacy):
   year = {2024},
 }
 """,
+        superseded_by="HALClusteringS2S.v2",
     )
 
     def dataset_transform(self):

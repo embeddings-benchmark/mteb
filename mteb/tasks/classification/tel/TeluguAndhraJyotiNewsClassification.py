@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
-    superseded_by = "TeluguAndhraJyotiNewsClassification.v2"
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification",
         description="A Telugu dataset for 5-class classification of Telugu news articles",
@@ -26,6 +25,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        superseded_by="TeluguAndhraJyotiNewsClassification.v2",
     )
 
     def dataset_transform(self):

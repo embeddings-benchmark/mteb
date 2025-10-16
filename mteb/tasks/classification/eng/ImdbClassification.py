@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ImdbClassification(AbsTaskClassification):
-    superseded_by = "ImdbClassification.v2"
     metadata = TaskMetadata(
         name="ImdbClassification",
         description="Large Movie Review Dataset",

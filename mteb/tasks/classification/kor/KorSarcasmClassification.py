@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorSarcasmClassification(AbsTaskClassification):
-    superseded_by = "KorSarcasmClassification.v2"
     metadata = TaskMetadata(
         name="KorSarcasmClassification",
         description="""
@@ -43,6 +42,7 @@ class KorSarcasmClassification(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="KorSarcasmClassification.v2",
     )
 
 

@@ -11,7 +11,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TwentyNewsgroupsClustering(AbsTaskClusteringLegacy):
-    superseded_by = "TwentyNewsgroupsClustering.v2"
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
@@ -49,6 +48,7 @@ class TwentyNewsgroupsClustering(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the topic or theme of the given news articles",
+        superseded_by="TwentyNewsgroupsClustering.v2",
     )
 
 

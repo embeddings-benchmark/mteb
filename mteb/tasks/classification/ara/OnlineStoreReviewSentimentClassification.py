@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
-    superseded_by = "OnlineStoreReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification",
         dataset={
@@ -26,6 +25,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-Arab-SA"],
         sample_creation="found",
         bibtex_citation="",
+        superseded_by="OnlineStoreReviewSentimentClassification.v2",
     )
 
     def dataset_transform(self):

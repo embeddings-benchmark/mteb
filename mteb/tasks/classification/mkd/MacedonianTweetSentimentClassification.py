@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MacedonianTweetSentimentClassification(AbsTaskClassification):
-    superseded_by = "MacedonianTweetSentimentClassification.v2"
     metadata = TaskMetadata(
         name="MacedonianTweetSentimentClassification",
         description="An Macedonian dataset for tweet sentiment classification.",
@@ -43,6 +42,7 @@ Bontcheva, Kalina},
   year = {2015},
 }
 """,
+        superseded_by="MacedonianTweetSentimentClassification.v2",
     )
 
 

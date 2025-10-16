@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class HindiDiscourseClassification(AbsTaskClassification):
-    superseded_by = "HindiDiscourseClassification.v2"
     metadata = TaskMetadata(
         name="HindiDiscourseClassification",
         dataset={
@@ -49,6 +48,7 @@ Stent, Amanda},
   year = {2020},
 }
 """,
+        superseded_by="HindiDiscourseClassification.v2",
     )
 
 

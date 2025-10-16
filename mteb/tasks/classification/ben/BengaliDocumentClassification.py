@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BengaliDocumentClassification(AbsTaskClassification):
-    superseded_by = "BengaliDocumentClassification.v2"
     metadata = TaskMetadata(
         name="BengaliDocumentClassification",
         description="Dataset for News Classification, categorized with 13 domains.",
@@ -41,6 +40,7 @@ Islam, Tanvir},
   year = {2023},
 }
 """,
+        superseded_by="BengaliDocumentClassification.v2",
     )
 
     def dataset_transform(self) -> None:

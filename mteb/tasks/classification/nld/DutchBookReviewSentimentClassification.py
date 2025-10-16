@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DutchBookReviewSentimentClassification(AbsTaskClassification):
-    superseded_by = "DutchBookReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification",
         description="A Dutch book review for sentiment classification.",
@@ -42,6 +41,7 @@ Suzan, Verberne},
   year = {2019},
 }
 """,
+        superseded_by="DutchBookReviewSentimentClassification.v2",
     )
 
 

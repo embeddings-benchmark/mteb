@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ToxicConversationsClassification(AbsTaskClassification):
-    superseded_by = "ToxicConversationsClassification.v2"
     metadata = TaskMetadata(
         name="ToxicConversationsClassification",
         description="Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
@@ -38,6 +37,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify the given comments as either toxic or not toxic",
+        superseded_by="ToxicConversationsClassification.v2",
     )
 
     samples_per_label = 16

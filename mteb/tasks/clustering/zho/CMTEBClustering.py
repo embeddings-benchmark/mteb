@@ -131,7 +131,6 @@ class CLSClusteringFastP2P(AbsTaskClustering):
 
 
 class CLSClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "CLSClusteringS2S.v2"
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
@@ -162,11 +161,11 @@ class CLSClusteringS2S(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the main category of scholar papers based on the titles",
+        superseded_by="CLSClusteringS2S.v2",
     )
 
 
 class CLSClusteringP2P(AbsTaskClusteringLegacy):
-    superseded_by = "CLSClusteringP2P.v2"
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
@@ -197,6 +196,7 @@ class CLSClusteringP2P(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
+        superseded_by="CLSClusteringP2P.v2",
     )
 
 
@@ -319,7 +319,6 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
 
 
 class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "ThuNewsClusteringS2S.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S",
         dataset={
@@ -358,11 +357,11 @@ class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles",
+        superseded_by="ThuNewsClusteringS2S.v2",
     )
 
 
 class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
-    superseded_by = "ThuNewsClusteringP2P.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringP2P",
         dataset={
@@ -401,4 +400,5 @@ class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
+        superseded_by="ThuNewsClusteringP2P.v2",
     )

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
-    superseded_by = "CSFDCZMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CSFDCZMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Czech.",
@@ -35,6 +34,7 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="CSFDCZMovieReviewSentimentClassification.v2",
     )
     # Increase the samples_per_label in order to improve baseline performance
     samples_per_label = 20

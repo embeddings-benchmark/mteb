@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SweRecClassification(AbsTaskClassification):
-    superseded_by = "SweRecClassification.v2"
     metadata = TaskMetadata(
         name="SweRecClassification",
         description="A Swedish dataset for sentiment classification on review",
@@ -41,6 +40,7 @@ Fishel, Mark},
 }
 """,
         prompt="Classify Swedish reviews by sentiment",
+        superseded_by="SweRecClassification.v2",
     )
 
 

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DdiscoCohesionClassification(AbsTaskClassification):
-    superseded_by = "Ddisco.v2"
     metadata = TaskMetadata(
         name="Ddisco",
         dataset={
@@ -54,6 +53,7 @@ Piperidis, Stelios},
   year = {2022},
 }
 """,
+        superseded_by="Ddisco.v2",
     )
 
     def dataset_transform(self):

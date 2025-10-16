@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TamilNewsClassification(AbsTaskClassification):
-    superseded_by = "TamilNewsClassification.v2"
     metadata = TaskMetadata(
         name="TamilNewsClassification",
         description="A Tamil dataset for 6-class classification of Tamil news articles",
@@ -33,6 +32,7 @@ class TamilNewsClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="TamilNewsClassification.v2",
     )
 
     def dataset_transform(self):

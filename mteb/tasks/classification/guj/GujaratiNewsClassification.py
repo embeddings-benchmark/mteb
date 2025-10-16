@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GujaratiNewsClassification(AbsTaskClassification):
-    superseded_by = "GujaratiNewsClassification.v2"
     metadata = TaskMetadata(
         name="GujaratiNewsClassification",
         description="A Gujarati dataset for 3-class classification of Gujarati news articles",
@@ -26,6 +25,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",  # none found
+        superseded_by="GujaratiNewsClassification.v2",
     )
 
     def dataset_transform(self):

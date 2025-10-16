@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class PatentClassification(AbsTaskClassification):
-    superseded_by = "PatentClassification.v2"
     metadata = TaskMetadata(
         name="PatentClassification",
         description="Classification Dataset of Patents and Abstract",
@@ -44,6 +43,7 @@ M{\`a}rquez, Llu{\'\i}s},
   year = {2019},
 }
 """,
+        superseded_by="PatentClassification.v2",
     )
 
 

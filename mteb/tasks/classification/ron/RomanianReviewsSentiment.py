@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RomanianReviewsSentiment(AbsTaskClassification):
-    superseded_by = "RomanianReviewsSentiment.v2"
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment",
         description="LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian",
@@ -33,6 +32,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
   year = {2021},
 }
 """,
+        superseded_by="RomanianReviewsSentiment.v2",
     )
 
 

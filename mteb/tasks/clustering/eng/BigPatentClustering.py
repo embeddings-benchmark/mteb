@@ -9,8 +9,6 @@ NUM_SAMPLES = 2048
 
 
 class BigPatentClustering(AbsTaskClusteringLegacy):
-    superseded_by = "BigPatentClustering.v2"
-
     metadata = TaskMetadata(
         name="BigPatentClustering",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
@@ -54,6 +52,7 @@ Summarization},
   year = {2019},
 }
 """,
+        superseded_by="BigPatentClustering.v2",
     )
 
 

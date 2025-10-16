@@ -5,7 +5,6 @@ TEST_SAMPLES = 2048
 
 
 class VieStudentFeedbackClassification(AbsTaskClassification):
-    superseded_by = "VieStudentFeedbackClassification.v2"
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification",
         description="A Vietnamese dataset for classification of student feedback",
@@ -39,6 +38,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
   year = {2018},
 }
 """,
+        superseded_by="VieStudentFeedbackClassification.v2",
     )
 
 

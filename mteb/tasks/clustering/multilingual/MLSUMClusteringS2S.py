@@ -19,7 +19,6 @@ N_SAMPLES = 2048
 
 
 class MLSUMClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "MLSUMClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
@@ -49,6 +48,7 @@ class MLSUMClusteringS2S(AbsTaskClusteringLegacy):
   year = {2020},
 }
 """,
+        superseded_by="MLSUMClusteringS2S.v2",
     )
 
     def load_data(self) -> None:

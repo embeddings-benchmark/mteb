@@ -7,8 +7,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ArxivClusteringP2P(AbsTaskClusteringLegacy):
-    superseded_by = "ArXivHierarchicalClusteringP2P"
-
     metadata = TaskMetadata(
         name="ArxivClusteringP2P",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -41,14 +39,11 @@ class ArxivClusteringP2P(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
+        superseded_by="ArXivHierarchicalClusteringP2P",
     )
 
 
 class ArxivClusteringP2PFast(AbsTaskClusteringLegacy):
-    superseded_by = "ArXivHierarchicalClusteringP2P"
-    # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClustering, instead we
-    # simply downsample each cluster.
-
     metadata = TaskMetadata(
         name="ArxivClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -82,6 +77,9 @@ class ArxivClusteringP2PFast(AbsTaskClusteringLegacy):
 """,  # None found
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
         adapted_from=["ArxivClusteringP2P"],
+        superseded_by="ArXivHierarchicalClusteringP2P",
+        # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClustering, instead we
+        # simply downsample each cluster.
     )
 
     def dataset_transform(self):

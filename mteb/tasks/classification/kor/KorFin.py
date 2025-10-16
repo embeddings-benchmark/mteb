@@ -1,7 +1,7 @@
 from mteb.abstasks.classification import AbsTaskClassification
 
 # type: ignore
-from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorFin(AbsTaskClassification):

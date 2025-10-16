@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class YahooAnswersTopicsClassification(AbsTaskClassification):
-    superseded_by = "YahooAnswersTopicsClassification.v2"
     metadata = TaskMetadata(
         name="YahooAnswersTopicsClassification",
         description="Dataset composed of questions and answers from Yahoo Answers, categorized into topics.",
@@ -38,6 +37,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
   year = {2015},
 }
 """,
+        superseded_by="YahooAnswersTopicsClassification.v2",
     )
 
     samples_per_label = 32

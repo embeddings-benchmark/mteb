@@ -11,7 +11,6 @@ tests_folder = Path(__file__).parent.parent
 
 
 class DummyTask(AbsTask):
-    superseded_by = "newer_task"
     metadata = TaskMetadata(
         name="dummy_task",
         description="dummy task for testing",
@@ -34,6 +33,7 @@ class DummyTask(AbsTask):
         bibtex_citation="",
         modalities=["text"],
         sample_creation="created",
+        superseded_by="newer_task",
     )
 
     def evaluate(self, model, split: str = "test"):

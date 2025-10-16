@@ -5,7 +5,6 @@ _EVAL_SPLITS = ["test"]
 
 
 class ToxicChatClassification(AbsTaskClassification):
-    superseded_by = "ToxicChatClassification.v2"
     metadata = TaskMetadata(
         name="ToxicChatClassification",
         description="""This dataset contains toxicity annotations on 10K user
@@ -46,6 +45,7 @@ class ToxicChatClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="ToxicChatClassification.v2",
     )
 
     def dataset_transform(self):

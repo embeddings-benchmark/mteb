@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RestaurantReviewSentimentClassification(AbsTaskClassification):
-    superseded_by = "RestaurantReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
         dataset={
@@ -35,6 +34,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
   year = {2015},
 }
 """,
+        superseded_by="RestaurantReviewSentimentClassification.v2",
     )
 
     def dataset_transform(self):

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class UkrFormalityClassification(AbsTaskClassification):
-    superseded_by = "UkrFormalityClassification.v2"
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
         description="""
@@ -43,6 +42,7 @@ Tetreault, Joel},
   year = {2018},
 }
 """,
+        superseded_by="UkrFormalityClassification.v2",
     )
 
     def dataset_transform(self):

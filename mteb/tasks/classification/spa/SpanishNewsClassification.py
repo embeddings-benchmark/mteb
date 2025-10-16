@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SpanishNewsClassification(AbsTaskClassification):
-    superseded_by = "SpanishNewsClassification.v2"
     metadata = TaskMetadata(
         name="SpanishNewsClassification",
         description="A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories.",
@@ -27,6 +26,7 @@ class SpanishNewsClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
+        superseded_by="SpanishNewsClassification.v2",
     )
 
     def dataset_transform(self):

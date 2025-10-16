@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EstonianValenceClassification(AbsTaskClassification):
-    superseded_by = "EstonianValenceClassification.v2"
     metadata = TaskMetadata(
         name="EstonianValenceClassification",
         dataset={
@@ -38,6 +37,7 @@ class EstonianValenceClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="EstonianValenceClassification.v2",
     )
 
     def dataset_transform(self):

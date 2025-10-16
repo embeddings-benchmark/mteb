@@ -8,7 +8,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class IndonesianMongabayConservationClassification(AbsTaskClassification):
-    superseded_by = "IndonesianMongabayConservationClassification.v2"
     metadata = TaskMetadata(
         name="IndonesianMongabayConservationClassification",
         description="Conservation dataset that was collected from mongabay.co.id contains topic-classification task (multi-label format) and sentiment classification. This task only covers sentiment analysis (positive, neutral negative)",
@@ -53,6 +52,7 @@ Purwarianti, Ayu},
   year = {2023},
 }
 """,
+        superseded_by="IndonesianMongabayConservationClassification.v2",
     )
 
     def dataset_transform(self):

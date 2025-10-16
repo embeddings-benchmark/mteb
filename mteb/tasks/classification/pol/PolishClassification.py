@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CbdClassification(AbsTaskClassification):
-    superseded_by = "CBD.v2"
     metadata = TaskMetadata(
         name="CBD",
         description="Polish Tweets annotated for cyberbullying detection.",
@@ -36,6 +35,7 @@ class CbdClassification(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="CBD.v2",
     )
 
 
@@ -78,7 +78,6 @@ class CbdClassificationV2(AbsTaskClassification):
 
 
 class PolEmo2InClassification(AbsTaskClassification):
-    superseded_by = "PolEmo2.0-IN.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -117,6 +116,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
   year = {2019},
 }
 """,
+        superseded_by="PolEmo2.0-IN.v2",
     )
 
 
@@ -164,7 +164,6 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
 
 
 class PolEmo2OutClassification(AbsTaskClassification):
-    superseded_by = "PolEmo2.0-OUT.v2"
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -189,6 +188,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        superseded_by="PolEmo2.0-OUT.v2",
     )
 
 
@@ -222,7 +222,6 @@ class PolEmo2OutClassificationV2(AbsTaskClassification):
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
-    superseded_by = "AllegroReviews.v2"
     metadata = TaskMetadata(
         name="AllegroReviews",
         description="A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.",
@@ -268,6 +267,7 @@ Tetreault, Joel},
   year = {2020},
 }
 """,
+        superseded_by="AllegroReviews.v2",
     )
 
 
@@ -323,7 +323,6 @@ Tetreault, Joel},
 
 
 class PacClassification(AbsTaskClassification):
-    superseded_by = "PAC.v2"
     metadata = TaskMetadata(
         name="PAC",
         description="Polish Paraphrase Corpus",
@@ -356,6 +355,7 @@ class PacClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
+        superseded_by="PAC.v2",
     )
 
 

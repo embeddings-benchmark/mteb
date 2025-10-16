@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FinToxicityClassification(AbsTaskClassification):
-    superseded_by = "FinToxicityClassification.v2"
     metadata = TaskMetadata(
         name="FinToxicityClassification",
         description="""
@@ -42,6 +41,7 @@ Laippala, Veronika},
   year = {2023},
 }
 """,
+        superseded_by="FinToxicityClassification.v2",
     )
 
     def dataset_transform(self):

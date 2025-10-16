@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class WikipediaBioMetChemClassification(AbsTaskClassification):
-    superseded_by = "WikipediaBioMetChemClassification.v2"
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -33,6 +32,7 @@ class WikipediaBioMetChemClassification(AbsTaskClassification):
   year = {2024},
 }
 """,
+        superseded_by="WikipediaBioMetChemClassification.v2",
     )
 
 

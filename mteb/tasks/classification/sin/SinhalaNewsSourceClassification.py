@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SinhalaNewsSourceClassification(AbsTaskClassification):
-    superseded_by = "SinhalaNewsSourceClassification.v2"
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification",
         description="This dataset contains Sinhala news headlines extracted from 9 news sources (websites) (Sri Lanka Army, Dinamina, GossipLanka, Hiru, ITN, Lankapuwath, NewsLK, Newsfirst, World Socialist Web Site-Sinhala).",
@@ -33,6 +32,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
   year = {2022},
 }
 """,
+        superseded_by="SinhalaNewsSourceClassification.v2",
     )
 
     def dataset_transform(self):

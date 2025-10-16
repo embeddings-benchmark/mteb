@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class MyanmarNews(AbsTaskClassification):
-    superseded_by = "MyanmarNews.v2"
     metadata = TaskMetadata(
         name="MyanmarNews",
         dataset={
@@ -35,6 +34,7 @@ class MyanmarNews(AbsTaskClassification):
   year = {2017},
 }
 """,
+        superseded_by="MyanmarNews.v2",
     )
 
 

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetSarcasmClassification(AbsTaskClassification):
-    superseded_by = "TweetSarcasmClassification.v2"
     metadata = TaskMetadata(
         name="TweetSarcasmClassification",
         dataset={
@@ -46,6 +45,7 @@ Mubarak, Hamdy},
   year = {2020},
 }
 """,
+        superseded_by="TweetSarcasmClassification.v2",
     )
 
     def dataset_transform(self):

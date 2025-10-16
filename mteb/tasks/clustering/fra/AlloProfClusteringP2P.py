@@ -6,8 +6,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AlloProfClusteringP2P(AbsTaskClusteringLegacy):
-    superseded_by = "AlloProfClusteringP2P.v2"
-
     metadata = TaskMetadata(
         name="AlloProfClusteringP2P",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
@@ -41,6 +39,7 @@ class AlloProfClusteringP2P(AbsTaskClusteringLegacy):
   year = {2023},
 }
 """,
+        superseded_by="AlloProfClusteringP2P.v2",
     )
 
 

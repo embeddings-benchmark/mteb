@@ -5,7 +5,6 @@ TEST_SAMPLES = 2048
 
 
 class FilipinoHateSpeechClassification(AbsTaskClassification):
-    superseded_by = "FilipinoHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification",
         description="Filipino Twitter dataset for sentiment classification.",
@@ -38,6 +37,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="FilipinoHateSpeechClassification.v2",
     )
 
 

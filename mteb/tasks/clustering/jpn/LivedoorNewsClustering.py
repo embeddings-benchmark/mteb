@@ -35,7 +35,6 @@ class LivedoorNewsClusteringv2(AbsTaskClustering):
 class LivedoorNewsClustering(AbsTaskClustering):
     max_document_to_embed = 1107
     max_fraction_of_documents_to_embed = None
-    superseded_by = "LivedoorNewsClustering.v2"
 
     metadata = TaskMetadata(
         name="LivedoorNewsClustering",
@@ -59,4 +58,5 @@ class LivedoorNewsClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        superseded_by="LivedoorNewsClustering.v2",
     )

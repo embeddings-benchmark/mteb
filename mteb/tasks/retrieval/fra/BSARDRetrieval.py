@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BSARDRetrieval(AbsTaskRetrieval):
-    superseded_by = "BSARDRetrieval.v2"
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
@@ -41,6 +40,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
   year = {2022},
 }
 """,
+        superseded_by="BSARDRetrieval.v2",
     )
 
 

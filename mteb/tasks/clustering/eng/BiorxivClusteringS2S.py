@@ -39,7 +39,6 @@ class BiorxivClusteringS2SFast(AbsTaskClustering):
 
 
 class BiorxivClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "BiorxivClusteringS2S.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringS2S",
         description="Clustering of titles from biorxiv. Clustering of 10 sets, based on the main category.",
@@ -63,4 +62,5 @@ class BiorxivClusteringS2S(AbsTaskClusteringLegacy):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles",
+        superseded_by="BiorxivClusteringS2S.v2",
     )

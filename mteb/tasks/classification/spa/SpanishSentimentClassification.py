@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SpanishSentimentClassification(AbsTaskClassification):
-    superseded_by = "SpanishSentimentClassification.v2"
     metadata = TaskMetadata(
         name="SpanishSentimentClassification",
         description="A Spanish dataset for sentiment classification.",
@@ -50,6 +49,7 @@ Vylomova, Ekaterina},
   year = {2023},
 }
 """,
+        superseded_by="SpanishSentimentClassification.v2",
     )
 
 

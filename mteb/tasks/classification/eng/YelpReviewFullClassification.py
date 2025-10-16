@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class YelpReviewFullClassification(AbsTaskClassification):
-    superseded_by = "YelpReviewFullClassification.v2"
     metadata = TaskMetadata(
         name="YelpReviewFullClassification",
         description="Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5.",
@@ -38,6 +37,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
   year = {2015},
 }
 """,
+        superseded_by="YelpReviewFullClassification.v2",
     )
 
     samples_per_label = 128
