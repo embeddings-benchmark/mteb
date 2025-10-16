@@ -7,8 +7,8 @@ class OpenTenderClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="OpenTenderClusteringS2S",
         dataset={
-            "path": "clips/mteb-nl-opentender-cls",
-            "revision": "53221b9d10649a531dceccdab8155ab795a59bbb",
+            "path": "clips/mteb-nl-opentender-clst-s2s-pr",
+            "revision": "ad86cf1813d130e17dda0092d1c4f2c664e68d0c",
         },
         description="This dataset contains all the articles published by the NOS as of the 1st of January 2010. The "
         "data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news "
@@ -39,9 +39,3 @@ class OpenTenderClusteringS2S(AbsTaskClustering):
 }
 """,
     )
-
-    def dataset_transform(self):
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].map(
-                lambda ex: {"labels": ex["label"], "sentences": ex["title"]}
-            )

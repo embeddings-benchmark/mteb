@@ -7,8 +7,8 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="OpenTenderClusteringP2P",
         dataset={
-            "path": "clips/mteb-nl-opentender-cls",
-            "revision": "53221b9d10649a531dceccdab8155ab795a59bbb",
+            "path": "clips/mteb-nl-opentender-cls-pr",
+            "revision": "9af5657575a669dc18c7f897a67287ff7d1a0c65",
         },
         description="This dataset contains all the articles published by the NOS as of the 1st of January 2010. The "
         "data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news "
@@ -41,10 +41,11 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
     )
 
     def dataset_transform(self):
+        # reuse the dataset for classification
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].map(
                 lambda ex: {
                     "labels": ex["label"],
-                    "sentences": f"{ex['title']}\n{ex['description']}",
+                    "sentences": ex["text"],
                 }
             )

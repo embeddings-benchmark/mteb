@@ -1,10 +1,10 @@
 {
     "test": {
-        "num_samples": 4500,
+        "num_samples": 4485,
         "text_statistics": {
-            "total_text_length": 2180640,
+            "total_text_length": 2177123,
             "min_text_length": 18,
-            "average_text_length": 484.58666666666664,
+            "average_text_length": 485.4231884057971,
             "max_text_length": 12193,
             "unique_texts": 4485
         },
@@ -22,7 +22,7 @@
                     "count": 150
                 },
                 "Onderzoek en ontwikkeling, en aanverwante adviezen": {
-                    "count": 150
+                    "count": 147
                 },
                 "Zakelijke dienstverlening: juridisch, marketing, consulting, drukkerij en beveiliging": {
                     "count": 150
@@ -31,7 +31,7 @@
                     "count": 150
                 },
                 "Structuren en materialen voor de bouw; ondersteunende producten voor de bouw (uitgezonderd elektrische apparatuur)": {
-                    "count": 150
+                    "count": 149
                 },
                 "Diensten voor land-, bos- en tuinbouw, aquicultuur en imkerij": {
                     "count": 150
@@ -49,13 +49,13 @@
                     "count": 150
                 },
                 "Meubelen (m.i.v. kantoormeubelen), inrichtingsartikelen, huishoudelijke apparaten (uitgez. verlichting) en schoonmaakproducten": {
-                    "count": 150
+                    "count": 149
                 },
                 "Gezondheidszorg en maatschappelijk werk": {
                     "count": 150
                 },
                 "Laboratoriuminstrumenten, optische en precisie-instrumenten (uitgezonderd brillen)": {
-                    "count": 150
+                    "count": 149
                 },
                 "Voeding, dranken, tabak en aanverwante producten": {
                     "count": 150
@@ -64,13 +64,13 @@
                     "count": 150
                 },
                 "Bedrijfsmachines": {
-                    "count": 150
+                    "count": 149
                 },
                 "Elektrische machines, apparaten, uitrusting en verbruiksartikelen; verlichting": {
-                    "count": 150
+                    "count": 149
                 },
                 "Vervoersdiensten (uitg. vervoer van afval)": {
-                    "count": 150
+                    "count": 149
                 },
                 "Financi\u00eble en verzekeringsdiensten": {
                     "count": 150
@@ -79,13 +79,13 @@
                     "count": 150
                 },
                 "Diensten voor onderwijs en opleiding": {
-                    "count": 150
+                    "count": 149
                 },
                 "Drukwerk en aanverwante producten": {
-                    "count": 150
+                    "count": 149
                 },
                 "Vervoersmaterieel en bijbehorende producten": {
-                    "count": 150
+                    "count": 149
                 },
                 "Software en informatiesystemen": {
                     "count": 150
@@ -97,13 +97,13 @@
                     "count": 150
                 },
                 "Post- en telecommunicatiediensten": {
-                    "count": 150
+                    "count": 149
                 },
                 "Aardolieproducten, brandstof, elektriciteit en andere energiebronnen": {
-                    "count": 150
+                    "count": 149
                 },
                 "Diensten voor hotel, restaurant en detailhandel": {
-                    "count": 150
+                    "count": 149
                 }
             }
         }
