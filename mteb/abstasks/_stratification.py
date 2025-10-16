@@ -95,9 +95,9 @@ def _fold_tie_break(
         return M[0]
     else:
         max_val = max(desired_samples_per_fold[M])
-        M_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
-        M_prim = np.array([x for x in M_prim if x in M])
-        return random_state.choice(M_prim, 1)[0]
+        m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
+        m_prim = np.array([x for x in m_prim if x in M])
+        return random_state.choice(m_prim, 1)[0]
 
 
 def _get_most_desired_combination(samples_with_combination: dict):
@@ -262,12 +262,12 @@ class IterativeStratification(_BaseKFold):
                     continue
 
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
-                M = np.where(
+                m = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l])
                     == max_val
                 )[0]
                 m = _fold_tie_break(
-                    self.desired_samples_per_combination_per_fold[l], M, self._rng_state
+                    self.desired_samples_per_combination_per_fold[l], m, self._rng_state
                 )
                 folds[m].append(row)
                 rows_used[row] = True

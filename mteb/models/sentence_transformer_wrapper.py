@@ -134,7 +134,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         """
         from sentence_transformers import __version__ as st_version
 
-        HAS_QUERY_ENCODE = (
+        has_query_encode = (
             Version(st_version).release
             >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
         )
@@ -156,7 +156,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         LogOnce(logger).info(prompt_log)
         logger.debug(f"Encoding {len(_inputs)} sentences.")
 
-        if prompt_type and HAS_QUERY_ENCODE:
+        if prompt_type and has_query_encode:
             if prompt_type == PromptType.query:
                 encode_function = self.model.encode_query
             elif prompt_type == PromptType.document:

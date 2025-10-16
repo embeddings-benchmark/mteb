@@ -269,7 +269,7 @@ class ModelMeta(BaseModel):
         if "API" in self.framework:
             return None
 
-        MB = 1024**2
+        MB = 1024**2  # noqa: N806
         try:
             safetensors_metadata = get_safetensors_metadata(self.name)  # type: ignore
             if len(safetensors_metadata.parameter_count) >= 0:
