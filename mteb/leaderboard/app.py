@@ -217,9 +217,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
     )
     all_benchmark_results = {
-        benchmark.name: all_results._filter_tasks(
-            [t.metadata.name for t in benchmark.tasks]
-        ).join_revisions()
+        benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
         for benchmark in benchmarks
     }
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
