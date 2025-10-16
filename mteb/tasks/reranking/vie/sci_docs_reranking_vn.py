@@ -1,8 +1,8 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
-class SciDocsRerankingVN(AbsTaskReranking):
+class SciDocsRerankingVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciDocsRR-VN",
         description="""A translated dataset from Ranking of related scientific papers based on their title.
@@ -12,8 +12,8 @@ class SciDocsRerankingVN(AbsTaskReranking):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://allenai.org/data/scidocs",
         dataset={
-            "path": "GreenNode/scidocs-reranking-vn",
-            "revision": "c9ab36ae6c75f754df6f1e043c09b5e0b5547cac",
+            "path": "mteb/SciDocsRR-VN",
+            "revision": "760894958694fbd1559ceef44505abe5b59ea598",
         },
         type="Reranking",
         category="t2t",
