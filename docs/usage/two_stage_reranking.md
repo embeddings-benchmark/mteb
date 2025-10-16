@@ -7,12 +7,12 @@ The first step will be to retrieve a broad set of candidate items using an encod
 ```python
 import mteb
 
-model = mteb.get_model("minishlab/potion-base-2M")  # encoder model
+encoder_model = mteb.get_model("minishlab/potion-base-2M")
 task = mteb.get_task("NanoArguAnaRetrieval")
 prediction_folder = "prediction_folder"
 
 results = mteb.evaluate(
-    model,
+    encoder_model,
     task,
     prediction_folder=prediction_folder,
 )
@@ -22,9 +22,9 @@ The second step will be to rerank the top-k candidates using a cross-encoder mod
 
 ```python
 task = task.convert_to_reranking(task.predictions_path(prediction_folder), top_k=100)
-model = mteb.get_model("jinaai/jina-reranker-v2-base-multilingual")  # cross-encoder model
+cross_encoder_model = mteb.get_model("jinaai/jina-reranker-v2-base-multilingual")
 results = mteb.evaluate(
-    model,
+    cross_encoder_model,
     task,
 )
 ```
