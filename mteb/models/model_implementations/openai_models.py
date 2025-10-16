@@ -32,7 +32,7 @@ class OpenAIModel(AbsEncoder):
     ) -> None:
         """Wrapper for OpenAIs embedding API.
 
-        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the docuement is empty we return a zero vector.
+        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the document is empty we return a zero vector.
         """
         requires_package(
             self,

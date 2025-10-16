@@ -134,7 +134,7 @@ class AbsTaskClassification(AbsTask):
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluate a model on the classification task.
 
-        Differs from other tasks as it reqires train split.
+        Differs from other tasks as it requires train split.
         """
         if not isinstance(model, EncoderProtocol):
             raise TypeError(
