@@ -49,6 +49,12 @@ def test_model_similar_tasks(training_datasets):
     assert sorted(dummy_model_meta.get_training_datasets()) == expected
 
 
+def test_similar_tasks_superseded_by():
+    """Banking77Classification in model training data, but Banking77Classification.v2 version not"""
+    model_meta = mteb.get_model_meta("BAAI/bge-multilingual-gemma2")
+    assert "Banking77Classification.v2" in model_meta.get_training_datasets()
+
+
 def test_model_name_without_prefix():
     with pytest.raises(ValueError):
         ModelMeta(
