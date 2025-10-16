@@ -1,6 +1,4 @@
 from mteb.abstasks.classification import AbsTaskClassification
-
-# type: ignore
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
