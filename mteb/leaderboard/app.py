@@ -682,10 +682,8 @@ def get_leaderboard_app() -> gr.Blocks:
                 zero_shot_setting=zero_shot,
             )
             elapsed = time.time() - start_time
-            if model_names == filtered_models:
-                # This indicates that the models should not be filtered
-                return None
             logger.debug(f"update_models callback: {elapsed}s")
+            # Always return sorted models to ensure models.change triggers update_tables
             return sorted(filtered_models)
 
         scores.change(
