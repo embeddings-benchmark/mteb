@@ -5,7 +5,6 @@ TEST_SAMPLES = 2048
 
 
 class RomanianSentimentClassification(AbsTaskClassification):
-    superseded_by = "RomanianSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
         description="An Romanian dataset for sentiment classification.",
@@ -35,6 +34,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="RomanianSentimentClassification.v2",
     )
 
 

@@ -6,7 +6,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DalajClassification(AbsTaskClassification):
-    superseded_by = "DalajClassification.v2"
     metadata = TaskMetadata(
         name="DalajClassification",
         dataset={
@@ -37,6 +36,7 @@ class DalajClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify texts based on linguistic acceptability in Swedish",
+        superseded_by="DalajClassification.v2",
     )
 
     samples_per_label = 16

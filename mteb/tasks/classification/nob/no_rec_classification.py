@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class NoRecClassification(AbsTaskClassification):
-    superseded_by = "NoRecClassification.v2"
     metadata = TaskMetadata(
         name="NoRecClassification",
         description="A Norwegian dataset for sentiment classification on review",
@@ -58,6 +57,7 @@ Tokunaga, Takenobu},
 }
 """,
         prompt="Classify Norwegian reviews by sentiment",
+        superseded_by="NoRecClassification.v2",
     )
 
 

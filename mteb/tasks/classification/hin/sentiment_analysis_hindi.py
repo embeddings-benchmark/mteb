@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SentimentAnalysisHindi(AbsTaskClassification):
-    superseded_by = "SentimentAnalysisHindi.v2"
     metadata = TaskMetadata(
         name="SentimentAnalysisHindi",
         description="Hindi Sentiment Analysis Dataset",
@@ -35,6 +34,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="SentimentAnalysisHindi.v2",
     )
 
     def dataset_transform(self):

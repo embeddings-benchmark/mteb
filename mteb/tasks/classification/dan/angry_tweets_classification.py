@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AngryTweetsClassification(AbsTaskClassification):
-    superseded_by = "AngryTweetsClassification.v2"
     metadata = TaskMetadata(
         name="AngryTweetsClassification",
         dataset={
@@ -35,6 +34,7 @@ class AngryTweetsClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify Danish tweets by sentiment. (positive, negative, neutral).",
+        superseded_by="AngryTweetsClassification.v2",
     )
 
     samples_per_label = 16

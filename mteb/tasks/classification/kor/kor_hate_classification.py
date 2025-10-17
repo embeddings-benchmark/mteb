@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KorHateClassification(AbsTaskClassification):
-    superseded_by = "KorHateClassification.v2"
     metadata = TaskMetadata(
         name="KorHateClassification",
         description="""The dataset was created to provide the first human-labeled Korean corpus for
@@ -42,6 +41,7 @@ class KorHateClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="KorHateClassification.v2",
     )
 
     def dataset_transform(self):

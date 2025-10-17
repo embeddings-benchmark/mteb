@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FrenkHrClassification(AbsTaskClassification):
-    superseded_by = "FrenkHrClassification.v2"
     metadata = TaskMetadata(
         name="FrenkHrClassification",
         description="Croatian subset of the FRENK dataset",
@@ -36,6 +35,7 @@ class FrenkHrClassification(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="FrenkHrClassification.v2",
     )
 
 

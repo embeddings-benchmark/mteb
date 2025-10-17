@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetSentimentExtractionClassification(AbsTaskClassification):
-    superseded_by = "TweetSentimentExtractionClassification.v2"
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification",
         description="",
@@ -38,6 +37,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify the sentiment of a given tweet as either positive, negative, or neutral",
+        superseded_by="TweetSentimentExtractionClassification.v2",
     )
 
     samples_per_label = 32

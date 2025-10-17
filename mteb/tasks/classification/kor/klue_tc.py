@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class KlueTC(AbsTaskClassification):
-    superseded_by = "KLUE-TC.v2"
     metadata = TaskMetadata(
         name="KLUE-TC",
         dataset={
@@ -36,6 +35,7 @@ class KlueTC(AbsTaskClassification):
   year = {2021},
 }
 """,
+        superseded_by="KLUE-TC.v2",
     )
 
     def dataset_transform(self):

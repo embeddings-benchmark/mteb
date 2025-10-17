@@ -14,8 +14,6 @@ NUM_SAMPLES = 2048
 
 
 class BlurbsClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "BlurbsClusteringS2S.v2"
-
     metadata = TaskMetadata(
         name="BlurbsClusteringS2S",
         description="Clustering of book titles. Clustering of 28 sets, either on the main or secondary genre.",
@@ -46,6 +44,7 @@ class BlurbsClusteringS2S(AbsTaskClusteringLegacy):
   year = {2019},
 }
 """,
+        superseded_by="BlurbsClusteringS2S.v2",
     )
 
 

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AJGT(AbsTaskClassification):
-    superseded_by = "AJGT.v2"
     metadata = TaskMetadata(
         name="AJGT",
         dataset={
@@ -35,6 +34,7 @@ class AJGT(AbsTaskClassification):
   year = {2017},
 }
 """,
+        superseded_by="AJGT.v2",
     )
 
 

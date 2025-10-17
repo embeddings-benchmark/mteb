@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SDSGlovesClassification(AbsTaskClassification):
-    superseded_by = "SDSGlovesClassification.v2"
     metadata = TaskMetadata(
         name="SDSGlovesClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -41,6 +40,7 @@ class SDSGlovesClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="SDSGlovesClassification.v2",
     )
 
 

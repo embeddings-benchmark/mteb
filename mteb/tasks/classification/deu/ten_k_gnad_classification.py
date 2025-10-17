@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TenKGnadClassification(AbsTaskClassification):
-    superseded_by = "TenKGnadClassification.v2"
     metadata = TaskMetadata(
         name="TenKGnadClassification",
         description="10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).",
@@ -37,6 +36,7 @@ class TenKGnadClassification(AbsTaskClassification):
   year = {2017},
 }
 """,
+        superseded_by="TenKGnadClassification.v2",
     )
 
 

@@ -21,7 +21,6 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 
 
 class SNLClustering(AbsTaskClusteringLegacy):
-    superseded_by = "SNLHierarchicalClusteringP2P"
     metadata = TaskMetadata(
         name="SNLClustering",
         dataset={
@@ -51,6 +50,7 @@ class SNLClustering(AbsTaskClusteringLegacy):
   year = {2023},
 }
 """,
+        superseded_by="SNLHierarchicalClusteringP2P",
     )
 
     def dataset_transform(self):

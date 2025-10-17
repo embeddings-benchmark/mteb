@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class UrduRomanSentimentClassification(AbsTaskClassification):
-    superseded_by = "UrduRomanSentimentClassification.v2"
     metadata = TaskMetadata(
         name="UrduRomanSentimentClassification",
         description="The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)",
@@ -34,6 +33,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
   year = {2018},
 }
 """,
+        superseded_by="UrduRomanSentimentClassification.v2",
     )
 
 

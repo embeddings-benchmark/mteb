@@ -54,6 +54,8 @@ def _create_similar_tasks(tasks: Sequence[type[AbsTask]]) -> dict[str, list[str]
         if task.metadata.adapted_from:
             for similar_task in task.metadata.adapted_from:
                 similar_tasks[similar_task].append(task.metadata.name)
+        if task.metadata.superseded_by:
+            similar_tasks[task.metadata.superseded_by].append(task.metadata.name)
     return similar_tasks
 
 

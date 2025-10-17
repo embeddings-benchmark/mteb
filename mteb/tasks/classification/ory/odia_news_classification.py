@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class OdiaNewsClassification(AbsTaskClassification):
-    superseded_by = "OdiaNewsClassification.v2"
     metadata = TaskMetadata(
         name="OdiaNewsClassification",
         description="A Odia dataset for 3-class classification of Odia news articles",
@@ -33,6 +32,7 @@ class OdiaNewsClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="OdiaNewsClassification.v2",
     )
 
     def dataset_transform(self):

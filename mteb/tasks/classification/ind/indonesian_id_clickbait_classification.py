@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class IndonesianIdClickbaitClassification(AbsTaskClassification):
-    superseded_by = "IndonesianIdClickbaitClassification.v2"
     metadata = TaskMetadata(
         name="IndonesianIdClickbaitClassification",
         dataset={
@@ -39,6 +38,7 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="IndonesianIdClickbaitClassification.v2",
     )
 
     def dataset_transform(self):

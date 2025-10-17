@@ -5,7 +5,6 @@ N_SAMPLES = 2048
 
 
 class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
-    superseded_by = "CSFDSKMovieReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Slovak.",
@@ -37,6 +36,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
   year = {2023},
 }
 """,
+        superseded_by="CSFDSKMovieReviewSentimentClassification.v2",
     )
 
     # Increase the samples_per_label in order to improve baseline performance

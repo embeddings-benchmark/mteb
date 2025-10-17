@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class BengaliHateSpeechClassification(AbsTaskClassification):
-    superseded_by = "BengaliHateSpeechClassification.v2"
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification",
         description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.",
@@ -34,6 +33,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="BengaliHateSpeechClassification.v2",
     )
 
     def dataset_transform(self):

@@ -435,7 +435,6 @@ class SynPerChatbotToneUserClassification(AbsTaskClassification):
 
 
 class SynPerTextToneClassification(AbsTaskClassification):
-    superseded_by = "SynPerTextToneClassification.v2"
     metadata = TaskMetadata(
         name="SynPerTextToneClassification",
         description="Persian Text Tone",
@@ -458,13 +457,12 @@ class SynPerTextToneClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
+        superseded_by="SynPerTextToneClassification.v2",
     )
     samples_per_label = 32
 
 
 class SynPerTextToneClassificationV2(AbsTaskClassification):
-    superseded_by = "SynPerTextToneClassification.v3"
-
     metadata = TaskMetadata(
         name="SynPerTextToneClassification.v2",
         description="""Persian Text Tone
@@ -489,6 +487,7 @@ class SynPerTextToneClassificationV2(AbsTaskClassification):
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
         adapted_from=["SynPerTextToneClassification"],
+        superseded_by="SynPerTextToneClassification.v3",
     )
     samples_per_label = 32
 
@@ -523,7 +522,6 @@ class SynPerTextToneClassificationV3(AbsTaskClassification):
 
 
 class SIDClassification(AbsTaskClassification):
-    superseded_by = "SIDClassification.v2"
     metadata = TaskMetadata(
         name="SIDClassification",
         description="SID Classification",
@@ -546,6 +544,7 @@ class SIDClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        superseded_by="SIDClassification.v2",
     )
     samples_per_label = 32
 
@@ -580,7 +579,6 @@ class SIDClassificationV2(AbsTaskClassification):
 
 
 class DeepSentiPers(AbsTaskClassification):
-    superseded_by = "DeepSentiPers.v2"
     metadata = TaskMetadata(
         name="DeepSentiPers",
         description="Persian Sentiment Analysis Dataset",
@@ -603,6 +601,7 @@ class DeepSentiPers(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        superseded_by="DeepSentiPers.v2",
     )
     samples_per_label = 32
 
@@ -640,7 +639,6 @@ class DeepSentiPersV2(AbsTaskClassification):
 
 
 class PersianTextEmotion(AbsTaskClassification):
-    superseded_by = "PersianTextEmotion.v2"
     metadata = TaskMetadata(
         name="PersianTextEmotion",
         description="Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
@@ -663,6 +661,7 @@ class PersianTextEmotion(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        superseded_by="PersianTextEmotion.v2",
     )
     samples_per_label = 32
 
@@ -697,7 +696,6 @@ class PersianTextEmotionV2(AbsTaskClassification):
 
 
 class SentimentDKSF(AbsTaskClassification):
-    superseded_by = "SentimentDKSF.v2"
     metadata = TaskMetadata(
         name="SentimentDKSF",
         description="The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.",
@@ -720,6 +718,7 @@ class SentimentDKSF(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        superseded_by="SentimentDKSF.v2",
     )
     samples_per_label = 32
 
@@ -754,7 +753,6 @@ class SentimentDKSFV2(AbsTaskClassification):
 
 
 class NLPTwitterAnalysisClassification(AbsTaskClassification):
-    superseded_by = "NLPTwitterAnalysisClassification.v2"
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClassification",
         description="Twitter Analysis Classification",
@@ -777,6 +775,7 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        superseded_by="NLPTwitterAnalysisClassification.v2",
     )
     samples_per_label = 32
 

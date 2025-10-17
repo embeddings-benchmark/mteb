@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 
 class BUCCBitextMining(AbsTaskBitextMining):
-    superseded_by = "BUCC.v2"
     metadata = TaskMetadata(
         name="BUCC",
         dataset={
@@ -58,6 +57,7 @@ Rapp, Reinhard},
   year = {2017},
 }
 """,
+        superseded_by="BUCC.v2",
     )
 
     def dataset_transform(self):

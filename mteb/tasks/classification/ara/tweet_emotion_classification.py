@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetEmotionClassification(AbsTaskClassification):
-    superseded_by = "TweetEmotionClassification.v2"
     metadata = TaskMetadata(
         name="TweetEmotionClassification",
         dataset={
@@ -35,6 +34,7 @@ class TweetEmotionClassification(AbsTaskClassification):
   year = {2018},
 }
 """,
+        superseded_by="TweetEmotionClassification.v2",
     )
 
 

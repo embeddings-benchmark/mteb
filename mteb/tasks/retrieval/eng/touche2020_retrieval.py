@@ -3,8 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Touche2020(AbsTaskRetrieval):
-    superseded_by = "Touche2020Retrieval.v3"
-
     metadata = TaskMetadata(
         name="Touche2020",
         description="Touché Task 1: Argument Retrieval for Controversial Questions",
@@ -49,6 +47,7 @@ Questions}},
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
         adapted_from=["Touche2020"],
+        superseded_by="Touche2020Retrieval.v3",
     )
 
 

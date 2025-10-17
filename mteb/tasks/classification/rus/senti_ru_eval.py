@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SentiRuEval2016Classification(AbsTaskClassification):
-    superseded_by = "SentiRuEval2016.v2"
     metadata = TaskMetadata(
         name="SentiRuEval2016",
         dataset={
@@ -36,6 +35,7 @@ class SentiRuEval2016Classification(AbsTaskClassification):
   year = {2016},
 }
 """,
+        superseded_by="SentiRuEval2016.v2",
     )
 
 

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
-    superseded_by = "GermanPoliticiansTwitterSentimentClassification.v2"
     metadata = TaskMetadata(
         name="GermanPoliticiansTwitterSentimentClassification",
         description="GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with their sentiment (3 classes).",
@@ -47,6 +46,7 @@ Zesch, Torsten},
   year = {2022},
 }
 """,
+        superseded_by="GermanPoliticiansTwitterSentimentClassification.v2",
     )
 
     def dataset_transform(self):

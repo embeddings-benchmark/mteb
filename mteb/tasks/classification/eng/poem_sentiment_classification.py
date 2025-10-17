@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class PoemSentimentClassification(AbsTaskClassification):
-    superseded_by = "PoemSentimentClassification.v2"
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
         description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.",
@@ -35,6 +34,7 @@ class PoemSentimentClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
+        superseded_by="PoemSentimentClassification.v2",
     )
 
 

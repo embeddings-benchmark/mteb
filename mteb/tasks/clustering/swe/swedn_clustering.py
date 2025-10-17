@@ -4,8 +4,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class SwednClustering(AbsTaskClusteringLegacy):
-    superseded_by = "SwednClusteringP2P"
-
     metadata = TaskMetadata(
         name="SwednClustering",
         dataset={
@@ -35,6 +33,7 @@ class SwednClustering(AbsTaskClusteringLegacy):
   year = {2021},
 }
 """,
+        superseded_by="SwednClusteringP2P",
     )
 
 

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class WRIMEClassification(AbsTaskClassification):
-    superseded_by = "WRIMEClassification.v2"
     metadata = TaskMetadata(
         name="WRIMEClassification",
         dataset={
@@ -52,6 +51,7 @@ Zhou, Yichao},
   year = {2021},
 }
 """,
+        superseded_by="WRIMEClassification.v2",
     )
 
 

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DKHateClassification(AbsTaskClassification):
-    superseded_by = "DKHateClassification.v2"
     metadata = TaskMetadata(
         name="DKHateClassification",
         dataset={
@@ -56,6 +55,7 @@ Piperidis, Stelios},
 }
 """,
         prompt="Classify Danish tweets based on offensiveness (offensive, not offensive)",
+        superseded_by="DKHateClassification.v2",
     )
 
     samples_per_label = 16

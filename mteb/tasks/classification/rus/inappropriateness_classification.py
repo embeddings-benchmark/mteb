@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class InappropriatenessClassification(AbsTaskClassification):
-    superseded_by = "InappropriatenessClassification.v2"
     metadata = TaskMetadata(
         name="InappropriatenessClassification",
         dataset={
@@ -55,6 +54,7 @@ Robnik-{\v{S}}ikonja, Marko},
 }
 """,
         prompt="Classify the given message as either sensitive topic or not",
+        superseded_by="InappropriatenessClassification.v2",
     )
 
     def dataset_transform(self):

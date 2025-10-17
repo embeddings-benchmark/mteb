@@ -4,8 +4,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TenKGnadClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "TenKGnadClusteringS2S.v2"
-
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S",
         description="Clustering of news article titles. Clustering of 10 splits on the news article category.",
@@ -28,6 +26,7 @@ class TenKGnadClusteringS2S(AbsTaskClusteringLegacy):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        superseded_by="TenKGnadClusteringS2S.v2",
     )
 
 

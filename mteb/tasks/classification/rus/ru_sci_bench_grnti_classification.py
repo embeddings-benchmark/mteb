@@ -3,8 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuSciBenchGRNTIClassification(AbsTaskClassification):
-    superseded_by = "RuSciBenchGRNTIClassification.v2"
-
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClassification",
         dataset={
@@ -28,6 +26,7 @@ class RuSciBenchGRNTIClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
         prompt="Classify the category of scientific papers based on the titles and abstracts",
+        superseded_by="RuSciBenchGRNTIClassification.v2",
     )
 
     def dataset_transform(self):

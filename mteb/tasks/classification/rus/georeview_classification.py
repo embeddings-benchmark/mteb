@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GeoreviewClassification(AbsTaskClassification):
-    superseded_by = "GeoreviewClassification.v2"
     metadata = TaskMetadata(
         name="GeoreviewClassification",
         dataset={
@@ -27,6 +26,7 @@ class GeoreviewClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
         prompt="Classify the organization rating based on the reviews",
+        superseded_by="GeoreviewClassification.v2",
     )
 
 

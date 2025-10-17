@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class AmazonPolarityClassification(AbsTaskClassification):
-    superseded_by = "AmazonPolarityClassification.v2"
     metadata = TaskMetadata(
         name="AmazonPolarityClassification",
         description="Amazon Polarity Classification Dataset.",
@@ -38,6 +37,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify Amazon reviews into positive or negative sentiment",
+        superseded_by="AmazonPolarityClassification.v2",
     )
 
 
