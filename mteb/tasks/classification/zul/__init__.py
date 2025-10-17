@@ -1,4 +1,4 @@
-from .IsiZuluNewsClassification import (
+from .isi_zulu_news_classification import (
     IsiZuluNewsClassification,
     IsiZuluNewsClassificationV2,
 )

@@ -1,10 +1,10 @@
 from .snl_clustering import SNLClustering
-from .SNLHierarchicalClustering import (
+from .snl_hierarchical_clustering import (
     SNLHierarchicalClusteringP2P,
     SNLHierarchicalClusteringS2S,
 )
 from .vg_clustering import VGClustering
-from .VGHierarchicalClustering import (
+from .vg_hierarchical_clustering import (
     VGHierarchicalClusteringP2P,
     VGHierarchicalClusteringS2S,
 )

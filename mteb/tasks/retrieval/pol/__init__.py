@@ -1,5 +1,5 @@
-from .ArguAnaPLRetrieval import ArguAnaPL
-from .CqadupstackPLRetrieval import (
+from .argu_ana_pl_retrieval import ArguAnaPL
+from .cqadupstack_pl_retrieval import (
     CQADupstackAndroidRetrievalPL,
     CQADupstackEnglishRetrievalPL,
     CQADupstackGamingRetrievalPL,
@@ -13,18 +13,18 @@ from .CqadupstackPLRetrieval import (
     CQADupstackWebmastersRetrievalPL,
     CQADupstackWordpressRetrievalPL,
 )
-from .DBPediaPLRetrieval import DBPediaPL, DBPediaPLHardNegatives
-from .FiQAPLRetrieval import FiQAPLRetrieval
-from .HotpotQAPLRetrieval import HotpotQAPL, HotpotQAPLHardNegatives
-from .MSMARCOPLRetrieval import MSMARCOPL, MSMARCOPLHardNegatives
-from .NFCorpusPLRetrieval import NFCorpusPL
-from .NQPLRetrieval import NQPL, NQPLHardNegatives
-from .PUGGRetrieval import PUGGRetrieval
-from .QuoraPLRetrieval import QuoraPLRetrieval, QuoraPLRetrievalHardNegatives
-from .SCIDOCSPLRetrieval import SCIDOCSPL
-from .SciFactPLRetrieval import SciFactPL
-from .Touche2020PLRetrieval import Touche2020PL
-from .TRECCOVIDPLRetrieval import TRECCOVIDPL
+from .db_pedia_pl_retrieval import DBPediaPL, DBPediaPLHardNegatives
+from .fi_qapl_retrieval import FiQAPLRetrieval
+from .hotpot_qapl_retrieval import HotpotQAPL, HotpotQAPLHardNegatives
+from .msmarcopl_retrieval import MSMARCOPL, MSMARCOPLHardNegatives
+from .nf_corpus_pl_retrieval import NFCorpusPL
+from .nqpl_retrieval import NQPL, NQPLHardNegatives
+from .pugg_retrieval import PUGGRetrieval
+from .quora_pl_retrieval import QuoraPLRetrieval, QuoraPLRetrievalHardNegatives
+from .sci_fact_pl_retrieval import SciFactPL
+from .scidocspl_retrieval import SCIDOCSPL
+from .touche2020_pl_retrieval import Touche2020PL
+from .treccovidpl_retrieval import TRECCOVIDPL
 
 __all__ = [
     "MSMARCOPL",

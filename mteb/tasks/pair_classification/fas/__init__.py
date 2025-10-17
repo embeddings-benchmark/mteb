@@ -1,4 +1,4 @@
-from .FaMTEBPairClassification import (
+from .fa_mteb_pair_classification import (
     CExaPPC,
     FarsiParaphraseDetection,
     ParsinluEntail,
@@ -7,7 +7,7 @@ from .FaMTEBPairClassification import (
     SynPerQAPC,
     SynPerTextKeywordsPC,
 )
-from .FarsTail import FarsTail
+from .fars_tail import FarsTail
 
 __all__ = [
     "CExaPPC",

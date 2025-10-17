@@ -1,8 +1,8 @@
-from .SinhalaNewsClassification import (
+from .sinhala_news_classification import (
     SinhalaNewsClassification,
     SinhalaNewsClassificationV2,
 )
-from .SinhalaNewsSourceClassification import (
+from .sinhala_news_source_classification import (
     SinhalaNewsSourceClassification,
     SinhalaNewsSourceClassificationV2,
 )

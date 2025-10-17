@@ -1,4 +1,4 @@
-from .PolishClustering import (
+from .polish_clustering import (
     EightTagsClustering,
     EightTagsClusteringFast,
     PlscClusteringP2P,

@@ -1,4 +1,4 @@
-from .SiswatiNewsClassification import (
+from .siswati_news_classification import (
     SiswatiNewsClassification,
     SiswatiNewsClassificationV2,
 )

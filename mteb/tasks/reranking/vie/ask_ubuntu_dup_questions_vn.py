@@ -1,8 +1,8 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
-class AskUbuntuDupQuestionsVN(AbsTaskReranking):
+class AskUbuntuDupQuestionsVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AskUbuntuDupQuestions-VN",
         description="""A translated dataset from AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar
@@ -12,8 +12,8 @@ class AskUbuntuDupQuestionsVN(AbsTaskReranking):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://github.com/taolei87/askubuntu",
         dataset={
-            "path": "GreenNode/askubuntudupquestions-reranking-vn",
-            "revision": "5cfaa5c07252d30c37302bfc056f0d85884971a1",
+            "path": "mteb/AskUbuntuDupQuestions-VN",
+            "revision": "92dd929557322bfd409936fc295d394cbf70e13a",
         },
         type="Reranking",
         category="t2t",

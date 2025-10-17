@@ -1,4 +1,4 @@
-from .PolishClassification import (
+from .polish_classification import (
     AllegroReviewsClassification,
     AllegroReviewsClassificationV2,
     CbdClassification,
