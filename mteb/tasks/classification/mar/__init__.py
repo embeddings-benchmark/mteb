@@ -1,4 +1,4 @@
-from .MarathiNewsClassification import (
+from .marathi_news_classification import (
     MarathiNewsClassification,
     MarathiNewsClassificationV2,
 )

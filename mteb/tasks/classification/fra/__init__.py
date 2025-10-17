@@ -1,5 +1,5 @@
-from .FrenchBookReviews import FrenchBookReviews, FrenchBookReviewsV2
-from .MovieReviewSentimentClassification import (
+from .french_book_reviews import FrenchBookReviews, FrenchBookReviewsV2
+from .movie_review_sentiment_classification import (
     MovieReviewSentimentClassification,
     MovieReviewSentimentClassificationV2,
 )

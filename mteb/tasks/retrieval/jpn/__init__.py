@@ -1,21 +1,21 @@
-from .JaCWIRRetrieval import JaCWIRRetrieval
-from .JaGovFaqsRetrieval import JaGovFaqsRetrieval
-from .JapaneseLegal1Retrieval import JapaneseLegal1Retrieval
-from .JaqketRetrieval import JaqketRetrieval
-from .JaQuADRetrieval import JaQuADRetrieval
-from .NLPJournalAbsArticleRetrieval import (
+from .ja_cwir_retrieval import JaCWIRRetrieval
+from .ja_gov_faqs_retrieval import JaGovFaqsRetrieval
+from .ja_qu_ad_retrieval import JaQuADRetrieval
+from .japanese_legal1_retrieval import JapaneseLegal1Retrieval
+from .jaqket_retrieval import JaqketRetrieval
+from .nlp_journal_abs_article_retrieval import (
     NLPJournalAbsArticleRetrieval,
     NLPJournalAbsArticleRetrievalV2,
 )
-from .NLPJournalAbsIntroRetrieval import (
+from .nlp_journal_abs_intro_retrieval import (
     NLPJournalAbsIntroRetrieval,
     NLPJournalAbsIntroRetrievalV2,
 )
-from .NLPJournalTitleAbsRetrieval import (
+from .nlp_journal_title_abs_retrieval import (
     NLPJournalTitleAbsRetrieval,
     NLPJournalTitleAbsRetrievalV2,
 )
-from .NLPJournalTitleIntroRetrieval import (
+from .nlp_journal_title_intro_retrieval import (
     NLPJournalTitleIntroRetrieval,
     NLPJournalTitleIntroRetrievalV2,
 )

@@ -1,4 +1,4 @@
-from .RuSciBenchRegression import (
+from .ru_sci_bench_regression import (
     RuSciBenchCitedCountRegression,
     RuSciBenchYearPublRegression,
 )

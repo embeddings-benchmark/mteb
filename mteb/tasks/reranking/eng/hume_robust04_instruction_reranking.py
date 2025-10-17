@@ -1,8 +1,8 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
-class HUMERobust04InstructionReranking(AbsTaskReranking):
+class HUMERobust04InstructionReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HUMERobust04InstructionReranking",
         description="Human evaluation subset of Robust04 instruction retrieval dataset for reranking evaluation.",

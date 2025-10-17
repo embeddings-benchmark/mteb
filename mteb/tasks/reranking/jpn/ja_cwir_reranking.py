@@ -1,10 +1,10 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 _EVAL_SPLIT = "test"
 
 
-class JaCWIRReranking(AbsTaskReranking):
+class JaCWIRReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="JaCWIRReranking",
         description=(

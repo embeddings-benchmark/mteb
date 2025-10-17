@@ -1,4 +1,4 @@
-from .JavaneseIMDBClassification import (
+from .javanese_imdb_classification import (
     JavaneseIMDBClassification,
     JavaneseIMDBClassificationV2,
 )

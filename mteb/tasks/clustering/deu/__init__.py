@@ -1,7 +1,7 @@
-from .BlurbsClusteringP2P import BlurbsClusteringP2P, BlurbsClusteringP2PFast
-from .BlurbsClusteringS2S import BlurbsClusteringS2S, BlurbsClusteringS2SFast
-from .TenKGnadClusteringP2P import TenKGnadClusteringP2P, TenKGnadClusteringP2PFast
-from .TenKGnadClusteringS2S import TenKGnadClusteringS2S, TenKGnadClusteringS2SFast
+from .blurbs_clustering_p2p import BlurbsClusteringP2P, BlurbsClusteringP2PFast
+from .blurbs_clustering_s2s import BlurbsClusteringS2S, BlurbsClusteringS2SFast
+from .ten_k_gnad_clustering_p2p import TenKGnadClusteringP2P, TenKGnadClusteringP2PFast
+from .ten_k_gnad_clustering_s2s import TenKGnadClusteringS2S, TenKGnadClusteringS2SFast
 
 __all__ = [
     "BlurbsClusteringP2P",

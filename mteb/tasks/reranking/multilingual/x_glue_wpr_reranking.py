@@ -1,7 +1,7 @@
 import logging
 
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +75,7 @@ _CITATION = r"""
 """
 
 
-class XGlueWPRReranking(AbsTaskReranking):
+class XGlueWPRReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XGlueWPRReranking",
         description="""XGLUE is a new benchmark dataset to evaluate the performance of cross-lingual pre-trained models

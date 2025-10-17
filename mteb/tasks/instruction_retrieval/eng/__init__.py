@@ -1,11 +1,11 @@
-from .IFIRAilaRetrieval import IFIRAila
-from .IFIRCdsRetrieval import IFIRCds
-from .IFIRFiQARetrieval import IFIRFiQA
-from .IFIRFireRetrieval import IFIRFire
-from .IFIRNFCorpusRetrieval import IFIRNFCorpus
-from .IFIRPmRetrieval import IFIRPm
-from .IFIRScifactRetrieval import IFIRScifact
-from .InstructIR import InstructIR
+from .ifir_aila_retrieval import IFIRAila
+from .ifir_cds_retrieval import IFIRCds
+from .ifir_fi_qa_retrieval import IFIRFiQA
+from .ifir_fire_retrieval import IFIRFire
+from .ifir_pm_retrieval import IFIRPm
+from .ifir_scifact_retrieval import IFIRScifact
+from .ifirnf_corpus_retrieval import IFIRNFCorpus
+from .instruct_ir import InstructIR
 
 __all__ = [
     "IFIRAila",
