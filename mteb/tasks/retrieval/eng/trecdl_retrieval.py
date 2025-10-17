@@ -9,7 +9,7 @@ class TRECDL2019(AbsTaskRetrieval):
         name="TRECDL2019",
         dataset={
             "path": "whybe-choi/trec-dl-2019",
-            "revision": "48411d50a49302fce8e44cd1f15becef750ad881",
+            "revision": "cbb055c2528c544edf84db8ec6aef1885ec8cfda",
         },
         description="TREC Deep Learning Track 2019 passage ranking task. The task involves retrieving relevant passages from the MS MARCO collection given web search queries. Queries have multi-graded relevance judgments.",
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019",
@@ -79,7 +79,7 @@ class TRECDL2020(AbsTaskRetrieval):
         name="TRECDL2020",
         dataset={
             "path": "whybe-choi/trec-dl-2020",
-            "revision": "fd9379e047b2ef08390d2af11d7d97a46a4a12ed",
+            "revision": "83d7d3532f3fa653f132da188bbaa852d959d6f9",
         },
         description="TREC Deep Learning Track 2020 passage ranking task. The task involves retrieving relevant passages from the MS MARCO collection given web search queries. Queries have multi-graded relevance judgments.",
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2020",
