@@ -222,9 +222,11 @@ class CachedEmbeddingWrapper(AbsEncoder):
     """
 
     def __init__(self, model: EncoderProtocol, cache_path: str | Path):
-        """Args:
-        model: Model to be wrapped.
-        cache_path: Path to the directory where cached embeddings are stored.
+        """Init
+
+        Args:
+            model: Model to be wrapped.
+            cache_path: Path to the directory where cached embeddings are stored.
         """
         self._model = model
         self.cache_path = Path(cache_path)
@@ -236,6 +238,7 @@ class CachedEmbeddingWrapper(AbsEncoder):
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
+        """Return wrapped model meta data."""
         return self._model.mteb_model_meta
 
     def encode(
@@ -253,14 +256,7 @@ class CachedEmbeddingWrapper(AbsEncoder):
 
         Args:
             inputs: Batch of inputs to encode.
-            task_metadata: The metadata of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-                The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
-                    2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
-                    4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
+            task_metadata: The metadata of the task.
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The name type of prompt. (query or passage)
