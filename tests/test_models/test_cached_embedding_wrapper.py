@@ -38,7 +38,7 @@ class TestCachedEmbeddingWrapper:
     def test_caching_functionality(self, cache_dir):
         # Create a dummy model
         dummy_model = DummyModel()
-        dummy_task_metadata_query = TaskMetadata(
+        dummy_task_metadata = TaskMetadata(
             name="DummyTaskQuery",
             description="Dummy task metadata",
             dataset={"path": "test", "revision": "test"},
@@ -46,8 +46,6 @@ class TestCachedEmbeddingWrapper:
             eval_langs=["eng-Latn"],
             main_score="accuracy",
         )
-        dummy_task_metadata_corpus = dummy_task_metadata_query.copy()
-        dummy_task_metadata_corpus.name = "DummyTaskCorpus"
 
         # Create the wrapper
         wrapped_model = CachedEmbeddingWrapper(dummy_model, cache_dir)
@@ -78,13 +76,13 @@ class TestCachedEmbeddingWrapper:
         # First call - should use the model to compute embeddings
         query_embeddings1 = wrapped_model.encode(
             queries,
-            task_metadata=dummy_task_metadata_query,
+            task_metadata=dummy_task_metadata,
             hf_subset="test",
             hf_split="test",
         )
         corpus_embeddings1 = wrapped_model.encode(
             corpus,
-            task_metadata=dummy_task_metadata_corpus,
+            task_metadata=dummy_task_metadata,
             hf_subset="test",
             hf_split="test",
         )
@@ -94,13 +92,13 @@ class TestCachedEmbeddingWrapper:
         # Second call - should use cached embeddings
         query_embeddings2 = wrapped_model.encode(
             queries,
-            task_metadata=dummy_task_metadata_query,
+            task_metadata=dummy_task_metadata,
             hf_subset="test",
             hf_split="test",
         )
         corpus_embeddings2 = wrapped_model.encode(
             corpus,
-            task_metadata=dummy_task_metadata_corpus,
+            task_metadata=dummy_task_metadata,
             hf_subset="test",
             hf_split="test",
         )
@@ -123,7 +121,7 @@ class TestCachedEmbeddingWrapper:
         )
         query_embeddings3 = wrapped_model.encode(
             new_queries,
-            task_metadata=dummy_task_metadata_query,
+            task_metadata=dummy_task_metadata,
             hf_subset="test",
             hf_split="test",
         )
@@ -134,7 +132,7 @@ class TestCachedEmbeddingWrapper:
         # try with a cached query only
         _ = wrapped_model.encode(
             queries,
-            task_metadata=dummy_task_metadata_query,
+            task_metadata=dummy_task_metadata,
             hf_subset="test",
             hf_split="test",
         )
