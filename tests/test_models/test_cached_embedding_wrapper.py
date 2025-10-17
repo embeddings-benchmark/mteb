@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb import TaskMetadata
 from mteb.abstasks import AbsTask
-from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
+from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.models_protocols import EncoderProtocol
 from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 

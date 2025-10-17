@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
@@ -207,12 +206,12 @@ class _VectorCacheMap:
             self.vectors = None
 
 
-class CachedEmbeddingWrapper(AbsEncoder):
+class CachedEmbeddingWrapper:
     """Wraps an encoder and caches embeddings for text and images.
 
     Examples:
         >>> import mteb
-        >>> from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
+        >>> from mteb.models.cache_wrappers import CachedEmbeddingWrapper
         >>> from pathlib import Path
         >>> model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
         >>> cache_path = Path.cwd() / "cache"
@@ -222,9 +221,11 @@ class CachedEmbeddingWrapper(AbsEncoder):
     """
 
     def __init__(self, model: EncoderProtocol, cache_path: str | Path):
-        """Args:
-        model: Model to be wrapped.
-        cache_path: Path to the directory where cached embeddings are stored.
+        """Init
+
+        Args:
+            model: Model to be wrapped.
+            cache_path: Path to the directory where cached embeddings are stored.
         """
         self._model = model
         self.cache_path = Path(cache_path)
@@ -236,6 +237,7 @@ class CachedEmbeddingWrapper(AbsEncoder):
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
+        """Return wrapped model meta data."""
         return self._model.mteb_model_meta
 
     def encode(
@@ -253,14 +255,7 @@ class CachedEmbeddingWrapper(AbsEncoder):
 
         Args:
             inputs: Batch of inputs to encode.
-            task_metadata: The metadata of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-                The order of priorities for prompt selection are:
-                    1. Composed prompt of task name + prompt type (query or passage)
-                    2. Specific task prompt
-                    3. Composed prompt of task type + prompt type (query or passage)
-                    4. Specific task type prompt
-                    5. Specific prompt type (query or passage)
+            task_metadata: The metadata of the task.
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The name type of prompt. (query or passage)
@@ -342,3 +337,19 @@ class CachedEmbeddingWrapper(AbsEncoder):
         """Unload cache from memory."""
         for task in list(self.cache_dict.keys()):
             self.cache_dict[task].close()
+
+    def similarity(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity] for more details."""
+        return self._model.similarity(embeddings1, embeddings2)
+
+    def similarity_pairwise(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
+        return self._model.similarity_pairwise(embeddings1, embeddings2)
