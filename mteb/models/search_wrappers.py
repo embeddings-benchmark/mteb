@@ -4,6 +4,7 @@ from typing import Any
 
 import torch
 from datasets import Dataset
+from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import (
     create_dataloader,
@@ -11,6 +12,7 @@ from mteb._create_dataloaders import (
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.types import (
     Array,
+    BatchedInput,
     CorpusDatasetType,
     PromptType,
     QueryDatasetType,
@@ -285,6 +287,42 @@ class SearchEncoderWrapper:
                 heapq.heappush(result_heaps[query_id], (score, corpus_id))
 
         return result_heaps
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Encode inputs using the model' s encode."""
+        return self.model.encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+
+    def similarity(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Compute the similarity between two collections of embeddings."""
+        return self.model.similarity(embeddings1, embeddings2)
+
+    def similarity_pairwise(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Compute the pairwise similarity between two collections of embeddings."""
+        return self.model.similarity_pairwise(embeddings1, embeddings2)
 
 
 class SearchCrossEncoderWrapper:
