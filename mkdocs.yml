@@ -72,9 +72,6 @@ nav:
       - index.md
       - whats_new.md
       - Installation: installation.md
-      - Adding a Model: adding_a_model.md
-      - Adding a Task: adding_a_dataset.md
-      - Adding a Benchmark: adding_a_benchmark.md
       - Usage:
         - Get Started: usage/get_started.md
         - Defining the Model: usage/defining_the_model.md
@@ -86,6 +83,11 @@ nav:
       - Advanced Usage:
         - Two stage reranking: advanced_usage/two_stage_reranking.md
         - Cache embeddings: advanced_usage/cache_embeddings.md
+  - Adding to MTEB:
+      - Adding a Model: adding_a_model.md
+      - Adding a Task: adding_a_dataset.md
+      - Adding a Benchmark: adding_a_benchmark.md
+      - Contributing: CONTRIBUTING.md
   - Overview:
       - overview/index.md
       - Benchmarks:

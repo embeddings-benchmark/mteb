@@ -19,7 +19,7 @@
         <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
         <a href="https://embeddings-benchmark.github.io/mteb/">Documentation</a> |
         <a href="#citing">Citing</a>
-    <p>
+    </p>
 </h4>
 
 <h3 align="center">
@@ -95,7 +95,7 @@ For more on how to use the CLI check out the [related documentation](https://emb
 [Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/any2anymultilingualretrieval/
 [Benchmarks]: https://embeddings-benchmark.github.io/mteb/overview/available_benchmarks/
 [Models]: https://embeddings-benchmark.github.io/mteb/overview/available_models/text/
-[Contributing]: CONTRIBUTING.md
+[Contributing]: docs/CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
 [Adding a benchmark]: docs/adding_a_benchmark.md

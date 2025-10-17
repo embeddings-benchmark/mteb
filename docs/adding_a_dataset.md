@@ -3,225 +3,144 @@
 To add a new dataset to MTEB, you need to do three things:
 
 1) Implement a task with the desired dataset, by subclassing an abstract task
-2) Add metadata to the task (run `task.calculate_descriptive_statistics()`)
-3) Submit the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository
+2) Add metadata to the task
+3) Calculate statistics of the task (run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics])
+4) Submit the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb/blob/main) repository
 
 If you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions).
 
-> Note: When we mention adding a dataset we refer to a subclass of one of the abstasks.
+!!! Note
+    When we mention adding a dataset we refer to a subclass of one of the [abstasks](./api/task.md#multimodal-tasks).
 
 ## Creating a new subclass
 
 ### A Simple Example
 
-To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).
+To add a new task, you need to implement a new class that inherits from the [`AbsTask`][mteb.AbsTask] associated with the task type (e.g. [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval] for retrieval tasks). You can find the supported task types in [here](./api/task.md#multimodal-tasks).
 
-```python
-from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.task_metadata import TaskMetadata
+??? example "SciDocs Reranking Task"
+    ```python
+    from mteb.abstasks.retrieval import AbsTaskRetrieval
+    from mteb.abstasks.task_metadata import TaskMetadata
 
-class SciDocsReranking(AbsTaskRetrieval):
-    metadata = TaskMetadata(
-        name="SciDocsRR",
-        description="Ranking of related scientific papers based on their title.",
-        reference="https://allenai.org/data/scidocs",
-        type="Reranking",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="map",
-        dataset={
-            "path": "mteb/scidocs-reranking",
-            "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
-        },
-        date=("2000-01-01", "2020-12-31"), # best guess
-        domains=["Academic", "Non-fiction", "Domains"],
-        task_subtypes=["Scientific Reranking"],
-        license="cc-by-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation="""
-@inproceedings{cohan-etal-2020-specter,
-    title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
-    author = "Cohan, Arman  and
-      Feldman, Sergey  and
-      Beltagy, Iz  and
-      Downey, Doug  and
-      Weld, Daniel",
-    editor = "Jurafsky, Dan  and
-      Chai, Joyce  and
-      Schluter, Natalie  and
-      Tetreault, Joel",
-    booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
-    month = jul,
-    year = "2020",
-    address = "Online",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2020.acl-main.207",
-    doi = "10.18653/v1/2020.acl-main.207",
-    pages = "2270--2282",
-}
-""",
-)
+    class SciDocsReranking(AbsTaskRetrieval):
+        metadata = TaskMetadata(
+            name="SciDocsRR",
+            description="Ranking of related scientific papers based on their title.",
+            reference="https://allenai.org/data/scidocs",
+            type="Reranking",
+            category="t2t",
+            modalities=["text"],
+            eval_splits=["test"],
+            eval_langs=["eng-Latn"],
+            main_score="map",
+            dataset={
+                "path": "mteb/scidocs-reranking",
+                "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+            },
+            date=("2000-01-01", "2020-12-31"), # best guess
+            domains=["Academic", "Non-fiction", "Domains"],
+            task_subtypes=["Scientific Reranking"],
+            license="cc-by-4.0",
+            annotations_creators="derived",
+            dialect=[],
+            sample_creation="found",
+            bibtex_citation="""
+    @inproceedings{cohan-etal-2020-specter,
+        title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
+        author = "Cohan, Arman  and
+          Feldman, Sergey  and
+          Beltagy, Iz  and
+          Downey, Doug  and
+          Weld, Daniel",
+        editor = "Jurafsky, Dan  and
+          Chai, Joyce  and
+          Schluter, Natalie  and
+          Tetreault, Joel",
+        booktitle = "Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics",
+        month = jul,
+        year = "2020",
+        address = "Online",
+        publisher = "Association for Computational Linguistics",
+        url = "https://aclanthology.org/2020.acl-main.207",
+        doi = "10.18653/v1/2020.acl-main.207",
+        pages = "2270--2282",
+    }
+    """,
+    )
 
-# testing the task with a model:
-model = mteb.get_model("intfloat/multilingual-e5-small")
-results = mteb.evaluate(model, tasks=[SciDocsReranking()])
-```
+    # testing the task with a model:
+    model = mteb.get_model("intfloat/multilingual-e5-small")
+    results = mteb.evaluate(model, tasks=[SciDocsReranking()])
+    ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/classification/multilingual/mtop_intent_classification.py).
+!!! Note
+    For multilingual/crosslingual tasks, make sure you've specified [`eval_langs`][mteb.TaskMetadata] as a dictionary, as shown in [this example](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/classification/multilingual/mtop_intent_classification.py).
 
 
 
 ### A Detailed Example
-Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
+Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a [`dataset_transform`][mteb.AbsTask.dataset_transform] method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
 
-```python
-class VGClustering(AbsTaskClustering):
-    metadata = TaskMetadata(
-        name="VGClustering",
-        description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
-        reference="https://huggingface.co/datasets/navjordj/VG_summarization",
-        type="Clustering",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=["test"],
-        eval_langs=["nob-Latn"],
-        main_score="v_measure",
-        dataset={
-            "path": "navjordj/VG_summarization",
-            "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
-        },
-        date=("2012-01-01", "2020-01-01"),
-        domains=["Academic", "Non-fiction"],
-        task_subtypes=["Scientific Reranking"],
-        license="cc-by-nc-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        text_creation="found",
-        bibtex_citation= ... # removed for brevity
-    )
+??? example "DBpediaClassificationV2 Task"
 
-    def dataset_transform(self):
-        splits = self.description["eval_splits"]
+    ```python
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.abstasks.classification import AbsTaskClassification
 
-        documents: list = []
-        labels: list = []
-        label_col = "classes"
+    class DBpediaClassificationV2(AbsTaskClassification):
+        metadata = TaskMetadata(
+            name="DBpediaClassification.v2",
+            description="""DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.
+            This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)""",
+            reference="https://arxiv.org/abs/1509.01626",
+            dataset={
+                "path": "mteb/d_bpedia",
+                "revision": "e45aab5cbb44baba43d8a0640d809d2aa0a0a770",
+            },
+            type="Classification",
+            category="t2c",
+            modalities=["text"],
+            eval_splits=["test"],
+            eval_langs=["eng-Latn"],
+            main_score="accuracy",
+            date=("2022-01-25", "2022-01-25"),
+            domains=["Encyclopaedic", "Written"],
+            task_subtypes=["Topic classification"],
+            license="cc-by-sa-3.0",
+            annotations_creators="derived",
+            dialect=[],
+            sample_creation="found",
+            bibtex_citation=r"""
+    @inproceedings{NIPS2015_250cf8b5,
+      author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
+      booktitle = {Advances in Neural Information Processing Systems},
+      editor = {C. Cortes and N. Lawrence and D. Lee and M. Sugiyama and R. Garnett},
+      pages = {},
+      publisher = {Curran Associates, Inc.},
+      title = {Character-level Convolutional Networks for Text Classification},
+      url = {https://proceedings.neurips.cc/paper_files/paper/2015/file/250cf8b51c773f3f8dc8b4be867a9a02-Paper.pdf},
+      volume = {28},
+      year = {2015},
+    }
+    """,
+            adapted_from=["DBpediaClassification"],
+        )
 
-        ds = {}
-        for split in splits:
-            ds_split = self.dataset[split]
-
-            _label = self.normalize_labels(ds_split[label_col])
-            documents.extend(ds_split["title"])
-            labels.extend(_label)
-
-            documents.extend(ds_split["ingress"])
-            labels.extend(_label)
-
-            documents.extend(ds_split["article"])
-            labels.extend(_label)
-
-            assert len(documents) == len(labels)
-
-            rng = random.Random(1111)  # local only seed
-            pairs = list(zip(documents, labels))
-            rng.shuffle(pairs)
-            documents, labels = [list(collection) for collection in zip(*pairs)]
-
-            # To get a more robust estimate we create batches of size 512, this decision can vary depending on dataset
-            documents_batched = list(batched(documents, 512))
-            labels_batched = list(batched(labels, 512))
-
-            # reduce the size of the dataset as we see that we obtain a consistent scores (if we change the seed) even
-            # with only 512x4 samples.
-            documents_batched = documents_batched[:4]
-            labels_batched = labels_batched[:4]
-
-
-            ds[split] = datasets.Dataset.from_dict(
-                {
-                    "sentences": documents_batched,
-                    "labels": labels_batched,
-                }
+        def dataset_transform(self):
+            self.dataset = self.stratified_subsampling(
+                self.dataset, seed=self.seed, splits=["train", "test"]
             )
-
-        self.dataset = datasets.DatasetDict(ds)
-```
-
-
+    ```
 
 ## Creating the metadata object
 Along with the task MTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
 
-To get an overview of the fields in the metadata object, you can look at the [TaskMetadata](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/TaskMetadata.py) class.
+To get an overview of the fields in the metadata object, you can look at the [TaskMetadata][mteb.TaskMetadata] class.
 
 
-Note that these fields can be left blank if the information is not available and can be extended if necessary. We do not include any machine-translated (without verification) datasets in the benchmark.
-
-<details>
-<summary>Domains</summary>
-<br>
-
-The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though we updated them where deemed appropriate. These do not have to be mutually exclusive.
-
-| **Domain**    | **Description**                                                  |
-|---------------|------------------------------------------------------------------|
-| Academic      | Academic writing                                                 |
-| Religious     | Religious text e.g. bibles                                       |
-| Blog          | [Blogpost, weblog etc.](https://en.wikipedia.org/wiki/Blog)      |
-| Fiction       | Works of [fiction](https://en.wikipedia.org/wiki/Fiction)        |
-| Government    | Governmental communication, websites or similar                  |
-| Legal         | Legal documents, laws etc.                                       |
-| Medical       | doctors notes, medical procedures or similar                     |
-| News          | News articles, tabloids etc.                                     |
-| Reviews       | Reviews e.g. user reviews of products                            |
-| Non-fiction   | [non-fiction](https://en.wikipedia.org/wiki/Non-fiction) writing |
-| Poetry        | Poems, Epics etc.                                                |
-| Social        | social media content                                             |
-| Spoken        | Spoken dialogues                                                 |
-| Encyclopaedic | E.g. Wikipedias                                                  |
-| Web           | Web content                                                      |
-
-
-</details>
-
-
-<br>
-<details>
-<summary>Task Subtypes</summary>
-<br>
-
-These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and are intended to be extended as needed.
-
-
-
-| Formalization           | Task                     | Description                                                                                                     |
-|-------------------------|--------------------------|-----------------------------------------------------------------------------------------------------------------|
-| **Retrieval**           |                          | Retrieval focuses on locating and providing relevant information or documents based on a query.                 |
-|                         | Question answering       | Finding answers to queries in a dataset, focusing on exact answers or relevant passages.                        |
-|                         | Article retrieval        | Identifying and retrieving full articles that are relevant to a given query.                                    |
-| **Bitext Mining**       |                          | Bitext mining involves identifying parallel texts across languages or dialects for translation or analysis.     |
-|                         | Dialect pairing          | Identifying pairs of text that are translations of each other across different dialects.                        |
-| **Classification**      |                          | Classification is the process of categorizing text into predefined groups or classes based on their content.    |
-|                         | Political                | Categorizing text according to political orientation or content.                                                |
-|                         | Language Identification  | Determining the language in which a given piece of text is written.                                             |
-|                         | Linguistic Acceptability | Assessing whether a sentence is grammatically correct according to linguistic norms.                            |
-|                         | Sentiment/Hate Speech    | Detecting the sentiment of text or identifying hate speech within the content.                                  |
-|                         | Dialog Systems           | Creating or evaluating systems capable of conversing with humans in a natural manner.                           |
-| **Clustering**          |                          | Clustering involves grouping sets of texts together based on their similarity without pre-defined labels.       |
-|                         | Thematic Clustering      | Grouping texts based on their thematic similarity without prior labeling.                                       |
-| **Reranking**           |                          | Reranking adjusts the order of items in a list to improve relevance or accuracy according to specific criteria. |
-| **Pair Classification** |                          | Pair classification assesses relationships between pairs of items, such as texts, to classify their connection. |
-| **STS**                 |                          | Semantic Textual Similarity measures the degree of semantic equivalence between two pieces of text.             |
-
-
-</details>
-
-
+!!! Note
+    That these fields can be left blank if the information is not available and can be extended if necessary. We do not include any machine-translated (without verification) datasets in the benchmark.
 
 ## Submit a PR
 
@@ -232,21 +151,28 @@ The PR will be reviewed by one of the organizers or contributors who might ask y
 
 Before you commit, here is a checklist you should complete before submitting:
 
+```markdown
 - [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
-
-An easy way to test it is using:
-```python
-import mteb
-# sample model:
-model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-task = mteb.get_task("{name of your task}")
-
-results = mteb.evaluate(model, tasks=[YourNewTask()])
-```
-
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
   - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
   - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
+```
+
+An easy way to test it is using:
+
+=== "Python"
+    ```python
+    import mteb
+    # sample model:
+    model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    task = mteb.get_task("{name of your task}")
+
+    results = mteb.evaluate(model, task)
+    ```
+=== "CLI"
+    ```bash
+    mteb run -m sentence-transformers/paraphrase-multilingual-MiniLM -t {name of your task}
+    ```
