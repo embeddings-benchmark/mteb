@@ -137,8 +137,8 @@ class AbsTaskRegression(AbsTaskClassification):
         n_bins: int = 10,
     ) -> datasets.DatasetDict:
         """Subsamples the dataset with stratification by the supplied label, which is assumed to be a continuous value.
+
         The continuous values are bucketized into `n_bins` bins based on quantiles.
-        Returns a DatasetDict object.
 
         Args:
             dataset_dict: the DatasetDict object.
@@ -147,6 +147,9 @@ class AbsTaskRegression(AbsTaskClassification):
             label: the label with which the stratified sampling is based on.
             n_samples: Optional, number of samples to subsample.
             n_bins: Optional, number of bins to bucketize the continuous label.
+
+        Returns:
+            A subsampled DatasetDict object.
         """
         stratify_col_name = f"{label}_binned_for_stratification"
 

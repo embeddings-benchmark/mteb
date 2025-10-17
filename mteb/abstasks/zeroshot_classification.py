@@ -60,6 +60,7 @@ class ZeroShotClassificationMetrics(TypedDict):
 
 class AbsTaskZeroShotClassification(AbsTask):
     """Abstract class for ZeroShot Classification tasks for any modality.
+
     The similarity between an input (can be image or text) and candidate text prompts, such as this is a dog/this is a cat.
 
     Attributes:

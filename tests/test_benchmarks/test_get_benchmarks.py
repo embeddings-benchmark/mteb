@@ -5,7 +5,6 @@ import logging
 import pytest
 
 import mteb
-import mteb.get_tasks
 
 logging.basicConfig(level=logging.INFO)
 

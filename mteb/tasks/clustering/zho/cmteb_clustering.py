@@ -4,7 +4,7 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
-    check_label_distribution,
+    _check_label_distribution,
 )
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -59,7 +59,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
@@ -118,7 +118,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
@@ -247,7 +247,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
@@ -306,7 +306,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)

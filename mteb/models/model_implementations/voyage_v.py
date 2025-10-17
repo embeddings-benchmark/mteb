@@ -13,10 +13,14 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
 
-def downsample_image(
+def _downsample_image(
     image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
 ) -> Image.Image:
-    """If image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio."""
+    """If image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
+
+    Returns:
+        The downsampled image.
+    """
     width, height = image.size
     pixels = width * height
 
@@ -123,7 +127,7 @@ def voyage_v_loader(model_name, **kwargs):
                 images, disable=not show_progress_bar, desc="Image Encoding"
             ):
                 batch_images = [
-                    [downsample_image(self.tensor_to_image(image))]
+                    [_downsample_image(self.tensor_to_image(image))]
                     for image in batch["image"]
                 ]
                 embeddings = self._multimodal_embed(
@@ -159,7 +163,7 @@ def voyage_v_loader(model_name, **kwargs):
                     inputs, disable=not show_progress_bar, desc="Interleaved Encoding"
                 ):
                     batch_images = [
-                        downsample_image(self.tensor_to_image(image))
+                        _downsample_image(self.tensor_to_image(image))
                         for image in batch["image"]
                     ]
                     batch_texts = batch["text"]

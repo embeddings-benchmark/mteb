@@ -310,8 +310,8 @@ model_names = ["intfloat/multilingual-e5-large"]
 results = mteb.load_results(models=model_names, tasks=tasks, download_latest=True)
 
 # Recommended:
-cache = ResultCache("~/.cache/mteb") # default
-cache.download_from_remote() # downloads remote results
+cache = ResultCache("~/.cache/mteb")  # default
+cache.download_from_remote()  # downloads remote results
 
 results = cache.load_results(models=model_names, tasks=tasks)
 ```

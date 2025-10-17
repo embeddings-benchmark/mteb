@@ -13,6 +13,16 @@ DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
 @dataclass
 class MenuEntry:
+    """A menu entry for the benchmark selector.
+
+    Attributes:
+        name: The name of the menu entry.
+        benchmarks: A list of benchmarks or nested menu entries.
+        description: An optional description of the menu entry.
+        open: Whether the accordion is open by default.
+        size: The size of the buttons. Can be "sm" or "md".
+    """
+
     name: str | None
     benchmarks: list[Benchmark | MenuEntry]
     description: str | None = None

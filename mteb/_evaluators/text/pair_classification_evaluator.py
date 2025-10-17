@@ -8,9 +8,9 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
 
@@ -36,8 +36,8 @@ class PairClassificationDistances(TypedDict):
 
 
 class PairClassificationEvaluator(Evaluator):
-    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
-    dissimilar sentences.
+    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and dissimilar sentences.
+
     The metrics are the cosine similarity as well as euclidean and Manhattan distance
     The returned score is the accuracy with a specified metric.
     The results are written in a CSV. If a CSV already exists, then values are appended.
@@ -135,7 +135,7 @@ class PairClassificationEvaluator(Evaluator):
         )
         all_unique_texts_embs = np.asarray(
             model.encode(
-                create_dataloader_from_texts(all_unique_texts),
+                _create_dataloader_from_texts(all_unique_texts),
                 task_metadata=task_metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,

@@ -97,7 +97,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
 
         kwargs = {"output_dimensionality": dimensionality} if dimensionality else {}
 
-        max_batch_size = 16  ## Vertex API limits the number of instances per call to 250, but there is also a limit of tokens involved. Let's be conservative and set it to 16 by default. TODO: in a future PR, leverage the CountTokens API to get the optimum batch size for each request.
+        max_batch_size = 16  # Vertex API limits the number of instances per call to 250, but there is also a limit of tokens involved. Let's be conservative and set it to 16 by default. TODO: in a future PR, leverage the CountTokens API to get the optimum batch size for each request.
         batches = [
             inputs[i : i + max_batch_size]
             for i in range(0, len(inputs), max_batch_size)

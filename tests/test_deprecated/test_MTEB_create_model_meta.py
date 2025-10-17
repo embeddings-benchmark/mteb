@@ -40,7 +40,7 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"
     model = CrossEncoder(model_name)
     meta = mteb.create_model_meta(model)
-    output_path = mteb.create_output_folder(
+    output_path = mteb._create_output_folder(
         model_meta=meta, output_folder=tmp_path.as_posix()
     )
 

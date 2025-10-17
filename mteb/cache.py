@@ -51,6 +51,17 @@ class ResultCache:
         model_revision: str | None = None,
         remote: bool = False,
     ) -> Path:
+        """Get the path to the results of a specific task for a specific model and revision.
+
+        Args:
+            task_name: The name of the task.
+            model_name: The name of the model as a valid directory name or a ModelMeta object.
+            model_revision: The revision of the model. Must be specified if model_name is a string.
+            remote: If True, it will return the path to the remote results repository, otherwise it will return the path to the local results repository.
+
+        Returns:
+            The path to the results of the task.
+        """
         results_folder = "results" if not remote else "remote"
 
         if isinstance(model_name, ModelMeta):
@@ -137,8 +148,10 @@ class ResultCache:
         model_name: str | ModelMeta,
         model_revision: str | None = None,
     ) -> None:
-        """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json. Where model_name is a
-        path-normalized model name. In addition we also save a model_meta.json in the revision folder to preserve the model metadata.
+        """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
+
+        Where model_name is a path-normalized model name.
+        In addition we also save a model_meta.json in the revision folder to preserve the model metadata.
 
         Args:
             task_result: The results of the task.
@@ -248,8 +261,10 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[Path]:
-        """Get all paths to result JSON files in the cache directory. These paths can then be used to fetch task results, like:
-        ```
+        """Get all paths to result JSON files in the cache directory.
+
+        These paths can then be used to fetch task results, like:
+        ```python
         for path in paths:
             task_result = TaskResult.from_disk(path)
         ```
@@ -310,7 +325,16 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[tuple[ModelName, Revision]]:
-        """Get all models in the cache directory."""
+        """Get all models in the cache directory.
+
+        Args:
+            tasks: A list of task names to filter the models.
+            require_model_meta: If True, only return models that have a model_meta.json file.
+            include_remote: If True, include remote results in the returned models.
+
+        Returns:
+            A list of tuples containing the model name and revision.
+        """
         cache_paths = self.get_cache_paths(
             tasks=tasks,
             require_model_meta=require_model_meta,
@@ -325,7 +349,16 @@ class ResultCache:
         require_model_meta: bool = True,
         include_remote: bool = True,
     ) -> list[str]:
-        """Get all task names in the cache directory."""
+        """Get all task names in the cache directory.
+
+        Args:
+            models: A list of model names or ModelMeta objects to filter the task names.
+            require_model_meta: If True, only return task names that have a model_meta.json file
+            include_remote: If True, include remote results in the returned task names.
+
+        Returns:
+            A list of task names in the cache directory.
+        """
         cache_paths = self.get_cache_paths(
             models=models,
             require_model_meta=require_model_meta,
@@ -359,7 +392,11 @@ class ResultCache:
         paths: list[Path],
         models: Sequence[str] | Sequence[ModelMeta] | None = None,
     ) -> list[Path]:
-        """Filter a list of paths by model name and optional revision."""
+        """Filter a list of paths by model name and optional revision.
+
+        Returns:
+            A list of paths that match the specified model names and revisions.
+        """
         if not models:
             return paths
 

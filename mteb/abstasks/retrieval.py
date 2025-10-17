@@ -9,13 +9,13 @@ from typing import Any, Literal
 from datasets import Dataset, DatasetDict, concatenate_datasets
 from typing_extensions import Self
 
+from mteb._create_dataloaders import (
+    _combine_queries_with_instruction_text,
+    _convert_conv_history_to_query,
+    _corpus_to_dict,
+)
 from mteb._evaluators import RetrievalEvaluator
 from mteb._evaluators.retrieval_metrics import make_score_dict
-from mteb.create_dataloaders import (
-    combine_queries_with_instruction_text,
-    convert_conv_history_to_query,
-    corpus_to_dict,
-)
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
@@ -137,6 +137,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
     def convert_v1_dataset_format_to_v2(self):
+        """Convert dataset from v1 (from `self.queries`, `self.document`) format to v2 format (`self.dotaset`)."""
         # check if dataset is `v1` version
         if not hasattr(self, "queries"):
             return
@@ -241,6 +242,7 @@ class AbsTaskRetrieval(AbsTask):
             del self.top_ranked
 
     def load_data(self) -> None:
+        """Load the dataset for the retrieval task."""
         if self.data_loaded:
             return
 
@@ -249,7 +251,7 @@ class AbsTaskRetrieval(AbsTask):
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
-        def process_data(split: str, hf_subset: str = "default"):
+        def _process_data(split: str, hf_subset: str = "default"):
             """Helper function to load and process data for a given split and language"""
             logger.debug(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
@@ -266,10 +268,10 @@ class AbsTaskRetrieval(AbsTask):
         if self.metadata.is_multilingual:
             for lang in self.metadata.eval_langs:
                 for split in eval_splits:
-                    process_data(split, lang)
+                    _process_data(split, lang)
         else:
             for split in eval_splits:
-                process_data(split)
+                _process_data(split)
         self.dataset_transform()
         self.data_loaded = True
 
@@ -430,6 +432,15 @@ class AbsTaskRetrieval(AbsTask):
         hf_split: str,
         hf_subset: str,
     ) -> dict[str, float]:
+        """Calculate task specific scores. Override in subclass if needed.
+
+        Args:
+            scores: Dictionary of scores
+            qrels: Relevant documents
+            results: Retrieval results
+            hf_split: Split to evaluate on
+            hf_subset: Subset to evaluate on
+        """
         return {}
 
     def _calculate_descriptive_statistics_from_split(
@@ -499,7 +510,7 @@ class AbsTaskRetrieval(AbsTask):
         queries_image_statistics = None
 
         if "t" in corpus_modalities:
-            corpus_texts = corpus.map(corpus_to_dict)["text"]
+            corpus_texts = corpus.map(_corpus_to_dict)["text"]
             documents_text_statistics = calculate_text_statistics(corpus_texts)
             number_of_characters += documents_text_statistics["total_text_length"]
 
@@ -509,10 +520,10 @@ class AbsTaskRetrieval(AbsTask):
         if "t" in queries_modalities:
             queries_ = queries
             if "instruction" in queries_[0]:
-                queries_ = queries_.map(combine_queries_with_instruction_text)
+                queries_ = queries_.map(_combine_queries_with_instruction_text)
 
             if isinstance(queries_["text"][0], dict | list):
-                queries_ = queries_.map(convert_conv_history_to_query)
+                queries_ = queries_.map(_convert_conv_history_to_query)
             queries_text_statistics = calculate_text_statistics(queries_["text"])
 
             number_of_characters += queries_text_statistics["total_text_length"]
@@ -629,6 +640,10 @@ class AbsTaskRetrieval(AbsTask):
 
         Returns:
             The current task reformulated as a reranking task
+
+        Raises:
+            FileNotFoundError: If the specified path does not exist.
+            ValueError: If the loaded top ranked results are not in the expected format.
         """
         top_ranked_path = Path(top_ranked_path)
         if top_ranked_path.is_dir():
@@ -668,7 +683,11 @@ def _process_relevant_docs(
     hf_subset: str,
     split: str,
 ) -> dict[str, dict[str, float]]:
-    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
+    """Collections can contain overlapping ids in different splits. Prepend split and subset to avoid this
+
+    Returns:
+        A new collection with split and subset prepended to ids
+    """
     return_collection = {}
     for query_id, relevant in collection.items():
         return_collection[f"{split}_{hf_subset}_{query_id}"] = {
