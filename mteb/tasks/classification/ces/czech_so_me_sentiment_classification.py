@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CzechSoMeSentimentClassification(AbsTaskClassification):
-    superseded_by = "CzechSoMeSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification",
         description="User comments on Facebook",
@@ -43,6 +42,7 @@ Montoyo, Andres},
   year = {2013},
 }
 """,
+        superseded_by="CzechSoMeSentimentClassification.v2",
     )
     samples_per_label = 16
 

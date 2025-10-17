@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TweetTopicSingleClassification(AbsTaskClassification):
-    superseded_by = "TweetTopicSingleClassification.v2"
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification",
         description="""Topic classification dataset on Twitter with 6 labels. Each instance of
@@ -46,6 +45,7 @@ Barbieri, Francesco},
   year = {2022},
 }
 """,
+        superseded_by="TweetTopicSingleClassification.v2",
     )
 
     def dataset_transform(self):

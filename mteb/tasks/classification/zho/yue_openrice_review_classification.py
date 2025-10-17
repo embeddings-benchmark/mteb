@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class YueOpenriceReviewClassification(AbsTaskClassification):
-    superseded_by = "YueOpenriceReviewClassification.v2"
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification",
         description="A Cantonese dataset for review classification",
@@ -35,6 +34,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="YueOpenriceReviewClassification.v2",
     )
 
     samples_per_label = 32

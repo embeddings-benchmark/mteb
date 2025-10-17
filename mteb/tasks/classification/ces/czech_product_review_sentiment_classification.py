@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class CzechProductReviewSentimentClassification(AbsTaskClassification):
-    superseded_by = "CzechProductReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CzechProductReviewSentimentClassification",
         description="User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (positive, neutral, negative)",
@@ -43,6 +42,7 @@ Montoyo, Andres},
   year = {2013},
 }
 """,
+        superseded_by="CzechProductReviewSentimentClassification.v2",
     )
     samples_per_label = 16
 

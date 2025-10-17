@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ArguAnaFa(AbsTaskRetrieval):
-    superseded_by = "ArguAna-Fa.v2"
     ignore_identical_ids = True
     metadata = TaskMetadata(
         name="ArguAna-Fa",
@@ -28,6 +27,7 @@ class ArguAnaFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["ArguAna"],
+        superseded_by="ArguAna-Fa.v2",
     )
 
 
@@ -438,7 +438,6 @@ class DBPediaFa(AbsTaskRetrieval):
 
 
 class FiQA2018Fa(AbsTaskRetrieval):
-    superseded_by = "FiQA2018-Fa.v2"
     ignore_identical_ids = True
     metadata = TaskMetadata(
         name="FiQA2018-Fa",
@@ -463,6 +462,7 @@ class FiQA2018Fa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["FiQA2018"],
+        superseded_by="FiQA2018-Fa.v2",
     )
 
 
@@ -606,7 +606,6 @@ class NQFa(AbsTaskRetrieval):
 
 
 class QuoraRetrievalFa(AbsTaskRetrieval):
-    superseded_by = "QuoraRetrieval-Fa.v2"
     ignore_identical_ids = True
 
     metadata = TaskMetadata(
@@ -632,6 +631,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["QuoraRetrieval"],
+        superseded_by="QuoraRetrieval-Fa.v2",
     )
 
 
@@ -665,7 +665,6 @@ class QuoraRetrievalFaV2(AbsTaskRetrieval):
 
 
 class SCIDOCSFa(AbsTaskRetrieval):
-    superseded_by = "SCIDOCS-Fa.v2"
     metadata = TaskMetadata(
         name="SCIDOCS-Fa",
         description="SCIDOCS-Fa",
@@ -689,6 +688,7 @@ class SCIDOCSFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["SCIDOCS"],
+        superseded_by="SCIDOCS-Fa.v2",
     )
 
 
@@ -720,7 +720,6 @@ class SCIDOCSFaV2(AbsTaskRetrieval):
 
 
 class SciFactFa(AbsTaskRetrieval):
-    superseded_by = "SciFact-Fa.v2"
     metadata = TaskMetadata(
         name="SciFact-Fa",
         description="SciFact-Fa",
@@ -744,6 +743,7 @@ class SciFactFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["SciFact"],
+        superseded_by="SciFact-Fa.v2",
     )
 
 
@@ -775,7 +775,6 @@ class SciFactFaV2(AbsTaskRetrieval):
 
 
 class TRECCOVIDFa(AbsTaskRetrieval):
-    superseded_by = "TRECCOVID-Fa.v2"
     metadata = TaskMetadata(
         name="TRECCOVID-Fa",
         description="TRECCOVID-Fa",
@@ -799,6 +798,7 @@ class TRECCOVIDFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["TRECCOVID"],
+        superseded_by="TRECCOVID-Fa.v2",
     )
 
 
@@ -830,7 +830,6 @@ class TRECCOVIDFaV2(AbsTaskRetrieval):
 
 
 class Touche2020Fa(AbsTaskRetrieval):
-    superseded_by = "Touche2020-Fa.v2"
     metadata = TaskMetadata(
         name="Touche2020-Fa",
         description="Touche2020-Fa",
@@ -854,6 +853,7 @@ class Touche2020Fa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["Touche2020"],
+        superseded_by="Touche2020-Fa.v2",
     )
 
 

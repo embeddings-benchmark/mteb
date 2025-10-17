@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ArxivClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "ArXivHierarchicalClusteringS2S"
     metadata = TaskMetadata(
         name="ArxivClusteringS2S",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -36,4 +35,5 @@ class ArxivClusteringS2S(AbsTaskClusteringLegacy):
 }
 """,
         prompt="Identify the main and secondary category of Arxiv papers based on the titles",
+        superseded_by="ArXivHierarchicalClusteringS2S",
     )

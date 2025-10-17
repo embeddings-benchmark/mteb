@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class HeadlineClassification(AbsTaskClassification):
-    superseded_by = "HeadlineClassification.v2"
     metadata = TaskMetadata(
         name="HeadlineClassification",
         dataset={
@@ -51,6 +50,7 @@ Oda, Yusuke},
 }
 """,
         prompt="Classify the topic or theme of the given news headline",
+        superseded_by="HeadlineClassification.v2",
     )
 
     def dataset_transform(self):

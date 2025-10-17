@@ -84,7 +84,6 @@ Ratan, Shyam},
 
 
 class STS22CrosslingualSTS(AbsTaskSTS):
-    superseded_by = "STS22.v2"
     fast_loading = True
     metadata = TaskMetadata(
         name="STS22",
@@ -137,6 +136,7 @@ Ratan, Shyam},
   year = {2022},
 }
 """,
+        superseded_by="STS22.v2",
     )
 
     min_score = 1

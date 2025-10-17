@@ -50,7 +50,6 @@ class MedrxivClusteringS2SFast(AbsTaskClustering):
 
 
 class MedrxivClusteringS2S(AbsTaskClusteringLegacy):
-    superseded_by = "MedrxivClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MedrxivClusteringS2S",
         description="Clustering of titles from medrxiv. Clustering of 10 sets, based on the main category.",
@@ -74,4 +73,5 @@ class MedrxivClusteringS2S(AbsTaskClusteringLegacy):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles",
+        superseded_by="MedrxivClusteringS2S.v2",
     )

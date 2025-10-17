@@ -104,7 +104,6 @@ Derczynski, Leon},
 
 class DanFever(AbsTaskRetrieval):
     ignore_identical_ids = True
-    superseded_by = "DanFeverRetrieval"
 
     metadata = TaskMetadata(
         name="DanFEVER",
@@ -146,4 +145,5 @@ Derczynski, Leon},
             "query": "Given a claim in Danish, retrieve documents that support the claim"
         },
         task_subtypes=["Claim verification"],
+        superseded_by="DanFeverRetrieval",
     )

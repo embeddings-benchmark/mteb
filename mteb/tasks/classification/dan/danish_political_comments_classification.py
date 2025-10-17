@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DanishPoliticalCommentsClassification(AbsTaskClassification):
-    superseded_by = "DanishPoliticalCommentsClassification.v2"
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification",
         dataset={
@@ -37,6 +36,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify Danish political comments for sentiment",
+        superseded_by="DanishPoliticalCommentsClassification.v2",
     )
 
     samples_per_label = 16

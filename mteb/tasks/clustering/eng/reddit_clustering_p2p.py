@@ -12,7 +12,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RedditClusteringP2P(AbsTaskClusteringLegacy):
-    superseded_by = "RedditClusteringP2P.v2"
     metadata = TaskMetadata(
         name="RedditClusteringP2P",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
@@ -50,6 +49,7 @@ Iryna Gurevych},
 }
 """,
         prompt="Identify the topic or theme of Reddit posts based on the titles and posts",
+        superseded_by="RedditClusteringP2P.v2",
     )
 
 

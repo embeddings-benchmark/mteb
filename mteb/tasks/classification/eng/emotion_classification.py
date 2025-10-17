@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class EmotionClassification(AbsTaskClassification):
-    superseded_by = "EmotionClassification.v2"
     metadata = TaskMetadata(
         name="EmotionClassification",
         description="Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
@@ -51,6 +50,7 @@ Tsujii, Jun{'}ichi},
 }
 """,
         prompt="Classify the emotion expressed in the given Twitter message into one of the six emotions: anger, fear, joy, love, sadness, and surprise",
+        superseded_by="EmotionClassification.v2",
     )
 
     samples_per_label = 16

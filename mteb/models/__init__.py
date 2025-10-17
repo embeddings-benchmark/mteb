@@ -1,3 +1,4 @@
+from .cache_wrappers import CachedEmbeddingWrapper
 from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
@@ -13,6 +14,7 @@ from .sentence_transformer_wrapper import (
 )
 
 __all__ = [
+    "CachedEmbeddingWrapper",
     "CrossEncoderProtocol",
     "CrossEncoderWrapper",
     "EncoderProtocol",

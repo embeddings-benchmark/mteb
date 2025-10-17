@@ -3,24 +3,24 @@ This section goes through new features added in v2. Below we give an overview of
 
 **Overview of changes:**
 
-- [Easier evaluation using `mteb.evaluate`](#easier-evaluation)
-- [Easier caching and results loading using the `ResultCache`](#better-local-and-online-caching)
-- [Support for multimodal evaluation](#multimodal-input-format)
-- [Better support for CrossEncoders](#better-support-for-crossencoders)
-- [Unified Retrieval, Reranking and instruction variants](#unified-retrieval-reranking-and-instruction-variants)
-- [Search Interface](#search-interface)
-- [New documentation](#new-documentation)
-- [Descriptive statistics for all tasks](#descriptive-statistics)
-- [Better support for error analysis, allowing you to save predictions](#saving-predictions)
-- [Support datasets v4](#support-datasets-v4)
-- Standardization of file names and typing across the library
-- Consistent logging and progress bars
-- [Upgrading from v1](#upgrading-from-v1)
-  - [Replacing `mteb.MTEB`](#replacing-mtebmteb)
-  - [Replacing `mteb.load_results()`](#replacing-mtebload_results)
-  - [Converting model to new format](#converting-model-to-new-format)
-  - [Reuploading datasets](#reuploading-datasets)
-  - [Converting Reranking datasets to new format](#converting-reranking-datasets-to-new-format)
+- [New in v2.0 🎉](#new-in-v20-)
+    - [Easier evaluation](#easier-evaluation)
+    - [Better local and online caching](#better-local-and-online-caching)
+    - [Multimodal Input format](#multimodal-input-format)
+    - [Better support for CrossEncoders](#better-support-for-crossencoders)
+    - [Unified Retrieval, Reranking and instruction variants](#unified-retrieval-reranking-and-instruction-variants)
+    - [Search Interface](#search-interface)
+    - [New Documentation](#new-documentation)
+    - [Better support for loading and comparing results](#better-support-for-loading-and-comparing-results)
+    - [Descriptive Statistics](#descriptive-statistics)
+    - [Saving Predictions](#saving-predictions)
+    - [Support datasets v4](#support-datasets-v4)
+  - [Upgrading from v1](#upgrading-from-v1)
+    - [Replacing `mteb.MTEB`](#replacing-mtebmteb)
+    - [Replacing `mteb.load_results()`](#replacing-mtebload_results)
+    - [Converting model to new format](#converting-model-to-new-format)
+    - [Reuploading datasets](#reuploading-datasets)
+    - [Converting Reranking datasets to new format](#converting-reranking-datasets-to-new-format)
 
 What are the reasons for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there are multiple important areas to expand in, e.g. [adding new benchmark for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accessible.
 We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.

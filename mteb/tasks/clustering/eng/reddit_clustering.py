@@ -71,7 +71,6 @@ Iryna Gurevych},
 
 
 class RedditClustering(AbsTaskClusteringLegacy):
-    superseded_by = "RedditClustering.v2"
     metadata = TaskMetadata(
         name="RedditClustering",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
@@ -109,4 +108,5 @@ Iryna Gurevych},
 }
 """,
         prompt="Identify the topic or theme of Reddit posts based on the titles",
+        superseded_by="RedditClustering.v2",
     )

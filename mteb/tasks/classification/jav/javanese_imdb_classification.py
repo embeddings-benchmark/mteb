@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class JavaneseIMDBClassification(AbsTaskClassification):
-    superseded_by = "JavaneseIMDBClassification.v2"
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification",
         description="Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.",
@@ -35,6 +34,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
   year = {2021},
 }
 """,
+        superseded_by="JavaneseIMDBClassification.v2",
     )
 
 

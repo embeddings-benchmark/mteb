@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class FrenchBookReviews(AbsTaskClassification):
-    superseded_by = "FrenchBookReviews.v2"
     metadata = TaskMetadata(
         name="FrenchBookReviews",
         dataset={
@@ -27,6 +26,7 @@ class FrenchBookReviews(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
+        superseded_by="FrenchBookReviews.v2",
     )
 
     def dataset_transform(self):

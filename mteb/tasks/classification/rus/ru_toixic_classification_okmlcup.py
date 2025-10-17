@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuToxicOKMLCUPClassification(AbsTaskClassification):
-    superseded_by = "RuToxicOKMLCUPClassification.v2"
     metadata = TaskMetadata(
         name="RuToxicOKMLCUPClassification",
         dataset={
@@ -26,6 +25,7 @@ class RuToxicOKMLCUPClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""""",
+        superseded_by="RuToxicOKMLCUPClassification.v2",
     )
 
     def dataset_transform(self):

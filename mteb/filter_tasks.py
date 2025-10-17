@@ -144,7 +144,6 @@ def filter_tasks(
     for t in tasks:
         # For metadata and superseded_by, we can access them directly
         metadata = t.metadata
-        superseded_by = t.superseded_by
 
         if langs_to_keep and not langs_to_keep.intersection(metadata.languages):
             continue
@@ -165,7 +164,7 @@ def filter_tasks(
             else:
                 if not modalities_to_keep.intersection(metadata.modalities):
                     continue
-        if exclude_superseded and superseded_by is not None:
+        if exclude_superseded and metadata.superseded_by is not None:
             continue
         is_aggregate = (
             issubclass(t, AbsTaskAggregate)

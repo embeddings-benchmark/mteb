@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class RuReviewsClassification(AbsTaskClassification):
-    superseded_by = "RuReviewsClassification.v2"
     metadata = TaskMetadata(
         name="RuReviewsClassification",
         dataset={
@@ -40,6 +39,7 @@ class RuReviewsClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify product reviews into positive, negative or neutral sentiment",
+        superseded_by="RuReviewsClassification.v2",
     )
 
     def dataset_transform(self):

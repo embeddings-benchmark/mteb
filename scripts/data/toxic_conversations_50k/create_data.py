@@ -44,6 +44,6 @@ for row in splits["test"]:
 print(num_labels)
 
 for split in ["train", "test"]:
-    with open(f"{split}.jsonl", "w") as fOut:  # noqa
+    with open(f"{split}.jsonl", "w") as fOut:
         for row in splits[split]:
             fOut.write(json.dumps(row) + "\n")

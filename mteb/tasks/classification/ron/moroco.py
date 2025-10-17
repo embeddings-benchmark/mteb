@@ -1,11 +1,8 @@
 from mteb.abstasks.classification import AbsTaskClassification
-
-# type: ignore
-from mteb.abstasks.task_metadata import TaskMetadata  # type: ignore
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Moroco(AbsTaskClassification):
-    superseded_by = "Moroco.v2"
     metadata = TaskMetadata(
         name="Moroco",
         dataset={
@@ -39,6 +36,7 @@ class Moroco(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="Moroco.v2",
     )
 
 

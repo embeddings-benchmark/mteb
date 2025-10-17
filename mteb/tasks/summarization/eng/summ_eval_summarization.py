@@ -6,7 +6,6 @@ from mteb.abstasks.text.summarization import AbsTaskSummarization
 
 
 class SummEvalSummarization(AbsTaskSummarization):
-    superseded_by = "SummEvalSummarization.v2"
     evaluator = DeprecatedSummarizationEvaluator
 
     metadata = TaskMetadata(
@@ -38,6 +37,7 @@ class SummEvalSummarization(AbsTaskSummarization):
   year = {2020},
 }
 """,
+        superseded_by="SummEvalSummarization.v2",
     )
 
     min_score = 0

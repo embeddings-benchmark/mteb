@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ArxivClassification(AbsTaskClassification):
-    superseded_by = "ArxivClassification.v2"
     metadata = TaskMetadata(
         name="ArxivClassification",
         description="Classification Dataset of Arxiv Papers",
@@ -37,6 +36,7 @@ class ArxivClassification(AbsTaskClassification):
   year = {2019},
 }
 """,
+        superseded_by="ArxivClassification.v2",
     )
 
 

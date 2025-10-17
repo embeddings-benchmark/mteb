@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TNews(AbsTaskClassification):
-    superseded_by = "TNews.v2"
     metadata = TaskMetadata(
         name="TNews",
         description="Short Text Classification for News",
@@ -71,6 +70,7 @@ Lan, Zhenzhong },
 }
 """,
         prompt="Classify the fine-grained category of the given news title",
+        superseded_by="TNews.v2",
     )
 
     samples_per_label = 32
@@ -152,7 +152,6 @@ Lan, Zhenzhong },
 
 
 class IFlyTek(AbsTaskClassification):
-    superseded_by = "IFlyTek.v2"
     metadata = TaskMetadata(
         name="IFlyTek",
         description="Long Text classification for the description of Apps",
@@ -220,6 +219,7 @@ Lan, Zhenzhong },
 }
 """,
         prompt="Given an App description text, find the appropriate fine-grained category",
+        superseded_by="IFlyTek.v2",
     )
 
     samples_per_label = 32
@@ -303,7 +303,6 @@ Lan, Zhenzhong },
 
 
 class MultilingualSentiment(AbsTaskClassification):
-    superseded_by = "MultilingualSentiment.v2"
     metadata = TaskMetadata(
         name="MultilingualSentiment",
         description="A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative",
@@ -327,6 +326,7 @@ class MultilingualSentiment(AbsTaskClassification):
         sample_creation=None,
         bibtex_citation=None,
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
+        superseded_by="MultilingualSentiment.v2",
     )
 
     samples_per_label = 32
@@ -364,7 +364,6 @@ class MultilingualSentimentV2(AbsTaskClassification):
 
 
 class JDReview(AbsTaskClassification):
-    superseded_by = "JDReview.v2"
     metadata = TaskMetadata(
         name="JDReview",
         description="review for iphone",
@@ -395,6 +394,7 @@ class JDReview(AbsTaskClassification):
 }
 """,
         prompt="Classify the customer review for iPhone on e-commerce platform into positive or negative",
+        superseded_by="JDReview.v2",
     )
 
     samples_per_label = 32
@@ -475,7 +475,6 @@ class OnlineShopping(AbsTaskClassification):
 
 
 class Waimai(AbsTaskClassification):
-    superseded_by = "Waimai.v2"
     metadata = TaskMetadata(
         name="Waimai",
         description="Sentiment Analysis of user reviews on takeaway platforms",
@@ -506,6 +505,7 @@ class Waimai(AbsTaskClassification):
 }
 """,
         prompt="Classify the customer review from a food takeaway platform into positive or negative",
+        superseded_by="Waimai.v2",
     )
 
     samples_per_label = 32

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class DBpediaClassification(AbsTaskClassification):
-    superseded_by = "DBpediaClassification.v2"
     metadata = TaskMetadata(
         name="DBpediaClassification",
         description="DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology.",
@@ -38,6 +37,7 @@ class DBpediaClassification(AbsTaskClassification):
   year = {2015},
 }
 """,
+        superseded_by="DBpediaClassification.v2",
     )
 
     def dataset_transform(self):

@@ -3,7 +3,6 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
-    superseded_by = "Itacola.v2"
     metadata = TaskMetadata(
         name="Itacola",
         dataset={
@@ -42,6 +41,7 @@ Tonelli, Sara},
   year = {2021},
 }
 """,
+        superseded_by="Itacola.v2",
     )
 
 
