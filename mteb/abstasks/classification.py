@@ -132,6 +132,10 @@ class AbsTaskClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
+        """Evaluate a model on the classification task.
+
+        Differs from other tasks as it requires train split.
+        """
         if not isinstance(model, EncoderProtocol):
             raise TypeError(
                 f"Model {model} is a SearchProtocol, but this task {self.metadata.name} does not support Search. "

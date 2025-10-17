@@ -71,7 +71,7 @@ def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
 
 def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
     table_dict = {}
-    ## Group by language. If it is a multilingual dataset, 1 is added to all languages present.
+    # Group by language. If it is a multilingual dataset, 1 is added to all languages present.
     for task in tasks:
         for lang in task.metadata.languages:
             if lang in PROGRAMMING_LANGS:
@@ -80,7 +80,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
                 table_dict[lang] = dict.fromkeys(sorted(get_args(TaskType)), 0)
             table_dict[lang][task.metadata.type] += 1
 
-    ## Wrangle for polars
+    # Wrangle for polars
     pl_table_dict = []
     for lang, d in table_dict.items():
         d.update({"0-lang-code": lang})  # for sorting columns

@@ -25,7 +25,7 @@ def test_output_structure(model, mock_task):
     evaluator = AnySTSEvaluator(
         test_data,
         mock_task.column_names,
-        gold_scores=list(map(mock_task.normalize, test_data["score"])),
+        gold_scores=list(map(mock_task._normalize, test_data["score"])),
         task_metadata=mock_task.metadata,
         hf_subset="default",
         hf_split="test",

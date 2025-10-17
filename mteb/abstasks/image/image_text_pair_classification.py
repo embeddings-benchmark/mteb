@@ -51,8 +51,8 @@ class ImageTextPairClassificationMetrics(TypedDict):
 
 
 class AbsTaskImageTextPairClassification(AbsTask):
-    """Abstract class for Image Text Pair Classification tasks,
-    e.g. Compositionality evaluation.
+    """Abstract class for Image Text Pair Classification tasks (Compositionality evaluation).
+
     The similarity is computed between pairs and the results are ranked.
     Note that the number of images and the number of captions can be different.
 

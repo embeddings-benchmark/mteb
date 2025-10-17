@@ -43,6 +43,9 @@ def get_model_metas(
             If (None, None), this filter is ignored.
         use_instructions: Whether to filter by models that use instructions. If None, all models are included.
         zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
+
+    Returns:
+        A list of model metadata objects that fit the specified criteria.
     """
     res = []
     model_names = set(model_names) if model_names is not None else None

@@ -75,7 +75,7 @@ def llm2clip_loader(model_name, **kwargs):
                 trust_remote_code=True,
             )
             tokenizer = AutoTokenizer.from_pretrained(llm_model_name)
-            llm_model.config._name_or_path = "meta-llama/Meta-Llama-3-8B-Instruct"  #  Workaround for LLM2VEC. constant.
+            llm_model.config._name_or_path = "meta-llama/Meta-Llama-3-8B-Instruct"  # Workaround for LLM2VEC. constant.
             self.l2v = LLM2Vec(
                 llm_model,
                 tokenizer,
@@ -192,7 +192,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     training_datasets=llm2clip_training_sets,
 )
 
-## NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
+# NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
 llm2clip_openai_l_14_224 = ModelMeta(
     loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-224",

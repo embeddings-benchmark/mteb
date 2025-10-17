@@ -1,4 +1,4 @@
-from .TeluguAndhraJyotiNewsClassification import (
+from .telugu_andhra_jyoti_news_classification import (
     TeluguAndhraJyotiNewsClassification,
     TeluguAndhraJyotiNewsClassificationV2,
 )

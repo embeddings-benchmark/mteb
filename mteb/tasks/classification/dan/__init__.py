@@ -1,17 +1,17 @@
-from .AngryTweetsClassification import (
+from .angry_tweets_classification import (
     AngryTweetsClassification,
     AngryTweetsClassificationV2,
 )
-from .DanishPoliticalCommentsClassification import (
+from .danish_political_comments_classification import (
     DanishPoliticalCommentsClassification,
     DanishPoliticalCommentsClassificationV2,
 )
-from .DdiscoCohesionClassification import (
+from .ddisco_cohesion_classification import (
     DdiscoCohesionClassification,
     DdiscoCohesionClassificationV2,
 )
-from .DKHateClassification import DKHateClassification, DKHateClassificationV2
-from .LccSentimentClassification import LccSentimentClassification
+from .dk_hate_classification import DKHateClassification, DKHateClassificationV2
+from .lcc_sentiment_classification import LccSentimentClassification
 
 __all__ = [
     "AngryTweetsClassification",

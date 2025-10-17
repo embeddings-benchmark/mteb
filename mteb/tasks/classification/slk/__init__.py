@@ -1,12 +1,12 @@
-from .CSFDSKMovieReviewSentimentClassification import (
+from .csfdsk_movie_review_sentiment_classification import (
     CSFDSKMovieReviewSentimentClassification,
     CSFDSKMovieReviewSentimentClassificationV2,
 )
-from .SlovakHateSpeechClassification import (
+from .slovak_hate_speech_classification import (
     SlovakHateSpeechClassification,
     SlovakHateSpeechClassificationV2,
 )
-from .SlovakMovieReviewSentimentClassification import (
+from .slovak_movie_review_sentiment_classification import (
     SlovakMovieReviewSentimentClassification,
     SlovakMovieReviewSentimentClassificationV2,
 )

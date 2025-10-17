@@ -38,6 +38,8 @@ FRAMEWORKS = Literal[
 
 
 class ScoringFunction(str, Enum):
+    """The scoring function used by the models."""
+
     COSINE = "cosine"
     DOT_PRODUCT = "dot"
     MAX_SIM = "MaxSim"
@@ -122,10 +124,17 @@ class ModelMeta(BaseModel):
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
-    def validate_similarity_fn_name(cls, value):
+    def _validate_similarity_fn_name(cls, value: str) -> ScoringFunction | None:
         """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'],
+
+        Sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'],
         and pylate uses Literal['MaxSim']
+
+        Args:
+            value: The similarity function name as a string.
+
+        Returns:
+            The corresponding ScoringFunction enum value.
         """
         if type(value) is ScoringFunction or value is None:
             return value
@@ -139,6 +148,7 @@ class ModelMeta(BaseModel):
         raise ValueError(f"Invalid similarity function name: {value}")
 
     def to_dict(self):
+        """Returns a dictionary representation of the model metadata."""
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
         dict_repr["training_datasets"] = (
@@ -151,7 +161,7 @@ class ModelMeta(BaseModel):
 
     @field_validator("languages")
     @classmethod
-    def languages_are_valid(
+    def _languages_are_valid(
         cls, languages: list[ISOLanguageScript] | None
     ) -> list[ISOLanguageScript] | None:
         if languages is None:
@@ -163,7 +173,7 @@ class ModelMeta(BaseModel):
 
     @field_validator("name")
     @classmethod
-    def check_name(cls, v: str | None) -> str | None:
+    def _check_name(cls, v: str | None) -> str | None:
         if v is None or v in ("bm25s", "Human"):
             return v
         if "/" not in v:
@@ -172,7 +182,8 @@ class ModelMeta(BaseModel):
             )
         return v
 
-    def load_model(self, **kwargs: Any) -> EncoderProtocol:
+    def load_model(self, **kwargs: Any) -> MTEBModels:
+        """Loads the model using the specified loader function."""
         if self.loader is None:
             raise NotImplementedError(
                 "No model implementation is available for this model."
@@ -191,6 +202,10 @@ class ModelMeta(BaseModel):
         return model
 
     def model_name_as_path(self) -> str:
+        """Returns the model name in a format that can be used as a file path.
+
+        Replaces "/" with "__" and spaces with "_".
+        """
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
@@ -198,9 +213,10 @@ class ModelMeta(BaseModel):
     def is_zero_shot_on(
         self, tasks: Sequence["AbsTask"] | Sequence[str]
     ) -> bool | None:
-        """Indicates whether the given model can be considered
-        zero-shot or not on the given tasks.
-        Returns None if no training data is specified on the model.
+        """Indicates whether the given model can be considered zero-shot or not on the given tasks.
+
+        Returns:
+             None if no training data is specified on the model.
         """
         # If no tasks were specified, we're obviously zero-shot
         if not tasks:
@@ -243,7 +259,7 @@ class ModelMeta(BaseModel):
         visited = set()
 
         for dataset in training_datasets:
-            similar_tasks = collect_similar_tasks(dataset, visited)
+            similar_tasks = _collect_similar_tasks(dataset, visited)
             return_dataset |= similar_tasks
 
         return return_dataset
@@ -251,7 +267,15 @@ class ModelMeta(BaseModel):
     def zero_shot_percentage(
         self, tasks: Sequence["AbsTask"] | Sequence[str]
     ) -> int | None:
-        """Indicates how out-of-domain the selected tasks are for the given model."""
+        """Indicates how out-of-domain the selected tasks are for the given model.
+
+        Args:
+            tasks: A sequence of tasks or dataset names to evaluate against.
+
+        Returns:
+            An integer percentage (0-100) indicating how out-of-domain the tasks are for the model.
+            Returns None if no training data is specified on the model or if no tasks are provided.
+        """
         training_datasets = self.get_training_datasets()
         if (training_datasets is None) or (not tasks):
             return None
@@ -265,7 +289,11 @@ class ModelMeta(BaseModel):
         return int(100 - perc_overlap)
 
     def calculate_memory_usage_mb(self) -> int | None:
-        """Calculates the memory usage (in FP32) of the model in MB."""
+        """Calculates the memory usage (in FP32) of the model in MB.
+
+        Returns:
+            The memory usage of the model in MB, or None if it cannot be determined.
+        """
         if "API" in self.framework:
             return None
 
@@ -303,8 +331,16 @@ class ModelMeta(BaseModel):
         return round(model_memory_mb)
 
 
-def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
-    """Recursively collect all similar tasks for a given dataset."""
+def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
+    """Recursively collect all similar tasks for a given dataset.
+
+    Args:
+        dataset: The dataset for which to find similar tasks.
+        visited: A set to keep track of visited datasets to avoid cycles.
+
+    Returns:
+        A set of similar tasks.
+    """
     from mteb.get_tasks import _SIMILAR_TASKS
 
     if dataset in visited:
@@ -317,12 +353,12 @@ def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     if dataset in _SIMILAR_TASKS:
         for similar_task in _SIMILAR_TASKS[dataset]:
             similar.add(similar_task)
-            similar.update(collect_similar_tasks(similar_task, visited))
+            similar.update(_collect_similar_tasks(similar_task, visited))
 
     # Check if dataset appears as a value in SIMILAR_TASKS
     for parent, children in _SIMILAR_TASKS.items():
         if dataset in children:
             similar.add(parent)
-            similar.update(collect_similar_tasks(parent, visited))
+            similar.update(_collect_similar_tasks(parent, visited))
 
     return similar

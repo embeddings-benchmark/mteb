@@ -13,8 +13,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from typing_extensions import override
 
+from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnModelProtocol
-from mteb.create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 
 from .classification import AbsTaskClassification
@@ -216,7 +216,13 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     def _undersample_data_indices(
         self, y: list[list[int]], samples_per_label: int, idxs: list[int] | None = None
     ) -> tuple[list[int], list[int]]:
-        """Undersample data to have samples_per_label samples of each label"""
+        """Undersample data to have samples_per_label samples of each label.
+
+        Returns:
+            A tuple containing:
+                - List of sampled indices.
+                - List of all indices after shuffling.
+        """
         sample_indices = []
         if idxs is None:
             idxs = np.arange(len(y))

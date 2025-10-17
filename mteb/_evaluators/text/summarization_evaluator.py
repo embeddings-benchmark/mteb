@@ -7,9 +7,9 @@ import torch
 from scipy.stats import pearsonr, spearmanr
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import cos_sim, dot_score
 
@@ -104,7 +104,7 @@ class SummarizationEvaluator(Evaluator):
 
         logger.info("Encoding human summaries...")
         embs_human_summaries_all = model.encode(
-            create_dataloader_from_texts(
+            _create_dataloader_from_texts(
                 [
                     summary
                     for human_summaries in self.human_summaries
@@ -119,7 +119,7 @@ class SummarizationEvaluator(Evaluator):
 
         logger.info("Encoding machine summaries...")
         embs_machine_summaries_all = model.encode(
-            create_dataloader_from_texts(
+            _create_dataloader_from_texts(
                 [
                     summary
                     for machine_summaries in self.machine_summaries
@@ -241,6 +241,7 @@ class SummarizationEvaluator(Evaluator):
 )
 class DeprecatedSummarizationEvaluator(SummarizationEvaluator):
     """A deprecated version of the SummarizationEvaluator that contains the bug outlines in https://github.com/embeddings-benchmark/mteb/issues/1156.
+
     It is kept here to maintain compatibility with older versions of the benchmark, but we do not recommend using it.
     """
 

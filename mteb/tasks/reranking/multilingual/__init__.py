@@ -1,8 +1,8 @@
-from .ESCIReranking import ESCIReranking
-from .HUMEWikipediaRerankingMultilingual import HUMEWikipediaRerankingMultilingual
-from .MIRACLReranking import MIRACLReranking
-from .WikipediaRerankingMultilingual import WikipediaRerankingMultilingual
-from .XGlueWPRReranking import XGlueWPRReranking
+from .esci_reranking import ESCIReranking
+from .hume_wikipedia_reranking_multilingual import HUMEWikipediaRerankingMultilingual
+from .miracl_reranking import MIRACLReranking
+from .wikipedia_reranking_multilingual import WikipediaRerankingMultilingual
+from .x_glue_wpr_reranking import XGlueWPRReranking
 
 __all__ = [
     "ESCIReranking",

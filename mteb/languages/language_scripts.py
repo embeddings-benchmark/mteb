@@ -25,6 +25,15 @@ class LanguageScripts:
     def from_languages_and_scripts(
         cls, languages: list[str] | None = None, scripts: list[str] | None = None
     ) -> Self:
+        """Create a LanguageScripts object from lists of languages and scripts.
+
+        Args:
+            languages: A list of language codes (e.g. ["eng", "fra-Latn"]).
+            scripts: A list of script codes (e.g. ["Latn", "Cyrl"]).
+
+        Returns:
+            A LanguageScripts object representing the provided languages and scripts.
+        """
         lang_script_codes = set()
         script_codes: set[str] = set(scripts) if (scripts is not None) else set()
         # normalize to 3 letter language codes
@@ -48,7 +57,14 @@ class LanguageScripts:
         )
 
     def contains_language(self, language: str) -> bool:
-        """Whether the set contains a specific language."""
+        """Whether the set contains a specific language.
+
+        Args:
+            language: The language code to check for. Can be in the form "eng" or "eng-Latn".
+
+        Returns:
+            True if the language is contained in the set, False otherwise.
+        """
         if not self.language_scripts and not self.languages:
             return True
 
@@ -67,18 +83,39 @@ class LanguageScripts:
         return False
 
     def contains_languages(self, languages: Iterable[str]) -> bool:
-        """Whether is contains all of the languages"""
+        """Whether is containing all the languages
+
+        Args:
+            languages: An iterable of language codes to check for.
+
+        Returns:
+            True if all languages are contained in the set, False otherwise.
+        """
         for l in languages:
             if not self.contains_language(l):
                 return False
         return True
 
     def contains_script(self, script: str) -> bool:
-        """Whether the set contains a specific script."""
+        """Whether the set contains a specific script.
+
+        Args:
+            script: The script code to check for.
+
+        Returns:
+            True if the script is contained in the set, False otherwise.
+        """
         return script in self.scripts
 
     def contains_scripts(self, scripts: Iterable[str]) -> bool:
-        """Whether is contains all of the scripts"""
+        """Whether is containing all the scripts
+
+        Args:
+            scripts: An iterable of script codes to check for.
+
+        Returns:
+            True if all scripts are contained in the set, False otherwise.
+        """
         for s in scripts:
             if not self.contains_script(s):
                 return False

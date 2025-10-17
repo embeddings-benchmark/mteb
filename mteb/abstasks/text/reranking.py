@@ -25,14 +25,17 @@ OLD_FORMAT_RERANKING_TASKS = []
     "You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data."
 )
 class AbsTaskReranking(AbsTaskRetrieval):
-    """Warning: Deprecated
-    This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead.
-    You can add your task name to mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS to load it in new format.
-    You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data.
-    For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
+    """Reranking task class.
+
+    Warning: Deprecated
+        This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead.
+        You can add your task name to mteb.abstasks.text.reranking.OLD_FORMAT_RERANKING_TASKS to load it in new format.
+        You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data.
+        For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
     def load_data(self) -> None:
+        """Load the dataset."""
         if self.data_loaded:
             return
 
@@ -42,8 +45,17 @@ class AbsTaskReranking(AbsTaskRetrieval):
             # use AbsTaskRetrieval default to load the data
             return super().load_data()
 
-    def process_example(self, example: dict, split: str, query_idx: int) -> dict:
-        """Process a single example from the dataset."""
+    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
+        """Process a single example from the dataset.
+
+        Args:
+            example: A single example from the dataset containing 'query', 'positive', and 'negative' fields.
+            split: The dataset split (e.g., 'train', 'validation', 'test').
+            query_idx: The index of the query in the dataset split.
+
+        Returns:
+            A dictionary containing the processed example with query_id, query text, document ids, document texts, and relevance scores.
+        """
         query = example["query"]
         positive_docs = example["positive"]
         negative_docs = example["negative"]
@@ -140,7 +152,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # Map the transformation function over the dataset
                 processed_dataset = enumerated_dataset.map(
-                    lambda example, idx: self.process_example(example, split, idx),
+                    lambda example, idx: self._process_example(example, split, idx),
                     with_indices=True,
                     remove_columns=enumerated_dataset.column_names,
                 )

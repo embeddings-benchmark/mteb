@@ -1,10 +1,10 @@
-from .IndicXnliPairClassification import IndicXnliPairClassification
-from .OpusparcusPC import OpusparcusPC
-from .PawsXPairClassification import PawsXPairClassification
-from .PubChemWikiPairClassification import PubChemWikiPairClassification
-from .RTE3 import RTE3
-from .XNLI import XNLI, XNLIV2
-from .XStance import XStance
+from .indic_xnli_pair_classification import IndicXnliPairClassification
+from .opusparcus_pc import OpusparcusPC
+from .paws_x_pair_classification import PawsXPairClassification
+from .pub_chem_wiki_pair_classification import PubChemWikiPairClassification
+from .rte3 import RTE3
+from .x_stance import XStance
+from .xnli import XNLI, XNLIV2
 
 __all__ = [
     "RTE3",

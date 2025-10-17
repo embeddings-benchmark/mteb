@@ -9,12 +9,17 @@ description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
     { name = "MTEB Contributors", email = "niklas@huggingface.co" },
-    { email = "kenneth.enevoldsen@cas.au.dk" },
-    { email = "nouamane@huggingface.co" },
-    { email = "info@nils-reimers.de" },
+    { name = "Kenneth Enevoldsen", email = "kenneth.enevoldsen@cas.au.dk" },
+    { name = "Nouamane Tazi", email = "nouamane@huggingface.co" },
+    { name = "Nils Reimers", email = "info@nils-reimers.de" },
+]
+maintainers = [
+    { name = "Kenneth Enevoldsen", email = "kenneth.enevoldsen@cas.au.dk" },
+    { name = "Roman Solomatin", email = "risolomatin@gmail.com" },
+    { name = "Isaac Chung", email = "chungisaac1217@gmail.com" },
 ]
 license = { file = "LICENSE" }
-keywords = ["deep learning", "text embeddings", "benchmark"]
+keywords = ["deep learning", "text embeddings", "embeddings", "multimodal", "benchmark", "retrieval", "information retrieval"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
@@ -24,7 +29,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.10,<3.14"
 dependencies = [
     "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
@@ -38,17 +43,15 @@ dependencies = [
     "rich>=0.0.0",
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
-    "typing_extensions>=0.0.0",
-    "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "transformers<4.57.0; python_version == '3.9'",  # https://github.com/huggingface/transformers/issues/41339
 ]
 
 
 [project.urls]
-homepage = "https://github.com/embeddings-benchmark/mteb"
-"Huggingface Organization" = "https://huggingface.co/mteb"
-"Source Code" = "https://github.com/embeddings-benchmark/mteb"
+Homepage = "https://github.com/embeddings-benchmark/mteb"
+Documentation = "https://embeddings-benchmark.github.io/mteb/"
+Repository = "https://github.com/embeddings-benchmark/mteb"
+"Hugging Face Organization" = "https://huggingface.co/mteb"
 
 [project.scripts]
 mteb = "mteb.cli:main"
@@ -57,7 +60,7 @@ mteb = "mteb.cli:main"
 image = ["torchvision>0.2.1"]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 leaderboard = [
-    "gradio==5.35.0; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio==5.35.0",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
@@ -91,7 +94,7 @@ youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lk
 
 [dependency-groups]
 lint = [
-    "ruff==0.11.13", # locked so we don't get PRs which fail only due to a lint update
+    "ruff==0.14.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
     "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
@@ -151,7 +154,7 @@ exclude_also = [
 
     # Don't complain about abstract methods, they aren't run:
     "@(abc\\.)?abstractmethod",
-    ]
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -224,6 +227,7 @@ select = [
     "RUF200",  # invalid-pyproject-toml
     "PTH",     # use pathlib
     "TID",     # tidy-imports
+    "D",       # pydocstyle
 ]
 
 ignore = [
@@ -231,20 +235,19 @@ ignore = [
     "E741",     # ambiguous variable name
     "F403",     # undefined import
     "D100",     # Missing docstring in public module
-    "D101",     # Missing docstring in public class
-    "D102",     # Missing docstring in public method
-    "D103",     # Missing docstring in public function
     "D105",     # Missing docstring in magic method
     "D104",     # Missing docstring in public package
     "D107",     # Missing docstring in __init__
-    "D205",     # 1 blank line required between summary line and description
     "D415",     # First line should end with a period
     "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = ["PTH"]
-"tests/*" = ["RUF012"]
+"scripts/*" = ["ALL"]
+"docs/*" = ["D", "DOC"]
+"tests/*" = ["RUF012", "D", "DOC"]
+"mteb/tasks/*" = ["D", "DOC"]
+"mteb/models/model_implementations/*" = ["D", "DOC"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false

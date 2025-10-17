@@ -1,4 +1,4 @@
-from .CMTEBClustering import (
+from .cmteb_clustering import (
     CLSClusteringFastP2P,
     CLSClusteringFastS2S,
     CLSClusteringP2P,

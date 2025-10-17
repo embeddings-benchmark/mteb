@@ -1,3 +1,3 @@
-from .IndoNLI import IndoNLI
+from .indo_nli import IndoNLI
 
 __all__ = ["IndoNLI"]

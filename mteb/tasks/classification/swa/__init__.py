@@ -1,4 +1,4 @@
-from .SwahiliNewsClassification import (
+from .swahili_news_classification import (
     SwahiliNewsClassification,
     SwahiliNewsClassificationV2,
 )

@@ -1,4 +1,4 @@
-from .CMTEBClassification import (
+from .cmteb_classification import (
     IFlyTek,
     IFlyTekV2,
     JDReview,
@@ -11,7 +11,7 @@ from .CMTEBClassification import (
     Waimai,
     WaimaiV2,
 )
-from .YueOpenriceReviewClassification import (
+from .yue_openrice_review_classification import (
     YueOpenriceReviewClassification,
     YueOpenriceReviewClassificationV2,
 )
