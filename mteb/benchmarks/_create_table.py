@@ -24,7 +24,11 @@ def _get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
 
 
 def _split_on_capital(s: str) -> str:
-    """Splits on capital letters and joins with spaces"""
+    """Splits on capital letters and joins with spaces
+
+    Returns:
+        The input string split on capital letters and joined with spaces as a string.
+    """
     return " ".join(re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)", s))
 
 

@@ -55,7 +55,11 @@ def _load_results(cache: ResultCache) -> BenchmarkResults:
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
-    """Produces a URL for the selected benchmark."""
+    """Produces a URL for the selected benchmark.
+
+    Returns:
+        A markdown string containing the URL.
+    """
     params = urlencode(
         {
             "benchmark_name": benchmark_name,
@@ -210,6 +214,7 @@ def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
 
 
 def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
+    """Returns a Gradio Blocks app for the MTEB leaderboard."""
     logger.info("Loading all benchmark results")
     all_results = _load_results(cache)
 

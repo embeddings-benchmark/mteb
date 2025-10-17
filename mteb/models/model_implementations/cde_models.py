@@ -7,8 +7,8 @@ import torch
 from torch.utils.data import DataLoader
 
 import mteb
+from mteb._create_dataloaders import _corpus_to_dict
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import corpus_to_dict
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.models_protocols import PromptType
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
@@ -147,7 +147,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
             task.load_data()
             task.convert_v1_dataset_format_to_v2()
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
-            sentences = cur_ds.map(corpus_to_dict)["text"]
+            sentences = cur_ds.map(_corpus_to_dict)["text"]
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskClassification = mteb.get_task(task_metadata.name)
             task.load_data()

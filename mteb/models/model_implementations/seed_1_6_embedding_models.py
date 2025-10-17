@@ -168,8 +168,15 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self._available_embed_dims = available_embed_dims
         self._encoding = tiktoken.get_encoding(tokenizer_name)
 
-    def truncate_text_tokens(self, text):
-        """Truncate a string to have `max_tokens` according to the given encoding."""
+    def truncate_text_tokens(self, text: str) -> str:
+        """Truncate a string to have `max_tokens` according to the given encoding.
+
+        Args:
+            text: The input string to be truncated.
+
+        Returns:
+            The truncated string.
+        """
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 

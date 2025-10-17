@@ -7,12 +7,12 @@ from datasets import Dataset
 from PIL.Image import Image
 from torch.utils.data import DataLoader
 
+from mteb._create_dataloaders import (
+    _transform_image_to_rgb,
+)
 from mteb._evaluators.evaluator import Evaluator
 from mteb._requires_package import requires_image_dependencies
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import (
-    transform_image_to_rgb,
-)
 from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
@@ -40,8 +40,8 @@ class CustomImageDataset(torch.utils.data.Dataset):
 
 
 class ImageTextPairClassificationEvaluator(Evaluator):
-    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of
-    identifying similar and dissimilar image caption pairs.
+    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and dissimilar image caption pairs.
+
     The goal is to find the correct image for each caption and the correct caption for each image.
     This is done by computing the similarities between each image and each caption.
     The results are written in a CSV. If a CSV already exists, then values are appended.
@@ -90,7 +90,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 for col in self.images_column_names:
                     images.append(row[col])
 
-        images = [transform_image_to_rgb(img) for img in images]
+        images = [_transform_image_to_rgb(img) for img in images]
 
         texts = []
         if isinstance(self.texts_column_names, str):

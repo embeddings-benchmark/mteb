@@ -28,15 +28,16 @@ logger = logging.getLogger(__name__)
 
 
 class AggregateTaskMetadata(TaskMetadata):
-    """Metadata for an aggregation of tasks. This description only covers exceptions to the TaskMetadata. Many of the field if not filled out will be
-    autofilled from its tasks.
+    """Metadata for an aggregation of tasks.
+
+    This description only covers exceptions to the TaskMetadata. Many of the field if not filled out will be autofilled from its tasks.
 
     Attributes:
         name: The name of the aggregated task.
         description: A description of the task. Should explain the aggregation.
         prompt: An aggregate task does not have a prompt, thus this value is always None.
-        dataset: The dataset for the aggregated task is specified in its tasks. The aggregate task thus only specified the revision and uses a
-            placeholder path.
+        dataset: The dataset for the aggregated task is specified in its tasks.
+            The aggregate task thus only specified the revision and uses a placeholder path.
         tasks: A list of tasks, the majority of the metadata is described within its tasks.
         eval_splits: The splits of the tasks used for evaluation.
     """
@@ -67,7 +68,7 @@ class AggregateTaskMetadata(TaskMetadata):
         return {"default": self.eval_langs}  # type: ignore
 
     @model_validator(mode="after")  # type: ignore
-    def compute_unfilled_cases(self) -> Self:
+    def _compute_unfilled_cases(self) -> Self:
         if not self.eval_langs:
             self.eval_langs = self._compute_eval_langs()
         if not self.date:

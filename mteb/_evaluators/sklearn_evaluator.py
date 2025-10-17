@@ -6,8 +6,8 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 from typing_extensions import Self
 
+from mteb._create_dataloaders import _create_image_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_image_dataloader
 from mteb.models import EncoderProtocol
 from mteb.types import BatchedInput
 
@@ -53,12 +53,12 @@ class SklearnEvaluator(Evaluator):
         self, batch_size: int
     ) -> tuple[DataLoader[BatchedInput], DataLoader[BatchedInput]]:
         if self.task_metadata.modalities == ["image"]:
-            dataloader_train = create_image_dataloader(
+            dataloader_train = _create_image_dataloader(
                 self.train_dataset,
                 image_column_name=self.values_column_name,
                 batch_size=batch_size,
             )
-            dataloader_test = create_image_dataloader(
+            dataloader_test = _create_image_dataloader(
                 self.eval_dataset,
                 image_column_name=self.values_column_name,
                 batch_size=batch_size,
@@ -86,8 +86,7 @@ class SklearnEvaluator(Evaluator):
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Classification evaluation by training a sklearn classifier on the
-        embeddings of the training set and evaluating on the embeddings of the test set.
+        """Classification evaluation by training a sklearn classifier on the embeddings of the training set and evaluating on the embeddings of the test set.
 
         Args:
             model: Encoder

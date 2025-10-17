@@ -21,7 +21,7 @@ inf_retreiver_v1_training_data = {
     "SciFact",
     "TRECCOVID",
     "Touche2020",
-    ## and other private data of INF TECH (not in MTEB),
+    # and other private data of INF TECH (not in MTEB),
     #
     # zho_Hans
     "CmedqaRetrieval",
@@ -32,7 +32,7 @@ inf_retreiver_v1_training_data = {
     "MedicalRetrieval",
     "T2Retrieval",
     "VideoRetrieval",
-    ## and other private data of INF TECH (not in MTEB),
+    # and other private data of INF TECH (not in MTEB),
 }
 
 inf_retriever_v1 = ModelMeta(

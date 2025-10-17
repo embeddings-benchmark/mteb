@@ -35,13 +35,23 @@ logger = logging.getLogger(__name__)
 
 
 class OverwriteStrategy(HelpfulStrEnum):
+    """Enum for the overwrite strategy when running a task.
+
+    - "always": Always run the task, overwriting the results
+    - "never": Run the task only if the results are not found in the cache. If the results are found, it will not run the task.
+    - "only-missing": Only rerun the missing splits of a task. It will not rerun the splits if the dataset revision or mteb version has
+        changed.
+    - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
+        cache.
+    """
+
     ALWAYS = "always"
     NEVER = "never"
     ONLY_MISSING = "only-missing"
     ONLY_CACHE = "only-cache"
 
 
-empty_model_meta = ModelMeta(
+_empty_model_meta = ModelMeta(
     loader=None,
     name=None,
     revision=None,
@@ -65,7 +75,7 @@ empty_model_meta = ModelMeta(
 
 def _create_empty_model_meta() -> ModelMeta:
     logger.warning("Model metadata is missing. Using empty metadata.")
-    meta = deepcopy(empty_model_meta)
+    meta = deepcopy(_empty_model_meta)
     meta.revision = "no_revision_available"
     meta.name = "no_model_name_available"
     return meta
@@ -108,7 +118,11 @@ def _evaluate_task(
     encode_kwargs: dict[str, Any],
     prediction_folder: Path | None,
 ) -> TaskResult:
-    """The core logic to run a model on a given task. See `evaluate` for more details."""
+    """The core logic to run a model on a given task. See `evaluate` for more details.
+
+    Returns:
+        The results of the evaluation.
+    """
     if co2_tracker is None or co2_tracker is True:
         try:
             from codecarbon import EmissionsTracker  # type: ignore[import]

@@ -197,7 +197,7 @@ class GmeQwen2VL(AbsEncoder):
         return all_embeddings
 
 
-### Copied from qwen_vl_utils.vision_process.py
+# Copied from qwen_vl_utils.vision_process.py
 
 IMAGE_FACTOR = 28
 MIN_PIXELS = 4 * 28 * 28
@@ -284,7 +284,7 @@ def fetch_image(
             f"Unrecognized image input, support local path, http url, base64 and PIL.Image, got {image}"
         )
     image = image_obj.convert("RGB")
-    ## resize
+    # resize
     # if "resized_height" in ele and "resized_width" in ele:
     #     resized_height, resized_width = smart_resize(
     #         ele["resized_height"],

@@ -1,4 +1,4 @@
-from mteb.abstasks.clustering import AbsTaskClustering, convert_to_fast
+from mteb.abstasks.clustering import AbsTaskClustering, _convert_to_fast
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -84,4 +84,4 @@ class BlurbsClusteringP2PFast(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        self.dataset = convert_to_fast(self.dataset, self.seed)  # type: ignore
+        self.dataset = _convert_to_fast(self.dataset, self.seed)  # type: ignore

@@ -4,8 +4,8 @@ from typing import Any
 from datasets import Dataset
 from sklearn import cluster
 
+from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 
 from .evaluator import Evaluator

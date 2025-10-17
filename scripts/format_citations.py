@@ -20,7 +20,7 @@ class KeywordLiteralFinder(ast.NodeVisitor):
         self.locations: list[tuple[int, int, int, int]] = []
         self.keyword_found_anywhere = False
 
-    def visit_Call(self, node: ast.Call):  # noqa: N802
+    def visit_Call(self, node: ast.Call):
         func_name = ""
         if isinstance(node.func, ast.Name):
             func_name = node.func.id

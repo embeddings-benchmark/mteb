@@ -5,7 +5,7 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.clustering import (
     AbsTaskClustering,
-    check_label_distribution,
+    _check_label_distribution,
 )
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -136,7 +136,7 @@ Piperidis, Stelios},
         for split in self.metadata.eval_splits:
             labels = list(chain.from_iterable(self.dataset[split]["labels"]))
             sentences = list(chain.from_iterable(self.dataset[split]["sentences"]))
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
@@ -210,7 +210,7 @@ class PlscClusteringS2SFast(AbsTaskClustering):
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)
@@ -292,7 +292,7 @@ class PlscClusteringP2PFast(AbsTaskClustering):
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
 
-            check_label_distribution(self.dataset[split])
+            _check_label_distribution(self.dataset[split])
 
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)

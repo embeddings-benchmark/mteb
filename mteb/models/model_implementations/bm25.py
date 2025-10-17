@@ -1,9 +1,9 @@
 import logging
 from typing import Any
 
+from mteb._create_dataloaders import _create_text_queries_dataloader
 from mteb._requires_package import requires_package
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_text_queries_dataloader
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import SearchProtocol
 from mteb.types import (
@@ -81,7 +81,7 @@ def bm25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results = {qid: {} for qid in query_ids}
-            queries_loader = create_text_queries_dataloader(queries)
+            queries_loader = _create_text_queries_dataloader(queries)
             queries_texts = [text for batch in queries_loader for text in batch["text"]]
 
             query_token_strs = self.encode(queries_texts)

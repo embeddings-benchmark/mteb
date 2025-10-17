@@ -8,8 +8,8 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_dataloader
 from mteb.models import EncoderProtocol
 from mteb.similarity_functions import compute_pairwise_similarity
 

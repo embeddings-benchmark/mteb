@@ -8,7 +8,11 @@ from .programming_languages import PROGRAMMING_LANGS
 
 
 def check_language_code(code: str) -> None:
-    """This method checks that the language code (e.g. "eng-Latn") is valid."""
+    """This method checks that the language code (e.g. "eng-Latn") is valid.
+
+    Args:
+        code: The language code to check.
+    """
     lang, script = code.split("-")
     if script == "Code":
         if lang in PROGRAMMING_LANGS:
