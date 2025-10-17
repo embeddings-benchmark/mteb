@@ -20,7 +20,7 @@ class FaissCache:
             self,
             "faiss",
             "FAISS-based vector cache",
-            install_instruction="pip install mteb[faiss-cpu] or mteb[faiss-gpu]",
+            install_instruction="pip install mteb[faiss-cpu]",
         )
         import faiss
 
