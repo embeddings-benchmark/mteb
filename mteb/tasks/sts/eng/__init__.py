@@ -1,19 +1,19 @@
-from .BiossesSTS import BiossesSTS
-from .HUMESICKR import HUMESICKR
-from .HUMESTS12 import HUMESTS12
-from .HUMESTSBenchmark import HUMESTSBenchmark
-from .SickrSTS import SickrSTS
-from .STS12STS import STS12STS
-from .STS12VisualSTS import STS12VisualSTS
-from .STS13STS import STS13STS
-from .STS13VisualSTS import STS13VisualSTS
-from .STS14STS import STS14STS
-from .STS14VisualSTS import STS14VisualSTS
-from .STS15STS import STS15STS
-from .STS15VisualSTS import STS15VisualSTS
-from .STS16STS import STS16STS
-from .STS16VisualSTS import STS16VisualSTS
-from .STSBenchmarkSTS import STSBenchmarkSTS
+from .biosses_sts import BiossesSTS
+from .humesickr import HUMESICKR
+from .humests12 import HUMESTS12
+from .humests_benchmark import HUMESTSBenchmark
+from .sickr_sts import SickrSTS
+from .sts12_sts import STS12STS
+from .sts12_visual_sts import STS12VisualSTS
+from .sts13_sts import STS13STS
+from .sts13_visual_sts import STS13VisualSTS
+from .sts14_sts import STS14STS
+from .sts14_visual_sts import STS14VisualSTS
+from .sts15_sts import STS15STS
+from .sts15_visual_sts import STS15VisualSTS
+from .sts16_sts import STS16STS
+from .sts16_visual_sts import STS16VisualSTS
+from .sts_benchmark_sts import STSBenchmarkSTS
 
 __all__ = [
     "HUMESICKR",

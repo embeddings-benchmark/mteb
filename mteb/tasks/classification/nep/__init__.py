@@ -1,4 +1,4 @@
-from .NepaliNewsClassification import (
+from .nepali_news_classification import (
     NepaliNewsClassification,
     NepaliNewsClassificationV2,
 )

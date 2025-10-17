@@ -1,9 +1,9 @@
-from .Moroco import Moroco, MorocoV2
-from .RomanianReviewsSentiment import (
+from .moroco import Moroco, MorocoV2
+from .romanian_reviews_sentiment import (
     RomanianReviewsSentiment,
     RomanianReviewsSentimentV2,
 )
-from .RomanianSentimentClassification import (
+from .romanian_sentiment_classification import (
     RomanianSentimentClassification,
     RomanianSentimentClassificationV2,
 )

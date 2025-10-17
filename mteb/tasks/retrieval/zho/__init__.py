@@ -1,4 +1,4 @@
-from .CMTEBRetrieval import (
+from .cmteb_retrieval import (
     CmedqaRetrieval,
     CovidRetrieval,
     DuRetrieval,
@@ -8,7 +8,7 @@ from .CMTEBRetrieval import (
     T2Retrieval,
     VideoRetrieval,
 )
-from .LeCaRDv2Retrieval import LeCaRDv2
+from .le_ca_r_dv2_retrieval import LeCaRDv2
 
 __all__ = [
     "CmedqaRetrieval",

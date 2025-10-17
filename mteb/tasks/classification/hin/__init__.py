@@ -1,8 +1,8 @@
-from .HindiDiscourseClassification import (
+from .hindi_discourse_classification import (
     HindiDiscourseClassification,
     HindiDiscourseClassificationV2,
 )
-from .SentimentAnalysisHindi import SentimentAnalysisHindi, SentimentAnalysisHindiV2
+from .sentiment_analysis_hindi import SentimentAnalysisHindi, SentimentAnalysisHindiV2
 
 __all__ = [
     "HindiDiscourseClassification",

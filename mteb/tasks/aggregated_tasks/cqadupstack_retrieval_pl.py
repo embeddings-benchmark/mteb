@@ -1,6 +1,6 @@
 from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks.retrieval.pol.CqadupstackPLRetrieval import (
+from mteb.tasks.retrieval.pol.cqadupstack_pl_retrieval import (
     CQADupstackAndroidRetrievalPL,
     CQADupstackEnglishRetrievalPL,
     CQADupstackGamingRetrievalPL,

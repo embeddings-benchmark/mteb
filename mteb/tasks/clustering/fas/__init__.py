@@ -1,4 +1,4 @@
-from .FaMTEBClustering import (
+from .fa_mteb_clustering import (
     BeytooteClustering,
     DigikalamagClustering,
     HamshahriClustring,

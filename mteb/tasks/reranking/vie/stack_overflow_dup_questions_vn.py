@@ -1,8 +1,8 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
-class StackOverflowDupQuestionsVN(AbsTaskReranking):
+class StackOverflowDupQuestionsVN(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StackOverflowDupQuestions-VN",
         description="""A translated dataset from Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaScript and Python
@@ -12,8 +12,8 @@ class StackOverflowDupQuestionsVN(AbsTaskReranking):
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.""",
         reference="https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",
         dataset={
-            "path": "GreenNode/stackoverflowdupquestions-reranking-vn",
-            "revision": "3ceb17db245f52beaf27a3720aa71e1cc5f06faf",
+            "path": "mteb/StackOverflowDupQuestions-VN",
+            "revision": "d8b31731385a16007cef386fd695ea3f2243e5b4",
         },
         type="Reranking",
         category="t2t",

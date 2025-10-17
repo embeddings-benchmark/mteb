@@ -1,4 +1,4 @@
-from .SwednRetrieval import SwednRetrieval
-from .SweFaqRetrieval import SweFaqRetrieval
+from .swe_faq_retrieval import SweFaqRetrieval
+from .swedn_retrieval import SwednRetrieval
 
 __all__ = ["SweFaqRetrieval", "SwednRetrieval"]

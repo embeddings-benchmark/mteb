@@ -1,4 +1,4 @@
-from .FinToxicityClassification import (
+from .fin_toxicity_classification import (
     FinToxicityClassification,
     FinToxicityClassificationV2,
 )

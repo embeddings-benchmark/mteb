@@ -1,19 +1,19 @@
-from .AskUbuntuDupQuestions import AskUbuntuDupQuestions
-from .BuiltBenchReranking import BuiltBenchReranking
-from .HUMECore17InstructionReranking import HUMECore17InstructionReranking
-from .HUMENews21InstructionReranking import HUMENews21InstructionReranking
-from .HUMERobust04InstructionReranking import HUMERobust04InstructionReranking
-from .LocBenchReranking import LocBenchReranking
-from .MindSmallReranking import MindSmallReranking
-from .MultiSWEbenchReranking import MultiSWEbenchReranking
-from .NevIR import NevIR
-from .SciDocsReranking import SciDocsReranking
-from .StackOverflowDupQuestions import StackOverflowDupQuestions
-from .SWEbenchLiteReranking import SWEbenchLiteReranking
-from .SWEbenchMultilingualReranking import SWEbenchMultilingualRR
-from .SWEbenchVerifiedReranking import SWEbenchVerifiedReranking
-from .SWEPolyBenchReranking import SWEPolyBenchReranking
-from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
+from .ask_ubuntu_dup_questions import AskUbuntuDupQuestions
+from .built_bench_reranking import BuiltBenchReranking
+from .hume_core17_instruction_reranking import HUMECore17InstructionReranking
+from .hume_news21_instruction_reranking import HUMENews21InstructionReranking
+from .hume_robust04_instruction_reranking import HUMERobust04InstructionReranking
+from .loc_bench_reranking import LocBenchReranking
+from .mind_small_reranking import MindSmallReranking
+from .multi_swe_bench_reranking import MultiSWEbenchReranking
+from .nev_ir import NevIR
+from .sci_docs_reranking import SciDocsReranking
+from .stack_overflow_dup_questions import StackOverflowDupQuestions
+from .swe_bench_lite_reranking import SWEbenchLiteReranking
+from .swe_bench_multilingual_reranking import SWEbenchMultilingualRR
+from .swe_bench_verified_reranking import SWEbenchVerifiedReranking
+from .swe_poly_bench_reranking import SWEPolyBenchReranking
+from .web_linx_candidates_reranking import WebLINXCandidatesReranking
 
 __all__ = [
     "AskUbuntuDupQuestions",
