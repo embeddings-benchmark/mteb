@@ -38,7 +38,7 @@ class CachedEmbeddingWrapper:
         self,
         model: EncoderProtocol,
         cache_path: str | Path,
-        backend: type[CacheBackendProtocol] = VectorCacheMap,
+        cache_backend: type[CacheBackendProtocol] = VectorCacheMap,
     ) -> None:
         """Init
 
