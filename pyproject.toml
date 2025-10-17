@@ -19,7 +19,7 @@ maintainers = [
     { name = "Isaac Chung", email = "chungisaac1217@gmail.com" },
 ]
 license = { file = "LICENSE" }
-keywords = ["deep learning", "text embeddings", "embeddings", "multimodal", "benchmark"]
+keywords = ["deep learning", "text embeddings", "embeddings", "multimodal", "benchmark", "retrieval", "information retrieval"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
