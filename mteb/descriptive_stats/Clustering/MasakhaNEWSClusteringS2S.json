@@ -1,0 +1,524 @@
+{
+    "test": {
+        "num_samples": 80,
+        "number_of_characters": 6242,
+        "min_text_length": 35,
+        "average_text_length": 78.025,
+        "max_text_length": 190,
+        "unique_texts": 6236,
+        "min_labels_per_text": 286,
+        "average_labels_per_text": 78.025,
+        "max_labels_per_text": 1589,
+        "unique_labels": 7,
+        "labels": {
+            "0": {
+                "count": 785
+            },
+            "2": {
+                "count": 1258
+            },
+            "3": {
+                "count": 1589
+            },
+            "5": {
+                "count": 1265
+            },
+            "1": {
+                "count": 762
+            },
+            "6": {
+                "count": 297
+            },
+            "4": {
+                "count": 286
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "amh": {
+                "num_samples": 5,
+                "number_of_characters": 376,
+                "min_text_length": 75,
+                "average_text_length": 75.2,
+                "max_text_length": 76,
+                "unique_texts": 373,
+                "min_labels_per_text": 81,
+                "average_labels_per_text": 75.2,
+                "max_labels_per_text": 100,
+                "unique_labels": 4,
+                "labels": {
+                    "0": {
+                        "count": 81
+                    },
+                    "2": {
+                        "count": 100
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "5": {
+                        "count": 95
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 5,
+                "number_of_characters": 948,
+                "min_text_length": 189,
+                "average_text_length": 189.6,
+                "max_text_length": 190,
+                "unique_texts": 948,
+                "min_labels_per_text": 123,
+                "average_labels_per_text": 189.6,
+                "max_labels_per_text": 200,
+                "unique_labels": 6,
+                "labels": {
+                    "0": {
+                        "count": 160
+                    },
+                    "1": {
+                        "count": 150
+                    },
+                    "2": {
+                        "count": 150
+                    },
+                    "3": {
+                        "count": 165
+                    },
+                    "5": {
+                        "count": 200
+                    },
+                    "6": {
+                        "count": 123
+                    }
+                }
+            },
+            "fra": {
+                "num_samples": 5,
+                "number_of_characters": 422,
+                "min_text_length": 84,
+                "average_text_length": 84.4,
+                "max_text_length": 85,
+                "unique_texts": 422,
+                "min_labels_per_text": 22,
+                "average_labels_per_text": 84.4,
+                "max_labels_per_text": 100,
+                "unique_labels": 5,
+                "labels": {
+                    "0": {
+                        "count": 100
+                    },
+                    "2": {
+                        "count": 100
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "5": {
+                        "count": 100
+                    },
+                    "6": {
+                        "count": 22
+                    }
+                }
+            },
+            "hau": {
+                "num_samples": 5,
+                "number_of_characters": 637,
+                "min_text_length": 127,
+                "average_text_length": 127.4,
+                "max_text_length": 128,
+                "unique_texts": 637,
+                "min_labels_per_text": 59,
+                "average_labels_per_text": 127.4,
+                "max_labels_per_text": 100,
+                "unique_labels": 7,
+                "labels": {
+                    "0": {
+                        "count": 80
+                    },
+                    "1": {
+                        "count": 100
+                    },
+                    "2": {
+                        "count": 99
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 99
+                    },
+                    "5": {
+                        "count": 100
+                    },
+                    "6": {
+                        "count": 59
+                    }
+                }
+            },
+            "ibo": {
+                "num_samples": 5,
+                "number_of_characters": 390,
+                "min_text_length": 78,
+                "average_text_length": 78.0,
+                "max_text_length": 78,
+                "unique_texts": 387,
+                "min_labels_per_text": 15,
+                "average_labels_per_text": 78.0,
+                "max_labels_per_text": 100,
+                "unique_labels": 6,
+                "labels": {
+                    "0": {
+                        "count": 59
+                    },
+                    "1": {
+                        "count": 74
+                    },
+                    "2": {
+                        "count": 85
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 15
+                    },
+                    "5": {
+                        "count": 57
+                    }
+                }
+            },
+            "lin": {
+                "num_samples": 5,
+                "number_of_characters": 175,
+                "min_text_length": 35,
+                "average_text_length": 35.0,
+                "max_text_length": 35,
+                "unique_texts": 175,
+                "min_labels_per_text": 17,
+                "average_labels_per_text": 35.0,
+                "max_labels_per_text": 100,
+                "unique_labels": 4,
+                "labels": {
+                    "0": {
+                        "count": 17
+                    },
+                    "2": {
+                        "count": 39
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "5": {
+                        "count": 19
+                    }
+                }
+            },
+            "lug": {
+                "num_samples": 5,
+                "number_of_characters": 223,
+                "min_text_length": 44,
+                "average_text_length": 44.6,
+                "max_text_length": 45,
+                "unique_texts": 223,
+                "min_labels_per_text": 19,
+                "average_labels_per_text": 44.6,
+                "max_labels_per_text": 100,
+                "unique_labels": 5,
+                "labels": {
+                    "0": {
+                        "count": 34
+                    },
+                    "2": {
+                        "count": 46
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 19
+                    },
+                    "5": {
+                        "count": 24
+                    }
+                }
+            },
+            "orm": {
+                "num_samples": 5,
+                "number_of_characters": 325,
+                "min_text_length": 65,
+                "average_text_length": 65.0,
+                "max_text_length": 65,
+                "unique_texts": 325,
+                "min_labels_per_text": 15,
+                "average_labels_per_text": 65.0,
+                "max_labels_per_text": 100,
+                "unique_labels": 5,
+                "labels": {
+                    "1": {
+                        "count": 32
+                    },
+                    "2": {
+                        "count": 97
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "5": {
+                        "count": 81
+                    },
+                    "6": {
+                        "count": 15
+                    }
+                }
+            },
+            "pcm": {
+                "num_samples": 5,
+                "number_of_characters": 305,
+                "min_text_length": 61,
+                "average_text_length": 61.0,
+                "max_text_length": 61,
+                "unique_texts": 305,
+                "min_labels_per_text": 20,
+                "average_labels_per_text": 61.0,
+                "max_labels_per_text": 99,
+                "unique_labels": 5,
+                "labels": {
+                    "0": {
+                        "count": 20
+                    },
+                    "1": {
+                        "count": 92
+                    },
+                    "2": {
+                        "count": 32
+                    },
+                    "3": {
+                        "count": 62
+                    },
+                    "5": {
+                        "count": 99
+                    }
+                }
+            },
+            "run": {
+                "num_samples": 5,
+                "number_of_characters": 322,
+                "min_text_length": 64,
+                "average_text_length": 64.4,
+                "max_text_length": 65,
+                "unique_texts": 322,
+                "min_labels_per_text": 15,
+                "average_labels_per_text": 64.4,
+                "max_labels_per_text": 100,
+                "unique_labels": 6,
+                "labels": {
+                    "0": {
+                        "count": 16
+                    },
+                    "1": {
+                        "count": 32
+                    },
+                    "2": {
+                        "count": 75
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 15
+                    },
+                    "5": {
+                        "count": 84
+                    }
+                }
+            },
+            "sna": {
+                "num_samples": 5,
+                "number_of_characters": 369,
+                "min_text_length": 73,
+                "average_text_length": 73.8,
+                "max_text_length": 74,
+                "unique_texts": 369,
+                "min_labels_per_text": 84,
+                "average_labels_per_text": 73.8,
+                "max_labels_per_text": 100,
+                "unique_labels": 4,
+                "labels": {
+                    "0": {
+                        "count": 100
+                    },
+                    "2": {
+                        "count": 85
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "5": {
+                        "count": 84
+                    }
+                }
+            },
+            "som": {
+                "num_samples": 5,
+                "number_of_characters": 294,
+                "min_text_length": 58,
+                "average_text_length": 58.8,
+                "max_text_length": 59,
+                "unique_texts": 294,
+                "min_labels_per_text": 15,
+                "average_labels_per_text": 58.8,
+                "max_labels_per_text": 100,
+                "unique_labels": 7,
+                "labels": {
+                    "0": {
+                        "count": 23
+                    },
+                    "1": {
+                        "count": 28
+                    },
+                    "2": {
+                        "count": 71
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 15
+                    },
+                    "5": {
+                        "count": 30
+                    },
+                    "6": {
+                        "count": 27
+                    }
+                }
+            },
+            "swa": {
+                "num_samples": 5,
+                "number_of_characters": 476,
+                "min_text_length": 95,
+                "average_text_length": 95.2,
+                "max_text_length": 96,
+                "unique_texts": 476,
+                "min_labels_per_text": 20,
+                "average_labels_per_text": 95.2,
+                "max_labels_per_text": 100,
+                "unique_labels": 7,
+                "labels": {
+                    "0": {
+                        "count": 64
+                    },
+                    "1": {
+                        "count": 20
+                    },
+                    "2": {
+                        "count": 100
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 59
+                    },
+                    "5": {
+                        "count": 100
+                    },
+                    "6": {
+                        "count": 33
+                    }
+                }
+            },
+            "tir": {
+                "num_samples": 5,
+                "number_of_characters": 272,
+                "min_text_length": 54,
+                "average_text_length": 54.4,
+                "max_text_length": 55,
+                "unique_texts": 272,
+                "min_labels_per_text": 16,
+                "average_labels_per_text": 54.4,
+                "max_labels_per_text": 100,
+                "unique_labels": 6,
+                "labels": {
+                    "0": {
+                        "count": 16
+                    },
+                    "1": {
+                        "count": 34
+                    },
+                    "2": {
+                        "count": 79
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "5": {
+                        "count": 25
+                    },
+                    "6": {
+                        "count": 18
+                    }
+                }
+            },
+            "xho": {
+                "num_samples": 5,
+                "number_of_characters": 297,
+                "min_text_length": 59,
+                "average_text_length": 59.4,
+                "max_text_length": 60,
+                "unique_texts": 297,
+                "min_labels_per_text": 15,
+                "average_labels_per_text": 59.4,
+                "max_labels_per_text": 100,
+                "unique_labels": 5,
+                "labels": {
+                    "0": {
+                        "count": 15
+                    },
+                    "1": {
+                        "count": 100
+                    },
+                    "2": {
+                        "count": 20
+                    },
+                    "3": {
+                        "count": 62
+                    },
+                    "5": {
+                        "count": 100
+                    }
+                }
+            },
+            "yor": {
+                "num_samples": 5,
+                "number_of_characters": 411,
+                "min_text_length": 82,
+                "average_text_length": 82.2,
+                "max_text_length": 83,
+                "unique_texts": 411,
+                "min_labels_per_text": 64,
+                "average_labels_per_text": 82.2,
+                "max_labels_per_text": 100,
+                "unique_labels": 5,
+                "labels": {
+                    "1": {
+                        "count": 100
+                    },
+                    "2": {
+                        "count": 80
+                    },
+                    "3": {
+                        "count": 100
+                    },
+                    "4": {
+                        "count": 64
+                    },
+                    "5": {
+                        "count": 67
+                    }
+                }
+            }
+        }
+    }
+}

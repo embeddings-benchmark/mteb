@@ -1,0 +1,42 @@
+{
+    "test": {
+        "num_samples": 215,
+        "number_of_characters": 131478,
+        "unique_pairs": 215,
+        "sentence1_statistics": {
+            "total_text_length": 68113,
+            "min_text_length": 13,
+            "average_text_length": 316.8046511627907,
+            "max_text_length": 8361,
+            "unique_texts": 215
+        },
+        "sentence2_statistics": {
+            "total_text_length": 63365,
+            "min_text_length": 8,
+            "average_text_length": 294.72093023255815,
+            "max_text_length": 8811,
+            "unique_texts": 215
+        },
+        "hf_subset_descriptive_stats": {
+            "rom-hun": {
+                "num_samples": 215,
+                "number_of_characters": 131478,
+                "unique_pairs": 215,
+                "sentence1_statistics": {
+                    "total_text_length": 68113,
+                    "min_text_length": 13,
+                    "average_text_length": 316.8046511627907,
+                    "max_text_length": 8361,
+                    "unique_texts": 215
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 63365,
+                    "min_text_length": 8,
+                    "average_text_length": 294.72093023255815,
+                    "max_text_length": 8811,
+                    "unique_texts": 215
+                }
+            }
+        }
+    }
+}

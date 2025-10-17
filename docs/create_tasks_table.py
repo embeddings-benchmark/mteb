@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import re
 from pathlib import Path
 from typing import get_args
@@ -7,7 +5,7 @@ from typing import get_args
 import polars as pl
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE
+from mteb.abstasks.task_metadata import TaskType
 from mteb.languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE, PROGRAMMING_LANGS
 
 
@@ -73,16 +71,16 @@ def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
 
 def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
     table_dict = {}
-    ## Group by language. If it is a multilingual dataset, 1 is added to all languages present.
+    # Group by language. If it is a multilingual dataset, 1 is added to all languages present.
     for task in tasks:
         for lang in task.metadata.languages:
             if lang in PROGRAMMING_LANGS:
                 lang = "code"
             if table_dict.get(lang) is None:
-                table_dict[lang] = dict.fromkeys(sorted(get_args(TASK_TYPE)), 0)
+                table_dict[lang] = dict.fromkeys(sorted(get_args(TaskType)), 0)
             table_dict[lang][task.metadata.type] += 1
 
-    ## Wrangle for polars
+    # Wrangle for polars
     pl_table_dict = []
     for lang, d in table_dict.items():
         d.update({"0-lang-code": lang})  # for sorting columns
@@ -100,13 +98,13 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
         .alias("2-lang-fam")
     )
 
-    df = df.with_columns(sum=pl.sum_horizontal(get_args(TASK_TYPE)))
+    df = df.with_columns(sum=pl.sum_horizontal(get_args(TaskType)))
     df = df.select(sorted(df.columns))
     if sort_by_sum:
         df = df.sort(by="sum", descending=True)
 
     total = df.sum()
-    task_names = sorted(get_args(TASK_TYPE))
+    task_names = sorted(get_args(TaskType))
     headers = ["ISO Code", "Language", "Family"] + task_names + ["Sum"]
     table_header = "| " + " | ".join(headers) + " |"
     separator_line = "|"

@@ -1,0 +1,69 @@
+{
+    "test": {
+        "num_samples": 35000,
+        "number_of_characters": 146737556,
+        "unique_pairs": 35000,
+        "min_sentence1_length": 16,
+        "average_sentence1_length": 99.10931428571429,
+        "max_sentence1_length": 204,
+        "unique_sentence1": 34978,
+        "min_sentence2_length": 17,
+        "average_sentence2_length": 101.14933691422246,
+        "max_sentence2_length": 339,
+        "unique_sentence2": 1133728,
+        "hf_subset_descriptive_stats": {
+            "de-en": {
+                "num_samples": 9580,
+                "number_of_characters": 41450074,
+                "unique_pairs": 9580,
+                "min_sentence1_length": 50,
+                "average_sentence1_length": 109.07974947807934,
+                "max_sentence1_length": 204,
+                "unique_sentence1": 9573,
+                "min_sentence2_length": 17,
+                "average_sentence2_length": 101.18043156531952,
+                "max_sentence2_length": 293,
+                "unique_sentence2": 397151
+            },
+            "fr-en": {
+                "num_samples": 9086,
+                "number_of_characters": 38272453,
+                "unique_pairs": 9086,
+                "min_sentence1_length": 43,
+                "average_sentence1_length": 99.31785163988553,
+                "max_sentence1_length": 174,
+                "unique_sentence1": 9081,
+                "min_sentence2_length": 21,
+                "average_sentence2_length": 101.05202942051324,
+                "max_sentence2_length": 319,
+                "unique_sentence2": 368033
+            },
+            "ru-en": {
+                "num_samples": 14435,
+                "number_of_characters": 57904085,
+                "unique_pairs": 14435,
+                "min_sentence1_length": 40,
+                "average_sentence1_length": 101.6593003117423,
+                "max_sentence1_length": 186,
+                "unique_sentence1": 14425,
+                "min_sentence2_length": 21,
+                "average_sentence2_length": 101.06828784332406,
+                "max_sentence2_length": 339,
+                "unique_sentence2": 555503
+            },
+            "zh-en": {
+                "num_samples": 1899,
+                "number_of_characters": 9110944,
+                "unique_pairs": 1899,
+                "min_sentence1_length": 16,
+                "average_sentence1_length": 28.429699842022117,
+                "max_sentence1_length": 40,
+                "unique_sentence1": 1899,
+                "min_sentence2_length": 22,
+                "average_sentence2_length": 101.92388026108485,
+                "max_sentence2_length": 249,
+                "unique_sentence2": 88360
+            }
+        }
+    }
+}

@@ -1,0 +1,3759 @@
+{
+    "test": {
+        "num_samples": 1300,
+        "text_statistics": {
+            "total_text_length": 314891,
+            "min_text_length": 100,
+            "average_text_length": 242.22384615384615,
+            "max_text_length": 908,
+            "unique_texts": 1298
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 1246,
+            "labels": {
+                "Realfag": {
+                    "count": 89
+                },
+                "Fysikk": {
+                    "count": 32
+                },
+                "Varme- og stoffl\u00e6re": {
+                    "count": 3
+                },
+                "Spr\u00e5k og litteratur": {
+                    "count": 139
+                },
+                "Spr\u00e5kvitenskapens fagdisipliner": {
+                    "count": 20
+                },
+                "Pragmatikk": {
+                    "count": 1
+                },
+                "Onomastikk": {
+                    "count": 14
+                },
+                "Personnavn": {
+                    "count": 14
+                },
+                "Fornavn": {
+                    "count": 14
+                },
+                "Guttenavn": {
+                    "count": 9
+                },
+                "Kunst og estetikk": {
+                    "count": 201
+                },
+                "Metall- og smykkekunst": {
+                    "count": 1
+                },
+                "Biologi": {
+                    "count": 92
+                },
+                "Vitenskapsgrener i biologien": {
+                    "count": 24
+                },
+                "Botanikk": {
+                    "count": 8
+                },
+                "Planteanatomi": {
+                    "count": 5
+                },
+                "Plantenes vevsystemer": {
+                    "count": 1
+                },
+                "Andre vev hos planter": {
+                    "count": 1
+                },
+                "Teknologi og industri": {
+                    "count": 97
+                },
+                "Transport": {
+                    "count": 35
+                },
+                "Navigasjon": {
+                    "count": 2
+                },
+                "Kjemi": {
+                    "count": 28
+                },
+                "Polymerkjemi": {
+                    "count": 3
+                },
+                "Sport og spill": {
+                    "count": 28
+                },
+                "Ballsport": {
+                    "count": 15
+                },
+                "Biljard": {
+                    "count": 2
+                },
+                "S\u00f8m": {
+                    "count": 8
+                },
+                " kl\u00e6r og mote": {
+                    "count": 8
+                },
+                "Sko": {
+                    "count": 1
+                },
+                "Veterin\u00e6rmedisin": {
+                    "count": 2
+                },
+                "Fiskehelse": {
+                    "count": 2
+                },
+                "Fotball": {
+                    "count": 9
+                },
+                "Norsk fotball": {
+                    "count": 4
+                },
+                "Musikk": {
+                    "count": 69
+                },
+                "Klassisk musikk": {
+                    "count": 25
+                },
+                "Den klassiske musikkens historie": {
+                    "count": 12
+                },
+                "Klassisk musikk f\u00f8r 1600": {
+                    "count": 1
+                },
+                "M\u00e5l og vekt": {
+                    "count": 7
+                },
+                "Eldre m\u00e5leenheter": {
+                    "count": 1
+                },
+                "Historie": {
+                    "count": 192
+                },
+                "Kulturhistorie": {
+                    "count": 6
+                },
+                "Folkelige skikker og tradisjoner": {
+                    "count": 2
+                },
+                "Spill": {
+                    "count": 3
+                },
+                "Brettspill": {
+                    "count": 2
+                },
+                "Biokjemi": {
+                    "count": 1
+                },
+                "Aminosyrer": {
+                    "count": 1
+                },
+                "Geografi": {
+                    "count": 178
+                },
+                "Norges geografi": {
+                    "count": 45
+                },
+                "Agder": {
+                    "count": 4
+                },
+                "Lindesnes": {
+                    "count": 1
+                },
+                "Verdens geografi": {
+                    "count": 128
+                },
+                "Afrika": {
+                    "count": 26
+                },
+                "Kapp Verdes geografi": {
+                    "count": 1
+                },
+                "Viken": {
+                    "count": 9
+                },
+                "Halden": {
+                    "count": 1
+                },
+                "Samfunn": {
+                    "count": 97
+                },
+                "Samfunnsfag": {
+                    "count": 26
+                },
+                "Statsvitenskap": {
+                    "count": 7
+                },
+                "Valgforskning og sammenliknende politikk": {
+                    "count": 1
+                },
+                "Politiske begreper": {
+                    "count": 1
+                },
+                "Planteriket": {
+                    "count": 24
+                },
+                "Dekkfr\u00f8ete planter": {
+                    "count": 24
+                },
+                "Enfr\u00f8bladete planter": {
+                    "count": 2
+                },
+                "Aspargesordenen": {
+                    "count": 1
+                },
+                "Orkid\u00e9familien": {
+                    "count": 1
+                },
+                "Marihandslekta": {
+                    "count": 1
+                },
+                "Jus": {
+                    "count": 34
+                },
+                "Formuerett": {
+                    "count": 8
+                },
+                "Selskapsrett": {
+                    "count": 5
+                },
+                "Telekommunikasjon og kringkasting": {
+                    "count": 2
+                },
+                "Kommunikasjonsteknologi": {
+                    "count": 2
+                },
+                "Oseania": {
+                    "count": 6
+                },
+                "Australias geografi": {
+                    "count": 2
+                },
+                "Jernbane og sporvei": {
+                    "count": 1
+                },
+                "Jernbanebiografier": {
+                    "count": 1
+                },
+                "Verdens historie og samtidshistorie": {
+                    "count": 126
+                },
+                "Europa": {
+                    "count": 192
+                },
+                "Den greske antikken": {
+                    "count": 6
+                },
+                "Sj\u00f8fart og skipsindustri": {
+                    "count": 16
+                },
+                "Fyrvesen og losvesen": {
+                    "count": 5
+                },
+                "Fyrvesen": {
+                    "count": 4
+                },
+                "Norske fyr": {
+                    "count": 4
+                },
+                "Norsk og nordisk historie": {
+                    "count": 26
+                },
+                "Norges historie": {
+                    "count": 20
+                },
+                "Norges historie fra 1945 til 1970": {
+                    "count": 1
+                },
+                "Nord- og Mellom-Amerika": {
+                    "count": 24
+                },
+                "Honduras\u2019 geografi": {
+                    "count": 1
+                },
+                "Historiske hjelpevitenskaper": {
+                    "count": 18
+                },
+                "Slektsforskning og genealogi": {
+                    "count": 17
+                },
+                "Utenlandske slekter": {
+                    "count": 7
+                },
+                "Folkegrupper i Nord- og Mellom-Amerika": {
+                    "count": 3
+                },
+                "Folkegrupper i Nord-Amerika": {
+                    "count": 3
+                },
+                "Litteratur i verden": {
+                    "count": 88
+                },
+                "Nord- og Mellom-Amerikas litteratur": {
+                    "count": 11
+                },
+                "USAs litteratur": {
+                    "count": 7
+                },
+                "USAs litteratur p\u00e5 1600 og 1700-tallet": {
+                    "count": 1
+                },
+                "Religion og filosofi": {
+                    "count": 95
+                },
+                "Religioner og livssyn": {
+                    "count": 61
+                },
+                "Kristendom": {
+                    "count": 48
+                },
+                "Det gamle testamentet": {
+                    "count": 2
+                },
+                "Personer i Det gamle testamentet": {
+                    "count": 2
+                },
+                "Tofr\u00f8bladete planter": {
+                    "count": 21
+                },
+                "Vierordenen": {
+                    "count": 3
+                },
+                "Vierfamilien": {
+                    "count": 1
+                },
+                "Vierslekta": {
+                    "count": 1
+                },
+                "Afrikas litteratur": {
+                    "count": 2
+                },
+                "Elfenbenskystens litteratur": {
+                    "count": 1
+                },
+                "N\u00e6ringsmidler og husholdning": {
+                    "count": 13
+                },
+                "Mat": {
+                    "count": 7
+                },
+                "Ulike lands kj\u00f8kken": {
+                    "count": 2
+                },
+                "S\u00f8r-Europas kj\u00f8kken": {
+                    "count": 1
+                },
+                "Italiensk mat": {
+                    "count": 1
+                },
+                "Klassisk musikk 1900\u20131950": {
+                    "count": 3
+                },
+                "Norske klassiske komponister og verker 1900\u20131950": {
+                    "count": 1
+                },
+                "Atferdsbiologi": {
+                    "count": 1
+                },
+                "Skip og skipstyper": {
+                    "count": 5
+                },
+                "Seilskip": {
+                    "count": 2
+                },
+                "Demografi": {
+                    "count": 2
+                },
+                "Filosofiens fagdisipliner": {
+                    "count": 12
+                },
+                "Filosofisk logikk": {
+                    "count": 1
+                },
+                "Historiske b\u00e5ttyper": {
+                    "count": 2
+                },
+                "Vikingskip": {
+                    "count": 1
+                },
+                "Bildende kunst": {
+                    "count": 49
+                },
+                "Kunstvitenskap": {
+                    "count": 5
+                },
+                "Termer og begreper i bildende kunst": {
+                    "count": 4
+                },
+                "Rubladordenen": {
+                    "count": 3
+                },
+                "Rubladfamilien": {
+                    "count": 3
+                },
+                "\u00c5kersteinfr\u00f8slekta": {
+                    "count": 1
+                },
+                "Familierett": {
+                    "count": 3
+                },
+                "Oslo": {
+                    "count": 1
+                },
+                "Atom- og kjernefysikk": {
+                    "count": 3
+                },
+                "Teknologi": {
+                    "count": 2
+                },
+                "Sjakk": {
+                    "count": 1
+                },
+                "Frankrikes historie": {
+                    "count": 11
+                },
+                "Frankrikes samtidshistorie": {
+                    "count": 3
+                },
+                "Italias geografi": {
+                    "count": 4
+                },
+                "Storbritannia og Nord-Irlands geografi": {
+                    "count": 13
+                },
+                "Katolisisme": {
+                    "count": 8
+                },
+                "Klostervesenet": {
+                    "count": 4
+                },
+                "Verdens historie": {
+                    "count": 5
+                },
+                "Den kalde krigen": {
+                    "count": 2
+                },
+                "Cellens organeller og mikrostruktur": {
+                    "count": 1
+                },
+                "Vekst og vekstanlegg": {
+                    "count": 1
+                },
+                "Analytisk kjemi": {
+                    "count": 2
+                },
+                "Spektroskopi": {
+                    "count": 2
+                },
+                "Grammatikk": {
+                    "count": 2
+                },
+                "Morfologi": {
+                    "count": 2
+                },
+                "Finlands litteratur": {
+                    "count": 4
+                },
+                "Utdanning og forskning": {
+                    "count": 12
+                },
+                "Pedagogikk": {
+                    "count": 3
+                },
+                "Biografier innen pedagogisk teori": {
+                    "count": 2
+                },
+                "Frankrikes litteratur": {
+                    "count": 14
+                },
+                "Frankrikes litteratur p\u00e5 1700-tallet": {
+                    "count": 2
+                },
+                "Psykologi": {
+                    "count": 4
+                },
+                "Personlighetspsykologi": {
+                    "count": 3
+                },
+                "Musikkbransje": {
+                    "count": 1
+                },
+                "Plateselskaper": {
+                    "count": 1
+                },
+                "Romanias historie": {
+                    "count": 3
+                },
+                "IT": {
+                    "count": 4
+                },
+                "Internett": {
+                    "count": 2
+                },
+                "Antigua og Barbudas geografi": {
+                    "count": 1
+                },
+                "Norges historie fra 1660 til 1814": {
+                    "count": 3
+                },
+                "Nordland": {
+                    "count": 6
+                },
+                "Bindal": {
+                    "count": 1
+                },
+                "Storbritannia og Nord-Irlands historie": {
+                    "count": 7
+                },
+                "Italias litteratur": {
+                    "count": 4
+                },
+                "Italias litteratur p\u00e5 1500-tallet": {
+                    "count": 2
+                },
+                "Arbeid og velferd": {
+                    "count": 4
+                },
+                "Arbeidsliv": {
+                    "count": 2
+                },
+                "Arbeidslivsorganisasjoner": {
+                    "count": 1
+                },
+                "Europas geografi generelt": {
+                    "count": 2
+                },
+                "Internasjonale dirigenter": {
+                    "count": 3
+                },
+                "Popul\u00e6rmusikk": {
+                    "count": 20
+                },
+                "Pop og rock": {
+                    "count": 11
+                },
+                "Internasjonal pop og rock": {
+                    "count": 10
+                },
+                "Afrikas historie": {
+                    "count": 2
+                },
+                "USAs historie": {
+                    "count": 5
+                },
+                "USAs historie fra 1960": {
+                    "count": 2
+                },
+                "Skipstyper": {
+                    "count": 1
+                },
+                "De ortodokse kirker": {
+                    "count": 2
+                },
+                "Sveriges litteratur": {
+                    "count": 5
+                },
+                "Sveriges litteratur 1900-1960": {
+                    "count": 2
+                },
+                "Avtalerett": {
+                    "count": 2
+                },
+                "Jentenavn": {
+                    "count": 5
+                },
+                "Energi": {
+                    "count": 6
+                },
+                "Belysning": {
+                    "count": 2
+                },
+                "Asia": {
+                    "count": 44
+                },
+                "Indias geografi": {
+                    "count": 3
+                },
+                "Br\u00f8nn\u00f8y": {
+                    "count": 1
+                },
+                "Anatomi": {
+                    "count": 3
+                },
+                "Insektenes anatomi og fysiologi": {
+                    "count": 1
+                },
+                "Pakistans geografi": {
+                    "count": 2
+                },
+                "Historiske religioner": {
+                    "count": 8
+                },
+                "Gresk religion": {
+                    "count": 2
+                },
+                "\u00d8konomi og n\u00e6ringsliv": {
+                    "count": 25
+                },
+                "N\u00e6ringsliv": {
+                    "count": 10
+                },
+                "Bedrifter og personer": {
+                    "count": 9
+                },
+                "Bedrifter i internasjonal n\u00e6ringslivshistorie": {
+                    "count": 2
+                },
+                "Politikk og offentlig forvaltning": {
+                    "count": 12
+                },
+                "Norsk politikk og offentlig forvaltning": {
+                    "count": 9
+                },
+                "Partier og politikere": {
+                    "count": 7
+                },
+                "Norske politikere": {
+                    "count": 7
+                },
+                "Tidligere politikere": {
+                    "count": 5
+                },
+                "Belarus\u2019 geografi": {
+                    "count": 1
+                },
+                "Matematikk": {
+                    "count": 6
+                },
+                "Sannsynlighet og statistikk": {
+                    "count": 2
+                },
+                "Statistikk": {
+                    "count": 2
+                },
+                "Film": {
+                    "count": 23
+                },
+                " TV og teater": {
+                    "count": 23
+                },
+                "Film og TV": {
+                    "count": 18
+                },
+                "Norske filmer og TV-serier": {
+                    "count": 1
+                },
+                "Arkitektur og landskap": {
+                    "count": 29
+                },
+                "Arkitekturhistorie": {
+                    "count": 9
+                },
+                "Islamsk arkitekturhistorie": {
+                    "count": 2
+                },
+                "Organisk kjemi": {
+                    "count": 7
+                },
+                "Organiske forbindelser": {
+                    "count": 7
+                },
+                "Historievitenskap": {
+                    "count": 8
+                },
+                "Historikere": {
+                    "count": 4
+                },
+                "Storbritannia og Nord-Irlands litteratur": {
+                    "count": 8
+                },
+                "Storbritannia og Nord-Irlands litteratur p\u00e5 1900-tallet": {
+                    "count": 3
+                },
+                "Folkegrupper i Afrika": {
+                    "count": 3
+                },
+                "Spr\u00e5kvitenskapens grunnbegreper": {
+                    "count": 1
+                },
+                "Luftfart": {
+                    "count": 6
+                },
+                "Luftfart\u00f8y": {
+                    "count": 1
+                },
+                "Sivilflytyper": {
+                    "count": 1
+                },
+                "Passasjerfly": {
+                    "count": 1
+                },
+                "Bygg og anlegg": {
+                    "count": 6
+                },
+                "Betong": {
+                    "count": 2
+                },
+                " sement og m\u00f8rtel": {
+                    "count": 2
+                },
+                "S\u00f8r-Amerikas geografi": {
+                    "count": 9
+                },
+                "Argentinas geografi": {
+                    "count": 2
+                },
+                "Bosnia-Hercegovinas geografi": {
+                    "count": 2
+                },
+                "Folkemusikk": {
+                    "count": 1
+                },
+                "Kristendommens historie": {
+                    "count": 6
+                },
+                "Tidlig kristendom": {
+                    "count": 4
+                },
+                "Den norske kirke": {
+                    "count": 5
+                },
+                "Buddhisme": {
+                    "count": 2
+                },
+                "Nyreligi\u00f8sitet": {
+                    "count": 2
+                },
+                "\u00d8stlig innflytelse": {
+                    "count": 1
+                },
+                "Medier": {
+                    "count": 17
+                },
+                "Forlagsdrift": {
+                    "count": 1
+                },
+                "Amt og len i Norge": {
+                    "count": 1
+                },
+                "Oster": {
+                    "count": 3
+                },
+                "Tekstiler": {
+                    "count": 4
+                },
+                "Flyteknikk": {
+                    "count": 1
+                },
+                "Flygeteori": {
+                    "count": 1
+                },
+                "Kirker": {
+                    "count": 7
+                },
+                " slott og g\u00e5rder": {
+                    "count": 7
+                },
+                "Slott og palasser": {
+                    "count": 3
+                },
+                "Klassisk musikk i barokken": {
+                    "count": 4
+                },
+                "Storbritannia og Nord-Irlands litteratur p\u00e5 1700-tallet": {
+                    "count": 3
+                },
+                "Drikke": {
+                    "count": 3
+                },
+                "Vin": {
+                    "count": 2
+                },
+                "Vinterminologi": {
+                    "count": 1
+                },
+                "Jazz": {
+                    "count": 17
+                },
+                "Nord-Amerikanske jazzut\u00f8vere og -ensembler": {
+                    "count": 10
+                },
+                " 1920 \u2013 1960": {
+                    "count": 2
+                },
+                "Danmarks geografi": {
+                    "count": 5
+                },
+                "Filippinenes geografi": {
+                    "count": 1
+                },
+                "Sj\u00f8merker": {
+                    "count": 1
+                },
+                "Elektrokjemi og metallurgi": {
+                    "count": 3
+                },
+                "Legeringer": {
+                    "count": 1
+                },
+                "St\u00e5l og andre jernlegeringer": {
+                    "count": 1
+                },
+                "Penger": {
+                    "count": 4
+                },
+                "Numismatikk": {
+                    "count": 2
+                },
+                "Taiwans geografi": {
+                    "count": 1
+                },
+                "Burkina Fasos geografi": {
+                    "count": 3
+                },
+                "Blues": {
+                    "count": 2
+                },
+                "Internasjonale bluesmusikere": {
+                    "count": 2
+                },
+                "Journalistikk": {
+                    "count": 2
+                },
+                "Journalistiske begreper": {
+                    "count": 2
+                },
+                "Middelalderens arkitekturhistorie": {
+                    "count": 4
+                },
+                "Frankrikes geografi": {
+                    "count": 8
+                },
+                "Jazzens historie": {
+                    "count": 1
+                },
+                "Tysk-romerske rike": {
+                    "count": 1
+                },
+                "Biografier i Det tysk-romerske riket": {
+                    "count": 1
+                },
+                "Geometri og topologi": {
+                    "count": 3
+                },
+                "Algebraisk geometri": {
+                    "count": 3
+                },
+                "USAs geografi": {
+                    "count": 7
+                },
+                "Delstater og omr\u00e5der i USA": {
+                    "count": 1
+                },
+                "Meteorologi": {
+                    "count": 2
+                },
+                "Klima": {
+                    "count": 1
+                },
+                "Klima i Norge": {
+                    "count": 1
+                },
+                "Norske tradisjonsb\u00e5ter": {
+                    "count": 1
+                },
+                "Nordnorske tradisjonsb\u00e5ter": {
+                    "count": 1
+                },
+                "Politi og kriminalitet": {
+                    "count": 4
+                },
+                "Politivesen": {
+                    "count": 2
+                },
+                "Politifaglige begreper": {
+                    "count": 2
+                },
+                "Kulturinstitusjoner": {
+                    "count": 6
+                },
+                "Museum": {
+                    "count": 3
+                },
+                "Filosofiens historie": {
+                    "count": 9
+                },
+                "Middelalderens og renessansens filosofi": {
+                    "count": 4
+                },
+                "Forsvar og sikkerhet": {
+                    "count": 18
+                },
+                "Forsvar i verden": {
+                    "count": 3
+                },
+                "Bokkunst og skrift": {
+                    "count": 2
+                },
+                "Skriftdesign og typografi": {
+                    "count": 1
+                },
+                "Typografer og skriftdesignere": {
+                    "count": 1
+                },
+                "Frankrikes nyere litteratur": {
+                    "count": 3
+                },
+                "Romerrikets litteratur": {
+                    "count": 2
+                },
+                "Verk i Romerrikets litteratur": {
+                    "count": 1
+                },
+                "Dyreriket": {
+                    "count": 30
+                },
+                "Ryggstrengdyr": {
+                    "count": 23
+                },
+                "Virveldyr": {
+                    "count": 26
+                },
+                "Fugler": {
+                    "count": 8
+                },
+                "Dykkere": {
+                    "count": 1
+                },
+                "Monarki": {
+                    "count": 1
+                },
+                "Maskiner": {
+                    "count": 10
+                },
+                "Maskinelementer": {
+                    "count": 1
+                },
+                "Jus generelt": {
+                    "count": 2
+                },
+                "Petroleum": {
+                    "count": 6
+                },
+                "Petroleumsutvinning": {
+                    "count": 4
+                },
+                "Boreteknologi": {
+                    "count": 1
+                },
+                "Landbruk": {
+                    "count": 8
+                },
+                "Husdyr": {
+                    "count": 7
+                },
+                "Hund": {
+                    "count": 5
+                },
+                "Hunderaser": {
+                    "count": 5
+                },
+                "Offentlig politikk og administrasjon": {
+                    "count": 3
+                },
+                "Politisk og \u00f8konomisk filosofi": {
+                    "count": 5
+                },
+                "Internasjonal tekstilindustri": {
+                    "count": 1
+                },
+                "Spanias geografi": {
+                    "count": 6
+                },
+                "Multippelenheter i SI-systemet": {
+                    "count": 1
+                },
+                " 1980 til i dag": {
+                    "count": 7
+                },
+                "Salmesang": {
+                    "count": 2
+                },
+                "Milit\u00e6re biografier": {
+                    "count": 4
+                },
+                "Norske milit\u00e6re biografier": {
+                    "count": 2
+                },
+                "Kristne trossamfunn": {
+                    "count": 9
+                },
+                "Spr\u00e5kforskere": {
+                    "count": 2
+                },
+                "Norske spr\u00e5kforskere og spr\u00e5kfolk": {
+                    "count": 1
+                },
+                "Romerrikets historie": {
+                    "count": 10
+                },
+                "Filmteknikk": {
+                    "count": 2
+                },
+                "Europeisk film og TV": {
+                    "count": 6
+                },
+                "Europeiske filmer og tv-serier": {
+                    "count": 1
+                },
+                "Bil": {
+                    "count": 8
+                },
+                "Bilfag": {
+                    "count": 4
+                },
+                "Bilens sikkerhetssystemer": {
+                    "count": 2
+                },
+                "Bygningstyper": {
+                    "count": 2
+                },
+                "Norges historie fra 1814 til 1884": {
+                    "count": 2
+                },
+                "Europeiske jazzut\u00f8vere og -ensembler": {
+                    "count": 2
+                },
+                " 1920 \u2013 1980": {
+                    "count": 4
+                },
+                "S\u00f8r-Amerika": {
+                    "count": 7
+                },
+                "Bolivias historie": {
+                    "count": 2
+                },
+                "Internasjonalt milit\u00e6rt samarbeid": {
+                    "count": 2
+                },
+                "Internasjonale milit\u00e6re organisasjoner": {
+                    "count": 2
+                },
+                "NATO": {
+                    "count": 2
+                },
+                "Kristen teologi og trosl\u00e6re": {
+                    "count": 2
+                },
+                "Leddyr": {
+                    "count": 4
+                },
+                "Insekter": {
+                    "count": 4
+                },
+                "Tovinger": {
+                    "count": 1
+                },
+                "Gallmygg": {
+                    "count": 1
+                },
+                "Dasineura": {
+                    "count": 1
+                },
+                "Mauritius\u2019 historie": {
+                    "count": 1
+                },
+                "Mauritius\u2019 samtidshistorie": {
+                    "count": 1
+                },
+                "Historiske riker i Sentral-Afrika": {
+                    "count": 1
+                },
+                "Politikkomr\u00e5der": {
+                    "count": 2
+                },
+                "Milj\u00f8vern": {
+                    "count": 1
+                },
+                "Milj\u00f8bevegelsen": {
+                    "count": 1
+                },
+                "Programmering": {
+                    "count": 1
+                },
+                "Polens historie": {
+                    "count": 1
+                },
+                "Fotografi": {
+                    "count": 2
+                },
+                "Fotohistoriske biografier": {
+                    "count": 1
+                },
+                "Skipstekniske og nautiske begrep": {
+                    "count": 5
+                },
+                "Immaterialrett": {
+                    "count": 1
+                },
+                "Opphavsrett": {
+                    "count": 1
+                },
+                "Kontormaskiner": {
+                    "count": 1
+                },
+                "Sosiologi": {
+                    "count": 6
+                },
+                "Sosiologer": {
+                    "count": 1
+                },
+                "Plantenes form": {
+                    "count": 3
+                },
+                "Fr\u00f8 og formeringsorganer": {
+                    "count": 1
+                },
+                "Genealoger": {
+                    "count": 1
+                },
+                "Storbritannias samtidshistorie": {
+                    "count": 1
+                },
+                "Samtidskunst": {
+                    "count": 10
+                },
+                "Skulptur og mosaikk i samtidskunsten": {
+                    "count": 4
+                },
+                "Bolig og eiendom": {
+                    "count": 3
+                },
+                "Volleyball": {
+                    "count": 1
+                },
+                "V\u00e6r": {
+                    "count": 1
+                },
+                "Skyer og nedb\u00f8r": {
+                    "count": 1
+                },
+                "Bangladesh' historie": {
+                    "count": 1
+                },
+                "Bangladesh' samtidshistorie": {
+                    "count": 1
+                },
+                "Spurvefugler": {
+                    "count": 2
+                },
+                "Kinas geografi": {
+                    "count": 1
+                },
+                "V\u00e5pen og milit\u00e6rt materiell": {
+                    "count": 3
+                },
+                "Marinefart\u00f8y": {
+                    "count": 1
+                },
+                "Undervannsb\u00e5ter": {
+                    "count": 1
+                },
+                "Belgias franskspr\u00e5klige litteratur": {
+                    "count": 4
+                },
+                "Motorkj\u00f8ret\u00f8yer": {
+                    "count": 1
+                },
+                "Israels historie": {
+                    "count": 1
+                },
+                "Astronomi": {
+                    "count": 17
+                },
+                "Solsystemet": {
+                    "count": 2
+                },
+                "Colombias geografi": {
+                    "count": 2
+                },
+                "Norges historie fra 1050 til 1300": {
+                    "count": 3
+                },
+                "\u00d8vrig vintersport": {
+                    "count": 2
+                },
+                "Skiskyting": {
+                    "count": 1
+                },
+                "Vestland": {
+                    "count": 8
+                },
+                "B\u00f8mlo": {
+                    "count": 1
+                },
+                "Moderne okkultisme": {
+                    "count": 1
+                },
+                "Frankrikes litteratur p\u00e5 1800-tallet": {
+                    "count": 3
+                },
+                "Antropologi": {
+                    "count": 6
+                },
+                "Antropologer": {
+                    "count": 3
+                },
+                "Musikkteori": {
+                    "count": 2
+                },
+                "Tonalitet": {
+                    "count": 1
+                },
+                "Internasjonale bedrifter og varemerker": {
+                    "count": 4
+                },
+                "Religionsvitenskap": {
+                    "count": 6
+                },
+                "Spr\u00e5ktypologi": {
+                    "count": 1
+                },
+                "Ungarns historie": {
+                    "count": 2
+                },
+                "Vade-": {
+                    "count": 2
+                },
+                " m\u00e5ke- og alkefugler": {
+                    "count": 2
+                },
+                "Oseanias litteratur": {
+                    "count": 3
+                },
+                "New Zealands litteratur": {
+                    "count": 1
+                },
+                "Pattedyr": {
+                    "count": 10
+                },
+                "Spissmusdyr": {
+                    "count": 1
+                },
+                "Spissmusfamilien": {
+                    "count": 1
+                },
+                "Soricinae": {
+                    "count": 1
+                },
+                "Soricini": {
+                    "count": 1
+                },
+                "Sorex": {
+                    "count": 1
+                },
+                "Fysikalsk kjemi": {
+                    "count": 1
+                },
+                "Litteraturvitenskap": {
+                    "count": 7
+                },
+                "Litteraturforskere og kritikere": {
+                    "count": 3
+                },
+                "Aserbajdsjans historie": {
+                    "count": 1
+                },
+                "Rettssosiologi": {
+                    "count": 1
+                },
+                "Chiles geografi": {
+                    "count": 1
+                },
+                "Norske bedrifter og varemerker": {
+                    "count": 3
+                },
+                "Klassisk musikk p\u00e5 1800-tallet": {
+                    "count": 4
+                },
+                "Internasjonale klassiske komponister og verker p\u00e5 1800-tallet": {
+                    "count": 3
+                },
+                "Flyindustri": {
+                    "count": 4
+                },
+                "Flyselskaper": {
+                    "count": 2
+                },
+                "Racketsport": {
+                    "count": 2
+                },
+                "Tennis": {
+                    "count": 2
+                },
+                "Prosessmetallurgi": {
+                    "count": 1
+                },
+                "Tysklands litteratur": {
+                    "count": 6
+                },
+                "Tysklands litteratur 1900-1950": {
+                    "count": 1
+                },
+                "Norske klassiske instrumentalister": {
+                    "count": 2
+                },
+                "Innlandet": {
+                    "count": 2
+                },
+                "Eidskog": {
+                    "count": 1
+                },
+                "Nord-amerikansk film og TV": {
+                    "count": 7
+                },
+                "Nord-amerikanske skuespillere": {
+                    "count": 5
+                },
+                "Internasjonal politikk": {
+                    "count": 2
+                },
+                "Troms og Finnmark": {
+                    "count": 3
+                },
+                "Bardu": {
+                    "count": 1
+                },
+                "Hinduisme": {
+                    "count": 3
+                },
+                "Aust-Agder": {
+                    "count": 1
+                },
+                "Kirkemusikk": {
+                    "count": 1
+                },
+                "Australias litteratur": {
+                    "count": 2
+                },
+                "Kunsthistorie": {
+                    "count": 31
+                },
+                "Ekspresjonisme og fauvisme": {
+                    "count": 1
+                },
+                "Vannforsyning": {
+                    "count": 1
+                },
+                "\u00d8vrige sporter": {
+                    "count": 2
+                },
+                "\u00d8vrig konkurranseidrett": {
+                    "count": 1
+                },
+                "Norsk pop og rock": {
+                    "count": 1
+                },
+                "Frankrikes litteratur p\u00e5 1600-tallet": {
+                    "count": 1
+                },
+                "Arkitekter og arkitektur-institusjoner": {
+                    "count": 10
+                },
+                "Internasjonale arkitekter fra 1600 til 1900": {
+                    "count": 2
+                },
+                "Dyrenes anatomi": {
+                    "count": 1
+                },
+                "Bangladesh' geografi": {
+                    "count": 3
+                },
+                "Benins historie": {
+                    "count": 1
+                },
+                "Benins samtidshistorie": {
+                    "count": 1
+                },
+                "Elektromagnetisme": {
+                    "count": 4
+                },
+                "Neo-ekspresjonisme og figurativ billedkunst etter 1945": {
+                    "count": 4
+                },
+                "N\u00e6ringsmiddelteknologi": {
+                    "count": 2
+                },
+                "Tr\u00f8ndelag": {
+                    "count": 3
+                },
+                "Skaun": {
+                    "count": 1
+                },
+                "Sigdal": {
+                    "count": 1
+                },
+                "Tysklands historie": {
+                    "count": 4
+                },
+                "Tysklands historie fra 1933 til 1945": {
+                    "count": 1
+                },
+                "Spr\u00e5kfilosofi": {
+                    "count": 1
+                },
+                "Kjerneenergi": {
+                    "count": 1
+                },
+                "Kjernekraftverk": {
+                    "count": 1
+                },
+                "Reiseliv": {
+                    "count": 3
+                },
+                "Bedrifter og organisasjoner i internasjonalt reiseliv": {
+                    "count": 2
+                },
+                "Norske dirigenter": {
+                    "count": 1
+                },
+                "Soppriket": {
+                    "count": 10
+                },
+                "Stilksporesopper": {
+                    "count": 9
+                },
+                "Hymeniesopper": {
+                    "count": 7
+                },
+                "Ekte hymeniesopper": {
+                    "count": 7
+                },
+                "Agaricomycetidae": {
+                    "count": 5
+                },
+                "Skivesoppordenen": {
+                    "count": 5
+                },
+                "Tricholomataceae": {
+                    "count": 1
+                },
+                "Ridderhatter": {
+                    "count": 1
+                },
+                "Indonesias geografi": {
+                    "count": 4
+                },
+                "Forskningsmetode": {
+                    "count": 5
+                },
+                "Frankrikes litteratur p\u00e5 1900-tallet": {
+                    "count": 4
+                },
+                "Aviser": {
+                    "count": 9
+                },
+                "Avisredakt\u00f8rer": {
+                    "count": 2
+                },
+                "Portugals litteratur": {
+                    "count": 1
+                },
+                "Utdanningshistorie": {
+                    "count": 1
+                },
+                "Pumper og turbiner": {
+                    "count": 3
+                },
+                "Byer i USA": {
+                    "count": 4
+                },
+                "USA-assosierte stater og territorer i Oseania": {
+                    "count": 1
+                },
+                "Korsblomstordenen": {
+                    "count": 3
+                },
+                "Korsblomstfamilien": {
+                    "count": 3
+                },
+                "Rublomslekta": {
+                    "count": 1
+                },
+                "Lyngordenen": {
+                    "count": 1
+                },
+                "Lyngfamilien": {
+                    "count": 1
+                },
+                "B\u00e6rlyngslekta": {
+                    "count": 1
+                },
+                " 1960 \u2013 1980": {
+                    "count": 1
+                },
+                "Geologi": {
+                    "count": 11
+                },
+                "Bergarter": {
+                    "count": 3
+                },
+                "Metamorfe bergarter": {
+                    "count": 1
+                },
+                "Nederlandsk og flamsk billedkunst 1400-1750": {
+                    "count": 2
+                },
+                "Kristen misjonsvirksomhet": {
+                    "count": 6
+                },
+                "Benins geografi": {
+                    "count": 1
+                },
+                "Romanias geografi": {
+                    "count": 2
+                },
+                "Molekyl\u00e6rbiologi": {
+                    "count": 1
+                },
+                "Metoder i celle- og molekyl\u00e6rbiologien": {
+                    "count": 1
+                },
+                "Skrinneblomslekta": {
+                    "count": 1
+                },
+                "Norsk bildende kunst fra 1800-1945": {
+                    "count": 3
+                },
+                "Englands historie": {
+                    "count": 1
+                },
+                "Kinas historie": {
+                    "count": 1
+                },
+                "Republikken Kinas historie (1912\u20131949)": {
+                    "count": 1
+                },
+                "Bunad": {
+                    "count": 1
+                },
+                " kofter og folkedrakt": {
+                    "count": 1
+                },
+                "Islam": {
+                    "count": 3
+                },
+                "Retninger i islam": {
+                    "count": 3
+                },
+                "Postimpresjonisme": {
+                    "count": 2
+                },
+                " symbolisme og art nouveau": {
+                    "count": 2
+                },
+                "Dyrevern": {
+                    "count": 1
+                },
+                "Tidsregning": {
+                    "count": 2
+                },
+                "Temabasert reiseliv": {
+                    "count": 1
+                },
+                "Turisthytter": {
+                    "count": 1
+                },
+                "Geomorfologi": {
+                    "count": 1
+                },
+                "M\u00f8re og Romsdal": {
+                    "count": 3
+                },
+                "Fjord": {
+                    "count": 1
+                },
+                "Formering": {
+                    "count": 1
+                },
+                "Design": {
+                    "count": 4
+                },
+                "M\u00f8bler og interi\u00f8rtyper": {
+                    "count": 1
+                },
+                "Ordforklaringer": {
+                    "count": 10
+                },
+                "Uttrykk og ordtak": {
+                    "count": 3
+                },
+                "Petroleumsfelter": {
+                    "count": 2
+                },
+                "Brasils historie": {
+                    "count": 2
+                },
+                "Brasils samtidshistorie": {
+                    "count": 2
+                },
+                "Kildeskrifter": {
+                    "count": 3
+                },
+                "Norske slekter": {
+                    "count": 9
+                },
+                "Kamp- og kontaktsport": {
+                    "count": 2
+                },
+                "Asiatiske kampsporter": {
+                    "count": 1
+                },
+                "Stormfugler": {
+                    "count": 1
+                },
+                "Stormfuglfamilien": {
+                    "count": 1
+                },
+                "Thalassoica": {
+                    "count": 1
+                },
+                "Danmarks historie": {
+                    "count": 4
+                },
+                "Danmarks samtidshistorie": {
+                    "count": 1
+                },
+                "Personer innen astronomi": {
+                    "count": 3
+                },
+                "Romvirksomhet": {
+                    "count": 4
+                },
+                "Personer": {
+                    "count": 1
+                },
+                " bedrifter og organisasjoner innen romvirksomhet": {
+                    "count": 1
+                },
+                "Prefikser og suffikser": {
+                    "count": 1
+                },
+                "Kraftselskaper og kraftverk": {
+                    "count": 2
+                },
+                "Arkivfag": {
+                    "count": 2
+                },
+                "Vestfold og Telemark": {
+                    "count": 2
+                },
+                "Midt-Telemark": {
+                    "count": 1
+                },
+                "B\u00f8": {
+                    "count": 2
+                },
+                "Russlands geografi": {
+                    "count": 1
+                },
+                "Teknologi- og industrihistorie": {
+                    "count": 4
+                },
+                "Norsk teknologi- og industrihistorie": {
+                    "count": 4
+                },
+                "Bergverkshistorie": {
+                    "count": 1
+                },
+                "Statsvitere og institusjoner": {
+                    "count": 1
+                },
+                "Verdensmusikk": {
+                    "count": 2
+                },
+                "Country og bluegrass": {
+                    "count": 1
+                },
+                "Amerikanske country- og bluegrassartister": {
+                    "count": 1
+                },
+                "Barnehage": {
+                    "count": 2
+                },
+                "Internasjonale klassiske ensembler": {
+                    "count": 1
+                },
+                "Antikkens filosofi": {
+                    "count": 2
+                },
+                "Leppeblomstordenen": {
+                    "count": 3
+                },
+                "Kjempefamilien": {
+                    "count": 1
+                },
+                "Kjempeslekta": {
+                    "count": 1
+                },
+                "Industri": {
+                    "count": 4
+                },
+                "Metallarbeid": {
+                    "count": 2
+                },
+                "Geologer": {
+                    "count": 2
+                },
+                "Canadas historie": {
+                    "count": 1
+                },
+                "Canadas samtidshistorie": {
+                    "count": 1
+                },
+                "Sosiologisk teori": {
+                    "count": 4
+                },
+                "Palestinas historie": {
+                    "count": 2
+                },
+                "Palestinas samtidshistorie": {
+                    "count": 2
+                },
+                "Canadas franskspr\u00e5klige litteratur": {
+                    "count": 1
+                },
+                "Internasjonale tegnekunstnere": {
+                    "count": 2
+                },
+                "\u00d8sterrikes litteratur": {
+                    "count": 2
+                },
+                "\u00d8sterrikes litteratur f\u00f8r 1700-tallet": {
+                    "count": 1
+                },
+                "Str\u00e5lefinnefisker": {
+                    "count": 2
+                },
+                "Karpefisker": {
+                    "count": 1
+                },
+                "Karpefamilien": {
+                    "count": 1
+                },
+                "Rhodeus": {
+                    "count": 1
+                },
+                "Indonesias historie": {
+                    "count": 1
+                },
+                "Indonesias samtidshistorie": {
+                    "count": 1
+                },
+                "Samfunnssikkerhet og beredskap": {
+                    "count": 1
+                },
+                "Beredskap og kriseh\u00e5ndtering": {
+                    "count": 1
+                },
+                "Designteori og -historie": {
+                    "count": 1
+                },
+                "Grunnstoffer": {
+                    "count": 5
+                },
+                "Nyklassisisme og romantikk i bildende kunst": {
+                    "count": 1
+                },
+                "Rot hos planter": {
+                    "count": 1
+                },
+                "Kroatias litteratur": {
+                    "count": 1
+                },
+                "Flaggermus": {
+                    "count": 1
+                },
+                "Glattnesefamilien": {
+                    "count": 1
+                },
+                "Vespertilioninae": {
+                    "count": 1
+                },
+                "Plecotini": {
+                    "count": 1
+                },
+                "Barbastella": {
+                    "count": 1
+                },
+                "J\u00f8dedom": {
+                    "count": 2
+                },
+                "Tsjekkias geografi": {
+                    "count": 1
+                },
+                "Danmarks litteratur": {
+                    "count": 5
+                },
+                "Danmarks litteratur p\u00e5 1900-tallet": {
+                    "count": 4
+                },
+                "Fransk politikk": {
+                    "count": 1
+                },
+                "IT-historie": {
+                    "count": 1
+                },
+                "Personer i IT-historie": {
+                    "count": 1
+                },
+                "USAs litteratur 1900-1950": {
+                    "count": 1
+                },
+                "Internasjonal rett": {
+                    "count": 3
+                },
+                "Alminnelig folkerett": {
+                    "count": 3
+                },
+                "Lydteknologi": {
+                    "count": 1
+                },
+                "Flatormer": {
+                    "count": 1
+                },
+                "Bendelormer": {
+                    "count": 1
+                },
+                "Pseudophyllidea": {
+                    "count": 1
+                },
+                "Diphyllobothriidae": {
+                    "count": 1
+                },
+                "Asias litteratur": {
+                    "count": 3
+                },
+                "Irans litteratur": {
+                    "count": 1
+                },
+                "Realisme og impresjonisme": {
+                    "count": 5
+                },
+                "Kjernekjemi": {
+                    "count": 1
+                },
+                "Hellas\u2019 historie": {
+                    "count": 1
+                },
+                "Norske aviser": {
+                    "count": 2
+                },
+                "Ord og uttrykk p\u00e5 andre spr\u00e5k": {
+                    "count": 3
+                },
+                "Tyske ord og uttrykk": {
+                    "count": 2
+                },
+                "Storbritannia og Nord-Irlands litteratur p\u00e5 1600-tallet": {
+                    "count": 1
+                },
+                "Haier og skater": {
+                    "count": 1
+                },
+                "H\u00e5branner": {
+                    "count": 1
+                },
+                "Brugdefamilien": {
+                    "count": 1
+                },
+                "Cetorhinus": {
+                    "count": 1
+                },
+                "Rettskildel\u00e6re": {
+                    "count": 1
+                },
+                "Belgias historie": {
+                    "count": 1
+                },
+                "Usbekistans geografi": {
+                    "count": 1
+                },
+                "Elektronikk": {
+                    "count": 6
+                },
+                "Fjernsynsteknikk": {
+                    "count": 1
+                },
+                "Frankrikes litteratur f\u00f8r 1500-tallet": {
+                    "count": 1
+                },
+                "Begreper i botanikken": {
+                    "count": 2
+                },
+                "Costa Ricas litteratur": {
+                    "count": 1
+                },
+                "Macrocystidiaceae": {
+                    "count": 1
+                },
+                "Macrocystidia": {
+                    "count": 1
+                },
+                "Flagg og nasjonalsymboler": {
+                    "count": 2
+                },
+                "Flagg og v\u00e5pen": {
+                    "count": 2
+                },
+                "Milit\u00e6r teori": {
+                    "count": 1
+                },
+                "Arendal": {
+                    "count": 1
+                },
+                "Austrheim": {
+                    "count": 1
+                },
+                "Cubas historie": {
+                    "count": 1
+                },
+                "Cubas samtidshistorie": {
+                    "count": 1
+                },
+                "Motiver i bildende kunst": {
+                    "count": 1
+                },
+                "Strophariaceae": {
+                    "count": 1
+                },
+                "Skulptur og mosaikk i nyere tid": {
+                    "count": 3
+                },
+                "Europas \u00f8vrige historie": {
+                    "count": 3
+                },
+                "Europa p\u00e5 1900-tallet": {
+                    "count": 1
+                },
+                "Kjemiens historie": {
+                    "count": 1
+                },
+                "S\u00f8tvierordenen": {
+                    "count": 3
+                },
+                "S\u00f8tvierfamilien": {
+                    "count": 3
+                },
+                "S\u00f8tvierslekta": {
+                    "count": 2
+                },
+                "Andre verdenskrig": {
+                    "count": 2
+                },
+                "Tysklands litteratur p\u00e5 1800-tallet": {
+                    "count": 3
+                },
+                "Norske klassiske ensembler": {
+                    "count": 1
+                },
+                "Drammen": {
+                    "count": 1
+                },
+                "Perus geografi": {
+                    "count": 2
+                },
+                "Romobservatorier": {
+                    "count": 2
+                },
+                "Fagbegreper i antropologi": {
+                    "count": 3
+                },
+                "Botswanas historie": {
+                    "count": 1
+                },
+                "Botswanas samtidshistorie": {
+                    "count": 1
+                },
+                "Vortemelkfamilien": {
+                    "count": 2
+                },
+                "Fly- og helikopterprodusenter": {
+                    "count": 2
+                },
+                "Heraldikk": {
+                    "count": 1
+                },
+                "Grafikk": {
+                    "count": 1
+                },
+                "Genetikk": {
+                    "count": 2
+                },
+                "Bemannet romfart": {
+                    "count": 1
+                },
+                "Tyrkias geografi": {
+                    "count": 2
+                },
+                "Den katolske kirke": {
+                    "count": 1
+                },
+                "Erkebiskoper": {
+                    "count": 1
+                },
+                "Biografier i norsk teknologi- og industrihistorie": {
+                    "count": 2
+                },
+                "Vepser": {
+                    "count": 3
+                },
+                "Arverett og skifterett": {
+                    "count": 1
+                },
+                "\u00d8rland": {
+                    "count": 1
+                },
+                "Engelsk fotball": {
+                    "count": 2
+                },
+                "Engelske fotballspillere": {
+                    "count": 1
+                },
+                "Bibliotek": {
+                    "count": 1
+                },
+                "S\u00f8r-Amerikas litteratur": {
+                    "count": 2
+                },
+                "Colombias litteratur": {
+                    "count": 1
+                },
+                "Protestantisme": {
+                    "count": 4
+                },
+                "Samferdsel": {
+                    "count": 2
+                },
+                "Broer": {
+                    "count": 1
+                },
+                "Broer i Norge": {
+                    "count": 1
+                },
+                "Stilkvepser": {
+                    "count": 1
+                },
+                "Broddvepser": {
+                    "count": 1
+                },
+                "Apoidea": {
+                    "count": 1
+                },
+                "Grafisk industri": {
+                    "count": 3
+                },
+                "Teknologi og materialer i grafisk industri": {
+                    "count": 2
+                },
+                "Norske skuespillere": {
+                    "count": 4
+                },
+                "Aviser i Vestland": {
+                    "count": 1
+                },
+                "Magnoliids": {
+                    "count": 1
+                },
+                "Magnoliaordenen": {
+                    "count": 1
+                },
+                "Annonaceae": {
+                    "count": 1
+                },
+                "Den franske revolusjon": {
+                    "count": 1
+                },
+                "Teater": {
+                    "count": 1
+                },
+                "Internasjonale teaterinstitusjoner": {
+                    "count": 1
+                },
+                "Arkeologi": {
+                    "count": 9
+                },
+                "Nordisk arkeologi": {
+                    "count": 2
+                },
+                "Hvaler": {
+                    "count": 1
+                },
+                "Bardehvaler": {
+                    "count": 1
+                },
+                "Finnhvalfamilien": {
+                    "count": 1
+                },
+                "Balaenoptera": {
+                    "count": 1
+                },
+                "Folketro": {
+                    "count": 2
+                },
+                "Russland og Sovjetunionens historie": {
+                    "count": 5
+                },
+                "Russlands eldre historie": {
+                    "count": 3
+                },
+                "Blad": {
+                    "count": 1
+                },
+                "Europeiske filmskuespillere": {
+                    "count": 4
+                },
+                "Internasjonale klassiske komponister og verker i barokken": {
+                    "count": 2
+                },
+                "Samfunns\u00f8konomi": {
+                    "count": 1
+                },
+                "\u00d8konomisk politikk": {
+                    "count": 1
+                },
+                "Motorsport": {
+                    "count": 1
+                },
+                "Bilsport": {
+                    "count": 1
+                },
+                "Perus historie": {
+                    "count": 1
+                },
+                "Skipstekniske begrep": {
+                    "count": 2
+                },
+                "Glass og keramikk": {
+                    "count": 1
+                },
+                "Glass og keramikk \u2013 ut\u00f8vere": {
+                    "count": 1
+                },
+                "Brunrotfamilien": {
+                    "count": 1
+                },
+                "Bokkunst": {
+                    "count": 1
+                },
+                "Internasjonale klassiske instrumentalister": {
+                    "count": 1
+                },
+                "Dagblomordenen": {
+                    "count": 1
+                },
+                "Dagblomfamilien": {
+                    "count": 1
+                },
+                "Roseordenen": {
+                    "count": 1
+                },
+                "Rosefamilien": {
+                    "count": 1
+                },
+                "Epleslekta": {
+                    "count": 1
+                },
+                "USAs litteratur 1950-2000": {
+                    "count": 3
+                },
+                "Plantevepser": {
+                    "count": 1
+                },
+                "Tenthredinoidea": {
+                    "count": 1
+                },
+                "Bladvepser": {
+                    "count": 1
+                },
+                "Blennocampinae": {
+                    "count": 1
+                },
+                "Tomostethus": {
+                    "count": 1
+                },
+                "Franske s\u00f8rterritorier": {
+                    "count": 1
+                },
+                "Musikkinstrumenter": {
+                    "count": 1
+                },
+                "Elektriske musikkinstrumenter": {
+                    "count": 1
+                },
+                "Arbeidsrett": {
+                    "count": 1
+                },
+                "Optikk": {
+                    "count": 3
+                },
+                "Animasjonsfilm": {
+                    "count": 1
+                },
+                "Snipefamilien": {
+                    "count": 1
+                },
+                "Rogaland": {
+                    "count": 3
+                },
+                "Eigersund": {
+                    "count": 2
+                },
+                "Albanias historie": {
+                    "count": 2
+                },
+                "Sirenia": {
+                    "count": 1
+                },
+                "Dugongidae": {
+                    "count": 1
+                },
+                "Dugong": {
+                    "count": 1
+                },
+                "Dans": {
+                    "count": 5
+                },
+                "Scenisk dans": {
+                    "count": 2
+                },
+                "Moderne- og samtidsdans": {
+                    "count": 1
+                },
+                "Moderne- og samtidsdans: norske kunstnere og kompanier": {
+                    "count": 1
+                },
+                "Raketter": {
+                    "count": 2
+                },
+                "Obligasjonsrett": {
+                    "count": 4
+                },
+                "Myanmars historie": {
+                    "count": 1
+                },
+                "Myanmars samtidshistorie": {
+                    "count": 1
+                },
+                "Biografier i Romerrikets historie": {
+                    "count": 3
+                },
+                "Kantarellordenen": {
+                    "count": 1
+                },
+                "Clavulinaceae": {
+                    "count": 1
+                },
+                "Ringerike": {
+                    "count": 1
+                },
+                "Litteraturtyper": {
+                    "count": 7
+                },
+                "Barne- og ungdomslitteratur": {
+                    "count": 3
+                },
+                "Internasjonal barne- og ungdomslitteratur": {
+                    "count": 2
+                },
+                "Russland og Sovjetunionens litteratur": {
+                    "count": 1
+                },
+                "Russiske litteraturforskere og kritikere": {
+                    "count": 1
+                },
+                "Filippinenes historie": {
+                    "count": 1
+                },
+                "Filippinenes samtidshistorie": {
+                    "count": 1
+                },
+                "Norske jazzut\u00f8vere og -ensembler": {
+                    "count": 2
+                },
+                "Bedrifts\u00f8konomi": {
+                    "count": 5
+                },
+                "Norske tegnekunstnere": {
+                    "count": 2
+                },
+                "Argentinas litteratur": {
+                    "count": 1
+                },
+                "Islands geografi": {
+                    "count": 1
+                },
+                "Gnagere": {
+                    "count": 2
+                },
+                "Sciuromorpha": {
+                    "count": 1
+                },
+                "Ekornfamilien": {
+                    "count": 1
+                },
+                "Myosciurus": {
+                    "count": 1
+                },
+                "Paleontologi": {
+                    "count": 5
+                },
+                "Tokke": {
+                    "count": 1
+                },
+                "Soul  og R&B": {
+                    "count": 1
+                },
+                "Internasjonal soul og R&B": {
+                    "count": 1
+                },
+                "Utenlandske spr\u00e5kforskere": {
+                    "count": 1
+                },
+                "Forglemmegeislekta": {
+                    "count": 2
+                },
+                "Slimriket": {
+                    "count": 1
+                },
+                "Strafferett": {
+                    "count": 1
+                },
+                "Mineraler": {
+                    "count": 4
+                },
+                "Silikatmineraler": {
+                    "count": 3
+                },
+                "Norges forsvar": {
+                    "count": 2
+                },
+                "Norske festninger og milit\u00e6ranlegg": {
+                    "count": 1
+                },
+                "Katolske ritualer og symboler": {
+                    "count": 2
+                },
+                "Irlands geografi": {
+                    "count": 1
+                },
+                "Jurister": {
+                    "count": 2
+                },
+                "Ulike lands musikk og musikktradisjoner": {
+                    "count": 1
+                },
+                "Albanias samtidshistorie": {
+                    "count": 1
+                },
+                "Varehandel": {
+                    "count": 1
+                },
+                "Psykologiens historie": {
+                    "count": 1
+                },
+                "Utenlandske aviser": {
+                    "count": 2
+                },
+                "Verdenshavene": {
+                    "count": 3
+                },
+                "Dyphavsgroper": {
+                    "count": 1
+                },
+                "Ulike lands arkitekturhistorie": {
+                    "count": 1
+                },
+                "Islands litteratur": {
+                    "count": 4
+                },
+                "Ulike lands kunst og kunsttradisjoner": {
+                    "count": 1
+                },
+                "Konstruksjonsteknikk": {
+                    "count": 1
+                },
+                "Canadas geografi": {
+                    "count": 1
+                },
+                "Bakterier": {
+                    "count": 1
+                },
+                "H\u00e5ndverk": {
+                    "count": 1
+                },
+                "Redskaper og festemidler": {
+                    "count": 1
+                },
+                "Utforsking av solsystemet": {
+                    "count": 1
+                },
+                "Vin i Europa": {
+                    "count": 1
+                },
+                "Vin i Frankrike": {
+                    "count": 1
+                },
+                "Myndigheter i Norge": {
+                    "count": 2
+                },
+                "Embets- og tjenestepersoner": {
+                    "count": 1
+                },
+                "Det 19. \u00e5rhundres filosofi": {
+                    "count": 1
+                },
+                "Nederlands historie": {
+                    "count": 1
+                },
+                "Norges historie fram til 1050": {
+                    "count": 1
+                },
+                "Barnevern": {
+                    "count": 1
+                },
+                "Rovpattedyr": {
+                    "count": 2
+                },
+                "Caniformia": {
+                    "count": 2
+                },
+                "Bj\u00f8rnefamilien": {
+                    "count": 1
+                },
+                "Tremarctos": {
+                    "count": 1
+                },
+                "Kirgisistans historie": {
+                    "count": 1
+                },
+                "Kirgisistans samtidshistorie": {
+                    "count": 1
+                },
+                "Krypdyr": {
+                    "count": 1
+                },
+                "Dinosaurer": {
+                    "count": 1
+                },
+                "\u00d8vrig europeisk malerkunst 1400-1750": {
+                    "count": 2
+                },
+                "Mesopotamia": {
+                    "count": 2
+                },
+                "Storg\u00e5rder og herreg\u00e5rder": {
+                    "count": 2
+                },
+                "Norske storg\u00e5rder": {
+                    "count": 2
+                },
+                "Internasjonale arkitekter og arkitektkontorer fra 1900 til i dag": {
+                    "count": 4
+                },
+                "Skriftspr\u00e5k": {
+                    "count": 1
+                },
+                "Alfabeter og skriftsystemer": {
+                    "count": 1
+                },
+                "Skrifttegn": {
+                    "count": 1
+                },
+                "Latinske bokstaver": {
+                    "count": 1
+                },
+                "Diakritiske tegn": {
+                    "count": 1
+                },
+                "Det 17. og 18. \u00e5rhundres filosofi": {
+                    "count": 2
+                },
+                "Norske arkitekter og arkitektkontorer fra 1900 til i dag": {
+                    "count": 3
+                },
+                "Asias kj\u00f8kken": {
+                    "count": 1
+                },
+                "Avisjournalister": {
+                    "count": 1
+                },
+                "V\u00e5pen": {
+                    "count": 2
+                },
+                "Artilleri": {
+                    "count": 1
+                },
+                "TV og radio": {
+                    "count": 1
+                },
+                "TV- og radiopersoner": {
+                    "count": 1
+                },
+                "Uorganisk kjemi": {
+                    "count": 3
+                },
+                "Myomorpha": {
+                    "count": 1
+                },
+                "Muroidea": {
+                    "count": 1
+                },
+                "Hamsterfamilien": {
+                    "count": 1
+                },
+                "Arvicolinae": {
+                    "count": 1
+                },
+                "Lemmini": {
+                    "count": 1
+                },
+                "Lemmus": {
+                    "count": 1
+                },
+                "Bilens drivlinje": {
+                    "count": 1
+                },
+                "Britisk Indiahav": {
+                    "count": 1
+                },
+                "Nyrealisme": {
+                    "count": 1
+                },
+                " nysaklighet og tendenskunst": {
+                    "count": 1
+                },
+                "Cellebiologi": {
+                    "count": 1
+                },
+                "Cellestrukturer": {
+                    "count": 1
+                },
+                "Tysklands geografi": {
+                    "count": 3
+                },
+                "Armenias geografi": {
+                    "count": 1
+                },
+                "Elektronisk navigasjon": {
+                    "count": 1
+                },
+                "Kinematografi": {
+                    "count": 1
+                },
+                "Spr\u00e5kfamilier": {
+                    "count": 3
+                },
+                "Indoeuropeiske spr\u00e5k": {
+                    "count": 3
+                },
+                "Romansk": {
+                    "count": 2
+                },
+                "Latin": {
+                    "count": 2
+                },
+                "Latinske verk": {
+                    "count": 2
+                },
+                "Folkegrupper i Asia": {
+                    "count": 1
+                },
+                "Folkegrupper i Sentral-Asia": {
+                    "count": 1
+                },
+                "Bilmerker": {
+                    "count": 2
+                },
+                "Eritreas geografi": {
+                    "count": 1
+                },
+                "Norr\u00f8n litteratur": {
+                    "count": 2
+                },
+                "Algebra": {
+                    "count": 1
+                },
+                "Kommutative algebraer og ringer": {
+                    "count": 1
+                },
+                "Israels geografi": {
+                    "count": 1
+                },
+                "Nellikordenen": {
+                    "count": 1
+                },
+                "Slireknefamilien": {
+                    "count": 1
+                },
+                "Syreslekta": {
+                    "count": 1
+                },
+                "And\u00f8y": {
+                    "count": 1
+                },
+                "Gulen": {
+                    "count": 1
+                },
+                "Rettshistorie": {
+                    "count": 2
+                },
+                "Kvinnherad": {
+                    "count": 1
+                },
+                "Bilhistoriske biografier": {
+                    "count": 1
+                },
+                "Jordans historie": {
+                    "count": 1
+                },
+                "Friidrett": {
+                    "count": 1
+                },
+                "L\u00f8p": {
+                    "count": 1
+                },
+                "Europeiske filmskapere": {
+                    "count": 1
+                },
+                "Oseania generelt": {
+                    "count": 1
+                },
+                "Industridesign": {
+                    "count": 1
+                },
+                "Fast eiendom": {
+                    "count": 1
+                },
+                "Milit\u00e6rvesen": {
+                    "count": 2
+                },
+                "Bank og finans": {
+                    "count": 2
+                },
+                "B\u00f8rs og finans": {
+                    "count": 2
+                },
+                "Internasjonale klassiske sangere": {
+                    "count": 2
+                },
+                "Nattravn- og seilerfugler": {
+                    "count": 1
+                },
+                "Seilerfamilien": {
+                    "count": 1
+                },
+                "Tachymarptis": {
+                    "count": 1
+                },
+                "Zoologi": {
+                    "count": 1
+                },
+                "Pedagogisk teori": {
+                    "count": 1
+                },
+                "Midt\u00f8sten": {
+                    "count": 4
+                },
+                "Midt\u00f8stens gamle kulturer": {
+                    "count": 4
+                },
+                "Oppdagelsesreiser": {
+                    "count": 3
+                },
+                "Urstilksporesopper": {
+                    "count": 1
+                },
+                "Ekte rustsopper": {
+                    "count": 1
+                },
+                "Rustsoppordenen": {
+                    "count": 1
+                },
+                "Pucciniaceae": {
+                    "count": 1
+                },
+                "Slektskap": {
+                    "count": 1
+                },
+                " familie og ekteskap": {
+                    "count": 1
+                },
+                "Akershus": {
+                    "count": 1
+                },
+                "Sk\u00f8ytesport": {
+                    "count": 1
+                },
+                "Eldre mynter og pengeenheter": {
+                    "count": 2
+                },
+                "Elektronisk musikk": {
+                    "count": 1
+                },
+                "Kunstinstitusjoner": {
+                    "count": 1
+                },
+                "Internasjonale kunstinstitusjoner": {
+                    "count": 1
+                },
+                "Norges historie fra 1884 til 1940": {
+                    "count": 5
+                },
+                "Plantefysiologi": {
+                    "count": 1
+                },
+                "Serbias historie": {
+                    "count": 1
+                },
+                "Ulike lands dansehistorie": {
+                    "count": 1
+                },
+                "Spanias litteratur": {
+                    "count": 1
+                },
+                "Spanias litteratur p\u00e5 1900-tallet": {
+                    "count": 1
+                },
+                "Israels litteratur": {
+                    "count": 1
+                },
+                "Skytesport": {
+                    "count": 1
+                },
+                "Viltm\u00e5l": {
+                    "count": 1
+                },
+                "H\u00e6r og landforsvar": {
+                    "count": 1
+                },
+                "Norsk og samisk litteratur": {
+                    "count": 11
+                },
+                "Nyere norsk litteratur": {
+                    "count": 5
+                },
+                "Italienske ord og uttrykk": {
+                    "count": 1
+                },
+                "USAs nyere litteratur": {
+                    "count": 2
+                },
+                "Nyklassisisme og historisme i arkitekturhistorien": {
+                    "count": 2
+                },
+                "Hygrophoraceae": {
+                    "count": 1
+                },
+                "Cuphophyllus": {
+                    "count": 1
+                },
+                "Ustabile grunnstoffer": {
+                    "count": 3
+                },
+                "Kubisme og futurisme": {
+                    "count": 1
+                },
+                "Krim": {
+                    "count": 1
+                },
+                "Krim i Norge": {
+                    "count": 1
+                },
+                "Namibias historie": {
+                    "count": 1
+                },
+                "Skifer": {
+                    "count": 1
+                },
+                "Rytme og tempo": {
+                    "count": 1
+                },
+                "Bl\u00f8tdyr": {
+                    "count": 2
+                },
+                "Snegler": {
+                    "count": 1
+                },
+                "Albuesnegler": {
+                    "count": 1
+                },
+                "Patelloidea": {
+                    "count": 1
+                },
+                "Patellidae": {
+                    "count": 1
+                },
+                "Patella": {
+                    "count": 1
+                },
+                "Angolas historie": {
+                    "count": 1
+                },
+                "Angolas samtidshistorie": {
+                    "count": 1
+                },
+                "Grunnoppl\u00e6ring": {
+                    "count": 2
+                },
+                "Yrkesfaglig utdanning": {
+                    "count": 2
+                },
+                "Bygg- og anleggsteknikk": {
+                    "count": 1
+                },
+                "Sveriges geografi": {
+                    "count": 3
+                },
+                "Andefugler": {
+                    "count": 1
+                },
+                "Andefamilien": {
+                    "count": 1
+                },
+                "Somateria": {
+                    "count": 1
+                },
+                "Rugby og amerikansk fotball": {
+                    "count": 1
+                },
+                "Broddsoppordenen": {
+                    "count": 1
+                },
+                "Hymenochaetaceae": {
+                    "count": 1
+                },
+                "Jordbruk": {
+                    "count": 1
+                },
+                "Trelast og treforedling": {
+                    "count": 2
+                },
+                "Papirindustri": {
+                    "count": 1
+                },
+                "Venezuelas geografi": {
+                    "count": 1
+                },
+                "Mystikere": {
+                    "count": 1
+                },
+                "Prosess": {
+                    "count": 1
+                },
+                "Straffeprosess": {
+                    "count": 1
+                },
+                "Institusjoner i klassisk musikk": {
+                    "count": 1
+                },
+                "Aviseiere og direkt\u00f8rer": {
+                    "count": 2
+                },
+                "Nord-amerikanske filmskapere": {
+                    "count": 2
+                },
+                "Norske kirkebygg": {
+                    "count": 2
+                },
+                "Utdanning i verden": {
+                    "count": 2
+                },
+                "Utdanning i Europa": {
+                    "count": 1
+                },
+                "Marokkos geografi": {
+                    "count": 1
+                },
+                "Trolldomsprosesser": {
+                    "count": 1
+                },
+                "Etiopias geografi": {
+                    "count": 1
+                },
+                "Petroleumshistorie": {
+                    "count": 1
+                },
+                "Ulykker i petroleumsbransjen": {
+                    "count": 1
+                },
+                "Anvendt elektromagnetisme": {
+                    "count": 1
+                },
+                "Tyrkiskspr\u00e5klig litteratur": {
+                    "count": 1
+                },
+                "Tyrkias litteratur": {
+                    "count": 1
+                },
+                "Indre \u00d8stfold": {
+                    "count": 1
+                },
+                "Eidsberg": {
+                    "count": 1
+                },
+                "Grafisk industrihistorie": {
+                    "count": 1
+                },
+                "Tingvoll": {
+                    "count": 1
+                },
+                "\u00d8kologi": {
+                    "count": 1
+                },
+                "Utviklingsbiologi": {
+                    "count": 1
+                },
+                "Fiskeri og havbruk": {
+                    "count": 1
+                },
+                "Norske fiskerier": {
+                    "count": 1
+                },
+                "Fiskeredskaper og fart\u00f8y": {
+                    "count": 1
+                },
+                "Bulgarias geografi": {
+                    "count": 2
+                },
+                "Nyere norsk sakprosa": {
+                    "count": 1
+                },
+                "Tremellomycetes": {
+                    "count": 1
+                },
+                "Tremellales": {
+                    "count": 1
+                },
+                "Tremellaceae": {
+                    "count": 1
+                },
+                "Cryptococcus": {
+                    "count": 1
+                },
+                "Norges litteratur 1800-tallet": {
+                    "count": 1
+                },
+                "Forskning og h\u00f8yere utdanning": {
+                    "count": 2
+                },
+                "Forskningsinstitutter": {
+                    "count": 1
+                },
+                "Transportrett": {
+                    "count": 2
+                },
+                "Sj\u00f8rett": {
+                    "count": 2
+                },
+                "Italias historie": {
+                    "count": 2
+                },
+                "Italias samtidshistorie": {
+                    "count": 1
+                },
+                "Internasjonale milit\u00e6re biografier": {
+                    "count": 2
+                },
+                "Portugisisk fotball": {
+                    "count": 1
+                },
+                "Medisin": {
+                    "count": 3
+                },
+                "Helse og samfunn": {
+                    "count": 2
+                },
+                "Medisinsk historie": {
+                    "count": 2
+                },
+                "Algeries geografi": {
+                    "count": 1
+                },
+                "Sveits\u2019 geografi": {
+                    "count": 2
+                },
+                "Klovdyr": {
+                    "count": 1
+                },
+                "Kvegfamilien": {
+                    "count": 1
+                },
+                "Bos": {
+                    "count": 1
+                },
+                "Norges litteratur 1900-1960": {
+                    "count": 1
+                },
+                "Mel\u00f8y": {
+                    "count": 1
+                },
+                "Religionsfilosofi": {
+                    "count": 1
+                },
+                "Sveits\u2019 litteratur": {
+                    "count": 2
+                },
+                "Sveits\u2019 franskspr\u00e5klige litteratur": {
+                    "count": 1
+                },
+                "Materialfysikk": {
+                    "count": 1
+                },
+                "Systematikk i biologien": {
+                    "count": 1
+                },
+                "Terrorisme": {
+                    "count": 1
+                },
+                "Norsk barne- og ungdomslitteratur f\u00f8r 2000": {
+                    "count": 1
+                },
+                "Krystallografi": {
+                    "count": 1
+                },
+                "Litter\u00e6re perioder og stiler": {
+                    "count": 1
+                },
+                "Ungarns litteratur": {
+                    "count": 1
+                },
+                "Semantikk": {
+                    "count": 1
+                },
+                "Norsk samtidskunst": {
+                    "count": 2
+                },
+                "Enebakk": {
+                    "count": 1
+                },
+                "Europeisk arkeologi": {
+                    "count": 1
+                },
+                "Tidlig abstrakt billedkunst": {
+                    "count": 1
+                },
+                "Cortinariaceae": {
+                    "count": 1
+                },
+                "Sl\u00f8rsopper": {
+                    "count": 1
+                },
+                "Sentralafrikanske republikks historie": {
+                    "count": 1
+                },
+                "Nord-Makedonias historie": {
+                    "count": 1
+                },
+                "Nord-Makedonias samtidshistorie": {
+                    "count": 1
+                },
+                "Ford\u00f8yelsessystemet": {
+                    "count": 1
+                },
+                "Ern\u00e6ring": {
+                    "count": 1
+                },
+                "Sveits\u2019 historie": {
+                    "count": 1
+                },
+                "Sveits\u2019 samtidshistorie": {
+                    "count": 1
+                },
+                "Grader og titler": {
+                    "count": 1
+                },
+                "Akademiske titler": {
+                    "count": 1
+                },
+                "New Zealands geografi": {
+                    "count": 1
+                },
+                "Sveriges historie": {
+                    "count": 1
+                },
+                "Sveriges kongehus": {
+                    "count": 1
+                },
+                "Norges historie fra 1940 til 1945": {
+                    "count": 2
+                },
+                "Klassisk religion": {
+                    "count": 1
+                },
+                "Astronomisk teknologi": {
+                    "count": 1
+                },
+                "Spanias historie": {
+                    "count": 1
+                },
+                "Spanias samtidshistorie": {
+                    "count": 1
+                },
+                "Sjangerl\u00e6re": {
+                    "count": 2
+                },
+                "epikk": {
+                    "count": 1
+                },
+                "Eidfjord": {
+                    "count": 1
+                },
+                "Orientering": {
+                    "count": 1
+                },
+                "Skotsk fotball": {
+                    "count": 1
+                },
+                "Leppeblomstfamilien": {
+                    "count": 1
+                },
+                "D\u00e5slekta": {
+                    "count": 1
+                },
+                "Estetikk": {
+                    "count": 2
+                },
+                "Nigerias historie": {
+                    "count": 1
+                },
+                "Nigerias samtidshistorie": {
+                    "count": 1
+                },
+                "Musikaler": {
+                    "count": 2
+                },
+                "Angolas geografi": {
+                    "count": 1
+                },
+                "Kristne ritualer og symboler": {
+                    "count": 2
+                },
+                "Radioteknikk": {
+                    "count": 1
+                },
+                "Internasjonale fotografer og fotokunstnere": {
+                    "count": 1
+                },
+                "Internasjonale klassiske komponister og verker 1900\u20131950": {
+                    "count": 2
+                },
+                "Norsk bildende kunst fra 1945 til 1990": {
+                    "count": 2
+                },
+                "Serbia og det gamle Jugoslavias litteratur": {
+                    "count": 1
+                },
+                "Polare ekspedisjoner og oppdagere": {
+                    "count": 1
+                },
+                "Italiensk fotball": {
+                    "count": 1
+                },
+                "Petroleumsselskaper": {
+                    "count": 1
+                },
+                "Datoartikler": {
+                    "count": 3
+                },
+                "Tysklands litteratur 1950-2000": {
+                    "count": 1
+                },
+                "M\u00e5ltider": {
+                    "count": 1
+                },
+                "Iraks historie": {
+                    "count": 1
+                },
+                "Iraks samtidshistorie": {
+                    "count": 1
+                },
+                "Irans historie": {
+                    "count": 1
+                },
+                "Irans samtidshistorie": {
+                    "count": 1
+                },
+                "Bod\u00f8": {
+                    "count": 1
+                },
+                "Nordiske jazzut\u00f8vere og -ensembler": {
+                    "count": 2
+                },
+                " 1980 til idag": {
+                    "count": 2
+                },
+                "Trelast- og treforedlingsindustri \u2013 historie": {
+                    "count": 1
+                },
+                "Det gamle Egypt": {
+                    "count": 1
+                },
+                "Norske ord og uttrykk": {
+                    "count": 1
+                },
+                "Papua Ny-Guineas geografi": {
+                    "count": 1
+                },
+                "Asker": {
+                    "count": 1
+                },
+                "Amfibier": {
+                    "count": 2
+                },
+                "Springpadder": {
+                    "count": 1
+                },
+                "Eleutherodactylidae": {
+                    "count": 1
+                },
+                "Eleutherodactylus": {
+                    "count": 1
+                },
+                "Tunneler": {
+                    "count": 1
+                },
+                "Tunneler i Norge": {
+                    "count": 1
+                },
+                "Salamandere": {
+                    "count": 1
+                },
+                "Plethodontidae": {
+                    "count": 1
+                },
+                "Aneides": {
+                    "count": 1
+                },
+                "H\u00e6ren": {
+                    "count": 1
+                },
+                "Kardeborreordenen": {
+                    "count": 1
+                },
+                "Kaprifolfamilien": {
+                    "count": 1
+                },
+                "Bl\u00e5knappslekta": {
+                    "count": 1
+                },
+                "Italias litteratur p\u00e5 1700-tallet": {
+                    "count": 1
+                },
+                "Skipsbygging": {
+                    "count": 1
+                },
+                "Skipskonstrukt\u00f8rer": {
+                    "count": 1
+                },
+                "Piggepleslekta": {
+                    "count": 1
+                },
+                "Sediment\u00e6re bergarter": {
+                    "count": 1
+                },
+                "Samfunnstyper": {
+                    "count": 1
+                },
+                "Boksing": {
+                    "count": 1
+                },
+                "Designinstitusjoner": {
+                    "count": 1
+                },
+                "De forente arabiske emiraters historie": {
+                    "count": 1
+                },
+                "De forente arabiske emiraters samtidshistorie": {
+                    "count": 1
+                },
+                "Folketrygd og pensjon": {
+                    "count": 1
+                },
+                "Forbrukerelektronikk": {
+                    "count": 1
+                },
+                "Utdanning i S\u00f8r-Amerika": {
+                    "count": 1
+                },
+                "Asias geografi generelt": {
+                    "count": 1
+                },
+                "Urverk og klokker": {
+                    "count": 1
+                },
+                "Standardisering": {
+                    "count": 1
+                },
+                "Oppdal": {
+                    "count": 1
+                },
+                "Norske arkitekturinstitusjoner": {
+                    "count": 1
+                },
+                "Sparta": {
+                    "count": 1
+                },
+                "Kunsth\u00e5ndverk": {
+                    "count": 2
+                },
+                "Treskurd": {
+                    "count": 1
+                },
+                "Treskj\u00e6rere": {
+                    "count": 1
+                },
+                "Tysklands historie fra 1806 til 1918": {
+                    "count": 1
+                },
+                "Mexicos geografi": {
+                    "count": 1
+                },
+                "Selfamilien": {
+                    "count": 1
+                },
+                "Cystophora": {
+                    "count": 1
+                },
+                "Burundis geografi": {
+                    "count": 1
+                },
+                "Islands historie": {
+                    "count": 1
+                },
+                "Tegneserier": {
+                    "count": 1
+                },
+                "Birkenes": {
+                    "count": 1
+                },
+                "Humanetikk": {
+                    "count": 1
+                },
+                "Matretter": {
+                    "count": 2
+                },
+                "Supper": {
+                    "count": 2
+                },
+                " sauser og kraft": {
+                    "count": 2
+                },
+                "Ugandas historie": {
+                    "count": 1
+                },
+                "Erkjennelsesteori": {
+                    "count": 1
+                },
+                "Sveits\u2019 tyskspr\u00e5klig litteratur": {
+                    "count": 1
+                },
+                "Sveits\u2019 tyskspr\u00e5klig litteratur p\u00e5 1900-tallet": {
+                    "count": 1
+                },
+                "Popkunst og minimalisme": {
+                    "count": 1
+                },
+                "Klassisk ballett": {
+                    "count": 1
+                },
+                "Klassisk ballett: internasjonale kunstnere og kompanier": {
+                    "count": 1
+                },
+                "Inkludering og rettigheter": {
+                    "count": 1
+                },
+                "Likestilling og diskriminering": {
+                    "count": 1
+                },
+                "Kvinnebevegelse": {
+                    "count": 1
+                },
+                "Kvinnebevegelsen i Norge": {
+                    "count": 1
+                },
+                "Arkeologi i Asia": {
+                    "count": 1
+                },
+                "Cubas litteratur": {
+                    "count": 1
+                },
+                "Elektrokjemi": {
+                    "count": 1
+                },
+                "Norges litteratur 1960-2000": {
+                    "count": 3
+                },
+                "Nederlands litteratur": {
+                    "count": 1
+                },
+                "Forfattere i romerrikets litteratur": {
+                    "count": 1
+                },
+                "Forbrenningsmotorer": {
+                    "count": 2
+                },
+                "Vitenskapsteori": {
+                    "count": 1
+                },
+                "Vitenskapsteoretikere": {
+                    "count": 1
+                },
+                "Norsk lyrikk 1960-2000": {
+                    "count": 1
+                },
+                "Helserett": {
+                    "count": 1
+                },
+                "Klesplagg": {
+                    "count": 1
+                },
+                "Belgias geografi": {
+                    "count": 1
+                },
+                "Antarktis": {
+                    "count": 1
+                },
+                "Danseinstitusjoner": {
+                    "count": 1
+                },
+                "Irans geografi": {
+                    "count": 1
+                },
+                "V\u00e5rskrinneblomslekta": {
+                    "count": 1
+                },
+                "Motstandskampen i Norge": {
+                    "count": 1
+                },
+                "Skjell": {
+                    "count": 1
+                },
+                "Unionoida": {
+                    "count": 1
+                },
+                "Unionoidea": {
+                    "count": 1
+                },
+                "Elvemuslinger": {
+                    "count": 1
+                },
+                "Margaritifera": {
+                    "count": 2
+                },
+                "Klassisk arkeologi": {
+                    "count": 1
+                },
+                "Gresk arkeologi": {
+                    "count": 1
+                },
+                "Teknologi- og industrifag": {
+                    "count": 1
+                },
+                "Afrosoricida": {
+                    "count": 1
+                },
+                "Tenrecidae": {
+                    "count": 1
+                },
+                "Tysklands historie fra 1918 til 1933": {
+                    "count": 1
+                },
+                "Erstatningsrett": {
+                    "count": 1
+                },
+                "Trevirke": {
+                    "count": 1
+                },
+                "Sovjetunionens historie": {
+                    "count": 2
+                },
+                "Gjenstanders kulturhistorie": {
+                    "count": 2
+                },
+                "Dominicas geografi": {
+                    "count": 2
+                },
+                "B\u00f8keordenen": {
+                    "count": 1
+                },
+                "Bj\u00f8rkefamilien": {
+                    "count": 1
+                },
+                "Bj\u00f8rkeslekta": {
+                    "count": 1
+                },
+                "Metrikk": {
+                    "count": 1
+                },
+                "USAs historie 1920\u20131960": {
+                    "count": 2
+                },
+                "Energi og ressurs": {
+                    "count": 1
+                },
+                "Tysklands nyere litteratur": {
+                    "count": 1
+                },
+                "Libanons historie": {
+                    "count": 1
+                },
+                "B\u00e6rum": {
+                    "count": 1
+                },
+                "Brasils geografi": {
+                    "count": 1
+                },
+                "Norges historie fra 1300 til 1660": {
+                    "count": 1
+                },
+                "Natur og landemerker i USA": {
+                    "count": 2
+                },
+                "Kv\u00e6fjord": {
+                    "count": 1
+                },
+                "Fremmedord og l\u00e5nord": {
+                    "count": 2
+                },
+                "Lokalforvaltning": {
+                    "count": 1
+                },
+                "Brennevin": {
+                    "count": 1
+                },
+                "Drinker": {
+                    "count": 1
+                },
+                "Hest": {
+                    "count": 1
+                },
+                "Erteblomstordenen": {
+                    "count": 1
+                },
+                "Erteblomstfamilien": {
+                    "count": 1
+                },
+                "Acacia": {
+                    "count": 1
+                },
+                "Historiske biografier i norsk politikk": {
+                    "count": 1
+                },
+                "Fremmedord med latinsk og gresk opphav": {
+                    "count": 1
+                },
+                "B\u00e5tsfjord": {
+                    "count": 1
+                },
+                "Tidsskrifter": {
+                    "count": 1
+                },
+                "Romanias samtidshistorie": {
+                    "count": 1
+                },
+                "Fagretninger i sosiologi": {
+                    "count": 1
+                },
+                "Folkegrupper i S\u00f8r-Amerika": {
+                    "count": 1
+                },
+                "Norges historie generelt": {
+                    "count": 1
+                },
+                "Norsk polarhistorie": {
+                    "count": 1
+                },
+                "Tekstilkunst": {
+                    "count": 1
+                },
+                "Tekstilkunstnere": {
+                    "count": 1
+                },
+                "Arkeologer": {
+                    "count": 2
+                },
+                "Stabile grunnstoffer": {
+                    "count": 1
+                },
+                "Fiskenes anatomi og fysiologi": {
+                    "count": 1
+                },
+                "Vang": {
+                    "count": 1
+                },
+                "Sunnfjord": {
+                    "count": 1
+                },
+                "Samv\u00e6rsdans": {
+                    "count": 1
+                },
+                "Nicaraguas litteratur": {
+                    "count": 1
+                },
+                "Sulfid- og sulfatmineraler": {
+                    "count": 1
+                },
+                "Hardrock og heavy metal": {
+                    "count": 1
+                },
+                "Norsk hardrock og heavy metal": {
+                    "count": 1
+                },
+                "Aver\u00f8y": {
+                    "count": 1
+                },
+                "Sol og stjerner": {
+                    "count": 1
+                },
+                "Gloppen": {
+                    "count": 1
+                },
+                "Italiensk manierisme": {
+                    "count": 1
+                },
+                " barokk- og renessansekunst": {
+                    "count": 1
+                },
+                "Sakprosa": {
+                    "count": 1
+                },
+                "Sekksporesopper": {
+                    "count": 1
+                },
+                "Ursekksporesopper": {
+                    "count": 1
+                },
+                "Heksekostsopper": {
+                    "count": 1
+                },
+                "Religion i ulike land": {
+                    "count": 1
+                },
+                "Religion i Latin-Amerika": {
+                    "count": 1
+                },
+                "Italias nyere litteratur": {
+                    "count": 1
+                },
+                "Arkitekturteori og -metode": {
+                    "count": 1
+                },
+                "Bahrains geografi": {
+                    "count": 1
+                },
+                "Biografier i nyere norsk historie": {
+                    "count": 1
+                },
+                "Askvoll": {
+                    "count": 1
+                },
+                "\u00d8sterrikes litteratur p\u00e5 1900-tallet": {
+                    "count": 1
+                },
+                "Katt": {
+                    "count": 1
+                },
+                "Piggfinnefisker": {
+                    "count": 1
+                },
+                "Leppefiskfamilien": {
+                    "count": 1
+                },
+                "Ctenolabrus": {
+                    "count": 1
+                },
+                "Mykologi": {
+                    "count": 1
+                },
+                "Innholdsstoffer hos sopp": {
+                    "count": 1
+                },
+                "Fluesnapperfamilien": {
+                    "count": 1
+                },
+                "Luscinia": {
+                    "count": 1
+                },
+                "Colombias historie": {
+                    "count": 1
+                },
+                "\u00d8vrige indo-europeiske spr\u00e5k": {
+                    "count": 1
+                },
+                "Dannmarks historie 1814-1945": {
+                    "count": 1
+                },
+                "Arbeiderbevegelsens historie": {
+                    "count": 1
+                },
+                "Kameruns litteratur": {
+                    "count": 1
+                },
+                "Vannsport": {
+                    "count": 1
+                },
+                "Sv\u00f8mmesport": {
+                    "count": 1
+                },
+                "Abstrakt ekspresjonisme": {
+                    "count": 1
+                },
+                "Bulgarias historie": {
+                    "count": 1
+                },
+                "Storbritannia og Nord-Irlands litteratur p\u00e5 1800-tallet": {
+                    "count": 1
+                },
+                "Norske klassiske komponister og verker f\u00f8r 1900": {
+                    "count": 1
+                },
+                "Kirgisistans geografi": {
+                    "count": 1
+                },
+                "Panamas historie": {
+                    "count": 1
+                },
+                "Finlands geografi": {
+                    "count": 1
+                },
+                "Petroleumsprodukter": {
+                    "count": 1
+                },
+                "Teknisk kybernetikk": {
+                    "count": 1
+                },
+                "Dyregeografi": {
+                    "count": 1
+                },
+                "Verdens dyreliv": {
+                    "count": 1
+                },
+                "Minev\u00e5pen": {
+                    "count": 1
+                },
+                "Det bysantinske rike": {
+                    "count": 1
+                },
+                "Element\u00e6rpartikkelfysikk": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

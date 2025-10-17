@@ -1,0 +1,31 @@
+{
+    "test": {
+        "num_samples": 1,
+        "number_of_characters": 904,
+        "min_text_length": 904,
+        "average_text_length": 904.0,
+        "max_text_length": 904,
+        "unique_texts": 904,
+        "min_labels_per_text": 99,
+        "average_labels_per_text": 904.0,
+        "max_labels_per_text": 240,
+        "unique_labels": 5,
+        "labels": {
+            "3": {
+                "count": 173
+            },
+            "2": {
+                "count": 164
+            },
+            "1": {
+                "count": 99
+            },
+            "0": {
+                "count": 240
+            },
+            "5": {
+                "count": 228
+            }
+        }
+    }
+}

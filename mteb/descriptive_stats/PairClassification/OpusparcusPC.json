@@ -1,0 +1,314 @@
+{
+    "test.full": {
+        "num_samples": 9155,
+        "number_of_characters": 436535,
+        "unique_pairs": 9155,
+        "min_sentence1_length": 10,
+        "avg_sentence1_length": 23.896559257236483,
+        "max_sentence1_length": 122,
+        "unique_sentence1": 9155,
+        "min_sentence2_length": 10,
+        "avg_sentence2_length": 23.78612779901693,
+        "max_sentence2_length": 121,
+        "unique_sentence2": 9155,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 6009
+            },
+            "0": {
+                "count": 3146
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 1409,
+                "number_of_characters": 70269,
+                "unique_pairs": 1409,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 24.828246983676365,
+                "max_sentence1_length": 98,
+                "unique_sentence1": 1409,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 25.043293115684882,
+                "max_sentence2_length": 110,
+                "unique_sentence2": 1409,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1047
+                    },
+                    "0": {
+                        "count": 362
+                    }
+                }
+            },
+            "en": {
+                "num_samples": 1348,
+                "number_of_characters": 63924,
+                "unique_pairs": 1348,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 23.98145400593472,
+                "max_sentence1_length": 82,
+                "unique_sentence1": 1348,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 23.439910979228486,
+                "max_sentence2_length": 111,
+                "unique_sentence2": 1348,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 982
+                    },
+                    "0": {
+                        "count": 366
+                    }
+                }
+            },
+            "fi": {
+                "num_samples": 1570,
+                "number_of_characters": 69983,
+                "unique_pairs": 1570,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 22.2171974522293,
+                "max_sentence1_length": 98,
+                "unique_sentence1": 1570,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 22.35796178343949,
+                "max_sentence2_length": 108,
+                "unique_sentence2": 1570,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 958
+                    },
+                    "0": {
+                        "count": 612
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 1468,
+                "number_of_characters": 82094,
+                "unique_pairs": 1468,
+                "min_sentence1_length": 11,
+                "avg_sentence1_length": 28.242506811989102,
+                "max_sentence1_length": 122,
+                "unique_sentence1": 1468,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 27.67983651226158,
+                "max_sentence2_length": 121,
+                "unique_sentence2": 1468,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1007
+                    },
+                    "0": {
+                        "count": 461
+                    }
+                }
+            },
+            "ru": {
+                "num_samples": 1632,
+                "number_of_characters": 71040,
+                "unique_pairs": 1632,
+                "min_sentence1_length": 11,
+                "avg_sentence1_length": 21.72610294117647,
+                "max_sentence1_length": 106,
+                "unique_sentence1": 1632,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 21.803308823529413,
+                "max_sentence2_length": 94,
+                "unique_sentence2": 1632,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1068
+                    },
+                    "0": {
+                        "count": 564
+                    }
+                }
+            },
+            "sv": {
+                "num_samples": 1728,
+                "number_of_characters": 79225,
+                "unique_pairs": 1728,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 22.95428240740741,
+                "max_sentence1_length": 79,
+                "unique_sentence1": 1728,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 22.89351851851852,
+                "max_sentence2_length": 106,
+                "unique_sentence2": 1728,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 947
+                    },
+                    "0": {
+                        "count": 781
+                    }
+                }
+            }
+        }
+    },
+    "validation.full": {
+        "num_samples": 9052,
+        "number_of_characters": 441614,
+        "unique_pairs": 9052,
+        "min_sentence1_length": 10,
+        "avg_sentence1_length": 24.41427308882015,
+        "max_sentence1_length": 140,
+        "unique_sentence1": 9052,
+        "min_sentence2_length": 10,
+        "avg_sentence2_length": 24.372072470172338,
+        "max_sentence2_length": 155,
+        "unique_sentence2": 9052,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 5992
+            },
+            "0": {
+                "count": 3060
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 1393,
+                "number_of_characters": 69379,
+                "unique_pairs": 1393,
+                "min_sentence1_length": 11,
+                "avg_sentence1_length": 24.728643216080403,
+                "max_sentence1_length": 108,
+                "unique_sentence1": 1393,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 25.07681263460158,
+                "max_sentence2_length": 122,
+                "unique_sentence2": 1393,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1013
+                    },
+                    "0": {
+                        "count": 380
+                    }
+                }
+            },
+            "en": {
+                "num_samples": 1350,
+                "number_of_characters": 63869,
+                "unique_pairs": 1350,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 23.950370370370372,
+                "max_sentence1_length": 91,
+                "unique_sentence1": 1350,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 23.36,
+                "max_sentence2_length": 76,
+                "unique_sentence2": 1350,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 335
+                    },
+                    "1": {
+                        "count": 1015
+                    }
+                }
+            },
+            "fi": {
+                "num_samples": 1575,
+                "number_of_characters": 71790,
+                "unique_pairs": 1575,
+                "min_sentence1_length": 11,
+                "avg_sentence1_length": 22.70095238095238,
+                "max_sentence1_length": 99,
+                "unique_sentence1": 1575,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 22.88,
+                "max_sentence2_length": 155,
+                "unique_sentence2": 1575,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 963
+                    },
+                    "0": {
+                        "count": 612
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 1404,
+                "number_of_characters": 81660,
+                "unique_pairs": 1404,
+                "min_sentence1_length": 11,
+                "avg_sentence1_length": 29.03988603988604,
+                "max_sentence1_length": 140,
+                "unique_sentence1": 1404,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 29.122507122507123,
+                "max_sentence2_length": 139,
+                "unique_sentence2": 1404,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 997
+                    },
+                    "0": {
+                        "count": 407
+                    }
+                }
+            },
+            "ru": {
+                "num_samples": 1598,
+                "number_of_characters": 77436,
+                "unique_pairs": 1598,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 24.303504380475594,
+                "max_sentence1_length": 100,
+                "unique_sentence1": 1598,
+                "min_sentence2_length": 11,
+                "avg_sentence2_length": 24.154568210262827,
+                "max_sentence2_length": 106,
+                "unique_sentence2": 1598,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1020
+                    },
+                    "0": {
+                        "count": 578
+                    }
+                }
+            },
+            "sv": {
+                "num_samples": 1732,
+                "number_of_characters": 77480,
+                "unique_pairs": 1732,
+                "min_sentence1_length": 10,
+                "avg_sentence1_length": 22.433602771362587,
+                "max_sentence1_length": 101,
+                "unique_sentence1": 1732,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 22.30080831408776,
+                "max_sentence2_length": 104,
+                "unique_sentence2": 1732,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 984
+                    },
+                    "0": {
+                        "count": 748
+                    }
+                }
+            }
+        }
+    }
+}
