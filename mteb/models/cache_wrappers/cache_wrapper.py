@@ -12,7 +12,6 @@ from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
@@ -207,7 +206,7 @@ class _VectorCacheMap:
             self.vectors = None
 
 
-class CachedEmbeddingWrapper(AbsEncoder):
+class CachedEmbeddingWrapper:
     """Wraps an encoder and caches embeddings for text and images.
 
     Examples:
@@ -338,3 +337,19 @@ class CachedEmbeddingWrapper(AbsEncoder):
         """Unload cache from memory."""
         for task in list(self.cache_dict.keys()):
             self.cache_dict[task].close()
+
+    def similarity(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity] for more details."""
+        return self._model.similarity(embeddings1, embeddings2)
+
+    def similarity_pairwise(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
+        return self._model.similarity_pairwise(embeddings1, embeddings2)
