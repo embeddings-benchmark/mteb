@@ -1695,7 +1695,8 @@ MTEB_NL = Benchmark(
             ],
         )
     ),
-    description="MTEB-NL",
+    description="MTEB-NL is a Dutch extension of MTEB, featuring a combination of existing and newly developed Dutch "
+    "datasets that cover a broad range of tasks.",
     reference="https://arxiv.org/abs/2509.12340",
     contacts=["nikolay-banar"],
     citation=r"""
