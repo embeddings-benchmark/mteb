@@ -50,11 +50,11 @@ def _multilabel_subsampling(
 
     for split in splits:
         n_split = len(dataset_dict[split])
-        X_np = np.arange(n_split).reshape((-1, 1))
+        x_np = np.arange(n_split).reshape((-1, 1))
         binarizer = MultiLabelBinarizer()
         labels_np = binarizer.fit_transform(dataset_dict[split][label])
         _, test_idx = _iterative_train_test_split(
-            X_np, labels_np, test_size=n_samples / n_split, random_state=seed
+            x_np, labels_np, test_size=n_samples / n_split, random_state=seed
         )
         dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
     return dataset_dict

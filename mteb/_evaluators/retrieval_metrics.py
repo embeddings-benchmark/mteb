@@ -27,7 +27,7 @@ def mrr(
     results: dict[str, dict[str, float]],
     k_values: list[int],
 ) -> dict[str, list[float]]:
-    MRR = defaultdict(list)
+    mrr_metrics = defaultdict(list)
 
     k_max, top_hits = max(k_values), {}
 
@@ -46,8 +46,8 @@ def mrr(
                 if hit[0] in query_relevant_docs:
                     rr = 1.0 / (rank + 1)
                     break
-            MRR[f"MRR@{k}"].append(rr)
-    return MRR
+            mrr_metrics[f"MRR@{k}"].append(rr)
+    return mrr_metrics
 
 
 def recall_cap(
@@ -82,7 +82,7 @@ def hole(
     results: dict[str, dict[str, float]],
     k_values: list[int],
 ) -> dict[str, list[float]]:
-    Hole = defaultdict(list)
+    hole = defaultdict(list)
 
     annotated_corpus = set()
     for _, docs in qrels.items():
@@ -99,8 +99,8 @@ def hole(
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
             ]
-            Hole[f"Hole_at_{k}"].append(len(hole_docs) / k)
-    return Hole
+            hole[f"Hole_at_{k}"].append(len(hole_docs) / k)
+    return hole
 
 
 def top_k_accuracy(

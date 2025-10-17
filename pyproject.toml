@@ -184,24 +184,7 @@ select = [
     "FA", # Future annotations
     "C4", # cleaner comprehensions
     "NPY", # numpy
-    # "N":  # PEP8 naming convention (slowly adopting it over multiple commits
-    "N801",
-    "N802",
-    "N803",
-    "N804",
-    "N805",
-    "N807",
-    "N811",
-    "N813",
-    "N814",
-    "N815",
-    "N816",
-    "N817",
-    "N818",
-    # "N999", # no camelcase in module name (for a seperate PR)
-    # would exclude:
-    # "N806", # probably not worth it
-    # "N812" # disallows: import torch.nn.functional as F which is standard
+    "N",       # PEP8 naming convention
     "RUF009",  # function-call-in-dataclass-default-argument
     "RUF008",  # mutable-dataclass-default
     "RUF013",  # implicit-optional
@@ -233,7 +216,6 @@ select = [
 ignore = [
     "E501",   # line too long
     "E741",     # ambiguous variable name
-    "F403",     # undefined import
     "D100",     # Missing docstring in public module
     "D105",     # Missing docstring in magic method
     "D104",     # Missing docstring in public package
@@ -246,11 +228,19 @@ ignore = [
 "scripts/*" = ["ALL"]
 "docs/*" = ["D", "DOC"]
 "tests/*" = ["RUF012", "D", "DOC"]
+"mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
 "mteb/tasks/*" = ["D", "DOC"]
 "mteb/models/model_implementations/*" = ["D", "DOC"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
+
+[tool.ruff.lint.pep8-naming]
+ignore-names = [
+    "F",  # torch.nn.functional
+    "X_train",
+    "X_test",
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
