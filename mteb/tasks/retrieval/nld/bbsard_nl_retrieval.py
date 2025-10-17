@@ -14,7 +14,7 @@ class BBSARDNLRetrieval(AbsTaskRetrieval):
         reference="https://aclanthology.org/2025.regnlp-1.3.pdf",
         dataset={
             "path": "clips/mteb-nl-bbsard",
-            "revision": "01b759e92194a95979a9359e3dccafa5c4b0db57",
+            "revision": "52027c212ba9765a3e9737c9cbf9a06ae83cbb93",
         },
         type="Retrieval",
         category="t2t",
