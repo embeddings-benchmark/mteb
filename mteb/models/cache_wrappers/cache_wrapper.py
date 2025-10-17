@@ -212,7 +212,7 @@ class CachedEmbeddingWrapper(AbsEncoder):
 
     Examples:
         >>> import mteb
-        >>> from mteb.models.model_implementations.cache_wrapper import CachedEmbeddingWrapper
+        >>> from mteb.models.cache_wrappers import CachedEmbeddingWrapper
         >>> from pathlib import Path
         >>> model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
         >>> cache_path = Path.cwd() / "cache"
