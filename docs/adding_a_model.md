@@ -2,15 +2,15 @@
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:
 
-1. Add the [model meta](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md#adding-a-model-implementation) to `mteb`
-2. [Evaluate](https://github.com/embeddings-benchmark/mteb/blob/main/docs/usage/usage.md#evaluating-a-model) the desired model using `mteb` on the [desired benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/usage/usage.md#selecting-a-benchmark)
+1. Add the [model meta](#adding-a-model-implementation) to `mteb`
+2. [Evaluate](./usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [desired benchmarks](./usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
 
 ## Adding a model implementation
 
 Adding a model implementation to `mteb` is quite straightforward.
-Typically it only requires that you fill in metadata about the model and add it to the [model directory](../mteb/models/):
+Typically it only requires that you fill in metadata about the model and add it to the [model directory](../mteb/models/model_implementations):
 
 ```python
 from mteb.model_meta import ModelMeta
@@ -36,8 +36,7 @@ my_model = ModelMeta(
 )
 ```
 
-This works for all [Sentence Transformers](https://sbert.net) compatible models. Once filled out, you can submit your model to `mteb` by
-submitting a PR.
+This works for all [Sentence Transformers](https://sbert.net) compatible models. Once filled out, you can submit your model to `mteb` by submitting a PR.
 
 
 ### Calculating the Memory Usage
@@ -65,6 +64,7 @@ model = ModelMeta(
            "passage": "passage: ",
         },
     ),
+    ...
 )
 ```
 
@@ -112,13 +112,13 @@ your_model = ModelMeta(
 
 
 ### Adding model dependencies
-If your are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
+If you are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
 
 ```toml
 voyageai = ["voyageai>=1.0.0,<2.0.0"]
 ```
 
-This ensure that the implementation does not break if a package is updated.
+This ensures that the implementation does not break if a package is updated.
 
 As it is an optional dependency, you can't use top-level dependencies, but will instead have to use import inside the wrapper scope:
 
@@ -128,14 +128,14 @@ In the [voyage_models.py](../mteb/models/voyage_models.py) file, we have added t
 from mteb._requires_package import requires_package
 
 
-class VoyageWrapper(Wrapper):
-    def __init__(...) -> None:
+class VoyageWrapper:
+    def __init__(self, model_name: str, revision: str, **kwargs) -> None:
         requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
         import voyageai
         ...
 ```
 Here you will also see that we use  to ensure friendly error messages when package installations are required.
-If you want to give a suggestion instead of a warning, you can use [`suggest_package`](../mteb/requires_packages.py).
+If you want to give a suggestion instead of a warning, you can use [`suggest_package`](../mteb/_requires_package.py).
 
 ### Submitting your model as a PR
 
@@ -146,4 +146,4 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model(model_name, revision)` and
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
-- [ ] The model is public, i.e. is available either as an API or the wieght are publicly avaiable to download
+- [ ] The model is public, i.e. is available either as an API or the weight are publicly available to download

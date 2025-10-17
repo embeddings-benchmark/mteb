@@ -80,6 +80,10 @@ nav:
         - Loading Results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
         - Running the Leaderboard: usage/leaderboard.md
+      - Contribute:
+        - Adding a Model: adding_a_model.md
+        - Adding a Task: adding_a_dataset.md
+        - Adding a Benchmark: adding_a_benchmark.md
   - Overview:
       - overview/index.md
       - Benchmarks:
@@ -88,11 +92,6 @@ nav:
         - Available Tasks: overview/available_tasks
       - Models:
         - Available Models: overview/available_models
-  # - Contribute: # TODO: Add contributions
-  #     - Adding a Model: adding_a_model.md
-  #     - Adding a Benchmark: adding_a_leaderboard_tab.md
-  #     - Adding a Task: adding_a_dataset.md
-  #     - Development Setup: CONTRIBUTING.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md
@@ -108,10 +107,6 @@ plugins:
   - search
   - exclude:
       glob:
-        # contributing segments
-        - adding_a_dataset.md
-        - adding_a_model.md
-        - adding_a_benchmark.md
         # projects
         - mieb/*
         - mmteb/*

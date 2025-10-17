@@ -1,4 +1,3 @@
-
 # Adding a Dataset
 
 To add a new dataset to MTEB, you need to do three things:
@@ -11,7 +10,7 @@ If you have any questions regarding this process feel free to open a discussion 
 
 > Note: When we mention adding a dataset we refer to a subclass of one of the abstasks.
 
-## 1) Creating a new subclass
+## Creating a new subclass
 
 ### A Simple Example
 
@@ -19,7 +18,6 @@ To add a new task, you need to implement a new class that inherits from the `Abs
 
 ```python
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from sentence_transformers import SentenceTransformer
 from mteb.abstasks.task_metadata import TaskMetadata
 
 class SciDocsReranking(AbsTaskRetrieval):
@@ -73,7 +71,7 @@ model = mteb.get_model("intfloat/multilingual-e5-small")
 results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/classification/multilingual/MTOPIntentClassification.py).
+> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/classification/multilingual/mtop_intent_classification.py).
 
 
 
@@ -81,7 +79,7 @@ results = mteb.evaluate(model, tasks=[SciDocsReranking()])
 Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
 
 ```python
-class VGClustering(AbsTaskClusteringLegacy):
+class VGClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="VGClustering",
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
@@ -156,7 +154,7 @@ class VGClustering(AbsTaskClusteringLegacy):
 
 
 
-## 2) Creating the metadata object
+## Creating the metadata object
 Along with the task MTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
 
 To get an overview of the fields in the metadata object, you can look at the [TaskMetadata](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/TaskMetadata.py) class.
