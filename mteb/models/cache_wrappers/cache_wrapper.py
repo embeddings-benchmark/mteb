@@ -12,7 +12,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models.cache_wrappers.cache_backend_protocol import (
     CacheBackendProtocol,
 )
-from mteb.models.cache_wrappers.cache_backends.cache_map import VectorCacheMap
+from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import Array, BatchedInput, PromptType
@@ -38,21 +38,21 @@ class CachedEmbeddingWrapper:
         self,
         model: EncoderProtocol,
         cache_path: str | Path,
-        cache_backend: type[CacheBackendProtocol] = VectorCacheMap,
+        cache_backend: type[CacheBackendProtocol] = NumpyCache,
     ) -> None:
         """Init
 
         Args:
             model: Model to be wrapped.
             cache_path: Path to the directory where cached embeddings are stored.
-            backend: Cache backend class to use for storing embeddings.
+            cache_backend: Cache backend class to use for storing embeddings.
         """
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
-        self.backend = backend
+        self.cache_backend = cache_backend
         self.cache_dict: dict[str, CacheBackendProtocol] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
@@ -88,23 +88,22 @@ class CachedEmbeddingWrapper:
         """
         task_name = task_metadata.name
         try:
-            if task_name not in self.cache_dict:
-                self.cache_dict[task_name] = self.backend(self.cache_path / task_name)
-                self.cache_dict[task_name].load(name=task_name)
+            cache = self._get_or_create_cache(task_name)
 
-            results: list[np.ndarray] = []
             uncached_items: list[BatchedInput] = []
             uncached_indices: list[int] = []
             all_items = inputs.dataset
+            cached_vectors: dict[int, np.ndarray] = {}
 
             for i, item in enumerate(all_items):
-                vector = self.cache_dict[task_name].get_vector(item)
+                vector = cache.get_vector(item)
                 if vector is not None:
-                    results.append(vector)
+                    cached_vectors[i] = vector
                 else:
                     uncached_items.append(item)
                     uncached_indices.append(i)
 
+            newly_encoded: dict[int, np.ndarray] = {}
             if uncached_items:
                 logger.info(f"Encoding {len(uncached_items)} new items")
                 # Build a simple DataLoader with only uncached items
@@ -126,28 +125,39 @@ class CachedEmbeddingWrapper:
                 )
                 if isinstance(new_vectors, torch.Tensor):
                     new_vectors = new_vectors.cpu().numpy()
-                for item, vec in zip(uncached_items, new_vectors):
-                    self.cache_dict[task_name].add(item, vec)
-                self.cache_dict[task_name].save()
-                results.extend(new_vectors)
+                cache.add(uncached_items, new_vectors)
+                cache.save()
+                for vector, original_idx in zip(new_vectors, uncached_indices):
+                    newly_encoded[original_idx] = vector
             else:
                 logger.info("All items found in cache")
 
             final_results = []
-            uncached_idx = 0
             for i in range(len(all_items)):
-                if i in uncached_indices:
-                    final_results.append(
-                        results[len(all_items) - len(uncached_items) + uncached_idx]
-                    )
-                    uncached_idx += 1
+                if i in cached_vectors:
+                    final_results.append(cached_vectors[i])
                 else:
-                    final_results.append(results[i - uncached_idx])
+                    final_results.append(newly_encoded[i])
 
             return np.array(final_results)
         except Exception as e:
             logger.error(f"Error in cached encoding: {str(e)}")
             raise
+
+    def _get_or_create_cache(self, task_name: str) -> CacheBackendProtocol:
+        """Get or create cache for a specific task.
+
+        Args:
+            task_name: Name of the task
+
+        Returns:
+            Cache backend instance for the task
+        """
+        if task_name not in self.cache_dict:
+            cache = self.cache_backend(self.cache_path / task_name)
+            cache.load()
+            self.cache_dict[task_name] = cache
+        return self.cache_dict[task_name]
 
     def __del__(self):
         self.close()

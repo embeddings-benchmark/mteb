@@ -11,7 +11,7 @@ from ._hash_utils import _hash_item
 logger = logging.getLogger(__name__)
 
 
-class VectorCacheMap:
+class NumpyCache:
     """Generic vector cache for both text and images."""
 
     def __init__(self, directory: str | Path, initial_vectors: int = 100000):
@@ -27,31 +27,34 @@ class VectorCacheMap:
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")
         self._initialize_vectors_file()
 
-    def add(self, item: BatchedInput, vector: np.ndarray) -> None:
+    def add(self, item: list[BatchedInput], vectors: np.ndarray) -> None:
         """Add a vector to the cache."""
         try:
             if self.vector_dim is None:
-                self.vector_dim = vector.shape[0]
+                self.vector_dim = (
+                    vectors.shape[0] if vectors.ndim == 1 else vectors.shape[1]
+                )
                 self._initialize_vectors_file()
                 self._save_dimension()
                 logger.info(f"Initialized vector dimension to {self.vector_dim}")
 
-            item_hash = _hash_item(item)
-            if item_hash in self.hash_to_index:
-                logger.warning(
-                    "Hash collision or duplicate item. Overwriting existing vector."
-                )
-                index = self.hash_to_index[item_hash]
-            else:
-                index = len(self.hash_to_index)
-                if index >= len(self.vectors):
-                    self._double_vectors_file()
-                self.hash_to_index[item_hash] = index
+            for item, vec in zip(item, vectors):
+                item_hash = _hash_item(item)
+                if item_hash in self.hash_to_index:
+                    logger.warning(
+                        "Hash collision or duplicate item. Overwriting existing vector."
+                    )
+                    index = self.hash_to_index[item_hash]
+                else:
+                    index = len(self.hash_to_index)
+                    if index >= len(self.vectors):
+                        self._double_vectors_file()
+                    self.hash_to_index[item_hash] = index
 
-            self.vectors[index] = vector
-            logger.debug(
-                f"Added new item-vector pair. Total pairs: {len(self.hash_to_index)}"
-            )
+                self.vectors[index] = vec
+                logger.debug(
+                    f"Added new item-vector pair. Total pairs: {len(self.hash_to_index)}"
+                )
         except Exception as e:
             logger.error(f"Error adding item-vector pair: {str(e)}")
             raise
@@ -129,7 +132,7 @@ class VectorCacheMap:
             logger.error(f"Error saving VectorCacheMap: {str(e)}")
             raise
 
-    def load(self, name: str | None = None) -> None:
+    def load(self) -> None:
         """Load VectorCacheMap from disk."""
         try:
             self._load_dimension()
@@ -151,15 +154,13 @@ class VectorCacheMap:
                     logger.warning(
                         "Vector dimension not set. Unable to load vectors file."
                     )
-                logger.info(
-                    f"Loaded VectorCacheMap ({name or ''}) from {self.directory}"
-                )
+                logger.info(f"Loaded VectorCacheMap from {self.directory}")
             else:
                 logger.warning(
-                    f"No existing files found. Initialized empty VectorCacheMap ({name or ''})."
+                    "No existing files found. Initialized empty VectorCacheMap."
                 )
         except Exception as e:
-            logger.error(f"Error loading VectorCacheMap ({name or ''}): {str(e)}")
+            logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise
 
     def get_vector(self, item: BatchedInput) -> np.ndarray | None:

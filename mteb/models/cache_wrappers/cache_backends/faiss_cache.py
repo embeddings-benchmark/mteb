@@ -26,7 +26,7 @@ class FaissCache:
 
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
-        self.index_file = self.directory / "index.faiss"
+        self.index_file = self.directory / "vectors.faiss"
         self.map_file = self.directory / "index.json"
 
         self.hash_to_index: dict[str, int] = {}
@@ -36,29 +36,29 @@ class FaissCache:
         logger.info(f"Initialized FAISS VectorCacheMap in {self.directory}")
         self.load()
 
-    def add(self, item: BatchedInput, vector: np.ndarray) -> None:
+    def add(self, items: list[BatchedInput], vectors: np.ndarray) -> None:
         """Add vector to FAISS index."""
         import faiss
 
-        if vector.ndim == 1:
-            vector = vector[None, :]
-
+        if vectors.ndim == 1:
+            vectors = vectors[None, :]
         if self.vector_dim is None:
-            self.vector_dim = vector.shape[1]
+            self.vector_dim = vectors.shape[1]
             self.index = faiss.IndexFlatL2(self.vector_dim)
         elif self.index is None:
             self.index = faiss.IndexFlatL2(self.vector_dim)
 
-        item_hash = _hash_item(item)
-        if item_hash in self.hash_to_index:
-            idx = self.hash_to_index[item_hash]
-            logger.debug(f"Overwriting vector at id {idx}")
-            self.index.reconstruct(idx)  # just to check existence
-            self.index.remove_ids(np.array([idx]))
-        new_id = len(self.hash_to_index)
-        self.index.add(vector.astype(np.float32))
-        self.hash_to_index[item_hash] = new_id
-        logger.debug(f"Added vector id={new_id}, total={len(self.hash_to_index)}")
+        start_id = len(self.hash_to_index)
+        vectors_to_add = []
+        for i, (item, vectors) in enumerate(zip(items, vectors)):
+            item_hash = _hash_item(item)
+            if item_hash in self.hash_to_index:
+                continue
+            self.hash_to_index[item_hash] = start_id + i
+            vectors_to_add.append(vectors)
+        if len(vectors_to_add) > 0:
+            vectors_array = np.vstack(vectors_to_add).astype(np.float32)
+            self.index.add(vectors_array)
 
     def get_vector(self, item: BatchedInput) -> np.ndarray | None:
         """Retrieve vector from index by hash."""
@@ -84,7 +84,7 @@ class FaissCache:
             json.dump(self.hash_to_index, f, indent=2)
         logger.info(f"Saved FAISS cache to {self.directory}")
 
-    def load(self, name: str | None = None) -> None:
+    def load(self) -> None:
         """Load FAISS index and mapping from disk."""
         import faiss
 

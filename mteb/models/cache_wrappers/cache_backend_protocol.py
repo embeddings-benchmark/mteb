@@ -26,12 +26,12 @@ class CacheBackendProtocol(Protocol):
             **kwargs: Additional backend-specific arguments.
         """
 
-    def add(self, item: BatchedInput, vector: np.ndarray) -> None:
+    def add(self, item: list[BatchedInput], vectors: np.ndarray) -> None:
         """Add a vector to the cache.
 
         Args:
             item: Input item containing 'text' or 'image'.
-            vector: Embedding vector of shape (dim,) or (1, dim).
+            vectors: Embedding vector of shape (dim,) or (1, dim).
         """
 
     def get_vector(self, item: BatchedInput) -> np.ndarray | None:
@@ -47,7 +47,7 @@ class CacheBackendProtocol(Protocol):
     def save(self) -> None:
         """Persist cache data to disk (index + metadata)."""
 
-    def load(self, name: str | None = None) -> None:
+    def load(self) -> None:
         """Load cache from disk (index + metadata)."""
 
     def close(self) -> None:
