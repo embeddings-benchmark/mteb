@@ -9,7 +9,7 @@ eval_split = "test"
 data_raw = load_dataset("clip-benchmark/wds_flickr30k")[eval_split]
 
 
-## i2t
+# i2t
 queries_ = {"id": [], "modality": [], "image": []}
 corpus_ = {"id": [], "modality": [], "text": []}
 relevant_docs_ = {"query-id": [], "corpus-id": [], "score": []}

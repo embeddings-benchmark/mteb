@@ -1,4 +1,4 @@
-from .FaMTEBSummaryRetrieval import (
+from .fa_mteb_summary_retrieval import (
     SAMSumFa,
     SynPerChatbotRAGSumSRetrieval,
     SynPerChatbotSumSRetrieval,

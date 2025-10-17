@@ -1,4 +1,4 @@
-from .FaMTEBClassification import (
+from .fa_mteb_classification import (
     DeepSentiPers,
     DeepSentiPersV2,
     DigikalamagClassification,
@@ -34,7 +34,7 @@ from .FaMTEBClassification import (
     SynPerTextToneClassificationV2,
     SynPerTextToneClassificationV3,
 )
-from .PersianFoodSentimentClassification import PersianFoodSentimentClassification
+from .persian_food_sentiment_classification import PersianFoodSentimentClassification
 
 __all__ = [
     "DeepSentiPers",

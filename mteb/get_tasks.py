@@ -54,6 +54,8 @@ def _create_similar_tasks(tasks: Sequence[type[AbsTask]]) -> dict[str, list[str]
         if task.metadata.adapted_from:
             for similar_task in task.metadata.adapted_from:
                 similar_tasks[similar_task].append(task.metadata.name)
+        if task.metadata.superseded_by:
+            similar_tasks[task.metadata.superseded_by].append(task.metadata.name)
     return similar_tasks
 
 
@@ -73,6 +75,8 @@ _DEFAULT_PROPRIETIES = (
 
 
 class MTEBTasks(tuple[AbsTask]):
+    """A tuple of tasks with additional methods to get an overview of the tasks."""
+
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
@@ -94,8 +98,12 @@ class MTEBTasks(tuple[AbsTask]):
                 langs.add(lg)
         return langs
 
-    def count_languages(self) -> dict:
-        """Summarize count of all languages from tasks"""
+    def count_languages(self) -> Counter:
+        """Summarize count of all languages from tasks
+
+        Returns:
+            Counter with language as key and count as value.
+        """
         langs = []
         for task in self:
             langs.extend(task.languages)
@@ -181,6 +189,9 @@ class MTEBTasks(tuple[AbsTask]):
             include_citation_in_name: Whether to include the citation in the name.
             limit_n_entries: Limit the number of entries for cell values, e.g. number of languages and domains. Will use "..." to indicate that
                 there are more entries.
+
+        Returns:
+            string with a LaTeX table.
         """
         if include_citation_in_name and "name" in properties:
             properties += ["intext_citation"]

@@ -11,8 +11,16 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types._encoder_io import Array, BatchedInput, PromptType
 
 
-def _string_to_vector(text: str | None, size: int):
-    """Generate a deterministic random vector based on a string."""
+def _string_to_vector(text: str | None, size: int) -> np.ndarray:
+    """Generate a deterministic random vector based on a string.
+
+    Args:
+        text: Input string.
+        size: Size of the output vector.
+
+    Returns:
+        A numpy array of shape (size,) containing the random vector.
+    """
     if text is None:
         text = ""
     # Convert string to a numeric seed
@@ -22,8 +30,16 @@ def _string_to_vector(text: str | None, size: int):
     return rng.random(size, dtype=np.float32)
 
 
-def _image_to_vector(image: Image.Image, size: int):
-    """Generate a deterministic random vector based on image content."""
+def _image_to_vector(image: Image.Image, size: int) -> np.ndarray:
+    """Generate a deterministic random vector based on image content.
+
+    Args:
+        image: PIL Image object.
+        size: Size of the output vector.
+
+    Returns:
+        A numpy array of shape (size,) containing the random vector.
+    """
     # Convert image to bytes and then to a numeric seed
     image_bytes = image.tobytes()
     seed = int(hashlib.sha256(image_bytes).hexdigest(), 16) % (2**32)
@@ -56,7 +72,16 @@ _common_mock_metadata = dict(
 def _batch_to_embeddings(
     inputs: DataLoader[BatchedInput], embedding_dim: int
 ) -> np.ndarray:
-    """Convert batched text/image inputs into embeddings."""
+    """Convert batched text/image inputs into embeddings.
+
+    Args:
+        inputs: A DataLoader yielding batches of inputs, where each batch is a dictionary
+                that may contain 'text' and/or 'image' keys.
+        embedding_dim: The dimensionality of the output embeddings.
+
+    Returns:
+        A 2D numpy array of shape (num_samples, embedding_dim) containing the embeddings
+    """
     embeddings = []
     for batch in inputs:
         has_text, has_image = "text" in batch, "image" in batch
@@ -121,7 +146,15 @@ class RandomEncoderBaseline:
         embeddings1: Array,
         embeddings2: Array,
     ) -> Array:
-        """Cosine similarity"""
+        """Cosine similarity between two sets of embeddings
+
+        Args:
+            embeddings1: First set of embeddings
+            embeddings2: Second set of embeddings
+
+        Returns:
+            Cosine similarity matrix between the two sets of embeddings
+        """
         norm1 = np.linalg.norm(
             embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
         )
@@ -137,7 +170,15 @@ class RandomEncoderBaseline:
         embeddings1: Array,
         embeddings2: Array,
     ) -> Array:
-        """Cosine similarity"""
+        """Cosine similarity for pairs of embeddings
+
+        Args:
+            embeddings1: First set of embeddings
+            embeddings2: Second set of embeddings
+
+        Returns:
+            Cosine similarity for each pair of embeddings
+        """
         norm1 = np.linalg.norm(
             embeddings1.reshape(-1, self.embedding_dim), axis=1, keepdims=True
         )

@@ -1,8 +1,8 @@
-from .TurkishMovieSentimentClassification import (
+from .turkish_movie_sentiment_classification import (
     TurkishMovieSentimentClassification,
     TurkishMovieSentimentClassificationV2,
 )
-from .TurkishProductSentimentClassification import (
+from .turkish_product_sentiment_classification import (
     TurkishProductSentimentClassification,
     TurkishProductSentimentClassificationV2,
 )

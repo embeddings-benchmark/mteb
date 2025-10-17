@@ -63,9 +63,6 @@ class RateLimiter:
 
         Returns:
             The result of the function execution
-
-        Raises:
-            Exception: When max retries are reached and still failing
         """
         retries = 0
         while retries < self.max_retries:
@@ -157,12 +154,12 @@ class ConanWrapper(AbsEncoder):
         api_model_name: str | None = None,
         **kwargs,
     ) -> None:
-        AK = os.getenv("CONAN_AK")
-        SK = os.getenv("CONAN_SK")
-        if not AK or not SK:
+        ak = os.getenv("CONAN_AK")
+        sk = os.getenv("CONAN_SK")
+        if not ak or not sk:
             raise ValueError("CONAN_AK and CONAN_SK environment variables must be set")
 
-        self.client = Client(ak=AK, sk=SK, url="https://ai.om.qq.com/api/conan/v2")
+        self.client = Client(ak=ak, sk=sk, url="https://ai.om.qq.com/api/conan/v2")
         self.model_name = api_model_name
 
     def encode(

@@ -106,7 +106,7 @@ class AbsTaskSTS(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs: Any,
     ) -> STSMetrics:
-        normalized_scores = list(map(self.normalize, data_split["score"]))
+        normalized_scores = list(map(self._normalize, data_split["score"]))
         data_split = data_split.select_columns(list(self.column_names))
 
         evaluator = AnySTSEvaluator(
@@ -231,5 +231,5 @@ class AbsTaskSTS(AbsTask):
             repo_name, [self.column_names[0], self.column_names[1], "score"]
         )
 
-    def normalize(self, x: float) -> float:
+    def _normalize(self, x: float) -> float:
         return (x - self.min_score) / (self.max_score - self.min_score)

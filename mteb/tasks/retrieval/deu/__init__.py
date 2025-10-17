@@ -1,12 +1,12 @@
-from .GerDaLIRRetrieval import GerDaLIR
-from .GerDaLIRSmallRetrieval import GerDaLIRSmall
-from .German1Retrieval import German1Retrieval
-from .GermanDPRRetrieval import GermanDPR
-from .GermanGovServiceRetrieval import GermanGovServiceRetrieval
-from .GermanHealthcare1Retrieval import GermanHealthcare1Retrieval
-from .GermanLegal1Retrieval import GermanLegal1Retrieval
-from .GermanQuADRetrieval import GermanQuADRetrieval
-from .LegalQuADRetrieval import LegalQuAD
+from .ger_da_lir_retrieval import GerDaLIR
+from .ger_da_lir_small_retrieval import GerDaLIRSmall
+from .german1_retrieval import German1Retrieval
+from .german_dpr_retrieval import GermanDPR
+from .german_gov_service_retrieval import GermanGovServiceRetrieval
+from .german_healthcare1_retrieval import GermanHealthcare1Retrieval
+from .german_legal1_retrieval import GermanLegal1Retrieval
+from .german_qu_ad_retrieval import GermanQuADRetrieval
+from .legal_qu_ad_retrieval import LegalQuAD
 
 __all__ = [
     "GerDaLIR",

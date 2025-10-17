@@ -1,3 +1,3 @@
-from .KlueNLI import KlueNLI
+from .klue_nli import KlueNLI
 
 __all__ = ["KlueNLI"]

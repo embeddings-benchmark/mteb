@@ -1,4 +1,4 @@
-from .KannadaNewsClassification import (
+from .kannada_news_classification import (
     KannadaNewsClassification,
     KannadaNewsClassificationV2,
 )

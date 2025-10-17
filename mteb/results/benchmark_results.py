@@ -82,6 +82,9 @@ class BenchmarkResults(BaseModel):
 
         Args:
             tasks: List of tasks to select. Can be a list of AbsTask objects or task names.
+
+        Returns:
+            A new BenchmarkResults object with the selected tasks.
         """
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
@@ -98,6 +101,9 @@ class BenchmarkResults(BaseModel):
         Args:
             names: List of model names to filter by. Can also be a list of ModelMeta objects. In which case, the revision is ignored.
             revisions: List of model revisions to filter by. If None, all revisions are returned.
+
+        Returns:
+            A new BenchmarkResults object with the filtered models.
         """
         models_res = []
         _revisions = revisions if revisions is not None else [None] * len(names)
@@ -163,6 +169,9 @@ class BenchmarkResults(BaseModel):
         1) If the main revision is present, it is kept. The main revision is the defined in the models ModelMeta object.
         2) If there is multiple revisions and some of them are None or na, they are filtered out.
         3) If there is no main revision, we prefer the one run using the latest mteb version.
+
+        Returns:
+            A new BenchmarkResults object with the revisions joined.
         """
 
         def parse_version(version_str: str) -> Version | None:
@@ -293,6 +302,7 @@ class BenchmarkResults(BaseModel):
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
+
         The DataFrame will have the following columns in addition to the metadata columns:
 
         - model_name: The name of the model.
@@ -304,7 +314,7 @@ class BenchmarkResults(BaseModel):
         - split: The split of the task. E.g. "test", "train", "validation".
         - subset: The subset of the task. E.g. "en", "fr-en".
 
-        Afterwards, the DataFrame will be aggregated according to the aggregation method and pivoted to either a wide format.
+        Afterward, the DataFrame will be aggregated according to the aggregation method and pivoted to either a wide format.
 
         Args:
             aggregation_level: The aggregation to use. Can be one of:
@@ -358,10 +368,12 @@ class BenchmarkResults(BaseModel):
         return self.model_results[index]
 
     def to_dict(self) -> dict:
+        """Convert BenchmarkResults to a dictionary."""
         return self.model_dump()
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
+        """Create BenchmarkResults from a dictionary."""
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:
@@ -372,6 +384,14 @@ class BenchmarkResults(BaseModel):
 
     @classmethod
     def from_validated(cls, **data) -> Self:
+        """Create BenchmarkResults from validated data.
+
+        Args:
+            data: Dictionary containing the data.
+
+        Returns:
+            An instance of BenchmarkResults.
+        """
         model_results = []
         for model_res in data["model_results"]:
             model_results.append(ModelResult.from_validated(**model_res))
@@ -379,7 +399,14 @@ class BenchmarkResults(BaseModel):
 
     @classmethod
     def from_disk(cls, path: Path | str) -> Self:
-        """Load the BenchmarkResults from a JSON file."""
+        """Load the BenchmarkResults from a JSON file.
+
+        Args:
+            path: Path to the JSON file.
+
+        Returns:
+            An instance of BenchmarkResults.
+        """
         path = Path(path)
         with path.open() as in_file:
             data = json.loads(in_file.read())

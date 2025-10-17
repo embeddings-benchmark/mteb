@@ -1,3 +1,3 @@
-from .EmitClassification import EmitClassification
+from .emit_classification import EmitClassification
 
 __all__ = ["EmitClassification"]

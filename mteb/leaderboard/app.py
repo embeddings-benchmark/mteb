@@ -13,6 +13,7 @@ import gradio as gr
 import pandas as pd
 
 import mteb
+from mteb import BenchmarkResults
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.cache import ResultCache
@@ -35,14 +36,13 @@ logger = logging.getLogger(__name__)
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 
 
-def _load_results():
+def _load_results(cache: ResultCache) -> BenchmarkResults:
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
-        results_cache = ResultCache()
-        results_cache.download_from_remote()
+        cache.download_from_remote()
         all_model_names = [model_meta.name for model_meta in mteb.get_model_metas()]
 
-        all_results = results_cache.load_results(
+        all_results = cache.load_results(
             models=all_model_names,
             only_main_score=True,
             require_model_meta=False,
@@ -55,7 +55,11 @@ def _load_results():
 
 
 def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
-    """Produces a URL for the selected benchmark."""
+    """Produces a URL for the selected benchmark.
+
+    Returns:
+        A markdown string containing the URL.
+    """
     params = urlencode(
         {
             "benchmark_name": benchmark_name,
@@ -209,17 +213,16 @@ def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
     return True
 
 
-def get_leaderboard_app() -> gr.Blocks:
+def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
+    """Returns a Gradio Blocks app for the MTEB leaderboard."""
     logger.info("Loading all benchmark results")
-    all_results = _load_results()
+    all_results = _load_results(cache)
 
     benchmarks = sorted(
         mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
     )
     all_benchmark_results = {
-        benchmark.name: benchmark.load_results(
-            base_results=all_results
-        ).join_revisions()
+        benchmark.name: all_results.select_tasks(benchmark.tasks).join_revisions()
         for benchmark in benchmarks
     }
     default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)

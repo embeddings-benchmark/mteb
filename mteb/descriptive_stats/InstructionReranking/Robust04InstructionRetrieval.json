@@ -1,31 +1,35 @@
 {
     "test": {
         "num_samples": 47596,
-        "number_of_characters": 109145153,
-        "num_documents": 47492,
-        "min_document_length": 48,
-        "average_document_length": 2297.9675103175273,
-        "max_document_length": 6597,
-        "unique_documents": 47492,
-        "num_queries": 104,
-        "min_query_length": 43,
-        "average_query_length": 96.92307692307692,
-        "max_query_length": 425,
-        "unique_queries": 104,
-        "none_queries": 0,
-        "num_relevant_docs": 36930,
-        "min_relevant_docs_per_query": 195,
-        "average_relevant_docs_per_query": 26.75,
-        "max_relevant_docs_per_query": 570,
-        "unique_relevant_docs": 17643,
-        "num_instructions": 104,
-        "min_instruction_length": 75,
-        "average_instruction_length": 29957,
-        "max_instruction_length": 923,
-        "unique_instructions": 104,
-        "num_top_ranked": null,
-        "min_top_ranked_per_query": null,
-        "average_top_ranked_per_query": null,
-        "max_top_ranked_per_query": null
+        "number_of_characters": 109165981,
+        "documents_text_statistics": {
+            "total_text_length": 109125840,
+            "min_text_length": 47,
+            "average_text_length": 2297.773098627137,
+            "max_text_length": 6597,
+            "unique_texts": 47226
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 40141,
+            "min_text_length": 119,
+            "average_text_length": 385.97115384615387,
+            "max_text_length": 986,
+            "unique_texts": 104
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 2782,
+            "min_relevant_docs_per_query": 195,
+            "average_relevant_docs_per_query": 26.75,
+            "max_relevant_docs_per_query": 570,
+            "unique_relevant_docs": 17643
+        },
+        "top_ranked_statistics": {
+            "num_top_ranked": 104000,
+            "min_top_ranked_per_query": 1000,
+            "average_top_ranked_per_query": 1000.0,
+            "max_top_ranked_per_query": 1000
+        }
     }
 }

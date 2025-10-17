@@ -1,3 +1,3 @@
-from .STSES import STSES
+from .stses import STSES
 
 __all__ = ["STSES"]

@@ -1,4 +1,6 @@
-"""The following code is a copy of
+"""Stratification utilities for multi-label data sets
+
+The following code is a copy of
 https://github.com/scikit-multilearn/scikit-multilearn/blob/master/skmultilearn/model_selection/iterative_stratification.py
 from the amazing scikit-multilearn library. Please try it out: https://github.com/scikit-multilearn/scikit-multilearn
 and cite the references above:
@@ -44,24 +46,25 @@ from sklearn.model_selection._split import _BaseKFold
 from sklearn.utils import check_random_state
 
 
-def _iterative_train_test_split(X, y, test_size, random_state=None):  # noqa: N803
+def _iterative_train_test_split(
+    X: np.ndarray,  # noqa: N803
+    y: np.ndarray,
+    test_size: float,
+    random_state: int | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
     """Iteratively stratified train/test split
 
-            Slighltly modified from:
-    https://github.com/scikit-multilearn/scikit-multilearn/blob/master/skmultilearn/model_selection/iterative_stratification.py
+    Slighltly modified from:
+        https://github.com/scikit-multilearn/scikit-multilearn/blob/master/skmultilearn/model_selection/iterative_stratification.py
 
-    Parameters
-    ----------
-    test_size : float, [0,1]
-        the proportion of the dataset to include in the test split, the rest will be put in the train set
-
-    random_state : None | int | np.random.RandomState
-        the random state seed (optional)
+    Args:
+        X: np.ndarray, shape (n_samples, n_features) input samples
+        y: np.ndarray, shape (n_samples, n_labels) multi-label binary matrix
+        test_size: float, [0,1] the proportion of the dataset to include in the test split, the rest will be put in the train set
+        random_state: random state seed
 
     Returns:
-    -------
-    train_indexes, test_indexes
-        indexes of a train/test split
+        train_indexes, test_indexes: np.ndarray, np.ndarray, the indexes of the train and test samples
     """
     stratifier = IterativeStratification(
         n_splits=2,
@@ -87,17 +90,15 @@ def _fold_tie_break(
         random_state: A numpy random state
 
     Returns:
-    -------
-    fold_number : int
         The selected fold index to put samples into
     """
     if len(M) == 1:
         return M[0]
     else:
         max_val = max(desired_samples_per_fold[M])
-        M_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
-        M_prim = np.array([x for x in M_prim if x in M])
-        return random_state.choice(M_prim, 1)[0]
+        m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
+        m_prim = np.array([x for x in m_prim if x in M])
+        return random_state.choice(m_prim, 1)[0]
 
 
 def _get_most_desired_combination(samples_with_combination: dict):
@@ -135,36 +136,29 @@ class IterativeStratification(_BaseKFold):
 
     Construct an interative stratifier that splits the data set into folds trying to maintain balanced representation
     with respect to order-th label combinations.
-
-    Attributes:
-    ----------
-    n_splits : number of splits, int
-        the number of folds to stratify into
-
-    order : int, >= 1
-        the order of label relationship to take into account when balancing sample distribution across labels
-
-    sample_distribution_per_fold : None or list[float], :code:`(n_splits)`
-        desired percentage of samples in each of the folds, if None and equal distribution of samples per fold
-        is assumed i.e. 1/n_splits for each fold. The value is held in :code:`self.percentage_per_fold`.
-
-    shuffle : bool
-        Whether to shuffle the data before splitting into batches. Note that the samples within each split
-        will not be shuffled.
-
-    random_state : int, RandomState instance or None
-        integer to seed the RNG, or the RNG state to use; if None (the default), will use the global
-        state of numpy RNG
     """
 
     def __init__(
         self,
-        n_splits=3,
-        order=1,
-        sample_distribution_per_fold=None,
-        shuffle=False,
-        random_state=None,
-    ):
+        n_splits: int = 3,
+        order: int = 1,
+        sample_distribution_per_fold: list[float] | None = None,
+        shuffle: bool = False,
+        random_state: int | None = None,
+    ) -> None:
+        """Initialize the stratifier
+
+        Args:
+            n_splits: number of folds. Must be at least 2.
+            order: order of label combinations to use in stratification. 1 means single labels, 2 means pairs of labels, etc.
+            sample_distribution_per_fold: list[float], list of length n_splits with the proportion of samples to assign to each fold. If None, uniform distribution is used.
+            shuffle: bool, whether to shuffle the data before splitting into batches. Note that the samples are always shuffled within each label combination.
+            random_state: int, RandomState instance or None, optional (default=None)
+                If int, random_state is the seed used by the random number generator;
+                If RandomState instance, random_state is the random number generator;
+                If None, the random number generator is the RandomState instance used
+                by `np.random`. Used when `shuffle` is True.
+        """
         self._rng_state = check_random_state(random_state)
         need_shuffle = shuffle or random_state is not None
         self.order = order
@@ -182,7 +176,16 @@ class IterativeStratification(_BaseKFold):
                 for _ in range(self.n_splits)  # type: ignore
             ]
 
-    def _prepare_stratification(self, y: np.ndarray) -> tuple:
+    def _prepare_stratification(
+        self, y: np.ndarray
+    ) -> tuple[
+        list[list[int]],
+        dict[int, bool],
+        list[list[int]],
+        list[list[list[int]]],
+        dict[tuple[int, ...], list[int]],
+        list[list[int]],
+    ]:
         """Prepares variables for performing stratification
 
         For the purpose of clarity, the type Combination denotes list[int], :code:`(self.order)` and represents a
@@ -262,12 +265,12 @@ class IterativeStratification(_BaseKFold):
                     continue
 
                 max_val = max(self.desired_samples_per_combination_per_fold[l])
-                M = np.where(
+                m = np.where(
                     np.array(self.desired_samples_per_combination_per_fold[l])
                     == max_val
                 )[0]
                 m = _fold_tie_break(
-                    self.desired_samples_per_combination_per_fold[l], M, self._rng_state
+                    self.desired_samples_per_combination_per_fold[l], m, self._rng_state
                 )
                 folds[m].append(row)
                 rows_used[row] = True

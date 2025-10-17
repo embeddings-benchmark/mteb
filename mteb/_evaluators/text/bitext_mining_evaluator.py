@@ -6,9 +6,9 @@ import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.models import EncoderProtocol
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ class BitextMiningEvaluator(Evaluator):
 
         embeddings = {}
         for sub in tqdm(subsets):
-            dataloader = create_dataloader_from_texts(self.sentences[sub])
+            dataloader = _create_dataloader_from_texts(self.sentences[sub])
             embeddings[sub] = model.encode(
                 dataloader,
                 task_metadata=self.task_metadata,
@@ -72,7 +72,8 @@ class BitextMiningEvaluator(Evaluator):
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
     ) -> list[dict[str, float]]:
-        """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
+        """This function performs a cosine similarity search between a list of query embeddings and a list of corpus embeddings.
+
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
 
         Args:

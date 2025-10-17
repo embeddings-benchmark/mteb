@@ -1,11 +1,11 @@
-from .HUMESIB200ClusteringS2S import HUMESIB200ClusteringS2S
-from .IndicReviewsClusteringP2P import IndicReviewsClusteringP2P
-from .MasakhaNEWSClusteringP2P import MasakhaNEWSClusteringP2P
-from .MasakhaNEWSClusteringS2S import MasakhaNEWSClusteringS2S
-from .MLSUMClusteringP2P import MLSUMClusteringP2P, MLSUMClusteringP2PFast
-from .MLSUMClusteringS2S import MLSUMClusteringS2S, MLSUMClusteringS2SFast
-from .SIB200ClusteringS2S import SIB200ClusteringFast
-from .WikiClusteringP2P import WikiClusteringFastP2P, WikiClusteringP2P
+from .humesib200_clustering_s2s import HUMESIB200ClusteringS2S
+from .indic_reviews_clustering_p2p import IndicReviewsClusteringP2P
+from .masakha_news_clustering_p2p import MasakhaNEWSClusteringP2P
+from .masakha_news_clustering_s2s import MasakhaNEWSClusteringS2S
+from .mlsum_clustering_p2p import MLSUMClusteringP2P, MLSUMClusteringP2PFast
+from .mlsum_clustering_s2s import MLSUMClusteringS2S, MLSUMClusteringS2SFast
+from .sib200_clustering_s2s import SIB200ClusteringFast
+from .wiki_clustering_p2p import WikiClusteringFastP2P, WikiClusteringP2P
 
 __all__ = [
     "HUMESIB200ClusteringS2S",

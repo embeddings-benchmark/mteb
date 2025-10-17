@@ -4,11 +4,13 @@ from mteb.types import HFSubset
 
 
 class SplitDescriptiveStatistics(TypedDict):
+    """Base class for descriptive statistics for the subset."""
+
     pass
 
 
 class DescriptiveStatistics(TypedDict, SplitDescriptiveStatistics):
-    """Class for descriptive statistics."""
+    """Class for descriptive statistics for the full task."""
 
     hf_subset_descriptive_stats: NotRequired[dict[HFSubset, SplitDescriptiveStatistics]]
 

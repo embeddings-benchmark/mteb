@@ -1,4 +1,4 @@
-from .BulgarianStoreReviewSentimentClassfication import (
+from .bulgarian_store_review_sentiment_classfication import (
     BulgarianStoreReviewSentimentClassfication,
 )
 

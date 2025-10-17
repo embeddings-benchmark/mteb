@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def run(args: argparse.Namespace) -> None:
+    """Run a model on a set of tasks."""
     # set logging based on verbosity level
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
@@ -66,25 +67,37 @@ def run(args: argparse.Namespace) -> None:
     if args.batch_size is not None:
         encode_kwargs["batch_size"] = args.batch_size
 
-    enable_co2_tracker = not args.disable_co2_tracker
+    overwrite_strategy = args.overwrite_strategy
+    if args.overwrite:
+        logger.warning(
+            "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead."
+        )
+        overwrite_strategy = OverwriteStrategy.ALWAYS.value
+
+    prediction_folder = args.prediction_folder
+    if args.save_predictions:
+        logger.warning(
+            "`--save_predictions` is deprecated, please use `--prediction-folder` instead."
+        )
+        prediction_folder = args.output_folder
 
     mteb.evaluate(
         model,
         tasks,
         cache=ResultCache(args.output_folder),
-        co2_tracker=enable_co2_tracker,
-        overwrite_strategy=args.overwrite_strategy,
+        co2_tracker=args.co2_tracker,
+        overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
-        prediction_folder=args.prediction_folder,
+        prediction_folder=prediction_folder,
     )
 
 
-def available_benchmarks(args: argparse.Namespace) -> None:
+def _available_benchmarks(args: argparse.Namespace) -> None:
     benchmarks = mteb.get_benchmarks(names=args.benchmarks)
     _display_benchmarks(benchmarks)
 
 
-def available_tasks(args: argparse.Namespace) -> None:
+def _available_tasks(args: argparse.Namespace) -> None:
     tasks = mteb.get_tasks(
         categories=args.categories,
         task_types=args.task_types,
@@ -146,7 +159,7 @@ def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
     )
     _add_task_selection_args(parser)
 
-    parser.set_defaults(func=available_tasks)
+    parser.set_defaults(func=_available_tasks)
 
 
 def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> None:
@@ -155,7 +168,7 @@ def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> 
     )
     _add_benchmark_selection_args(parser)
 
-    parser.set_defaults(func=available_benchmarks)
+    parser.set_defaults(func=_available_benchmarks)
 
 
 def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
@@ -165,17 +178,18 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         "-m",
         "--model",
         type=str,
-        help="Model to use. Will priotize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
     )
 
     _add_task_selection_args(parser)
     _add_benchmark_selection_args(parser)
 
     parser.add_argument(
-        "--device", type=int, default=None, help="Device to use for computation"
+        "--device", type=int, default=None, help="Device to use for computation."
     )
     parser.add_argument(
         "--output-folder",
+        "--output_folder",  # for backward compatibility
         type=str,
         default="results",
         help="Output directory for results. Will default to `results` if not set.",
@@ -183,30 +197,49 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.add_argument(
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
-    parser.add_argument(
-        "--disable-co2-tracker",
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "--co2-tracker",
+        dest="co2_tracker",
         action="store_true",
-        default=False,
-        help="Disable CO₂ tracker, enabled by default",
+        help="Enable CO₂ tracker. If no argument is passed, the CO₂ tracker will be run if installed.",
     )
+    group.add_argument(
+        "--no-co2-tracker",
+        dest="co2_tracker",
+        action="store_false",
+        help="Disable CO₂ tracker. If no argument is passed, the CO₂ tracker will be run if installed.",
+    )
+    parser.set_defaults(co2_tracker=None)
+
     parser.add_argument(
         "--eval-splits",
+        "--eval_splits",  # for backward compatibility
         nargs="+",
         type=str,
         default=None,
-        help="Evaluation splits to use (train, dev, test..). If None, all splits will be used",
+        help="Evaluation splits to use (train, dev, test..). If None, all splits will be used.",
     )
     parser.add_argument(
         "--model-revision",
+        "--model_revision",  # for backward compatibility
         type=str,
         default=None,
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
     )
     parser.add_argument(
         "--batch-size",
+        "--batch_size",  # for backward compatibility
         type=int,
         default=None,
-        help="Batch size of the encode. Will be passed to the MTEB as mteb.evaluate(model, task, encode_kwargs = {'batch_size': value}).",
+        help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs={'batch_size': value})`.",
+    )
+    # for backward compatibility
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        default=False,
+        help="Whether to overwrite existing results. Deprecated, use `--overwrite-strategy 'always'` instead.",
     )
     parser.add_argument(
         "--overwrite-strategy",
@@ -215,8 +248,14 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         choices=[val.value for val in OverwriteStrategy],
         help=(
             "Strategy for when to overwrite. Can be 'always', 'never', 'only-missing'. 'only-missing' will only rerun the missing splits of a task."
-            + " It will not rerun the splits if the dataset revision or mteb version has changed. "
+            + " It will not rerun the splits if the dataset revision or mteb version has changed."
         ),
+    )
+    parser.add_argument(
+        "--save_predictions",
+        action="store_true",
+        default=False,
+        help="Saves the predictions file in output_folder. Deprecated, use `--prediction-folder` instead.",
     )
     parser.add_argument(
         "--prediction-folder",
@@ -228,7 +267,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.set_defaults(func=run)
 
 
-def create_meta(args: argparse.Namespace) -> None:
+def _create_meta(args: argparse.Namespace) -> None:
     model_name = args.model_name
     tasks_names = args.tasks
     benchmarks = args.benchmarks
@@ -314,11 +353,15 @@ def _add_create_meta_parser(subparsers) -> None:
         default=None,
     )
 
-    parser.set_defaults(func=create_meta)
+    parser.set_defaults(func=_create_meta)
 
 
 def build_cli() -> argparse.ArgumentParser:
-    """Builds the argument parser for the MTEB CLI."""
+    """Builds the argument parser for the MTEB CLI.
+
+    Returns:
+        An argparse.ArgumentParser object configured with subcommands and options.
+    """
     parser = argparse.ArgumentParser(
         description="MTEB Command Line Interface",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,

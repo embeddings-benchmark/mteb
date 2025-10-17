@@ -1,8 +1,8 @@
-from .SpanishNewsClassification import (
+from .spanish_news_classification import (
     SpanishNewsClassification,
     SpanishNewsClassificationV2,
 )
-from .SpanishSentimentClassification import (
+from .spanish_sentiment_classification import (
     SpanishSentimentClassification,
     SpanishSentimentClassificationV2,
 )

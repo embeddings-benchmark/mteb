@@ -33,6 +33,8 @@ logger = logging.getLogger(__name__)
 
 
 class Criterias(HelpfulStrEnum):
+    """Enum for criteria to check when merging TaskResult objects."""
+
     MTEB_VERSION = "mteb_version"
     DATASET_REVISION = "dataset_revision"
 
@@ -168,6 +170,16 @@ class TaskResult(BaseModel):
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
     ) -> Self:
+        """Create a TaskResult from the task and scores.
+
+        Args:
+            task: The task to create the TaskResult from.
+            scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[SplitName, dict[HFSubset, Scores]].
+                Where Scores is a dictionary with the following structure; dict[str, Any]. Where the keys and values are scores. Split is the split of
+                the dataset.
+            evaluation_time: The time taken to evaluate the model.
+            kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
+        """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         flat_scores = defaultdict(list)
@@ -248,6 +260,7 @@ class TaskResult(BaseModel):
 
     @property
     def is_public(self) -> bool:
+        """Check if the task is public."""
         return self.task.metadata.is_public
 
     @property
@@ -265,12 +278,23 @@ class TaskResult(BaseModel):
         return list(self.scores.keys())
 
     def to_dict(self) -> dict:
-        """Convert the TaskResult to a dictionary."""
+        """Convert the TaskResult to a dictionary.
+
+        Returns:
+            The TaskResult as a dictionary.
+        """
         return self.model_dump()
 
     @classmethod
     def from_dict(cls, data: dict) -> Self:
-        """Create a TaskResult from a dictionary."""
+        """Create a TaskResult from a dictionary.
+
+        Args:
+            data: The dictionary to create the TaskResult from.
+
+        Returns:
+            The created TaskResult object.
+        """
         return cls.model_validate(data)
 
     def _round_scores(self, scores: dict[SplitName, list[ScoresDict]], n: int) -> None:
@@ -289,6 +313,11 @@ class TaskResult(BaseModel):
                 scores[key] = round(value, n)
 
     def to_disk(self, path: Path) -> None:
+        """Save TaskResult to disk.
+
+        Args:
+            path: The path to the file to save.
+        """
         json_obj = self.model_dump()
         self._round_scores(json_obj["scores"], 6)
 
@@ -302,6 +331,9 @@ class TaskResult(BaseModel):
         Args:
             path: The path to the file to load.
             load_historic_data: Whether to attempt to load historic data from before v1.11.0.
+
+        Returns:
+            The loaded TaskResult object.
         """
         with path.open("r", encoding="utf-8") as f:
             data = json.load(f)
@@ -503,7 +535,16 @@ class TaskResult(BaseModel):
         languages: str | None = None,
         subsets: Iterable[str] | None = None,
     ) -> float:
-        """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
+        """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified.
+
+        Args:
+            splits: The splits to consider.
+            languages: The languages to consider. Can be ISO language codes or ISO language script codes.
+            subsets: The hf_subsets to consider.
+
+        Returns:
+            The mean main score for the specified splits, languages and subsets.
+        """
         if splits is None:
             splits = self.scores.keys()
         val_sum = 0
@@ -541,12 +582,22 @@ class TaskResult(BaseModel):
 
     @classmethod
     def from_validated(cls, **data) -> Self:
+        """Create a TaskResult from validated data.
+
+        Returns:
+            The created TaskResult object.
+        """
         return cls.model_construct(**data)
 
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
     def only_main_score(self) -> Self:
+        """Return a new TaskResult object with only the main score.
+
+        Returns:
+            A new TaskResult object with only the main score.
+        """
         new_scores = {}
         for split in self.scores:
             new_scores[split] = []
@@ -563,13 +614,18 @@ class TaskResult(BaseModel):
         return new_res
 
     def validate_and_filter_scores(self, task: AbsTask | None = None) -> Self:
-        """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
+        """Validate and filter the scores against the task metadata.
+
+        This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.
 
         Args:
             task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
                 the scores will be filtered to only include those splits and languages. If None it will attempt to get the task from the task_name.
+
+        Returns:
+            A new TaskResult object with the validated and filtered scores.
         """
         from mteb.get_tasks import get_task
 

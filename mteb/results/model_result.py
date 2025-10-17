@@ -88,7 +88,12 @@ class ModelResult(BaseModel):
         return f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, task_results=[...](#{n_entries}))"
 
     @classmethod
-    def from_validated(cls, **data) -> Self:
+    def from_validated(cls, **data: dict[str, Any]) -> Self:
+        """Create a ModelResult from validated data.
+
+        Args:
+            data: The validated data.
+        """
         data["task_results"] = [
             TaskResult.from_validated(**res) for res in data["task_results"]
         ]
@@ -131,6 +136,11 @@ class ModelResult(BaseModel):
         )
 
     def select_tasks(self, tasks: Sequence[AbsTask]) -> Self:
+        """Select tasks from the ModelResult based on a list of AbsTask objects.
+
+        Args:
+            tasks: A sequence of AbsTask objects to select from the ModelResult.
+        """
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
@@ -244,6 +254,7 @@ class ModelResult(BaseModel):
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
+
         The DataFrame will have the following columns in addition to the metadata columns:
 
         - model_name: The name of the model.

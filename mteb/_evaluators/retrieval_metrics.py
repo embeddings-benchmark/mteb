@@ -27,7 +27,7 @@ def mrr(
     results: dict[str, dict[str, float]],
     k_values: list[int],
 ) -> dict[str, list[float]]:
-    MRR = defaultdict(list)
+    mrr_metrics = defaultdict(list)
 
     k_max, top_hits = max(k_values), {}
 
@@ -46,8 +46,8 @@ def mrr(
                 if hit[0] in query_relevant_docs:
                     rr = 1.0 / (rank + 1)
                     break
-            MRR[f"MRR@{k}"].append(rr)
-    return MRR
+            mrr_metrics[f"MRR@{k}"].append(rr)
+    return mrr_metrics
 
 
 def recall_cap(
@@ -82,7 +82,7 @@ def hole(
     results: dict[str, dict[str, float]],
     k_values: list[int],
 ) -> dict[str, list[float]]:
-    Hole = defaultdict(list)
+    hole = defaultdict(list)
 
     annotated_corpus = set()
     for _, docs in qrels.items():
@@ -99,8 +99,8 @@ def hole(
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
             ]
-            Hole[f"Hole_at_{k}"].append(len(hole_docs) / k)
-    return Hole
+            hole[f"Hole_at_{k}"].append(len(hole_docs) / k)
+    return hole
 
 
 def top_k_accuracy(
@@ -184,8 +184,18 @@ def evaluate_p_mrr_change(
     changed_qrels: dict[str, list[str]],
     k_values: list[int],
 ) -> dict[str, float | dict[str, float]]:
-    """Computes the scores needed for FollowIR datasets, including p-MRR (measuring change in instruction) and
-    details about the original instruction run and changed instruction run.
+    """Computes the scores needed for FollowIR datasets.
+
+    Including p-MRR (measuring change in instruction) and details about the original instruction run and changed instruction run. Used by IntructionRetrieval/Reranking tasks.
+
+    Args:
+        qrels: Ground truth relevance judgments for the queries
+        results: Predicted relevance scores for the queries
+        changed_qrels: A mapping from query IDs (without -og or -changed) to a list of document IDs that have changed relevance
+        k_values: The k values for which to compute the scores
+
+    Returns:
+        A dictionary with the scores, including "p-MRR", "og" and "changed" keys.
     """
     followir_scores = defaultdict(dict)
 
@@ -270,11 +280,12 @@ def nauc(
     abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
-    1/ Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
-    2/ Computes the oracle abstention curve, i.e., the best theoretical abstention curve (e.g.: at a 10% abstention rate, the oracle abstains on the bottom-10% instances with regard to the evaluation metric)
-    3/ Computes the flat abstention curve, i.e., the one remains flat for all abstention rates (ineffective abstention)
-    4/ Computes the area under the three curves
-    5/ Finally scales the raw AUC between the oracle and the flat AUCs to get normalized AUC
+
+    1. Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
+    2. Computes the oracle abstention curve, i.e., the best theoretical abstention curve (e.g.: at a 10% abstention rate, the oracle abstains on the bottom-10% instances with regard to the evaluation metric)
+    3. Computes the flat abstention curve, i.e., the one remains flat for all abstention rates (ineffective abstention)
+    4. Computes the area under the three curves
+    5. Finally scales the raw AUC between the oracle and the flat AUCs to get normalized AUC
 
     Args:
         conf_scores: Instance confidence scores used for abstention thresholding, with shape `(num_test_instances,)`
@@ -334,14 +345,19 @@ def paired_accuracy(
     results: dict[str, dict[str, float]],
     scores: dict[str, dict[str, float]],
 ) -> float:
-    """Computes the paired accuracy. This means both queries for an instance have to be correct for it to count.
-        This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
-        For more details, see https://arxiv.org/abs/2305.07614
+    """Computes the paired accuracy.
+
+    This means both queries for an instance have to be correct for it to count.
+    This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
+    For more details, see https://arxiv.org/abs/2305.07614
 
     Args:
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
         scores: The scores for the queries, to extract top_1 recall for each query
+
+    Returns:
+        The paired accuracy score
     """
     # group the queries by the query id
     query_keys = set()
@@ -371,6 +387,9 @@ def robustness_at_10(
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
         scores: The scores for the queries, to extract ndcg@10 for each query
+
+    Returns:
+        The robustness at 10 score
     """
     query_keys = defaultdict(list)
     for key in qrels.keys():
@@ -485,6 +504,9 @@ def max_over_subqueries(
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
         k_values: The k values for which to compute the scores
+
+    Returns:
+        A dictionary with the scores, prefixed with "max_over_subqueries_"
     """
     query_keys = defaultdict(list)
     for key in qrels.keys():
@@ -566,7 +588,15 @@ def evaluate_abstention(
     results: dict[str, dict[str, float]],
     metric_scores: dict[str, list[float]],
 ) -> dict[str, float]:
-    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
+    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
+
+    Args:
+        results: A mapping from query IDs to a dictionary of document IDs and their scores.
+        metric_scores: A dictionary mapping metric names to lists of scores for each query.
+
+    Returns:
+        A dictionary mapping metric names to their corresponding nAUC scores.
+    """
     all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
     all_conf_scores = [confidence_scores(sim_scores) for sim_scores in all_sim_scores]
     conf_fcts = list(all_conf_scores[0].keys())
