@@ -1,34 +1,36 @@
-from .AmazonPolarityClassification import (
+from .amazon_polarity_classification import (
     AmazonPolarityClassification,
     AmazonPolarityClassificationV2,
 )
-from .ArxivClassification import ArxivClassification, ArxivClassificationV2
-from .Banking77Classification import Banking77Classification, Banking77ClassificationV2
-from .BirdsnapClassification import BirdsnapClassification
-from .Caltech101Classification import Caltech101Classification
-from .CIFAR import CIFAR10Classification, CIFAR100Classification
-from .Country211Classification import Country211Classification
-from .DBpediaClassification import DBpediaClassification, DBpediaClassificationV2
-from .DTDClassification import DTDClassification
-from .EmotionClassification import EmotionClassification, EmotionClassificationV2
-from .EuroSATClassification import EuroSATClassification
-from .FER2013Classification import FER2013Classification
-from .FGVCAircraftClassification import FGVCAircraftClassification
-from .FinancialPhrasebankClassification import (
+from .arxiv_classification import ArxivClassification, ArxivClassificationV2
+from .banking77_classification import Banking77Classification, Banking77ClassificationV2
+from .birdsnap_classification import BirdsnapClassification
+from .caltech101_classification import Caltech101Classification
+from .cifar import CIFAR10Classification, CIFAR100Classification
+from .country211_classification import Country211Classification
+from .dbpedia_classification import DBpediaClassification, DBpediaClassificationV2
+from .dtd_classification import DTDClassification
+from .emotion_classification import EmotionClassification, EmotionClassificationV2
+from .euro_sat_classification import EuroSATClassification
+from .fer2013_classification import FER2013Classification
+from .fgvc_aircraft_classification import FGVCAircraftClassification
+from .financial_phrasebank_classification import (
     FinancialPhrasebankClassification,
     FinancialPhrasebankClassificationV2,
 )
-from .Food101Classification import Food101Classification
-from .FrenkEnClassification import FrenkEnClassification, FrenkEnClassificationV2
-from .GTSRBClassification import GTSRBClassification
-from .HUMEEmotionClassification import HUMEEmotionClassification
-from .HUMEToxicConversationsClassification import HUMEToxicConversationsClassification
-from .HUMETweetSentimentExtractionClassification import (
+from .food101_classification import Food101Classification
+from .frenk_en_classification import FrenkEnClassification, FrenkEnClassificationV2
+from .gtsrb_classification import GTSRBClassification
+from .hume_emotion_classification import HUMEEmotionClassification
+from .hume_toxic_conversations_classification import (
+    HUMEToxicConversationsClassification,
+)
+from .hume_tweet_sentiment_extraction_classification import (
     HUMETweetSentimentExtractionClassification,
 )
-from .Imagenet1k import Imagenet1kClassification
-from .ImdbClassification import ImdbClassification, ImdbClassificationV2
-from .LegalBenchClassification import (
+from .imagenet1k import Imagenet1kClassification
+from .imdb_classification import ImdbClassification, ImdbClassificationV2
+from .legal_bench_classification import (
     CanadaTaxCourtOutcomesLegalBenchClassification,
     ContractNLIConfidentialityOfAgreementLegalBenchClassification,
     ContractNLIExplicitIdentificationLegalBenchClassification,
@@ -150,92 +152,98 @@ from .LegalBenchClassification import (
     UCCVCommonLawLegalBenchClassification,
     UnfairTOSLegalBenchClassification,
 )
-from .MNISTClassification import MNISTClassification
-from .NewsClassification import NewsClassification, NewsClassificationV2
-from .OxfordFlowersClassification import OxfordFlowersClassification
-from .OxfordPetsClassification import OxfordPetsClassification
-from .PatchCamelyonClassification import PatchCamelyonClassification
-from .PatentClassification import PatentClassification, PatentClassificationV2
-from .PoemSentimentClassification import (
+from .mnist_classification import MNISTClassification
+from .news_classification import NewsClassification, NewsClassificationV2
+from .oxford_flowers_classification import OxfordFlowersClassification
+from .oxford_pets_classification import OxfordPetsClassification
+from .patch_camelyon_classification import PatchCamelyonClassification
+from .patent_classification import PatentClassification, PatentClassificationV2
+from .poem_sentiment_classification import (
     PoemSentimentClassification,
     PoemSentimentClassificationV2,
 )
-from .RESISC45Classification import RESISC45Classification
-from .SDSEyeProtectionClassification import (
+from .resisc45_classification import RESISC45Classification
+from .sds_eye_protection_classification import (
     SDSEyeProtectionClassification,
     SDSEyeProtectionClassificationV2,
 )
-from .SDSGlovesClassification import SDSGlovesClassification, SDSGlovesClassificationV2
-from .StanfordCarsClassification import StanfordCarsClassification
-from .STL10Classification import STL10Classification
-from .SUN397Classification import SUN397Classification
-from .ToxicChatClassification import ToxicChatClassification, ToxicChatClassificationV2
-from .ToxicConversationsClassification import (
+from .sds_gloves_classification import (
+    SDSGlovesClassification,
+    SDSGlovesClassificationV2,
+)
+from .stanford_cars_classification import StanfordCarsClassification
+from .stl10_classification import STL10Classification
+from .sun397_classification import SUN397Classification
+from .toxic_chat_classification import (
+    ToxicChatClassification,
+    ToxicChatClassificationV2,
+)
+from .toxic_conversations_classification import (
     ToxicConversationsClassification,
     ToxicConversationsClassificationV2,
 )
-from .TweetSentimentExtractionClassification import (
+from .tweet_sentiment_extraction_classification import (
     TweetSentimentExtractionClassification,
     TweetSentimentExtractionClassificationV2,
 )
-from .TweetTopicSingleClassification import (
+from .tweet_topic_single_classification import (
     TweetTopicSingleClassification,
     TweetTopicSingleClassificationV2,
 )
-from .UCF101Classification import UCF101Classification
-from .WikipediaBiolumNeurochemClassification import (
-    WikipediaBiolumNeurochemClassification,
-)
-from .WikipediaBioMetChemClassification import (
+from .ucf101_classification import UCF101Classification
+from .wikipedia_bio_met_chem_classification import (
     WikipediaBioMetChemClassification,
     WikipediaBioMetChemClassificationV2,
 )
-from .WikipediaChemEngSpecialtiesClassification import (
+from .wikipedia_biolum_neurochem_classification import (
+    WikipediaBiolumNeurochemClassification,
+)
+from .wikipedia_chem_eng_specialties_classification import (
     WikipediaChemEngSpecialtiesClassification,
 )
-from .WikipediaChemFieldsClassification import (
+from .wikipedia_chem_fields_classification import (
     WikipediaChemFieldsClassification,
     WikipediaChemFieldsClassificationV2,
 )
-from .WikipediaChemistryTopicsClassification import (
+from .wikipedia_chemistry_topics_classification import (
     WikipediaChemistryTopicsClassification,
 )
-from .WikipediaCompChemSpectroscopyClassification import (
+from .wikipedia_comp_chem_spectroscopy_classification import (
     WikipediaCompChemSpectroscopyClassification,
     WikipediaCompChemSpectroscopyClassificationV2,
 )
-from .WikipediaCryobiologySeparationClassification import (
+from .wikipedia_cryobiology_separation_classification import (
     WikipediaCryobiologySeparationClassification,
 )
-from .WikipediaCrystallographyAnalyticalClassification import (
+from .wikipedia_crystallography_analytical_classification import (
     WikipediaCrystallographyAnalyticalClassification,
     WikipediaCrystallographyAnalyticalClassificationV2,
 )
-from .WikipediaGreenhouseEnantiopureClassification import (
+from .wikipedia_greenhouse_enantiopure_classification import (
     WikipediaGreenhouseEnantiopureClassification,
 )
-from .WikipediaIsotopesFissionClassification import (
+from .wikipedia_isotopes_fission_classification import (
     WikipediaIsotopesFissionClassification,
 )
-from .WikipediaLuminescenceClassification import WikipediaLuminescenceClassification
-from .WikipediaOrganicInorganicClassification import (
+from .wikipedia_luminescence_classification import WikipediaLuminescenceClassification
+from .wikipedia_organic_inorganic_classification import (
     WikipediaOrganicInorganicClassification,
 )
-from .WikipediaSaltsSemiconductorsClassification import (
+from .wikipedia_salts_semiconductors_classification import (
     WikipediaSaltsSemiconductorsClassification,
 )
-from .WikipediaSolidStateColloidalClassification import (
+from .wikipedia_solid_state_colloidal_classification import (
     WikipediaSolidStateColloidalClassification,
 )
-from .WikipediaTheoreticalAppliedClassification import (
+from .wikipedia_theoretical_applied_classification import (
     WikipediaTheoreticalAppliedClassification,
     WikipediaTheoreticalAppliedClassificationV2,
 )
-from .YahooAnswersTopicsClassification import (
+from .yahoo_answers_topics_classification import (
     YahooAnswersTopicsClassification,
     YahooAnswersTopicsClassificationV2,
 )
-from .YelpReviewFullClassification import (
+from .yelp_review_full_classification import (
     YelpReviewFullClassification,
     YelpReviewFullClassificationV2,
 )

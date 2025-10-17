@@ -1,4 +1,4 @@
-from .BEIRFa import (
+from .beir_fa import (
     ArguAnaFa,
     ArguAnaFaV2,
     ClimateFEVERFa,
@@ -36,7 +36,7 @@ from .BEIRFa import (
     TRECCOVIDFa,
     TRECCOVIDFaV2,
 )
-from .FaMTEBRetrieval import (
+from .fa_mteb_retrieval import (
     PersianWebDocumentRetrieval,
     SynPerChatbotRAGFAQRetrieval,
     SynPerChatbotRAGTopicsRetrieval,

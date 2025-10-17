@@ -1,3 +1,3 @@
-from .MultiEURLEXMultilabelClassification import MultiEURLEXMultilabelClassification
+from .multi_eurlex_multilabel_classification import MultiEURLEXMultilabelClassification
 
 __all__ = ["MultiEURLEXMultilabelClassification"]

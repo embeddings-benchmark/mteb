@@ -1,4 +1,4 @@
-from .JSICK import JSICK
-from .JSTS import JSTS
+from .jsick import JSICK
+from .jsts import JSTS
 
 __all__ = ["JSICK", "JSTS"]

@@ -1,8 +1,8 @@
+from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.reranking import AbsTaskReranking
 
 
-class HUMECore17InstructionReranking(AbsTaskReranking):
+class HUMECore17InstructionReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HUMECore17InstructionReranking",
         description="Human evaluation subset of Core17 instruction retrieval dataset for reranking evaluation.",

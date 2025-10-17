@@ -1,6 +1,6 @@
-from .SprintDuplicateQuestionsPCVN import SprintDuplicateQuestionsPCVN
-from .TwitterSemEval2015PCVN import TwitterSemEval2015PCVN
-from .TwitterURLCorpusPCVN import TwitterURLCorpusPC
+from .sprint_duplicate_questions_pcvn import SprintDuplicateQuestionsPCVN
+from .twitter_sem_eval2015_pcvn import TwitterSemEval2015PCVN
+from .twitter_url_corpus_pcvn import TwitterURLCorpusPC
 
 __all__ = [
     "SprintDuplicateQuestionsPCVN",

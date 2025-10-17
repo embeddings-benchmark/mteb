@@ -1,7 +1,7 @@
-from .KlueTC import KlueTC, KlueTCV2
-from .KorFin import KorFin
-from .KorHateClassification import KorHateClassification, KorHateClassificationV2
-from .KorSarcasmClassification import (
+from .klue_tc import KlueTC, KlueTCV2
+from .kor_fin import KorFin
+from .kor_hate_classification import KorHateClassification, KorHateClassificationV2
+from .kor_sarcasm_classification import (
     KorSarcasmClassification,
     KorSarcasmClassificationV2,
 )

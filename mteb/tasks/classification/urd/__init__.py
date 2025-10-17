@@ -1,4 +1,4 @@
-from .UrduRomanSentimentClassification import (
+from .urdu_roman_sentiment_classification import (
     UrduRomanSentimentClassification,
     UrduRomanSentimentClassificationV2,
 )

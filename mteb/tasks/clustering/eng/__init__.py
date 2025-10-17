@@ -1,42 +1,42 @@
-from .ArxivClusteringP2P import ArxivClusteringP2P, ArxivClusteringP2PFast
-from .ArxivClusteringS2S import ArxivClusteringS2S
-from .ArXivHierarchicalClustering import (
+from .arxiv_clustering_p2p import ArxivClusteringP2P, ArxivClusteringP2PFast
+from .arxiv_clustering_s2s import ArxivClusteringS2S
+from .arxiv_hierarchical_clustering import (
     ArXivHierarchicalClusteringP2P,
     ArXivHierarchicalClusteringS2S,
 )
-from .BigPatentClustering import BigPatentClustering, BigPatentClusteringFast
-from .BiorxivClusteringP2P import BiorxivClusteringP2P, BiorxivClusteringP2PFast
-from .BiorxivClusteringS2S import BiorxivClusteringS2S, BiorxivClusteringS2SFast
-from .BuiltBenchClusteringP2P import BuiltBenchClusteringP2P
-from .BuiltBenchClusteringS2S import BuiltBenchClusteringS2S
-from .CIFAR import CIFAR10Clustering, CIFAR100Clustering
-from .ClusTrecCovid import ClusTrecCovid
-from .HUMEArxivClusteringP2P import HUMEArxivClusteringP2P
-from .HUMERedditClusteringP2P import HUMERedditClusteringP2P
-from .HUMEWikiCitiesClustering import HUMEWikiCitiesClustering
-from .ImageNet import ImageNet10Clustering, ImageNetDog15Clustering
-from .MedrxivClusteringP2P import MedrxivClusteringP2P, MedrxivClusteringP2PFast
-from .MedrxivClusteringS2S import MedrxivClusteringS2S, MedrxivClusteringS2SFast
-from .RedditClustering import RedditClustering, RedditFastClusteringS2S
-from .RedditClusteringP2P import RedditClusteringP2P, RedditFastClusteringP2P
-from .StackExchangeClustering import (
+from .big_patent_clustering import BigPatentClustering, BigPatentClusteringFast
+from .biorxiv_clustering_p2p import BiorxivClusteringP2P, BiorxivClusteringP2PFast
+from .biorxiv_clustering_s2s import BiorxivClusteringS2S, BiorxivClusteringS2SFast
+from .built_bench_clustering_p2p import BuiltBenchClusteringP2P
+from .built_bench_clustering_s2s import BuiltBenchClusteringS2S
+from .cifar import CIFAR10Clustering, CIFAR100Clustering
+from .clus_trec_covid import ClusTrecCovid
+from .hume_arxiv_clustering_p2p import HUMEArxivClusteringP2P
+from .hume_reddit_clustering_p2p import HUMERedditClusteringP2P
+from .hume_wiki_cities_clustering import HUMEWikiCitiesClustering
+from .image_net import ImageNet10Clustering, ImageNetDog15Clustering
+from .medrxiv_clustering_p2p import MedrxivClusteringP2P, MedrxivClusteringP2PFast
+from .medrxiv_clustering_s2s import MedrxivClusteringS2S, MedrxivClusteringS2SFast
+from .reddit_clustering import RedditClustering, RedditFastClusteringS2S
+from .reddit_clustering_p2p import RedditClusteringP2P, RedditFastClusteringP2P
+from .stack_exchange_clustering import (
     StackExchangeClustering,
     StackExchangeClusteringFast,
 )
-from .StackExchangeClusteringP2P import (
+from .stack_exchange_clustering_p2p import (
     StackExchangeClusteringP2P,
     StackExchangeClusteringP2PFast,
 )
-from .TinyImageNet import TinyImageNet
-from .TwentyNewsgroupsClustering import (
+from .tiny_image_net import TinyImageNet
+from .twenty_newsgroups_clustering import (
     TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
 )
-from .WikiCitiesClustering import WikiCitiesClustering
-from .WikipediaChemistrySpecialtiesClustering import (
+from .wiki_cities_clustering import WikiCitiesClustering
+from .wikipedia_chemistry_specialties_clustering import (
     WikipediaChemistrySpecialtiesClustering,
 )
-from .WikipediaChemistryTopicsClustering import WikipediaChemistryTopicsClustering
+from .wikipedia_chemistry_topics_clustering import WikipediaChemistryTopicsClustering
 
 __all__ = [
     "ArXivHierarchicalClusteringP2P",

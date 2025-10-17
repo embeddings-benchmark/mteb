@@ -1,43 +1,43 @@
-from .AILACasedocsRetrieval import AILACasedocs
-from .AILAStatutesRetrieval import AILAStatutes
-from .AlphaNLIRetrieval import AlphaNLI
-from .ARCChallengeRetrieval import ARCChallenge
-from .ArguAnaRetrieval import ArguAna
-from .BarExamQARetrieval import BarExamQARetrieval
-from .BillSumCARetrieval import BillSumCARetrieval
-from .BillSumUSRetrieval import BillSumUSRetrieval
-from .BIRCOArguAnaReranking import BIRCOArguAnaReranking
-from .BIRCOClinicalTrialReranking import BIRCOClinicalTrialReranking
-from .BIRCODorisMaeReranking import BIRCODorisMaeReranking
-from .BIRCORelicReranking import BIRCORelicReranking
-from .BIRCOWhatsThatBookReranking import BIRCOWhatsThatBookReranking
-from .BLINKIT2IRetrieval import BLINKIT2IRetrieval
-from .BLINKIT2TRetrieval import BLINKIT2TRetrieval
-from .BrightRetrieval import BrightLongRetrieval, BrightRetrieval
-from .BuiltBenchRetrieval import BuiltBenchRetrieval
-from .ChatDoctorRetrieval import ChatDoctorRetrieval
-from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
-from .ChemNQRetrieval import ChemNQRetrieval
-from .CIRRIT2IRetrieval import CIRRIT2IRetrieval
-from .ClimateFEVERRetrieval import (
+from .aila_casedocs_retrieval import AILACasedocs
+from .aila_statutes_retrieval import AILAStatutes
+from .alpha_nli_retrieval import AlphaNLI
+from .arc_challenge_retrieval import ARCChallenge
+from .argu_ana_retrieval import ArguAna
+from .bar_exam_qa_retrieval import BarExamQARetrieval
+from .bill_sum_ca_retrieval import BillSumCARetrieval
+from .bill_sum_us_retrieval import BillSumUSRetrieval
+from .birco_argu_ana_reranking import BIRCOArguAnaReranking
+from .birco_clinical_trial_reranking import BIRCOClinicalTrialReranking
+from .birco_doris_mae_reranking import BIRCODorisMaeReranking
+from .birco_relic_reranking import BIRCORelicReranking
+from .birco_whats_that_book_reranking import BIRCOWhatsThatBookReranking
+from .blink_it2i_retrieval import BLINKIT2IRetrieval
+from .blink_it2t_retrieval import BLINKIT2TRetrieval
+from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
+from .built_bench_retrieval import BuiltBenchRetrieval
+from .chat_doctor_retrieval import ChatDoctorRetrieval
+from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
+from .chem_nq_retrieval import ChemNQRetrieval
+from .cirr_it2i_retrieval import CIRRIT2IRetrieval
+from .climate_fever_retrieval import (
     ClimateFEVER,
     ClimateFEVERHardNegatives,
     ClimateFEVERRetrievalv2,
 )
-from .CQADupstackAndroidRetrieval import CQADupstackAndroidRetrieval
-from .CQADupstackEnglishRetrieval import CQADupstackEnglishRetrieval
-from .CQADupstackGamingRetrieval import CQADupstackGamingRetrieval
-from .CQADupstackGisRetrieval import CQADupstackGisRetrieval
-from .CQADupstackMathematicaRetrieval import CQADupstackMathematicaRetrieval
-from .CQADupstackPhysicsRetrieval import CQADupstackPhysicsRetrieval
-from .CQADupstackProgrammersRetrieval import CQADupstackProgrammersRetrieval
-from .CQADupstackStatsRetrieval import CQADupstackStatsRetrieval
-from .CQADupstackTexRetrieval import CQADupstackTexRetrieval
-from .CQADupstackUnixRetrieval import CQADupstackUnixRetrieval
-from .CQADupstackWebmastersRetrieval import CQADupstackWebmastersRetrieval
-from .CQADupstackWordpressRetrieval import CQADupstackWordpressRetrieval
-from .CUB200I2IRetrieval import CUB200I2I
-from .DAPFAMPatentRetrieval import (
+from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
+from .cqa_dupstack_english_retrieval import CQADupstackEnglishRetrieval
+from .cqa_dupstack_gaming_retrieval import CQADupstackGamingRetrieval
+from .cqa_dupstack_gis_retrieval import CQADupstackGisRetrieval
+from .cqa_dupstack_mathematica_retrieval import CQADupstackMathematicaRetrieval
+from .cqa_dupstack_physics_retrieval import CQADupstackPhysicsRetrieval
+from .cqa_dupstack_programmers_retrieval import CQADupstackProgrammersRetrieval
+from .cqa_dupstack_stats_retrieval import CQADupstackStatsRetrieval
+from .cqa_dupstack_tex_retrieval import CQADupstackTexRetrieval
+from .cqa_dupstack_unix_retrieval import CQADupstackUnixRetrieval
+from .cqa_dupstack_webmasters_retrieval import CQADupstackWebmastersRetrieval
+from .cqa_dupstack_wordpress_retrieval import CQADupstackWordpressRetrieval
+from .cub200_i2i_retrieval import CUB200I2I
+from .dapfam_patent_retrieval import (
     DAPFAMAllTitlAbsClmToFullTextRetrieval,
     DAPFAMAllTitlAbsClmToTitlAbsClmRetrieval,
     DAPFAMAllTitlAbsClmToTitlAbsRetrieval,
@@ -57,84 +57,84 @@ from .DAPFAMPatentRetrieval import (
     DAPFAMOutTitlAbsToTitlAbsClmRetrieval,
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
-from .DBPediaRetrieval import DBPedia, DBPediaHardNegatives
-from .EDIST2ITRetrieval import EDIST2ITRetrieval
-from .EncyclopediaVQAIT2ITRetrieval import EncyclopediaVQAIT2ITRetrieval
-from .EnglishFinance1Retrieval import EnglishFinance1Retrieval
-from .EnglishFinance2Retrieval import EnglishFinance2Retrieval
-from .EnglishFinance3Retrieval import EnglishFinance3Retrieval
-from .EnglishFinance4Retrieval import EnglishFinance4Retrieval
-from .EnglishHealthcare1Retrieval import EnglishHealthcare1Retrieval
-from .FaithDialRetrieval import FaithDialRetrieval
-from .Fashion200kI2TRetrieval import Fashion200kI2TRetrieval
-from .Fashion200kT2IRetrieval import Fashion200kT2IRetrieval
-from .FashionIQIT2IRetrieval import FashionIQIT2IRetrieval
-from .FeedbackQARetrieval import FeedbackQARetrieval
-from .FEVERRetrieval import FEVER, FEVERHardNegatives
-from .FinanceBenchRetrieval import FinanceBenchRetrieval
-from .FinQARetrieval import FinQARetrieval
-from .FiQA2018Retrieval import FiQA2018
-from .Flickr30kI2TRetrieval import Flickr30kI2TRetrieval
-from .Flickr30kT2IRetrieval import Flickr30kT2IRetrieval
-from .FORBI2IRetrieval import FORBI2I
-from .GLDv2I2IRetrieval import GLDv2I2IRetrieval
-from .GLDv2I2TRetrieval import GLDv2I2TRetrieval
-from .GovReportRetrieval import GovReportRetrieval
-from .HagridRetrieval import HagridRetrieval
-from .HatefulMemesI2TRetrieval import HatefulMemesI2TRetrieval
-from .HatefulMemesT2IRetrieval import HatefulMemesT2IRetrieval
-from .HC3FinanceRetrieval import HC3FinanceRetrieval
-from .HellaSwagRetrieval import HellaSwag
-from .HotpotQARetrieval import HotpotQA, HotpotQAHardNegatives
-from .ImageCoDeT2IRetrieval import ImageCoDeT2IRetrieval
-from .InfoSeekIT2ITRetrieval import InfoSeekIT2ITRetrieval
-from .InfoSeekIT2TRetrieval import InfoSeekIT2TRetrieval
-from .LegalBenchConsumerContractsQARetrieval import LegalBenchConsumerContractsQA
-from .LegalBenchCorporateLobbyingRetrieval import LegalBenchCorporateLobbying
-from .LegalSummarizationRetrieval import LegalSummarization
-from .LEMBNarrativeQARetrieval import LEMBNarrativeQARetrieval
-from .LEMBNeedleRetrieval import LEMBNeedleRetrieval
-from .LEMBPasskeyRetrieval import LEMBPasskeyRetrieval
-from .LEMBQMSumRetrieval import LEMBQMSumRetrieval
-from .LEMBSummScreenFDRetrieval import LEMBSummScreenFDRetrieval
-from .LEMBWikimQARetrieval import LEMBWikimQARetrieval
-from .LIMITRetrieval import LIMITRetrieval, LIMITSmallRetrieval
-from .LitSearchRetrieval import LitSearchRetrieval
-from .LLaVAIT2TRetrieval import LLaVAIT2TRetrieval
-from .LoTTERetrieval import LoTTERetrieval
-from .MedicalQARetrieval import MedicalQARetrieval
-from .MemotionI2TRetrieval import MemotionI2TRetrieval
-from .MemotionT2IRetrieval import MemotionT2IRetrieval
-from .METI2IRetrieval import METI2IRetrieval
-from .MLQuestions import MLQuestionsRetrieval
-from .MSCOCOI2TRetrieval import MSCOCOI2TRetrieval
-from .MSCOCOT2IRetrieval import MSCOCOT2IRetrieval
-from .MSMARCORetrieval import MSMARCO, MSMARCOHardNegatives
-from .MSMARCOv2Retrieval import MSMARCOv2
-from .NanoArguAnaRetrieval import NanoArguAnaRetrieval
-from .NanoClimateFeverRetrieval import NanoClimateFeverRetrieval
-from .NanoDBPediaRetrieval import NanoDBPediaRetrieval
-from .NanoFEVERRetrieval import NanoFEVERRetrieval
-from .NanoFiQA2018Retrieval import NanoFiQA2018Retrieval
-from .NanoHotpotQARetrieval import NanoHotpotQARetrieval
-from .NanoMSMARCORetrieval import NanoMSMARCORetrieval
-from .NanoNFCorpusRetrieval import NanoNFCorpusRetrieval
-from .NanoNQRetrieval import NanoNQRetrieval
-from .NanoQuoraRetrieval import NanoQuoraRetrieval
-from .NanoSCIDOCSRetrieval import NanoSCIDOCSRetrieval
-from .NanoSciFactRetrieval import NanoSciFactRetrieval
-from .NanoTouche2020Retrieval import NanoTouche2020Retrieval
-from .NarrativeQARetrieval import NarrativeQARetrieval
-from .NFCorpusRetrieval import NFCorpus
-from .NIGHTSI2IRetrieval import NIGHTSI2IRetrieval
-from .NQRetrieval import NQ, NQHardNegatives
-from .OKVQAIT2TRetrieval import OKVQAIT2TRetrieval
-from .OVENIT2ITRetrieval import OVENIT2ITRetrieval
-from .OVENIT2TRetrieval import OVENIT2TRetrieval
-from .PiqaRetrieval import PIQA
-from .QuailRetrieval import Quail
-from .QuoraRetrieval import QuoraRetrieval, QuoraRetrievalHardNegatives
-from .R2MEDRetrieval import (
+from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives
+from .edis_t2it_retrieval import EDIST2ITRetrieval
+from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
+from .english_finance1_retrieval import EnglishFinance1Retrieval
+from .english_finance2_retrieval import EnglishFinance2Retrieval
+from .english_finance3_retrieval import EnglishFinance3Retrieval
+from .english_finance4_retrieval import EnglishFinance4Retrieval
+from .english_healthcare1_retrieval import EnglishHealthcare1Retrieval
+from .faith_dial_retrieval import FaithDialRetrieval
+from .fashion200k_i2t_retrieval import Fashion200kI2TRetrieval
+from .fashion200k_t2i_retrieval import Fashion200kT2IRetrieval
+from .fashion_iq_it2i_retrieval import FashionIQIT2IRetrieval
+from .feedback_qa_retrieval import FeedbackQARetrieval
+from .fever_retrieval import FEVER, FEVERHardNegatives
+from .fi_qa2018_retrieval import FiQA2018
+from .fin_qa_retrieval import FinQARetrieval
+from .finance_bench_retrieval import FinanceBenchRetrieval
+from .flickr30k_i2t_retrieval import Flickr30kI2TRetrieval
+from .flickr30k_t2i_retrieval import Flickr30kT2IRetrieval
+from .forb_i2i_retrieval import FORBI2I
+from .gl_dv2_i2i_retrieval import GLDv2I2IRetrieval
+from .gl_dv2_i2t_retrieval import GLDv2I2TRetrieval
+from .gov_report_retrieval import GovReportRetrieval
+from .hagrid_retrieval import HagridRetrieval
+from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
+from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
+from .hc3_finance_retrieval import HC3FinanceRetrieval
+from .hella_swag_retrieval import HellaSwag
+from .hotpot_qa_retrieval import HotpotQA, HotpotQAHardNegatives
+from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
+from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
+from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
+from .legal_bench_consumer_contracts_qa_retrieval import LegalBenchConsumerContractsQA
+from .legal_bench_corporate_lobbying_retrieval import LegalBenchCorporateLobbying
+from .legal_summarization_retrieval import LegalSummarization
+from .lemb_narrative_qa_retrieval import LEMBNarrativeQARetrieval
+from .lemb_needle_retrieval import LEMBNeedleRetrieval
+from .lemb_passkey_retrieval import LEMBPasskeyRetrieval
+from .lemb_summ_screen_fd_retrieval import LEMBSummScreenFDRetrieval
+from .lemb_wikim_qa_retrieval import LEMBWikimQARetrieval
+from .lembqm_sum_retrieval import LEMBQMSumRetrieval
+from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
+from .lit_search_retrieval import LitSearchRetrieval
+from .llava_it2t_retrieval import LLaVAIT2TRetrieval
+from .lotte_retrieval import LoTTERetrieval
+from .medical_qa_retrieval import MedicalQARetrieval
+from .memotion_i2t_retrieval import MemotionI2TRetrieval
+from .memotion_t2i_retrieval import MemotionT2IRetrieval
+from .met_i2i_retrieval import METI2IRetrieval
+from .ml_questions import MLQuestionsRetrieval
+from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
+from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
+from .msmarc_ov2_retrieval import MSMARCOv2
+from .msmarco_retrieval import MSMARCO, MSMARCOHardNegatives
+from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
+from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
+from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
+from .nano_fever_retrieval import NanoFEVERRetrieval
+from .nano_fi_qa2018_retrieval import NanoFiQA2018Retrieval
+from .nano_hotpot_qa_retrieval import NanoHotpotQARetrieval
+from .nano_msmarco_retrieval import NanoMSMARCORetrieval
+from .nano_nf_corpus_retrieval import NanoNFCorpusRetrieval
+from .nano_nq_retrieval import NanoNQRetrieval
+from .nano_quora_retrieval import NanoQuoraRetrieval
+from .nano_sci_fact_retrieval import NanoSciFactRetrieval
+from .nano_scidocs_retrieval import NanoSCIDOCSRetrieval
+from .nano_touche2020_retrieval import NanoTouche2020Retrieval
+from .narrative_qa_retrieval import NarrativeQARetrieval
+from .nf_corpus_retrieval import NFCorpus
+from .nights_i2i_retrieval import NIGHTSI2IRetrieval
+from .nq_retrieval import NQ, NQHardNegatives
+from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
+from .oven_it2it_retrieval import OVENIT2ITRetrieval
+from .oven_it2t_retrieval import OVENIT2TRetrieval
+from .piqa_retrieval import PIQA
+from .quail_retrieval import Quail
+from .quora_retrieval import QuoraRetrieval, QuoraRetrievalHardNegatives
+from .r2_med_retrieval import (
     R2MEDBioinformaticsRetrieval,
     R2MEDBiologyRetrieval,
     R2MEDIIYiClinicalRetrieval,
@@ -144,41 +144,41 @@ from .R2MEDRetrieval import (
     R2MEDPMCClinicalRetrieval,
     R2MEDPMCTreatmentRetrieval,
 )
-from .RARbCodeRetrieval import RARbCode
-from .RARbMathRetrieval import RARbMath
-from .ReMuQIT2TRetrieval import ReMuQIT2TRetrieval
-from .ROxfordI2IRetrieval import (
+from .r_oxford_i2i_retrieval import (
     ROxfordEasyI2IRetrieval,
     ROxfordHardI2IRetrieval,
     ROxfordMediumI2IRetrieval,
 )
-from .RP2kI2IRetrieval import RP2kI2IRetrieval
-from .RParisI2IRetrieval import (
+from .r_paris_i2i_retrieval import (
     RParisEasyI2IRetrieval,
     RParisHardI2IRetrieval,
     RParisMediumI2IRetrieval,
 )
-from .SCIDOCSRetrieval import SCIDOCS
-from .SciFactRetrieval import SciFact
-from .SciMMIRI2TRetrieval import SciMMIRI2TRetrieval
-from .SciMMIRT2IRetrieval import SciMMIRT2IRetrieval
-from .SiqaRetrieval import SIQA
-from .SketchyI2IRetrieval import SketchyI2IRetrieval
-from .SOPI2IRetrieval import SOPI2IRetrieval
-from .SpartQARetrieval import SpartQA
-from .StanfordCarsI2IRetrieval import StanfordCarsI2I
-from .TempReasonL1Retrieval import TempReasonL1
-from .TempReasonL2ContextRetrieval import TempReasonL2Context
-from .TempReasonL2FactRetrieval import TempReasonL2Fact
-from .TempReasonL2PureRetrieval import TempReasonL2Pure
-from .TempReasonL3ContextRetrieval import TempReasonL3Context
-from .TempReasonL3FactRetrieval import TempReasonL3Fact
-from .TempReasonL3PureRetrieval import TempReasonL3Pure
-from .TopiOCQARetrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
-from .Touche2020Retrieval import Touche2020, Touche2020v3Retrieval
-from .TRECCOVIDRetrieval import TRECCOVID
-from .TUBerlinT2IRetrieval import TUBerlinT2IRetrieval
-from .VidoreBenchRetrieval import (
+from .ra_rb_code_retrieval import RARbCode
+from .ra_rb_math_retrieval import RARbMath
+from .re_mu_q_it2t_retrieval import ReMuQIT2TRetrieval
+from .rp2k_i2i_retrieval import RP2kI2IRetrieval
+from .sci_fact_retrieval import SciFact
+from .sci_mmir_i2t_retrieval import SciMMIRI2TRetrieval
+from .sci_mmir_t2i_retrieval import SciMMIRT2IRetrieval
+from .scidocs_retrieval import SCIDOCS
+from .siqa_retrieval import SIQA
+from .sketchy_i2i_retrieval import SketchyI2IRetrieval
+from .sop_i2i_retrieval import SOPI2IRetrieval
+from .spart_qa_retrieval import SpartQA
+from .stanford_cars_i2i_retrieval import StanfordCarsI2I
+from .temp_reason_l1_retrieval import TempReasonL1
+from .temp_reason_l2_context_retrieval import TempReasonL2Context
+from .temp_reason_l2_fact_retrieval import TempReasonL2Fact
+from .temp_reason_l2_pure_retrieval import TempReasonL2Pure
+from .temp_reason_l3_context_retrieval import TempReasonL3Context
+from .temp_reason_l3_fact_retrieval import TempReasonL3Fact
+from .temp_reason_l3_pure_retrieval import TempReasonL3Pure
+from .topi_ocqa_retrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
+from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
+from .treccovid_retrieval import TRECCOVID
+from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
+from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
     VidoreDocVQARetrieval,
     VidoreInfoVQARetrieval,
@@ -190,13 +190,13 @@ from .VidoreBenchRetrieval import (
     VidoreTabfquadRetrieval,
     VidoreTatdqaRetrieval,
 )
-from .VisualNewsI2TRetrieval import VisualNewsI2TRetrieval
-from .VisualNewsT2IRetrieval import VisualNewsT2IRetrieval
-from .VizWizIT2TRetrieval import VizWizIT2TRetrieval
-from .VQA2IT2TRetrieval import VQA2IT2TRetrieval
-from .WebQAT2ITRetrieval import WebQAT2ITRetrieval
-from .WebQAT2TRetrieval import WebQAT2TRetrieval
-from .WinoGrandeRetrieval import WinoGrande
+from .visual_news_i2t_retrieval import VisualNewsI2TRetrieval
+from .visual_news_t2i_retrieval import VisualNewsT2IRetrieval
+from .viz_wiz_it2t_retrieval import VizWizIT2TRetrieval
+from .vqa2_it2t_retrieval import VQA2IT2TRetrieval
+from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
+from .web_qa_t2t_retrieval import WebQAT2TRetrieval
+from .wino_grande_retrieval import WinoGrande
 
 __all__ = [
     "CUB200I2I",
