@@ -12,7 +12,7 @@ class TRECDL2019(AbsTaskRetrieval):
         name="TRECDL2019",
         dataset={
             "path": "whybe-choi/trec-dl-2019",
-            "revision": "76120c45775d7f03c6dbb05c53370e875ebaa2dd",
+            "revision": "48411d50a49302fce8e44cd1f15becef750ad881",
         },
         description="TREC Deep Learning Track 2019 passage ranking task. The task involves retrieving relevant passages from the MS MARCO collection given web search queries. Queries have multi-graded relevance judgments.",
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2019",
@@ -42,12 +42,13 @@ class TRECDL2019(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{craswell2020overview,
-  title={Overview of the TREC 2019 deep learning track},
-  author={Craswell, Nick and Mitra, Bhaskar and Yilmaz, Emine and Campos, Daniel and Voorhees, Ellen M},
-  booktitle={Proceedings of the 28th Text REtrieval Conference (TREC 2019)},
-  year={2020},
-  organization={NIST}
+  author = {Craswell, Nick and Mitra, Bhaskar and Yilmaz, Emine and Campos, Daniel and Voorhees, Ellen M},
+  booktitle = {Proceedings of the 28th Text REtrieval Conference (TREC 2019)},
+  organization = {NIST},
+  title = {Overview of the TREC 2019 deep learning track},
+  year = {2020},
 }
+
 @article{DBLP:journals/corr/NguyenRSGTMD16,
   archiveprefix = {arXiv},
   author = {Tri Nguyen and
@@ -81,7 +82,7 @@ class TRECDL2020(AbsTaskRetrieval):
         name="TRECDL2020",
         dataset={
             "path": "whybe-choi/trec-dl-2020",
-            "revision": "baf893b96bb881bbad6d0512e1a6b7d3ddce7f8b",
+            "revision": "fd9379e047b2ef08390d2af11d7d97a46a4a12ed",
         },
         description="TREC Deep Learning Track 2020 passage ranking task. The task involves retrieving relevant passages from the MS MARCO collection given web search queries. Queries have multi-graded relevance judgments.",
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning-2020",
@@ -111,12 +112,13 @@ class TRECDL2020(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{craswell2021overview,
-  title={Overview of the TREC 2020 deep learning track},
-  author={Craswell, Nick and Mitra, Bhaskar and Yilmaz, Emine and Campos, Daniel and Voorhees, Ellen M},
-  booktitle={Proceedings of the 29th Text REtrieval Conference (TREC 2020)},
-  year={2021},
-  organization={NIST}
+  author = {Craswell, Nick and Mitra, Bhaskar and Yilmaz, Emine and Campos, Daniel and Voorhees, Ellen M},
+  booktitle = {Proceedings of the 29th Text REtrieval Conference (TREC 2020)},
+  organization = {NIST},
+  title = {Overview of the TREC 2020 deep learning track},
+  year = {2021},
 }
+
 @article{DBLP:journals/corr/NguyenRSGTMD16,
   archiveprefix = {arXiv},
   author = {Tri Nguyen and
