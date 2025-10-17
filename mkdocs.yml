@@ -80,7 +80,9 @@ nav:
         - Loading Results: usage/loading_results.md
         - Command Line Interface: usage/cli.md
         - Running the Leaderboard: usage/leaderboard.md
-        - Two stage reranking: usage/two_stage_reranking.md
+      - Advanced Usage:
+        - Two stage reranking: advanced_usage/two_stage_reranking.md
+        - Cache embeddings: advanced_usage/cache_embeddings.md
   - Overview:
       - overview/index.md
       - Benchmarks:
