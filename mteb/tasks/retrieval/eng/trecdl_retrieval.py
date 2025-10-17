@@ -1,8 +1,5 @@
-from __future__ import annotations
-
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class TRECDL2019(AbsTaskRetrieval):
