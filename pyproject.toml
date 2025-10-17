@@ -227,9 +227,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["PTH", "N"]
 "tests/*" = ["RUF012"]
-"mteb/tasks/*" = ["N999"]  # no camelcase in module name
 "mteb/tasks/*__init__.py" = ["F403"]  # undefined import `from .lang import *`
-"mteb/MTEB.py" = ["N999"]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
