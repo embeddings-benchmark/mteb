@@ -92,6 +92,7 @@ class ModelMeta(BaseModel):
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
         is_cross_encoder: Whether the model can act as a cross-encoder or not.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
+        contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -121,6 +122,7 @@ class ModelMeta(BaseModel):
     modalities: list[Modalities] = ["text"]
     is_cross_encoder: bool | None = None
     citation: str | None = None
+    contacts: list[str] | None = None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
