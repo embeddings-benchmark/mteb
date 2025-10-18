@@ -151,7 +151,10 @@ class AbsTaskPairClassification(AbsTask):
                 if isinstance(cur_dataset, Dataset):
                     for row in cur_dataset:
                         for k, v in row.items():
-                            dataset[k].append(v)
+                            if isinstance(v, list):
+                                dataset[k].extend(v)
+                            else:
+                                dataset[k].append(v)
                 else:
                     for key, value in cur_dataset.items():
                         dataset[key].extend(value[0] if len(value) == 1 else value)
