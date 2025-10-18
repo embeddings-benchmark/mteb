@@ -1,11 +1,10 @@
-from mteb._evaluators.pair_classification_evaluator import PairClassificationEvaluator
-
 from .any_sts_evaluator import AnySTSEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .evaluator import Evaluator
 from .image.imagetext_pairclassification_evaluator import (
     ImageTextPairClassificationEvaluator,
 )
+from .pair_classification_evaluator import PairClassificationEvaluator
 from .retrieval_evaluator import RetrievalEvaluator
 from .sklearn_evaluator import SklearnEvaluator
 from .text.bitext_mining_evaluator import BitextMiningEvaluator
