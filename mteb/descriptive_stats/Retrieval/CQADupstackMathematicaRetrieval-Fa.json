@@ -1,30 +1,31 @@
 {
     "test": {
-        "num_samples": 17509,
-        "number_of_characters": 16590417,
-        "documents_text_statistics": {
-            "total_text_length": 16553337,
-            "min_text_length": 10,
-            "average_text_length": 990.9211014666267,
-            "max_text_length": 5280,
-            "unique_texts": 16705
-        },
-        "documents_image_statistics": null,
-        "queries_text_statistics": {
-            "total_text_length": 37080,
-            "min_text_length": 0,
-            "average_text_length": 46.11940298507463,
-            "max_text_length": 142,
-            "unique_texts": 799
-        },
-        "queries_image_statistics": null,
-        "relevant_docs_statistics": {
-            "num_relevant_docs": 1358,
-            "min_relevant_docs_per_query": 1,
-            "average_relevant_docs_per_query": 1.6890547263681592,
-            "max_relevant_docs_per_query": 56,
-            "unique_relevant_docs": 1358
-        },
-        "top_ranked_statistics": null
+        "num_samples": 17503,
+        "number_of_characters": 16590623,
+        "num_documents": 16705,
+        "min_document_length": 11,
+        "average_document_length": 990.9334331038611,
+        "max_document_length": 5280,
+        "unique_documents": 16705,
+        "num_queries": 798,
+        "min_query_length": 7,
+        "average_query_length": 46.46616541353384,
+        "max_query_length": 142,
+        "unique_queries": 804,
+        "none_queries": 6,
+        "num_relevant_docs": 1358,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.6890547263681592,
+        "max_relevant_docs_per_query": 56,
+        "unique_relevant_docs": 1358,
+        "num_instructions": null,
+        "min_instruction_length": null,
+        "average_instruction_length": null,
+        "max_instruction_length": null,
+        "unique_instructions": null,
+        "num_top_ranked": null,
+        "min_top_ranked_per_query": null,
+        "average_top_ranked_per_query": null,
+        "max_top_ranked_per_query": null
     }
 }

@@ -3,16 +3,26 @@
         "num_samples": 1924,
         "number_of_characters": 230196,
         "unique_pairs": 1899,
-        "min_sentence1_length": 22,
-        "average_sentence1_len": 61.24064449064449,
-        "max_sentence1_length": 123,
-        "unique_sentence1": 1514,
-        "min_sentence2_length": 25,
-        "average_sentence2_len": 58.40384615384615,
-        "max_sentence2_length": 104,
-        "unique_sentence2": 1383,
-        "min_score": -1.0,
-        "avg_score": -0.20686070686070687,
-        "max_score": 1.0
+        "text1_statistics": {
+            "total_text_length": 117827,
+            "min_text_length": 22,
+            "average_text_length": 61.24064449064449,
+            "max_text_length": 123,
+            "unique_texts": 1514
+        },
+        "text2_statistics": {
+            "total_text_length": 112369,
+            "min_text_length": 25,
+            "average_text_length": 58.40384615384615,
+            "max_text_length": 104,
+            "unique_texts": 1383
+        },
+        "image1_statistics": null,
+        "image2_statistics": null,
+        "label_statistics": {
+            "min_score": -1.0,
+            "avg_score": -0.20686070686070687,
+            "max_score": 1.0
+        }
     }
 }

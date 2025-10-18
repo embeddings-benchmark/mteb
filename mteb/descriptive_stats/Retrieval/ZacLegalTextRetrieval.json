@@ -1,31 +1,30 @@
 {
     "test": {
-        "num_samples": 62213,
-        "number_of_characters": 83468389,
-        "num_documents": 61425,
-        "min_document_length": 16,
-        "average_document_length": 1357.7925274725276,
-        "max_document_length": 252962,
-        "unique_documents": 61425,
-        "num_queries": 788,
-        "min_query_length": 16,
-        "average_query_length": 83.73477157360406,
-        "max_query_length": 164,
-        "unique_queries": 788,
-        "none_queries": 0,
-        "num_relevant_docs": 793,
-        "min_relevant_docs_per_query": 1,
-        "average_relevant_docs_per_query": 1.0063451776649746,
-        "max_relevant_docs_per_query": 2,
-        "unique_relevant_docs": 447,
-        "num_instructions": null,
-        "min_instruction_length": null,
-        "average_instruction_length": null,
-        "max_instruction_length": null,
-        "unique_instructions": null,
-        "num_top_ranked": null,
-        "min_top_ranked_per_query": null,
-        "average_top_ranked_per_query": null,
-        "max_top_ranked_per_query": null
+        "num_samples": 62243,
+        "number_of_characters": 83532010,
+        "documents_text_statistics": {
+            "total_text_length": 83463474,
+            "min_text_length": 16,
+            "average_text_length": 1358.7867155067156,
+            "max_text_length": 252963,
+            "unique_texts": 60701
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 68536,
+            "min_text_length": 16,
+            "average_text_length": 83.78484107579462,
+            "max_text_length": 164,
+            "unique_texts": 788
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 793,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0063451776649746,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 447
+        },
+        "top_ranked_statistics": null
     }
 }
