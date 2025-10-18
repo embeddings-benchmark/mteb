@@ -148,8 +148,13 @@ class AbsTaskPairClassification(AbsTask):
                 cur_dataset = self.dataset[hf_subset][split]
                 if isinstance(cur_dataset, list):
                     cur_dataset = cur_dataset[0]
-                for key, value in cur_dataset.items():
-                    dataset[key].extend(value[0] if len(value) == 1 else value)
+                if isinstance(cur_dataset, Dataset):
+                    for row in cur_dataset:
+                        for k, v in row.items():
+                            dataset[k].append(v)
+                else:
+                    for key, value in cur_dataset.items():
+                        dataset[key].extend(value[0] if len(value) == 1 else value)
         else:
             dataset = self.dataset[split]
 
