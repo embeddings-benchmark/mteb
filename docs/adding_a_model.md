@@ -32,7 +32,7 @@ my_model = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/user-or-org/my-training-code",
     public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
-    training_datasets={"MSMARCO": ["train"]}, # if you trained on the MSMARCO training set
+    training_datasets={"MSMARCO"}, # if you trained on the MSMARCO training set
 )
 ```
 
@@ -52,16 +52,14 @@ model_meta.calculate_memory_usage_mb()
 ### Adding instruction models
 
 Some models, such as the [E5 models](https://huggingface.co/intfloat/multilingual-e5-large-instruct), use instructions or prompts.
-You can directly add the prompts when saving and uploading your model to the Hub. Refer to this [configuration file as an example](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json). 
+You can directly add the prompts when saving and uploading your model to the Hub. Refer to this [configuration file as an example](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json).
 
 However, you can also add these directly to the model configuration:
 
 ```python
 model = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="intfloat/multilingual-e5-small",
-        revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
+    loader=sentence_transformers_loader
+    loader_kwargs=dict(
         model_prompts={
            "query": "query: ",
            "passage": "passage: ",
@@ -74,36 +72,40 @@ model = ModelMeta(
 
 If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
 ```python
-from mteb.models.wrapper import Wrapper
-from mteb.encoder_interface import PromptType
+from mteb.types import PromptType
 import numpy as np
 
-class CustomWrapper(Wrapper):
-    def __init__(self, model_name, model_revision):
-        super().__init__(model_name, model_revision)
-        # your custom implementation here
+class CustomModel():
+    def __init__(self, model_name: str, revision: str, **kwargs):
+        pass # your implementation here
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs
+        **kwargs,
     ) -> np.ndarray:
-        # your custom implementation here
-        return np.zeros((len(sentences), self.embed_dim))
+
+        arrays = []
+        for batch in inputs:
+            documents = batch["text"]
+            # embed documents:
+            embed_dim = 100
+            embedding = np.zeros((len(documents), embed_dim))
+
+        embeddings = np.concat(arrays)
+        return embeddings
 ```
 
 Then you can specify the `loader` parameter in the `ModelMeta` class:
 
 ```python
 your_model = ModelMeta(
-    loader=partial(
-        CustomWrapper,
-        model_name="model_name",
-        model_revision="5617a9f61b028005a4858fdac845db406aefb181"
-    ),
+    loader=CustomModel
     ...
 )
 ```
@@ -121,8 +123,10 @@ This ensure that the implementation does not break if a package is updated.
 As it is an optional dependency, you can't use top-level dependencies, but will instead have to use import inside the wrapper scope:
 
 In the [voyage_models.py](../mteb/models/voyage_models.py) file, we have added the following code:
+
 ```python
-from mteb.requires_package import requires_package
+from mteb._requires_package import requires_package
+
 
 class VoyageWrapper(Wrapper):
     def __init__(...) -> None:
@@ -142,4 +146,4 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model(model_name, revision)` and
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
-- [ ] The model is public, i.e. is available either as an API or the wieght are publicly avaiable to download 
+- [ ] The model is public, i.e. is available either as an API or the wieght are publicly avaiable to download

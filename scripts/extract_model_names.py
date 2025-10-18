@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import ast
 import logging
@@ -10,7 +8,9 @@ from git import Repo
 logging.basicConfig(level=logging.INFO)
 
 
-def get_changed_files(base_branch="main", startswith="mteb/models/") -> list[str]:
+def get_changed_files(
+    base_branch="main", startswith="mteb/models/model_implementations/"
+) -> list[str]:
     repo_path = Path(__file__).parent.parent
     repo = Repo(repo_path)
     repo.remotes.origin.fetch(base_branch)
@@ -24,12 +24,7 @@ def get_changed_files(base_branch="main", startswith="mteb/models/") -> list[str
     return [
         f
         for f in changed_files
-        if f.startswith(startswith)
-        and f.endswith(".py")
-        and "overview" not in f
-        and "init" not in f
-        and "instructions" not in f
-        and Path(f).exists()
+        if f.startswith(startswith) and f.endswith(".py") and Path(f).exists()
     ]
 
 

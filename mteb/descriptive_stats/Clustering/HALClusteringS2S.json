@@ -1,0 +1,70 @@
+{
+    "test": {
+        "num_samples": 10,
+        "number_of_characters": 85375,
+        "min_text_length": 8537,
+        "average_text_length": 8537.5,
+        "max_text_length": 8538,
+        "unique_texts": 84633,
+        "min_labels_per_text": 1,
+        "average_labels_per_text": 8537.5,
+        "max_labels_per_text": 58706,
+        "unique_labels": 18,
+        "labels": {
+            "shs": {
+                "count": 58706
+            },
+            "math": {
+                "count": 862
+            },
+            "info": {
+                "count": 3446
+            },
+            "sdv": {
+                "count": 11049
+            },
+            "spi": {
+                "count": 3601
+            },
+            "scco": {
+                "count": 652
+            },
+            "sdu": {
+                "count": 1177
+            },
+            "sde": {
+                "count": 2830
+            },
+            "chim": {
+                "count": 764
+            },
+            "phys": {
+                "count": 2003
+            },
+            "other": {
+                "count": 18
+            },
+            "nlin": {
+                "count": 12
+            },
+            "stic": {
+                "count": 14
+            },
+            "stat": {
+                "count": 52
+            },
+            "qfin": {
+                "count": 183
+            },
+            "image": {
+                "count": 1
+            },
+            "instrum": {
+                "count": 2
+            },
+            "electromag": {
+                "count": 3
+            }
+        }
+    }
+}

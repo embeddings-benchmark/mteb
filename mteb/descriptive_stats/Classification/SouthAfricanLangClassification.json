@@ -1,0 +1,108 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 347,
+        "text_statistics": {
+            "total_text_length": 505523,
+            "min_text_length": 204,
+            "average_text_length": 246.83740234375,
+            "max_text_length": 302,
+            "unique_texts": 2041
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 11,
+            "labels": {
+                "9": {
+                    "count": 186
+                },
+                "2": {
+                    "count": 186
+                },
+                "10": {
+                    "count": 186
+                },
+                "5": {
+                    "count": 187
+                },
+                "8": {
+                    "count": 186
+                },
+                "0": {
+                    "count": 186
+                },
+                "4": {
+                    "count": 186
+                },
+                "1": {
+                    "count": 187
+                },
+                "7": {
+                    "count": 186
+                },
+                "3": {
+                    "count": 186
+                },
+                "6": {
+                    "count": 186
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 33000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 8180949,
+            "min_text_length": 204,
+            "average_text_length": 247.90754545454544,
+            "max_text_length": 302,
+            "unique_texts": 29948
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 11,
+            "labels": {
+                "9": {
+                    "count": 3000
+                },
+                "1": {
+                    "count": 3000
+                },
+                "3": {
+                    "count": 3000
+                },
+                "8": {
+                    "count": 3000
+                },
+                "6": {
+                    "count": 3000
+                },
+                "2": {
+                    "count": 3000
+                },
+                "10": {
+                    "count": 3000
+                },
+                "5": {
+                    "count": 3000
+                },
+                "7": {
+                    "count": 3000
+                },
+                "4": {
+                    "count": 3000
+                },
+                "0": {
+                    "count": 3000
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,5 @@
 """tests for the MTEB CLI"""
 
-from __future__ import annotations
-
 import subprocess
 import sys
 from argparse import Namespace
@@ -10,37 +8,44 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb.cli import create_meta, run
+from mteb.cli.build_cli import (
+    _available_benchmarks,
+    _available_tasks,
+    _create_meta,
+    run,
+)
 
 
-def test_available_tasks():
-    command = f"{sys.executable} -m mteb available_tasks"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    assert "Banking77Classification" in result.stdout, (
-        "Sample task Banking77Classification task not found in available tasks"
+def test_available_tasks(capsys):
+    args = Namespace(
+        categories=None,
+        task_types=None,
+        languages=None,
+        tasks=None,
+    )
+    _available_tasks(args=args)
+
+    captured = capsys.readouterr()
+    assert "LccSentimentClassification" in captured.out, (
+        "Sample task LccSentimentClassification task not found in available tasks"
     )
 
 
-def test_available_benchmarks():
-    command = f"{sys.executable} -m mteb available_benchmarks"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    assert "MTEB(eng, v1)" in result.stdout, (
+def test_available_benchmarks(capsys):
+    args = Namespace(benchmarks=None)
+    _available_benchmarks(args=args)
+
+    captured = capsys.readouterr()
+    assert "MTEB(eng, v1)" in captured.out, (
         "Sample benchmark MTEB(eng, v1) task not found in available benchmarks"
     )
 
 
 run_task_fixures = [
     (
-        "sentence-transformers/average_word_embeddings_komninos",
+        "sentence-transformers/all-MiniLM-L6-v2",
         "BornholmBitextMining",
-        "21eec43590414cb8e3a6f654857abed0483ae36e",
-    ),
-    (
-        "intfloat/multilingual-e5-small",
-        "BornholmBitextMining",
-        "fd1525a9fd15316a2d503bf26ab031a61d056e98",
+        "8b3219a92973c328a8e22fadcfa821b5dc75636a",
     ),
 ]
 
@@ -50,30 +55,32 @@ def test_run_task(
     model_name: str,
     task_name: str,
     model_revision: str,
+    tmp_path: Path,
 ):
     args = Namespace(
         model=model_name,
         tasks=[task_name],
         model_revision=model_revision,
-        output_folder="tests/results/test_model",
-        verbosity=3,
+        output_folder=tmp_path.as_posix(),
         device=None,
         categories=None,
         task_types=None,
         languages=None,
         batch_size=None,
+        verbosity=3,
         co2_tracker=None,
-        overwrite=True,
+        overwrite_strategy="always",
         eval_splits=None,
+        prediction_folder=None,
         benchmarks=None,
+        overwrite=False,
+        save_predictions=None,
     )
 
     run(args)
 
     model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
-    results_path = Path(
-        f"tests/results/test_model/{model_name_as_path}/{model_revision}"
-    )
+    results_path = tmp_path / "results" / model_name_as_path / model_revision
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [f.name for f in list(results_path.glob("*.json"))], (
         "model_meta.json not found in output folder"
@@ -83,23 +90,24 @@ def test_run_task(
     )
 
 
-def test_create_meta():
+def test_create_meta(tmp_path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     output_folder = test_folder / "create_meta"
-    results = (
-        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
-    )
-    output_path = output_folder / "model_card.md"
+    output_path = tmp_path / "model_card.md"
 
     args = Namespace(
-        results_folder=results,
+        model_name=model_name,
+        results_folder=output_folder,
         output_path=output_path,
         overwrite=True,
         from_existing=None,
+        tasks=None,
+        benchmarks=None,
     )
 
-    create_meta(args)
+    _create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 
@@ -122,7 +130,7 @@ def test_create_meta():
         )
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
+    command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -134,24 +142,27 @@ def test_create_meta():
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
     ],
 )
-def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: str):
+def test_create_meta_from_existing(
+    existing_readme_name: str, gold_readme_name: str, tmp_path: Path
+):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
     output_folder = test_folder / "create_meta"
-    results = (
-        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
-    )
-    output_path = output_folder / "model_card.md"
+    output_path = tmp_path / "model_card.md"
     existing_readme = output_folder / existing_readme_name
 
     args = Namespace(
-        results_folder=results,
+        model_name=model_name,
+        results_folder=output_folder,
         output_path=output_path,
         overwrite=True,
         from_existing=str(existing_readme),
+        tasks=None,
+        benchmarks=None,
     )
 
-    create_meta(args)
+    _create_meta(args)
 
     assert output_path.exists(), "Output file not created"
 
@@ -183,15 +194,6 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
         )
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
-
-
-def test_save_predictions():
-    command = f"{sys.executable} -m mteb run -m sentence-transformers/average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
-    test_folder = Path(__file__).parent
-    results_path = test_folder / "results" / "NFCorpus_default_predictions.json"
-    assert results_path.exists(), "Predictions file not created"

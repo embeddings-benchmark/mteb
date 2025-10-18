@@ -1,8 +1,8 @@
 # RTEB Benchmarks - Retrieval Embedding Benchmark
-from __future__ import annotations
+
 
 from mteb.benchmarks.benchmark import RtebBenchmark
-from mteb.overview import get_tasks
+from mteb.get_tasks import get_tasks
 
 RTEB_CITATION = r"""@article{rteb2025,
   author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},

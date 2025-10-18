@@ -1,22 +1,40 @@
 {
     "test": {
-        "number_of_characters": 361250,
         "num_samples": 80384,
-        "num_queries": 6003,
-        "num_documents": 74381,
-        "min_document_length": 0,
-        "average_document_length": 0,
-        "max_document_length": 0,
-        "unique_documents": 0,
-        "num_document_images": 74381,
-        "min_query_length": 18,
-        "average_query_length": 60.17824421122772,
-        "max_query_length": 138,
-        "unique_queries": 5973,
-        "num_query_images": 6003,
-        "min_relevant_docs_per_query": 1,
-        "average_relevant_docs_per_query": 1.001832417124771,
-        "max_relevant_docs_per_query": 4,
-        "unique_relevant_docs": 6003
+        "number_of_characters": 361250,
+        "documents_text_statistics": null,
+        "documents_image_statistics": {
+            "min_image_width": 256,
+            "average_image_width": 259.50373079146556,
+            "max_image_width": 2304,
+            "min_image_height": 256,
+            "average_image_height": 325.46704131431414,
+            "max_image_height": 1366,
+            "unique_images": 72371
+        },
+        "queries_text_statistics": {
+            "total_text_length": 361250,
+            "min_text_length": 18,
+            "average_text_length": 60.17824421122772,
+            "max_text_length": 138,
+            "unique_texts": 5973
+        },
+        "queries_image_statistics": {
+            "min_image_width": 256,
+            "average_image_width": 259.62452107279694,
+            "max_image_width": 614,
+            "min_image_height": 256,
+            "average_image_height": 328.8965517241379,
+            "max_image_height": 1127,
+            "unique_images": 4292
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 6014,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.001832417124771,
+            "max_relevant_docs_per_query": 4,
+            "unique_relevant_docs": 6003
+        },
+        "top_ranked_statistics": null
     }
 }
