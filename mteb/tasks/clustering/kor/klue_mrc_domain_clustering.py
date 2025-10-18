@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -16,8 +14,8 @@ class KlueMrcDomainClustering(AbsTaskClusteringLegacy):
         eval_langs=["kor-Hang"],
         main_score="v_measure",
         dataset={
-            "path": "on-and-on/clustering_klue_mrc_context_domain",
-            "revision": "a814b5ef0b6814991785f2c31af8e38ef7bb3f0d",
+            "path": "mteb/KlueMrcDomainClustering",
+            "revision": "058684c3d416fff6681be45864aed41b75e334b2",
         },
         date=("2016-01-01", "2020-12-31"),
         domains=["News", "Written"],
@@ -38,25 +36,3 @@ class KlueMrcDomainClustering(AbsTaskClusteringLegacy):
 """,
         prompt="Identify the topic or theme of the given texts",
     )
-
-    def dataset_transform(self):
-        documents: list = []
-        labels: list = []
-
-        split = self.metadata.eval_splits[0]
-        ds = {}
-
-        self.dataset = self.dataset.rename_columns(
-            {"text": "sentences", "label": "labels"}
-        )
-
-        documents.append(self.dataset[split]["sentences"])
-        labels.append(self.dataset[split]["labels"])
-
-        ds[split] = datasets.Dataset.from_dict(
-            {
-                "sentences": documents,
-                "labels": labels,
-            }
-        )
-        self.dataset = datasets.DatasetDict(ds)

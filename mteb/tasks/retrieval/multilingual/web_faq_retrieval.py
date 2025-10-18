@@ -58,7 +58,9 @@ _LANGUAGES = {
 }
 
 
-def _load_webfaq_data(path: str, langs: list, splits: str, revision: str | None = None):
+def _load_webfaq_data(
+    path: str, langs: list, splits: list[str], revision: str | None = None
+):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -158,7 +160,7 @@ class WebFAQRetrieval(AbsTaskRetrieval):
         self.corpus, self.queries, self.relevant_docs = _load_webfaq_data(
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=_EVAL_SPLIT,
+            splits=self.metadata.eval_splits,
             revision=self.metadata.dataset["revision"],
         )
 

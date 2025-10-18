@@ -9,7 +9,7 @@ class CQADupstackAndroidRetrieval(AbsTaskRetrieval):
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         dataset={
             "path": "mteb/cqadupstack-android",
-            "revision": "f46a197baaae43b4f621051089b82a364682dfeb",
+            "revision": "e03f271e3f4a75f49787c838a62f671b35bc9004",
         },
         type="Retrieval",
         category="t2t",

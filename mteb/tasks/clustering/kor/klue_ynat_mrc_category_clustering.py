@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.clustering_legacy import AbsTaskClusteringLegacy
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -16,8 +14,8 @@ class KlueYnatMrcCategoryClustering(AbsTaskClusteringLegacy):
         eval_langs=["kor-Hang"],
         main_score="v_measure",
         dataset={
-            "path": "on-and-on/clustering_klue_mrc_ynat_title",
-            "revision": "5bbded98f39e3bf6e81e15aa79c6616008519e29",
+            "path": "mteb/KlueYnatMrcCategoryClustering",
+            "revision": "0fa09942e3482f13c9b048f65076607e9f788db6",
         },
         date=("2016-01-01", "2020-12-31"),
         domains=["News", "Written"],
@@ -38,25 +36,3 @@ class KlueYnatMrcCategoryClustering(AbsTaskClusteringLegacy):
 """,
         prompt="Identify the topic or theme of the given texts",
     )
-
-    def dataset_transform(self):
-        documents: list = []
-        labels: list = []
-
-        split = self.metadata.eval_splits[0]
-        ds = {}
-
-        self.dataset = self.dataset.rename_columns(
-            {"text": "sentences", "label": "labels"}
-        )
-
-        documents.append(self.dataset[split]["sentences"])
-        labels.append(self.dataset[split]["labels"])
-
-        ds[split] = datasets.Dataset.from_dict(
-            {
-                "sentences": documents,
-                "labels": labels,
-            }
-        )
-        self.dataset = datasets.DatasetDict(ds)
