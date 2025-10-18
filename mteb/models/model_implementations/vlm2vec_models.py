@@ -17,6 +17,13 @@ from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
+VLM2VEC_CITATION = """@article{jiang2024vlm2vec,
+  title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
+  author={Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu},
+  journal={arXiv preprint arXiv:2410.05160},
+  year={2024}
+}"""
+
 
 class VLM2VecWrapper(AbsEncoder):
     """Adapted from https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/src/model.py"""
@@ -279,6 +286,7 @@ vlm2vec_lora = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
+    citation=VLM2VEC_CITATION,
 )
 
 vlm2vec_full = ModelMeta(
@@ -301,4 +309,5 @@ vlm2vec_full = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
+    citation=VLM2VEC_CITATION,
 )

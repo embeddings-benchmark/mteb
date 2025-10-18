@@ -9,6 +9,15 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+SIGLIP_CITATION = """@misc{zhai2023sigmoid,
+      title={Sigmoid Loss for Language Image Pre-Training},
+      author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+      year={2023},
+      eprint={2303.15343},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}"""
+
 
 class SiglipModelWrapper(AbsEncoder):
     def __init__(
@@ -133,6 +142,7 @@ siglip_so400m_patch14_224 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_so400m_patch14_384 = ModelMeta(
@@ -155,6 +165,7 @@ siglip_so400m_patch14_384 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_so400m_patch16_256_i18n = ModelMeta(
@@ -177,6 +188,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_base_patch16_256_multilingual = ModelMeta(
@@ -199,6 +211,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_base_patch16_256 = ModelMeta(
@@ -221,6 +234,7 @@ siglip_base_patch16_256 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_base_patch16_512 = ModelMeta(
@@ -243,6 +257,7 @@ siglip_base_patch16_512 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_base_patch16_384 = ModelMeta(
@@ -265,6 +280,7 @@ siglip_base_patch16_384 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_base_patch16_224 = ModelMeta(
@@ -287,6 +303,7 @@ siglip_base_patch16_224 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_large_patch16_256 = ModelMeta(
@@ -309,6 +326,7 @@ siglip_large_patch16_256 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )
 
 siglip_large_patch16_384 = ModelMeta(
@@ -331,4 +349,5 @@ siglip_large_patch16_384 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
+    citation=SIGLIP_CITATION,
 )

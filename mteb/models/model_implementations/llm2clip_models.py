@@ -11,6 +11,16 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+LLM2CLIP_CITATION = """@misc{huang2024llm2clippowerfullanguagemodel,
+  title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
+  author={Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu},
+  year={2024},
+  eprint={2411.04997},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2411.04997}
+}"""
+
 MODEL2PROCESSOR = {
     "microsoft/LLM2CLIP-Openai-L-14-336": "openai/clip-vit-large-patch14-336",
     "microsoft/LLM2CLIP-Openai-B-16": "openai/clip-vit-base-patch16",
@@ -190,6 +200,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
+    citation=LLM2CLIP_CITATION,
 )
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -213,6 +224,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
+    citation=LLM2CLIP_CITATION,
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -235,4 +247,5 @@ llm2clip_openai_b_16 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
+    citation=LLM2CLIP_CITATION,
 )

@@ -60,6 +60,19 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
         self.model = SentenceTransformer(modules=[transformer, pooling])
 
 
+BMRETRIEVER_CITATION = """
+@inproceedings{xu-etal-2024-bmretriever,
+    title = "{BMR}etriever: Tuning Large Language Models as Better Biomedical Text Retrievers",
+    author = "Xu, Ran and Shi, Wenqi and Yu, Yue and Zhuang, Yuchen and Zhu, Yanqiao and Wang, May Dongmei and Ho, Joyce C. and Zhang, Chao and Yang, Carl",
+    booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    month = "November",
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    pages = "22234--22254",
+    url = "https://aclanthology.org/2024.emnlp-main.1241/"
+}"""
+
 # https://huggingface.co/datasets/BMRetriever/biomed_retrieval_dataset
 BMRETRIEVER_TRAINING_DATA = {
     "FEVER",
@@ -93,6 +106,7 @@ BMRetriever_410M = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=BMRETRIEVER_TRAINING_DATA,
+    citation=BMRETRIEVER_CITATION,
 )
 
 BMRetriever_1B = ModelMeta(
@@ -121,6 +135,7 @@ BMRetriever_1B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=BMRETRIEVER_TRAINING_DATA,
+    citation=BMRETRIEVER_CITATION,
 )
 
 BMRetriever_2B = ModelMeta(
@@ -149,6 +164,7 @@ BMRetriever_2B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=BMRETRIEVER_TRAINING_DATA,
+    citation=BMRETRIEVER_CITATION,
 )
 
 BMRetriever_7B = ModelMeta(
@@ -177,4 +193,5 @@ BMRetriever_7B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=BMRETRIEVER_TRAINING_DATA,
+    citation=BMRETRIEVER_CITATION,
 )
