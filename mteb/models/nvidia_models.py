@@ -162,7 +162,7 @@ llama_embed_nemotron_evaluated_languages = [
     "xho-Latn",
     "yor-Latn",
     "zho-Hans",
- ]
+]
 
 TASK_PROMPTS = {
     # Classification
@@ -186,7 +186,7 @@ TASK_PROMPTS = {
     "CataloniaTweetClassification": "Given a tweet, categorized by sentiment into AGAINST, FAVOR or NEUTRAL",
     "CyrillicTurkicLangClassification": "Given a text, classify its language",
     "IndicLangClassification": "Given a text, classify its language",
-    "MasakhaNEWSClassification":  "Classify the News in the given texts into one of the seven category: politics,sports,health,business,entertainment,technology,religion ",
+    "MasakhaNEWSClassification": "Classify the News in the given texts into one of the seven category: politics,sports,health,business,entertainment,technology,religion ",
     "MultiHateClassification": "Given a text, categorized by sentiment into hate or non-hate",
     "NusaParagraphEmotionClassification": "Given a paragraph, classify its emotion",
     "NusaX-senti": "Given a text, categorized by sentiment into positive or negative",
@@ -194,7 +194,7 @@ TASK_PROMPTS = {
     "NepaliNewsClassification": "Given a news article, categorized it into business, entertainment or sports",
     "OdiaNewsClassification": "Given a news article, categorized it into business, entertainment or sports",
     "PunjabiNewsClassification": "Given a news article, categorized it into two-classes",
-    "PolEmo2.0-OUT":"Classify the sentiment of out-of-domain (products and school) online reviews",
+    "PolEmo2.0-OUT": "Classify the sentiment of out-of-domain (products and school) online reviews",
     "PAC": 'Classify the sentence into one of the two types: "BEZPIECZNE_POSTANOWIENIE_UMOWNE" and "KLAUZULA_ABUZYWNA"',
     "SinhalaNewsClassification": "Given a news article, categorized it into political, business, technology, sports and Entertainment",
     "CSFDSKMovieReviewSentimentClassification": "Given a movie review, classify its rating on a scale from 0 to 5",
@@ -203,30 +203,30 @@ TASK_PROMPTS = {
     "SwahiliNewsClassification": "Given a news article, classify its domain",
     "TswanaNewsClassification": "Given a news article, classify its topic",
     "IsiZuluNewsClassification": "Given a news article, classify its topic",
-    
     # Clustering
     "WikiCitiesClustering": "Identify of Wikipedia articles of cities by country",
     "MasakhaNEWSClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
     "RomaniBibleClustering": "Identify verses from the Bible in Kalderash Romani by book.",
     "ArXivHierarchicalClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
-    "ArXivHierarchicalClusteringS2S":  "Identify the main and secondary category of Arxiv papers based on the titles",
+    "ArXivHierarchicalClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
     "BigPatentClustering.v2": "Identify the category of documents from the Big Patent dataset",
     "AlloProfClusteringS2S.v2": "Identify the topic of document titles from Allo Prof dataset",
     "HALClusteringS2S.v2": "Identify the topic of titles from HAL",
     "SIB200ClusteringS2S": "Identify the category of documents",
     "WikiClusteringP2P.v2": "Identify the category of wiki passages",
     "PlscClusteringP2P.v2": "Identify the category of titles+abstracts from Library of Science",
-
     # Multilabel Classification
     "KorHateSpeechMLClassification": "Given a Korean online news comments, classify its fine-grained hate speech classes",
     "MalteseNewsClassification": "Given a maltese new, classify its topic",
     "MultiEURLEXMultilabelClassification": "Given a text, classify its topic",
     "BrazilianToxicTweetsClassification": "Given a tweet, classify its topic",
-
     # Retrieval
     "StackOverflowQA": "Given a question about coding, retrieval code or passage that can solve user's question",
     "AILAStatutes": "Identifying the most relevant statutes for a given situation",
-    "ArguAna": {"query": "Given a claim, find documents that refute the claim", "document": "Given a claim, find documents that refute the claim"},
+    "ArguAna": {
+        "query": "Given a claim, find documents that refute the claim",
+        "document": "Given a claim, find documents that refute the claim",
+    },
     "HagridRetrieval": "Given a question, retrieve passages that answer the question",
     "LegalBenchCorporateLobbying": "Given a question, retrieve passages that answer the question",
     "LEMBPasskeyRetrieval": "Given a question, retrieve passages that answer the question",
@@ -238,7 +238,6 @@ TASK_PROMPTS = {
     "News21InstructionRetrieval": "Given a question, retrieve passages that answer the question",
     "Robust04InstructionRetrieval": "Given a question, retrieve passages that answer the question",
     "MIRACLRetrievalHardNegatives": "Given a question, retrieve passages that answer the question",
-
     # Reranking
     "WebLINXCandidatesReranking": "Given a question, retrieve passages that answer the question",
     "AlloprofReranking": "Given a question, retrieve passages that answer the question",
@@ -268,11 +267,10 @@ llama_embed_nemotron_training_datasets = {
 
 class LlamaEmbedNemotron(Wrapper):
     def __init__(
-        self, 
+        self,
         model_name,
         revision,
         max_seq_length=4096,
-        batch_size=4,
     ):
         required_transformers_version = "4.51.0"
         if Version(transformers_version) != Version(required_transformers_version):
@@ -284,23 +282,24 @@ class LlamaEmbedNemotron(Wrapper):
         requires_package(
             self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
         )
-        
+
         self.model_name = model_name
         self.revision = revision
         self.max_seq_length = max_seq_length
-        self.batch_size = batch_size
-        self.attn_implementation = "flash_attention_2" if torch.cuda.is_available() else "eager"
+        self.attn_implementation = (
+            "flash_attention_2" if torch.cuda.is_available() else "eager"
+        )
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.task_prompts = TASK_PROMPTS
         self.instruction_template = self._instruction_template
-        
+
         self.tokenizer = AutoTokenizer.from_pretrained(
-            self.model_name, 
+            self.model_name,
             trust_remote_code=True,
             padding_side="left",
             revision=self.revision,
         )
-                
+
         self.model = AutoModel.from_pretrained(
             self.model_name,
             trust_remote_code=True,
@@ -317,44 +316,41 @@ class LlamaEmbedNemotron(Wrapper):
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        **kwargs
+        **kwargs,
     ) -> np.ndarray:
         """Encode sentences with task-specific instructions."""
 
+        batch_size = kwargs.pop("batch_size", 4)
         instruction = self._get_task_specific_instruction(task_name, prompt_type)
 
         prefix = self.format_instruction(instruction, prompt_type)
         sentences = [prefix + sentence for sentence in sentences]
 
-        return self._extract_embeddings(sentences)
+        return self._extract_embeddings(sentences, batch_size=batch_size)
 
     def _get_task_specific_instruction(
-        self, 
-        task_name: str, 
-        prompt_type: PromptType | None
+        self, task_name: str, prompt_type: PromptType | None
     ) -> str:
         """Get instruction for a specific task, applying task-specific overrides."""
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
         task_type = task_metadata.type
-        
+
         # First, get the base instruction using custom prompts or task metadata
         instruction = self._get_base_instruction(task_name, prompt_type)
-        
+
         # Apply task-type-specific overrides
         instruction = self._apply_task_type_overrides(
             instruction, task_type, task_name, prompt_type
         )
-        
+
         return instruction
-    
+
     def _get_base_instruction(
-        self, 
-        task_name: str, 
-        prompt_type: PromptType | None
+        self, task_name: str, prompt_type: PromptType | None
     ) -> str:
         """Get the base instruction from task-specific prompts or task metadata."""
-        
+
         # Check if task has custom prompt in TASK_PROMPTS
         if task_name in self.task_prompts:
             instruction = self.task_prompts[task_name]
@@ -362,10 +358,10 @@ class LlamaEmbedNemotron(Wrapper):
             if isinstance(instruction, dict) and prompt_type:
                 return instruction.get(prompt_type.value, "")
             return instruction if isinstance(instruction, str) else ""
-        
+
         # Fall back to Wrapper's get_instruction method for task metadata
         return self.get_instruction(task_name, prompt_type)
-    
+
     def _apply_task_type_overrides(
         self,
         instruction: str,
@@ -374,35 +370,36 @@ class LlamaEmbedNemotron(Wrapper):
         prompt_type: PromptType | None,
     ) -> str:
         """Apply task-type-specific instruction overrides."""
-        
+
         # For retrieval/reranking tasks, skip instruction for documents
         # unless it's a symmetric task (where both query and document use prompts)
-        is_symmetric_task = (
-            task_name in self.task_prompts 
-            and isinstance(self.task_prompts[task_name], dict)
+        is_symmetric_task = task_name in self.task_prompts and isinstance(
+            self.task_prompts[task_name], dict
         )
-        
+
         if (
-            ("Retrieval" in task_type or "Reranking" in task_type) 
-            and not is_symmetric_task 
+            ("Retrieval" in task_type or "Reranking" in task_type)
+            and not is_symmetric_task
             and prompt_type == PromptType.document
         ):
             return ""
-        
+
         # Override for STS and PairClassification tasks
         if task_type in ["STS", "PairClassification"]:
             return "Retrieve semantically similar text"
-        
+
         # Override for BitextMining tasks
         if task_type in ["BitextMining"]:
             return "Retrieve parallel sentences"
-        
+
         return instruction
-    
+
     @staticmethod
-    def _instruction_template(instruction: str, prompt_type: PromptType | None = None) -> str:
+    def _instruction_template(
+        instruction: str, prompt_type: PromptType | None = None
+    ) -> str:
         """Format instruction with the model-specific template."""
-        
+
         return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
     @staticmethod
@@ -410,44 +407,55 @@ class LlamaEmbedNemotron(Wrapper):
         last_hidden_states: torch.Tensor,
         attention_mask: torch.Tensor,
     ) -> torch.Tensor:
-        last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
-        
+        last_hidden = last_hidden_states.masked_fill(
+            ~attention_mask[..., None].bool(), 0.0
+        )
+
         return last_hidden.sum(dim=1) / attention_mask.sum(dim=1)[..., None]
 
-    def _extract_embeddings(self, corpus: List[str]):
-
-        dataloader = DataLoader(corpus, batch_size=self.batch_size, shuffle=False, collate_fn=None)
+    def _extract_embeddings(self, corpus: List[str], batch_size: int):
+        dataloader = DataLoader(
+            corpus, batch_size=batch_size, shuffle=False, collate_fn=None
+        )
 
         all_embeddings = []
         for batch in tqdm(dataloader, desc=f"Extracting embeddings..."):
             with torch.inference_mode():
                 inputs = self.tokenizer(
-                    batch, 
-                    max_length=self.max_seq_length, 
-                    truncation="longest_first", 
+                    batch,
+                    max_length=self.max_seq_length,
+                    truncation="longest_first",
                     padding=True,
-                    return_tensors="pt"
+                    return_tensors="pt",
                 ).to(self.device)
 
                 outputs = self.model(**inputs)
                 if outputs.last_hidden_state.dtype == torch.float16:
-                    outputs.last_hidden_state = outputs.last_hidden_state.to(torch.float32)
+                    outputs.last_hidden_state = outputs.last_hidden_state.to(
+                        torch.float32
+                    )
 
                 embeddings = self.average_pooling(
                     last_hidden_states=outputs.last_hidden_state,
                     attention_mask=inputs["attention_mask"],
                 )
-                
+
                 embeddings = F.normalize(embeddings, dim=-1)
 
             all_embeddings.append(embeddings.contiguous())
 
-        result = torch.cat(all_embeddings, dim=0).detach().cpu().numpy().astype("float32")[:len(corpus)]
+        result = (
+            torch.cat(all_embeddings, dim=0)
+            .detach()
+            .cpu()
+            .numpy()
+            .astype("float32")[: len(corpus)]
+        )
 
         del all_embeddings
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-        
+
         return result
 
 
@@ -457,7 +465,6 @@ llama_embed_nemotron_8b = ModelMeta(
         model_name="nvidia/llama-embed-nemotron-8b",
         revision="84a375593d27d3528beb4e104822515659e093b4",
         max_seq_length=4096,
-        batch_size=4,
     ),
     name="nvidia/llama-embed-nemotron-8b",
     languages=llama_embed_nemotron_evaluated_languages,
@@ -474,8 +481,8 @@ llama_embed_nemotron_8b = ModelMeta(
     framework=["PyTorch"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
-    public_training_code=None, # Will be released later
-    public_training_data=None, # Will be released later
+    public_training_code=None,  # Will be released later
+    public_training_data=None,  # Will be released later
 )
 
 
