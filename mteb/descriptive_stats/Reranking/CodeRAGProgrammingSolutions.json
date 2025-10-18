@@ -1,30 +1,31 @@
 {
     "train": {
-        "num_samples": 2256,
-        "number_of_characters": 355183,
-        "documents_text_statistics": {
-            "total_text_length": 277070,
-            "min_text_length": 29,
-            "average_text_length": 245.62943262411346,
-            "max_text_length": 1992,
-            "unique_texts": 1126
-        },
-        "documents_image_statistics": null,
-        "queries_text_statistics": {
-            "total_text_length": 78113,
-            "min_text_length": 0,
-            "average_text_length": 69.24911347517731,
-            "max_text_length": 251,
-            "unique_texts": 966
-        },
-        "queries_image_statistics": null,
-        "relevant_docs_statistics": {
-            "num_relevant_docs": 1128,
-            "min_relevant_docs_per_query": 1,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 1,
-            "unique_relevant_docs": 1128
-        },
-        "top_ranked_statistics": null
+        "num_samples": 2114,
+        "number_of_characters": 355909,
+        "num_documents": 1128,
+        "min_document_length": 30,
+        "average_document_length": 246.27304964539007,
+        "max_document_length": 1993,
+        "unique_documents": 1128,
+        "num_queries": 986,
+        "min_query_length": 11,
+        "average_query_length": 79.22210953346855,
+        "max_query_length": 251,
+        "unique_queries": 1128,
+        "none_queries": 142,
+        "num_relevant_docs": 1128,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.0,
+        "max_relevant_docs_per_query": 1,
+        "unique_relevant_docs": 1128,
+        "num_instructions": null,
+        "min_instruction_length": null,
+        "average_instruction_length": null,
+        "max_instruction_length": null,
+        "unique_instructions": null,
+        "num_top_ranked": null,
+        "min_top_ranked_per_query": null,
+        "average_top_ranked_per_query": null,
+        "max_top_ranked_per_query": null
     }
 }
