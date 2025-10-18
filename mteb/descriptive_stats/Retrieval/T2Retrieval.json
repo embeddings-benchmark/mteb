@@ -2,30 +2,29 @@
     "dev": {
         "num_samples": 141417,
         "number_of_characters": 103924352,
-        "num_documents": 118605,
-        "min_document_length": 1,
-        "average_document_length": 874.1184182791619,
-        "max_document_length": 42956,
-        "unique_documents": 118605,
-        "num_queries": 22812,
-        "min_query_length": 4,
-        "average_query_length": 10.938847974750132,
-        "max_query_length": 31,
-        "unique_queries": 22812,
-        "none_queries": 0,
-        "num_relevant_docs": 118932,
-        "min_relevant_docs_per_query": 1,
-        "average_relevant_docs_per_query": 5.213571804313519,
-        "max_relevant_docs_per_query": 62,
-        "unique_relevant_docs": 118605,
-        "num_instructions": null,
-        "min_instruction_length": null,
-        "average_instruction_length": null,
-        "max_instruction_length": null,
-        "unique_instructions": null,
-        "num_top_ranked": null,
-        "min_top_ranked_per_query": null,
-        "average_top_ranked_per_query": null,
-        "max_top_ranked_per_query": null
+        "documents_text_statistics": {
+            "total_text_length": 103674815,
+            "min_text_length": 1,
+            "average_text_length": 874.1184182791619,
+            "max_text_length": 42956,
+            "unique_texts": 118605
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 249537,
+            "min_text_length": 4,
+            "average_text_length": 10.938847974750132,
+            "max_text_length": 31,
+            "unique_texts": 22812
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 118932,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 5.213571804313519,
+            "max_relevant_docs_per_query": 62,
+            "unique_relevant_docs": 118605
+        },
+        "top_ranked_statistics": null
     }
 }
