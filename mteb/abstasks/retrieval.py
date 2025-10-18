@@ -171,8 +171,8 @@ class AbsTaskRetrieval(AbsTask):
                     [
                         {
                             "id": k,
-                            "text": v["text"],
-                            "title": v.get("title", ""),
+                            "text": v if isinstance(v, str) else v["text"],
+                            "title": v.get("title", "") if isinstance(v, dict) else "",
                         }
                         for k, v in ds_corpus.items()
                     ]
