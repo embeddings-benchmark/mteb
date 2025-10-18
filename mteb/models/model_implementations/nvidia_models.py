@@ -468,6 +468,7 @@ class LlamaEmbedNemotron(AbsEncoder):
         dataloader: DataLoader[BatchedInput],
         instruction: str,
         show_progress_bar: bool = True,
+        **kwargs: Any,
     ) -> Array:
         all_embeddings = []
         for batch in tqdm(
