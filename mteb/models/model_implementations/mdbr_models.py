@@ -3,6 +3,16 @@ from mteb.models.model_implementations.mxbai_models import mixedbread_training_d
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+LEAF_CITATION = """@misc{mdbr_leaf,
+  title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations},
+  author={Robin Vujanic and Thomas Rueckstiess},
+  year={2025},
+  eprint={2509.12539},
+  archivePrefix={arXiv},
+  primaryClass={cs.IR},
+  url={https://arxiv.org/abs/2509.12539}
+}"""
+
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 
 LEAF_TRAINING_DATASETS = {
@@ -38,6 +48,7 @@ mdbr_leaf_ir = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=LEAF_TRAINING_DATASETS | arctic_v1_training_datasets,
+    citation=LEAF_CITATION,
 )
 
 mdbr_leaf_mt = ModelMeta(
@@ -64,4 +75,5 @@ mdbr_leaf_mt = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=LEAF_TRAINING_DATASETS | mixedbread_training_data,
+    citation=LEAF_CITATION,
 )

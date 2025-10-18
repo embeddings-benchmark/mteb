@@ -4,6 +4,16 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 
 from .nvidia_models import nvidia_training_datasets
 
+STELLA_CITATION = """@misc{zhang2025jasperstelladistillationsota,
+      title={Jasper and Stella: distillation of SOTA embedding models},
+      author={Dun Zhang and Jiacheng Li and Ziyang Zeng and Fulong Wang},
+      year={2025},
+      eprint={2412.19048},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2412.19048},
+}"""
+
 stella_zh_datasets = {
     "BQ",
     "LCQMC",
@@ -65,6 +75,7 @@ stella_en_400m = ModelMeta(
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
+    citation=STELLA_CITATION,
 )
 
 stella_en_1_5b = ModelMeta(
@@ -92,6 +103,7 @@ stella_en_1_5b = ModelMeta(
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
+    citation=STELLA_CITATION,
 )
 
 stella_large_zh_v3_1792d = ModelMeta(

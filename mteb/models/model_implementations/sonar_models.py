@@ -1,5 +1,13 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
+SONAR_CITATION = """@misc{Duquenne:2023:sonar_arxiv,
+  author = {Paul-Ambroise Duquenne and Holger Schwenk and Benoit Sagot},
+  title = {{SONAR:} Sentence-Level Multimodal and Language-Agnostic Representations},
+  publisher = {arXiv},
+  year = {2023},
+  url = {https://arxiv.org/abs/2308.11466},
+}"""
+
 sonar_langs = [
     "ace-Arab",
     "ace-Latn",
@@ -229,4 +237,5 @@ sonar = ModelMeta(
     ),
     public_training_code="https://github.com/facebookresearch/SONAR",
     public_training_data=None,  # couldn't find this
+    citation=SONAR_CITATION,
 )

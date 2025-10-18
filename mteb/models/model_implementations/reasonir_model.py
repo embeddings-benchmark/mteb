@@ -4,6 +4,14 @@ from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
 
+REASONIR_CITATION = """@article{shao2025reasonir,
+      title={ReasonIR: Training Retrievers for Reasoning Tasks},
+      author={Rulin Shao and Rui Qiao and Varsha Kishore and Niklas Muennighoff and Xi Victoria Lin and Daniela Rus and Bryan Kian Hsiang Low and Sewon Min and Wen-tau Yih and Pang Wei Koh and Luke Zettlemoyer},
+      year={2025},
+      journal={arXiv preprint arXiv:2504.20595},
+      url={https://arxiv.org/abs/2504.20595},
+}"""
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -52,4 +60,5 @@ ReasonIR_8B = ModelMeta(
     training_datasets=REASONIR_TRAINING_DATA,
     public_training_code="https://github.com/facebookresearch/ReasonIR/tree/main/training",
     public_training_data="https://huggingface.co/datasets/reasonir/reasonir-data",
+    citation=REASONIR_CITATION,
 )

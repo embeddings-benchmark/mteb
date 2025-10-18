@@ -7,7 +7,11 @@ from mteb._requires_package import (
 )
 from mteb.models.model_meta import ModelMeta
 
-from .colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
+from .colpali_models import (
+    COLPALI_CITATION,
+    COLPALI_TRAINING_DATA,
+    ColPaliEngineWrapper,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -92,6 +96,7 @@ colqwen2 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )
 
 colqwen2_5 = ModelMeta(
@@ -117,6 +122,7 @@ colqwen2_5 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )
 
 colnomic_7b = ModelMeta(
@@ -142,7 +148,17 @@ colnomic_7b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )
+
+COLNOMIC_CITATION = """
+@misc{nomicembedmultimodal2025,
+  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
+  author={Nomic Team},
+  year={2025},
+  publisher={Nomic AI},
+  url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
+}"""
 
 COLNOMIC_TRAINING_DATA = {"VDRMultilingual"} | COLPALI_TRAINING_DATA
 COLNOMIC_LANGUAGES = [
@@ -176,6 +192,7 @@ colnomic_3b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
+    citation=COLNOMIC_CITATION,
 )
 
 colnomic_7b = ModelMeta(
@@ -201,4 +218,5 @@ colnomic_7b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
+    citation=COLNOMIC_CITATION,
 )

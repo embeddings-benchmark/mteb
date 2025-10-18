@@ -2,6 +2,13 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .bge_models import bge_full_data
 
+LENS_CITATION = """@article{lei2025lens,
+  title={Enhancing Lexicon-Based Text Embeddings with Large Language Models},
+  author={Lei, Yibin and Shen, Tao and Cao, Yu and Yates, Andrew},
+  journal={arXiv preprint arXiv:2501.09749},
+  year={2025}
+}"""
+
 lens_d4000 = ModelMeta(
     loader=None,
     name="yibinlei/LENS-d4000",
@@ -21,6 +28,7 @@ lens_d4000 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_full_data,
     max_tokens=32768,
+    citation=LENS_CITATION,
 )
 
 lens_d8000 = ModelMeta(
@@ -42,4 +50,5 @@ lens_d8000 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_full_data,
     max_tokens=32768,
+    citation=LENS_CITATION,
 )
