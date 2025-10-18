@@ -154,24 +154,46 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
+        def _process_split(
+            ds_queries: dict | Dataset, ds_corpus: dict | Dataset
+        ) -> tuple[Dataset, Dataset]:
+            if isinstance(ds_queries, dict):
+                queries = Dataset.from_list(
+                    [{"id": k, "text": v} for k, v in ds_queries.items()]
+                )
+            elif isinstance(ds_queries, Dataset):
+                queries = ds_queries
+            else:
+                raise ValueError(f"Can't convert queries of type {type(ds_queries)}")
+
+            if isinstance(ds_corpus, dict):
+                corpus = Dataset.from_list(
+                    [
+                        {
+                            "id": k,
+                            "text": v["text"],
+                            "title": v.get("title", ""),
+                        }
+                        for k, v in ds_corpus.items()
+                    ]
+                )
+            elif isinstance(ds_corpus, Dataset):
+                corpus = ds_corpus
+            else:
+                raise ValueError(f"Can't convert corpus of type {type(ds_corpus)}")
+            return queries, corpus
+
         if self.metadata.is_multilingual:
             for subset in self.queries:
                 for split in self.queries[subset]:
                     queries = self.queries[subset][split]
                     corpus = self.corpus[subset][split]
-                    self.dataset[subset][split]["queries"] = Dataset.from_list(
-                        [{"id": k, "text": v} for k, v in queries.items()]
-                    )
-                    self.dataset[subset][split]["corpus"] = Dataset.from_list(
-                        [
-                            {
-                                "id": k,
-                                "text": v["text"],
-                                "title": v.get("title", ""),
-                            }
-                            for k, v in corpus.items()
-                        ]
-                    )
+
+                    (
+                        self.dataset[subset][split]["queries"],
+                        self.dataset[subset][split]["corpus"],
+                    ) = _process_split(queries, corpus)
+
                     self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                         subset
                     ][split]
@@ -192,30 +214,10 @@ class AbsTaskRetrieval(AbsTask):
             for split in self.queries:
                 queries = self.queries[split]
                 corpus = self.corpus[split]
-                if isinstance(queries, dict):
-                    self.dataset[subset][split]["queries"] = Dataset.from_list(
-                        [{"id": k, "text": v} for k, v in queries.items()]
-                    )
-                elif isinstance(queries, Dataset):
-                    self.dataset[subset][split]["queries"] = queries
-                else:
-                    raise ValueError(f"Can't convert queries of type {type(queries)}")
-
-                if isinstance(corpus, dict):
-                    self.dataset[subset][split]["corpus"] = Dataset.from_list(
-                        [
-                            {
-                                "id": k,
-                                "text": v["text"],
-                                "title": v.get("title", ""),
-                            }
-                            for k, v in corpus.items()
-                        ]
-                    )
-                elif isinstance(corpus, Dataset):
-                    self.dataset[subset][split]["corpus"] = corpus
-                else:
-                    raise ValueError(f"Can't convert corpus of type {type(corpus)}")
+                (
+                    self.dataset[subset][split]["queries"],
+                    self.dataset[subset][split]["corpus"],
+                ) = _process_split(queries, corpus)
 
                 self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
                     split
