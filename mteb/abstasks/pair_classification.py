@@ -7,7 +7,7 @@ from datasets import Dataset
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
-from mteb._evaluators.text.pair_classification_evaluator import (
+from mteb._evaluators.pair_classification_evaluator import (
     PairClassificationDistances,
 )
 from mteb.abstasks._statistics_calculation import (
