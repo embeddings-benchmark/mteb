@@ -83,4 +83,6 @@ class BlurbsClusteringP2PFast(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        self.dataset = _convert_to_fast(self.dataset, self.seed)  # type: ignore
+        self.dataset = _convert_to_fast(
+            self.dataset, self.input_column_name, self.label_column_name, self.seed
+        )

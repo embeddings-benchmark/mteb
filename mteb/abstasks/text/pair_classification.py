@@ -78,6 +78,7 @@ class AbsTaskPairClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> dict[str, float]:
+        # for compatibility with v1 version where datasets were stored in a single row
         data_split = data_split[0] if len(data_split) == 1 else data_split
         evaluator = PairClassificationEvaluator(
             data_split[self.sentence1_column_name],
@@ -146,10 +147,16 @@ class AbsTaskPairClassification(AbsTask):
             dataset = defaultdict(list)
             for hf_subset in self.metadata.eval_langs:
                 cur_dataset = self.dataset[hf_subset][split]
-                if isinstance(cur_dataset, list):
+                # for compatibility with v1 version where datasets were stored in a single row
+                if isinstance(cur_dataset, list) or len(cur_dataset) == 1:
                     cur_dataset = cur_dataset[0]
-                for key, value in cur_dataset.items():
-                    dataset[key].extend(value[0] if len(value) == 1 else value)
+                if isinstance(cur_dataset, Dataset):
+                    for row in cur_dataset:
+                        for k, v in row.items():
+                            dataset[k].append(v)
+                else:
+                    for key, value in cur_dataset.items():
+                        dataset[key].extend(value[0] if len(value) == 1 else value)
         else:
             dataset = self.dataset[split]
 

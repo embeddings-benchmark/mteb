@@ -64,5 +64,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClustering):
     )
 
     def dataset_transform(self) -> None:
-        ds = _convert_to_fast(self.dataset, self.seed)  # type: ignore
+        ds = _convert_to_fast(
+            self.dataset, self.input_column_name, self.label_column_name, self.seed
+        )
         self.dataset = ds
