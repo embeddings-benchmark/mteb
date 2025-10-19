@@ -11,7 +11,7 @@ class FGVCAircraftZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
             "path": "mteb/FGVCAircraft",
-            "revision": "3ae0e4e94e37c610c26df758ec3255fa90d80e67",
+            "revision": "2d33d00400099b87bfec8b04f2876fb10ca07487",
         },
         type="ZeroShotClassification",
         category="i2t",
