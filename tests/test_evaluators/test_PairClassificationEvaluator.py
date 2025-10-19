@@ -15,8 +15,9 @@ class TestPairClassificationEvaluator:
         task = MockPairClassificationTask()
         task.load_data()
         evaluator = PairClassificationEvaluator(
-            task.dataset["test"]["sentence1"],
-            task.dataset["test"]["sentence2"],
+            task.dataset["test"],
+            "sentence1",
+            "sentence2",
             MockClassificationTask.metadata,
             "test",
             "test",

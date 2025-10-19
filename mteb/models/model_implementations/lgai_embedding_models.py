@@ -63,4 +63,14 @@ lgai_embedding_en = ModelMeta(
     public_training_data=None,
     adapted_from="mistralai/Mistral-7B-v0.1",
     training_datasets=E5_MISTRAL_TRAINING_DATA | LGAI_EMBEDDING_TRAINING_DATA,
+    citation="""@misc{choi2025lgaiembeddingpreviewtechnicalreport,
+      title={LGAI-EMBEDDING-Preview Technical Report},
+      author={Jooyoung Choi and Hyun Kim and Hansol Jang and Changwook Jun and Kyunghoon Bae and Hyewon Choi and Stanley Jungkyu Choi and Honglak Lee and Chulmin Yun},
+      year={2025},
+      eprint={2506.07438},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2506.07438},
+}
+""",
 )

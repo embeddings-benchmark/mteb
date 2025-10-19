@@ -179,4 +179,10 @@ granite_vision_embedding = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=None,  # proprietary, not public
+    citation="""@article{karlinsky2025granitevision,
+  title={Granite Vision: a lightweight, open-source multimodal model for enterprise Intelligence},
+  author={Granite Vision Team and Karlinsky, Leonid and Arbelle, Assaf and Daniels, Abraham and Nassar, Ahmed and Alfassi, Amit and Wu, Bo and Schwartz, Eli and Joshi, Dhiraj and Kondic, Jovana and Shabtay, Nimrod and Li, Pengyuan and Herzig, Roei and Abedin, Shafiq and Perek, Shaked and Harary, Sivan and Barzelay, Udi and Raz Goldfarb, Adi and Oliva, Aude and Wieles, Ben and Bhattacharjee, Bishwaranjan and Huang, Brandon and Auer, Christoph and Gutfreund, Dan and Beymer, David and Wood, David and Kuehne, Hilde and Hansen, Jacob and Shtok, Joseph and Wong, Ken and Bathen, Luis Angel and Mishra, Mayank and Lysak, Maksym and Dolfi, Michele and Yurochkin, Mikhail and Livathinos, Nikolaos and Harel, Nimrod and Azulai, Ophir and Naparstek, Oshri and de Lima, Rafael Teixeira and Panda, Rameswar and Doveh, Sivan and Gupta, Shubham and Das, Subhro and Zawad, Syed and Kim, Yusik and He, Zexue and Brooks, Alexander and Goodhart, Gabe and Govindjee, Anita and Leist, Derek and Ibrahim, Ibrahim and Soffer, Aya and Cox, David and Soule, Kate and Lastras, Luis and Desai, Nirmit and Ofek-koifman, Shila and Raghavan, Sriram and Syeda-Mahmood, Tanveer and Staar, Peter and Drory, Tal and Feris, Rogerio},
+  journal={arXiv preprint arXiv:2502.09927},
+  year={2025}
+}""",
 )

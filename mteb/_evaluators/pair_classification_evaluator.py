@@ -2,13 +2,14 @@ import logging
 from typing import Any, TypedDict
 
 import numpy as np
+from datasets import Dataset
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
 
-from mteb._create_dataloaders import _create_dataloader_from_texts
+from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
@@ -44,31 +45,36 @@ class PairClassificationEvaluator(Evaluator):
     The labels need to be 0 for dissimilar pairs and 1 for similar pairs.
 
     Args:
-        sentences1: The first column of sentences
-        sentences2: The second column of sentences
+        dataset: Dataset to evaluate.
+        input1_column_name: The first column of sentences
+        input2_column_name: The second column of sentences
         labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
         batch_size: Batch size used to compute embeddings
     """
 
     def __init__(
         self,
-        sentences1: list[str],
-        sentences2: list[str],
+        dataset: Dataset,
+        input1_column_name: str,
+        input2_column_name: str,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.sentences1 = sentences1
-        self.sentences2 = sentences2
+        self.dataset = dataset
+        self.input1_column_name = input1_column_name
+        self.input2_column_name = input2_column_name
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-        if len(self.sentences1) != len(self.sentences2):
+        if len(self.dataset[self.input1_column_name]) != len(
+            self.dataset[self.input2_column_name]
+        ):
             raise ValueError(
-                f"Sentences1 and Sentences2 must have the same length for task {task_metadata.name}"
+                f"First and second input columns must have the same length for task {task_metadata.name}"
             )
 
     def __call__(
@@ -76,20 +82,47 @@ class PairClassificationEvaluator(Evaluator):
         model: EncoderProtocol,
         encode_kwargs: dict[str, Any],
     ) -> PairClassificationDistances:
-        logger.info("Running pair classification - Encoding sentences...")
-        # datasets v4 will pass column objects, so we need to extract the text
-        all_sentences = self.sentences1[:] + self.sentences2[:]
-        len_sentences1 = len(self.sentences1)
-        embeddings = self._encode_unique_texts(
-            all_sentences,
-            model,
-            task_metadata=self.task_metadata,
-            hf_split=self.hf_split,
-            hf_subset=self.hf_subset,
-            **encode_kwargs,
-        )
-        embeddings1 = embeddings[:len_sentences1]
-        embeddings2 = embeddings[len_sentences1:]
+        logger.info("Running pair classification - Encoding inputs...")
+        if self.task_metadata.modalities == ["text"]:
+            # datasets v4 will pass column objects, so we need to extract the text
+            all_sentences = (
+                self.dataset[self.input1_column_name][:]
+                + self.dataset[self.input2_column_name][:]
+            )
+            len_sentences1 = len(self.dataset[self.input1_column_name])
+            embeddings = self._encode_unique_texts(
+                all_sentences,
+                model,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
+            embeddings1 = embeddings[:len_sentences1]
+            embeddings2 = embeddings[len_sentences1:]
+        else:
+            embeddings1 = model.encode(
+                create_dataloader(
+                    self.dataset,
+                    task_metadata=self.task_metadata,
+                    input_column=self.input1_column_name,
+                ),
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
+            embeddings2 = model.encode(
+                create_dataloader(
+                    self.dataset,
+                    task_metadata=self.task_metadata,
+                    input_column=self.input2_column_name,
+                ),
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
+                **encode_kwargs,
+            )
 
         logger.info("Running pair classification - Evaluating pair similarity...")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)

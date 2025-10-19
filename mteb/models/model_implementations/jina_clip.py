@@ -10,6 +10,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+JINA_CLIP_CITATION = """@article{koukounas2024jinaclip,
+  title={Jina CLIP: Your CLIP Model Is Also Your Text Retriever},
+  author={Koukounas, Andreas and Mastrapas, Georgios and Günther, Michael and Wang, Bo and Martens, Scott and Mohr, Isabelle and Sturua, Saba and Akram, Mohammad Kalim and Martínez, Joan Fontanals and Ognawala, Saahil and Guzman, Susana and Werk, Maximilian and Wang, Nan and Xiao, Han},
+  journal={arXiv preprint arXiv:2405.20204},
+  year={2024}
+}"""
+
 
 class JinaCLIPModel(AbsEncoder):
     def __init__(
@@ -140,4 +147,5 @@ jina_clip_v1 = ModelMeta(
         # HotpotQA
         # Natural Language Inference (NLI) dataset (Bowman et al., 2015)
     },
+    citation=JINA_CLIP_CITATION,
 )

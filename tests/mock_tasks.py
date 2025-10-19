@@ -13,12 +13,12 @@ from mteb.abstasks.image.image_text_pair_classification import (
 from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
+from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.regression import AbsTaskRegression
 from mteb.abstasks.retrieval import AbsTaskRetrieval, RetrievalSplitData
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
-from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.text.summarization import AbsTaskSummarization
 from mteb.abstasks.zeroshot_classification import (
     AbsTaskZeroShotClassification,
@@ -910,6 +910,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
                 "max_text_length": 29,
                 "unique_texts": 2,
             },
+            "image1_statistics": None,
             "text2_statistics": {
                 "total_text_length": 61,
                 "min_text_length": 24,
@@ -917,6 +918,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
                 "max_text_length": 37,
                 "unique_texts": 2,
             },
+            "image2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -969,6 +971,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                 "max_text_length": 29,
                 "unique_texts": 2,
             },
+            "image1_statistics": None,
             "text2_statistics": {
                 "total_text_length": 122,
                 "min_text_length": 24,
@@ -976,6 +979,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                 "max_text_length": 37,
                 "unique_texts": 2,
             },
+            "image2_statistics": None,
             "labels_statistics": {
                 "min_labels_per_text": 1,
                 "average_label_per_text": 1.0,
@@ -995,6 +999,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "max_text_length": 29,
                         "unique_texts": 2,
                     },
+                    "image1_statistics": None,
                     "text2_statistics": {
                         "total_text_length": 61,
                         "min_text_length": 24,
@@ -1002,6 +1007,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "max_text_length": 37,
                         "unique_texts": 2,
                     },
+                    "image2_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1021,6 +1027,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "max_text_length": 29,
                         "unique_texts": 2,
                     },
+                    "image1_statistics": None,
                     "text2_statistics": {
                         "total_text_length": 61,
                         "min_text_length": 24,
@@ -1028,6 +1035,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
                         "max_text_length": 37,
                         "unique_texts": 2,
                     },
+                    "image2_statistics": None,
                     "labels_statistics": {
                         "min_labels_per_text": 1,
                         "average_label_per_text": 1.0,
@@ -1070,6 +1078,80 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
             {
                 "eng": data,
                 "fra": data,
+            }
+        )
+        self.data_loaded = True
+
+
+class MockPairImageClassificationTask(AbsTaskPairClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": None,
+            "image1_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "text2_statistics": None,
+            "image2_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 1}, "0": {"count": 1}},
+            },
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="PairClassification",
+        name="MockPairImageClassificationTask",
+        main_score="similarity_ap",
+        **general_args,  # type: ignore
+    )
+    metadata.modalities = ["image"]
+
+    input1_column_name = "image1"
+    input2_column_name = "image2"
+
+    def load_data(self) -> None:
+        images1 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        images1 = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images1
+        ]
+
+        images2 = [self.np_rng.integers(0, 255, (100, 100, 3)) for _ in range(2)]
+        images2 = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images2
+        ]
+
+        labels = [1, 0]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "image1": images1,
+                        "image2": images2,
+                        "labels": labels,
+                    }
+                ),
             }
         )
         self.data_loaded = True

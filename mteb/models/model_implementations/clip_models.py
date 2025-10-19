@@ -105,6 +105,15 @@ class CLIPModel(AbsEncoder):
         raise ValueError
 
 
+CLIP_CITATION = """
+@article{radford2021learning,
+  title={Learning Transferable Visual Models From Natural Language Supervision},
+  author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+  journal={arXiv preprint arXiv:2103.00020},
+  year={2021}
+}"""
+
+
 clip_vit_large_patch14 = ModelMeta(
     loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-large-patch14",
@@ -125,6 +134,7 @@ clip_vit_large_patch14 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
+    citation=CLIP_CITATION,
 )
 
 clip_vit_base_patch32 = ModelMeta(
@@ -147,6 +157,7 @@ clip_vit_base_patch32 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
+    citation=CLIP_CITATION,
 )
 
 clip_vit_base_patch16 = ModelMeta(
@@ -169,4 +180,5 @@ clip_vit_base_patch16 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
+    citation=CLIP_CITATION,
 )

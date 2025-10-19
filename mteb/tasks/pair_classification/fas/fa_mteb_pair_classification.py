@@ -1,5 +1,5 @@
+from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 
 
 class CExaPPC(AbsTaskPairClassification):
@@ -241,22 +241,6 @@ class ParsinluEntail(AbsTaskPairClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        _dataset = {}
-        self.dataset = self.dataset.filter(lambda x: x["label"] != "n")
-        self.dataset = self.dataset.map(
-            lambda example: {"label": 1 if example["label"] == "e" else 0}
-        )
-        for split in self.metadata.eval_splits:
-            _dataset[split] = [
-                {
-                    "sentence1": self.dataset[split]["sent1"],
-                    "sentence2": self.dataset[split]["sent2"],
-                    "labels": self.dataset[split]["label"],
-                }
-            ]
-        self.dataset = _dataset
 
 
 class ParsinluQueryParaphPC(AbsTaskPairClassification):

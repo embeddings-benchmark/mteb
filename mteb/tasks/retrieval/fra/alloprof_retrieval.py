@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -39,32 +37,3 @@ class AlloprofRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-        # fetch both subsets of the dataset
-        corpus_raw = datasets.load_dataset(
-            name="documents",
-            **self.metadata.dataset,
-        )
-        queries_raw = datasets.load_dataset(
-            name="queries",
-            **self.metadata.dataset,
-        )
-        eval_split = self.metadata.eval_splits[0]
-        self.queries = {
-            eval_split: {str(q["id"]): q["text"] for q in queries_raw[eval_split]}
-        }
-        self.corpus = {
-            eval_split: {
-                str(d["uuid"]): {"text": d["text"]} for d in corpus_raw[eval_split]
-            }
-        }
-
-        self.relevant_docs = {eval_split: {}}
-        for q in queries_raw[eval_split]:
-            for r in q["relevant"]:
-                self.relevant_docs[eval_split][str(q["id"])] = {r: 1}
-
-        self.data_loaded = True
