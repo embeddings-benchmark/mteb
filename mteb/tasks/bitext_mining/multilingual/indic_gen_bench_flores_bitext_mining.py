@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
@@ -93,13 +91,11 @@ _LANGUAGES_MAPPING = get_lang_pairs()
 
 
 class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
-    parallel_subsets = True
-
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={
             "path": "mteb/IndicGenBenchFloresBitextMining",
-            "revision": "86a531bb76d2b52947ed750d201e08db504f9e36",
+            "revision": "07dcc23c08a2540ba37ebe1e487da9dc497cc15c",
         },
         description="Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google",
         reference="https://github.com/google-research-datasets/indic-gen-bench/",
@@ -127,10 +123,3 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.data_loaded = True
