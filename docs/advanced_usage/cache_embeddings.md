@@ -36,7 +36,7 @@ By default, the `CachedEmbeddingWrapper` uses a NumPy memmap backend (`NumpyCach
 
 ```python
 import mteb
-from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
+from mteb.models.cache_wrappers.cache_backends import FaissCache
 from mteb.models import CachedEmbeddingWrapper
 
 model = mteb.get_model(...)
