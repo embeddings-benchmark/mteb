@@ -1,3 +1,5 @@
+import datasets
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
@@ -125,3 +127,10 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
 }
 """,
     )
+
+    def load_data(self) -> None:
+        if self.data_loaded:
+            return
+
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
+        self.data_loaded = True
