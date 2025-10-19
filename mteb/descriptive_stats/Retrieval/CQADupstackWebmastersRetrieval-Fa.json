@@ -1,31 +1,30 @@
 {
     "test": {
-        "num_samples": 17907,
-        "number_of_characters": 11695225,
-        "num_documents": 17405,
-        "min_document_length": 14,
-        "average_document_length": 670.4368859523125,
-        "max_document_length": 5076,
-        "unique_documents": 17405,
-        "num_queries": 502,
-        "min_query_length": 14,
-        "average_query_length": 52.332669322709165,
-        "max_query_length": 138,
-        "unique_queries": 506,
-        "none_queries": 4,
-        "num_relevant_docs": 1395,
-        "min_relevant_docs_per_query": 1,
-        "average_relevant_docs_per_query": 2.7569169960474307,
-        "max_relevant_docs_per_query": 207,
-        "unique_relevant_docs": 1395,
-        "num_instructions": null,
-        "min_instruction_length": null,
-        "average_instruction_length": null,
-        "max_instruction_length": null,
-        "unique_instructions": null,
-        "num_top_ranked": null,
-        "min_top_ranked_per_query": null,
-        "average_top_ranked_per_query": null,
-        "max_top_ranked_per_query": null
+        "num_samples": 17911,
+        "number_of_characters": 11695046,
+        "documents_text_statistics": {
+            "total_text_length": 11668775,
+            "min_text_length": 13,
+            "average_text_length": 670.4266015512784,
+            "max_text_length": 5076,
+            "unique_texts": 17403
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 26271,
+            "min_text_length": 0,
+            "average_text_length": 51.91897233201581,
+            "max_text_length": 138,
+            "unique_texts": 503
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1395,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 2.7569169960474307,
+            "max_relevant_docs_per_query": 207,
+            "unique_relevant_docs": 1395
+        },
+        "top_ranked_statistics": null
     }
 }
