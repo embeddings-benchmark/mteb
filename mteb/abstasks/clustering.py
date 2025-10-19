@@ -1,5 +1,6 @@
 import itertools
 import logging
+import os
 import random
 from collections import defaultdict
 from pathlib import Path
@@ -31,6 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 MultilingualDataset = dict[HFSubset, DatasetDict]
+OMP_NUM_THREADS = 4
 
 
 def _evaluate_clustering_bootstrapped(
@@ -53,6 +55,17 @@ def _evaluate_clustering_bootstrapped(
         - A dictionary where keys are level names (e.g., "Level 0", "Level 1", etc.) and values are lists of V-measure scores for each clustering experiment at that level.
         - A dictionary where keys are level names and values are lists of cluster assignments for each clustering experiment at that level.
     """
+    # set OMP_NUM_THREADS for reproductibility
+    if "OMP_NUM_THREADS" not in os.environ:
+        logger.info(
+            f"Setting OMP_NUM_THREADS to {OMP_NUM_THREADS} for clustering to ensure reproducibility."
+        )
+        os.environ["OMP_NUM_THREADS"] = str(OMP_NUM_THREADS)
+    else:
+        logger.info(
+            f"Using existing OMP_NUM_THREADS={os.environ['OMP_NUM_THREADS']} for clustering, this may lead to non-reproducible results. Set it to {OMP_NUM_THREADS} to ensure reproducibility."
+        )
+
     v_measures = defaultdict(list)
     cluster_assignments = defaultdict(list)
     if max_depth is not None:
