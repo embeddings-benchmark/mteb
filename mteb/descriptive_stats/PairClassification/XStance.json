@@ -1,8 +1,8 @@
 {
     "test": {
         "num_samples": 5542,
-        "unique_pairs": 5542,
         "number_of_characters": 1645233,
+        "unique_pairs": 5542,
         "text1_statistics": {
             "total_text_length": 686074,
             "min_text_length": 48,
@@ -10,7 +10,6 @@
             "max_text_length": 403,
             "unique_texts": 418
         },
-        "image1_statistics": null,
         "text2_statistics": {
             "total_text_length": 959159,
             "min_text_length": 50,
@@ -18,7 +17,6 @@
             "max_text_length": 500,
             "unique_texts": 5542
         },
-        "image2_statistics": null,
         "labels_statistics": {
             "min_labels_per_text": 1,
             "average_label_per_text": 1.0,
@@ -36,8 +34,8 @@
         "hf_subset_descriptive_stats": {
             "de": {
                 "num_samples": 2048,
-                "unique_pairs": 2048,
                 "number_of_characters": 564191,
+                "unique_pairs": 2048,
                 "text1_statistics": {
                     "total_text_length": 231088,
                     "min_text_length": 48,
@@ -45,7 +43,6 @@
                     "max_text_length": 208,
                     "unique_texts": 96
                 },
-                "image1_statistics": null,
                 "text2_statistics": {
                     "total_text_length": 333103,
                     "min_text_length": 50,
@@ -53,7 +50,6 @@
                     "max_text_length": 500,
                     "unique_texts": 2048
                 },
-                "image2_statistics": null,
                 "labels_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -71,8 +67,8 @@
             },
             "fr": {
                 "num_samples": 2048,
-                "unique_pairs": 2048,
                 "number_of_characters": 656746,
+                "unique_pairs": 2048,
                 "text1_statistics": {
                     "total_text_length": 261898,
                     "min_text_length": 56,
@@ -80,7 +76,6 @@
                     "max_text_length": 351,
                     "unique_texts": 156
                 },
-                "image1_statistics": null,
                 "text2_statistics": {
                     "total_text_length": 394848,
                     "min_text_length": 50,
@@ -88,7 +83,6 @@
                     "max_text_length": 500,
                     "unique_texts": 2048
                 },
-                "image2_statistics": null,
                 "labels_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,
@@ -106,8 +100,8 @@
             },
             "it": {
                 "num_samples": 1446,
-                "unique_pairs": 1446,
                 "number_of_characters": 424296,
+                "unique_pairs": 1446,
                 "text1_statistics": {
                     "total_text_length": 193088,
                     "min_text_length": 60,
@@ -115,7 +109,6 @@
                     "max_text_length": 403,
                     "unique_texts": 166
                 },
-                "image1_statistics": null,
                 "text2_statistics": {
                     "total_text_length": 231208,
                     "min_text_length": 50,
@@ -123,7 +116,6 @@
                     "max_text_length": 500,
                     "unique_texts": 1446
                 },
-                "image2_statistics": null,
                 "labels_statistics": {
                     "min_labels_per_text": 1,
                     "average_label_per_text": 1.0,

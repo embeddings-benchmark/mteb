@@ -7,7 +7,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         name="TopiOCQA",
         dataset={
             "path": "mteb/TopiOCQA",
-            "revision": "53887a22a3e277dc96ed42854f562308699dba20",
+            "revision": "3f96cf4eb4d53dce45603e217cb050d156f5a443",
         },
         reference="https://mcgill-nlp.github.io/topiocqa",
         description=(

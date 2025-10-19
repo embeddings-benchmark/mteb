@@ -111,6 +111,9 @@ def _create_text_dataloader_for_queries(
     )
 
 
+_warned_about_user_role = False
+
+
 def _convert_conv_history_to_query(
     row: dict[str, list[str] | Conversation],
 ) -> dict[str, str | Conversation]:
@@ -122,6 +125,8 @@ def _convert_conv_history_to_query(
     Returns:
         The updated row with the "query" and "text" fields set to the conversation string, and the "conversation" field set to the list of ConversationTurn.
     """
+    global _warned_about_user_role
+
     conversation = row["text"]
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
@@ -130,10 +135,11 @@ def _convert_conv_history_to_query(
         current_conversation = [
             ConversationTurn(role="user", content=message) for message in conversation
         ]
-
-        logger.warning(
-            "Conversations are a list of strings. Used 'user' role for all turns."
-        )
+        if not _warned_about_user_role:
+            logger.warning(
+                "Conversations are a list of strings. Used 'user' role for all turns."
+            )
+            _warned_about_user_role = True
     # otherwise, it's a list of dictionaries, which we need to convert to strings
     elif isinstance(conversation, list) and isinstance(conversation[0], dict):
         conv = []
