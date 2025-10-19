@@ -29,3 +29,16 @@ vectors = np.asarray(vector_map.vectors)
 zero_mask = (vectors == 0).all(axis=1)
 vectors = vectors[~zero_mask]
 ```
+
+### Different Cache backends
+
+By default, the `CachedEmbeddingWrapper` uses a NumPy memmap backend (`NumpyCache`) to store embeddings. However, you can also use other backends. Currently, only `FAISS` is implemented, but you can provide your own custom backend that implements the `CacheBackendProtocol` by passing it as the `search_backend` parameter when initializing the `CachedEmbeddingWrapper`. For example:
+
+```python
+import mteb
+from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
+from mteb.models import CachedEmbeddingWrapper
+
+model = mteb.get_model(...)
+cachedmodel = CachedEmbeddingWrapper(model, "cache_dir", cache_backend=FaissCache)
+```
