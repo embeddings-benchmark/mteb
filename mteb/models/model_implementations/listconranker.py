@@ -9,6 +9,13 @@ from mteb.types import BatchedInput, PromptType
 
 from .rerankers_custom import RerankerWrapper
 
+LISTCONRANKER_CITATION = """@article{liu2025listconranker,
+  title={ListConRanker: A Contrastive Text Reranker with Listwise Encoding},
+  author={Liu, Junlong and Ma, Yue and Zhao, Ruihui and Zheng, Junhao and Ma, Qianli and Kang, Yangyang},
+  journal={arXiv preprint arXiv:2501.07111},
+  year={2025}
+}"""
+
 
 class ListConRanker(RerankerWrapper):
     def __init__(self, model_name_or_path: str, **kwargs) -> None:
@@ -122,4 +129,5 @@ listconranker = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     is_cross_encoder=True,
+    citation=LISTCONRANKER_CITATION,
 )

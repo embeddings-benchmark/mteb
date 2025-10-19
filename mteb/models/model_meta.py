@@ -62,7 +62,7 @@ class ModelMeta(BaseModel):
     """The model metadata object.
 
     Attributes:
-        loader: the function that loads the model. If None it will assume that the model is not implemented. Cross-encoders like models would implement *only* `SearchInterface`.
+        loader: The function that loads the model. If None it assumes that the model is not implemented.
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or

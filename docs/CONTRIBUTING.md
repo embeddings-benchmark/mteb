@@ -39,6 +39,8 @@ This command is equivalent to the command run during CI. It will check for code 
 MTEB follows [semantic versioning](https://semver.org/). This means that the version number of the package is composed of three numbers: `MAJOR.MINOR.PATCH`. This allows us to use existing tools to manage the versioning of the package automatically. For maintainers (and contributors), this means that commits with the following prefixes will automatically trigger a version bump:
 
 - `fix:` for patches
+- `model:` for new models
+- `dataset:` for new datasets and benchmarks
 - `feat:` for minor versions
 - `breaking:` for major versions
 

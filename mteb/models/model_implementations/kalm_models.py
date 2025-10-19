@@ -12,6 +12,13 @@ from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
+KALM_EMBEDDING_CITATION = """@article{hu2025kalm,
+  title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
+  author={Hu, Xinshuo and Shan, Zifei and Zhao, Xinping and Sun, Zetian and Liu, Zhenyu and Li, Dongfang and Ye, Shaolin and Wei, Xinyuan and Chen, Qian and Hu, Baotian and others},
+  journal={arXiv preprint arXiv:2501.01028},
+  year={2025}
+}"""
+
 
 class KALMWrapper(InstructSentenceTransformerModel):
     def encode(
@@ -673,6 +680,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     training_datasets=kalm_training_data,  # Replace with actual dataset if available
     adapted_from="Qwen/Qwen2-0.5B",
     superseded_by=None,
+    citation=KALM_EMBEDDING_CITATION,
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
@@ -696,6 +704,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
     training_datasets=kalm_training_data,
     adapted_from="Qwen/Qwen2-0.5B",
     superseded_by=None,
+    citation=KALM_EMBEDDING_CITATION,
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
@@ -725,6 +734,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1_5 = ModelMeta(
     training_datasets=kalm_training_data,
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
     superseded_by=None,
+    citation=KALM_EMBEDDING_CITATION,
 )
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
@@ -754,4 +764,5 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
     training_datasets=kalm_v2_training_data,
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5",
     superseded_by=None,
+    citation=KALM_EMBEDDING_CITATION,
 )

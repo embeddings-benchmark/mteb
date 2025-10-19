@@ -1,3 +1,4 @@
+import hashlib
 import logging
 from collections import defaultdict
 from pathlib import Path
@@ -7,10 +8,11 @@ from datasets import Dataset
 from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
-from mteb._evaluators.text.pair_classification_evaluator import (
+from mteb._evaluators.pair_classification_evaluator import (
     PairClassificationDistances,
 )
 from mteb.abstasks._statistics_calculation import (
+    calculate_image_statistics,
     calculate_label_statistics,
     calculate_text_statistics,
 )
@@ -18,6 +20,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import (
+    ImageStatistics,
     LabelStatistics,
     SplitDescriptiveStatistics,
     TextStatistics,
@@ -32,7 +35,7 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
-        unique_pairs: Number of unique pairs
+        unique_text_pairs: Number of unique pairs
 
         text1_statistics: Statistics for sentence1
         text2_statistics: Statistics for sentence2
@@ -43,8 +46,10 @@ class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     number_of_characters: int
     unique_pairs: int
 
-    text1_statistics: TextStatistics
-    text2_statistics: TextStatistics
+    text1_statistics: TextStatistics | None
+    image1_statistics: ImageStatistics | None
+    text2_statistics: TextStatistics | None
+    image2_statistics: ImageStatistics | None
     labels_statistics: LabelStatistics
 
 
@@ -56,15 +61,15 @@ class AbsTaskPairClassification(AbsTask):
 
     Attributes:
         dataset: A HuggingFace dataset containing the data for the task. Should contain the following columns: sentence1, sentence2, labels.
-        sentence1_column_name: The name of the column containing the first sentence in the pair.
-        sentence2_column_name: The name of the column containing the second sentence in the pair.
+        input1_column_name: The name of the column containing the first sentence in the pair.
+        input2_column_name: The name of the column containing the second sentence in the pair.
         label_column_name: The name of the column containing the labels for the pairs. Labels should be 0 or 1.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    sentence1_column_name: str = "sentence1"
-    sentence2_column_name: str = "sentence2"
+    input1_column_name: str = "sentence1"
+    input2_column_name: str = "sentence2"
     label_column_name: str = "labels"
 
     def _evaluate_subset(
@@ -78,10 +83,13 @@ class AbsTaskPairClassification(AbsTask):
         prediction_folder: Path | None = None,
         **kwargs,
     ) -> dict[str, float]:
-        data_split = data_split[0] if len(data_split) == 1 else data_split
+        if self.metadata.modalities == ["text"]:
+            # for compatibility with v1 version where datasets were stored in a single row
+            data_split = data_split[0] if len(data_split) == 1 else data_split
         evaluator = PairClassificationEvaluator(
-            data_split[self.sentence1_column_name],
-            data_split[self.sentence2_column_name],
+            data_split,
+            self.input1_column_name,
+            self.input2_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
@@ -146,25 +154,31 @@ class AbsTaskPairClassification(AbsTask):
             dataset = defaultdict(list)
             for hf_subset in self.metadata.eval_langs:
                 cur_dataset = self.dataset[hf_subset][split]
-                if isinstance(cur_dataset, list):
+                # for compatibility with v1 version where datasets were stored in a single row
+                if isinstance(cur_dataset, list) or len(cur_dataset) == 1:
                     cur_dataset = cur_dataset[0]
-                for key, value in cur_dataset.items():
-                    dataset[key].extend(value[0] if len(value) == 1 else value)
+                if isinstance(cur_dataset, Dataset):
+                    for row in cur_dataset:
+                        for k, v in row.items():
+                            dataset[k].append(v)
+                else:
+                    for key, value in cur_dataset.items():
+                        dataset[key].extend(value[0] if len(value) == 1 else value)
         else:
             dataset = self.dataset[split]
 
         if isinstance(dataset, list):
             dataset = dataset[0]
 
-        sentence1 = (
-            dataset[self.sentence1_column_name][0]
-            if len(dataset[self.sentence1_column_name]) == 1
-            else dataset[self.sentence1_column_name]
+        input1 = (
+            dataset[self.input1_column_name][0]
+            if len(dataset[self.input1_column_name]) == 1
+            else dataset[self.input1_column_name]
         )
-        sentence2 = (
-            dataset[self.sentence2_column_name][0]
-            if len(dataset[self.sentence2_column_name]) == 1
-            else dataset[self.sentence2_column_name]
+        input2 = (
+            dataset[self.input2_column_name][0]
+            if len(dataset[self.input2_column_name]) == 1
+            else dataset[self.input2_column_name]
         )
         labels = (
             dataset[self.label_column_name][0]
@@ -172,17 +186,45 @@ class AbsTaskPairClassification(AbsTask):
             else dataset[self.label_column_name]
         )
 
-        text1_statistics = calculate_text_statistics(sentence1)
-        text2_statistics = calculate_text_statistics(sentence2)
-        return PairClassificationDescriptiveStatistics(
-            num_samples=len(sentence1),
-            number_of_characters=(
+        text1_statistics = None
+        text2_statistics = None
+        image1_statistics = None
+        image2_statistics = None
+        number_of_characters = None
+        unique_pairs = None
+        if self.metadata.modalities == ["text"]:
+            text1_statistics = calculate_text_statistics(input1)
+            text2_statistics = calculate_text_statistics(input2)
+            number_of_characters = (
                 text1_statistics["total_text_length"]
                 + text2_statistics["total_text_length"]
-            ),
-            unique_pairs=len(set(zip(sentence1, sentence2))),
+            )
+            unique_pairs = len(set(zip(input1, input2)))
+
+        elif self.metadata.modalities == ["image"]:
+            image1_statistics = calculate_image_statistics(input1)
+            image2_statistics = calculate_image_statistics(input2)
+
+            def _compute_image_hash(inputs: list) -> list[str]:
+                hashes = set()
+                for img in inputs:
+                    img_bytes = img.tobytes()
+                    img_hash = hashlib.md5(img_bytes).hexdigest()
+                    hashes.add(img_hash)
+                return list(hashes)
+
+            image_1_hashes = _compute_image_hash(input1)
+            image_2_hashes = _compute_image_hash(input2)
+            unique_pairs = len(set(zip(image_1_hashes, image_2_hashes)))
+
+        return PairClassificationDescriptiveStatistics(
+            num_samples=len(input1),
+            unique_pairs=unique_pairs,
+            number_of_characters=number_of_characters,
             text1_statistics=text1_statistics,
+            image1_statistics=image1_statistics,
             text2_statistics=text2_statistics,
+            image2_statistics=image2_statistics,
             labels_statistics=calculate_label_statistics(labels),
         )
 
@@ -200,8 +242,8 @@ class AbsTaskPairClassification(AbsTask):
         self._upload_dataset_to_hub(
             repo_name,
             [
-                self.sentence1_column_name,
-                self.sentence2_column_name,
+                self.input1_column_name,
+                self.input2_column_name,
                 self.label_column_name,
             ],
         )

@@ -8,6 +8,16 @@ from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DA
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 
+QZHOU_EMBEDDING_CITATION = """@misc{yu2025qzhouembeddingtechnicalreport,
+      title={QZhou-Embedding Technical Report},
+      author={Peng Yu and En Xu and Bin Chen and Haibiao Chen and Yinfei Xu},
+      year={2025},
+      eprint={2508.21632},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2508.21632},
+}"""
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -71,6 +81,7 @@ QZhou_Embedding = ModelMeta(
     # Not in MTEB:
     # "FreedomIntelligence/Huatuo26M-Lite",
     # "infgrad/retrieval_data_llm",
+    citation=QZHOU_EMBEDDING_CITATION,
 )
 
 QZhou_Embedding_Zh = ModelMeta(
@@ -96,4 +107,5 @@ QZhou_Embedding_Zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=qzhou_zh_training_data,
+    citation=QZHOU_EMBEDDING_CITATION,
 )

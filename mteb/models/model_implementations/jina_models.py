@@ -573,6 +573,15 @@ jina_embeddings_v4 = ModelMeta(
     public_training_data=None,
     training_datasets=JinaV4_TRAINING_DATA,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
+    citation="""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
+      year={2025},
+      eprint={2506.18902},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.18902},
+}""",
 )
 
 
@@ -694,6 +703,14 @@ jina_embeddings_v2_base_en = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@misc{günther2023jina,
+      title={Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents},
+      author={Michael Günther and Jackmin Ong and Isabelle Mohr and Alaeddine Abdessalem and Tanguy Abel and Mohammad Kalim Akram and Susana Guzman and Georgios Mastrapas and Saba Sturua and Bo Wang and Maximilian Werk and Nan Wang and Han Xiao},
+      year={2023},
+      eprint={2310.19923},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
@@ -749,6 +766,14 @@ jina_embeddings_v2_small_en = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@misc{günther2023jina,
+      title={Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents},
+      author={Michael Günther and Jackmin Ong and Isabelle Mohr and Alaeddine Abdessalem and Tanguy Abel and Mohammad Kalim Akram and Susana Guzman and Georgios Mastrapas and Saba Sturua and Bo Wang and Maximilian Werk and Nan Wang and Han Xiao},
+      year={2023},
+      eprint={2310.19923},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
@@ -797,6 +822,14 @@ jina_embedding_b_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@misc{günther2023jina,
+      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
+      year={2023},
+      eprint={2307.11224},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
@@ -845,4 +878,12 @@ jina_embedding_s_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
+    citation="""@misc{günther2023jina,
+      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
+      year={2023},
+      eprint={2307.11224},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )

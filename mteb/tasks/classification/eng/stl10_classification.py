@@ -45,3 +45,4 @@ class STL10Classification(AbsTaskClassification):
 }
 """,
     )
+    input_column_name = "image"
