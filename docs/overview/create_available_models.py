@@ -88,7 +88,9 @@ def required_memory_string(mem_in_mb: int | None) -> str:
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     license = meta.license or "not specified"
-    model_name_w_link = f"[`{meta.name}`]({meta.reference})" if meta.reference else meta.name
+    model_name_w_link = (
+        f"[`{meta.name}`]({meta.reference})" if meta.reference else meta.name
+    )
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
