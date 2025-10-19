@@ -96,9 +96,9 @@ For more on how to use the CLI check out the [related documentation](https://emb
 [Benchmarks]: https://embeddings-benchmark.github.io/mteb/overview/available_benchmarks/
 [Models]: https://embeddings-benchmark.github.io/mteb/overview/available_models/text/
 [Contributing]: docs/CONTRIBUTING.md
-[Adding a model]: docs/adding_a_model.md
-[Adding a dataset]: docs/adding_a_dataset.md
-[Adding a benchmark]: docs/adding_a_benchmark.md
+[Adding a model]: docs/contributing/adding_a_model.md
+[Adding a dataset]: docs/contributing/adding_a_dataset.md
+[Adding a benchmark]: docs/contributing/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 
 ## Citing

@@ -3,7 +3,7 @@
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:
 
 1. Add the [model meta](#adding-a-model-implementation) to `mteb`
-2. [Evaluate](./usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](./usage/selecting_tasks.md#selecting-a-benchmark)
+2. [Evaluate](../usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
 

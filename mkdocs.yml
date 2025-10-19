@@ -84,9 +84,9 @@ nav:
         - Two stage reranking: advanced_usage/two_stage_reranking.md
         - Cache embeddings: advanced_usage/cache_embeddings.md
   - Contributing:
-      - Adding a Model: adding_a_model.md
-      - Adding a Task: adding_a_dataset.md
-      - Adding a Benchmark: adding_a_benchmark.md
+      - Adding a Model: contributing/adding_a_model.md
+      - Adding a Task: contributing/adding_a_dataset.md
+      - Adding a Benchmark: contributing/adding_a_benchmark.md
       - Guidelines: CONTRIBUTING.md
   - Overview:
       - overview/index.md

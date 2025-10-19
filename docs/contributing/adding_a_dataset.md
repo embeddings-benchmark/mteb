@@ -10,13 +10,13 @@ To add a new dataset to MTEB, you need to do three things:
 If you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions).
 
 !!! Note
-    When we mention adding a dataset we refer to a subclass of one of the [abstasks](./api/task.md#multimodal-tasks).
+    When we mention adding a dataset we refer to a subclass of one of the [abstasks](../api/task.md#multimodal-tasks).
 
 ## Creating a new subclass
 
 ### A Simple Example
 
-To add a new task, you need to implement a new class that inherits from the [`AbsTask`][mteb.AbsTask] associated with the task type (e.g. [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval] for retrieval tasks). You can find the supported task types in [here](./api/task.md#multimodal-tasks).
+To add a new task, you need to implement a new class that inherits from the [`AbsTask`][mteb.AbsTask] associated with the task type (e.g. [`AbsTaskRetrieval`][mteb.abstasks.retrieval.AbsTaskRetrieval] for retrieval tasks). You can find the supported task types in [here](../api/task.md#multimodal-tasks).
 
 ??? example "SciDocs Reranking Task"
     ```python
