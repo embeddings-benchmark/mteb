@@ -184,6 +184,16 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         )
 
 
+COLPALI_CITATION = """
+@misc{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C\'eline and Colombo, Pierre},
+  year={2024},
+  eprint={2407.01449},
+  archivePrefix={arXiv},
+  primaryClass={cs.IR}
+}"""
+
 COLPALI_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
     "DocVQA",
@@ -215,6 +225,7 @@ colpali_v1_1 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )
 
 colpali_v1_2 = ModelMeta(
@@ -240,6 +251,7 @@ colpali_v1_2 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )
 
 colpali_v1_3 = ModelMeta(
@@ -265,4 +277,5 @@ colpali_v1_3 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )

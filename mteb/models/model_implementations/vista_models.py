@@ -10,6 +10,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+VISTA_CITATION = """@article{zhou2024vista,
+  title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
+  author={Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
+  journal={arXiv preprint arXiv:2406.04292},
+  year={2024}
+}"""
+
 
 def vista_loader(model_name, **kwargs):
     try:  # a temporal fix for the dependency issues of vista models.
@@ -257,6 +264,7 @@ visualized_bge_base = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
+    citation=VISTA_CITATION,
 )
 
 visualized_bge_m3 = ModelMeta(
@@ -283,4 +291,5 @@ visualized_bge_m3 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
+    citation=VISTA_CITATION,
 )

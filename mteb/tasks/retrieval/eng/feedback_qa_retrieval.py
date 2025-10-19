@@ -10,8 +10,8 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         description="Using Interactive Feedback to Improve the Accuracy and Explainability of Question Answering Systems Post-Deployment",
         reference="https://arxiv.org/abs/2204.03025",
         dataset={
-            "path": "lt2c/fqa",
-            "revision": "a5cb615179f91ae10605b39cf21e40e3ebb577e3",
+            "path": "mteb/FeedbackQARetrieval",
+            "revision": "8a17afc1b3e112c65fd6938b75692846afda97f8",
         },
         type="Retrieval",
         category="t2t",

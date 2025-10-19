@@ -131,4 +131,12 @@ Youtu_Embedding_V1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
+    citation="""@misc{zhang2025codiemb,
+  title={CoDiEmb: A Collaborative yet Distinct Framework for Unified Representation Learning in Information Retrieval and Semantic Textual Similarity},
+  author={Zhang, Bowen and Song, Zixin and Chen, Chunquan and Zhang, Qian-Wen and Yin, Di and Sun, Xing},
+  year={2025},
+  eprint={2508.11442},
+  archivePrefix={arXiv},
+  url={https://arxiv.org/abs/2508.11442},
+}""",
 )

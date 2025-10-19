@@ -1,38 +1,52 @@
 {
     "test": {
         "num_samples": 7178,
-        "unique_num_labels": 7,
-        "min_image_width": 48,
-        "average_image_width": 48.0,
-        "max_image_width": 48,
-        "min_image_height": 48,
-        "average_image_height": 48.0,
-        "max_image_height": 48,
-        "min_label_text_length": 30,
-        "average_label_text_length": 32.57142857142857,
-        "max_label_text_length": 35,
-        "labels": {
-            "0": {
-                "count": 958
-            },
-            "1": {
-                "count": 111
-            },
-            "2": {
-                "count": 1024
-            },
-            "3": {
-                "count": 1774
-            },
-            "4": {
-                "count": 1233
-            },
-            "5": {
-                "count": 1247
-            },
-            "6": {
-                "count": 831
+        "number_of_characters": null,
+        "text_statistics": null,
+        "image_statistics": {
+            "min_image_width": 48,
+            "average_image_width": 48.0,
+            "max_image_width": 48,
+            "min_image_height": 48,
+            "average_image_height": 48.0,
+            "max_image_height": 48,
+            "unique_images": 7092
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "0": {
+                    "count": 958
+                },
+                "1": {
+                    "count": 111
+                },
+                "2": {
+                    "count": 1024
+                },
+                "3": {
+                    "count": 1774
+                },
+                "4": {
+                    "count": 1233
+                },
+                "5": {
+                    "count": 1247
+                },
+                "6": {
+                    "count": 831
+                }
             }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 228,
+            "min_text_length": 30,
+            "average_text_length": 32.57142857142857,
+            "max_text_length": 35,
+            "unique_texts": 7
         }
     }
 }

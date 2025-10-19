@@ -92,6 +92,13 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
+QWEN3_CITATION = """@article{qwen3embedding,
+  title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
+  author={Zhang, Yanzhao and Li, Mingxin and Long, Dingkun and Zhang, Xin and Lin, Huan and Yang, Baosong and Xie, Pengjun and Yang, An and Liu, Dayiheng and Lin, Junyang and Huang, Fei and Zhou, Jingren},
+  journal={arXiv preprint arXiv:2506.05176},
+  year={2025}
+}"""
+
 training_data = {
     "T2Retrieval",
     "DuRetrieval",
@@ -143,6 +150,7 @@ Qwen3_Embedding_0B6 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
+    citation=QWEN3_CITATION,
 )
 
 Qwen3_Embedding_4B = ModelMeta(
@@ -164,6 +172,7 @@ Qwen3_Embedding_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
+    citation=QWEN3_CITATION,
 )
 
 Qwen3_Embedding_8B = ModelMeta(
@@ -185,4 +194,5 @@ Qwen3_Embedding_8B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
+    citation=QWEN3_CITATION,
 )

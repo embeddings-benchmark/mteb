@@ -22,7 +22,7 @@ This section goes through new features added in v2. Below we give an overview of
     - [Reuploading datasets](#reuploading-datasets)
     - [Converting Reranking datasets to new format](#converting-reranking-datasets-to-new-format)
 
-What are the reasons for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there are multiple important areas to expand in, e.g. [adding new benchmark for image embeddings](https://arxiv.org/abs/2504.10471), support new model types in general making the library more accessible.
+What are the reasons for the changes? Generally the many inconsistencies in the library made it hard to maintain without introducing breaking changes and we do think that there are multiple important areas to expand in, e.g. [adding new benchmark for image embeddings][@mieb_2025], support new model types in general making the library more accessible.
 We have already been able to add many new feature in v2.0, but hope that this new version allow us to keep doing so without breaking backward compatibility. See [upgrading from v1](#upgrading-from-v1) for specific deprecations and how to fix them.
 
 
@@ -42,10 +42,10 @@ from mteb.cache import ResultCache
 model = ...
 tasks = ...
 
-cache = ResultCache(cache_path="~/.cache/mteb") # default
+cache = ResultCache(cache_path="~/.cache/mteb")  # default
 
 # simple evaluate with cache
-results = mteb.evaluate(model, tasks, cache=cache) # only runs if results not in cache
+results = mteb.evaluate(model, tasks, cache=cache)  # only runs if results not in cache
 ```
 
 It allow you to access the online cache so you don't have to rerun existing models.
@@ -61,7 +61,7 @@ results = mteb.evaluate(model, tasks, cache=cache)
 Models in mteb who implements the [`Encoder`][mteb.models.EncoderProtocol] protocol now supports multimodal input With the model protocol roughly looking like so:
 
 ```py
-class EncoderProtocol(Protocol): # simplified
+class EncoderProtocol(Protocol):  # simplified
     """The interface for an encoder in MTEB."""
 
     def encode(self, inputs: DataLoader[BatchedInput], ...) -> Array: ...

@@ -38,6 +38,7 @@ from .mock_tasks import (
     MockMultilingualSTSTask,
     MockMultilingualSummarizationTask,
     MockPairClassificationTask,
+    MockPairImageClassificationTask,
     MockRegressionTask,
     MockRerankingTask,
     MockRetrievalDialogTask,
@@ -133,6 +134,7 @@ MOCK_MIEB_TASK_GRID = [
     MockMultilingualImageMultilabelClassificationTask(),
     MockImageClusteringFastTask(),
     MockImageRegressionTask(),
+    MockPairImageClassificationTask(),
 ]
 
 MOCK_MIEB_TASK_GRID_AS_STRING = [

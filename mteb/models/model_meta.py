@@ -62,7 +62,7 @@ class ModelMeta(BaseModel):
     """The model metadata object.
 
     Attributes:
-        loader: the function that loads the model. If None it will assume that the model is not implemented. Cross-encoders like models would implement *only* `SearchInterface`.
+        loader: The function that loads the model. If None it assumes that the model is not implemented.
         loader_kwargs: The keyword arguments to pass to the loader function.
         name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
@@ -92,6 +92,7 @@ class ModelMeta(BaseModel):
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
         is_cross_encoder: Whether the model can act as a cross-encoder or not.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
+        contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -121,6 +122,7 @@ class ModelMeta(BaseModel):
     modalities: list[Modalities] = ["text"]
     is_cross_encoder: bool | None = None
     citation: str | None = None
+    contacts: list[str] | None = None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod

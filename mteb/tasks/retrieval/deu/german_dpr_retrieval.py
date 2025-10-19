@@ -11,7 +11,7 @@ class GermanDPR(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/deepset/germandpr",
         dataset={
             "path": "mteb/GermanDPR",
-            "revision": "bde7c447186671b585e412afc39ce7b8bad517ee",
+            "revision": "64a4860e55ba6d8fcb923d5306d08e08b1c72794",
         },
         type="Retrieval",
         category="t2t",

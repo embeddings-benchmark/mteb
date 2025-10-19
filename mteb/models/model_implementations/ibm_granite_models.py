@@ -4,6 +4,13 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+GRANITE_EMBEDDING_CITATION = """@article{awasthy2025graniteembedding,
+  title={Granite Embedding Models},
+  author={Awasthy, Parul and Trivedi, Aashka and Li, Yulong and Bornea, Mihaela and Cox, David and Daniels, Abraham and Franz, Martin and Goodhart, Gabe and Iyer, Bhavani and Kumar, Vishwajeet and Lastras, Luis and McCarley, Scott and Murthy, Rudra and P, Vignesh and Rosenthal, Sara and Roukos, Salim and Sen, Jaydeep and Sharma, Sukriti and Sil, Avirup and Soule, Kate and Sultan, Arafat and Florian, Radu},
+  journal={arXiv preprint arXiv:2502.20204},
+  year={2025}
+}"""
+
 GRANITE_LANGUAGES = [
     "ara-Latn",
     "ces-Latn",
@@ -105,6 +112,7 @@ granite_107m_multilingual = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
+    citation=GRANITE_EMBEDDING_CITATION,
 )
 
 granite_278m_multilingual = ModelMeta(
@@ -128,6 +136,7 @@ granite_278m_multilingual = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
+    citation=GRANITE_EMBEDDING_CITATION,
 )
 
 granite_30m_english = ModelMeta(
@@ -151,6 +160,7 @@ granite_30m_english = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
+    citation=GRANITE_EMBEDDING_CITATION,
 )
 
 granite_125m_english = ModelMeta(
@@ -174,6 +184,7 @@ granite_125m_english = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
+    citation=GRANITE_EMBEDDING_CITATION,
 )
 
 
@@ -198,6 +209,7 @@ granite_english_r2 = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
+    citation=GRANITE_EMBEDDING_CITATION,
 )
 
 granite_small_english_r2 = ModelMeta(
@@ -221,4 +233,5 @@ granite_small_english_r2 = ModelMeta(
     public_training_data=None,
     use_instructions=False,
     training_datasets=granite_training_data,
+    citation=GRANITE_EMBEDDING_CITATION,
 )

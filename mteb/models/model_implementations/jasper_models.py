@@ -102,4 +102,15 @@ jasper_en_v1 = ModelMeta(
     # more codes https://huggingface.co/NovaSearch/jasper_en_vision_language_v1/commit/da9b77d56c23d9398fa8f93af449102784f74e1d
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data="https://huggingface.co/datasets/infgrad/jasper_text_distill_dataset",
+    citation="""
+@misc{zhang2025jasperstelladistillationsota,
+      title={Jasper and Stella: distillation of SOTA embedding models},
+      author={Dun Zhang and Jiacheng Li and Ziyang Zeng and Fulong Wang},
+      year={2025},
+      eprint={2412.19048},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2412.19048},
+}
+""",
 )

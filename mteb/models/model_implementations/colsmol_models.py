@@ -7,7 +7,11 @@ from mteb._requires_package import (
 )
 from mteb.models.model_meta import ModelMeta
 
-from .colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
+from .colpali_models import (
+    COLPALI_CITATION,
+    COLPALI_TRAINING_DATA,
+    ColPaliEngineWrapper,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -67,6 +71,7 @@ colsmol_256m = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )
 
 colsmol_500m = ModelMeta(
@@ -92,4 +97,5 @@ colsmol_500m = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
 )

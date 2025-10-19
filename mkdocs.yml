@@ -83,6 +83,11 @@ nav:
       - Advanced Usage:
         - Two stage reranking: advanced_usage/two_stage_reranking.md
         - Cache embeddings: advanced_usage/cache_embeddings.md
+  - Contributing:
+      - Adding a Model: contributing/adding_a_model.md
+      - Adding a Task: contributing/adding_a_dataset.md
+      - Adding a Benchmark: contributing/adding_a_benchmark.md
+      - Guidelines: CONTRIBUTING.md
   - Overview:
       - overview/index.md
       - Benchmarks:
@@ -91,11 +96,6 @@ nav:
         - Available Tasks: overview/available_tasks
       - Models:
         - Available Models: overview/available_models
-  # - Contribute: # TODO: Add contributions
-  #     - Adding a Model: adding_a_model.md
-  #     - Adding a Benchmark: adding_a_leaderboard_tab.md
-  #     - Adding a Task: adding_a_dataset.md
-  #     - Development Setup: CONTRIBUTING.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md
@@ -111,10 +111,6 @@ plugins:
   - search
   - exclude:
       glob:
-        # contributing segments
-        - adding_a_dataset.md
-        - adding_a_model.md
-        - adding_a_benchmark.md
         # projects
         - mieb/*
         - mmteb/*
