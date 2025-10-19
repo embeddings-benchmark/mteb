@@ -72,7 +72,7 @@ model = ModelMeta(
 
 ### Using a custom Implementation
 
-If you need to use a custom implementation, you can specify the `loader` parameter in the [`ModelMeta`][mteb.models.model_meta.ModelMeta] class that would implement [Encoder][mteb.models.EncoderProtocol] or [CrossEncoder][mteb.models.CrossEncoderProtocol] protocols.
+If you need to use a custom implementation, you can specify the `loader` parameter in the [`ModelMeta`][mteb.models.model_meta.ModelMeta] class. It should implement one of the following protocols: [Encoder][mteb.models.EncoderProtocol], [CrossEncoder][mteb.models.CrossEncoderProtocol], or [Search][mteb.models.SearchProtocol].
 
 ??? example "Custom Model Implementation"
     ```python
