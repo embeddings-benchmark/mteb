@@ -72,16 +72,16 @@ model = ModelMeta(
 
 ### Using a custom Implementation
 
-If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class.
+If you need to use a custom implementation, you can specify the `loader` parameter in the [`ModelMeta`][mteb.models.model_meta.ModelMeta] class that would implement [Encoder][mteb.models.EncoderProtocol] or [CrossEncoder][mteb.models.CrossEncoderProtocol] protocols.
 
 ??? example "Custom Model Implementation"
     ```python
     from mteb.types import PromptType
     import numpy as np
 
-    class CustomModel():
+    class CustomModel:
         def __init__(self, model_name: str, revision: str, **kwargs):
-            pass # your implementation here
+            pass # your initialization of model here
 
         def encode(
             self,
