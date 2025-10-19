@@ -99,6 +99,10 @@ TaskDomain = Literal[
     "Financial",
     "Entertainment",
 ]
+"""
+The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
+ we updated them where deemed appropriate. These do not have to be mutually exclusive.
+"""
 
 SampleCreationMethod = Literal[
     "found",
@@ -151,18 +155,31 @@ TaskType = Literal[_TASK_TYPE]
 
 TaskCategory = Literal[
     "t2t",
-    "t2c",  # text-to-category
-    "i2i",  # image-to-image
-    "i2c",  # image-to-category
-    "i2t",  # image-to-text
-    "t2i",  # text-to-image
-    "it2t",  # image+text-to-text
-    "it2i",  # image+text-to-image
-    "i2it",  # image-to-image+text
-    "t2it",  # text-to-image+text
-    "it2it",  # image+text-to-image+text
+    "t2c",
+    "i2i",
+    "i2c",
+    "i2t",
+    "t2i",
+    "it2t",
+    "it2i",
+    "i2it",
+    "t2it",
+    "it2it",
 ]
-"""The category of the task. E.g. includes "t2t" (text to text), "t2i" (text to image) and "i2c" (image to category)."""
+"""The category of the task.
+
+1. t2t: text to text
+2. t2c: text to category
+3. i2i: image to image
+4. i2c: image to category
+5. i2t: image to text
+6. t2i: text to image
+7. it2t: image+text to text
+8. it2i: image+text to image
+9. i2it: image to image+text
+10. t2it: text to image+text
+11. it2it: image+text to image+text
+"""
 
 AnnotatorType = Literal[
     "expert-annotated",
@@ -211,7 +228,7 @@ class TaskMetadata(BaseModel):
         dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.
-        type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
+        type: The type of the task. This includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
             "PairClassification", "BitextMining". The type should match the abstask type.
         category: The category of the task. E.g. includes "t2t" (text to text), "t2i" (text to image).
         reference: A URL to the documentation of the task. E.g. a published paper.
@@ -222,7 +239,7 @@ class TaskMetadata(BaseModel):
             huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
-        domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
+        domains: The domains of the data. This includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
