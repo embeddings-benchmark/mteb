@@ -36,6 +36,21 @@
 | 131.1K | 3.1K | 4.2B | 7.7 GB | 2024-10-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{jiang2024vlm2vec,
+      title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
+      author={Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu},
+      journal={arXiv preprint arXiv:2410.05160},
+      year={2024}
+    }
+    ```
+    
+
+
+
 ####  [`TIGER-Lab/VLM2Vec-LoRA`](https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA)
 
  **License:** apache-2.0
@@ -46,6 +61,21 @@
 | 131.1K | 3.1K | not specified | not specified | 2024-10-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{jiang2024vlm2vec,
+      title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
+      author={Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu},
+      journal={arXiv preprint arXiv:2410.05160},
+      year={2024}
+    }
+    ```
+    
+
+
+
 ####  [`ibm-granite/granite-vision-3.3-2b-embedding`](https://huggingface.co/ibm-granite/granite-vision-3.3-2b-embedding)
 
  **License:** apache-2.0
@@ -54,6 +84,21 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 128.0K | 128 | 3.0B | 11.1 GB | 2025-06-11 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{karlinsky2025granitevision,
+      title={Granite Vision: a lightweight, open-source multimodal model for enterprise Intelligence},
+      author={Granite Vision Team and Karlinsky, Leonid and Arbelle, Assaf and Daniels, Abraham and Nassar, Ahmed and Alfassi, Amit and Wu, Bo and Schwartz, Eli and Joshi, Dhiraj and Kondic, Jovana and Shabtay, Nimrod and Li, Pengyuan and Herzig, Roei and Abedin, Shafiq and Perek, Shaked and Harary, Sivan and Barzelay, Udi and Raz Goldfarb, Adi and Oliva, Aude and Wieles, Ben and Bhattacharjee, Bishwaranjan and Huang, Brandon and Auer, Christoph and Gutfreund, Dan and Beymer, David and Wood, David and Kuehne, Hilde and Hansen, Jacob and Shtok, Joseph and Wong, Ken and Bathen, Luis Angel and Mishra, Mayank and Lysak, Maksym and Dolfi, Michele and Yurochkin, Mikhail and Livathinos, Nikolaos and Harel, Nimrod and Azulai, Ophir and Naparstek, Oshri and de Lima, Rafael Teixeira and Panda, Rameswar and Doveh, Sivan and Gupta, Shubham and Das, Subhro and Zawad, Syed and Kim, Yusik and He, Zexue and Brooks, Alexander and Goodhart, Gabe and Govindjee, Anita and Leist, Derek and Ibrahim, Ibrahim and Soffer, Aya and Cox, David and Soule, Kate and Lastras, Luis and Desai, Nirmit and Ofek-koifman, Shila and Raghavan, Sriram and Syeda-Mahmood, Tanveer and Staar, Peter and Drory, Tal and Feris, Rogerio},
+      journal={arXiv preprint arXiv:2502.09927},
+      year={2025}
+    }
+    ```
+    
+
 
 
 ####  [`intfloat/mmE5-mllama-11b-instruct`](https://huggingface.co/intfloat/mmE5-mllama-11b-instruct)
@@ -68,18 +113,18 @@
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{chen2025mmE5,
       title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
       author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
       journal={arXiv preprint arXiv:2502.08468},
       year={2025}
     }
-
+    
     ```
-
+    
 
 
 
@@ -93,6 +138,21 @@
 | 8.2K | 768 | 223.0M | 849.0 MB | 2024-05-30 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{koukounas2024jinaclip,
+      title={Jina CLIP: Your CLIP Model Is Also Your Text Retriever},
+      author={Koukounas, Andreas and Mastrapas, Georgios and Günther, Michael and Wang, Bo and Martens, Scott and Mohr, Isabelle and Sturua, Saba and Akram, Mohammad Kalim and Martínez, Joan Fontanals and Ognawala, Saahil and Guzman, Susana and Werk, Maximilian and Wang, Nan and Xiao, Han},
+      journal={arXiv preprint arXiv:2405.20204},
+      year={2024}
+    }
+    ```
+    
+
+
+
 ####  [`jinaai/jina-embeddings-v4`](https://huggingface.co/jinaai/jina-embeddings-v4)
 
  **License:** cc-by-nc-4.0
@@ -101,6 +161,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 32.8K | 2.0K | 3.8B | 7.3 GB | 2025-06-24 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+          title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+          author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
+          year={2025},
+          eprint={2506.18902},
+          archivePrefix={arXiv},
+          primaryClass={cs.AI},
+          url={https://arxiv.org/abs/2506.18902},
+    }
+    ```
+    
+
 
 
 ####  [`microsoft/LLM2CLIP-Openai-B-16`](https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16)
@@ -113,6 +191,24 @@
 | not specified | 1.3K | 361.0M | not specified | 2024-11-07 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{huang2024llm2clippowerfullanguagemodel,
+      title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
+      author={Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu},
+      year={2024},
+      eprint={2411.04997},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.04997}
+    }
+    ```
+    
+
+
+
 ####  [`microsoft/LLM2CLIP-Openai-L-14-224`](https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224)
 
  **License:** apache-2.0
@@ -121,6 +217,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | not specified | 1.3K | 578.0M | not specified | 2024-11-07 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{huang2024llm2clippowerfullanguagemodel,
+      title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
+      author={Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu},
+      year={2024},
+      eprint={2411.04997},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.04997}
+    }
+    ```
+    
+
 
 
 ####  [`microsoft/LLM2CLIP-Openai-L-14-336`](https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336)
@@ -133,6 +247,24 @@
 | not specified | 1.3K | 579.0M | not specified | 2024-11-07 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{huang2024llm2clippowerfullanguagemodel,
+      title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
+      author={Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu},
+      year={2024},
+      eprint={2411.04997},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.04997}
+    }
+    ```
+    
+
+
+
 ####  [`nomic-ai/colnomic-embed-multimodal-3b`](https://huggingface.co/nomic-ai/colnomic-embed-multimodal-3b)
 
  **License:** apache-2.0
@@ -143,6 +275,23 @@
 | 128.0K | 128 | 3.0B | 7.0 GB | 2025-03-31 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{nomicembedmultimodal2025,
+      title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
+      author={Nomic Team},
+      year={2025},
+      publisher={Nomic AI},
+      url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
+    }
+    ```
+    
+
+
+
 ####  [`nomic-ai/colnomic-embed-multimodal-7b`](https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b)
 
  **License:** apache-2.0
@@ -151,6 +300,23 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 128.0K | 128 | 7.0B | 14.1 GB | 2025-03-31 | deu-Latn, eng-Latn, fra-Latn, ita-Latn, spa-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{nomicembedmultimodal2025,
+      title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
+      author={Nomic Team},
+      year={2025},
+      publisher={Nomic AI},
+      url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
+    }
+    ```
+    
+
 
 
 ####  [`nomic-ai/nomic-embed-vision-v1.5`](https://huggingface.co/nomic-ai/nomic-embed-vision-v1.5)
@@ -203,6 +369,24 @@
 | 8.2K | 128 | 256.0M | 800.0 MB | 2025-01-22 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
+    
+
+
+
 ####  [`vidore/colSmol-500M`](https://huggingface.co/vidore/colSmol-500M)
 
  **License:** apache-2.0
@@ -211,6 +395,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 8.2K | 128 | 500.0M | 1.2 GB | 2025-01-22 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
+    
+
 
 
 ####  [`vidore/colpali-v1.1`](https://huggingface.co/vidore/colpali-v1.1)
@@ -223,6 +425,24 @@
 | 16.4K | 128 | 2.9B | 4.6 GB | 2024-08-21 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
+    
+
+
+
 ####  [`vidore/colpali-v1.2`](https://huggingface.co/vidore/colpali-v1.2)
 
  **License:** apache-2.0
@@ -231,6 +451,24 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 16.4K | 128 | 2.9B | 4.6 GB | 2024-08-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
+    
+
 
 
 ####  [`vidore/colpali-v1.3`](https://huggingface.co/vidore/colpali-v1.3)
@@ -243,6 +481,24 @@
 | 16.4K | 128 | 2.9B | 4.6 GB | 2024-11-01 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
+    
+
+
+
 ####  [`vidore/colqwen2-v1.0`](https://huggingface.co/vidore/colqwen2-v1.0)
 
  **License:** apache-2.0
@@ -253,6 +509,24 @@
 | 32.8K | 128 | 2.2B | 7.0 GB | 2025-11-03 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
+    
+
+
+
 ####  [`vidore/colqwen2.5-v0.2`](https://huggingface.co/vidore/colqwen2.5-v0.2)
 
  **License:** apache-2.0
@@ -261,6 +535,22 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 128.0K | 128 | 3.0B | 7.0 GB | 2025-01-31 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @misc{faysse2024colpali,
+      title={ColPali: Efficient Document Retrieval with Vision Language Models},
+      author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
+      year={2024},
+      eprint={2407.01449},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    ```
 
 ## Non-instruction Model
 
@@ -274,6 +564,21 @@
 | 512.0 | 768 | 196.0M | 1.6 GB | 2024-06-06 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{zhou2024vista,
+      title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
+      author={Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
+      journal={arXiv preprint arXiv:2406.04292},
+      year={2024}
+    }
+    ```
+    
+
+
+
 ####  [`BAAI/bge-visualized-m3`](https://huggingface.co/BAAI/bge-visualized)
 
  **License:** not specified
@@ -282,6 +587,21 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 8.2K | 1.0K | 872.9M | 4.2 GB | 2024-06-06 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @article{zhou2024vista,
+      title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
+      author={Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
+      journal={arXiv preprint arXiv:2406.04292},
+      year={2024}
+    }
+    ```
+    
+
 
 
 ####  [`Cohere/Cohere-embed-v4.0`](https://docs.cohere.com/docs/cohere-embed)
@@ -454,7 +774,7 @@
 | not specified | 768 | 7.8B | 28.9 GB | 2024-03-31 | eng-Latn |
 
 
-####  [`baseline/random-cross-encoder-baseline`](https://huggingface.co/baseline/random-cross-encoder-baseline)
+####  baseline/random-cross-encoder-baseline
 
  **License:** mit
 
@@ -464,7 +784,7 @@
 | infP | 32 | 0 | 0.0 MB | not specified | not specified |
 
 
-####  [`baseline/random-encoder-baseline`](https://huggingface.co/baseline/random-encoder-baseline)
+####  baseline/random-encoder-baseline
 
  **License:** mit
 
@@ -504,6 +824,23 @@
 | 64.0 | 768 | 203.0M | 775.0 MB | 2024-01-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
+
+
 ####  [`google/siglip-base-patch16-256`](https://huggingface.co/google/siglip-base-patch16-256)
 
  **License:** apache-2.0
@@ -512,6 +849,23 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 64.0 | 768 | 203.0M | 775.0 MB | 2024-01-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
 
 
 ####  [`google/siglip-base-patch16-256-multilingual`](https://huggingface.co/google/siglip-base-patch16-256-multilingual)
@@ -524,6 +878,23 @@
 | 64.0 | 768 | 371.0M | 1.4 GB | 2024-01-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
+
+
 ####  [`google/siglip-base-patch16-384`](https://huggingface.co/google/siglip-base-patch16-384)
 
  **License:** apache-2.0
@@ -532,6 +903,23 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 64.0 | 768 | 203.0M | 776.0 MB | 2024-01-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
 
 
 ####  [`google/siglip-base-patch16-512`](https://huggingface.co/google/siglip-base-patch16-512)
@@ -544,6 +932,23 @@
 | 64.0 | 768 | 204.0M | 777.0 MB | 2024-01-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
+
+
 ####  [`google/siglip-large-patch16-256`](https://huggingface.co/google/siglip-large-patch16-256)
 
  **License:** apache-2.0
@@ -552,6 +957,23 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 64.0 | 1.0K | 652.0M | 2.4 GB | 2024-01-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
 
 
 ####  [`google/siglip-large-patch16-384`](https://huggingface.co/google/siglip-large-patch16-384)
@@ -564,6 +986,23 @@
 | 64.0 | 1.0K | 652.0M | 2.4 GB | 2024-01-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
+
+
 ####  [`google/siglip-so400m-patch14-224`](https://huggingface.co/google/siglip-so400m-patch14-224)
 
  **License:** apache-2.0
@@ -572,6 +1011,23 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 16.0 | 1.2K | 877.0M | 3.3 GB | 2024-01-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
 
 
 ####  [`google/siglip-so400m-patch14-384`](https://huggingface.co/google/siglip-so400m-patch14-384)
@@ -584,6 +1040,23 @@
 | 64.0 | 1.2K | 878.0M | 3.3 GB | 2024-01-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
+
+
 ####  [`google/siglip-so400m-patch16-256-i18n`](https://huggingface.co/google/siglip-so400m-patch16-256-i18n)
 
  **License:** apache-2.0
@@ -592,6 +1065,23 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 64.0 | 1.2K | 1.1B | 4.2 GB | 2024-01-08 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    @misc{zhai2023sigmoid,
+          title={Sigmoid Loss for Language Image Pre-Training},
+          author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
+          year={2023},
+          eprint={2303.15343},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV}
+    }
+    ```
+    
+
 
 
 ####  [`kakaobrain/align-base`](https://huggingface.co/kakaobrain/align-base)
@@ -694,6 +1184,22 @@
 | 77.0 | 512 | 151.0M | 576.0 MB | 2021-02-26 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{radford2021learning,
+      title={Learning Transferable Visual Models From Natural Language Supervision},
+      author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+      journal={arXiv preprint arXiv:2103.00020},
+      year={2021}
+    }
+    ```
+    
+
+
+
 ####  [`openai/clip-vit-base-patch32`](https://huggingface.co/openai/clip-vit-base-patch32)
 
  **License:** not specified
@@ -704,6 +1210,22 @@
 | 77.0 | 512 | 151.0M | 576.0 MB | 2021-02-26 | eng-Latn |
 
 
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{radford2021learning,
+      title={Learning Transferable Visual Models From Natural Language Supervision},
+      author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+      journal={arXiv preprint arXiv:2103.00020},
+      year={2021}
+    }
+    ```
+    
+
+
+
 ####  [`openai/clip-vit-large-patch14`](https://huggingface.co/openai/clip-vit-large-patch14)
 
  **License:** not specified
@@ -712,6 +1234,22 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 77.0 | 768 | 428.0M | 1.6 GB | 2021-02-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+    
+    ```bibtex
+    
+    @article{radford2021learning,
+      title={Learning Transferable Visual Models From Natural Language Supervision},
+      author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
+      journal={arXiv preprint arXiv:2103.00020},
+      year={2021}
+    }
+    ```
+    
+
 
 
 ####  [`voyageai/voyage-multimodal-3`](https://huggingface.co/voyageai/voyage-multimodal-3)

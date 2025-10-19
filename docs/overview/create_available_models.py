@@ -9,7 +9,7 @@ START_INSERT = "<!-- START TASK DESCRIPTION -->"
 END_INSERT = "<!-- END TASK DESCRIPTION -->"
 
 model_entry = """
-####  [`{model_name}`]({reference})
+####  {model_name_w_link}
 
  **License:** {license}
 
@@ -86,10 +86,9 @@ def required_memory_string(mem_in_mb: int | None) -> str:
 
 
 def format_model_entry(meta: ModelMeta) -> str:
-    model_name = meta.name
     revision = meta.revision or "not specified"
     license = meta.license or "not specified"
-    reference = meta.reference or f"https://huggingface.co/{model_name}"
+    model_name_w_link = f"[`{meta.name}`]({meta.reference})" if meta.reference else meta.name
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
@@ -114,10 +113,9 @@ def format_model_entry(meta: ModelMeta) -> str:
     required_mem = required_memory_string(meta.memory_usage_mb)
 
     entry = model_entry.format(
-        model_name=model_name,
+        model_name_w_link=model_name_w_link,
         revision=revision,
         license=license,
-        reference=reference,
         max_tokens=max_tokens,
         embed_dim=embed_dim,
         n_parameters=n_parameters,
