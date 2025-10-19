@@ -684,6 +684,7 @@ def get_leaderboard_app() -> gr.Blocks:
             elapsed = time.time() - start_time
             logger.debug(f"update_models callback: {elapsed}s")
             # Always return sorted models to ensure models.change triggers update_tables
+
             return sorted(filtered_models)
 
         scores.change(
@@ -699,6 +700,7 @@ def get_leaderboard_app() -> gr.Blocks:
             ],
             outputs=[models],
         )
+
         task_select.change(
             update_models,
             inputs=[
@@ -852,11 +854,12 @@ def get_leaderboard_app() -> gr.Blocks:
         # Only update tables when models change, not when scores/tasks change directly
         # This avoids redundant updates since scores/tasks changes trigger update_models
         # which then triggers models.change
-        models.change(
-            update_tables,
-            inputs=[scores, task_select, models, benchmark_select],
-            outputs=[summary_table, per_task_table],
-        )
+        for item in [models, task_select]:
+            item.change(
+                update_tables,
+                inputs=[scores, task_select, models, benchmark_select],
+                outputs=[summary_table, per_task_table],
+            )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
 
