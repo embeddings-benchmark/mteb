@@ -1,5 +1,5 @@
+from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.text.pair_classification import AbsTaskPairClassification
 
 
 class ArmenianParaphrasePC(AbsTaskPairClassification):
