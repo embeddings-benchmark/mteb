@@ -72,7 +72,7 @@ class IN22ConvBitextMining(AbsTaskBitextMining):
         name="IN22ConvBitextMining",
         dataset={
             "path": "mteb/IN22ConvBitextMining",
-            "revision": "4729cdf8e2c21d5d8e953b2e256ccd5d7a6716cd",
+            "revision": "2747bf03e02df02cc08b9cce64d0d053fef2a826",
         },
         description="IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Conv",

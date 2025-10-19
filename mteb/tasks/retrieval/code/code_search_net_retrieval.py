@@ -1,24 +1,24 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
-
 
 class CodeSearchNetRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
         name="CodeSearchNetRetrieval",
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://huggingface.co/datasets/code_search_net/",
         dataset={
             "path": "mteb/CodeSearchNetRetrieval",
-            "revision": "dfb845c0832eb3eb51a61f390e0485dc46424e08",
+            "revision": "68e8f0731a656fa4bd5b7c81936d95ad48a39bfe",
         },
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=[_EVAL_SPLIT],
-        eval_langs={lang: [lang + "-Code"] for lang in _LANGS},
+        eval_splits=["test"],
+        eval_langs={
+            lang: [lang + "-Code"]
+            for lang in ["python", "javascript", "go", "ruby", "java", "php"]
+        },
         main_score="ndcg_at_10",
         date=("2019-01-01", "2019-12-31"),
         domains=["Programming", "Written"],

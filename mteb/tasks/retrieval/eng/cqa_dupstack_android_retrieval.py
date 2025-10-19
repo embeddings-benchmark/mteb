@@ -8,8 +8,8 @@ class CQADupstackAndroidRetrieval(AbsTaskRetrieval):
         description="CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         dataset={
-            "path": "mteb/cqadupstack-android",
-            "revision": "e03f271e3f4a75f49787c838a62f671b35bc9004",
+            "path": "mteb/CQADupstackAndroidRetrieval",
+            "revision": "9be4c0e46342e8e3aff577a89b9a1ec9bc6b4af3",
         },
         type="Retrieval",
         category="t2t",

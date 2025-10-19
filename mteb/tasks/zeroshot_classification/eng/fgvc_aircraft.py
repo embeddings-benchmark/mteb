@@ -10,7 +10,7 @@ class FGVCAircraftZeroShotClassification(AbsTaskZeroShotClassification):
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
-            "path": "mteb/FGVCAircraft",
+            "path": "mteb/FGVCAircraftZeroShot",
             "revision": "2d33d00400099b87bfec8b04f2876fb10ca07487",
         },
         type="ZeroShotClassification",

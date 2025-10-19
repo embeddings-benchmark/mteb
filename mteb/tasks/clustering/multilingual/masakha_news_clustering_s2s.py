@@ -26,7 +26,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClusteringLegacy):
         name="MasakhaNEWSClusteringS2S",
         dataset={
             "path": "mteb/MasakhaNEWSClusteringS2S",
-            "revision": "b3b12a9f4a43adef3b5f4055eb41a40f91209066",
+            "revision": "5dddcb139010208a28c3dcc2568560061c210097",
         },
         description=(
             "Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label."
