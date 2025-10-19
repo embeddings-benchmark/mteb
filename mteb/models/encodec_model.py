@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterable
 from functools import partial
 from typing import Any
@@ -14,6 +15,8 @@ from transformers import AutoProcessor, EncodecModel
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+
+logger = logging.getLogger(__name__)
 
 
 class EncodecWrapper(Wrapper):
@@ -56,11 +59,26 @@ class EncodecWrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
-                        audio = (
-                            torch.from_numpy(audio).float()
-                            if isinstance(audio, np.ndarray)
-                            else audio.float()
-                        )
+                        if isinstance(audio, np.ndarray):
+                            audio = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            audio = torch.tensor(audio).float()
+                        else:
+                            audio = audio.float()
+                        # Check for empty audio before resampling
+                        if audio.numel() == 0:
+                            logger.warning(
+                                "Empty audio array from dataset - creating null audio marker"
+                            )
+                            # Create special marker audio to maintain alignment
+                            sr = item.get("sampling_rate", self.sampling_rate)
+                            min_samples = max(
+                                500, int(0.1 * sr)
+                            )  # At least 500 samples or 100ms
+                            audio = torch.full(
+                                (min_samples,), -999.0, dtype=torch.float32
+                            )
+
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
@@ -87,10 +105,34 @@ class EncodecWrapper(Wrapper):
         if audio.dim() > 1 and audio.shape[0] > 1:  # If multi-channel
             audio = torch.mean(audio, dim=0, keepdim=True)  # Convert to mono
 
-        return audio.squeeze()
+        audio = audio.squeeze()
+
+        # Handle empty audio by returning a special marker
+        if audio.numel() == 0:
+            logger.warning(
+                "Empty audio tensor encountered - will create null embedding"
+            )
+            # Return a special tensor that we can identify later
+            # Use sufficient samples to avoid processing issues
+            min_samples = max(
+                500, int(0.1 * self.sampling_rate)
+            )  # At least 500 samples or 100ms
+            audio = torch.full(
+                (min_samples,), -999.0, dtype=torch.float32
+            )  # Special marker value
+
+        return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
-        waveform, sample_rate = torchaudio.load(path)
+        try:
+            waveform, sample_rate = torchaudio.load(path)
+        except Exception as e:
+            logger.warning(
+                f"Failed to load audio file {path}: {e} - creating null audio marker"
+            )
+            # Create special marker audio to maintain alignment
+            min_samples = max(500, int(0.1 * self.sampling_rate))
+            return torch.full((min_samples,), -999.0, dtype=torch.float32)
 
         # Convert to mono if needed
         if waveform.shape[0] > 1:  # If multi-channel
@@ -99,7 +141,16 @@ class EncodecWrapper(Wrapper):
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
-        return waveform.squeeze()
+
+        waveform = waveform.squeeze()
+
+        # Handle empty audio files
+        if waveform.numel() == 0:
+            logger.warning(f"Empty audio file: {path} - creating null audio marker")
+            min_samples = max(500, int(0.1 * self.sampling_rate))
+            waveform = torch.full((min_samples,), -999.0, dtype=torch.float32)
+
+        return waveform
 
     def get_audio_embeddings(
         self,
@@ -123,7 +174,21 @@ class EncodecWrapper(Wrapper):
 
                 # Process audio through EnCodec's processor
                 max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-                batch_np = [audio[:max_samples].cpu().numpy() for audio in batch]
+                batch_np = []
+                null_indices = []  # Track which samples are null markers
+
+                for idx, audio in enumerate(batch):
+                    audio_np = audio[:max_samples].cpu().numpy()
+
+                    # Check if this is a null marker (all values are -999.0)
+                    if len(audio_np) > 0 and np.all(np.abs(audio_np + 999.0) < 1e-6):
+                        null_indices.append(idx)
+                        # Replace with minimal silence for processing
+                        audio_np = (
+                            np.zeros_like(audio_np) + 1e-6
+                        )  # Very quiet but not zero
+
+                    batch_np.append(audio_np)
 
                 inputs = self.processor(
                     raw_audio=batch_np,
@@ -134,7 +199,6 @@ class EncodecWrapper(Wrapper):
                 ).to(self.device)
 
                 # Get the latent representations directly from the encoder
-                # This gives continuous embeddings instead of discrete codes
                 latent = self.model.encoder(inputs.input_values)
 
                 # Apply mean pooling over the time dimension to get fixed-size embeddings
@@ -142,6 +206,15 @@ class EncodecWrapper(Wrapper):
 
                 # Normalize embeddings
                 embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
+
+                # Replace null marker embeddings with special null embeddings
+                if null_indices:
+                    for idx in null_indices:
+                        # Create a null embedding (all zeros)
+                        embeddings[idx] = torch.zeros_like(embeddings[idx])
+                        logger.debug(
+                            f"Created null embedding for empty audio at batch index {idx}"
+                        )
 
                 all_embeddings.append(embeddings.cpu())
 
