@@ -82,7 +82,7 @@ class MLQARetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/mlqa",
         dataset={
             "path": "mteb/MLQARetrieval",
-            "revision": "34281568b19c1b5c662546ad4379fe7ca8d5202e",
+            "revision": "5bef8b6e2601af974fb1a1cca03fd702229be4b6",
         },
         type="Retrieval",
         category="t2t",

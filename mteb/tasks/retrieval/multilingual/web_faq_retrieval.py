@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -58,72 +56,14 @@ _LANGUAGES = {
 }
 
 
-def _load_webfaq_data(path: str, langs: list, splits: str, revision: str | None = None):
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
-
-    split = _EVAL_SPLIT
-
-    for lang in langs:
-        # Load corpus data (Can be several millions for languages)
-        corpus_identifier = f"{lang}-corpus"
-        corpus_data = datasets.load_dataset(
-            path,
-            corpus_identifier,
-            revision=revision,
-        )
-        corpus[lang][split] = {}
-        for row in corpus_data["corpus"]:
-            corpus_id = row["_id"]
-            title = row["title"]
-            text = row["text"]
-            corpus[lang][split][corpus_id] = {"title": title, "text": text}
-
-        # Load queries data
-        queries_identifier = f"{lang}-queries"
-        queries_data = datasets.load_dataset(
-            path,
-            queries_identifier,
-            revision=revision,
-        )
-        queries[lang][split] = {}
-        for row in queries_data[split]:
-            query_id = row["_id"]
-            text = row["text"]
-            queries[lang][split][query_id] = text
-
-        # Load relevant documents data
-        qrels_identifier = f"{lang}-qrels"
-        qrels_data = datasets.load_dataset(
-            path,
-            qrels_identifier,
-            revision=revision,
-        )
-        relevant_docs[lang][split] = {}
-        for row in qrels_data[split]:
-            query_id = row["query-id"]
-            corpus_id = row["corpus-id"]
-            score = row["score"]
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][corpus_id] = int(score)
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
-
-
 class WebFAQRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WebFAQRetrieval",
         description="WebFAQ is a broad-coverage corpus of natural question-answer pairs in 75 languages, gathered from FAQ pages on the web.",
         reference="https://huggingface.co/PaDaS-Lab",
         dataset={
-            "path": "PaDaS-Lab/webfaq-retrieval",
-            "revision": "c3262adb1c32ac0c3ea8de6393a44366edaa62e1",
+            "path": "mteb/WebFAQRetrieval",
+            "revision": "f64f483ad0f31d2e78209d524c14a4a867965959",
         },
         type="Retrieval",
         category="t2t",
@@ -150,16 +90,3 @@ class WebFAQRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_webfaq_data(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            splits=_EVAL_SPLIT,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True

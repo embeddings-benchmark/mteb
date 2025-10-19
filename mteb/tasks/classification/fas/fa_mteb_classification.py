@@ -838,9 +838,6 @@ class DigikalamagClassification(AbsTaskClassification):
     )
     samples_per_label = 32
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("content", "text")
-
 
 class FaIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(

@@ -1,7 +1,4 @@
-from collections import defaultdict
-
 import datasets
-from datasets import Dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
@@ -72,7 +69,7 @@ class IN22ConvBitextMining(AbsTaskBitextMining):
         name="IN22ConvBitextMining",
         dataset={
             "path": "mteb/IN22ConvBitextMining",
-            "revision": "4729cdf8e2c21d5d8e953b2e256ccd5d7a6716cd",
+            "revision": "2747bf03e02df02cc08b9cce64d0d053fef2a826",
         },
         description="IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Conv",
@@ -106,19 +103,5 @@ class IN22ConvBitextMining(AbsTaskBitextMining):
         if self.data_loaded:
             return
 
-        dataset = datasets.load_dataset(
-            **self.metadata.dataset,
-            split=self.metadata.eval_splits[0],
-        )
-        self.dataset = defaultdict(dict)
-        for lang in self.metadata.eval_langs:
-            first_lang, second_lang = lang.split("-")
-            ds = Dataset.from_dict(
-                {
-                    "sentence1": dataset[first_lang],
-                    "sentence2": dataset[second_lang],
-                }
-            )
-            self.dataset[lang][self.metadata.eval_splits[0]] = ds
-
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True

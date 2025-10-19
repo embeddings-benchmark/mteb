@@ -589,7 +589,11 @@ class AbsTaskRetrieval(AbsTask):
                         f"Unexpected subset item type {subset_item} without converter"
                     )
             if len(sections) > 0:
-                DatasetDict(sections).push_to_hub(repo_name, hf_subset_name)
+                DatasetDict(sections).push_to_hub(
+                    repo_name,
+                    hf_subset_name,
+                    commit_message=f"Add {hf_subset_name}-{subset_item}",
+                )
 
         for subset in self.dataset:
             logger.info(f"Converting {subset} of {self.metadata.name}")
@@ -619,7 +623,9 @@ class AbsTaskRetrieval(AbsTask):
                         )
                 relevant_sections[split] = Dataset.from_list(entries)
             DatasetDict(relevant_sections).push_to_hub(
-                repo_name, f"{subset}-qrels" if subset != "default" else "qrels"
+                repo_name,
+                f"{subset}-qrels" if subset != "default" else "qrels",
+                commit_message=f"Add {subset}-qrels",
             )
 
             _push_section(
