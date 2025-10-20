@@ -114,11 +114,6 @@ plugins:
         # projects
         - mieb/*
         - mmteb/*
-        # overview
-        - benchmarks.md
-        - tasks.md
-        # other
-        - reproducible_workflow.md
   - mkdocstrings:
       handlers:
         python:
