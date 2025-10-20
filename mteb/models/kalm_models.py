@@ -803,6 +803,37 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
     superseded_by=None,
 )
 
+KaLM_Embedding_KaLM_embedding_multilingual_mini_instruct_v2_5 = ModelMeta(
+    loader=partial(
+        InstructSentenceTransformerWrapper,
+        model_name="KaLM-Embedding/KaLM-embedding-multilingual-mini-instruct-v2.5",
+        revision="6a4cfc1084cb459ebd4729b53a8656a61448c720",
+        instruction_template=KaLM_INSTRUCTION,
+        max_seq_length=512,
+        apply_instruction_to_passages=False,
+        prompts_dict=KaLM_v2_task_prompts,
+    ),
+    name="KaLM-Embedding/KaLM-embedding-multilingual-mini-instruct-v2.5",
+    revision="6a4cfc1084cb459ebd4729b53a8656a61448c720",
+    release_date="2025-09-30",
+    languages=["eng-Latn", "zho-Hans"],
+    n_parameters=494032768,
+    memory_usage_mb=1885,
+    max_tokens=512,
+    embed_dim=896,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/KaLM-Embedding/KaLM-embedding-finetuning-data",
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/KaLM-Embedding/KaLM-embedding-multilingual-mini-instruct-v2.5",
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    training_datasets=kalm_v2_training_data,
+    adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v2",
+    superseded_by=None,
+)
+
 
 # KaLM_Embedding_X_0605 = ModelMeta(
 #     loader=partial(
