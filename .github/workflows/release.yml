@@ -1,33 +1,113 @@
 # This workflow will
-# - Will be triggered on release publishing github release
-# - Build package
-# - Upload it on pypi and github release
+# - will be triggered on each commit
+#  - based on commit prefix will be created patch, minor, major release using `uv`
+# - Find the latest version tag based on the commit history
+#   - Create a git tag for the new version
+#   - Update the version number in pyproject.toml based on the commit history
+# - Upload the package to PyPI
+# - Create a release on GitHub
 
-name: Release
+# This workflow required the following secrets to be set:
+# - a GitHub personal access token with the `repo` scope called `RELEASE`
+# - and that you setup trusted publishing using PyPI as described here: https://blog.pypi.org/posts/2023-04-20-introducing-trusted-publishers/
+
+name: Version & Release on Commit Prefix
 on:
-  release:
-    # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#release
-    types: [published]
+  push:
+    branches:
+      - main
 
 jobs:
-  release:
+  bump_and_release:
     runs-on: ubuntu-latest
     concurrency: release
     environment:
       name: pypi
     permissions:
-      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing using PyPI
-      contents: read
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing using PyPI
+      contents: write  # for updating pyproject
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v5
-      - name: Set up Python
-        uses: actions/setup-python@v5
         with:
-          python: "3.11"
+          fetch-depth: 0
+
+      - name: Get last commit message
+        id: last_commit
+        run: |
+          msg=$(git log -1 --pretty=%B)
+          echo "commit message: '$msg'"
+          {
+            echo "msg<<EOF"
+            echo "$msg"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Determine bump type
+        id: bump_type
+        run: |
+          msg="${{ steps.last_commit.outputs.msg }}"
+          low=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
+          echo "lowercase message: '$low'"
+
+          bump="none"
+          if [[ $low == breaking:* ]]; then
+            bump="major"
+          elif [[ $low == feat:* ]]; then
+            bump="minor"
+          elif [[ $low == fix:* ]] || [[ $low == dataset:* ]] || [[ $low == model:* ]]; then
+            bump="patch"
+          fi
+
+          echo "bump=$bump" >> "$GITHUB_OUTPUT"
+          echo "Determined bump type: $bump"
+
+      - name: Exit if no bump
+        if: ${{ steps.bump_type.outputs.bump == 'none' }}
+        run: |
+          echo "No recognized prefix for version bump. Exiting."
+          exit 0
+
       - name: Install uv
         uses: astral-sh/setup-uv@v6
+
+      - name: Bump version
+        id: version_bump
+        run: |
+          echo "Running uv version --bump ${{ steps.bump_type.outputs.bump }}"
+          uv version --bump "${{ steps.bump_type.outputs.bump }}"
+
+          # Capture the new version (second token from `uv version`)
+          ver=$(uv version | awk '{print $2}')
+          echo "New version detected: $ver"
+          echo "new_version=$ver" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump and tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add pyproject.toml
+          git commit -m "chore: bump version to ${{ steps.version_bump.outputs.new_version }}" || echo "No changes to commit."
+
+          tag="v${{ steps.version_bump.outputs.new_version }}"
+          git tag "$tag"
+
+          # push changes and tag safely
+          git push --force-with-lease origin HEAD:main
+          git push origin "$tag"
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="v${{ steps.version_bump.outputs.new_version }}"
+          echo "Creating release for tag $tag"
+          gh release create "$tag" --generate-notes --repo "${{ github.repository }}"
+
       - name: Build
         run: uv build
 
@@ -39,6 +119,7 @@ jobs:
 
       - name: Publish
         run: uv publish
+
       - name: Upload artifacts to Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
