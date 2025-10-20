@@ -3,20 +3,18 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class GerDaLIR(AbsTaskRetrieval):
-    _EVAL_SPLIT = "test"
-
     metadata = TaskMetadata(
         name="GerDaLIR",
         description="GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform.",
         reference="https://github.com/lavis-nlp/GerDaLIR",
         dataset={
-            "path": "mteb/GerDaLIRSmall",
-            "revision": "b199f38071bc06a2cb86c4c10d57ecee6c46056a",
+            "path": "mteb/GerDaLIR",
+            "revision": "735f2cca1298426b3c792de3527b4bdc18537fc0",
         },
         type="Retrieval",
         category="t2t",
         modalities=["text"],
-        eval_splits=[_EVAL_SPLIT],
+        eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="ndcg_at_10",
         date=None,

@@ -38,18 +38,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{li2023towards,
       title={Towards general text embeddings with multi-stage contrastive learning},
       author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
       journal={arXiv preprint arXiv:2308.03281},
       year={2023}
     }
-    
+
     ```
-    
+
 
 
 
@@ -75,7 +75,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{bge_embedding,
           title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
@@ -86,7 +86,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -132,7 +132,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{bge_embedding,
           title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
@@ -143,7 +143,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -189,7 +189,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{bge_embedding,
           title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
@@ -200,7 +200,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -236,9 +236,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{xu-etal-2024-bmretriever,
         title = "{BMR}etriever: Tuning Large Language Models as Better Biomedical Text Retrievers",
         author = "Xu, Ran and Shi, Wenqi and Yu, Yue and Zhuang, Yuchen and Zhu, Yanqiao and Wang, May Dongmei and Ho, Joyce C. and Zhang, Chao and Yang, Carl",
@@ -251,7 +251,7 @@
         url = "https://aclanthology.org/2024.emnlp-main.1241/"
     }
     ```
-    
+
 
 
 
@@ -267,9 +267,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{xu-etal-2024-bmretriever,
         title = "{BMR}etriever: Tuning Large Language Models as Better Biomedical Text Retrievers",
         author = "Xu, Ran and Shi, Wenqi and Yu, Yue and Zhuang, Yuchen and Zhu, Yanqiao and Wang, May Dongmei and Ho, Joyce C. and Zhang, Chao and Yang, Carl",
@@ -282,7 +282,7 @@
         url = "https://aclanthology.org/2024.emnlp-main.1241/"
     }
     ```
-    
+
 
 
 
@@ -298,9 +298,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{xu-etal-2024-bmretriever,
         title = "{BMR}etriever: Tuning Large Language Models as Better Biomedical Text Retrievers",
         author = "Xu, Ran and Shi, Wenqi and Yu, Yue and Zhuang, Yuchen and Zhu, Yanqiao and Wang, May Dongmei and Ho, Joyce C. and Zhang, Chao and Yang, Carl",
@@ -313,7 +313,7 @@
         url = "https://aclanthology.org/2024.emnlp-main.1241/"
     }
     ```
-    
+
 
 
 
@@ -329,9 +329,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @inproceedings{xu-etal-2024-bmretriever,
         title = "{BMR}etriever: Tuning Large Language Models as Better Biomedical Text Retrievers",
         author = "Xu, Ran and Shi, Wenqi and Yu, Yue and Zhuang, Yuchen and Zhu, Yanqiao and Wang, May Dongmei and Ho, Joyce C. and Zhang, Chao and Yang, Carl",
@@ -344,7 +344,7 @@
         url = "https://aclanthology.org/2024.emnlp-main.1241/"
     }
     ```
-    
+
 
 
 
@@ -440,9 +440,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{muennighoff2024generative,
           title={Generative Representational Instruction Tuning},
           author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
@@ -451,9 +451,9 @@
           archivePrefix={arXiv},
           primaryClass={cs.CL}
     }
-    
+
     ```
-    
+
 
 
 
@@ -469,9 +469,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{muennighoff2024generative,
           title={Generative Representational Instruction Tuning},
           author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
@@ -480,9 +480,9 @@
           archivePrefix={arXiv},
           primaryClass={cs.CL}
     }
-    
+
     ```
-    
+
 
 
 
@@ -498,7 +498,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{hu2025kalm,
       title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
@@ -507,7 +507,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -523,7 +523,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{hu2025kalm,
       title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
@@ -532,7 +532,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -548,7 +548,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{hu2025kalm,
       title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
@@ -557,7 +557,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -573,7 +573,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{yu2025qzhouembeddingtechnicalreport,
           title={QZhou-Embedding Technical Report},
@@ -585,7 +585,7 @@
           url={https://arxiv.org/abs/2508.21632},
     }
     ```
-    
+
 
 
 
@@ -601,7 +601,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{yu2025qzhouembeddingtechnicalreport,
           title={QZhou-Embedding Technical Report},
@@ -613,7 +613,7 @@
           url={https://arxiv.org/abs/2508.21632},
     }
     ```
-    
+
 
 
 
@@ -629,7 +629,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{LinqAIResearch2024,
       title={Linq-Embed-Mistral:Elevating Text Retrieval with Improved GPT Data Through Task-Specific Control and Quality Refinement},
@@ -639,7 +639,7 @@
       url={https://getlinq.com/blog/linq-embed-mistral/}
     }
     ```
-    
+
 
 
 
@@ -655,9 +655,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -668,7 +668,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -684,9 +684,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -697,7 +697,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -713,9 +713,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -726,7 +726,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -742,9 +742,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -755,7 +755,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -771,9 +771,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -784,7 +784,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -800,9 +800,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -813,7 +813,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -829,9 +829,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -842,7 +842,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -858,9 +858,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{behnamghader2024llm2veclargelanguagemodels,
           title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
           author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
@@ -871,7 +871,7 @@
           url={https://arxiv.org/abs/2404.05961},
     }
     ```
-    
+
 
 
 
@@ -887,7 +887,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{mdbr_leaf,
       title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations},
@@ -899,7 +899,7 @@
       url={https://arxiv.org/abs/2509.12539}
     }
     ```
-    
+
 
 
 
@@ -915,7 +915,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{mdbr_leaf,
       title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations},
@@ -927,7 +927,7 @@
       url={https://arxiv.org/abs/2509.12539}
     }
     ```
-    
+
 
 
 
@@ -943,9 +943,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{zhang2025jasperstelladistillationsota,
           title={Jasper and Stella: distillation of SOTA embedding models},
           author={Dun Zhang and Jiacheng Li and Ziyang Zeng and Fulong Wang},
@@ -955,9 +955,9 @@
           primaryClass={cs.IR},
           url={https://arxiv.org/abs/2412.19048},
     }
-    
+
     ```
-    
+
 
 
 
@@ -973,7 +973,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhang2025jasperstelladistillationsota,
           title={Jasper and Stella: distillation of SOTA embedding models},
@@ -985,7 +985,7 @@
           url={https://arxiv.org/abs/2412.19048},
     }
     ```
-    
+
 
 
 
@@ -1001,7 +1001,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhang2025jasperstelladistillationsota,
           title={Jasper and Stella: distillation of SOTA embedding models},
@@ -1013,7 +1013,7 @@
           url={https://arxiv.org/abs/2412.19048},
     }
     ```
-    
+
 
 
 
@@ -1029,7 +1029,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{qwen3embedding,
       title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
@@ -1038,7 +1038,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -1054,7 +1054,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{qwen3embedding,
       title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
@@ -1063,7 +1063,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -1079,7 +1079,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{qwen3embedding,
       title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
@@ -1088,7 +1088,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -1104,7 +1104,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{shao2025reasonir,
           title={ReasonIR: Training Retrievers for Reasoning Tasks},
@@ -1114,7 +1114,7 @@
           url={https://arxiv.org/abs/2504.20595},
     }
     ```
-    
+
 
 
 
@@ -1140,7 +1140,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{SFR-embedding-2,
           title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
@@ -1148,9 +1148,9 @@
           year={2024},
           url={https://huggingface.co/Salesforce/SFR-Embedding-2_R}
         }
-        
+
     ```
-    
+
 
 
 
@@ -1296,29 +1296,19 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @article{li2023angle,
           title={AnglE-optimized Text Embeddings},
           author={Li, Xianming and Li, Jing},
           journal={arXiv preprint arXiv:2309.12871},
           year={2023}
         }
-        
+
     ```
-    
 
 
-
-####  [`Youtu-RAG/CoDi-Embedding-V1`](https://huggingface.co/Youtu-RAG/CoDi-Embedding-V1)
-
- **License:** apache-2.0
-
-
-| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
-|-------|-------|-------|-------|-------|-------|
-| 4.1K | 2.3K | 2.7B | not specified | 2025-08-20 | zho-Hans |
 
 
 ####  [`ai-forever/FRIDA`](https://huggingface.co/ai-forever/FRIDA)
@@ -1343,7 +1333,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
           title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
@@ -1354,9 +1344,9 @@
           primaryClass={cs.CL},
           url={https://arxiv.org/abs/2408.12503},
         }
-        
+
     ```
-    
+
 
 
 
@@ -1382,7 +1372,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{choi2025lgaiembeddingpreviewtechnicalreport,
           title={LGAI-EMBEDDING-Preview Technical Report},
@@ -1393,9 +1383,9 @@
           primaryClass={cs.CL},
           url={https://arxiv.org/abs/2506.07438},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1431,18 +1421,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{rankllama,
           title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
           author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
           year={2023},
           journal={arXiv:2310.08319},
     }
-    
+
     ```
-    
+
 
 
 
@@ -1488,7 +1478,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{deepvk2024user,
             title={USER: Universal Sentence Encoder for Russian},
@@ -1497,9 +1487,9 @@
             publisher={Hugging Face}
             year={2024},
         }
-        
+
     ```
-    
+
 
 
 
@@ -1595,7 +1585,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{infly-ai_2025,
       author       = {Junhan Yang and Jiahe Wan and Yichen Yao and Wei Chu and Yinghui Xu and Yuan Qi},
@@ -1606,7 +1596,7 @@
       publisher    = {Hugging Face}
     }
     ```
-    
+
 
 
 
@@ -1622,7 +1612,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{infly-ai_2025,
       author       = {Junhan Yang and Jiahe Wan and Yichen Yao and Wei Chu and Yinghui Xu and Yuan Qi},
@@ -1633,7 +1623,7 @@
       publisher    = {Hugging Face}
     }
     ```
-    
+
 
 
 
@@ -1649,18 +1639,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},
       year={2022}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1676,18 +1666,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},
       year={2022}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1703,18 +1693,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},
       year={2022}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1730,18 +1720,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},
       year={2022}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1757,25 +1747,25 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @article{wang2023improving,
           title={Improving Text Embeddings with Large Language Models},
           author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
           journal={arXiv preprint arXiv:2401.00368},
           year={2023}
         }
-    
+
         @article{wang2022text,
           title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
           author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
           journal={arXiv preprint arXiv:2212.03533},
           year={2022}
         }
-        
+
     ```
-    
+
 
 
 
@@ -1791,18 +1781,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},
       year={2022}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1818,18 +1808,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},
       year={2022}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1845,18 +1835,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2024multilingual,
       title={Multilingual E5 Text Embeddings: A Technical Report},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2402.05672},
       year={2024}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1872,18 +1862,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2024multilingual,
       title={Multilingual E5 Text Embeddings: A Technical Report},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2402.05672},
       year={2024}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1899,7 +1889,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{wang2024multilingual,
           title={Multilingual E5 Text Embeddings: A Technical Report},
@@ -1908,7 +1898,7 @@
           year={2024}
         }
     ```
-    
+
 
 
 
@@ -1924,18 +1914,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{wang2024multilingual,
       title={Multilingual E5 Text Embeddings: A Technical Report},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2402.05672},
       year={2024}
     }
-    
+
     ```
-    
+
 
 
 
@@ -1951,9 +1941,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
           title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA},
           author={Saba Sturua and Isabelle Mohr and Mohammad Kalim Akram and Michael Günther and Bo Wang and Markus Krimmel and Feng Wang and Georgios Mastrapas and Andreas Koukounas and Andreas Koukounas and Nan Wang and Han Xiao},
@@ -1963,9 +1953,9 @@
           primaryClass={cs.CL},
           url={https://arxiv.org/abs/2409.10173},
         }
-        
+
     ```
-    
+
 
 
 
@@ -2031,25 +2021,25 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @online{emb2024mxbai,
           title={Open Source Strikes Bread - New Fluffy Embeddings Model},
           author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
           year={2024},
           url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
         }
-    
+
         @article{li2023angle,
           title={AnglE-optimized Text Embeddings},
           author={Li, Xianming and Li, Jing},
           journal={arXiv preprint arXiv:2309.12871},
           year={2023}
         }
-        
+
     ```
-    
+
 
 
 
@@ -2085,9 +2075,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{nussbaum2024nomic,
           title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
           author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
@@ -2096,9 +2086,9 @@
           archivePrefix={arXiv},
           primaryClass={cs.CL}
     }
-    
+
     ```
-    
+
 
 
 
@@ -2134,9 +2124,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{nussbaum2024nomic,
           title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
           author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
@@ -2145,9 +2135,9 @@
           archivePrefix={arXiv},
           primaryClass={cs.CL}
     }
-    
+
     ```
-    
+
 
 
 
@@ -2169,6 +2159,16 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 32.8K | 4.1K | 7.8B | 14.6 GB | 2024-09-09 | eng-Latn |
+
+
+####  [`nvidia/llama-embed-nemotron-8b`](https://huggingface.co/nvidia/llama-embed-nemotron-8b)
+
+ **License:** https://huggingface.co/nvidia/llama-embed-nemotron-8b/blob/main/LICENSE
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.5B | 28.0 GB | 2025-10-23 | afr-Latn, amh-Ethi, ara-Arab, arq-Arab, ary-Arab, ... (66) |
 
 
 ####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v1`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v1)
@@ -2233,18 +2233,18 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{rankllama,
           title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
           author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
           year={2023},
           journal={arXiv:2310.08319},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2260,9 +2260,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{weller2024promptriever,
           title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
           author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
@@ -2272,9 +2272,9 @@
           primaryClass={cs.IR},
           url={https://arxiv.org/abs/2409.11136},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2290,9 +2290,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{weller2024promptriever,
           title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
           author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
@@ -2302,9 +2302,9 @@
           primaryClass={cs.IR},
           url={https://arxiv.org/abs/2409.11136},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2320,9 +2320,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{weller2024promptriever,
           title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
           author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
@@ -2332,9 +2332,9 @@
           primaryClass={cs.IR},
           url={https://arxiv.org/abs/2409.11136},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2350,9 +2350,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{weller2024promptriever,
           title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
           author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
@@ -2362,9 +2362,9 @@
           primaryClass={cs.IR},
           url={https://arxiv.org/abs/2409.11136},
     }
-    
+
     ```
-    
+
 
 
 
@@ -2400,7 +2400,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhang2025codiemb,
       title={CoDiEmb: A Collaborative yet Distinct Framework for Unified Representation Learning in Information Retrieval and Semantic Textual Similarity},
@@ -2411,7 +2411,7 @@
       url={https://arxiv.org/abs/2508.11442},
     }
     ```
-    
+
 
 
 
@@ -2577,7 +2577,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{lei2025lens,
       title={Enhancing Lexicon-Based Text Embeddings with Large Language Models},
@@ -2586,7 +2586,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -2602,7 +2602,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{lei2025lens,
       title={Enhancing Lexicon-Based Text Embeddings with Large Language Models},
@@ -2611,7 +2611,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -2718,9 +2718,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @misc{li2023making,
           title={Making Large Language Models A Better Foundation For Dense Retrieval},
           author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
@@ -2737,9 +2737,9 @@
               archivePrefix={arXiv},
               primaryClass={cs.CL}
         }
-        
+
     ```
-    
+
 
 
 
@@ -2755,7 +2755,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{liu2025listconranker,
       title={ListConRanker: A Contrastive Text Reranker with Listwise Encoding},
@@ -2764,7 +2764,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -2810,7 +2810,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{https://doi.org/10.48550/arxiv.2205.02340,
           doi = {10.48550/ARXIV.2205.02340},
@@ -2823,7 +2823,7 @@
           copyright = {arXiv.org perpetual, non-exclusive license}
         }
     ```
-    
+
 
 
 
@@ -2839,7 +2839,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{kuratov2019adaptationdeepbidirectionalmultilingual,
           title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language},
@@ -2851,7 +2851,7 @@
           url={https://arxiv.org/abs/1905.07213},
         }
     ```
-    
+
 
 
 
@@ -2907,7 +2907,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{hu2025kalm,
       title={KaLM-Embedding: Superior Training Data Brings A Stronger Embedding Model},
@@ -2916,7 +2916,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -3532,7 +3532,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{bm25s,
           title={BM25S: Orders of magnitude faster lexical search via eager sparse scoring},
@@ -3544,7 +3544,7 @@
           url={https://arxiv.org/abs/2407.03618},
     }
     ```
-    
+
 
 
 
@@ -3580,7 +3580,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{rosa2022parameterleftbehinddistillation,
           title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
@@ -3592,7 +3592,7 @@
           url={https://arxiv.org/abs/2206.02873},
         }
     ```
-    
+
 
 
 
@@ -3608,7 +3608,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{rosa2022parameterleftbehinddistillation,
           title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
@@ -3620,7 +3620,7 @@
           url={https://arxiv.org/abs/2206.02873},
         }
     ```
-    
+
 
 
 
@@ -3636,7 +3636,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{rosa2022parameterleftbehinddistillation,
           title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
@@ -3648,7 +3648,7 @@
           url={https://arxiv.org/abs/2206.02873},
         }
     ```
-    
+
 
 
 
@@ -3664,7 +3664,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{rosa2022parameterleftbehinddistillation,
           title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
@@ -3676,7 +3676,7 @@
           url={https://arxiv.org/abs/2206.02873},
         }
     ```
-    
+
 
 
 
@@ -3842,7 +3842,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{Duquenne:2023:sonar_arxiv,
       author = {Paul-Ambroise Duquenne and Holger Schwenk and Benoit Sagot},
@@ -3852,7 +3852,7 @@
       url = {https://arxiv.org/abs/2308.11466},
     }
     ```
-    
+
 
 
 
@@ -3868,9 +3868,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @misc{izacard2021contriever,
           title={Unsupervised Dense Information Retrieval with Contrastive Learning},
           author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
@@ -3879,7 +3879,7 @@
           doi = {10.48550/ARXIV.2112.09118},
         }
     ```
-    
+
 
 
 
@@ -3905,7 +3905,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{10.48550/arxiv.2210.11416,
           doi = {10.48550/ARXIV.2210.11416},
@@ -3917,9 +3917,9 @@
           year = {2022},
           copyright = {Creative Commons Attribution 4.0 International}
         }
-        
+
     ```
-    
+
 
 
 
@@ -3935,7 +3935,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{10.48550/arxiv.2210.11416,
           doi = {10.48550/ARXIV.2210.11416},
@@ -3947,9 +3947,9 @@
           year = {2022},
           copyright = {Creative Commons Attribution 4.0 International}
         }
-        
+
     ```
-    
+
 
 
 
@@ -3965,7 +3965,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{10.48550/arxiv.2210.11416,
           doi = {10.48550/ARXIV.2210.11416},
@@ -3977,9 +3977,9 @@
           year = {2022},
           copyright = {Creative Commons Attribution 4.0 International}
         }
-        
+
     ```
-    
+
 
 
 
@@ -3995,7 +3995,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{10.48550/arxiv.2210.11416,
           doi = {10.48550/ARXIV.2210.11416},
@@ -4007,9 +4007,9 @@
           year = {2022},
           copyright = {Creative Commons Attribution 4.0 International}
         }
-        
+
     ```
-    
+
 
 
 
@@ -4045,7 +4045,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{awasthy2025graniteembedding,
       title={Granite Embedding Models},
@@ -4054,7 +4054,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -4070,7 +4070,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{awasthy2025graniteembedding,
       title={Granite Embedding Models},
@@ -4079,7 +4079,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -4095,7 +4095,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{awasthy2025graniteembedding,
       title={Granite Embedding Models},
@@ -4104,7 +4104,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -4120,7 +4120,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{awasthy2025graniteembedding,
       title={Granite Embedding Models},
@@ -4129,7 +4129,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -4145,7 +4145,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{awasthy2025graniteembedding,
       title={Granite Embedding Models},
@@ -4154,7 +4154,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -4170,7 +4170,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{awasthy2025graniteembedding,
       title={Granite Embedding Models},
@@ -4179,7 +4179,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -4255,9 +4255,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
         @misc{weller2024followir,
           title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
           author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
@@ -4266,9 +4266,9 @@
           archivePrefix={arXiv},
           primaryClass={cs.IR}
         }
-        
+
     ```
-    
+
 
 
 
@@ -4294,7 +4294,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{günther2023jina,
           title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
@@ -4305,7 +4305,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -4321,7 +4321,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{günther2023jina,
           title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
@@ -4332,7 +4332,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -4348,7 +4348,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{günther2023jina,
           title={Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents},
@@ -4359,7 +4359,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -4375,7 +4375,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{günther2023jina,
           title={Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents},
@@ -4386,7 +4386,7 @@
           primaryClass={cs.CL}
     }
     ```
-    
+
 
 
 
@@ -4532,7 +4532,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{touvron2023llama2openfoundation,
           title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
@@ -4544,7 +4544,7 @@
           url={https://arxiv.org/abs/2307.09288},
         }
     ```
-    
+
 
 
 
@@ -4560,7 +4560,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{touvron2023llama2openfoundation,
           title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
@@ -4572,7 +4572,7 @@
           url={https://arxiv.org/abs/2307.09288},
         }
     ```
-    
+
 
 
 
@@ -4668,7 +4668,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{jiang2023mistral7b,
           title={Mistral 7B},
@@ -4680,7 +4680,7 @@
           url={https://arxiv.org/abs/2310.06825},
         }
     ```
-    
+
 
 
 
@@ -4696,7 +4696,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @software{MokaMassiveMixedEmbedding,
       author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
@@ -4704,7 +4704,7 @@
       year = {2023}
     }
     ```
-    
+
 
 
 
@@ -4720,7 +4720,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @software{MokaMassiveMixedEmbedding,
       author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
@@ -4728,7 +4728,7 @@
       year = {2023}
     }
     ```
-    
+
 
 
 
@@ -4744,7 +4744,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @software{MokaMassiveMixedEmbedding,
       author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
@@ -4752,7 +4752,7 @@
       year = {2023}
     }
     ```
-    
+
 
 
 
@@ -4958,7 +4958,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{feng2022languageagnosticbertsentenceembedding,
           title={Language-agnostic BERT Sentence Embedding},
@@ -4970,7 +4970,7 @@
           url={https://arxiv.org/abs/2007.01852},
         }
     ```
-    
+
 
 
 
@@ -4986,7 +4986,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @inproceedings{reimers-2019-sentence-bert,
         title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
@@ -4997,9 +4997,9 @@
         publisher = "Association for Computational Linguistics",
         url = "http://arxiv.org/abs/1908.10084",
     }
-    
+
     ```
-    
+
 
 
 
@@ -5015,7 +5015,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @inproceedings{reimers-2019-sentence-bert,
         title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
@@ -5026,9 +5026,9 @@
         publisher = "Association for Computational Linguistics",
         url = "http://arxiv.org/abs/1908.10084",
     }
-    
+
     ```
-    
+
 
 
 
@@ -5044,7 +5044,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @inproceedings{reimers-2019-sentence-bert,
         title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
@@ -5055,9 +5055,9 @@
         publisher = "Association for Computational Linguistics",
         url = "http://arxiv.org/abs/1908.10084",
     }
-    
+
     ```
-    
+
 
 
 
@@ -5113,7 +5113,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @inproceedings{reimers-2019-sentence-bert,
         title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
@@ -5124,9 +5124,9 @@
         publisher = "Association for Computational Linguistics",
         url = "http://arxiv.org/abs/1908.10084",
     }
-    
+
     ```
-    
+
 
 
 
@@ -5142,7 +5142,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @inproceedings{reimers-2019-sentence-bert,
         title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
@@ -5153,9 +5153,9 @@
         publisher = "Association for Computational Linguistics",
         url = "http://arxiv.org/abs/1908.10084",
     }
-    
+
     ```
-    
+
 
 
 
@@ -5171,7 +5171,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @inproceedings{reimers-2019-sentence-bert,
         title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
@@ -5182,9 +5182,9 @@
         publisher = "Association for Computational Linguistics",
         url = "http://arxiv.org/abs/1908.10084",
     }
-    
+
     ```
-    
+
 
 
 
@@ -5270,7 +5270,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @software{text2vec,
       author = {Xu Ming},
@@ -5279,7 +5279,7 @@
       url = {https://github.com/shibing624/text2vec},
     }
     ```
-    
+
 
 
 
@@ -5295,7 +5295,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @software{text2vec,
       author = {Xu Ming},
@@ -5304,7 +5304,7 @@
       url = {https://github.com/shibing624/text2vec},
     }
     ```
-    
+
 
 
 
@@ -5320,7 +5320,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @software{text2vec,
       author = {Xu Ming},
@@ -5329,7 +5329,7 @@
       url = {https://github.com/shibing624/text2vec},
     }
     ```
-    
+
 
 
 
@@ -5425,7 +5425,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{bonifacio2021mmarco,
           title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
@@ -5435,9 +5435,9 @@
           archivePrefix={arXiv},
           primaryClass={cs.CL}
         }
-        
+
     ```
-    
+
 
 
 
