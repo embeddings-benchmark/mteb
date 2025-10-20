@@ -748,6 +748,17 @@ bge_en_icl = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data,
     adapted_from="intfloat/e5-mistral-7b-instruct",
+    citation="""
+    @misc{li2024makingtextembeddersfewshot,
+      title={Making Text Embedders Few-Shot Learners},
+      author={Chaofan Li and MingHao Qin and Shitao Xiao and Jianlyu Chen and Kun Luo and Yingxia Shao and Defu Lian and Zheng Liu},
+      year={2024},
+      eprint={2409.15700},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2409.15700},
+}
+""",
 )
 
 bge_m3_unsupervised = ModelMeta(

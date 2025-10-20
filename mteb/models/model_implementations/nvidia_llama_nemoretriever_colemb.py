@@ -9,6 +9,16 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import Array, BatchedInput, PromptType
 
+LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
+      title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
+      author={Mengyao Xu and Gabriel Moreira and Ronay Ak and Radek Osmulski and Yauhen Babakhin and Zhiding Yu and Benedikt Schifferer and Even Oldridge},
+      year={2025},
+      eprint={2507.05513},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2507.05513}
+}"""
+
 
 class LlamaNemoretrieverColembed(AbsEncoder):
     def __init__(
@@ -148,6 +158,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
@@ -173,4 +184,5 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=TRAINING_DATA,
+    citation=LLAMA_NEMORETRIEVER_CITATION,
 )
