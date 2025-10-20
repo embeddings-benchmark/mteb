@@ -14,6 +14,13 @@ from .bge_models import bge_training_data
 
 logger = logging.getLogger(__name__)
 
+MODEL2VEC_CITATION = """@software{minishlab2024model2vec,
+      authors = {Stephan Tulkens, Thomas van Dongen},
+      title = {Model2Vec: Turn any Sentence Transformer into a Small Fast Model},
+      year = {2024},
+      url = {https://github.com/MinishLab/model2vec}
+}"""
+
 _POTION_MULTILINGUAL_128M_LANGUAGES = [
     "afr-Latn",
     "amh-Ethi",
@@ -172,6 +179,7 @@ m2v_base_glove_subword = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 
@@ -196,6 +204,7 @@ m2v_base_glove = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 m2v_base_output = ModelMeta(
@@ -219,6 +228,7 @@ m2v_base_output = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 m2v_multilingual_output = ModelMeta(
@@ -242,6 +252,7 @@ m2v_multilingual_output = ModelMeta(
     training_datasets=None,
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 potion_base_2m = ModelMeta(
@@ -265,6 +276,7 @@ potion_base_2m = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 potion_base_4m = ModelMeta(
@@ -288,6 +300,7 @@ potion_base_4m = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 potion_base_8m = ModelMeta(
@@ -311,6 +324,7 @@ potion_base_8m = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 potion_multilingual_128m = ModelMeta(
@@ -334,6 +348,7 @@ potion_multilingual_128m = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
+    citation=MODEL2VEC_CITATION,
 )
 
 pubmed_bert_100k = ModelMeta(

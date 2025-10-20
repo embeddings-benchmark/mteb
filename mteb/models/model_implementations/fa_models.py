@@ -27,6 +27,15 @@ parsbert = ModelMeta(
         # Persian Wikipedia
         # Other data crawled from websites like bigbangpage.com, chetor.com, eligasht.com/blog, digikala.com/mag, and ted.com/talks.
     ),
+    citation="""
+    @article{ParsBERT,
+    title={ParsBERT: Transformer-based Model for Persian Language Understanding},
+    author={Mehrdad Farahani, Mohammad Gharachorloo, Marzieh Farahani, Mohammad Manthouri},
+    journal={ArXiv},
+    year={2020},
+    volume={abs/2005.12515}
+}
+""",
 )
 
 bert_zwnj = ModelMeta(

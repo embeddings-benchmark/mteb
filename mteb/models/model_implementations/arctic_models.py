@@ -4,6 +4,26 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+ARCTIC_V1_CITATION = """@article{merrick2024embedding,
+      title={Embedding And Clustering Your Data Can Improve Contrastive Pretraining},
+      author={Merrick, Luke},
+      journal={arXiv preprint arXiv:2407.18887},
+      year={2024},
+      eprint={2407.18887},
+      archivePrefix={arXiv},
+      url={https://arxiv.org/abs/2407.18887}
+}"""
+
+ARCTIC_V2_CITATION = """@article{yu2024arctic,
+      title={Arctic-Embed 2.0: Multilingual Retrieval Without Compromise},
+      author={Yu, Puxuan and Merrick, Luke and Nuti, Gaurav and Campos, Daniel},
+      journal={arXiv preprint arXiv:2412.04506},
+      year={2024},
+      eprint={2412.04506},
+      archivePrefix={arXiv},
+      url={https://arxiv.org/abs/2412.04506}
+}"""
+
 LANGUAGES_V2_0 = [
     "afr-Latn",
     "ara-Arab",
@@ -138,6 +158,7 @@ arctic_embed_xs = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=arctic_v1_training_datasets,
+    citation=ARCTIC_V1_CITATION,
 )
 
 
@@ -162,6 +183,7 @@ arctic_embed_s = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=arctic_v1_training_datasets,
+    citation=ARCTIC_V1_CITATION,
 )
 
 
@@ -186,6 +208,7 @@ arctic_embed_m = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=arctic_v1_training_datasets,
+    citation=ARCTIC_V1_CITATION,
 )
 
 arctic_embed_m_long = ModelMeta(
@@ -210,6 +233,7 @@ arctic_embed_m_long = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=arctic_v1_training_datasets,
+    citation=ARCTIC_V1_CITATION,
 )
 
 arctic_embed_l = ModelMeta(
@@ -233,6 +257,7 @@ arctic_embed_l = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=arctic_v1_training_datasets,
+    citation=ARCTIC_V1_CITATION,
 )
 
 arctic_embed_m_v1_5 = ModelMeta(
@@ -261,6 +286,7 @@ arctic_embed_m_v1_5 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=arctic_v1_training_datasets,
+    citation=ARCTIC_V1_CITATION,
 )
 
 arctic_embed_m_v2_0 = ModelMeta(
@@ -285,6 +311,7 @@ arctic_embed_m_v2_0 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=arctic_v2_training_datasets,
+    citation=ARCTIC_V2_CITATION,
 )
 
 arctic_embed_l_v2_0 = ModelMeta(
@@ -308,4 +335,5 @@ arctic_embed_l_v2_0 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=arctic_v2_training_datasets,
+    citation=ARCTIC_V2_CITATION,
 )

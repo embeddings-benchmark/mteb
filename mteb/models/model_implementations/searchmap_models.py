@@ -37,4 +37,12 @@ searchmap_preview = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="NovaSearch/stella_en_400M_v5",
+    citation="""@misc{vectorpath2025searchmap,
+  title={SearchMap: Conversational E-commerce Search Embedding Model},
+  author={VectorPath Research Team},
+  year={2025},
+  publisher={Hugging Face},
+  journal={HuggingFace Model Hub},
+}
+""",
 )
