@@ -497,14 +497,30 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             logger.debug(f"on_benchmark_select callback: {elapsed}s")
             show_zero_shot = _should_show_zero_shot_filter(benchmark_name)
 
+            # Calculate initial models for this benchmark to avoid race conditions
+            benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
+            all_models_in_scores = list({entry["model_name"] for entry in scores})
+            initial_models = filter_models(
+                all_models_in_scores,
+                benchmark_tasks,
+                availability=None,
+                compatibility=[],
+                instructions=None,
+                max_model_size=MAX_MODEL_SIZE,
+                zero_shot_setting="allow_all",
+            )
+            # Sort to ensure consistency with update_models
+            initial_models = sorted(initial_models)
+
             return (
                 languages,
                 domains,
                 types,
                 modalities,
-                sorted([task.metadata.name for task in benchmark.tasks]),
+                benchmark_tasks,
                 scores,
                 gr.update(visible=show_zero_shot),
+                initial_models,
             )
 
         benchmark_select.change(
@@ -518,6 +534,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 task_select,
                 scores,
                 zero_shot,
+                models,
             ],
         )
 
@@ -672,10 +689,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
                 zero_shot_setting=zero_shot,
             )
             elapsed = time.time() - start_time
-            if model_names == filtered_models:
-                # This indicates that the models should not be filtered
-                return None
             logger.debug(f"update_models callback: {elapsed}s")
+            # Always return sorted models to ensure models.change triggers update_tables
+
             return sorted(filtered_models)
 
         scores.change(
@@ -691,6 +707,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             ],
             outputs=[models],
         )
+
         task_select.change(
             update_models,
             inputs=[
@@ -770,16 +787,25 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             outputs=[models],
         )
 
+        def _cache_key_for_update_tables(scores, tasks, models_to_keep, benchmark_name):
+            scores_hash = hash(
+                tuple(sorted((d.get("model_name"), d.get("revision")) for d in scores))
+            )
+            tasks_hash = hash(tuple(sorted(tasks)))
+            # Sort models_to_keep to ensure consistent hash regardless of input order
+            models_hash = (
+                hash(tuple(sorted(models_to_keep)))
+                if models_to_keep is not None
+                else None
+            )
+            bench_hash = hash(benchmark_name)
+            key = hash((scores_hash, tasks_hash, models_hash, bench_hash))
+
+            return key
+
         @cachetools.cached(
             cache={},
-            key=lambda scores, tasks, models_to_keep, benchmark_name: hash(
-                (
-                    id(scores),
-                    hash(tuple(tasks)),
-                    id(models_to_keep),
-                    hash(benchmark_name),
-                )
-            ),
+            key=_cache_key_for_update_tables,
         )
         def update_tables(
             scores,
@@ -832,21 +858,15 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             logger.debug(f"update_tables callback: {elapsed}s")
             return summary, per_task
 
-        task_select.change(
-            update_tables,
-            inputs=[scores, task_select, models, benchmark_select],
-            outputs=[summary_table, per_task_table],
-        )
-        scores.change(
-            update_tables,
-            inputs=[scores, task_select, models, benchmark_select],
-            outputs=[summary_table, per_task_table],
-        )
-        models.change(
-            update_tables,
-            inputs=[scores, task_select, models, benchmark_select],
-            outputs=[summary_table, per_task_table],
-        )
+        # Only update tables when models change, not when scores/tasks change directly
+        # This avoids redundant updates since scores/tasks changes trigger update_models
+        # which then triggers models.change
+        for item in [models, task_select]:
+            item.change(
+                update_tables,
+                inputs=[scores, task_select, models, benchmark_select],
+                outputs=[summary_table, per_task_table],
+            )
 
         gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
 
@@ -860,19 +880,11 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             bench_tasks,
             bench_scores,
             zero_shot,
+            bench_initial_models,
         ) = on_benchmark_select(benchmark.name)
-        filtered_models = update_models(
-            bench_scores,
-            bench_tasks,
-            availability=None,
-            compatibility=[],
-            instructions=None,
-            max_model_size=MAX_MODEL_SIZE,
-            zero_shot="allow_all",
-        )
-        # We have to call this both on the filtered and unfiltered task because the callbacks
-        # also gets called twice for some reason
-        update_tables(bench_scores, bench_tasks, filtered_models, benchmark.name)
+        # Call update_tables to populate cache (simulating models.change trigger)
+        update_tables(bench_scores, bench_tasks, bench_initial_models, benchmark.name)
+        # Also cache the filtered tasks scenario
         filtered_tasks = update_task_list(
             benchmark.name,
             bench_types,
@@ -880,7 +892,9 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             bench_languages,
             bench_modalities,
         )
-        update_tables(bench_scores, filtered_tasks, filtered_models, benchmark.name)
+        update_tables(
+            bench_scores, filtered_tasks, bench_initial_models, benchmark.name
+        )
     return demo
 
 

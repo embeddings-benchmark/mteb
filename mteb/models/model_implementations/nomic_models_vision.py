@@ -12,6 +12,16 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+NOMIC_EMBED_VISION_CITATION = """@article{nussbaum2024nomicembedvision,
+      title={Nomic Embed Vision: Expanding the Latent Space},
+      author={Nussbaum, Zach and Duderstadt, Brandon and Mulyar, Andriy},
+      journal={arXiv preprint arXiv:2406.18587},
+      year={2024},
+      eprint={2406.18587},
+      archivePrefix={arXiv},
+      url={https://arxiv.org/abs/2406.18587}
+}"""
+
 
 class NomicVisionModel(AbsEncoder):
     def __init__(
@@ -174,4 +184,5 @@ nomic_embed_vision_v1_5 = ModelMeta(
         # https://arxiv.org/pdf/2406.18587
         # DFN-2B
     ),
+    citation=NOMIC_EMBED_VISION_CITATION,
 )

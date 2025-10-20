@@ -100,6 +100,13 @@ SFR_Embedding_Code_2B_R = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@article{liu2024codexembed,
+  title={CodeXEmbed: A Generalist Embedding Model Family for Multiligual and Multi-task Code Retrieval},
+  author={Liu, Ye and Meng, Rui and Jot, Shafiq and Savarese, Silvio and Xiong, Caiming and Zhou, Yingbo and Yavuz, Semih},
+  journal={arXiv preprint arXiv:2411.12644},
+  year={2024}
+}
+""",
 )
 
 SFR_Embedding_Mistral = ModelMeta(
@@ -129,4 +136,13 @@ SFR_Embedding_Mistral = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
+    citation="""
+    @misc{SFRAIResearch2024,
+  title={SFR-Embedding-Mistral:Enhance Text Retrieval with Transfer Learning},
+  author={Rui Meng, Ye Liu, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
+  howpublished={Salesforce AI Research Blog},
+  year={2024},
+  url={https://www.salesforce.com/blog/sfr-embedding/}
+}
+""",
 )

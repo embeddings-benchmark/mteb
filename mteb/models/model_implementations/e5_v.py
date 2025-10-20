@@ -14,6 +14,16 @@ E5_V_TRANSFORMERS_VERSION = (
     "4.44.2"  # Issue 1647: Only works with transformers==4.44.2.
 )
 
+E5_V_CITATION = """@article{jiang2024e5v,
+      title={E5-V: Universal Embeddings with Multimodal Large Language Models},
+      author={Jiang, Ting and Song, Minghui and Zhang, Zihan and Huang, Haizhen and Deng, Weiwei and Sun, Feng and Zhang, Qi and Wang, Deqing and Zhuang, Fuzhen},
+      journal={arXiv preprint arXiv:2407.12580},
+      year={2024},
+      eprint={2407.12580},
+      archivePrefix={arXiv},
+      url={https://arxiv.org/abs/2407.12580}
+}"""
+
 
 class E5VModel(AbsEncoder):
     def __init__(
@@ -169,4 +179,5 @@ e5_v = ModelMeta(
     training_datasets=set(
         # princeton-nlp/datasets-for-simcse
     ),
+    citation=E5_V_CITATION,
 )
