@@ -8,11 +8,14 @@
 # - Create a release on GitHub
 
 # This workflow required the following secrets to be set:
-# - a GitHub personal access token with the `repo` scope called `RELEASE`
-# - and that you setup trusted publishing using PyPI as described here: https://blog.pypi.org/posts/2023-04-20-introducing-trusted-publishers/
+# repo setup trusted publishing using PyPI as described here: https://docs.pypi.org/trusted-publishers/
 
 name: Version & Release on Commit Prefix
 on:
+  workflow_run:
+    workflows: [ "test" ]
+    types:
+      - completed
   push:
     branches:
       - main
@@ -93,11 +96,8 @@ jobs:
           git add pyproject.toml
           git commit -m "chore: bump version to ${{ steps.version_bump.outputs.new_version }}" || echo "No changes to commit."
 
-          tag="v${{ steps.version_bump.outputs.new_version }}"
-          git tag "$tag"
-
           # push changes and tag safely
-          git push --force-with-lease origin HEAD:main
+          git push origin HEAD:main
           git push origin "$tag"
 
       - name: Create GitHub Release
