@@ -18,6 +18,16 @@ from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
+NV_RETRIEVER_CITATION = """@misc{moreira2025nvretrieverimprovingtextembedding,
+      title={NV-Retriever: Improving text embedding models with effective hard-negative mining},
+      author={Gabriel de Souza P. Moreira and Radek Osmulski and Mengyao Xu and Ronay Ak and Benedikt Schifferer and Even Oldridge},
+      year={2025},
+      eprint={2407.15831},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2407.15831}
+}"""
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
@@ -117,6 +127,7 @@ NV_embed_v2 = ModelMeta(
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
     public_training_data=None,
+    citation=NV_RETRIEVER_CITATION,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -146,6 +157,7 @@ NV_embed_v1 = ModelMeta(
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
     public_training_data=None,
+    citation=NV_RETRIEVER_CITATION,
 )
 
 llama_embed_nemotron_evaluated_languages = [
@@ -533,4 +545,5 @@ llama_embed_nemotron_8b = ModelMeta(
     public_training_code=None,  # Will be released later
     public_training_data=None,  # Will be released later
     contacts=["ybabakhin"],
+    citation=NV_RETRIEVER_CITATION,
 )
