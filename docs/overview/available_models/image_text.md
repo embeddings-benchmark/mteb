@@ -13,7 +13,25 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 32.8K | 1.5K | 2.2B | 8.2 GB | 2024-12-24 | cmn-Hans, eng-Latn |
+| 32.8K | 1536 | 2.2B | 8.2 GB | 2024-12-24 | cmn-Hans, eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @misc{zhang2024gme,
+          title={GME: Improving Universal Multimodal Retrieval by Multimodal LLMs},
+          author={Zhang, Xin and Zhang, Yanzhao and Xie, Wen and Li, Mingxin and Dai, Ziqi and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Li, Wenjie and Zhang, Min},
+          year={2024},
+          eprint={2412.16855},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={http://arxiv.org/abs/2412.16855}
+    }
+    ```
+
+
 
 
 ####  [`Alibaba-NLP/gme-Qwen2-VL-7B-Instruct`](https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct)
@@ -23,7 +41,25 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 32.8K | 3.6K | 8.3B | 30.9 GB | 2024-12-24 | cmn-Hans, eng-Latn |
+| 32.8K | 3584 | 8.3B | 30.9 GB | 2024-12-24 | cmn-Hans, eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @misc{zhang2024gme,
+          title={GME: Improving Universal Multimodal Retrieval by Multimodal LLMs},
+          author={Zhang, Xin and Zhang, Yanzhao and Xie, Wen and Li, Mingxin and Dai, Ziqi and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Li, Wenjie and Zhang, Min},
+          year={2024},
+          eprint={2412.16855},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL},
+          url={http://arxiv.org/abs/2412.16855}
+    }
+    ```
+
+
 
 
 ####  [`TIGER-Lab/VLM2Vec-Full`](https://huggingface.co/TIGER-Lab/VLM2Vec-Full)
@@ -33,12 +69,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 131.1K | 3.1K | 4.2B | 7.7 GB | 2024-10-08 | eng-Latn |
+| 131.1K | 3072 | 4.2B | 7.7 GB | 2024-10-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{jiang2024vlm2vec,
       title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
@@ -47,7 +83,7 @@
       year={2024}
     }
     ```
-    
+
 
 
 
@@ -58,12 +94,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 131.1K | 3.1K | not specified | not specified | 2024-10-08 | eng-Latn |
+| 131.1K | 3072 | not specified | not specified | 2024-10-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{jiang2024vlm2vec,
       title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
@@ -72,7 +108,7 @@
       year={2024}
     }
     ```
-    
+
 
 
 
@@ -88,7 +124,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{karlinsky2025granitevision,
       title={Granite Vision: a lightweight, open-source multimodal model for enterprise Intelligence},
@@ -97,7 +133,7 @@
       year={2025}
     }
     ```
-    
+
 
 
 
@@ -108,23 +144,23 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 128.0K | 4.1K | 10.6B | 19.8 GB | 2025-02-12 | eng-Latn |
+| 128.0K | 4096 | 10.6B | 19.8 GB | 2025-02-12 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{chen2025mmE5,
       title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
       author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
       journal={arXiv preprint arXiv:2502.08468},
       year={2025}
     }
-    
+
     ```
-    
+
 
 
 
@@ -140,7 +176,7 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{koukounas2024jinaclip,
       title={Jina CLIP: Your CLIP Model Is Also Your Text Retriever},
@@ -149,7 +185,7 @@
       year={2024}
     }
     ```
-    
+
 
 
 
@@ -160,12 +196,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 32.8K | 2.0K | 3.8B | 7.3 GB | 2025-06-24 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
+| 32.8K | 2048 | 3.8B | 7.3 GB | 2025-06-24 | afr-Latn, amh-Latn, ara-Latn, asm-Latn, aze-Latn, ... (99) |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
           title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
@@ -177,7 +213,7 @@
           url={https://arxiv.org/abs/2506.18902},
     }
     ```
-    
+
 
 
 
@@ -188,12 +224,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| not specified | 1.3K | 361.0M | not specified | 2024-11-07 | eng-Latn |
+| not specified | 1280 | 361.0M | not specified | 2024-11-07 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{huang2024llm2clippowerfullanguagemodel,
       title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
@@ -205,7 +241,7 @@
       url={https://arxiv.org/abs/2411.04997}
     }
     ```
-    
+
 
 
 
@@ -216,12 +252,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| not specified | 1.3K | 578.0M | not specified | 2024-11-07 | eng-Latn |
+| not specified | 1280 | 578.0M | not specified | 2024-11-07 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{huang2024llm2clippowerfullanguagemodel,
       title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
@@ -233,7 +269,7 @@
       url={https://arxiv.org/abs/2411.04997}
     }
     ```
-    
+
 
 
 
@@ -244,12 +280,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| not specified | 1.3K | 579.0M | not specified | 2024-11-07 | eng-Latn |
+| not specified | 1280 | 579.0M | not specified | 2024-11-07 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{huang2024llm2clippowerfullanguagemodel,
       title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
@@ -261,7 +297,7 @@
       url={https://arxiv.org/abs/2411.04997}
     }
     ```
-    
+
 
 
 
@@ -277,9 +313,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{nomicembedmultimodal2025,
       title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
       author={Nomic Team},
@@ -288,7 +324,7 @@
       url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
     }
     ```
-    
+
 
 
 
@@ -304,9 +340,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{nomicembedmultimodal2025,
       title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
       author={Nomic Team},
@@ -315,7 +351,7 @@
       url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
     }
     ```
-    
+
 
 
 
@@ -329,6 +365,24 @@
 | 2.0K | 768 | 92.9M | 355.0 MB | 2024-06-08 | eng-Latn |
 
 
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{nussbaum2024nomicembedvision,
+          title={Nomic Embed Vision: Expanding the Latent Space},
+          author={Nussbaum, Zach and Duderstadt, Brandon and Mulyar, Andriy},
+          journal={arXiv preprint arXiv:2406.18587},
+          year={2024},
+          eprint={2406.18587},
+          archivePrefix={arXiv},
+          url={https://arxiv.org/abs/2406.18587}
+    }
+    ```
+
+
+
+
 ####  [`nvidia/llama-nemoretriever-colembed-1b-v1`](https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1)
 
  **License:** https://huggingface.co/nvidia/llama-nemoretriever-colembed-1b-v1/blob/main/LICENSE
@@ -336,7 +390,25 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 8.2K | 2.0K | 2.4B | 9.0 GB | 2025-06-27 | eng-Latn |
+| 8.2K | 2048 | 2.4B | 9.0 GB | 2025-06-27 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @misc{xu2025llamanemoretrievercolembedtopperforming,
+          title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
+          author={Mengyao Xu and Gabriel Moreira and Ronay Ak and Radek Osmulski and Yauhen Babakhin and Zhiding Yu and Benedikt Schifferer and Even Oldridge},
+          year={2025},
+          eprint={2507.05513},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV},
+          url={https://arxiv.org/abs/2507.05513}
+    }
+    ```
+
+
 
 
 ####  [`nvidia/llama-nemoretriever-colembed-3b-v1`](https://huggingface.co/nvidia/llama-nemoretriever-colembed-3b-v1)
@@ -346,7 +418,25 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 8.2K | 3.1K | 4.4B | 16.4 GB | 2025-06-27 | eng-Latn |
+| 8.2K | 3072 | 4.4B | 16.4 GB | 2025-06-27 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @misc{xu2025llamanemoretrievercolembedtopperforming,
+          title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
+          author={Mengyao Xu and Gabriel Moreira and Ronay Ak and Radek Osmulski and Yauhen Babakhin and Zhiding Yu and Benedikt Schifferer and Even Oldridge},
+          year={2025},
+          eprint={2507.05513},
+          archivePrefix={arXiv},
+          primaryClass={cs.CV},
+          url={https://arxiv.org/abs/2507.05513}
+    }
+    ```
+
+
 
 
 ####  [`royokong/e5-v`](https://huggingface.co/royokong/e5-v)
@@ -356,7 +446,25 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 8.2K | 4.1K | 8.4B | 15.6 GB | 2024-07-17 | eng-Latn |
+| 8.2K | 4096 | 8.4B | 15.6 GB | 2024-07-17 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{jiang2024e5v,
+          title={E5-V: Universal Embeddings with Multimodal Large Language Models},
+          author={Jiang, Ting and Song, Minghui and Zhang, Zihan and Huang, Haizhen and Deng, Weiwei and Sun, Feng and Zhang, Qi and Wang, Deqing and Zhuang, Fuzhen},
+          journal={arXiv preprint arXiv:2407.12580},
+          year={2024},
+          eprint={2407.12580},
+          archivePrefix={arXiv},
+          url={https://arxiv.org/abs/2407.12580}
+    }
+    ```
+
+
 
 
 ####  [`vidore/colSmol-256M`](https://huggingface.co/vidore/colSmol-256M)
@@ -371,9 +479,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -383,7 +491,7 @@
       primaryClass={cs.IR}
     }
     ```
-    
+
 
 
 
@@ -399,9 +507,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -411,7 +519,7 @@
       primaryClass={cs.IR}
     }
     ```
-    
+
 
 
 
@@ -427,9 +535,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -439,7 +547,7 @@
       primaryClass={cs.IR}
     }
     ```
-    
+
 
 
 
@@ -455,9 +563,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -467,7 +575,7 @@
       primaryClass={cs.IR}
     }
     ```
-    
+
 
 
 
@@ -483,9 +591,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -495,7 +603,7 @@
       primaryClass={cs.IR}
     }
     ```
-    
+
 
 
 
@@ -511,9 +619,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -523,7 +631,7 @@
       primaryClass={cs.IR}
     }
     ```
-    
+
 
 
 
@@ -539,9 +647,9 @@
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @misc{faysse2024colpali,
       title={ColPali: Efficient Document Retrieval with Vision Language Models},
       author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C'eline and Colombo, Pierre},
@@ -561,12 +669,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 196.0M | 1.6 GB | 2024-06-06 | eng-Latn |
+| 512 | 768 | 196.0M | 1.6 GB | 2024-06-06 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{zhou2024vista,
       title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
@@ -575,7 +683,7 @@
       year={2024}
     }
     ```
-    
+
 
 
 
@@ -586,12 +694,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 8.2K | 1.0K | 872.9M | 4.2 GB | 2024-06-06 | eng-Latn |
+| 8.2K | 1024 | 872.9M | 4.2 GB | 2024-06-06 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @article{zhou2024vista,
       title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
@@ -600,7 +708,7 @@
       year={2024}
     }
     ```
-    
+
 
 
 
@@ -611,7 +719,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 128.0K | 1.5K | not specified | not specified | 2024-12-01 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111) |
+| 128.0K | 1536 | not specified | not specified | 2024-12-01 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111) |
 
 
 ####  [`Cohere/Cohere-embed-v4.0 (output_dtype=binary)`](https://docs.cohere.com/docs/embeddings)
@@ -621,7 +729,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 128.0K | 1.5K | not specified | not specified | 2024-12-01 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111) |
+| 128.0K | 1536 | not specified | not specified | 2024-12-01 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111) |
 
 
 ####  [`Cohere/Cohere-embed-v4.0 (output_dtype=int8)`](https://docs.cohere.com/docs/embeddings)
@@ -631,7 +739,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 128.0K | 1.5K | not specified | not specified | 2024-12-01 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111) |
+| 128.0K | 1536 | not specified | not specified | 2024-12-01 | afr-Latn, amh-Ethi, ara-Arab, asm-Beng, aze-Latn, ... (111) |
 
 
 ####  [`QuanSun/EVA02-CLIP-B-16`](https://huggingface.co/QuanSun/EVA-CLIP)
@@ -641,7 +749,22 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 512 | 149.0M | 568.0 MB | 2023-04-26 | eng-Latn |
+| 77 | 512 | 149.0M | 568.0 MB | 2023-04-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{EVA-CLIP,
+          title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+          author={Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue},
+          journal={arXiv preprint arXiv:2303.15389},
+          year={2023}
+    }
+    ```
+
+
 
 
 ####  [`QuanSun/EVA02-CLIP-L-14`](https://huggingface.co/QuanSun/EVA-CLIP)
@@ -651,7 +774,22 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 768 | 428.0M | 1.6 GB | 2023-04-26 | eng-Latn |
+| 77 | 768 | 428.0M | 1.6 GB | 2023-04-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{EVA-CLIP,
+          title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+          author={Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue},
+          journal={arXiv preprint arXiv:2303.15389},
+          year={2023}
+    }
+    ```
+
+
 
 
 ####  [`QuanSun/EVA02-CLIP-bigE-14`](https://huggingface.co/QuanSun/EVA-CLIP)
@@ -661,7 +799,22 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 1.0K | 4.7B | 17.5 GB | 2023-04-26 | eng-Latn |
+| 77 | 1024 | 4.7B | 17.5 GB | 2023-04-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{EVA-CLIP,
+          title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+          author={Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue},
+          journal={arXiv preprint arXiv:2303.15389},
+          year={2023}
+    }
+    ```
+
+
 
 
 ####  [`QuanSun/EVA02-CLIP-bigE-14-plus`](https://huggingface.co/QuanSun/EVA-CLIP)
@@ -671,7 +824,22 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 1.0K | 5.0B | 18.6 GB | 2023-04-26 | eng-Latn |
+| 77 | 1024 | 5.0B | 18.6 GB | 2023-04-26 | eng-Latn |
+
+
+??? quote "Citation"
+
+
+    ```bibtex
+    @article{EVA-CLIP,
+          title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+          author={Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue},
+          journal={arXiv preprint arXiv:2303.15389},
+          year={2023}
+    }
+    ```
+
+
 
 
 ####  [`Salesforce/blip-image-captioning-base`](https://huggingface.co/Salesforce/blip-image-captioning-base)
@@ -681,7 +849,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 247.0M | 942.0 MB | 2023-08-01 | eng-Latn |
+| 512 | 768 | 247.0M | 942.0 MB | 2023-08-01 | eng-Latn |
 
 
 ####  [`Salesforce/blip-image-captioning-large`](https://huggingface.co/Salesforce/blip-image-captioning-large)
@@ -691,7 +859,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 470.0M | 1.8 GB | 2023-12-07 | eng-Latn |
+| 512 | 768 | 470.0M | 1.8 GB | 2023-12-07 | eng-Latn |
 
 
 ####  [`Salesforce/blip-itm-base-coco`](https://huggingface.co/Salesforce/blip-itm-base-coco)
@@ -701,7 +869,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 247.0M | 942.0 MB | 2023-08-01 | eng-Latn |
+| 512 | 768 | 247.0M | 942.0 MB | 2023-08-01 | eng-Latn |
 
 
 ####  [`Salesforce/blip-itm-base-flickr`](https://huggingface.co/Salesforce/blip-itm-base-flickr)
@@ -711,7 +879,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 247.0M | 942.0 MB | 2023-08-01 | eng-Latn |
+| 512 | 768 | 247.0M | 942.0 MB | 2023-08-01 | eng-Latn |
 
 
 ####  [`Salesforce/blip-itm-large-coco`](https://huggingface.co/Salesforce/blip-itm-large-coco)
@@ -721,7 +889,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 470.0M | 1.8 GB | 2023-08-01 | eng-Latn |
+| 512 | 768 | 470.0M | 1.8 GB | 2023-08-01 | eng-Latn |
 
 
 ####  [`Salesforce/blip-itm-large-flickr`](https://huggingface.co/Salesforce/blip-itm-large-flickr)
@@ -731,7 +899,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 470.0M | 1.8 GB | 2023-08-01 | eng-Latn |
+| 512 | 768 | 470.0M | 1.8 GB | 2023-08-01 | eng-Latn |
 
 
 ####  [`Salesforce/blip-vqa-base`](https://huggingface.co/Salesforce/blip-vqa-base)
@@ -741,7 +909,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 247.0M | 1.4 GB | 2023-12-07 | eng-Latn |
+| 512 | 768 | 247.0M | 1.4 GB | 2023-12-07 | eng-Latn |
 
 
 ####  [`Salesforce/blip-vqa-capfilt-large`](https://huggingface.co/Salesforce/blip-vqa-capfilt-large)
@@ -751,7 +919,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 512.0 | 768 | 247.0M | 942.0 MB | 2023-01-22 | eng-Latn |
+| 512 | 768 | 247.0M | 942.0 MB | 2023-01-22 | eng-Latn |
 
 
 ####  [`Salesforce/blip2-opt-2.7b`](https://huggingface.co/Salesforce/blip2-opt-2.7b)
@@ -801,7 +969,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| not specified | 1.0K | not specified | not specified | 2024-10-24 | eng-Latn |
+| not specified | 1024 | not specified | not specified | 2024-10-24 | eng-Latn |
 
 
 ####  [`cohere/embed-multilingual-v3.0`](https://huggingface.co/Cohere/Cohere-embed-multilingual-v3.0)
@@ -811,7 +979,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| not specified | 1.0K | not specified | not specified | 2024-10-24 | not specified |
+| not specified | 1024 | not specified | not specified | 2024-10-24 | not specified |
 
 
 ####  [`google/siglip-base-patch16-224`](https://huggingface.co/google/siglip-base-patch16-224)
@@ -821,12 +989,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 768 | 203.0M | 775.0 MB | 2024-01-08 | eng-Latn |
+| 64 | 768 | 203.0M | 775.0 MB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -837,7 +1005,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -848,12 +1016,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 768 | 203.0M | 775.0 MB | 2024-01-08 | eng-Latn |
+| 64 | 768 | 203.0M | 775.0 MB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -864,7 +1032,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -875,12 +1043,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 768 | 371.0M | 1.4 GB | 2024-01-08 | eng-Latn |
+| 64 | 768 | 371.0M | 1.4 GB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -891,7 +1059,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -902,12 +1070,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 768 | 203.0M | 776.0 MB | 2024-01-08 | eng-Latn |
+| 64 | 768 | 203.0M | 776.0 MB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -918,7 +1086,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -929,12 +1097,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 768 | 204.0M | 777.0 MB | 2024-01-08 | eng-Latn |
+| 64 | 768 | 204.0M | 777.0 MB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -945,7 +1113,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -956,12 +1124,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 1.0K | 652.0M | 2.4 GB | 2024-01-08 | eng-Latn |
+| 64 | 1024 | 652.0M | 2.4 GB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -972,7 +1140,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -983,12 +1151,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 1.0K | 652.0M | 2.4 GB | 2024-01-08 | eng-Latn |
+| 64 | 1024 | 652.0M | 2.4 GB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -999,7 +1167,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -1010,12 +1178,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 16.0 | 1.2K | 877.0M | 3.3 GB | 2024-01-08 | eng-Latn |
+| 16 | 1152 | 877.0M | 3.3 GB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -1026,7 +1194,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -1037,12 +1205,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 1.2K | 878.0M | 3.3 GB | 2024-01-08 | eng-Latn |
+| 64 | 1152 | 878.0M | 3.3 GB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -1053,7 +1221,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -1064,12 +1232,12 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 1.2K | 1.1B | 4.2 GB | 2024-01-08 | eng-Latn |
+| 64 | 1152 | 1.1B | 4.2 GB | 2024-01-08 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
     @misc{zhai2023sigmoid,
           title={Sigmoid Loss for Language Image Pre-Training},
@@ -1080,7 +1248,7 @@
           primaryClass={cs.CV}
     }
     ```
-    
+
 
 
 
@@ -1091,7 +1259,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 64.0 | 768 | 176.0M | 671.0 MB | 2023-02-24 | eng-Latn |
+| 64 | 768 | 176.0M | 671.0 MB | 2023-02-24 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K`](https://huggingface.co/laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K)
@@ -1101,7 +1269,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 512 | 150.0M | 572.0 MB | 2023-04-26 | eng-Latn |
+| 77 | 512 | 150.0M | 572.0 MB | 2023-04-26 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K`](https://huggingface.co/laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K)
@@ -1111,7 +1279,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 512 | 151.0M | 576.0 MB | 2023-04-26 | eng-Latn |
+| 77 | 512 | 151.0M | 576.0 MB | 2023-04-26 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-B-32-laion2B-s34B-b79K`](https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K)
@@ -1121,7 +1289,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 512 | 151.0M | 577.0 MB | 2022-09-15 | eng-Latn |
+| 77 | 512 | 151.0M | 577.0 MB | 2022-09-15 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-H-14-laion2B-s32B-b79K`](https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K)
@@ -1131,7 +1299,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 1.0K | 986.0M | 3.7 GB | 2022-09-15 | eng-Latn |
+| 77 | 1024 | 986.0M | 3.7 GB | 2022-09-15 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K`](https://huggingface.co/laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K)
@@ -1141,7 +1309,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 768 | 428.0M | 1.6 GB | 2023-04-26 | eng-Latn |
+| 77 | 768 | 428.0M | 1.6 GB | 2023-04-26 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-L-14-laion2B-s32B-b82K`](https://huggingface.co/laion/CLIP-ViT-L-14-laion2B-s32B-b82K)
@@ -1151,7 +1319,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 768 | 428.0M | 1.6 GB | 2022-09-15 | eng-Latn |
+| 77 | 768 | 428.0M | 1.6 GB | 2022-09-15 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-bigG-14-laion2B-39B-b160k`](https://huggingface.co/laion/CLIP-ViT-bigG-14-laion2B-39B-b160k)
@@ -1161,7 +1329,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 1.3K | 2.5B | 9.5 GB | 2023-01-23 | eng-Latn |
+| 77 | 1280 | 2.5B | 9.5 GB | 2023-01-23 | eng-Latn |
 
 
 ####  [`laion/CLIP-ViT-g-14-laion2B-s34B-b88K`](https://huggingface.co/laion/CLIP-ViT-g-14-laion2B-s34B-b88K)
@@ -1171,7 +1339,7 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 1.0K | 1.4B | 5.1 GB | 2023-03-06 | eng-Latn |
+| 77 | 1024 | 1.4B | 5.1 GB | 2023-03-06 | eng-Latn |
 
 
 ####  [`openai/clip-vit-base-patch16`](https://huggingface.co/openai/clip-vit-base-patch16)
@@ -1181,14 +1349,14 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 512 | 151.0M | 576.0 MB | 2021-02-26 | eng-Latn |
+| 77 | 512 | 151.0M | 576.0 MB | 2021-02-26 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{radford2021learning,
       title={Learning Transferable Visual Models From Natural Language Supervision},
       author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
@@ -1196,7 +1364,7 @@
       year={2021}
     }
     ```
-    
+
 
 
 
@@ -1207,14 +1375,14 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 512 | 151.0M | 576.0 MB | 2021-02-26 | eng-Latn |
+| 77 | 512 | 151.0M | 576.0 MB | 2021-02-26 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{radford2021learning,
       title={Learning Transferable Visual Models From Natural Language Supervision},
       author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
@@ -1222,7 +1390,7 @@
       year={2021}
     }
     ```
-    
+
 
 
 
@@ -1233,14 +1401,14 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 77.0 | 768 | 428.0M | 1.6 GB | 2021-02-26 | eng-Latn |
+| 77 | 768 | 428.0M | 1.6 GB | 2021-02-26 | eng-Latn |
 
 
 ??? quote "Citation"
 
-    
+
     ```bibtex
-    
+
     @article{radford2021learning,
       title={Learning Transferable Visual Models From Natural Language Supervision},
       author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
@@ -1248,7 +1416,7 @@
       year={2021}
     }
     ```
-    
+
 
 
 
@@ -1259,4 +1427,4 @@
 
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
-| 32.8K | 1.0K | not specified | not specified | 2024-11-10 | not specified |
+| 32.8K | 1024 | not specified | not specified | 2024-11-10 | not specified |
