@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import ast
 import importlib.util
 import re
@@ -15,7 +13,7 @@ import pandas as pd
 import typer
 from datasets import Dataset, DatasetDict
 from huggingface_hub import HfApi
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 """
 This script is designed for data cleaning and the automatic creation of new task versions with updated data.
@@ -428,7 +426,7 @@ def filter_controversial(dataset_dict: DatasetDict) -> DatasetDict:
         for text, label in zip(ds["text"], ds["label"]):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(
-                label if isinstance(label, (str, int, float)) else tuple(label)
+                label if isinstance(label, str | int | float) else tuple(label)
             )
     bad_texts = {t for t, labels in normalized.items() if len(labels) > 1}
     return DatasetDict(
@@ -624,7 +622,7 @@ def get_transform_statements(file_path: Path, class_name: str) -> list[ast.stmt]
     return []
 
 
-def load_dataset(file_path: Path, class_name: str) -> DatasetDict:  # noqa: F811
+def load_dataset(file_path: Path, class_name: str) -> DatasetDict:
     original = file_path.read_text()
     lines = original.splitlines(keepends=True)
     filtered: list[str] = []

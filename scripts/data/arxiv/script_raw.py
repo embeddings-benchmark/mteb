@@ -2,13 +2,11 @@
 only keep useful information
 """
 
-from __future__ import annotations
-
 import gzip
 import json
 
 import jsonlines
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 with open("archive/arxiv-metadata-oai-snapshot.json") as file:
     old_lines = file.readlines()

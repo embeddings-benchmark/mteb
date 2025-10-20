@@ -6,7 +6,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[image]" --group dev
+	pip install ".[bm25s,pylate,image,codecarbon,faiss-cpu]" --group dev
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -33,12 +33,22 @@ pr:
 	make lint
 	make test
 
-
 build-docs:
 	@echo "--- 📚 Building documentation ---"
-	# since we do not have a documentation site, this just build tables for the .md files
-	python docs/create_tasks_table.py
-	python docs/create_benchmarks_table.py
+	make build-docs-overview
+	python -m mkdocs build
+
+
+build-docs-overview:
+	@echo "--- 📚 Building documentation overview ---"
+	python docs/overview/create_available_tasks.py
+	python docs/overview/create_available_models.py
+	python docs/overview/create_available_benchmarks.py
+
+
+serve-docs:
+	@echo "--- 📚 Serving documentation ---"
+	python -m mkdocs serve
 
 
 model-load-test:
@@ -74,3 +84,8 @@ format-citations:
 check: ## Run code quality tools.
 	@echo "--- 🧹 Running code quality tools ---"
 	@pre-commit run -a
+
+.PHONY: typecheck
+typecheck:
+	@echo "--- 🔍 Running type checks ---"
+	mypy mteb

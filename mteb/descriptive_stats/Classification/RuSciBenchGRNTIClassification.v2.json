@@ -1,0 +1,630 @@
+{
+    "test": {
+        "num_samples": 5281,
+        "number_texts_intersect_with_train": 1,
+        "text_statistics": {
+            "total_text_length": 4706594,
+            "min_text_length": 102,
+            "average_text_length": 891.2315849270972,
+            "max_text_length": 5445,
+            "unique_texts": 5281
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 28,
+            "labels": {
+                "760000": {
+                    "count": 189
+                },
+                "100000": {
+                    "count": 189
+                },
+                "60000": {
+                    "count": 188
+                },
+                "340000": {
+                    "count": 187
+                },
+                "380000": {
+                    "count": 188
+                },
+                "130000": {
+                    "count": 188
+                },
+                "520000": {
+                    "count": 189
+                },
+                "180000": {
+                    "count": 189
+                },
+                "440000": {
+                    "count": 189
+                },
+                "110000": {
+                    "count": 189
+                },
+                "270000": {
+                    "count": 189
+                },
+                "290000": {
+                    "count": 188
+                },
+                "170000": {
+                    "count": 189
+                },
+                "650000": {
+                    "count": 188
+                },
+                "683500": {
+                    "count": 189
+                },
+                "680000": {
+                    "count": 189
+                },
+                "140000": {
+                    "count": 188
+                },
+                "770000": {
+                    "count": 189
+                },
+                "500000": {
+                    "count": 189
+                },
+                "730000": {
+                    "count": 188
+                },
+                "30000": {
+                    "count": 189
+                },
+                "40000": {
+                    "count": 188
+                },
+                "150000": {
+                    "count": 189
+                },
+                "20000": {
+                    "count": 189
+                },
+                "160000": {
+                    "count": 188
+                },
+                "310000": {
+                    "count": 189
+                },
+                "550000": {
+                    "count": 189
+                },
+                "670000": {
+                    "count": 189
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "grnti_ru": {
+                "num_samples": 2764,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 2397897,
+                    "min_text_length": 102,
+                    "average_text_length": 867.545947901592,
+                    "max_text_length": 4194,
+                    "unique_texts": 2764
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 28,
+                    "labels": {
+                        "760000": {
+                            "count": 99
+                        },
+                        "100000": {
+                            "count": 99
+                        },
+                        "60000": {
+                            "count": 99
+                        },
+                        "340000": {
+                            "count": 97
+                        },
+                        "380000": {
+                            "count": 99
+                        },
+                        "130000": {
+                            "count": 98
+                        },
+                        "520000": {
+                            "count": 99
+                        },
+                        "180000": {
+                            "count": 99
+                        },
+                        "440000": {
+                            "count": 99
+                        },
+                        "110000": {
+                            "count": 99
+                        },
+                        "270000": {
+                            "count": 99
+                        },
+                        "290000": {
+                            "count": 99
+                        },
+                        "170000": {
+                            "count": 99
+                        },
+                        "650000": {
+                            "count": 98
+                        },
+                        "683500": {
+                            "count": 99
+                        },
+                        "680000": {
+                            "count": 99
+                        },
+                        "140000": {
+                            "count": 98
+                        },
+                        "770000": {
+                            "count": 99
+                        },
+                        "500000": {
+                            "count": 99
+                        },
+                        "730000": {
+                            "count": 98
+                        },
+                        "30000": {
+                            "count": 99
+                        },
+                        "40000": {
+                            "count": 98
+                        },
+                        "150000": {
+                            "count": 99
+                        },
+                        "20000": {
+                            "count": 99
+                        },
+                        "160000": {
+                            "count": 98
+                        },
+                        "310000": {
+                            "count": 99
+                        },
+                        "550000": {
+                            "count": 99
+                        },
+                        "670000": {
+                            "count": 99
+                        }
+                    }
+                }
+            },
+            "grnti_en": {
+                "num_samples": 2517,
+                "number_texts_intersect_with_train": 1,
+                "text_statistics": {
+                    "total_text_length": 2308697,
+                    "min_text_length": 112,
+                    "average_text_length": 917.2415574096146,
+                    "max_text_length": 5445,
+                    "unique_texts": 2517
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 28,
+                    "labels": {
+                        "380000": {
+                            "count": 89
+                        },
+                        "340000": {
+                            "count": 90
+                        },
+                        "520000": {
+                            "count": 90
+                        },
+                        "290000": {
+                            "count": 89
+                        },
+                        "270000": {
+                            "count": 90
+                        },
+                        "30000": {
+                            "count": 90
+                        },
+                        "180000": {
+                            "count": 90
+                        },
+                        "40000": {
+                            "count": 90
+                        },
+                        "683500": {
+                            "count": 90
+                        },
+                        "110000": {
+                            "count": 90
+                        },
+                        "670000": {
+                            "count": 90
+                        },
+                        "550000": {
+                            "count": 90
+                        },
+                        "160000": {
+                            "count": 90
+                        },
+                        "130000": {
+                            "count": 90
+                        },
+                        "730000": {
+                            "count": 90
+                        },
+                        "140000": {
+                            "count": 90
+                        },
+                        "60000": {
+                            "count": 89
+                        },
+                        "770000": {
+                            "count": 90
+                        },
+                        "150000": {
+                            "count": 90
+                        },
+                        "500000": {
+                            "count": 90
+                        },
+                        "20000": {
+                            "count": 90
+                        },
+                        "310000": {
+                            "count": 90
+                        },
+                        "170000": {
+                            "count": 90
+                        },
+                        "440000": {
+                            "count": 90
+                        },
+                        "100000": {
+                            "count": 90
+                        },
+                        "760000": {
+                            "count": 90
+                        },
+                        "680000": {
+                            "count": 90
+                        },
+                        "650000": {
+                            "count": 90
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 52737,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 46995496,
+            "min_text_length": 58,
+            "average_text_length": 891.1294916282686,
+            "max_text_length": 9998,
+            "unique_texts": 52734
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 28,
+            "labels": {
+                "30000": {
+                    "count": 1882
+                },
+                "760000": {
+                    "count": 1884
+                },
+                "680000": {
+                    "count": 1881
+                },
+                "270000": {
+                    "count": 1886
+                },
+                "40000": {
+                    "count": 1884
+                },
+                "770000": {
+                    "count": 1884
+                },
+                "130000": {
+                    "count": 1878
+                },
+                "160000": {
+                    "count": 1885
+                },
+                "520000": {
+                    "count": 1887
+                },
+                "500000": {
+                    "count": 1886
+                },
+                "380000": {
+                    "count": 1885
+                },
+                "290000": {
+                    "count": 1885
+                },
+                "440000": {
+                    "count": 1886
+                },
+                "140000": {
+                    "count": 1886
+                },
+                "650000": {
+                    "count": 1884
+                },
+                "340000": {
+                    "count": 1873
+                },
+                "60000": {
+                    "count": 1886
+                },
+                "20000": {
+                    "count": 1883
+                },
+                "670000": {
+                    "count": 1887
+                },
+                "180000": {
+                    "count": 1880
+                },
+                "150000": {
+                    "count": 1884
+                },
+                "100000": {
+                    "count": 1886
+                },
+                "110000": {
+                    "count": 1883
+                },
+                "550000": {
+                    "count": 1884
+                },
+                "683500": {
+                    "count": 1877
+                },
+                "170000": {
+                    "count": 1886
+                },
+                "310000": {
+                    "count": 1881
+                },
+                "730000": {
+                    "count": 1884
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "grnti_ru": {
+                "num_samples": 28399,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 24430393,
+                    "min_text_length": 58,
+                    "average_text_length": 860.2553963167717,
+                    "max_text_length": 9998,
+                    "unique_texts": 28397
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 28,
+                    "labels": {
+                        "30000": {
+                            "count": 1014
+                        },
+                        "760000": {
+                            "count": 1016
+                        },
+                        "680000": {
+                            "count": 1012
+                        },
+                        "270000": {
+                            "count": 1016
+                        },
+                        "40000": {
+                            "count": 1015
+                        },
+                        "770000": {
+                            "count": 1014
+                        },
+                        "130000": {
+                            "count": 1010
+                        },
+                        "160000": {
+                            "count": 1015
+                        },
+                        "520000": {
+                            "count": 1017
+                        },
+                        "500000": {
+                            "count": 1016
+                        },
+                        "380000": {
+                            "count": 1015
+                        },
+                        "290000": {
+                            "count": 1015
+                        },
+                        "440000": {
+                            "count": 1017
+                        },
+                        "140000": {
+                            "count": 1017
+                        },
+                        "650000": {
+                            "count": 1014
+                        },
+                        "340000": {
+                            "count": 1003
+                        },
+                        "60000": {
+                            "count": 1016
+                        },
+                        "20000": {
+                            "count": 1014
+                        },
+                        "670000": {
+                            "count": 1017
+                        },
+                        "180000": {
+                            "count": 1013
+                        },
+                        "150000": {
+                            "count": 1016
+                        },
+                        "100000": {
+                            "count": 1016
+                        },
+                        "110000": {
+                            "count": 1014
+                        },
+                        "550000": {
+                            "count": 1015
+                        },
+                        "683500": {
+                            "count": 1009
+                        },
+                        "170000": {
+                            "count": 1016
+                        },
+                        "310000": {
+                            "count": 1011
+                        },
+                        "730000": {
+                            "count": 1016
+                        }
+                    }
+                }
+            },
+            "grnti_en": {
+                "num_samples": 24338,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 22565103,
+                    "min_text_length": 62,
+                    "average_text_length": 927.1551894157285,
+                    "max_text_length": 8942,
+                    "unique_texts": 24337
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 28,
+                    "labels": {
+                        "770000": {
+                            "count": 870
+                        },
+                        "680000": {
+                            "count": 869
+                        },
+                        "130000": {
+                            "count": 868
+                        },
+                        "270000": {
+                            "count": 870
+                        },
+                        "40000": {
+                            "count": 869
+                        },
+                        "150000": {
+                            "count": 868
+                        },
+                        "760000": {
+                            "count": 868
+                        },
+                        "440000": {
+                            "count": 869
+                        },
+                        "380000": {
+                            "count": 870
+                        },
+                        "650000": {
+                            "count": 870
+                        },
+                        "110000": {
+                            "count": 869
+                        },
+                        "60000": {
+                            "count": 870
+                        },
+                        "520000": {
+                            "count": 870
+                        },
+                        "160000": {
+                            "count": 870
+                        },
+                        "20000": {
+                            "count": 869
+                        },
+                        "100000": {
+                            "count": 870
+                        },
+                        "670000": {
+                            "count": 870
+                        },
+                        "340000": {
+                            "count": 870
+                        },
+                        "550000": {
+                            "count": 869
+                        },
+                        "683500": {
+                            "count": 868
+                        },
+                        "170000": {
+                            "count": 870
+                        },
+                        "140000": {
+                            "count": 869
+                        },
+                        "30000": {
+                            "count": 868
+                        },
+                        "180000": {
+                            "count": 867
+                        },
+                        "310000": {
+                            "count": 870
+                        },
+                        "290000": {
+                            "count": 870
+                        },
+                        "730000": {
+                            "count": 868
+                        },
+                        "500000": {
+                            "count": 870
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

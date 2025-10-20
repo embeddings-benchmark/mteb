@@ -1,0 +1,384 @@
+{
+    "test": {
+        "num_samples": 373850,
+        "text_statistics": {
+            "total_text_length": 21324081,
+            "min_text_length": 15,
+            "average_text_length": 57.03913601711916,
+            "max_text_length": 209,
+            "unique_texts": 277050
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 121,
+            "labels": {
+                "ux.stackexchange.com.txt": {
+                    "count": 4944
+                },
+                "islam.stackexchange.com.txt": {
+                    "count": 3945
+                },
+                "gamedev.stackexchange.com.txt": {
+                    "count": 2635
+                },
+                "music.stackexchange.com.txt": {
+                    "count": 1784
+                },
+                "esperanto.stackexchange.com.txt": {
+                    "count": 4423
+                },
+                "opendata.stackexchange.com.txt": {
+                    "count": 3544
+                },
+                "pm.stackexchange.com.txt": {
+                    "count": 5147
+                },
+                "patents.stackexchange.com.txt": {
+                    "count": 4590
+                },
+                "lifehacks.stackexchange.com.txt": {
+                    "count": 4863
+                },
+                "languagelearning.stackexchange.com.txt": {
+                    "count": 3971
+                },
+                "philosophy.stackexchange.com.txt": {
+                    "count": 4186
+                },
+                "spanish.stackexchange.com.txt": {
+                    "count": 3864
+                },
+                "german.stackexchange.com.txt": {
+                    "count": 4778
+                },
+                "photo.stackexchange.com.txt": {
+                    "count": 3824
+                },
+                "parenting.stackexchange.com.txt": {
+                    "count": 4466
+                },
+                "sustainability.stackexchange.com.txt": {
+                    "count": 3382
+                },
+                "sharepoint.stackexchange.com.txt": {
+                    "count": 3314
+                },
+                "korean.stackexchange.com.txt": {
+                    "count": 2903
+                },
+                "physics.stackexchange.com.txt": {
+                    "count": 2378
+                },
+                "eosio.stackexchange.com.txt": {
+                    "count": 6533
+                },
+                "musicfans.stackexchange.com.txt": {
+                    "count": 4321
+                },
+                "martialarts.stackexchange.com.txt": {
+                    "count": 3570
+                },
+                "ru.stackoverflow.com.txt": {
+                    "count": 3812
+                },
+                "literature.stackexchange.com.txt": {
+                    "count": 2539
+                },
+                "expatriates.stackexchange.com.txt": {
+                    "count": 3222
+                },
+                "pt.stackoverflow.com.txt": {
+                    "count": 4725
+                },
+                "ja.stackoverflow.com.txt": {
+                    "count": 1512
+                },
+                "softwarerecs.stackexchange.com.txt": {
+                    "count": 6694
+                },
+                "mathematica.stackexchange.com.txt": {
+                    "count": 2495
+                },
+                "ethereum.stackexchange.com.txt": {
+                    "count": 2370
+                },
+                "japanese.stackexchange.com.txt": {
+                    "count": 4780
+                },
+                "unix.stackexchange.com.txt": {
+                    "count": 3029
+                },
+                "travel.stackexchange.com.txt": {
+                    "count": 3494
+                },
+                "space.stackexchange.com.txt": {
+                    "count": 2740
+                },
+                "serverfault.com.txt": {
+                    "count": 5195
+                },
+                "fitness.stackexchange.com.txt": {
+                    "count": 6080
+                },
+                "magento.stackexchange.com.txt": {
+                    "count": 2762
+                },
+                "robotics.stackexchange.com.txt": {
+                    "count": 1499
+                },
+                "math.stackexchange.com.txt": {
+                    "count": 2359
+                },
+                "latin.stackexchange.com.txt": {
+                    "count": 5764
+                },
+                "health.stackexchange.com.txt": {
+                    "count": 4646
+                },
+                "iot.stackexchange.com.txt": {
+                    "count": 1734
+                },
+                "expressionengine.stackexchange.com.txt": {
+                    "count": 2969
+                },
+                "law.stackexchange.com.txt": {
+                    "count": 3176
+                },
+                "vi.stackexchange.com.txt": {
+                    "count": 1620
+                },
+                "matheducators.stackexchange.com.txt": {
+                    "count": 3420
+                },
+                "raspberrypi.stackexchange.com.txt": {
+                    "count": 4272
+                },
+                "sitecore.stackexchange.com.txt": {
+                    "count": 3583
+                },
+                "sports.stackexchange.com.txt": {
+                    "count": 3586
+                },
+                "workplace.stackexchange.com.txt": {
+                    "count": 2350
+                },
+                "stackoverflow.com.txt": {
+                    "count": 3101
+                },
+                "judaism.stackexchange.com.txt": {
+                    "count": 2847
+                },
+                "ham.stackexchange.com.txt": {
+                    "count": 2265
+                },
+                "iota.stackexchange.com.txt": {
+                    "count": 3542
+                },
+                "graphicdesign.stackexchange.com.txt": {
+                    "count": 5086
+                },
+                "quant.stackexchange.com.txt": {
+                    "count": 3217
+                },
+                "politics.stackexchange.com.txt": {
+                    "count": 2080
+                },
+                "security.stackexchange.com.txt": {
+                    "count": 3124
+                },
+                "hardwarerecs.stackexchange.com.txt": {
+                    "count": 2784
+                },
+                "portuguese.stackexchange.com.txt": {
+                    "count": 1984
+                },
+                "superuser.com.txt": {
+                    "count": 3383
+                },
+                "money.stackexchange.com.txt": {
+                    "count": 2510
+                },
+                "tezos.stackexchange.com.txt": {
+                    "count": 1931
+                },
+                "monero.stackexchange.com.txt": {
+                    "count": 2826
+                },
+                "hermeneutics.stackexchange.com.txt": {
+                    "count": 2185
+                },
+                "webmasters.stackexchange.com.txt": {
+                    "count": 3186
+                },
+                "hsm.stackexchange.com.txt": {
+                    "count": 3460
+                },
+                "webapps.stackexchange.com.txt": {
+                    "count": 1765
+                },
+                "stackapps.com.txt": {
+                    "count": 2027
+                },
+                "worldbuilding.stackexchange.com.txt": {
+                    "count": 3277
+                },
+                "softwareengineering.stackexchange.com.txt": {
+                    "count": 4940
+                },
+                "french.stackexchange.com.txt": {
+                    "count": 2305
+                },
+                "interpersonal.stackexchange.com.txt": {
+                    "count": 2834
+                },
+                "gaming.stackexchange.com.txt": {
+                    "count": 4986
+                },
+                "genealogy.stackexchange.com.txt": {
+                    "count": 1488
+                },
+                "opensource.stackexchange.com.txt": {
+                    "count": 1287
+                },
+                "puzzling.stackexchange.com.txt": {
+                    "count": 3446
+                },
+                "linguistics.stackexchange.com.txt": {
+                    "count": 1465
+                },
+                "writers.stackexchange.com.txt": {
+                    "count": 2518
+                },
+                "mythology.stackexchange.com.txt": {
+                    "count": 2480
+                },
+                "networkengineering.stackexchange.com.txt": {
+                    "count": 2396
+                },
+                "tex.stackexchange.com.txt": {
+                    "count": 1740
+                },
+                "or.stackexchange.com.txt": {
+                    "count": 1682
+                },
+                "scicomp.stackexchange.com.txt": {
+                    "count": 3372
+                },
+                "scifi.stackexchange.com.txt": {
+                    "count": 2714
+                },
+                "tor.stackexchange.com.txt": {
+                    "count": 3411
+                },
+                "sqa.stackexchange.com.txt": {
+                    "count": 3491
+                },
+                "wordpress.stackexchange.com.txt": {
+                    "count": 1604
+                },
+                "mechanics.stackexchange.com.txt": {
+                    "count": 5460
+                },
+                "outdoors.stackexchange.com.txt": {
+                    "count": 2025
+                },
+                "stellar.stackexchange.com.txt": {
+                    "count": 4791
+                },
+                "russian.stackexchange.com.txt": {
+                    "count": 4851
+                },
+                "reverseengineering.stackexchange.com.txt": {
+                    "count": 2192
+                },
+                "quantumcomputing.stackexchange.com.txt": {
+                    "count": 1455
+                },
+                "freelancing.stackexchange.com.txt": {
+                    "count": 1322
+                },
+                "english.stackexchange.com.txt": {
+                    "count": 5258
+                },
+                "sound.stackexchange.com.txt": {
+                    "count": 1415
+                },
+                "pets.stackexchange.com.txt": {
+                    "count": 3089
+                },
+                "windowsphone.stackexchange.com.txt": {
+                    "count": 1790
+                },
+                "joomla.stackexchange.com.txt": {
+                    "count": 2741
+                },
+                "history.stackexchange.com.txt": {
+                    "count": 2131
+                },
+                "stats.stackexchange.com.txt": {
+                    "count": 3134
+                },
+                "homebrew.stackexchange.com.txt": {
+                    "count": 3732
+                },
+                "gis.stackexchange.com.txt": {
+                    "count": 2556
+                },
+                "gardening.stackexchange.com.txt": {
+                    "count": 1905
+                },
+                "retrocomputing.stackexchange.com.txt": {
+                    "count": 2851
+                },
+                "es.stackoverflow.com.txt": {
+                    "count": 1467
+                },
+                "moderators.stackexchange.com.txt": {
+                    "count": 1286
+                },
+                "skeptics.stackexchange.com.txt": {
+                    "count": 2892
+                },
+                "italian.stackexchange.com.txt": {
+                    "count": 3279
+                },
+                "salesforce.stackexchange.com.txt": {
+                    "count": 2362
+                },
+                "tridion.stackexchange.com.txt": {
+                    "count": 1493
+                },
+                "ukrainian.stackexchange.com.txt": {
+                    "count": 1837
+                },
+                "engineering.stackexchange.com.txt": {
+                    "count": 2896
+                },
+                "vegetarianism.stackexchange.com.txt": {
+                    "count": 1431
+                },
+                "poker.stackexchange.com.txt": {
+                    "count": 1259
+                },
+                "movies.stackexchange.com.txt": {
+                    "count": 2202
+                },
+                "woodworking.stackexchange.com.txt": {
+                    "count": 2416
+                },
+                "hinduism.stackexchange.com.txt": {
+                    "count": 3606
+                },
+                "rpg.stackexchange.com.txt": {
+                    "count": 2127
+                },
+                "rus.stackexchange.com.txt": {
+                    "count": 2068
+                }
+            }
+        }
+    }
+}

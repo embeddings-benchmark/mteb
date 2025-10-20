@@ -1,0 +1,2512 @@
+{
+    "validation": {
+        "num_samples": 38561,
+        "text_statistics": {
+            "total_text_length": 154358159,
+            "min_text_length": 273,
+            "average_text_length": 4002.960478203366,
+            "max_text_length": 98385,
+            "unique_texts": 38229
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 187,
+            "labels": {
+                "panorama": {
+                    "count": 726
+                },
+                "muenchen": {
+                    "count": 547
+                },
+                "sport": {
+                    "count": 3178
+                },
+                "digital": {
+                    "count": 254
+                },
+                "karriere": {
+                    "count": 149
+                },
+                "bildung": {
+                    "count": 111
+                },
+                "reise": {
+                    "count": 204
+                },
+                "auto": {
+                    "count": 218
+                },
+                "stil": {
+                    "count": 205
+                },
+                "politik": {
+                    "count": 3847
+                },
+                "wirtschaft": {
+                    "count": 2491
+                },
+                "geld": {
+                    "count": 100
+                },
+                "thema": {
+                    "count": 1
+                },
+                "afrique": {
+                    "count": 1222
+                },
+                "idees": {
+                    "count": 1513
+                },
+                "international": {
+                    "count": 2444
+                },
+                "m-perso": {
+                    "count": 158
+                },
+                "societe": {
+                    "count": 1300
+                },
+                "economie": {
+                    "count": 1608
+                },
+                "blog": {
+                    "count": 184
+                },
+                "disparitions": {
+                    "count": 183
+                },
+                "football": {
+                    "count": 183
+                },
+                "m-le-mag": {
+                    "count": 482
+                },
+                "planete": {
+                    "count": 513
+                },
+                "sciences": {
+                    "count": 379
+                },
+                "politique": {
+                    "count": 1103
+                },
+                "televisions-radio": {
+                    "count": 44
+                },
+                "police-justice": {
+                    "count": 146
+                },
+                "livres": {
+                    "count": 200
+                },
+                "emploi": {
+                    "count": 114
+                },
+                "le-jazz-et-la-salsa": {
+                    "count": 9
+                },
+                "m-gastronomie": {
+                    "count": 38
+                },
+                "les-recettes-du-monde": {
+                    "count": 22
+                },
+                "actualite-medias": {
+                    "count": 88
+                },
+                "campus": {
+                    "count": 281
+                },
+                "culture": {
+                    "count": 1536
+                },
+                "cinema": {
+                    "count": 62
+                },
+                "les-decodeurs": {
+                    "count": 322
+                },
+                "argent": {
+                    "count": 222
+                },
+                "big-browser": {
+                    "count": 54
+                },
+                "climat": {
+                    "count": 27
+                },
+                "pixels": {
+                    "count": 403
+                },
+                "affaire-khashoggi": {
+                    "count": 1
+                },
+                "l-epargne-solidaire": {
+                    "count": 1
+                },
+                "m-styles": {
+                    "count": 206
+                },
+                "musiques": {
+                    "count": 20
+                },
+                "m-voyage": {
+                    "count": 7
+                },
+                "basket": {
+                    "count": 10
+                },
+                "cotecourscotesjardins": {
+                    "count": 17
+                },
+                "rugby": {
+                    "count": 35
+                },
+                "education": {
+                    "count": 54
+                },
+                "sante": {
+                    "count": 48
+                },
+                "blog-mediateur": {
+                    "count": 65
+                },
+                "les-vins-d-alsace": {
+                    "count": 1
+                },
+                "evasion-fiscale": {
+                    "count": 2
+                },
+                "tennis": {
+                    "count": 26
+                },
+                "smart-cities": {
+                    "count": 24
+                },
+                "les-cles-de-demain": {
+                    "count": 17
+                },
+                "la-foire-du-drone": {
+                    "count": 14
+                },
+                "videos": {
+                    "count": 4
+                },
+                "guides-d-achat": {
+                    "count": 44
+                },
+                "chroniques-de-la-presidence-trump": {
+                    "count": 17
+                },
+                "les-enfants-akira": {
+                    "count": 8
+                },
+                "le-blog-du-decodex": {
+                    "count": 1
+                },
+                "energies": {
+                    "count": 6
+                },
+                "gastronomie": {
+                    "count": 2
+                },
+                "talents-numeriques": {
+                    "count": 1
+                },
+                "du-verger-aux-papilles": {
+                    "count": 8
+                },
+                "implant-files": {
+                    "count": 2
+                },
+                "citynnovation": {
+                    "count": 1
+                },
+                "perspectives-economiques-du-japon": {
+                    "count": 1
+                },
+                "elections": {
+                    "count": 5
+                },
+                "paroles-d-entrepreneurs-au-coeur-des-territoires": {
+                    "count": 11
+                },
+                "l-element-intemporel": {
+                    "count": 1
+                },
+                "derriere-les-portes-du-college-doisneau": {
+                    "count": 6
+                },
+                "medecine-d-aujourd-hui": {
+                    "count": 1
+                },
+                "le-style-intemporel": {
+                    "count": 1
+                },
+                "la-flandre-extravagante": {
+                    "count": 1
+                },
+                "collection-jules-verne": {
+                    "count": 7
+                },
+                "la-france-connectee": {
+                    "count": 17
+                },
+                "voyages-oenophiles": {
+                    "count": 1
+                },
+                "le-quebec-la-decouverte-au-rendez-vous": {
+                    "count": 7
+                },
+                "des-solutions-pour-la-planete": {
+                    "count": 1
+                },
+                "incendie-de-notre-dame": {
+                    "count": 10
+                },
+                "unknown": {
+                    "count": 6
+                },
+                "la-suisse-grandeur-nature": {
+                    "count": 5
+                },
+                "refaire-le-monde": {
+                    "count": 1
+                },
+                "des-materiaux-qui-changent-la-vie": {
+                    "count": 3
+                },
+                "bac-lycee": {
+                    "count": 1
+                },
+                "mon-chauffeur-le-nouveau-service-tgv-inoui": {
+                    "count": 1
+                },
+                "vers-un-luxe-plus-durable": {
+                    "count": 1
+                },
+                "social": {
+                    "count": 263
+                },
+                "economics": {
+                    "count": 58
+                },
+                "moscow": {
+                    "count": 45
+                },
+                "politics": {
+                    "count": 154
+                },
+                "science": {
+                    "count": 13
+                },
+                "mosobl": {
+                    "count": 33
+                },
+                "incident": {
+                    "count": 36
+                },
+                "politica actualidad": {
+                    "count": 1031
+                },
+                "elpais gente": {
+                    "count": 563
+                },
+                "cultura actualidad": {
+                    "count": 700
+                },
+                "internacional actualidad": {
+                    "count": 372
+                },
+                "ccaa madrid": {
+                    "count": 780
+                },
+                "elpais album": {
+                    "count": 182
+                },
+                "elpais icon": {
+                    "count": 82
+                },
+                "economia actualidad": {
+                    "count": 854
+                },
+                "sociedad actualidad": {
+                    "count": 435
+                },
+                "elpais ciencia": {
+                    "count": 119
+                },
+                "internacional colombia": {
+                    "count": 29
+                },
+                "internacional america": {
+                    "count": 141
+                },
+                "cultura television": {
+                    "count": 304
+                },
+                "elpais planeta_futuro": {
+                    "count": 321
+                },
+                "elviajero album": {
+                    "count": 24
+                },
+                "elpais estilo": {
+                    "count": 72
+                },
+                "elpais opinion": {
+                    "count": 1573
+                },
+                "elviajero actualidad": {
+                    "count": 164
+                },
+                "elpais buenavida": {
+                    "count": 67
+                },
+                "elpais seres_urbanos": {
+                    "count": 18
+                },
+                "ccaa catalunya": {
+                    "count": 727
+                },
+                "elpais africa_no_es_un_pais": {
+                    "count": 24
+                },
+                "elpais mamas_papas": {
+                    "count": 73
+                },
+                "internacional mexico": {
+                    "count": 75
+                },
+                "deportes actualidad": {
+                    "count": 373
+                },
+                "elpais actualidad": {
+                    "count": 82
+                },
+                "elpais podcast_las_noticias_de_el_pais": {
+                    "count": 41
+                },
+                "elpais videos": {
+                    "count": 54
+                },
+                "elpais inenglish": {
+                    "count": 157
+                },
+                "tecnologia actualidad": {
+                    "count": 85
+                },
+                "elpais icon_design": {
+                    "count": 29
+                },
+                "ccaa valencia": {
+                    "count": 41
+                },
+                "elpais animalesycia": {
+                    "count": 2
+                },
+                "cultura babelia": {
+                    "count": 138
+                },
+                "elpais alterconsumismo": {
+                    "count": 16
+                },
+                "ccaa paisvasco": {
+                    "count": 13
+                },
+                "deportes adrenalina": {
+                    "count": 2
+                },
+                "elpais mira_que_te_lo_tengo_dicho": {
+                    "count": 2
+                },
+                "economia mis_derechos": {
+                    "count": 8
+                },
+                "elpais paco_nadal": {
+                    "count": 5
+                },
+                "internacional estados_unidos": {
+                    "count": 38
+                },
+                "politica diario_de_espana": {
+                    "count": 19
+                },
+                "elpais laboratorio_de_felicidad": {
+                    "count": 7
+                },
+                "elpais la_voz_de_inaki": {
+                    "count": 29
+                },
+                "internacional argentina": {
+                    "count": 12
+                },
+                "elpais escaparate": {
+                    "count": 49
+                },
+                "elpais del_tirador_a_la_ciudad": {
+                    "count": 7
+                },
+                "deportes es_laliga": {
+                    "count": 17
+                },
+                "economia publizia": {
+                    "count": 4
+                },
+                "economia alternativas": {
+                    "count": 18
+                },
+                "elpais 3500_millones": {
+                    "count": 7
+                },
+                "economia vivienda": {
+                    "count": 8
+                },
+                "elpais somos_antartida": {
+                    "count": 2
+                },
+                "economia finanzas_a_las_9": {
+                    "count": 6
+                },
+                "deportes la_bitacora_de_leontxo": {
+                    "count": 1
+                },
+                "elpais mujeres": {
+                    "count": 8
+                },
+                "elpais media": {
+                    "count": 19
+                },
+                "elpais mundo_animal": {
+                    "count": 13
+                },
+                "internacional mundo_global": {
+                    "count": 35
+                },
+                "elpais el_rincon_de_los_inmortales": {
+                    "count": 3
+                },
+                "elpais happiness_lab": {
+                    "count": 3
+                },
+                "cultura elemental": {
+                    "count": 6
+                },
+                "cultura ruta_norteamericana": {
+                    "count": 3
+                },
+                "elpais tu_lisboa_y_la_mia": {
+                    "count": 2
+                },
+                "internacional las_atalayas": {
+                    "count": 1
+                },
+                "ccaa galicia": {
+                    "count": 19
+                },
+                "cultura doc_and_roll": {
+                    "count": 3
+                },
+                "elpais mas_se_perdio_en_la_habana": {
+                    "count": 2
+                },
+                "elpais ideas": {
+                    "count": 148
+                },
+                "cultura miss_festivales": {
+                    "count": 7
+                },
+                "elpais viajero_astuto": {
+                    "count": 5
+                },
+                "elviajero videos": {
+                    "count": 2
+                },
+                "elpais mordiscos_y_tacones": {
+                    "count": 1
+                },
+                "elpais eps": {
+                    "count": 16
+                },
+                "elpais el_pais_que_hacemos": {
+                    "count": 4
+                },
+                "elpais migrados": {
+                    "count": 3
+                },
+                "elpais trans_iberian": {
+                    "count": 1
+                },
+                "cultura el_toro_por_los_cuernos": {
+                    "count": 5
+                },
+                "elpais gastronotas_de_capel": {
+                    "count": 2
+                },
+                "politica sepa_usted": {
+                    "count": 5
+                },
+                "ccaa andalucia": {
+                    "count": 27
+                },
+                "cultura 1up": {
+                    "count": 3
+                },
+                "sociedad pienso_luego_actuo": {
+                    "count": 1
+                },
+                "deportes conectando_con_la_grada": {
+                    "count": 3
+                },
+                "internacional solo_en_argentina": {
+                    "count": 1
+                },
+                "elpais dias_de_vino_y_podcasts": {
+                    "count": 1
+                },
+                "cultura recondita_armonia": {
+                    "count": 1
+                },
+                "elpais sesenta_y_tantos": {
+                    "count": 2
+                },
+                "politica cronica_negra": {
+                    "count": 1
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 11394,
+                "text_statistics": {
+                    "total_text_length": 42805917,
+                    "min_text_length": 340,
+                    "average_text_length": 3756.882306477093,
+                    "max_text_length": 22472,
+                    "unique_texts": 11392
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 13,
+                    "labels": {
+                        "panorama": {
+                            "count": 726
+                        },
+                        "muenchen": {
+                            "count": 547
+                        },
+                        "sport": {
+                            "count": 2541
+                        },
+                        "digital": {
+                            "count": 254
+                        },
+                        "karriere": {
+                            "count": 149
+                        },
+                        "bildung": {
+                            "count": 111
+                        },
+                        "reise": {
+                            "count": 204
+                        },
+                        "auto": {
+                            "count": 218
+                        },
+                        "stil": {
+                            "count": 205
+                        },
+                        "politik": {
+                            "count": 3847
+                        },
+                        "wirtschaft": {
+                            "count": 2491
+                        },
+                        "geld": {
+                            "count": 100
+                        },
+                        "thema": {
+                            "count": 1
+                        }
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 16059,
+                "text_statistics": {
+                    "total_text_length": 60294796,
+                    "min_text_length": 300,
+                    "average_text_length": 3754.579737219005,
+                    "max_text_length": 62532,
+                    "unique_texts": 15941
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 79,
+                    "labels": {
+                        "afrique": {
+                            "count": 1222
+                        },
+                        "sport": {
+                            "count": 554
+                        },
+                        "idees": {
+                            "count": 1513
+                        },
+                        "international": {
+                            "count": 2444
+                        },
+                        "m-perso": {
+                            "count": 158
+                        },
+                        "societe": {
+                            "count": 1300
+                        },
+                        "economie": {
+                            "count": 1608
+                        },
+                        "blog": {
+                            "count": 184
+                        },
+                        "disparitions": {
+                            "count": 183
+                        },
+                        "football": {
+                            "count": 183
+                        },
+                        "m-le-mag": {
+                            "count": 482
+                        },
+                        "planete": {
+                            "count": 513
+                        },
+                        "sciences": {
+                            "count": 379
+                        },
+                        "politique": {
+                            "count": 1103
+                        },
+                        "televisions-radio": {
+                            "count": 44
+                        },
+                        "police-justice": {
+                            "count": 146
+                        },
+                        "livres": {
+                            "count": 200
+                        },
+                        "emploi": {
+                            "count": 114
+                        },
+                        "le-jazz-et-la-salsa": {
+                            "count": 9
+                        },
+                        "m-gastronomie": {
+                            "count": 38
+                        },
+                        "les-recettes-du-monde": {
+                            "count": 22
+                        },
+                        "actualite-medias": {
+                            "count": 88
+                        },
+                        "campus": {
+                            "count": 281
+                        },
+                        "culture": {
+                            "count": 1471
+                        },
+                        "cinema": {
+                            "count": 62
+                        },
+                        "les-decodeurs": {
+                            "count": 322
+                        },
+                        "argent": {
+                            "count": 222
+                        },
+                        "big-browser": {
+                            "count": 54
+                        },
+                        "climat": {
+                            "count": 27
+                        },
+                        "pixels": {
+                            "count": 403
+                        },
+                        "affaire-khashoggi": {
+                            "count": 1
+                        },
+                        "l-epargne-solidaire": {
+                            "count": 1
+                        },
+                        "m-styles": {
+                            "count": 206
+                        },
+                        "musiques": {
+                            "count": 20
+                        },
+                        "m-voyage": {
+                            "count": 7
+                        },
+                        "basket": {
+                            "count": 10
+                        },
+                        "cotecourscotesjardins": {
+                            "count": 17
+                        },
+                        "rugby": {
+                            "count": 35
+                        },
+                        "education": {
+                            "count": 54
+                        },
+                        "sante": {
+                            "count": 48
+                        },
+                        "blog-mediateur": {
+                            "count": 65
+                        },
+                        "les-vins-d-alsace": {
+                            "count": 1
+                        },
+                        "evasion-fiscale": {
+                            "count": 2
+                        },
+                        "tennis": {
+                            "count": 26
+                        },
+                        "smart-cities": {
+                            "count": 24
+                        },
+                        "les-cles-de-demain": {
+                            "count": 17
+                        },
+                        "la-foire-du-drone": {
+                            "count": 14
+                        },
+                        "videos": {
+                            "count": 4
+                        },
+                        "guides-d-achat": {
+                            "count": 44
+                        },
+                        "chroniques-de-la-presidence-trump": {
+                            "count": 17
+                        },
+                        "les-enfants-akira": {
+                            "count": 8
+                        },
+                        "le-blog-du-decodex": {
+                            "count": 1
+                        },
+                        "energies": {
+                            "count": 6
+                        },
+                        "gastronomie": {
+                            "count": 2
+                        },
+                        "talents-numeriques": {
+                            "count": 1
+                        },
+                        "du-verger-aux-papilles": {
+                            "count": 8
+                        },
+                        "implant-files": {
+                            "count": 2
+                        },
+                        "citynnovation": {
+                            "count": 1
+                        },
+                        "perspectives-economiques-du-japon": {
+                            "count": 1
+                        },
+                        "elections": {
+                            "count": 5
+                        },
+                        "paroles-d-entrepreneurs-au-coeur-des-territoires": {
+                            "count": 11
+                        },
+                        "l-element-intemporel": {
+                            "count": 1
+                        },
+                        "derriere-les-portes-du-college-doisneau": {
+                            "count": 6
+                        },
+                        "medecine-d-aujourd-hui": {
+                            "count": 1
+                        },
+                        "le-style-intemporel": {
+                            "count": 1
+                        },
+                        "la-flandre-extravagante": {
+                            "count": 1
+                        },
+                        "collection-jules-verne": {
+                            "count": 7
+                        },
+                        "la-france-connectee": {
+                            "count": 17
+                        },
+                        "voyages-oenophiles": {
+                            "count": 1
+                        },
+                        "le-quebec-la-decouverte-au-rendez-vous": {
+                            "count": 7
+                        },
+                        "des-solutions-pour-la-planete": {
+                            "count": 1
+                        },
+                        "incendie-de-notre-dame": {
+                            "count": 10
+                        },
+                        "unknown": {
+                            "count": 6
+                        },
+                        "la-suisse-grandeur-nature": {
+                            "count": 5
+                        },
+                        "refaire-le-monde": {
+                            "count": 1
+                        },
+                        "des-materiaux-qui-changent-la-vie": {
+                            "count": 3
+                        },
+                        "bac-lycee": {
+                            "count": 1
+                        },
+                        "mon-chauffeur-le-nouveau-service-tgv-inoui": {
+                            "count": 1
+                        },
+                        "vers-un-luxe-plus-durable": {
+                            "count": 1
+                        }
+                    }
+                }
+            },
+            "ru": {
+                "num_samples": 750,
+                "text_statistics": {
+                    "total_text_length": 4847491,
+                    "min_text_length": 711,
+                    "average_text_length": 6463.321333333333,
+                    "max_text_length": 32833,
+                    "unique_texts": 750
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 9,
+                    "labels": {
+                        "social": {
+                            "count": 263
+                        },
+                        "economics": {
+                            "count": 58
+                        },
+                        "moscow": {
+                            "count": 45
+                        },
+                        "politics": {
+                            "count": 154
+                        },
+                        "sport": {
+                            "count": 83
+                        },
+                        "science": {
+                            "count": 13
+                        },
+                        "mosobl": {
+                            "count": 33
+                        },
+                        "culture": {
+                            "count": 65
+                        },
+                        "incident": {
+                            "count": 36
+                        }
+                    }
+                }
+            },
+            "es": {
+                "num_samples": 10358,
+                "text_statistics": {
+                    "total_text_length": 46409955,
+                    "min_text_length": 273,
+                    "average_text_length": 4480.590364935316,
+                    "max_text_length": 98385,
+                    "unique_texts": 10146
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 89,
+                    "labels": {
+                        "politica actualidad": {
+                            "count": 1031
+                        },
+                        "elpais gente": {
+                            "count": 563
+                        },
+                        "cultura actualidad": {
+                            "count": 700
+                        },
+                        "internacional actualidad": {
+                            "count": 372
+                        },
+                        "ccaa madrid": {
+                            "count": 780
+                        },
+                        "elpais album": {
+                            "count": 182
+                        },
+                        "elpais icon": {
+                            "count": 82
+                        },
+                        "economia actualidad": {
+                            "count": 854
+                        },
+                        "sociedad actualidad": {
+                            "count": 435
+                        },
+                        "elpais ciencia": {
+                            "count": 119
+                        },
+                        "internacional colombia": {
+                            "count": 29
+                        },
+                        "internacional america": {
+                            "count": 141
+                        },
+                        "cultura television": {
+                            "count": 304
+                        },
+                        "elpais planeta_futuro": {
+                            "count": 321
+                        },
+                        "elviajero album": {
+                            "count": 24
+                        },
+                        "elpais estilo": {
+                            "count": 72
+                        },
+                        "elpais opinion": {
+                            "count": 1573
+                        },
+                        "elviajero actualidad": {
+                            "count": 164
+                        },
+                        "elpais buenavida": {
+                            "count": 67
+                        },
+                        "elpais seres_urbanos": {
+                            "count": 18
+                        },
+                        "ccaa catalunya": {
+                            "count": 727
+                        },
+                        "elpais africa_no_es_un_pais": {
+                            "count": 24
+                        },
+                        "elpais mamas_papas": {
+                            "count": 73
+                        },
+                        "internacional mexico": {
+                            "count": 75
+                        },
+                        "deportes actualidad": {
+                            "count": 373
+                        },
+                        "elpais actualidad": {
+                            "count": 82
+                        },
+                        "elpais podcast_las_noticias_de_el_pais": {
+                            "count": 41
+                        },
+                        "elpais videos": {
+                            "count": 54
+                        },
+                        "elpais inenglish": {
+                            "count": 157
+                        },
+                        "tecnologia actualidad": {
+                            "count": 85
+                        },
+                        "elpais icon_design": {
+                            "count": 29
+                        },
+                        "ccaa valencia": {
+                            "count": 41
+                        },
+                        "elpais animalesycia": {
+                            "count": 2
+                        },
+                        "cultura babelia": {
+                            "count": 138
+                        },
+                        "elpais alterconsumismo": {
+                            "count": 16
+                        },
+                        "ccaa paisvasco": {
+                            "count": 13
+                        },
+                        "deportes adrenalina": {
+                            "count": 2
+                        },
+                        "elpais mira_que_te_lo_tengo_dicho": {
+                            "count": 2
+                        },
+                        "economia mis_derechos": {
+                            "count": 8
+                        },
+                        "elpais paco_nadal": {
+                            "count": 5
+                        },
+                        "internacional estados_unidos": {
+                            "count": 38
+                        },
+                        "politica diario_de_espana": {
+                            "count": 19
+                        },
+                        "elpais laboratorio_de_felicidad": {
+                            "count": 7
+                        },
+                        "elpais la_voz_de_inaki": {
+                            "count": 29
+                        },
+                        "internacional argentina": {
+                            "count": 12
+                        },
+                        "elpais escaparate": {
+                            "count": 49
+                        },
+                        "elpais del_tirador_a_la_ciudad": {
+                            "count": 7
+                        },
+                        "deportes es_laliga": {
+                            "count": 17
+                        },
+                        "economia publizia": {
+                            "count": 4
+                        },
+                        "economia alternativas": {
+                            "count": 18
+                        },
+                        "elpais 3500_millones": {
+                            "count": 7
+                        },
+                        "economia vivienda": {
+                            "count": 8
+                        },
+                        "elpais somos_antartida": {
+                            "count": 2
+                        },
+                        "economia finanzas_a_las_9": {
+                            "count": 6
+                        },
+                        "deportes la_bitacora_de_leontxo": {
+                            "count": 1
+                        },
+                        "elpais mujeres": {
+                            "count": 8
+                        },
+                        "elpais media": {
+                            "count": 19
+                        },
+                        "elpais mundo_animal": {
+                            "count": 13
+                        },
+                        "internacional mundo_global": {
+                            "count": 35
+                        },
+                        "elpais el_rincon_de_los_inmortales": {
+                            "count": 3
+                        },
+                        "elpais happiness_lab": {
+                            "count": 3
+                        },
+                        "cultura elemental": {
+                            "count": 6
+                        },
+                        "cultura ruta_norteamericana": {
+                            "count": 3
+                        },
+                        "elpais tu_lisboa_y_la_mia": {
+                            "count": 2
+                        },
+                        "internacional las_atalayas": {
+                            "count": 1
+                        },
+                        "ccaa galicia": {
+                            "count": 19
+                        },
+                        "cultura doc_and_roll": {
+                            "count": 3
+                        },
+                        "elpais mas_se_perdio_en_la_habana": {
+                            "count": 2
+                        },
+                        "elpais ideas": {
+                            "count": 148
+                        },
+                        "cultura miss_festivales": {
+                            "count": 7
+                        },
+                        "elpais viajero_astuto": {
+                            "count": 5
+                        },
+                        "elviajero videos": {
+                            "count": 2
+                        },
+                        "elpais mordiscos_y_tacones": {
+                            "count": 1
+                        },
+                        "elpais eps": {
+                            "count": 16
+                        },
+                        "elpais el_pais_que_hacemos": {
+                            "count": 4
+                        },
+                        "elpais migrados": {
+                            "count": 3
+                        },
+                        "elpais trans_iberian": {
+                            "count": 1
+                        },
+                        "cultura el_toro_por_los_cuernos": {
+                            "count": 5
+                        },
+                        "elpais gastronotas_de_capel": {
+                            "count": 2
+                        },
+                        "politica sepa_usted": {
+                            "count": 5
+                        },
+                        "ccaa andalucia": {
+                            "count": 27
+                        },
+                        "cultura 1up": {
+                            "count": 3
+                        },
+                        "sociedad pienso_luego_actuo": {
+                            "count": 1
+                        },
+                        "deportes conectando_con_la_grada": {
+                            "count": 3
+                        },
+                        "internacional solo_en_argentina": {
+                            "count": 1
+                        },
+                        "elpais dias_de_vino_y_podcasts": {
+                            "count": 1
+                        },
+                        "cultura recondita_armonia": {
+                            "count": 1
+                        },
+                        "elpais sesenta_y_tantos": {
+                            "count": 2
+                        },
+                        "politica cronica_negra": {
+                            "count": 1
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "test": {
+        "num_samples": 41206,
+        "text_statistics": {
+            "total_text_length": 172884370,
+            "min_text_length": 273,
+            "average_text_length": 4195.611561423094,
+            "max_text_length": 135921,
+            "unique_texts": 40894
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 196,
+            "labels": {
+                "politik": {
+                    "count": 3614
+                },
+                "wirtschaft": {
+                    "count": 2352
+                },
+                "geld": {
+                    "count": 103
+                },
+                "panorama": {
+                    "count": 539
+                },
+                "sport": {
+                    "count": 3352
+                },
+                "muenchen": {
+                    "count": 557
+                },
+                "digital": {
+                    "count": 235
+                },
+                "karriere": {
+                    "count": 124
+                },
+                "bildung": {
+                    "count": 127
+                },
+                "reise": {
+                    "count": 218
+                },
+                "auto": {
+                    "count": 182
+                },
+                "stil": {
+                    "count": 208
+                },
+                "football": {
+                    "count": 153
+                },
+                "culture": {
+                    "count": 1492
+                },
+                "disparitions": {
+                    "count": 183
+                },
+                "international": {
+                    "count": 2571
+                },
+                "afrique": {
+                    "count": 1216
+                },
+                "sciences": {
+                    "count": 317
+                },
+                "societe": {
+                    "count": 1189
+                },
+                "livres": {
+                    "count": 212
+                },
+                "economie": {
+                    "count": 1374
+                },
+                "politique": {
+                    "count": 858
+                },
+                "idees": {
+                    "count": 1238
+                },
+                "m-perso": {
+                    "count": 160
+                },
+                "big-browser": {
+                    "count": 51
+                },
+                "m-le-mag": {
+                    "count": 444
+                },
+                "argent": {
+                    "count": 215
+                },
+                "tennis": {
+                    "count": 17
+                },
+                "les-decodeurs": {
+                    "count": 279
+                },
+                "police-justice": {
+                    "count": 86
+                },
+                "blog": {
+                    "count": 146
+                },
+                "chroniques-de-la-presidence-trump": {
+                    "count": 15
+                },
+                "planete": {
+                    "count": 659
+                },
+                "m-styles": {
+                    "count": 286
+                },
+                "musiques": {
+                    "count": 16
+                },
+                "pixels": {
+                    "count": 415
+                },
+                "campus": {
+                    "count": 174
+                },
+                "paroles-d-entrepreneurs-au-coeur-des-territoires": {
+                    "count": 2
+                },
+                "des-materiaux-qui-changent-la-vie": {
+                    "count": 2
+                },
+                "actualite-medias": {
+                    "count": 79
+                },
+                "la-foire-du-drone": {
+                    "count": 7
+                },
+                "emploi": {
+                    "count": 103
+                },
+                "smart-cities": {
+                    "count": 21
+                },
+                "la-france-connectee": {
+                    "count": 24
+                },
+                "cotecourscotesjardins": {
+                    "count": 29
+                },
+                "guides-d-achat": {
+                    "count": 41
+                },
+                "blog-mediateur": {
+                    "count": 46
+                },
+                "management-collaboratif": {
+                    "count": 1
+                },
+                "videos": {
+                    "count": 12
+                },
+                "televisions-radio": {
+                    "count": 9
+                },
+                "les-recettes-du-monde": {
+                    "count": 19
+                },
+                "les-cles-de-demain": {
+                    "count": 4
+                },
+                "rugby": {
+                    "count": 53
+                },
+                "le-jazz-et-la-salsa": {
+                    "count": 10
+                },
+                "climat": {
+                    "count": 25
+                },
+                "education": {
+                    "count": 40
+                },
+                "sante": {
+                    "count": 33
+                },
+                "basket": {
+                    "count": 6
+                },
+                "lycee": {
+                    "count": 2
+                },
+                "bac-lycee": {
+                    "count": 3
+                },
+                "unknown": {
+                    "count": 62
+                },
+                "festival": {
+                    "count": 357
+                },
+                "m-gastronomie": {
+                    "count": 35
+                },
+                "construire-autrement-la-ville-de-demain": {
+                    "count": 4
+                },
+                "critique-litteraire": {
+                    "count": 132
+                },
+                "derriere-les-portes-du-college-doisneau": {
+                    "count": 3
+                },
+                "des-solutions-pour-la-planete": {
+                    "count": 2
+                },
+                "du-verger-aux-papilles": {
+                    "count": 1
+                },
+                "energies": {
+                    "count": 5
+                },
+                "contes": {
+                    "count": 17
+                },
+                "cinema": {
+                    "count": 8
+                },
+                "blog-du-tour-de-france": {
+                    "count": 40
+                },
+                "passeurdesciences": {
+                    "count": 11
+                },
+                "gastronomie": {
+                    "count": 7
+                },
+                "bons-plans": {
+                    "count": 4
+                },
+                "incendie-de-notre-dame": {
+                    "count": 2
+                },
+                "les-enfants-akira": {
+                    "count": 9
+                },
+                "implant-files": {
+                    "count": 1
+                },
+                "mondephilatelique": {
+                    "count": 29
+                },
+                "sante-lmde-aux-cotes-des-etudiants": {
+                    "count": 3
+                },
+                "evasion-fiscale": {
+                    "count": 2
+                },
+                "rentree-etudiante": {
+                    "count": 5
+                },
+                "podcasts": {
+                    "count": 9
+                },
+                "le-meridien-au-soleil": {
+                    "count": 3
+                },
+                "balade-culturelle-en-catalogne": {
+                    "count": 1
+                },
+                "la-flandre-extravagante": {
+                    "count": 1
+                },
+                "destinations-culturelles-2020-a-ne-pas-manquer": {
+                    "count": 1
+                },
+                "il-etait-une-fois-un-palais-moderniste-au-coeur-de-l-inde": {
+                    "count": 1
+                },
+                "interiale-sante-et-prevoyance": {
+                    "count": 1
+                },
+                "cidre-et-sistronomie": {
+                    "count": 5
+                },
+                "des-chaussures-elegantes-et-techniques": {
+                    "count": 1
+                },
+                "les-aidants-des-enjeux-des-reponses": {
+                    "count": 1
+                },
+                "cet-hiver-mango-cultive-la-personnalite-comme-nouvelle-tendance": {
+                    "count": 1
+                },
+                "epargne-retraite-et-placements": {
+                    "count": 1
+                },
+                "keyhani": {
+                    "count": 1
+                },
+                "collection-automne-hiver": {
+                    "count": 1
+                },
+                "virees-autour-de-lisbonne": {
+                    "count": 1
+                },
+                "la-france-ouvriere": {
+                    "count": 1
+                },
+                "m-voyage": {
+                    "count": 1
+                },
+                "votre-retraite-a-l-international": {
+                    "count": 1
+                },
+                "science": {
+                    "count": 15
+                },
+                "politics": {
+                    "count": 161
+                },
+                "mosobl": {
+                    "count": 38
+                },
+                "social": {
+                    "count": 203
+                },
+                "incident": {
+                    "count": 51
+                },
+                "economics": {
+                    "count": 43
+                },
+                "moscow": {
+                    "count": 55
+                },
+                "specprojects": {
+                    "count": 1
+                },
+                "politica actualidad": {
+                    "count": 1230
+                },
+                "elpais planeta_futuro": {
+                    "count": 356
+                },
+                "elpais gente": {
+                    "count": 760
+                },
+                "elpais opinion": {
+                    "count": 1550
+                },
+                "ccaa madrid": {
+                    "count": 969
+                },
+                "internacional actualidad": {
+                    "count": 672
+                },
+                "cultura actualidad": {
+                    "count": 948
+                },
+                "elpais icon": {
+                    "count": 225
+                },
+                "elpais sesenta_y_tantos": {
+                    "count": 10
+                },
+                "internacional mundo_global": {
+                    "count": 30
+                },
+                "elpais buenavida": {
+                    "count": 168
+                },
+                "elpais mamas_papas": {
+                    "count": 116
+                },
+                "internacional mexico": {
+                    "count": 80
+                },
+                "internacional america": {
+                    "count": 137
+                },
+                "internacional colombia": {
+                    "count": 58
+                },
+                "internacional estados_unidos": {
+                    "count": 53
+                },
+                "elpais ciencia": {
+                    "count": 231
+                },
+                "tecnologia actualidad": {
+                    "count": 159
+                },
+                "cultura television": {
+                    "count": 404
+                },
+                "economia actualidad": {
+                    "count": 1160
+                },
+                "ccaa valencia": {
+                    "count": 76
+                },
+                "deportes actualidad": {
+                    "count": 650
+                },
+                "ccaa catalunya": {
+                    "count": 839
+                },
+                "politica diario_de_espana": {
+                    "count": 15
+                },
+                "elpais album": {
+                    "count": 218
+                },
+                "elpais actualidad": {
+                    "count": 134
+                },
+                "sociedad actualidad": {
+                    "count": 691
+                },
+                "elpais videos": {
+                    "count": 122
+                },
+                "ccaa galicia": {
+                    "count": 57
+                },
+                "elpais ideas": {
+                    "count": 191
+                },
+                "elpais eps": {
+                    "count": 41
+                },
+                "deportes es_laliga": {
+                    "count": 31
+                },
+                "elpais estilo": {
+                    "count": 34
+                },
+                "elpais inenglish": {
+                    "count": 305
+                },
+                "sociedad pienso_luego_actuo": {
+                    "count": 16
+                },
+                "elpais el_rincon_de_los_inmortales": {
+                    "count": 5
+                },
+                "economia mis_derechos": {
+                    "count": 14
+                },
+                "elpais la_voz_de_inaki": {
+                    "count": 40
+                },
+                "elviajero actualidad": {
+                    "count": 196
+                },
+                "elpais escaparate": {
+                    "count": 171
+                },
+                "elpais alterconsumismo": {
+                    "count": 21
+                },
+                "elpais podcast_las_noticias_de_el_pais": {
+                    "count": 75
+                },
+                "cultura elemental": {
+                    "count": 5
+                },
+                "elviajero album": {
+                    "count": 14
+                },
+                "economia alternativas": {
+                    "count": 13
+                },
+                "economia vivienda": {
+                    "count": 12
+                },
+                "economia finanzas_a_las_9": {
+                    "count": 10
+                },
+                "cultura babelia": {
+                    "count": 206
+                },
+                "sociedad feliziudad": {
+                    "count": 7
+                },
+                "internacional argentina": {
+                    "count": 45
+                },
+                "elpais el_pais_que_hacemos": {
+                    "count": 8
+                },
+                "elpais 3500_millones": {
+                    "count": 25
+                },
+                "elpais migrados": {
+                    "count": 15
+                },
+                "cultura miss_festivales": {
+                    "count": 13
+                },
+                "cultura 1up": {
+                    "count": 2
+                },
+                "elpais laboratorio_de_felicidad": {
+                    "count": 2
+                },
+                "elpais africa_no_es_un_pais": {
+                    "count": 29
+                },
+                "ccaa paisvasco": {
+                    "count": 13
+                },
+                "elpais icon_design": {
+                    "count": 54
+                },
+                "elpais paco_nadal": {
+                    "count": 10
+                },
+                "ccaa andalucia": {
+                    "count": 4
+                },
+                "cultura recondita_armonia": {
+                    "count": 2
+                },
+                "elpais mujeres": {
+                    "count": 10
+                },
+                "elpais viajero_astuto": {
+                    "count": 3
+                },
+                "elpais media": {
+                    "count": 46
+                },
+                "economia publizia": {
+                    "count": 4
+                },
+                "elpais seres_urbanos": {
+                    "count": 25
+                },
+                "economia mis_finanzas": {
+                    "count": 23
+                },
+                "elpais del_tirador_a_la_ciudad": {
+                    "count": 6
+                },
+                "cultura ruta_norteamericana": {
+                    "count": 1
+                },
+                "cultura doc_and_roll": {
+                    "count": 6
+                },
+                "internacional las_atalayas": {
+                    "count": 1
+                },
+                "elpais mordiscos_y_tacones": {
+                    "count": 1
+                },
+                "economia thinkbig_empresas": {
+                    "count": 3
+                },
+                "elpais hechos": {
+                    "count": 5
+                },
+                "elpais gastronotas_de_capel": {
+                    "count": 4
+                },
+                "deportes adrenalina": {
+                    "count": 2
+                },
+                "elpais dias_de_vino_y_podcasts": {
+                    "count": 3
+                },
+                "elpais mundo_animal": {
+                    "count": 7
+                },
+                "elpais escuelas_en_red": {
+                    "count": 1
+                },
+                "cultura el_toro_por_los_cuernos": {
+                    "count": 9
+                },
+                "deportes la_bitacora_de_leontxo": {
+                    "count": 1
+                },
+                "economia nuevos_tiempos": {
+                    "count": 4
+                },
+                "elpais animalesycia": {
+                    "count": 3
+                },
+                "brasil politica": {
+                    "count": 1
+                },
+                "internacional sonar_europe": {
+                    "count": 1
+                },
+                "cultura ka_boom": {
+                    "count": 2
+                },
+                "internacional la_serpiente_emplumada": {
+                    "count": 1
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 10701,
+                "text_statistics": {
+                    "total_text_length": 42749575,
+                    "min_text_length": 593,
+                    "average_text_length": 3994.9140267264743,
+                    "max_text_length": 25967,
+                    "unique_texts": 10695
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 12,
+                    "labels": {
+                        "politik": {
+                            "count": 3614
+                        },
+                        "wirtschaft": {
+                            "count": 2352
+                        },
+                        "geld": {
+                            "count": 103
+                        },
+                        "panorama": {
+                            "count": 539
+                        },
+                        "sport": {
+                            "count": 2442
+                        },
+                        "muenchen": {
+                            "count": 557
+                        },
+                        "digital": {
+                            "count": 235
+                        },
+                        "karriere": {
+                            "count": 124
+                        },
+                        "bildung": {
+                            "count": 127
+                        },
+                        "reise": {
+                            "count": 218
+                        },
+                        "auto": {
+                            "count": 182
+                        },
+                        "stil": {
+                            "count": 208
+                        }
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 15828,
+                "text_statistics": {
+                    "total_text_length": 59577364,
+                    "min_text_length": 287,
+                    "average_text_length": 3764.048774323983,
+                    "max_text_length": 89934,
+                    "unique_texts": 15763
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 89,
+                    "labels": {
+                        "football": {
+                            "count": 153
+                        },
+                        "culture": {
+                            "count": 1384
+                        },
+                        "disparitions": {
+                            "count": 183
+                        },
+                        "sport": {
+                            "count": 828
+                        },
+                        "international": {
+                            "count": 2571
+                        },
+                        "afrique": {
+                            "count": 1216
+                        },
+                        "sciences": {
+                            "count": 317
+                        },
+                        "societe": {
+                            "count": 1189
+                        },
+                        "livres": {
+                            "count": 212
+                        },
+                        "economie": {
+                            "count": 1374
+                        },
+                        "politique": {
+                            "count": 858
+                        },
+                        "idees": {
+                            "count": 1238
+                        },
+                        "m-perso": {
+                            "count": 160
+                        },
+                        "big-browser": {
+                            "count": 51
+                        },
+                        "m-le-mag": {
+                            "count": 444
+                        },
+                        "argent": {
+                            "count": 215
+                        },
+                        "tennis": {
+                            "count": 17
+                        },
+                        "les-decodeurs": {
+                            "count": 279
+                        },
+                        "police-justice": {
+                            "count": 86
+                        },
+                        "blog": {
+                            "count": 146
+                        },
+                        "chroniques-de-la-presidence-trump": {
+                            "count": 15
+                        },
+                        "planete": {
+                            "count": 659
+                        },
+                        "m-styles": {
+                            "count": 286
+                        },
+                        "musiques": {
+                            "count": 16
+                        },
+                        "pixels": {
+                            "count": 415
+                        },
+                        "campus": {
+                            "count": 174
+                        },
+                        "paroles-d-entrepreneurs-au-coeur-des-territoires": {
+                            "count": 2
+                        },
+                        "des-materiaux-qui-changent-la-vie": {
+                            "count": 2
+                        },
+                        "actualite-medias": {
+                            "count": 79
+                        },
+                        "la-foire-du-drone": {
+                            "count": 7
+                        },
+                        "emploi": {
+                            "count": 103
+                        },
+                        "smart-cities": {
+                            "count": 21
+                        },
+                        "la-france-connectee": {
+                            "count": 24
+                        },
+                        "cotecourscotesjardins": {
+                            "count": 29
+                        },
+                        "guides-d-achat": {
+                            "count": 41
+                        },
+                        "blog-mediateur": {
+                            "count": 46
+                        },
+                        "management-collaboratif": {
+                            "count": 1
+                        },
+                        "videos": {
+                            "count": 12
+                        },
+                        "televisions-radio": {
+                            "count": 9
+                        },
+                        "les-recettes-du-monde": {
+                            "count": 19
+                        },
+                        "les-cles-de-demain": {
+                            "count": 4
+                        },
+                        "rugby": {
+                            "count": 53
+                        },
+                        "le-jazz-et-la-salsa": {
+                            "count": 10
+                        },
+                        "climat": {
+                            "count": 25
+                        },
+                        "education": {
+                            "count": 40
+                        },
+                        "sante": {
+                            "count": 33
+                        },
+                        "basket": {
+                            "count": 6
+                        },
+                        "lycee": {
+                            "count": 2
+                        },
+                        "bac-lycee": {
+                            "count": 3
+                        },
+                        "unknown": {
+                            "count": 62
+                        },
+                        "festival": {
+                            "count": 357
+                        },
+                        "m-gastronomie": {
+                            "count": 35
+                        },
+                        "construire-autrement-la-ville-de-demain": {
+                            "count": 4
+                        },
+                        "critique-litteraire": {
+                            "count": 132
+                        },
+                        "derriere-les-portes-du-college-doisneau": {
+                            "count": 3
+                        },
+                        "des-solutions-pour-la-planete": {
+                            "count": 2
+                        },
+                        "du-verger-aux-papilles": {
+                            "count": 1
+                        },
+                        "energies": {
+                            "count": 5
+                        },
+                        "contes": {
+                            "count": 17
+                        },
+                        "cinema": {
+                            "count": 8
+                        },
+                        "blog-du-tour-de-france": {
+                            "count": 40
+                        },
+                        "passeurdesciences": {
+                            "count": 11
+                        },
+                        "gastronomie": {
+                            "count": 7
+                        },
+                        "bons-plans": {
+                            "count": 4
+                        },
+                        "incendie-de-notre-dame": {
+                            "count": 2
+                        },
+                        "les-enfants-akira": {
+                            "count": 9
+                        },
+                        "implant-files": {
+                            "count": 1
+                        },
+                        "mondephilatelique": {
+                            "count": 29
+                        },
+                        "sante-lmde-aux-cotes-des-etudiants": {
+                            "count": 3
+                        },
+                        "evasion-fiscale": {
+                            "count": 2
+                        },
+                        "rentree-etudiante": {
+                            "count": 5
+                        },
+                        "podcasts": {
+                            "count": 9
+                        },
+                        "le-meridien-au-soleil": {
+                            "count": 3
+                        },
+                        "balade-culturelle-en-catalogne": {
+                            "count": 1
+                        },
+                        "la-flandre-extravagante": {
+                            "count": 1
+                        },
+                        "destinations-culturelles-2020-a-ne-pas-manquer": {
+                            "count": 1
+                        },
+                        "il-etait-une-fois-un-palais-moderniste-au-coeur-de-l-inde": {
+                            "count": 1
+                        },
+                        "interiale-sante-et-prevoyance": {
+                            "count": 1
+                        },
+                        "cidre-et-sistronomie": {
+                            "count": 5
+                        },
+                        "des-chaussures-elegantes-et-techniques": {
+                            "count": 1
+                        },
+                        "les-aidants-des-enjeux-des-reponses": {
+                            "count": 1
+                        },
+                        "cet-hiver-mango-cultive-la-personnalite-comme-nouvelle-tendance": {
+                            "count": 1
+                        },
+                        "epargne-retraite-et-placements": {
+                            "count": 1
+                        },
+                        "keyhani": {
+                            "count": 1
+                        },
+                        "collection-automne-hiver": {
+                            "count": 1
+                        },
+                        "virees-autour-de-lisbonne": {
+                            "count": 1
+                        },
+                        "la-france-ouvriere": {
+                            "count": 1
+                        },
+                        "m-voyage": {
+                            "count": 1
+                        },
+                        "votre-retraite-a-l-international": {
+                            "count": 1
+                        }
+                    }
+                }
+            },
+            "ru": {
+                "num_samples": 757,
+                "text_statistics": {
+                    "total_text_length": 5135333,
+                    "min_text_length": 395,
+                    "average_text_length": 6783.795244385733,
+                    "max_text_length": 135921,
+                    "unique_texts": 757
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 10,
+                    "labels": {
+                        "science": {
+                            "count": 15
+                        },
+                        "politics": {
+                            "count": 161
+                        },
+                        "mosobl": {
+                            "count": 38
+                        },
+                        "culture": {
+                            "count": 108
+                        },
+                        "social": {
+                            "count": 203
+                        },
+                        "incident": {
+                            "count": 51
+                        },
+                        "economics": {
+                            "count": 43
+                        },
+                        "sport": {
+                            "count": 82
+                        },
+                        "moscow": {
+                            "count": 55
+                        },
+                        "specprojects": {
+                            "count": 1
+                        }
+                    }
+                }
+            },
+            "es": {
+                "num_samples": 13920,
+                "text_statistics": {
+                    "total_text_length": 65422098,
+                    "min_text_length": 273,
+                    "average_text_length": 4699.863362068965,
+                    "max_text_length": 85710,
+                    "unique_texts": 13679
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 88,
+                    "labels": {
+                        "politica actualidad": {
+                            "count": 1230
+                        },
+                        "elpais planeta_futuro": {
+                            "count": 356
+                        },
+                        "elpais gente": {
+                            "count": 760
+                        },
+                        "elpais opinion": {
+                            "count": 1550
+                        },
+                        "ccaa madrid": {
+                            "count": 969
+                        },
+                        "internacional actualidad": {
+                            "count": 672
+                        },
+                        "cultura actualidad": {
+                            "count": 948
+                        },
+                        "elpais icon": {
+                            "count": 225
+                        },
+                        "elpais sesenta_y_tantos": {
+                            "count": 10
+                        },
+                        "internacional mundo_global": {
+                            "count": 30
+                        },
+                        "elpais buenavida": {
+                            "count": 168
+                        },
+                        "elpais mamas_papas": {
+                            "count": 116
+                        },
+                        "internacional mexico": {
+                            "count": 80
+                        },
+                        "internacional america": {
+                            "count": 137
+                        },
+                        "internacional colombia": {
+                            "count": 58
+                        },
+                        "internacional estados_unidos": {
+                            "count": 53
+                        },
+                        "elpais ciencia": {
+                            "count": 231
+                        },
+                        "tecnologia actualidad": {
+                            "count": 159
+                        },
+                        "cultura television": {
+                            "count": 404
+                        },
+                        "economia actualidad": {
+                            "count": 1160
+                        },
+                        "ccaa valencia": {
+                            "count": 76
+                        },
+                        "deportes actualidad": {
+                            "count": 650
+                        },
+                        "ccaa catalunya": {
+                            "count": 839
+                        },
+                        "politica diario_de_espana": {
+                            "count": 15
+                        },
+                        "elpais album": {
+                            "count": 218
+                        },
+                        "elpais actualidad": {
+                            "count": 134
+                        },
+                        "sociedad actualidad": {
+                            "count": 691
+                        },
+                        "elpais videos": {
+                            "count": 122
+                        },
+                        "ccaa galicia": {
+                            "count": 57
+                        },
+                        "elpais ideas": {
+                            "count": 191
+                        },
+                        "elpais eps": {
+                            "count": 41
+                        },
+                        "deportes es_laliga": {
+                            "count": 31
+                        },
+                        "elpais estilo": {
+                            "count": 34
+                        },
+                        "elpais inenglish": {
+                            "count": 305
+                        },
+                        "sociedad pienso_luego_actuo": {
+                            "count": 16
+                        },
+                        "elpais el_rincon_de_los_inmortales": {
+                            "count": 5
+                        },
+                        "economia mis_derechos": {
+                            "count": 14
+                        },
+                        "elpais la_voz_de_inaki": {
+                            "count": 40
+                        },
+                        "elviajero actualidad": {
+                            "count": 196
+                        },
+                        "elpais escaparate": {
+                            "count": 171
+                        },
+                        "elpais alterconsumismo": {
+                            "count": 21
+                        },
+                        "elpais podcast_las_noticias_de_el_pais": {
+                            "count": 75
+                        },
+                        "cultura elemental": {
+                            "count": 5
+                        },
+                        "elviajero album": {
+                            "count": 14
+                        },
+                        "economia alternativas": {
+                            "count": 13
+                        },
+                        "economia vivienda": {
+                            "count": 12
+                        },
+                        "economia finanzas_a_las_9": {
+                            "count": 10
+                        },
+                        "cultura babelia": {
+                            "count": 206
+                        },
+                        "sociedad feliziudad": {
+                            "count": 7
+                        },
+                        "internacional argentina": {
+                            "count": 45
+                        },
+                        "elpais el_pais_que_hacemos": {
+                            "count": 8
+                        },
+                        "elpais 3500_millones": {
+                            "count": 25
+                        },
+                        "elpais migrados": {
+                            "count": 15
+                        },
+                        "cultura miss_festivales": {
+                            "count": 13
+                        },
+                        "cultura 1up": {
+                            "count": 2
+                        },
+                        "elpais laboratorio_de_felicidad": {
+                            "count": 2
+                        },
+                        "elpais africa_no_es_un_pais": {
+                            "count": 29
+                        },
+                        "ccaa paisvasco": {
+                            "count": 13
+                        },
+                        "elpais icon_design": {
+                            "count": 54
+                        },
+                        "elpais paco_nadal": {
+                            "count": 10
+                        },
+                        "ccaa andalucia": {
+                            "count": 4
+                        },
+                        "cultura recondita_armonia": {
+                            "count": 2
+                        },
+                        "elpais mujeres": {
+                            "count": 10
+                        },
+                        "elpais viajero_astuto": {
+                            "count": 3
+                        },
+                        "elpais media": {
+                            "count": 46
+                        },
+                        "economia publizia": {
+                            "count": 4
+                        },
+                        "elpais seres_urbanos": {
+                            "count": 25
+                        },
+                        "economia mis_finanzas": {
+                            "count": 23
+                        },
+                        "elpais del_tirador_a_la_ciudad": {
+                            "count": 6
+                        },
+                        "cultura ruta_norteamericana": {
+                            "count": 1
+                        },
+                        "cultura doc_and_roll": {
+                            "count": 6
+                        },
+                        "internacional las_atalayas": {
+                            "count": 1
+                        },
+                        "elpais mordiscos_y_tacones": {
+                            "count": 1
+                        },
+                        "economia thinkbig_empresas": {
+                            "count": 3
+                        },
+                        "elpais hechos": {
+                            "count": 5
+                        },
+                        "elpais gastronotas_de_capel": {
+                            "count": 4
+                        },
+                        "deportes adrenalina": {
+                            "count": 2
+                        },
+                        "elpais dias_de_vino_y_podcasts": {
+                            "count": 3
+                        },
+                        "elpais mundo_animal": {
+                            "count": 7
+                        },
+                        "elpais escuelas_en_red": {
+                            "count": 1
+                        },
+                        "cultura el_toro_por_los_cuernos": {
+                            "count": 9
+                        },
+                        "deportes la_bitacora_de_leontxo": {
+                            "count": 1
+                        },
+                        "economia nuevos_tiempos": {
+                            "count": 4
+                        },
+                        "elpais animalesycia": {
+                            "count": 3
+                        },
+                        "brasil politica": {
+                            "count": 1
+                        },
+                        "internacional sonar_europe": {
+                            "count": 1
+                        },
+                        "cultura ka_boom": {
+                            "count": 2
+                        },
+                        "internacional la_serpiente_emplumada": {
+                            "count": 1
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import json
 import logging
@@ -8,7 +6,7 @@ from pathlib import Path
 from huggingface_hub import scan_cache_dir
 
 from mteb import get_model, get_model_meta
-from mteb.models.overview import MODEL_REGISTRY
+from mteb.models.get_model_meta import MODEL_REGISTRY
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,12 +18,12 @@ def teardown_function(revision: str):
     delete_strategy.execute()
 
 
-def get_model_below_n_param_threshold(model_name: str) -> str:
+def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -> str:
     """Test that we can get all models with a number of parameters below a threshold."""
     model_meta = get_model_meta(model_name=model_name)
     assert model_meta is not None
     if model_meta.n_parameters is not None:
-        if model_meta.n_parameters >= 2e9:
+        if model_meta.n_parameters >= threshold:
             return "Over threshold. Not tested."
         elif "API" in model_meta.framework:
             try:
@@ -94,8 +92,9 @@ if __name__ == "__main__":
         all_model_names = args.model_name
     elif args.model_name_file:
         all_model_names = []
-        if Path(args.model_name_file).exists():
-            with open(args.model_name_file) as f:
+        model_name_file = Path(args.model_name_file)
+        if model_name_file.exists():
+            with model_name_file.open() as f:
                 all_model_names = f.read().strip().split()
         else:
             logging.warning(

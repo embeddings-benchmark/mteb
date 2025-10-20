@@ -1,28 +1,21 @@
-from __future__ import annotations
-
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING
 
 import pandas as pd
-from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.benchmarks._create_table import (
     _create_per_task_table_from_benchmark_results,
     _create_summary_table_from_benchmark_results,
     _create_summary_table_mean_public_private,
     _create_summary_table_mean_subset,
+    _create_summary_table_mean_task_type,
 )
-from mteb.load_results.load_results import load_results
+from mteb.results import BenchmarkResults
+from mteb.types import StrURL
 
 if TYPE_CHECKING:
-    from mteb.abstasks.AbsTask import AbsTask
-    from mteb.load_results.benchmark_results import BenchmarkResults
-
-http_url_adapter = TypeAdapter(AnyUrl)
-UrlString = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
+    from mteb.abstasks import AbsTask
 
 
 @dataclass
@@ -37,7 +30,7 @@ class Benchmark:
         citation: A bibtex citation
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
 
-    Example:
+    Examples:
         >>> Benchmark(
         ...     name="MTEB(custom)",
         ...     tasks=mteb.get_tasks(
@@ -49,61 +42,67 @@ class Benchmark:
     """
 
     name: str
-    tasks: Sequence[AbsTask]
+    tasks: Sequence["AbsTask"]
     description: str | None = None
-    reference: UrlString | None = None
+    reference: StrURL | None = None
     citation: str | None = None
     contacts: list[str] | None = None
     display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable["AbsTask"]:
         return iter(self.tasks)
 
     def __len__(self) -> int:
         return len(self.tasks)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> "AbsTask":
         return self.tasks[index]
-
-    def load_results(
-        self, base_results: None | BenchmarkResults = None
-    ) -> BenchmarkResults:
-        if not hasattr(self, "results_cache"):
-            self.results_cache = {}
-        if base_results in self.results_cache:
-            return self.results_cache[base_results]
-        if base_results is None:
-            base_results = load_results()
-        results = base_results.select_tasks(self.tasks)
-        self.results_cache[base_results] = results
-        return results
 
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
+        """Create summary table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the summary results.
+        """
         return _create_summary_table_from_benchmark_results(benchmark_results)
 
     def _create_per_task_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create per-task table. Called by the leaderboard app."""
+        """Create per-task table. Called by the leaderboard app.
+
+        Returns:
+            A pandas DataFrame representing the per-task results.
+        """
         return _create_per_task_table_from_benchmark_results(benchmark_results)
 
 
 class RtebBenchmark(Benchmark):
+    """Wrapper for RTEB benchmark."""
+
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
         return _create_summary_table_mean_public_private(benchmark_results)
 
 
 class HUMEBenchmark(Benchmark):
+    """Wrapper for HUME benchmark."""
+
     def _create_summary_table(
         self, benchmark_results: BenchmarkResults
     ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app."""
         return _create_summary_table_mean_subset(benchmark_results)
+
+
+class MIEBBenchmark(Benchmark):
+    """Wrapper for MIEB benchmark."""
+
+    def _create_summary_table(
+        self, benchmark_results: BenchmarkResults
+    ) -> pd.DataFrame:
+        return _create_summary_table_mean_task_type(benchmark_results)

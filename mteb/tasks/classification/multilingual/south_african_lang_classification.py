@@ -1,0 +1,56 @@
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
+
+_LANGUAGES = [
+    "afr-Latn",
+    "eng-Latn",
+    "nbl-Latn",
+    "nso-Latn",
+    "sot-Latn",
+    "ssw-Latn",
+    "tsn-Latn",
+    "tso-Latn",
+    "ven-Latn",
+    "xho-Latn",
+    "zul-Latn",
+]
+
+
+class SouthAfricanLangClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="SouthAfricanLangClassification",
+        dataset={
+            "path": "mlexplorer008/south_african_language_identification",
+            "revision": "5ccda92ffd7e74fa91fed595a1cbcff1bb68ec2d",
+        },
+        description="A language identification test set for 11 South African Languages.",
+        reference="https://www.kaggle.com/competitions/south-african-language-identification/",
+        category="t2c",
+        modalities=["text"],
+        type="Classification",
+        eval_splits=["test"],
+        eval_langs=_LANGUAGES,
+        main_score="accuracy",
+        date=("2010-01-01", "2023-01-01"),
+        domains=["Web", "Non-fiction", "Written"],
+        task_subtypes=["Language identification"],
+        license="mit",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{south-african-language-identification,
+  author = {ExploreAI Academy, Joanne M},
+  publisher = {Kaggle},
+  title = {South African Language Identification},
+  url = {https://kaggle.com/competitions/south-african-language-identification},
+  year = {2022},
+}
+""",
+    )
+
+    def dataset_transform(self) -> None:
+        self.dataset = self.dataset.rename_columns(
+            {" text": "text", "lang_id": "label"}
+        )
+        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)

@@ -1,0 +1,86 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class Touche2020(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Touche2020",
+        description="Touché Task 1: Argument Retrieval for Controversial Questions",
+        reference="https://webis.de/events/touche-20/shared-task-1.html",
+        dataset={
+            "path": "mteb/touche2020",
+            "revision": "a34f9a33db75fa0cbb21bb5cfc3dae8dc8bec93f",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2020-09-23", "2020-09-23"),
+        domains=["Academic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@dataset{potthast_2022_6862281,
+  author = {Potthast, Martin and
+Gienapp, Lukas and
+Wachsmuth, Henning and
+Hagen, Matthias and
+Fröbe, Maik and
+Bondarenko, Alexander and
+Ajjour, Yamen and
+Stein, Benno},
+  doi = {10.5281/zenodo.6862281},
+  month = jul,
+  publisher = {Zenodo},
+  title = {{Touché20-Argument-Retrieval-for-Controversial-
+Questions}},
+  url = {https://doi.org/10.5281/zenodo.6862281},
+  year = {2022},
+}
+""",
+        prompt={
+            "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
+        },
+        adapted_from=["Touche2020"],
+        superseded_by="Touche2020Retrieval.v3",
+    )
+
+
+class Touche2020v3Retrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Touche2020Retrieval.v3",
+        description="Touché Task 1: Argument Retrieval for Controversial Questions",
+        reference="https://github.com/castorini/touche-error-analysis",
+        dataset={
+            "path": "mteb/webis-touche2020-v3",
+            "revision": "431886eaecc48f067a3975b70d0949ea2862463c",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2020-09-23", "2020-09-23"),
+        domains=["Academic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{Thakur_etal_SIGIR2024,
+  address_ = {Washington, D.C.},
+  author = {Nandan Thakur and Luiz Bonifacio and Maik {Fr\"{o}be} and Alexander Bondarenko and Ehsan Kamalloo and Martin Potthast and Matthias Hagen and Jimmy Lin},
+  booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  title = {Systematic Evaluation of Neural Retrieval Models on the {Touch\'{e}} 2020 Argument Retrieval Subset of {BEIR}},
+  year = {2024},
+}
+""",
+        adapted_from=["Touche2020"],
+    )

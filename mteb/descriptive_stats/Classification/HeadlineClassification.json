@@ -1,0 +1,78 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 127763,
+            "min_text_length": 13,
+            "average_text_length": 62.38427734375,
+            "max_text_length": 173,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "1": {
+                    "count": 342
+                },
+                "0": {
+                    "count": 341
+                },
+                "4": {
+                    "count": 341
+                },
+                "2": {
+                    "count": 341
+                },
+                "3": {
+                    "count": 341
+                },
+                "5": {
+                    "count": 342
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 36000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 2232586,
+            "min_text_length": 2,
+            "average_text_length": 62.01627777777778,
+            "max_text_length": 501,
+            "unique_texts": 36000
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "0": {
+                    "count": 6000
+                },
+                "2": {
+                    "count": 6000
+                },
+                "1": {
+                    "count": 6000
+                },
+                "4": {
+                    "count": 6000
+                },
+                "5": {
+                    "count": 6000
+                },
+                "3": {
+                    "count": 6000
+                }
+            }
+        }
+    }
+}

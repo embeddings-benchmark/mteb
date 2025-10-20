@@ -1,0 +1,33 @@
+name: Documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e . --group docs
+
+      - name: Build and Deploy
+        if: github.event_name == 'push'
+        run: |
+          make build-docs-overview
+          mkdocs gh-deploy --force
+
+      - name: Build
+        if: github.event_name == 'pull_request'
+        run: make build-docs

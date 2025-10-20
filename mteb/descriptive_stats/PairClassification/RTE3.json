@@ -1,0 +1,169 @@
+{
+    "test": {
+        "num_samples": 1923,
+        "number_of_characters": 479937,
+        "unique_pairs": 1923,
+        "text1_statistics": {
+            "total_text_length": 377935,
+            "min_text_length": 45,
+            "average_text_length": 196.5340613624545,
+            "max_text_length": 661,
+            "unique_texts": 1832
+        },
+        "text2_statistics": {
+            "total_text_length": 102002,
+            "min_text_length": 16,
+            "average_text_length": 53.04316172646906,
+            "max_text_length": 166,
+            "unique_texts": 1651
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "1": {
+                    "count": 1634
+                },
+                "0": {
+                    "count": 289
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 481,
+                "number_of_characters": 124552,
+                "unique_pairs": 481,
+                "text1_statistics": {
+                    "total_text_length": 98165,
+                    "min_text_length": 45,
+                    "average_text_length": 204.0852390852391,
+                    "max_text_length": 640,
+                    "unique_texts": 454
+                },
+                "text2_statistics": {
+                    "total_text_length": 26387,
+                    "min_text_length": 23,
+                    "average_text_length": 54.858627858627855,
+                    "max_text_length": 161,
+                    "unique_texts": 409
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "1": {
+                            "count": 409
+                        },
+                        "0": {
+                            "count": 72
+                        }
+                    }
+                }
+            },
+            "en": {
+                "num_samples": 482,
+                "number_of_characters": 108730,
+                "unique_pairs": 482,
+                "text1_statistics": {
+                    "total_text_length": 85827,
+                    "min_text_length": 50,
+                    "average_text_length": 178.0643153526971,
+                    "max_text_length": 595,
+                    "unique_texts": 457
+                },
+                "text2_statistics": {
+                    "total_text_length": 22903,
+                    "min_text_length": 16,
+                    "average_text_length": 47.516597510373444,
+                    "max_text_length": 142,
+                    "unique_texts": 408
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "1": {
+                            "count": 410
+                        },
+                        "0": {
+                            "count": 72
+                        }
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 482,
+                "number_of_characters": 126128,
+                "unique_pairs": 482,
+                "text1_statistics": {
+                    "total_text_length": 99104,
+                    "min_text_length": 56,
+                    "average_text_length": 205.60995850622407,
+                    "max_text_length": 641,
+                    "unique_texts": 467
+                },
+                "text2_statistics": {
+                    "total_text_length": 27024,
+                    "min_text_length": 24,
+                    "average_text_length": 56.066390041493776,
+                    "max_text_length": 166,
+                    "unique_texts": 428
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "1": {
+                            "count": 409
+                        },
+                        "0": {
+                            "count": 73
+                        }
+                    }
+                }
+            },
+            "it": {
+                "num_samples": 478,
+                "number_of_characters": 120527,
+                "unique_pairs": 478,
+                "text1_statistics": {
+                    "total_text_length": 94839,
+                    "min_text_length": 63,
+                    "average_text_length": 198.407949790795,
+                    "max_text_length": 661,
+                    "unique_texts": 454
+                },
+                "text2_statistics": {
+                    "total_text_length": 25688,
+                    "min_text_length": 21,
+                    "average_text_length": 53.74058577405858,
+                    "max_text_length": 151,
+                    "unique_texts": 406
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "1": {
+                            "count": 406
+                        },
+                        "0": {
+                            "count": 72
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

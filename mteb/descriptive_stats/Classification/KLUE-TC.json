@@ -1,0 +1,84 @@
+{
+    "validation": {
+        "num_samples": 2048,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 55699,
+            "min_text_length": 8,
+            "average_text_length": 27.19677734375,
+            "max_text_length": 41,
+            "unique_texts": 2048
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "\uc0ac\ud68c": {
+                    "count": 832
+                },
+                "\uc815\uce58": {
+                    "count": 162
+                },
+                "\uacbd\uc81c": {
+                    "count": 303
+                },
+                "\uc0dd\ud65c\ubb38\ud654": {
+                    "count": 308
+                },
+                "IT\uacfc\ud559": {
+                    "count": 125
+                },
+                "\uc2a4\ud3ec\uce20": {
+                    "count": 130
+                },
+                "\uc138\uacc4": {
+                    "count": 188
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 45678,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 1250049,
+            "min_text_length": 4,
+            "average_text_length": 27.36654406935505,
+            "max_text_length": 44,
+            "unique_texts": 45678
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 7,
+            "labels": {
+                "\uc0dd\ud65c\ubb38\ud654": {
+                    "count": 5751
+                },
+                "\uc0ac\ud68c": {
+                    "count": 5133
+                },
+                "IT\uacfc\ud559": {
+                    "count": 5235
+                },
+                "\uc2a4\ud3ec\uce20": {
+                    "count": 7742
+                },
+                "\uc138\uacc4": {
+                    "count": 8320
+                },
+                "\uc815\uce58": {
+                    "count": 7379
+                },
+                "\uacbd\uc81c": {
+                    "count": 6118
+                }
+            }
+        }
+    }
+}
