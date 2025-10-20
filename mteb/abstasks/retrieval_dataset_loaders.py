@@ -176,7 +176,7 @@ class RetrievalDatasetLoader:
                 {
                     "query-id": Value("string"),
                     "corpus-id": Value("string"),
-                    "score": Value("float"),
+                    "score": Value("uint16"),
                 }
             )
         )
