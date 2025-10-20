@@ -500,7 +500,7 @@ def get_leaderboard_app(cache: ResultCache = ResultCache()) -> gr.Blocks:
             # Calculate initial models for this benchmark to avoid race conditions
             benchmark_tasks = sorted([task.metadata.name for task in benchmark.tasks])
             all_models_in_scores = list({entry["model_name"] for entry in scores})
-            initial_models = filter_models(
+            initial_models = _filter_models(
                 all_models_in_scores,
                 benchmark_tasks,
                 availability=None,
