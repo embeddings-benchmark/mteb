@@ -1,14 +1,12 @@
-from __future__ import annotations
-
 import gzip
 import os
 
 import datasets
 import jsonlines
 import numpy as np
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
-np.random.seed(28042000)
+np.random.seed(28042000)  # noqa: NPY002
 
 d = datasets.load_dataset("flax-sentence-embeddings/stackexchange_title_body_jsonl")[
     "validation"
@@ -35,7 +33,7 @@ splits = []
 
 # Coarse splits 10k
 for k in tqdm(range(split_number)):
-    np.random.shuffle(indices)
+    np.random.shuffle(indices)  # noqa: NPY002
     current_indices = indices[:split_size]
     subset = d.select(current_indices)
     text = [get_text(item) for item in subset]
@@ -48,7 +46,7 @@ split_number = 5
 
 # Coarse splits 5k
 for k in tqdm(range(split_number)):
-    np.random.shuffle(indices)
+    np.random.shuffle(indices)  # noqa: NPY002
     current_indices = indices[:split_size]
     subset = d.select(current_indices)
     text = [get_text(item) for item in subset]

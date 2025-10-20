@@ -1,20 +1,5 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Annotated
-
-from pydantic import AnyUrl, BeforeValidator, TypeAdapter
-
-from mteb.benchmarks.benchmark import Benchmark
-from mteb.overview import MTEBTasks, get_task, get_tasks
-
-if TYPE_CHECKING:
-    pass
-
-http_url_adapter = TypeAdapter(AnyUrl)
-UrlString = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
-
+from mteb.benchmarks.benchmark import Benchmark, HUMEBenchmark, MIEBBenchmark
+from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
 MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
   author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -181,7 +166,7 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
     """,
     citation=r"""
 @article{muennighoff2022mteb,
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
   doi = {10.48550/ARXIV.2210.07316},
   journal = {arXiv preprint arXiv:2210.07316},
   publisher = {arXiv},
@@ -197,43 +182,45 @@ MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
     display_name="Russian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
-    tasks=get_tasks(
-        languages=["rus"],
-        tasks=[
-            # Classification
-            "GeoreviewClassification",
-            "HeadlineClassification",
-            "InappropriatenessClassification",
-            "KinopoiskClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "RuReviewsClassification",
-            "RuSciBenchGRNTIClassification",
-            "RuSciBenchOECDClassification",
-            # Clustering
-            "GeoreviewClusteringP2P",
-            "RuSciBenchGRNTIClusteringP2P",
-            "RuSciBenchOECDClusteringP2P",
-            # MultiLabelClassification
-            "CEDRClassification",
-            "SensitiveTopicsClassification",
-            # PairClassification
-            "TERRa",
-            # Reranking
-            "MIRACLReranking",
-            "RuBQReranking",
-            # Retrieval
-            "MIRACLRetrieval",
-            "RiaNewsRetrieval",
-            "RuBQRetrieval",
-            # STS
-            "RUParaPhraserSTS",
-            "STS22",
-        ],
-    )
-    + get_tasks(
-        tasks=["RuSTSBenchmarkSTS"],
-        eval_splits=["test"],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["rus"],
+            tasks=[
+                # Classification
+                "GeoreviewClassification",
+                "HeadlineClassification",
+                "InappropriatenessClassification",
+                "KinopoiskClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "RuReviewsClassification",
+                "RuSciBenchGRNTIClassification",
+                "RuSciBenchOECDClassification",
+                # Clustering
+                "GeoreviewClusteringP2P",
+                "RuSciBenchGRNTIClusteringP2P",
+                "RuSciBenchOECDClusteringP2P",
+                # MultiLabelClassification
+                "CEDRClassification",
+                "SensitiveTopicsClassification",
+                # PairClassification
+                "TERRa",
+                # Reranking
+                "MIRACLReranking",
+                "RuBQReranking",
+                # Retrieval
+                "MIRACLRetrieval",
+                "RiaNewsRetrieval",
+                "RuBQRetrieval",
+                # STS
+                "RUParaPhraserSTS",
+                "STS22",
+            ],
+        )
+        + get_tasks(
+            tasks=["RuSTSBenchmarkSTS"],
+            eval_splits=["test"],
+        )
     ),
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
@@ -309,6 +296,33 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
   primaryclass = {cs.IR},
   title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
   year = {2024},
+}
+""",
+)
+
+MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
+    name="IFIR",
+    display_name="IFIR",
+    tasks=get_tasks(
+        tasks=[
+            "IFIRAila",
+            "IFIRCds",
+            "IFIRFiQA",
+            "IFIRFire",
+            "IFIRNFCorpus",
+            "IFIRPm",
+            "IFIRScifact",
+        ]
+    ),
+    description="Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval",
+    reference="https://arxiv.org/abs/2503.04644",
+    citation=r"""
+@inproceedings{song2025ifir,
+  author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+  pages = {10186--10204},
+  title = {IFIR: A Comprehensive Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval},
+  year = {2025},
 }
 """,
 )
@@ -445,6 +459,7 @@ SEB = Benchmark(
 CoIR = Benchmark(
     name="CoIR",
     display_name="Code Information Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
     tasks=get_tasks(
         tasks=[
             "AppsRetrieval",
@@ -476,7 +491,7 @@ CoIR = Benchmark(
 
 RAR_b = Benchmark(
     name="RAR-b",
-    display_name="Reasoning retrieval",
+    display_name="Reasoning as retrieval",
     tasks=get_tasks(
         tasks=[
             "ARCChallenge",
@@ -994,7 +1009,7 @@ MTEB_INDIC = Benchmark(
         (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
-    reference="https://arxiv.org/abs/2502.13595",
+    reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -1128,7 +1143,7 @@ MTEB_EU = Benchmark(
         exclusive_language_filter=True,
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
-    reference="https://arxiv.org/abs/2502.13595",
+    reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -1163,6 +1178,7 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
+    display_name="Reasoning Retrieval",
     tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
@@ -1238,25 +1254,29 @@ CODE_RAG = Benchmark(
 
 BEIR = Benchmark(
     name="BEIR",
-    tasks=get_tasks(
-        tasks=[
-            "TRECCOVID",
-            "NFCorpus",
-            "NQ",
-            "HotpotQA",
-            "FiQA2018",
-            "ArguAna",
-            "Touche2020",
-            "CQADupstackRetrieval",
-            "QuoraRetrieval",
-            "DBPedia",
-            "SCIDOCS",
-            "FEVER",
-            "ClimateFEVER",
-            "SciFact",
-        ],
-    )
-    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    display_name="BEIR",
+    icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "TRECCOVID",
+                "NFCorpus",
+                "NQ",
+                "HotpotQA",
+                "FiQA2018",
+                "ArguAna",
+                "Touche2020",
+                "CQADupstackRetrieval",
+                "QuoraRetrieval",
+                "DBPedia",
+                "SCIDOCS",
+                "FEVER",
+                "ClimateFEVER",
+                "SciFact",
+            ],
+        )
+        + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
+    ),
     description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""
@@ -1361,7 +1381,7 @@ C_MTEB = Benchmark(
 
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
-    display_name="Farsi",
+    display_name="Farsi Legacy",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1448,6 +1468,87 @@ FA_MTEB = Benchmark(
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
 )
 
+FA_MTEB_2 = Benchmark(
+    name="MTEB(fas, v2)",
+    display_name="Farsi",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
+    tasks=get_tasks(
+        languages=["fas"],
+        tasks=[
+            # Classification
+            "PersianFoodSentimentClassification",
+            "SynPerChatbotConvSAClassification",
+            "SynPerChatbotConvSAToneChatbotClassification",
+            "SynPerChatbotConvSAToneUserClassification",
+            "SynPerChatbotSatisfactionLevelClassification",
+            "SynPerTextToneClassification.v3",
+            "SIDClassification.v2",
+            "DeepSentiPers.v2",
+            "PersianTextEmotion.v2",
+            "NLPTwitterAnalysisClassification.v2",
+            "DigikalamagClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "StyleClassification",
+            "PerShopDomainClassification",
+            "PerShopIntentClassification",
+            # Clustering
+            "BeytooteClustering",
+            "DigikalamagClustering",
+            "HamshahriClustring",
+            "NLPTwitterAnalysisClustering",
+            "SIDClustring",
+            # PairClassification
+            "FarsTail",
+            "SynPerChatbotRAGFAQPC",
+            "FarsiParaphraseDetection",
+            "SynPerTextKeywordsPC",
+            "SynPerQAPC",
+            "ParsinluEntail",
+            "ParsinluQueryParaphPC",
+            # Reranking
+            "MIRACLReranking",
+            "WikipediaRerankingMultilingual",
+            # Retrieval
+            "SynPerQARetrieval",
+            "SynPerChatbotRAGFAQRetrieval",
+            "PersianWebDocumentRetrieval",
+            "WikipediaRetrievalMultilingual",
+            "MIRACLRetrievalHardNegatives",
+            "HotpotQA-FaHardNegatives",
+            "MSMARCO-FaHardNegatives",
+            "NQ-FaHardNegatives",
+            "ArguAna-Fa.v2",
+            "FiQA2018-Fa.v2",
+            "QuoraRetrieval-Fa.v2",
+            "SCIDOCS-Fa.v2",
+            "SciFact-Fa.v2",
+            "TRECCOVID-Fa.v2",
+            "FEVER-FaHardNegatives",
+            "NeuCLIR2023RetrievalHardNegatives",
+            "WebFAQRetrieval",
+            # STS
+            "Farsick",
+            "SynPerSTS",
+            # SummaryRetrieval
+            "SAMSumFa",
+            "SynPerChatbotSumSRetrieval",
+            "SynPerChatbotRAGSumSRetrieval",
+        ],
+    ),
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark. For more details on the improvements, see the main PR comment: [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157).",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
+    contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+)
+
 CHEMTEB = Benchmark(
     name="ChemTEB",
     display_name="Chemical",
@@ -1497,6 +1598,8 @@ CHEMTEB = Benchmark(
 
 BEIR_NL = Benchmark(
     name="BEIR-NL",
+    display_name="BEIR-NL",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/nl.svg",
     tasks=get_tasks(
         tasks=[
             "ArguAna-NL",
@@ -1667,7 +1770,7 @@ MIEB_common_tasks = [
     "WebQAT2TRetrieval",
 ]
 
-MIEB_ENG = Benchmark(
+MIEB_ENG = MIEBBenchmark(
     name="MIEB(eng)",
     display_name="Image-Text, English",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
@@ -1696,7 +1799,7 @@ MIEB_ENG = Benchmark(
 """,
 )
 
-MIEB_MULTILINGUAL = Benchmark(
+MIEB_MULTILINGUAL = MIEBBenchmark(
     name="MIEB(Multilingual)",
     display_name="Image-Text, Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
@@ -1731,7 +1834,7 @@ MIEB_MULTILINGUAL = Benchmark(
 """,
 )
 
-MIEB_LITE = Benchmark(
+MIEB_LITE = MIEBBenchmark(
     name="MIEB(lite)",
     display_name="Image-Text, Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
@@ -1815,7 +1918,7 @@ MIEB_LITE = Benchmark(
 """,
 )
 
-MIEB_IMG = Benchmark(
+MIEB_IMG = MIEBBenchmark(
     name="MIEB(Img)",
     display_name="Image only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
@@ -1887,6 +1990,43 @@ MIEB_IMG = Benchmark(
 """,
     contacts=["gowitheflow-1998", "isaac-chung"],
 )
+
+BEIR_PL = Benchmark(
+    name="BEIR-PL",
+    tasks=get_tasks(
+        languages=["pol"],
+        tasks=[
+            "MSMARCO-PL",
+            "TRECCOVID-PL",
+            "NFCorpus-PL",
+            "NQ-PL",
+            "HotpotQA-PL",
+            "FiQA-PL",
+            "ArguAna-PL",
+            "Touche2020-PL",
+            "CQADupstackRetrieval-PL",
+            "Quora-PL",
+            "DBPedia-PL",
+            "SCIDOCS-PL",
+            "SciFact-PL",
+        ],
+        eval_splits=["test"],
+    ),
+    description="BEIR-PL is a benchmark for evaluating text embedding models on Polish language data.",
+    reference="https://arxiv.org/abs/2305.19840",
+    citation=r"""
+@misc{wojtasik2024beirplzeroshotinformation,
+  archiveprefix = {arXiv},
+  author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
+  eprint = {2305.19840},
+  primaryclass = {cs.IR},
+  title = {BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
+  url = {https://arxiv.org/abs/2305.19840},
+  year = {2024},
+}
+""",
+)
+
 
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
@@ -2213,4 +2353,42 @@ JINA_VDR = Benchmark(
   url = {https://arxiv.org/abs/2506.18902},
   year = {2025},
 }""",
+)
+
+
+HUME = HUMEBenchmark(
+    name="HUME(v1)",
+    display_name="Human Benchmark",
+    # icon="https://raw.githubusercontent.com/huggingface/benchmarks/main/benchmarks/assets/hume.png",
+    tasks=get_tasks(
+        tasks=[
+            "HUMEEmotionClassification",
+            "HUMEToxicConversationsClassification",
+            "HUMETweetSentimentExtractionClassification",
+            "HUMEMultilingualSentimentClassification",
+            "HUMEArxivClusteringP2P",
+            "HUMERedditClusteringP2P",
+            "HUMEWikiCitiesClustering",
+            "HUMESIB200ClusteringS2S",
+            "HUMECore17InstructionReranking",
+            "HUMENews21InstructionReranking",
+            "HUMERobust04InstructionReranking",
+            "HUMEWikipediaRerankingMultilingual",
+            "HUMESICK-R",
+            "HUMESTS12",
+            "HUMESTSBenchmark",
+            "HUMESTS22",
+        ],
+        languages=[
+            "eng-Latn",
+            "ara-Arab",
+            "rus-Cyrl",
+            "dan-Latn",
+            "nob-Latn",
+        ],
+    ),
+    description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
+    reference="Coming soon (in review)",
+    citation=None,
+    contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
 )

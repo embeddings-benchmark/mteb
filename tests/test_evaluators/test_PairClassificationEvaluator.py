@@ -1,46 +1,43 @@
-from __future__ import annotations
-
 import pytest
 
-from mteb.evaluation.evaluators import PairClassificationEvaluator
+import mteb
+from mteb._evaluators import PairClassificationEvaluator
+from tests.mock_tasks import (
+    MockClassificationTask,
+    MockPairClassificationTask,
+)
 
 TOL = 0.0001
 
 
 class TestPairClassificationEvaluator:
     def test_accuracy(self):
-        scores = [6.12, 5.39, 5.28, 5.94, 6.34, 6.47, 7.88, 6.62, 8.04, 5.9]
-        labels = [0, 0, 0, 0, 1, 0, 0, 0, 1, 0]
-        high_score_more_similar = True
-        acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
-            scores, labels, high_score_more_similar
+        task = MockPairClassificationTask()
+        task.load_data()
+        evaluator = PairClassificationEvaluator(
+            task.dataset["test"],
+            "sentence1",
+            "sentence2",
+            MockClassificationTask.metadata,
+            "test",
+            "test",
         )
-        assert acc == pytest.approx(0.9, TOL)
-        assert acc_threshold == pytest.approx(7.95999, TOL)
-
-    def test_f1(self):
-        scores = [6.12, 5.39, 5.28, 5.94, 6.34, 6.47, 7.88, 6.62, 8.04, 5.9]
-        labels = [0, 0, 0, 0, 1, 0, 0, 0, 1, 0]
-        high_score_more_similar = True
-
-        (
-            f1,
-            precision,
-            recall,
-            f1_threshold,
-        ) = PairClassificationEvaluator.find_best_f1_and_threshold(
-            scores, labels, high_score_more_similar
+        distances = evaluator(
+            mteb.get_model("baseline/random-encoder-baseline"),
+            encode_kwargs={"batch_size": 32},
         )
-        assert f1 == pytest.approx(0.66666, TOL)
-        assert precision == pytest.approx(1.0, TOL)
-        assert recall == pytest.approx(0.5, TOL)
-        assert f1_threshold == pytest.approx(7.95999, TOL)
-
-    def test_ap(self):
-        scores = [6.12, 5.39, 5.28, 5.94, 6.34, 6.47, 7.88, 6.62, 8.04, 5.9]
-        labels = [0, 0, 0, 0, 1, 0, 0, 0, 1, 0]
-        high_score_more_similar = True
-        ap = PairClassificationEvaluator.ap_score(
-            scores, labels, high_score_more_similar
+        assert distances["cosine_scores"] == pytest.approx(
+            [0.7375020980834961, 0.7731508016586304], TOL
         )
-        assert ap == pytest.approx(0.7, TOL)
+        assert distances["euclidean_distances"] == pytest.approx(
+            [2.4108424186706543, 2.1905980110168457], TOL
+        )
+        assert distances["manhattan_distances"] == pytest.approx(
+            [11.177837371826172, 10.721406936645508], TOL
+        )
+        assert distances["similarity_scores"] == pytest.approx(
+            [0.7375020384788513, 0.7731509208679199], TOL
+        )
+        assert distances["dot_scores"] == pytest.approx(
+            [7.974165916442871, 8.176445960998535], TOL
+        )

@@ -11,7 +11,7 @@ class AudioDataset(torch.utils.data.Dataset):
         self.dataset = hf_dataset
         self.transform = transform
         self.audio_column_name = audio_column_name
-        
+
         # Check if dataset is a list of audio objects or a HuggingFace dataset
         self.is_raw_audio_list = isinstance(hf_dataset, list)
 
@@ -25,7 +25,7 @@ class AudioDataset(torch.utils.data.Dataset):
         else:
             # Handle HuggingFace dataset with columns
             audio = self.dataset[idx][self.audio_column_name]
-            
+
         if isinstance(audio, bytes):
             waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
         elif isinstance(audio, str):
@@ -39,7 +39,7 @@ class AudioDataset(torch.utils.data.Dataset):
         else:
             # Assume audio is already a tensor or in a usable format
             waveform = audio
-            
+
         if self.transform is not None:
             waveform = self.transform(waveform)
         return waveform

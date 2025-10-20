@@ -1,0 +1,33 @@
+{
+    "headlines": {
+        "num_samples": 34376,
+        "text_statistics": {
+            "total_text_length": 1427388,
+            "min_text_length": 2,
+            "average_text_length": 41.522806609262275,
+            "max_text_length": 496,
+            "unique_texts": 33506
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "domestic news": {
+                    "count": 19155
+                },
+                "economy": {
+                    "count": 4582
+                },
+                "sports": {
+                    "count": 6110
+                },
+                "culture": {
+                    "count": 4529
+                }
+            }
+        }
+    }
+}

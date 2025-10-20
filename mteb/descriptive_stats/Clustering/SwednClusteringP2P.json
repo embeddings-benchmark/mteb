@@ -1,0 +1,64 @@
+{
+    "summaries": {
+        "num_samples": 34376,
+        "text_statistics": {
+            "total_text_length": 7541052,
+            "min_text_length": 48,
+            "average_text_length": 219.36967651850128,
+            "max_text_length": 904,
+            "unique_texts": 34193
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "domestic news": {
+                    "count": 19155
+                },
+                "economy": {
+                    "count": 4582
+                },
+                "sports": {
+                    "count": 6110
+                },
+                "culture": {
+                    "count": 4529
+                }
+            }
+        }
+    },
+    "articles": {
+        "num_samples": 34376,
+        "text_statistics": {
+            "total_text_length": 103343288,
+            "min_text_length": 191,
+            "average_text_length": 3006.2627414475214,
+            "max_text_length": 140461,
+            "unique_texts": 34292
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "domestic news": {
+                    "count": 19155
+                },
+                "economy": {
+                    "count": 4582
+                },
+                "sports": {
+                    "count": 6110
+                },
+                "culture": {
+                    "count": 4529
+                }
+            }
+        }
+    }
+}

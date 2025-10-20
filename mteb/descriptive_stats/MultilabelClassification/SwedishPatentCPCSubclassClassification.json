@@ -1,0 +1,1513 @@
+{
+    "train": {
+        "num_samples": 8011,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 21909761,
+            "min_text_length": 1,
+            "average_text_length": 2734.959555611035,
+            "max_text_length": 107441,
+            "unique_texts": 8010
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.5422544001997254,
+            "max_labels_per_text": 8,
+            "unique_labels": 497,
+            "labels": {
+                "C08L": {
+                    "count": 100
+                },
+                "C11B": {
+                    "count": 49
+                },
+                "B42D": {
+                    "count": 6
+                },
+                "B42F": {
+                    "count": 19
+                },
+                "C04B": {
+                    "count": 357
+                },
+                "C22B": {
+                    "count": 37
+                },
+                "F23L": {
+                    "count": 39
+                },
+                "C13K": {
+                    "count": 2
+                },
+                "A01K": {
+                    "count": 19
+                },
+                "F23B": {
+                    "count": 31
+                },
+                "F24B": {
+                    "count": 31
+                },
+                "F24H": {
+                    "count": 60
+                },
+                "F23G": {
+                    "count": 23
+                },
+                "F24F": {
+                    "count": 59
+                },
+                "F24D": {
+                    "count": 32
+                },
+                "A01F": {
+                    "count": 18
+                },
+                "A24F": {
+                    "count": 3
+                },
+                "C11D": {
+                    "count": 57
+                },
+                "D21H": {
+                    "count": 94
+                },
+                "G01N": {
+                    "count": 154
+                },
+                "B04B": {
+                    "count": 82
+                },
+                "D21C": {
+                    "count": 71
+                },
+                "C05F": {
+                    "count": 5
+                },
+                "C10J": {
+                    "count": 8
+                },
+                "G11B": {
+                    "count": 27
+                },
+                "H04R": {
+                    "count": 16
+                },
+                "A45C": {
+                    "count": 14
+                },
+                "B21J": {
+                    "count": 11
+                },
+                "C12N": {
+                    "count": 52
+                },
+                "B23K": {
+                    "count": 53
+                },
+                "A43B": {
+                    "count": 8
+                },
+                "B01D": {
+                    "count": 222
+                },
+                "A01J": {
+                    "count": 38
+                },
+                "E03C": {
+                    "count": 20
+                },
+                "A47K": {
+                    "count": 30
+                },
+                "C11C": {
+                    "count": 22
+                },
+                "A61G": {
+                    "count": 25
+                },
+                "B27B": {
+                    "count": 30
+                },
+                "C12C": {
+                    "count": 14
+                },
+                "F25C": {
+                    "count": 6
+                },
+                "A01D": {
+                    "count": 25
+                },
+                "E06B": {
+                    "count": 29
+                },
+                "B25B": {
+                    "count": 22
+                },
+                "F27D": {
+                    "count": 38
+                },
+                "C21B": {
+                    "count": 11
+                },
+                "H01K": {
+                    "count": 8
+                },
+                "A23B": {
+                    "count": 33
+                },
+                "F23M": {
+                    "count": 18
+                },
+                "B32B": {
+                    "count": 49
+                },
+                "D21D": {
+                    "count": 46
+                },
+                "F01N": {
+                    "count": 4
+                },
+                "H04M": {
+                    "count": 56
+                },
+                "F24C": {
+                    "count": 29
+                },
+                "B65D": {
+                    "count": 232
+                },
+                "D06H": {
+                    "count": 9
+                },
+                "E05C": {
+                    "count": 16
+                },
+                "A23K": {
+                    "count": 18
+                },
+                "C09H": {
+                    "count": 3
+                },
+                "E01B": {
+                    "count": 10
+                },
+                "B07B": {
+                    "count": 22
+                },
+                "B26B": {
+                    "count": 31
+                },
+                "E05B": {
+                    "count": 22
+                },
+                "C01C": {
+                    "count": 11
+                },
+                "A22C": {
+                    "count": 21
+                },
+                "C10F": {
+                    "count": 18
+                },
+                "E05D": {
+                    "count": 19
+                },
+                "B44C": {
+                    "count": 11
+                },
+                "C23C": {
+                    "count": 46
+                },
+                "A63B": {
+                    "count": 5
+                },
+                "E21B": {
+                    "count": 9
+                },
+                "E04F": {
+                    "count": 15
+                },
+                "F23D": {
+                    "count": 44
+                },
+                "B29D": {
+                    "count": 55
+                },
+                "B65F": {
+                    "count": 15
+                },
+                "F02M": {
+                    "count": 12
+                },
+                "B01J": {
+                    "count": 114
+                },
+                "C03C": {
+                    "count": 39
+                },
+                "C02F": {
+                    "count": 53
+                },
+                "D21B": {
+                    "count": 16
+                },
+                "A01C": {
+                    "count": 6
+                },
+                "F23H": {
+                    "count": 13
+                },
+                "F22B": {
+                    "count": 31
+                },
+                "F27B": {
+                    "count": 40
+                },
+                "B60C": {
+                    "count": 36
+                },
+                "C25B": {
+                    "count": 16
+                },
+                "H05B": {
+                    "count": 71
+                },
+                "B65B": {
+                    "count": 101
+                },
+                "D06P": {
+                    "count": 27
+                },
+                "F23N": {
+                    "count": 15
+                },
+                "B28B": {
+                    "count": 52
+                },
+                "C01F": {
+                    "count": 15
+                },
+                "F28D": {
+                    "count": 80
+                },
+                "A43D": {
+                    "count": 11
+                },
+                "A63H": {
+                    "count": 7
+                },
+                "F16G": {
+                    "count": 7
+                },
+                "F28F": {
+                    "count": 91
+                },
+                "F42B": {
+                    "count": 37
+                },
+                "C23F": {
+                    "count": 24
+                },
+                "F28B": {
+                    "count": 15
+                },
+                "D02G": {
+                    "count": 28
+                },
+                "G02B": {
+                    "count": 38
+                },
+                "A47L": {
+                    "count": 13
+                },
+                "C10B": {
+                    "count": 9
+                },
+                "C12H": {
+                    "count": 5
+                },
+                "C22C": {
+                    "count": 44
+                },
+                "A01B": {
+                    "count": 14
+                },
+                "A45F": {
+                    "count": 10
+                },
+                "B21D": {
+                    "count": 29
+                },
+                "B67B": {
+                    "count": 10
+                },
+                "D01H": {
+                    "count": 14
+                },
+                "A63C": {
+                    "count": 8
+                },
+                "B62M": {
+                    "count": 5
+                },
+                "C14C": {
+                    "count": 8
+                },
+                "B65G": {
+                    "count": 134
+                },
+                "A01N": {
+                    "count": 94
+                },
+                "E01C": {
+                    "count": 27
+                },
+                "A01G": {
+                    "count": 23
+                },
+                "B22C": {
+                    "count": 23
+                },
+                "G07F": {
+                    "count": 11
+                },
+                "B63H": {
+                    "count": 10
+                },
+                "F23K": {
+                    "count": 21
+                },
+                "F25D": {
+                    "count": 29
+                },
+                "H01C": {
+                    "count": 20
+                },
+                "A01M": {
+                    "count": 9
+                },
+                "C12P": {
+                    "count": 69
+                },
+                "C01B": {
+                    "count": 74
+                },
+                "D06N": {
+                    "count": 16
+                },
+                "B67C": {
+                    "count": 6
+                },
+                "C09K": {
+                    "count": 46
+                },
+                "B66F": {
+                    "count": 13
+                },
+                "A62C": {
+                    "count": 7
+                },
+                "B29C": {
+                    "count": 144
+                },
+                "E01H": {
+                    "count": 6
+                },
+                "E04H": {
+                    "count": 10
+                },
+                "F23J": {
+                    "count": 11
+                },
+                "C07C": {
+                    "count": 211
+                },
+                "F24V": {
+                    "count": 3
+                },
+                "F41A": {
+                    "count": 26
+                },
+                "B23D": {
+                    "count": 15
+                },
+                "B28C": {
+                    "count": 11
+                },
+                "A61F": {
+                    "count": 37
+                },
+                "F04D": {
+                    "count": 38
+                },
+                "C01D": {
+                    "count": 10
+                },
+                "F16L": {
+                    "count": 48
+                },
+                "G09B": {
+                    "count": 14
+                },
+                "C01G": {
+                    "count": 16
+                },
+                "H01M": {
+                    "count": 27
+                },
+                "C03B": {
+                    "count": 41
+                },
+                "F25B": {
+                    "count": 46
+                },
+                "B27N": {
+                    "count": 23
+                },
+                "F02B": {
+                    "count": 12
+                },
+                "B02C": {
+                    "count": 35
+                },
+                "A61Q": {
+                    "count": 28
+                },
+                "A61K": {
+                    "count": 201
+                },
+                "H01B": {
+                    "count": 98
+                },
+                "A61D": {
+                    "count": 4
+                },
+                "B22F": {
+                    "count": 15
+                },
+                "E21C": {
+                    "count": 4
+                },
+                "A47J": {
+                    "count": 17
+                },
+                "B25G": {
+                    "count": 2
+                },
+                "F16C": {
+                    "count": 37
+                },
+                "C14B": {
+                    "count": 3
+                },
+                "C09D": {
+                    "count": 46
+                },
+                "B63J": {
+                    "count": 3
+                },
+                "B64C": {
+                    "count": 8
+                },
+                "F01C": {
+                    "count": 9
+                },
+                "C10L": {
+                    "count": 20
+                },
+                "B27G": {
+                    "count": 7
+                },
+                "B65H": {
+                    "count": 65
+                },
+                "G01B": {
+                    "count": 37
+                },
+                "F28G": {
+                    "count": 15
+                },
+                "F28C": {
+                    "count": 11
+                },
+                "A21B": {
+                    "count": 4
+                },
+                "B05B": {
+                    "count": 42
+                },
+                "G01G": {
+                    "count": 8
+                },
+                "B60P": {
+                    "count": 31
+                },
+                "B22D": {
+                    "count": 26
+                },
+                "D06F": {
+                    "count": 36
+                },
+                "A23C": {
+                    "count": 14
+                },
+                "A21C": {
+                    "count": 11
+                },
+                "E02F": {
+                    "count": 37
+                },
+                "F26B": {
+                    "count": 32
+                },
+                "B41F": {
+                    "count": 37
+                },
+                "B23Q": {
+                    "count": 24
+                },
+                "B03C": {
+                    "count": 16
+                },
+                "C25C": {
+                    "count": 12
+                },
+                "B62D": {
+                    "count": 58
+                },
+                "H03B": {
+                    "count": 27
+                },
+                "H03C": {
+                    "count": 12
+                },
+                "C10G": {
+                    "count": 31
+                },
+                "C09J": {
+                    "count": 28
+                },
+                "C08K": {
+                    "count": 50
+                },
+                "C08B": {
+                    "count": 16
+                },
+                "D21F": {
+                    "count": 58
+                },
+                "B01F": {
+                    "count": 46
+                },
+                "B27L": {
+                    "count": 20
+                },
+                "C08C": {
+                    "count": 3
+                },
+                "F16B": {
+                    "count": 21
+                },
+                "H01H": {
+                    "count": 145
+                },
+                "F23C": {
+                    "count": 19
+                },
+                "A41B": {
+                    "count": 14
+                },
+                "H01F": {
+                    "count": 67
+                },
+                "C22F": {
+                    "count": 4
+                },
+                "C21D": {
+                    "count": 18
+                },
+                "B61F": {
+                    "count": 8
+                },
+                "C09F": {
+                    "count": 4
+                },
+                "C12M": {
+                    "count": 6
+                },
+                "A63F": {
+                    "count": 6
+                },
+                "C07F": {
+                    "count": 47
+                },
+                "B06B": {
+                    "count": 30
+                },
+                "B29B": {
+                    "count": 13
+                },
+                "A47G": {
+                    "count": 9
+                },
+                "B41L": {
+                    "count": 14
+                },
+                "D04B": {
+                    "count": 24
+                },
+                "B24D": {
+                    "count": 17
+                },
+                "E03D": {
+                    "count": 11
+                },
+                "A61H": {
+                    "count": 8
+                },
+                "B65C": {
+                    "count": 7
+                },
+                "B27C": {
+                    "count": 3
+                },
+                "B23B": {
+                    "count": 10
+                },
+                "H01J": {
+                    "count": 110
+                },
+                "A24C": {
+                    "count": 17
+                },
+                "B21K": {
+                    "count": 4
+                },
+                "C05C": {
+                    "count": 2
+                },
+                "B62J": {
+                    "count": 4
+                },
+                "C08J": {
+                    "count": 38
+                },
+                "B05D": {
+                    "count": 19
+                },
+                "A47F": {
+                    "count": 11
+                },
+                "D21J": {
+                    "count": 18
+                },
+                "D06L": {
+                    "count": 10
+                },
+                "D21G": {
+                    "count": 12
+                },
+                "C23G": {
+                    "count": 14
+                },
+                "B26D": {
+                    "count": 15
+                },
+                "B30B": {
+                    "count": 24
+                },
+                "D06M": {
+                    "count": 70
+                },
+                "F16H": {
+                    "count": 56
+                },
+                "B27K": {
+                    "count": 8
+                },
+                "D04H": {
+                    "count": 33
+                },
+                "H02P": {
+                    "count": 41
+                },
+                "A23G": {
+                    "count": 18
+                },
+                "F01L": {
+                    "count": 5
+                },
+                "E02D": {
+                    "count": 11
+                },
+                "C06B": {
+                    "count": 5
+                },
+                "H01G": {
+                    "count": 26
+                },
+                "E04C": {
+                    "count": 17
+                },
+                "B44F": {
+                    "count": 6
+                },
+                "F21V": {
+                    "count": 33
+                },
+                "H03H": {
+                    "count": 29
+                },
+                "G03B": {
+                    "count": 76
+                },
+                "H01R": {
+                    "count": 87
+                },
+                "D01C": {
+                    "count": 2
+                },
+                "H01T": {
+                    "count": 11
+                },
+                "B03D": {
+                    "count": 9
+                },
+                "H03J": {
+                    "count": 11
+                },
+                "C10K": {
+                    "count": 5
+                },
+                "D05B": {
+                    "count": 21
+                },
+                "G05D": {
+                    "count": 52
+                },
+                "H04B": {
+                    "count": 42
+                },
+                "B21B": {
+                    "count": 14
+                },
+                "F04B": {
+                    "count": 35
+                },
+                "F01B": {
+                    "count": 11
+                },
+                "B60G": {
+                    "count": 15
+                },
+                "B41M": {
+                    "count": 26
+                },
+                "B03B": {
+                    "count": 10
+                },
+                "C08G": {
+                    "count": 71
+                },
+                "G03C": {
+                    "count": 14
+                },
+                "A21D": {
+                    "count": 10
+                },
+                "C25D": {
+                    "count": 18
+                },
+                "F16K": {
+                    "count": 48
+                },
+                "H02H": {
+                    "count": 34
+                },
+                "D01G": {
+                    "count": 8
+                },
+                "C23D": {
+                    "count": 3
+                },
+                "A61M": {
+                    "count": 36
+                },
+                "F41C": {
+                    "count": 4
+                },
+                "D01F": {
+                    "count": 41
+                },
+                "F41G": {
+                    "count": 15
+                },
+                "F23Q": {
+                    "count": 9
+                },
+                "C08F": {
+                    "count": 45
+                },
+                "H02G": {
+                    "count": 35
+                },
+                "A23L": {
+                    "count": 38
+                },
+                "C13B": {
+                    "count": 4
+                },
+                "C07D": {
+                    "count": 258
+                },
+                "A61B": {
+                    "count": 32
+                },
+                "A23F": {
+                    "count": 5
+                },
+                "B23P": {
+                    "count": 6
+                },
+                "G03F": {
+                    "count": 12
+                },
+                "G03D": {
+                    "count": 9
+                },
+                "F16J": {
+                    "count": 27
+                },
+                "B64D": {
+                    "count": 12
+                },
+                "E02B": {
+                    "count": 7
+                },
+                "E21D": {
+                    "count": 2
+                },
+                "F42C": {
+                    "count": 18
+                },
+                "B62B": {
+                    "count": 10
+                },
+                "F04F": {
+                    "count": 5
+                },
+                "B21C": {
+                    "count": 17
+                },
+                "F15B": {
+                    "count": 36
+                },
+                "B25H": {
+                    "count": 3
+                },
+                "F22G": {
+                    "count": 6
+                },
+                "F22D": {
+                    "count": 4
+                },
+                "H03G": {
+                    "count": 22
+                },
+                "H04N": {
+                    "count": 26
+                },
+                "B27M": {
+                    "count": 8
+                },
+                "F04C": {
+                    "count": 25
+                },
+                "B60R": {
+                    "count": 32
+                },
+                "B25C": {
+                    "count": 15
+                },
+                "C07K": {
+                    "count": 9
+                },
+                "G09F": {
+                    "count": 15
+                },
+                "F16D": {
+                    "count": 44
+                },
+                "A47C": {
+                    "count": 18
+                },
+                "C09B": {
+                    "count": 15
+                },
+                "F01D": {
+                    "count": 10
+                },
+                "H04J": {
+                    "count": 22
+                },
+                "G21C": {
+                    "count": 117
+                },
+                "H02K": {
+                    "count": 87
+                },
+                "B04C": {
+                    "count": 15
+                },
+                "H03K": {
+                    "count": 117
+                },
+                "C10M": {
+                    "count": 37
+                },
+                "H04Q": {
+                    "count": 90
+                },
+                "B08B": {
+                    "count": 12
+                },
+                "H02M": {
+                    "count": 58
+                },
+                "G01S": {
+                    "count": 48
+                },
+                "H01Q": {
+                    "count": 18
+                },
+                "B05C": {
+                    "count": 16
+                },
+                "D06B": {
+                    "count": 19
+                },
+                "B66C": {
+                    "count": 16
+                },
+                "B41C": {
+                    "count": 5
+                },
+                "A61C": {
+                    "count": 24
+                },
+                "F02K": {
+                    "count": 6
+                },
+                "D03D": {
+                    "count": 23
+                },
+                "E05F": {
+                    "count": 13
+                },
+                "H03F": {
+                    "count": 39
+                },
+                "C25F": {
+                    "count": 5
+                },
+                "H10N": {
+                    "count": 30
+                },
+                "A61L": {
+                    "count": 24
+                },
+                "F21S": {
+                    "count": 15
+                },
+                "G03G": {
+                    "count": 12
+                },
+                "B21F": {
+                    "count": 6
+                },
+                "B27D": {
+                    "count": 10
+                },
+                "C05B": {
+                    "count": 2
+                },
+                "G01F": {
+                    "count": 24
+                },
+                "B26F": {
+                    "count": 6
+                },
+                "B63B": {
+                    "count": 24
+                },
+                "B41N": {
+                    "count": 10
+                },
+                "G01K": {
+                    "count": 14
+                },
+                "E03F": {
+                    "count": 21
+                },
+                "A47B": {
+                    "count": 12
+                },
+                "A44B": {
+                    "count": 13
+                },
+                "H05K": {
+                    "count": 24
+                },
+                "A23D": {
+                    "count": 8
+                },
+                "B24C": {
+                    "count": 6
+                },
+                "E01F": {
+                    "count": 3
+                },
+                "C30B": {
+                    "count": 22
+                },
+                "G01T": {
+                    "count": 13
+                },
+                "B01L": {
+                    "count": 15
+                },
+                "B41J": {
+                    "count": 43
+                },
+                "C07J": {
+                    "count": 92
+                },
+                "B60B": {
+                    "count": 7
+                },
+                "B31B": {
+                    "count": 16
+                },
+                "G01P": {
+                    "count": 21
+                },
+                "C21C": {
+                    "count": 14
+                },
+                "G05G": {
+                    "count": 9
+                },
+                "F01P": {
+                    "count": 4
+                },
+                "H01L": {
+                    "count": 95
+                },
+                "B43K": {
+                    "count": 8
+                },
+                "H03M": {
+                    "count": 32
+                },
+                "A61J": {
+                    "count": 13
+                },
+                "B61D": {
+                    "count": 11
+                },
+                "E04G": {
+                    "count": 7
+                },
+                "A23N": {
+                    "count": 4
+                },
+                "C12Q": {
+                    "count": 6
+                },
+                "G01R": {
+                    "count": 44
+                },
+                "E04D": {
+                    "count": 6
+                },
+                "F16F": {
+                    "count": 19
+                },
+                "A62B": {
+                    "count": 16
+                },
+                "B21H": {
+                    "count": 3
+                },
+                "B63C": {
+                    "count": 3
+                },
+                "B60L": {
+                    "count": 10
+                },
+                "E06C": {
+                    "count": 2
+                },
+                "H02J": {
+                    "count": 27
+                },
+                "G01D": {
+                    "count": 21
+                },
+                "A22B": {
+                    "count": 4
+                },
+                "F15C": {
+                    "count": 9
+                },
+                "G21F": {
+                    "count": 9
+                },
+                "D01D": {
+                    "count": 23
+                },
+                "H01P": {
+                    "count": 23
+                },
+                "D06C": {
+                    "count": 18
+                },
+                "E04B": {
+                    "count": 16
+                },
+                "B61J": {
+                    "count": 3
+                },
+                "B61K": {
+                    "count": 3
+                },
+                "B61C": {
+                    "count": 3
+                },
+                "B61B": {
+                    "count": 9
+                },
+                "F17D": {
+                    "count": 4
+                },
+                "B60H": {
+                    "count": 12
+                },
+                "F17C": {
+                    "count": 20
+                },
+                "E01D": {
+                    "count": 2
+                },
+                "C09C": {
+                    "count": 5
+                },
+                "G21K": {
+                    "count": 6
+                },
+                "F01M": {
+                    "count": 5
+                },
+                "F02G": {
+                    "count": 5
+                },
+                "B23H": {
+                    "count": 4
+                },
+                "G01C": {
+                    "count": 27
+                },
+                "B60K": {
+                    "count": 21
+                },
+                "B41B": {
+                    "count": 6
+                },
+                "E03B": {
+                    "count": 5
+                },
+                "G01M": {
+                    "count": 14
+                },
+                "G06K": {
+                    "count": 13
+                },
+                "G06F": {
+                    "count": 31
+                },
+                "G10K": {
+                    "count": 10
+                },
+                "G06M": {
+                    "count": 8
+                },
+                "F41J": {
+                    "count": 5
+                },
+                "G06C": {
+                    "count": 6
+                },
+                "F02D": {
+                    "count": 5
+                },
+                "B25D": {
+                    "count": 13
+                },
+                "H04L": {
+                    "count": 67
+                },
+                "H03D": {
+                    "count": 21
+                },
+                "A24B": {
+                    "count": 9
+                },
+                "A24D": {
+                    "count": 10
+                },
+                "G01L": {
+                    "count": 21
+                },
+                "B60T": {
+                    "count": 21
+                },
+                "A45D": {
+                    "count": 15
+                },
+                "G08C": {
+                    "count": 10
+                },
+                "B67D": {
+                    "count": 11
+                },
+                "D03C": {
+                    "count": 5
+                },
+                "G05B": {
+                    "count": 16
+                },
+                "B31F": {
+                    "count": 5
+                },
+                "B60W": {
+                    "count": 7
+                },
+                "H10D": {
+                    "count": 70
+                },
+                "F21K": {
+                    "count": 3
+                },
+                "B66B": {
+                    "count": 8
+                },
+                "B60J": {
+                    "count": 10
+                },
+                "F02C": {
+                    "count": 4
+                },
+                "D07B": {
+                    "count": 11
+                },
+                "C07B": {
+                    "count": 4
+                },
+                "B61L": {
+                    "count": 13
+                },
+                "B24B": {
+                    "count": 39
+                },
+                "H05H": {
+                    "count": 6
+                },
+                "D02J": {
+                    "count": 9
+                },
+                "B66D": {
+                    "count": 3
+                },
+                "G06G": {
+                    "count": 12
+                },
+                "H01S": {
+                    "count": 21
+                },
+                "B60N": {
+                    "count": 14
+                },
+                "B07C": {
+                    "count": 14
+                },
+                "G01V": {
+                    "count": 9
+                },
+                "F16N": {
+                    "count": 6
+                },
+                "G08B": {
+                    "count": 24
+                },
+                "G05F": {
+                    "count": 12
+                },
+                "B64F": {
+                    "count": 4
+                },
+                "B61G": {
+                    "count": 11
+                },
+                "F03C": {
+                    "count": 7
+                },
+                "B60S": {
+                    "count": 14
+                },
+                "B28D": {
+                    "count": 5
+                },
+                "B27F": {
+                    "count": 4
+                },
+                "F25J": {
+                    "count": 7
+                },
+                "F16P": {
+                    "count": 3
+                },
+                "B41K": {
+                    "count": 6
+                },
+                "G11C": {
+                    "count": 21
+                },
+                "F41H": {
+                    "count": 6
+                },
+                "F16M": {
+                    "count": 3
+                },
+                "A23P": {
+                    "count": 6
+                },
+                "H02B": {
+                    "count": 12
+                },
+                "B60Q": {
+                    "count": 10
+                },
+                "A61N": {
+                    "count": 6
+                },
+                "F03B": {
+                    "count": 10
+                },
+                "G06V": {
+                    "count": 3
+                },
+                "H04W": {
+                    "count": 3
+                },
+                "G02F": {
+                    "count": 9
+                },
+                "G04F": {
+                    "count": 6
+                },
+                "H03L": {
+                    "count": 13
+                },
+                "B23C": {
+                    "count": 2
+                },
+                "A61P": {
+                    "count": 4
+                },
+                "C07H": {
+                    "count": 11
+                },
+                "G21G": {
+                    "count": 2
+                },
+                "G07D": {
+                    "count": 5
+                },
+                "A62D": {
+                    "count": 3
+                },
+                "A23J": {
+                    "count": 7
+                },
+                "H04H": {
+                    "count": 3
+                },
+                "G01H": {
+                    "count": 3
+                },
+                "G01J": {
+                    "count": 10
+                },
+                "D05C": {
+                    "count": 3
+                },
+                "F01K": {
+                    "count": 4
+                },
+                "G10L": {
+                    "count": 3
+                },
+                "A41D": {
+                    "count": 2
+                },
+                "G07C": {
+                    "count": 8
+                },
+                "B60D": {
+                    "count": 7
+                },
+                "F02P": {
+                    "count": 2
+                },
+                "B43L": {
+                    "count": 4
+                },
+                "G21D": {
+                    "count": 8
+                },
+                "D03J": {
+                    "count": 4
+                },
+                "F41F": {
+                    "count": 5
+                },
+                "B61H": {
+                    "count": 2
+                },
+                "H10H": {
+                    "count": 5
+                },
+                "H10F": {
+                    "count": 11
+                },
+                "G04C": {
+                    "count": 5
+                },
+                "G04B": {
+                    "count": 3
+                },
+                "G03H": {
+                    "count": 3
+                },
+                "G09G": {
+                    "count": 3
+                },
+                "H99Z": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

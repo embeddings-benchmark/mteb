@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import gradio as gr
-from build.lib.mteb.benchmarks.benchmarks import MTEB_multilingual
 
 import mteb
 from mteb import Benchmark
@@ -11,23 +10,34 @@ from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
 
-DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
-
 
 @dataclass
 class MenuEntry:
+    """A menu entry for the benchmark selector.
+
+    Attributes:
+        name: The name of the menu entry.
+        benchmarks: A list of benchmarks or nested menu entries.
+        description: An optional description of the menu entry.
+        open: Whether the accordion is open by default.
+        size: The size of the buttons. Can be "sm" or "md".
+    """
+
     name: str | None
     benchmarks: list[Benchmark | MenuEntry]
     description: str | None = None
     open: bool = False
+    size: str = "sm"
 
 
-BENCHMARK_ENTRIES = [
+GP_BENCHMARK_ENTRIES = [
     MenuEntry(
-        name="Select Benchmark",
+        name="General Purpose",
         description="",
         open=False,
-        benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
+        benchmarks=mteb.get_benchmarks(
+            ["MTEB(Multilingual, v2)", "MTEB(eng, v2)", "HUME(v1)"]
+        )
         + [
             MenuEntry(
                 "Image",
@@ -37,13 +47,11 @@ BENCHMARK_ENTRIES = [
                         "MIEB(eng)",
                         "MIEB(lite)",
                         "MIEB(Img)",
-                        "VisualDocumentRetrieval",
-                        "JinaVDR",
                     ]
                 ),
             ),
             MenuEntry(
-                "Domain-Specific",
+                "Domain-Specific ",
                 mteb.get_benchmarks(
                     [
                         "MTEB(Code, v1)",
@@ -67,32 +75,85 @@ BENCHMARK_ENTRIES = [
                         "MTEB(kor, v1)",
                         "MTEB(pol, v1)",
                         "MTEB(rus, v1)",
-                        "MTEB(fas, v1)",
+                        "MTEB(fas, v2)",
                         "VN-MTEB (vie, v1)",
                     ]
                 )
-                + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
+                + [
+                    MenuEntry(
+                        "Other", mteb.get_benchmarks(["MTEB(eng, v1)", "MTEB(fas, v1)"])
+                    )
+                ],
             ),
             MenuEntry(
                 "Miscellaneous",  # All of these are retrieval benchmarks
                 mteb.get_benchmarks(
                     [
-                        "BEIR",
-                        "BEIR-NL",
-                        "NanoBEIR",
-                        "BRIGHT",
-                        "BRIGHT (long)",
                         "BuiltBench(eng)",
-                        "CoIR",
-                        "FollowIR",
-                        "LongEmbed",
                         "MINERSBitextMining",
-                        "RAR-b",
                     ]
                 ),
             ),
         ],
     ),
+]
+
+R_BENCHMARK_ENTRIES = [
+    MenuEntry(
+        name="Retrieval",
+        description=None,
+        open=False,
+        benchmarks=[
+            mteb.get_benchmark("RTEB(beta)"),
+            mteb.get_benchmark("RTEB(eng, beta)"),
+            MenuEntry(
+                "Image",
+                description=None,
+                open=False,
+                benchmarks=[
+                    mteb.get_benchmark("VisualDocumentRetrieval"),
+                    mteb.get_benchmark("JinaVDR"),
+                ],
+            ),
+            MenuEntry(
+                "Domain-Specific",
+                description=None,
+                open=False,
+                benchmarks=[
+                    mteb.get_benchmark("RTEB(fin, beta)"),
+                    mteb.get_benchmark("RTEB(Law, beta)"),
+                    mteb.get_benchmark("RTEB(Code, beta)"),
+                    mteb.get_benchmark("CoIR"),
+                    mteb.get_benchmark("RTEB(Health, beta)"),
+                    mteb.get_benchmark("FollowIR"),
+                    mteb.get_benchmark("LongEmbed"),
+                    mteb.get_benchmark("BRIGHT"),
+                ],
+            ),
+            MenuEntry(
+                "Language-specific",
+                description=None,
+                open=False,
+                benchmarks=[
+                    mteb.get_benchmark("RTEB(fra, beta)"),
+                    mteb.get_benchmark("RTEB(deu, beta)"),
+                    mteb.get_benchmark("RTEB(jpn, beta)"),
+                    mteb.get_benchmark("BEIR"),
+                    mteb.get_benchmark("BEIR-NL"),
+                ],
+            ),
+            MenuEntry(
+                "Miscellaneous",
+                mteb.get_benchmarks(
+                    [
+                        "NanoBEIR",
+                        "BRIGHT (long)",
+                        "RAR-b",
+                    ]
+                ),
+            ),
+        ],
+    )
 ]
 
 
@@ -131,7 +192,7 @@ def _create_button(
     return button
 
 
-def make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
+def _make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
     """Creates a UI selector from menu entries with up to 3 levels of nesting.
 
     Args:
@@ -195,5 +256,5 @@ def _render_benchmark_item(
 
 if __name__ == "__main__":
     with gr.Blocks() as b:
-        selector = make_selector(BENCHMARK_ENTRIES)
+        selector = _make_selector(GP_BENCHMARK_ENTRIES)
     b.launch()

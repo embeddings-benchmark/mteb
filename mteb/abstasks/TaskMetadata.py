@@ -4,13 +4,13 @@ import json
 import logging
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Union
+from typing import Any, Literal, Union
 
 from pydantic import (
     BaseModel,
     field_validator,
 )
-from typing_extensions import Literal, TypedDict
+from typing_extensions import TypedDict
 
 from ..custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from ..encoder_interface import PromptType

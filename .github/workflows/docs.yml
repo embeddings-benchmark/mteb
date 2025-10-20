@@ -1,6 +1,5 @@
 # GitHub action for the task table generation.
-
-name: documentation
+name: tables
 
 on:
   push:
@@ -24,11 +23,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
+          python -m pip install --upgrade pip
+          pip install -e . --group docs
 
       - name: Create table
         run: |
-          make build-docs
+          make build-tables
 
   create-table-and-push:
     if: github.ref == 'refs/heads/main'
@@ -43,11 +43,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
+          python -m pip install --upgrade pip
+          pip install -e . --group docs
 
       - name: Create table
         run: |
-          make build-docs
+          make build-tables
 
       - name: Push table
         env:

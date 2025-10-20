@@ -1,0 +1,30 @@
+{
+    "test": {
+        "num_samples": 5604,
+        "number_of_characters": 6824930,
+        "documents_text_statistics": {
+            "total_text_length": 6765197,
+            "min_text_length": 34,
+            "average_text_length": 1220.2736291486292,
+            "max_text_length": 3440,
+            "unique_texts": 5544
+        },
+        "documents_image_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 59733,
+            "min_text_length": 720,
+            "average_text_length": 995.55,
+            "max_text_length": 1367,
+            "unique_texts": 60
+        },
+        "queries_image_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1094,
+            "min_relevant_docs_per_query": 100,
+            "average_relevant_docs_per_query": 18.233333333333334,
+            "max_relevant_docs_per_query": 138,
+            "unique_relevant_docs": 5544
+        },
+        "top_ranked_statistics": null
+    }
+}

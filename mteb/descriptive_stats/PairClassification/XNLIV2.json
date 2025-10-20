@@ -1,0 +1,466 @@
+{
+    "test": {
+        "num_samples": 17745,
+        "number_of_characters": 2778287,
+        "unique_pairs": 17745,
+        "text1_statistics": {
+            "total_text_length": 1880851,
+            "min_text_length": 5,
+            "average_text_length": 105.99329388560157,
+            "max_text_length": 339,
+            "unique_texts": 14234
+        },
+        "text2_statistics": {
+            "total_text_length": 897436,
+            "min_text_length": 8,
+            "average_text_length": 50.57402085094393,
+            "max_text_length": 162,
+            "unique_texts": 17745
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 8879
+                },
+                "1": {
+                    "count": 8866
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "punjabi": {
+                "num_samples": 1365,
+                "number_of_characters": 211060,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 142939,
+                    "min_text_length": 16,
+                    "average_text_length": 104.71721611721611,
+                    "max_text_length": 275,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 68121,
+                    "min_text_length": 8,
+                    "average_text_length": 49.9054945054945,
+                    "max_text_length": 138,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "gujrati": {
+                "num_samples": 1365,
+                "number_of_characters": 202647,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 137095,
+                    "min_text_length": 15,
+                    "average_text_length": 100.43589743589743,
+                    "max_text_length": 270,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 65552,
+                    "min_text_length": 9,
+                    "average_text_length": 48.02344322344322,
+                    "max_text_length": 141,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "kannada": {
+                "num_samples": 1365,
+                "number_of_characters": 220182,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 148160,
+                    "min_text_length": 16,
+                    "average_text_length": 108.54212454212454,
+                    "max_text_length": 283,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 72022,
+                    "min_text_length": 9,
+                    "average_text_length": 52.76336996336996,
+                    "max_text_length": 158,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "assamese": {
+                "num_samples": 1365,
+                "number_of_characters": 202808,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 137126,
+                    "min_text_length": 17,
+                    "average_text_length": 100.45860805860806,
+                    "max_text_length": 271,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 65682,
+                    "min_text_length": 9,
+                    "average_text_length": 48.11868131868132,
+                    "max_text_length": 153,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "bengali": {
+                "num_samples": 1365,
+                "number_of_characters": 204859,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 139743,
+                    "min_text_length": 5,
+                    "average_text_length": 102.37582417582418,
+                    "max_text_length": 282,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 65116,
+                    "min_text_length": 9,
+                    "average_text_length": 47.704029304029305,
+                    "max_text_length": 139,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "marathi": {
+                "num_samples": 1365,
+                "number_of_characters": 205734,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 139501,
+                    "min_text_length": 18,
+                    "average_text_length": 102.1985347985348,
+                    "max_text_length": 272,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 66233,
+                    "min_text_length": 10,
+                    "average_text_length": 48.522344322344324,
+                    "max_text_length": 156,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "bhojpuri": {
+                "num_samples": 1365,
+                "number_of_characters": 205063,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 139078,
+                    "min_text_length": 5,
+                    "average_text_length": 101.88864468864469,
+                    "max_text_length": 266,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 65985,
+                    "min_text_length": 12,
+                    "average_text_length": 48.34065934065934,
+                    "max_text_length": 154,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "odiya": {
+                "num_samples": 1365,
+                "number_of_characters": 210923,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 141653,
+                    "min_text_length": 17,
+                    "average_text_length": 103.77509157509158,
+                    "max_text_length": 259,
+                    "unique_texts": 1094
+                },
+                "text2_statistics": {
+                    "total_text_length": 69270,
+                    "min_text_length": 11,
+                    "average_text_length": 50.747252747252745,
+                    "max_text_length": 149,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "sanskrit": {
+                "num_samples": 1365,
+                "number_of_characters": 214093,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 143373,
+                    "min_text_length": 17,
+                    "average_text_length": 105.03516483516484,
+                    "max_text_length": 272,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 70720,
+                    "min_text_length": 8,
+                    "average_text_length": 51.80952380952381,
+                    "max_text_length": 148,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "tamil": {
+                "num_samples": 1365,
+                "number_of_characters": 239561,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 161196,
+                    "min_text_length": 15,
+                    "average_text_length": 118.0923076923077,
+                    "max_text_length": 337,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 78365,
+                    "min_text_length": 10,
+                    "average_text_length": 57.41025641025641,
+                    "max_text_length": 156,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "turkish": {
+                "num_samples": 1365,
+                "number_of_characters": 206729,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 140841,
+                    "min_text_length": 15,
+                    "average_text_length": 103.18021978021979,
+                    "max_text_length": 266,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 65888,
+                    "min_text_length": 9,
+                    "average_text_length": 48.26959706959707,
+                    "max_text_length": 145,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "greek": {
+                "num_samples": 1365,
+                "number_of_characters": 236520,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 160652,
+                    "min_text_length": 13,
+                    "average_text_length": 117.69377289377289,
+                    "max_text_length": 339,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 75868,
+                    "min_text_length": 10,
+                    "average_text_length": 55.58095238095238,
+                    "max_text_length": 162,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            },
+            "russian": {
+                "num_samples": 1365,
+                "number_of_characters": 218108,
+                "unique_pairs": 1365,
+                "text1_statistics": {
+                    "total_text_length": 149494,
+                    "min_text_length": 11,
+                    "average_text_length": 109.51941391941392,
+                    "max_text_length": 306,
+                    "unique_texts": 1095
+                },
+                "text2_statistics": {
+                    "total_text_length": 68614,
+                    "min_text_length": 11,
+                    "average_text_length": 50.266666666666666,
+                    "max_text_length": 150,
+                    "unique_texts": 1365
+                },
+                "labels_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 683
+                        },
+                        "1": {
+                            "count": 682
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

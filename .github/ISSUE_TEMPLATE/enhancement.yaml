@@ -8,4 +8,3 @@ body:
       description: Please provide a clear and concise description of the feature you would like to see added.
     validations:
       required: true
-  

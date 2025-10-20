@@ -1,0 +1,61 @@
+{
+    "test": {
+        "num_samples": 512,
+        "number_of_characters": 56148,
+        "unique_pairs": 512,
+        "sentence1_statistics": {
+            "total_text_length": 28074,
+            "min_text_length": 8,
+            "average_text_length": 54.83203125,
+            "max_text_length": 204,
+            "unique_texts": 512
+        },
+        "sentence2_statistics": {
+            "total_text_length": 28074,
+            "min_text_length": 8,
+            "average_text_length": 54.83203125,
+            "max_text_length": 204,
+            "unique_texts": 512
+        },
+        "hf_subset_descriptive_stats": {
+            "srn_Latn-nld_Latn": {
+                "num_samples": 256,
+                "number_of_characters": 28074,
+                "unique_pairs": 256,
+                "sentence1_statistics": {
+                    "total_text_length": 12882,
+                    "min_text_length": 8,
+                    "average_text_length": 50.3203125,
+                    "max_text_length": 204,
+                    "unique_texts": 256
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 15192,
+                    "min_text_length": 12,
+                    "average_text_length": 59.34375,
+                    "max_text_length": 194,
+                    "unique_texts": 256
+                }
+            },
+            "nld_Latn-srn_Latn": {
+                "num_samples": 256,
+                "number_of_characters": 28074,
+                "unique_pairs": 256,
+                "sentence1_statistics": {
+                    "total_text_length": 15192,
+                    "min_text_length": 12,
+                    "average_text_length": 59.34375,
+                    "max_text_length": 194,
+                    "unique_texts": 256
+                },
+                "sentence2_statistics": {
+                    "total_text_length": 12882,
+                    "min_text_length": 8,
+                    "average_text_length": 50.3203125,
+                    "max_text_length": 204,
+                    "unique_texts": 256
+                }
+            }
+        }
+    }
+}

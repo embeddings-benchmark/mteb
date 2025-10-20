@@ -1,0 +1,40 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class EstQA(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="EstQA",
+        dataset={
+            "path": "kardosdrur/estonian-qa",
+            "revision": "99d6f921d9dd4d09116a6312deceb22c16529cfb",
+        },
+        description=(
+            "EstQA is an Estonian question answering dataset based on Wikipedia."
+        ),
+        reference="https://www.semanticscholar.org/paper/Extractive-Question-Answering-for-Estonian-Language-182912IAPM-Alum%C3%A4e/ea4f60ab36cadca059c880678bc4c51e293a85d6?utm_source=direct_link",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["est-Latn"],
+        main_score="ndcg_at_10",
+        date=(
+            "2002-08-24",
+            "2021-05-10",
+        ),  # birth of Estonian Wikipedia to publishing the article
+        domains=["Encyclopaedic", "Written"],
+        task_subtypes=["Question answering"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@mastersthesis{mastersthesis,
+  author = {Anu Käver},
+  school = {Tallinn University of Technology (TalTech)},
+  title = {Extractive Question Answering for Estonian Language},
+  year = {2021},
+}
+""",
+    )

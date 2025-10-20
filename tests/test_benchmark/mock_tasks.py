@@ -31,7 +31,7 @@ from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiCho
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
-from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
+from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
     AbsTaskImageMultilabelClassification,
 )
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
