@@ -7,6 +7,8 @@ on:
 jobs:
   bump_and_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # required for pushing tags and creating releases
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -16,15 +18,16 @@ jobs:
         run: |
           msg=$(git log -1 --pretty=%B)
           echo "commit message: '$msg'"
-          echo "msg<<EOF" >> $GITHUB_OUTPUT
-          echo "$msg" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "msg<<EOF"
+            echo "$msg"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Determine bump type
         id: bump_type
         run: |
           msg="${{ steps.last_commit.outputs.msg }}"
-          # lowercase commit message
           low=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
           echo "lowercase message: '$low'"
 
@@ -37,7 +40,7 @@ jobs:
             bump="patch"
           fi
 
-          echo "bump=$bump" >> $GITHUB_OUTPUT
+          echo "bump=$bump" >> "$GITHUB_OUTPUT"
           echo "Determined bump type: $bump"
 
       - name: Exit if no bump
@@ -52,11 +55,13 @@ jobs:
       - name: Bump version
         id: version_bump
         run: |
-          echo "Running uv version --bump ${ { steps.bump_type.outputs.bump } }"
+          echo "Running uv version --bump ${{ steps.bump_type.outputs.bump }}"
           uv version --bump "${{ steps.bump_type.outputs.bump }}"
-          # Capture the new version
+
+          # Capture the new version (second token from `uv version`)
           ver=$(uv version | awk '{print $2}')
-          echo "new_version=$ver" >> $GITHUB_OUTPUT
+          echo "New version detected: $ver"
+          echo "new_version=$ver" >> "$GITHUB_OUTPUT"
 
       - name: Commit version bump and tag
         env:
