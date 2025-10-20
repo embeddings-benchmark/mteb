@@ -776,7 +776,6 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
     ```bibtex
     
     @inproceedings{dadas-etal-2020-evaluation,
-      abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
       address = {Marseille, France},
       author = {Dadas, Slawomir  and
     Pere{\\l}kiewicz, Micha{\\l}  and
@@ -829,7 +828,6 @@ Clustering of headlines from social media posts in Polish belonging to 8 categor
     ```bibtex
     
     @inproceedings{dadas-etal-2020-evaluation,
-      abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
       address = {Marseille, France},
       author = {Dadas, Slawomir  and
     Pere{\\l}kiewicz, Micha{\\l}  and
@@ -1128,7 +1126,7 @@ Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the 
 
 this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education
 
-**Dataset:** [`on-and-on/clustering_klue_mrc_context_domain`](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain)
+**Dataset:** [`mteb/KlueMrcDomainClustering`](https://huggingface.co/datasets/mteb/KlueMrcDomainClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1159,7 +1157,7 @@ this dataset is a processed and redistributed version of the KLUE-MRC dataset. D
 
 this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MRC  dataset. News_category: IT/Science, Sports, Media/Culture, Ecomomy/Finance, Real Estate
 
-**Dataset:** [`on-and-on/clustering_klue_mrc_ynat_title`](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title)
+**Dataset:** [`mteb/KlueYnatMrcCategoryClustering`](https://huggingface.co/datasets/mteb/KlueYnatMrcCategoryClustering) • **License:** cc-by-sa-4.0 • [Learn more →](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1454,7 +1452,6 @@ MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) i
     ```bibtex
     
     @inproceedings{nishikawa-etal-2022-ease,
-      abstract = {We present EASE, a novel method for learning sentence embeddings via contrastive learning between sentences and their related entities.The advantage of using entity supervision is twofold: (1) entities have been shown to be a strong indicator of text semantics and thus should provide rich training signals for sentence embeddings; (2) entities are defined independently of languages and thus offer useful cross-lingual alignment supervision.We evaluate EASE against other unsupervised models both in monolingual and multilingual settings.We show that EASE exhibits competitive or better performance in English semantic textual similarity (STS) and short text clustering (STC) tasks and it significantly outperforms baseline methods in multilingual settings on a variety of tasks.Our source code, pre-trained models, and newly constructed multi-lingual STC dataset are available at https://github.com/studio-ousia/ease.},
       address = {Seattle, United States},
       author = {Nishikawa, Sosuke  and
     Ri, Ryokan  and

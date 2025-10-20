@@ -137,7 +137,6 @@ A Polish dataset for sentiment classification on reviews from e-commerce marketp
     ```bibtex
     
     @inproceedings{rybak-etal-2020-klej,
-      abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
       address = {Online},
       author = {Rybak, Piotr  and
     Mroczkowski, Robert  and
@@ -181,7 +180,6 @@ A Polish dataset for sentiment classification on reviews from e-commerce marketp
     ```bibtex
     
     @inproceedings{rybak-etal-2020-klej,
-      abstract = {In recent years, a series of Transformer-based models unlocked major improvements in general natural language understanding (NLU) tasks. Such a fast pace of research would not be possible without general NLU benchmarks, which allow for a fair comparison of the proposed methods. However, such benchmarks are available only for a handful of languages. To alleviate this issue, we introduce a comprehensive multi-task benchmark for the Polish language understanding, accompanied by an online leaderboard. It consists of a diverse set of tasks, adopted from existing datasets for named entity recognition, question-answering, textual entailment, and others. We also introduce a new sentiment analysis task for the e-commerce domain, named Allegro Reviews (AR). To ensure a common evaluation scheme and promote models that generalize to different NLU tasks, the benchmark includes datasets from varying domains and applications. Additionally, we release HerBERT, a Transformer-based model trained specifically for the Polish language, which has the best average performance and obtains the best results for three out of nine tasks. Finally, we provide an extensive evaluation, including several standard baselines and recently proposed, multilingual Transformer-based models.},
       address = {Online},
       author = {Rybak, Piotr  and
     Mroczkowski, Robert  and
@@ -224,7 +222,6 @@ A collection of Amazon customer reviews annotated for counterfactual detection p
     ```bibtex
     
     @inproceedings{oneill-etal-2021-wish,
-      abstract = {Counterfactual statements describe events that did not or cannot take place. We consider the problem of counterfactual detection (CFD) in product reviews. For this purpose, we annotate a multilingual CFD dataset from Amazon product reviews covering counterfactual statements written in English, German, and Japanese languages. The dataset is unique as it contains counterfactuals in multiple languages, covers a new application area of e-commerce reviews, and provides high quality professional annotations. We train CFD models using different text representation methods and classifiers. We find that these models are robust against the selectional biases introduced due to cue phrase-based sentence selection. Moreover, our CFD dataset is compatible with prior datasets and can be merged to learn accurate CFD models. Applying machine translation on English counterfactual examples to create multilingual data performs poorly, demonstrating the language-specificity of this problem, which has been ignored so far.},
       address = {Online and Punta Cana, Dominican Republic},
       author = {O{'}Neill, James  and
     Rozenshtein, Polina  and
@@ -3533,7 +3530,6 @@ Danish Tweets annotated for Hate Speech either being Offensive or not
     ```bibtex
     
     @inproceedings{sigurbergsson-derczynski-2020-offensive,
-      abstract = {The presence of offensive language on social media platforms and the implications this poses is becoming a major concern in modern society. Given the enormous amount of content created every day, automatic methods are required to detect and deal with this type of content. Until now, most of the research has focused on solving the problem for the English language, while the problem is multilingual. We construct a Danish dataset DKhate containing user-generated comments from various social media platforms, and to our knowledge, the first of its kind, annotated for various types and target of offensive language. We develop four automatic classification systems, each designed to work for both the English and the Danish language. In the detection of offensive language in English, the best performing system achieves a macro averaged F1-score of 0.74, and the best performing system for Danish achieves a macro averaged F1-score of 0.70. In the detection of whether or not an offensive post is targeted, the best performing system for English achieves a macro averaged F1-score of 0.62, while the best performing system for Danish achieves a macro averaged F1-score of 0.73. Finally, in the detection of the target type in a targeted offensive post, the best performing system for English achieves a macro averaged F1-score of 0.56, and the best performing system for Danish achieves a macro averaged F1-score of 0.63. Our work for both the English and the Danish language captures the type and targets of offensive language, and present automatic methods for detecting different kinds of offensive language such as hate speech and cyberbullying.},
       address = {Marseille, France},
       author = {Sigurbergsson, Gudbjartur Ingi  and
     Derczynski, Leon},
@@ -3586,7 +3582,6 @@ Danish Tweets annotated for Hate Speech either being Offensive or not
     ```bibtex
     
     @inproceedings{sigurbergsson-derczynski-2020-offensive,
-      abstract = {The presence of offensive language on social media platforms and the implications this poses is becoming a major concern in modern society. Given the enormous amount of content created every day, automatic methods are required to detect and deal with this type of content. Until now, most of the research has focused on solving the problem for the English language, while the problem is multilingual. We construct a Danish dataset DKhate containing user-generated comments from various social media platforms, and to our knowledge, the first of its kind, annotated for various types and target of offensive language. We develop four automatic classification systems, each designed to work for both the English and the Danish language. In the detection of offensive language in English, the best performing system achieves a macro averaged F1-score of 0.74, and the best performing system for Danish achieves a macro averaged F1-score of 0.70. In the detection of whether or not an offensive post is targeted, the best performing system for English achieves a macro averaged F1-score of 0.62, while the best performing system for Danish achieves a macro averaged F1-score of 0.73. Finally, in the detection of the target type in a targeted offensive post, the best performing system for English achieves a macro averaged F1-score of 0.56, and the best performing system for Danish achieves a macro averaged F1-score of 0.63. Our work for both the English and the Danish language captures the type and targets of offensive language, and present automatic methods for detecting different kinds of offensive language such as hate speech and cyberbullying.},
       address = {Marseille, France},
       author = {Sigurbergsson, Gudbjartur Ingi  and
     Derczynski, Leon},
@@ -3787,7 +3782,6 @@ A Danish Discourse dataset with values for coherence and source (Wikipedia or Re
     ```bibtex
     
     @inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
-      abstract = {To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.},
       address = {Marseille, France},
       author = {Flansmose Mikkelsen, Linea  and
     Kinch, Oliver  and
@@ -3839,7 +3833,6 @@ A Danish Discourse dataset with values for coherence and source (Wikipedia or Re
     ```bibtex
     
     @inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
-      abstract = {To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.},
       address = {Marseille, France},
       author = {Flansmose Mikkelsen, Linea  and
     Kinch, Oliver  and
@@ -4251,7 +4244,6 @@ Emotion is a dataset of English Twitter messages with six basic emotions: anger,
     ```bibtex
     
     @inproceedings{saravia-etal-2018-carer,
-      abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
       address = {Brussels, Belgium},
       author = {Saravia, Elvis  and
     Liu, Hsien-Chi Toby  and
@@ -4296,7 +4288,6 @@ Emotion is a dataset of English Twitter messages with six basic emotions: anger,
     ```bibtex
     
     @inproceedings{saravia-etal-2018-carer,
-      abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
       address = {Brussels, Belgium},
       author = {Saravia, Elvis  and
     Liu, Hsien-Chi Toby  and
@@ -5001,7 +4992,6 @@ Goergian Sentiment Dataset
     ```bibtex
     
     @inproceedings{stefanovitch-etal-2022-resources,
-      abstract = {This paper presents, to the best of our knowledge, the first ever publicly available annotated dataset for sentiment classification and semantic polarity dictionary for Georgian. The characteristics of these resources and the process of their creation are described in detail. The results of various experiments on the performance of both lexicon- and machine learning-based models for Georgian sentiment classification are also reported. Both 3-label (positive, neutral, negative) and 4-label settings (same labels + mixed) are considered. The machine learning models explored include, i.a., logistic regression, SVMs, and transformed-based models. We also explore transfer learning- and translation-based (to a well-supported language) approaches. The obtained results for Georgian are on par with the state-of-the-art results in sentiment classification for well studied languages when using training data of comparable size.},
       address = {Marseille, France},
       author = {Stefanovitch, Nicolas  and
     Piskorski, Jakub  and
@@ -5197,7 +5187,6 @@ Human evaluation subset of Emotion is a dataset of English Twitter messages with
     ```bibtex
     
     @inproceedings{saravia-etal-2018-carer,
-      abstract = {Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.},
       address = {Brussels, Belgium},
       author = {Saravia, Elvis  and
     Liu, Hsien-Chi Toby  and
@@ -5390,7 +5379,6 @@ Headline rubric classification based on the paraphraser plus dataset.
     ```bibtex
     
     @inproceedings{gudkov-etal-2020-automatically,
-      abstract = {The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.},
       address = {Online},
       author = {Gudkov, Vadim  and
     Mitrofanova, Olga  and
@@ -5438,7 +5426,6 @@ Headline rubric classification based on the paraphraser plus dataset.
     ```bibtex
     
     @inproceedings{gudkov-etal-2020-automatically,
-      abstract = {The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.},
       address = {Online},
       author = {Gudkov, Vadim  and
     Mitrofanova, Olga  and
@@ -5739,7 +5726,6 @@ Long Text classification for the description of Apps
     ```bibtex
     
     @inproceedings{xu-etal-2020-clue,
-      abstract = {The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com},
       address = {Barcelona, Spain (Online)},
       author = {Xu, Liang  and
     Hu, Hai and
@@ -5807,7 +5793,6 @@ Long Text classification for the description of Apps
     ```bibtex
     
     @inproceedings{xu-etal-2020-clue,
-      abstract = {The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com},
       address = {Barcelona, Spain (Online)},
       author = {Xu, Liang  and
     Hu, Hai and
@@ -5995,7 +5980,6 @@ Inappropriateness identification in the form of binary classification
     ```bibtex
     
     @inproceedings{babakov-etal-2021-detecting,
-      abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
       author = {Babakov, Nikolay  and
     Logacheva, Varvara  and
@@ -6047,7 +6031,6 @@ Inappropriateness identification in the form of binary classification
     ```bibtex
     
     @inproceedings{babakov-etal-2021-detecting,
-      abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
       author = {Babakov, Nikolay  and
     Logacheva, Varvara  and
@@ -6098,7 +6081,6 @@ Inappropriateness identification in the form of binary classification
     ```bibtex
     
     @inproceedings{babakov-etal-2021-detecting,
-      abstract = {Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.},
       address = {Kiyv, Ukraine},
       author = {Babakov, Nikolay  and
     Logacheva, Varvara  and
@@ -6248,7 +6230,6 @@ The CLICK-ID dataset is a collection of Indonesian news headlines that was colle
     ```bibtex
     
     @article{WILLIAM2020106231,
-      abstract = {News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas.},
       author = {Andika William and Yunita Sari},
       doi = {https://doi.org/10.1016/j.dib.2020.106231},
       issn = {2352-3409},
@@ -6285,7 +6266,6 @@ The CLICK-ID dataset is a collection of Indonesian news headlines that was colle
     ```bibtex
     
     @article{WILLIAM2020106231,
-      abstract = {News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas.},
       author = {Andika William and Yunita Sari},
       doi = {https://doi.org/10.1016/j.dib.2020.106231},
       issn = {2352-3409},
@@ -6545,7 +6525,6 @@ An Italian Dataset consisting of 1101 pairs of judgments and their official hold
     ```bibtex
     
     @inproceedings{10.1145/3594536.3595177,
-      abstract = {Legal holdings are used in Italy as a critical component of the legal system, serving to establish legal precedents, provide guidance for future legal decisions, and ensure consistency and predictability in the interpretation and application of the law. They are written by domain experts who describe in a clear and concise manner the principle of law applied in the judgments.We introduce a legal holding extraction method based on Italian-LEGAL-BERT to automatically extract legal holdings from Italian cases. In addition, we present ITA-CaseHold, a benchmark dataset for Italian legal summarization. We conducted several experiments using this dataset, as a valuable baseline for future research on this topic.},
       address = {New York, NY, USA},
       author = {Licari, Daniele and Bushipaka, Praveen and Marino, Gabriele and Comand\'{e}, Giovanni and Cucinotta, Tommaso},
       booktitle = {Proceedings of the Nineteenth International Conference on Artificial Intelligence and Law},
@@ -7338,7 +7317,6 @@ The leipzig corpora collection, annotated for sentiment
     ```bibtex
     
     @inproceedings{quasthoff-etal-2006-corpus,
-      abstract = {A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.},
       address = {Genoa, Italy},
       author = {Quasthoff, Uwe  and
     Richter, Matthias  and
@@ -8235,7 +8213,6 @@ MTOP: Multilingual Task-Oriented Semantic Parsing
     ```bibtex
     
     @inproceedings{li-etal-2021-mtop,
-      abstract = {Scaling semantic parsing models for task-oriented dialog systems to new languages is often expensive and time-consuming due to the lack of available datasets. Available datasets suffer from several shortcomings: a) they contain few languages b) they contain small amounts of labeled examples per language c) they are based on the simple intent and slot detection paradigm for non-compositional queries. In this paper, we present a new multilingual dataset, called MTOP, comprising of 100k annotated utterances in 6 languages across 11 domains. We use this dataset and other publicly available datasets to conduct a comprehensive benchmarking study on using various state-of-the-art multilingual pre-trained models for task-oriented semantic parsing. We achieve an average improvement of +6.3 points on Slot F1 for the two existing multilingual datasets, over best results reported in their experiments. Furthermore, we demonstrate strong zero-shot performance using pre-trained models combined with automatic translation and alignment, and a proposed distant supervision method to reduce the noise in slot label projection.},
       address = {Online},
       author = {Li, Haoran  and
     Arora, Abhinav  and
@@ -8315,7 +8292,6 @@ MTOP: Multilingual Task-Oriented Semantic Parsing
     ```bibtex
     
     @inproceedings{li-etal-2021-mtop,
-      abstract = {Scaling semantic parsing models for task-oriented dialog systems to new languages is often expensive and time-consuming due to the lack of available datasets. Available datasets suffer from several shortcomings: a) they contain few languages b) they contain small amounts of labeled examples per language c) they are based on the simple intent and slot detection paradigm for non-compositional queries. In this paper, we present a new multilingual dataset, called MTOP, comprising of 100k annotated utterances in 6 languages across 11 domains. We use this dataset and other publicly available datasets to conduct a comprehensive benchmarking study on using various state-of-the-art multilingual pre-trained models for task-oriented semantic parsing. We achieve an average improvement of +6.3 points on Slot F1 for the two existing multilingual datasets, over best results reported in their experiments. Furthermore, we demonstrate strong zero-shot performance using pre-trained models combined with automatic translation and alignment, and a proposed distant supervision method to reduce the noise in slot label projection.},
       address = {Online},
       author = {Li, Haoran  and
     Arora, Abhinav  and
@@ -8880,7 +8856,6 @@ Hate speech detection dataset with binary
     ```bibtex
     
     @inproceedings{rottger-etal-2021-hatecheck,
-      abstract = {Detecting online hate is a difficult task that even state-of-the-art models struggle with. Typically, hate speech detection models are evaluated by measuring their performance on held-out test data using metrics such as accuracy and F1 score. However, this approach makes it difficult to identify specific model weak points. It also risks overestimating generalisable model performance due to increasingly well-evidenced systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, we introduce HateCheck, a suite of functional tests for hate speech detection models. We specify 29 model functionalities motivated by a review of previous research and a series of interviews with civil society stakeholders. We craft test cases for each functionality and validate their quality through a structured annotation process. To illustrate HateCheck{'}s utility, we test near-state-of-the-art transformer models as well as two popular commercial models, revealing critical model weaknesses.},
       address = {Online},
       author = {R{\"o}ttger, Paul  and
     Vidgen, Bertie  and
@@ -8903,7 +8878,6 @@ Hate speech detection dataset with binary
     }
     
     @inproceedings{rottger-etal-2022-multilingual,
-      abstract = {Hate speech detection models are typically evaluated on held-out test sets. However, this risks painting an incomplete and potentially misleading picture of model performance because of increasingly well-documented systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, recent research has thus introduced functional tests for hate speech detection models. However, these tests currently only exist for English-language content, which means that they cannot support the development of more effective models in other languages spoken by billions across the world. To help address this issue, we introduce Multilingual HateCheck (MHC), a suite of functional tests for multilingual hate speech detection models. MHC covers 34 functionalities across ten languages, which is more languages than any other hate speech dataset. To illustrate MHC{'}s utility, we train and test a high-performing multilingual hate speech detection model, and reveal critical model weaknesses for monolingual and cross-lingual applications.},
       address = {Seattle, Washington (Hybrid)},
       author = {R{\"o}ttger, Paul  and
     Seelawi, Haitham  and
@@ -9203,7 +9177,6 @@ A Nepali dataset for 7500 news articles
     ```bibtex
     
     @inproceedings{arora-2020-inltk,
-      abstract = {We present iNLTK, an open-source NLP library consisting of pre-trained language models and out-of-the-box support for Data Augmentation, Textual Similarity, Sentence Embeddings, Word Embeddings, Tokenization and Text Generation in 13 Indic Languages. By using pre-trained models from iNLTK for text classification on publicly available datasets, we significantly outperform previously reported results. On these datasets, we also show that by using pre-trained models and data augmentation from iNLTK, we can achieve more than 95{\%} of the previous best performance by using less than 10{\%} of the training data. iNLTK is already being widely used by the community and has 40,000+ downloads, 600+ stars and 100+ forks on GitHub.},
       address = {Online},
       author = {Arora, Gaurav},
       booktitle = {Proceedings of Second Workshop for NLP Open Source Software (NLP-OSS)},
@@ -9246,7 +9219,6 @@ A Nepali dataset for 7500 news articles
     ```bibtex
     
     @inproceedings{arora-2020-inltk,
-      abstract = {We present iNLTK, an open-source NLP library consisting of pre-trained language models and out-of-the-box support for Data Augmentation, Textual Similarity, Sentence Embeddings, Word Embeddings, Tokenization and Text Generation in 13 Indic Languages. By using pre-trained models from iNLTK for text classification on publicly available datasets, we significantly outperform previously reported results. On these datasets, we also show that by using pre-trained models and data augmentation from iNLTK, we can achieve more than 95{\%} of the previous best performance by using less than 10{\%} of the training data. iNLTK is already being widely used by the community and has 40,000+ downloads, 600+ stars and 100+ forks on GitHub.},
       address = {Online},
       author = {Arora, Gaurav},
       booktitle = {Proceedings of Second Workshop for NLP Open Source Software (NLP-OSS)},
@@ -9462,7 +9434,6 @@ A dataset for Nordic language identification.
     ```bibtex
     
     @inproceedings{haas-derczynski-2021-discriminating,
-      abstract = {Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.},
       address = {Kiyv, Ukraine},
       author = {Haas, Ren{\'e}  and
     Derczynski, Leon},
@@ -9504,7 +9475,6 @@ Norwegian parliament speeches annotated for sentiment
     ```bibtex
     
     @inproceedings{kummervold-etal-2021-operationalizing,
-      abstract = {In this work, we show the process of building a large-scale training set from digital and digitized collections at a national library. The resulting Bidirectional Encoder Representations from Transformers (BERT)-based language model for Norwegian outperforms multilingual BERT (mBERT) models in several token and sequence classification tasks for both Norwegian Bokm{\aa}l and Norwegian Nynorsk. Our model also improves the mBERT performance for other languages present in the corpus such as English, Swedish, and Danish. For languages not included in the corpus, the weights degrade moderately while keeping strong multilingual properties. Therefore, we show that building high-quality models within a memory institution using somewhat noisy optical character recognition (OCR) content is feasible, and we hope to pave the way for other memory institutions to follow.},
       address = {Reykjavik, Iceland (Online)},
       author = {Kummervold, Per E  and
     De la Rosa, Javier  and
@@ -9545,7 +9515,6 @@ Norwegian parliament speeches annotated for sentiment
     ```bibtex
     
     @inproceedings{kummervold-etal-2021-operationalizing,
-      abstract = {In this work, we show the process of building a large-scale training set from digital and digitized collections at a national library. The resulting Bidirectional Encoder Representations from Transformers (BERT)-based language model for Norwegian outperforms multilingual BERT (mBERT) models in several token and sequence classification tasks for both Norwegian Bokm{\aa}l and Norwegian Nynorsk. Our model also improves the mBERT performance for other languages present in the corpus such as English, Swedish, and Danish. For languages not included in the corpus, the weights degrade moderately while keeping strong multilingual properties. Therefore, we show that building high-quality models within a memory institution using somewhat noisy optical character recognition (OCR) content is feasible, and we hope to pave the way for other memory institutions to follow.},
       address = {Reykjavik, Iceland (Online)},
       author = {Kummervold, Per E  and
     De la Rosa, Javier  and
@@ -10528,7 +10497,6 @@ Classification Dataset of Patents and Abstract
     ```bibtex
     
     @inproceedings{sharma-etal-2019-bigpatent,
-      abstract = {Most existing text summarization datasets are compiled from the news domain, where summaries have a flattened discourse structure. In such datasets, summary-worthy content often appears in the beginning of input articles. Moreover, large segments from input articles are present verbatim in their respective summaries. These issues impede the learning and evaluation of systems that can understand an article{'}s global content structure as well as produce abstractive summaries with high compression ratio. In this work, we present a novel dataset, BIGPATENT, consisting of 1.3 million records of U.S. patent documents along with human written abstractive summaries. Compared to existing summarization datasets, BIGPATENT has the following properties: i) summaries contain a richer discourse structure with more recurring entities, ii) salient content is evenly distributed in the input, and iii) lesser and shorter extractive fragments are present in the summaries. Finally, we train and evaluate baselines and popular learning models on BIGPATENT to shed light on new challenges and motivate future directions for summarization research.},
       address = {Florence, Italy},
       author = {Sharma, Eva  and
     Li, Chen  and
@@ -10570,7 +10538,6 @@ Classification Dataset of Patents and Abstract
     ```bibtex
     
     @inproceedings{sharma-etal-2019-bigpatent,
-      abstract = {Most existing text summarization datasets are compiled from the news domain, where summaries have a flattened discourse structure. In such datasets, summary-worthy content often appears in the beginning of input articles. Moreover, large segments from input articles are present verbatim in their respective summaries. These issues impede the learning and evaluation of systems that can understand an article{'}s global content structure as well as produce abstractive summaries with high compression ratio. In this work, we present a novel dataset, BIGPATENT, consisting of 1.3 million records of U.S. patent documents along with human written abstractive summaries. Compared to existing summarization datasets, BIGPATENT has the following properties: i) summaries contain a richer discourse structure with more recurring entities, ii) salient content is evenly distributed in the input, and iii) lesser and shorter extractive fragments are present in the summaries. Finally, we train and evaluate baselines and popular learning models on BIGPATENT to shed light on new challenges and motivate future directions for summarization research.},
       address = {Florence, Italy},
       author = {Sharma, Eva  and
     Li, Chen  and
@@ -10834,7 +10801,6 @@ A collection of Polish online reviews from four domains: medicine, hotels, produ
     ```bibtex
     
     @inproceedings{kocon-etal-2019-multi,
-      abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
       address = {Hong Kong, China},
       author = {Koco{\'n}, Jan  and
     Mi{\l}kowski, Piotr  and
@@ -10872,7 +10838,6 @@ A collection of Polish online reviews from four domains: medicine, hotels, produ
     ```bibtex
     
     @inproceedings{kocon-etal-2019-multi,
-      abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
       address = {Hong Kong, China},
       author = {Koco{\'n}, Jan  and
     Mi{\l}kowski, Piotr  and
@@ -12110,7 +12075,6 @@ This data set contains ~500 Shlokas
     ```bibtex
     
     @inproceedings{arora-2020-inltk,
-      abstract = {We present iNLTK, an open-source NLP library consisting of pre-trained language models and out-of-the-box support for Data Augmentation, Textual Similarity, Sentence Embeddings, Word Embeddings, Tokenization and Text Generation in 13 Indic Languages. By using pre-trained models from iNLTK for text classification on publicly available datasets, we significantly outperform previously reported results. On these datasets, we also show that by using pre-trained models and data augmentation from iNLTK, we can achieve more than 95{\%} of the previous best performance by using less than 10{\%} of the training data. iNLTK is already being widely used by the community and has 40,000+ downloads, 600+ stars and 100+ forks on GitHub.},
       address = {Online},
       author = {Arora, Gaurav},
       booktitle = {Proceedings of Second Workshop for NLP Open Source Software (NLP-OSS)},
@@ -14340,7 +14304,6 @@ Arabic sarcasm detection dataset, which was created through the reannotation of 
     ```bibtex
     
     @inproceedings{abu-farha-magdy-2020-arabic,
-      abstract = {Sarcasm is one of the main challenges for sentiment analysis systems. Its complexity comes from the expression of opinion using implicit indirect phrasing. In this paper, we present ArSarcasm, an Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. The dataset contains 10,547 tweets, 16{\%} of which are sarcastic. In addition to sarcasm the data was annotated for sentiment and dialects. Our analysis shows the highly subjective nature of these tasks, which is demonstrated by the shift in sentiment labels based on annotators{'} biases. Experiments show the degradation of state-of-the-art sentiment analysers when faced with sarcastic content. Finally, we train a deep learning model for sarcasm detection using BiLSTM. The model achieves an F1 score of 0.46, which shows the challenging nature of the task, and should act as a basic baseline for future research on our dataset.},
       address = {Marseille, France},
       author = {Abu Farha, Ibrahim  and
     Magdy, Walid},
@@ -14384,7 +14347,6 @@ Arabic sarcasm detection dataset, which was created through the reannotation of 
     ```bibtex
     
     @inproceedings{abu-farha-magdy-2020-arabic,
-      abstract = {Sarcasm is one of the main challenges for sentiment analysis systems. Its complexity comes from the expression of opinion using implicit indirect phrasing. In this paper, we present ArSarcasm, an Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets. The dataset contains 10,547 tweets, 16{\%} of which are sarcastic. In addition to sarcasm the data was annotated for sentiment and dialects. Our analysis shows the highly subjective nature of these tasks, which is demonstrated by the shift in sentiment labels based on annotators{'} biases. Experiments show the degradation of state-of-the-art sentiment analysers when faced with sarcastic content. Finally, we train a deep learning model for sarcasm detection using BiLSTM. The model achieves an F1 score of 0.46, which shows the challenging nature of the task, and should act as a basic baseline for future research on our dataset.},
       address = {Marseille, France},
       author = {Abu Farha, Ibrahim  and
     Magdy, Walid},
@@ -14427,7 +14389,6 @@ A multilingual Sentiment Analysis dataset consisting of tweets in 8 different la
     ```bibtex
     
     @inproceedings{barbieri-etal-2022-xlm,
-      abstract = {Language models are ubiquitous in current NLP, and their multilingual capacity has recently attracted considerable attention. However, current analyses have almost exclusively focused on (multilingual variants of) standard benchmarks, and have relied on clean pre-training and task-specific corpora as multilingual signals. In this paper, we introduce XLM-T, a model to train and evaluate multilingual language models in Twitter. In this paper we provide: (1) a new strong multilingual baseline consisting of an XLM-R (Conneau et al. 2020) model pre-trained on millions of tweets in over thirty languages, alongside starter code to subsequently fine-tune on a target task; and (2) a set of unified sentiment analysis Twitter datasets in eight different languages and a XLM-T model trained on this dataset.},
       address = {Marseille, France},
       author = {Barbieri, Francesco  and
     Espinosa Anke, Luis  and
@@ -14925,7 +14886,6 @@ A dataset of Japanese social network rated for sentiment
     ```bibtex
     
     @inproceedings{kajiwara-etal-2021-wrime,
-      abstract = {We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.},
       address = {Online},
       author = {Kajiwara, Tomoyuki  and
     Chu, Chenhui  and
@@ -14975,7 +14935,6 @@ A dataset of Japanese social network rated for sentiment
     ```bibtex
     
     @inproceedings{kajiwara-etal-2021-wrime,
-      abstract = {We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.},
       address = {Online},
       author = {Kajiwara, Tomoyuki  and
     Chu, Chenhui  and

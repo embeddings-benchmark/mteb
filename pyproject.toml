@@ -291,17 +291,20 @@ markers = [
 ]
 
 [tool.uv]
+default-groups = ["test", "docs", "typing", "lint"]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]
 conflicts = [
     [{ extra = "timm" }, { extra = "blip2" }],
     [{ extra = "llm2vec" }, { extra = "model2vec" }],
-    # conflicting versions of transformers:
-    [{ extra = "llm2vec" }, { extra = "pylate" }],
+    [{ extra = "llm2vec" }, { extra = "pylate" }], # conflicting versions of transformers
+    [{ extra = "llm2vec" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
     [{ extra = "colpali-engine" }, { extra = "pylate" }],
     [{ extra = "colpali-engine" }, { extra = "llm2vec" }],
+    [{ extra = "colpali-engine" }, { extra = "llama-embed-nemotron" }], # conflicting version of transformers
     [{ extra = "jina-v4" }, { extra = "llm2vec" }],
+    [{ extra = "jina-v4" }, { extra = "llama-embed-nemotron" }], # conflicting versions of transformers
 ]
 
 [tool.uv.extra-build-dependencies]

@@ -315,7 +315,7 @@ Classifying facial emotions.
 
 Classifying aircraft images from 41 manufacturers and 102 variants.
 
-**Dataset:** [`mteb/FGVCAircraft`](https://huggingface.co/datasets/mteb/FGVCAircraft) • **License:** not specified • [Learn more →](https://arxiv.org/abs/1306.5151)
+**Dataset:** [`mteb/FGVCAircraftZeroShot`](https://huggingface.co/datasets/mteb/FGVCAircraftZeroShot) • **License:** not specified • [Learn more →](https://arxiv.org/abs/1306.5151)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -517,7 +517,6 @@ Histopathology diagnosis classification dataset.
     ```bibtex
     
     @inproceedings{10.1007/978-3-030-00934-2_24,
-      abstract = {We propose a new model for digital pathology segmentation, based on the observation that histopathology images are inherently symmetric under rotation and reflection. Utilizing recent findings on rotation equivariant CNNs, the proposed model leverages these symmetries in a principled manner. We present a visual analysis showing improved stability on predictions, and demonstrate that exploiting rotation equivariance significantly improves tumor detection performance on a challenging lymph node metastases dataset. We further present a novel derived dataset to enable principled comparison of machine learning models, in combination with an initial benchmark. Through this dataset, the task of histopathology diagnosis becomes accessible as a challenging benchmark for fundamental machine learning research.},
       address = {Cham},
       author = {Veeling, Bastiaan S.
     and Linmans, Jasper

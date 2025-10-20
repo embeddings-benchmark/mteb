@@ -34,18 +34,18 @@ BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{thakur2021beir,
       author = {Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
       journal = {arXiv preprint arXiv:2104.08663},
       title = {Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
       year = {2021},
     }
-
+    
     ```
-
+    
 
 
 
@@ -80,9 +80,9 @@ BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{banar2024beirnlzeroshotinformationretrieval,
       archiveprefix = {arXiv},
       author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
@@ -92,9 +92,9 @@ BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created 
       url = {https://arxiv.org/abs/2412.08329},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -106,7 +106,7 @@ BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
     economics, psychology, mathematics, and coding. These queries are drawn from
     naturally occurring and carefully curated human data.
-
+    
 
 [Learn more →](https://brightbenchmark.github.io/)
 
@@ -121,18 +121,18 @@ BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{su2024bright,
       author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
       journal = {arXiv preprint arXiv:2407.12883},
       title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -146,7 +146,7 @@ economics, psychology, mathematics, and coding. These queries are drawn from
 naturally occurring and carefully curated human data.
 
 This is the long version of the benchmark, which only filter longer documents.
-
+    
 
 [Learn more →](https://brightbenchmark.github.io/)
 
@@ -161,18 +161,18 @@ This is the long version of the benchmark, which only filter longer documents.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{su2024bright,
       author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
       journal = {arXiv preprint arXiv:2407.12883},
       title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -196,18 +196,18 @@ This is the long version of the benchmark, which only filter longer documents.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{shahinmoghadam2024benchmarking,
       author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
       journal = {arXiv preprint arXiv:2411.12056},
       title = {Benchmarking pre-trained text embedding models in aligning built asset information},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -254,18 +254,18 @@ ChemTEB evaluates the performance of text embedding models on chemical domain da
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{kasmaee2024chemteb,
       author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
       journal = {arXiv preprint arXiv:2412.00532},
       title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -295,9 +295,9 @@ CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{li2024coircomprehensivebenchmarkcode,
       archiveprefix = {arXiv},
       author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
@@ -307,9 +307,9 @@ CoIR: A Comprehensive Benchmark for Code Information Retrieval Models
       url = {https://arxiv.org/abs/2407.02883},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -333,9 +333,9 @@ A benchmark for evaluating code retrieval augmented generation, testing models' 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wang2024coderagbenchretrievalaugmentcode,
       archiveprefix = {arXiv},
       author = {Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
@@ -345,9 +345,9 @@ A benchmark for evaluating code retrieval augmented generation, testing models' 
       url = {https://arxiv.org/abs/2406.14497},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -374,9 +374,9 @@ A benchmark for evaluating text embedding models on Russian data.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{dale_encodechka,
       author = {Dale, David},
       editor = {habr.com},
@@ -386,9 +386,9 @@ A benchmark for evaluating text embedding models on Russian data.
       url = {https://habr.com/ru/articles/669674/},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -411,9 +411,9 @@ Retrieval w/Instructions is the task of finding relevant documents for a query t
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{weller2024followir,
       archiveprefix = {arXiv},
       author = {Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
@@ -422,9 +422,9 @@ Retrieval w/Instructions is the task of finding relevant documents for a query t
       title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -517,7 +517,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
       archiveprefix = {arXiv},
@@ -529,7 +529,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -538,7 +538,7 @@ Multilingual, domain-diverse and layout-rich document retrieval benchmark.
 LongEmbed is a benchmark oriented at exploring models' performance on long-context retrieval.
     The benchmark comprises two synthetic tasks and four carefully chosen real-world tasks,
     featuring documents of varying length and dispersed target information.
-
+    
 
 [Learn more →](https://arxiv.org/abs/2404.12096v2)
 
@@ -558,18 +558,18 @@ LongEmbed is a benchmark oriented at exploring models' performance on long-conte
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{zhu2024longembed,
       author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
       journal = {arXiv preprint arXiv:2404.12096},
       title = {LongEmbed: Extending Embedding Models for Long Context Retrieval},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -638,9 +638,9 @@ A image-only version of MIEB(Multilingual) that consists of 49 tasks.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -650,9 +650,9 @@ A image-only version of MIEB(Multilingual) that consists of 49 tasks.
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -805,9 +805,9 @@ MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 ta
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -817,9 +817,9 @@ MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 ta
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -966,9 +966,9 @@ MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -978,9 +978,9 @@ MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, 
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1053,9 +1053,9 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2025mieb,
       author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       doi = {10.48550/ARXIV.2504.10471},
@@ -1065,9 +1065,9 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
       url = {https://arxiv.org/abs/2504.10471},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1076,7 +1076,7 @@ MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types
 Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate the
     ability of multilingual LMs in semantic retrieval tasks,
     including bitext mining and classification via retrieval-augmented contexts.
-
+    
 
 [Learn more →](https://arxiv.org/pdf/2406.07424)
 
@@ -1097,18 +1097,18 @@ Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate 
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{winata2024miners,
       author = {Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
       journal = {arXiv preprint arXiv:2406.07424},
       title = {MINERS: Multilingual Language Models as Semantic Retrievers},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1136,7 +1136,7 @@ A massive code embedding benchmark covering retrieval tasks in a miriad of popul
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1148,7 +1148,7 @@ A massive code embedding benchmark covering retrieval tasks in a miriad of popul
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1238,7 +1238,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1250,7 +1250,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1289,7 +1289,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1301,7 +1301,7 @@ A regional geopolitical text embedding benchmark targetting embedding performanc
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1493,7 +1493,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1505,13 +1505,13 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
       year = {2025},
     }
     ```
-
+    
 
 
 
 ####  MTEB(Multilingual, v2)
 
-A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.
+A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. 
 
 [Learn more →](https://arxiv.org/abs/2502.13595)
 
@@ -1656,7 +1656,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -1668,7 +1668,7 @@ A large-scale multilingual expansion of MTEB, driven mainly by highly-curated co
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -1716,9 +1716,9 @@ A curated selection of tasks coverering the Scandinavian languages; Danish, Swed
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @inproceedings{enevoldsen2024scandinavian,
       author = {Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
       booktitle = {Advances in Neural Information Processing Systems},
@@ -1726,9 +1726,9 @@ A curated selection of tasks coverering the Scandinavian languages; Danish, Swed
       url = {https://nips.cc/virtual/2024/poster/97869},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1780,9 +1780,9 @@ The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchma
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{c-pack,
       archiveprefix = {arXiv},
       author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
@@ -1791,9 +1791,9 @@ The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchma
       title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
       year = {2023},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1832,9 +1832,9 @@ A benchmark for text-embedding performance in German.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{wehrli2024germantextembeddingclustering,
       archiveprefix = {arXiv},
       author = {Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
@@ -1844,9 +1844,9 @@ A benchmark for text-embedding performance in German.
       url = {https://arxiv.org/abs/2401.02709},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1855,7 +1855,7 @@ A benchmark for text-embedding performance in German.
 The original English benchmark by Muennighoff et al., (2023).
 This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, as it uses updated versions of the task, making it notably faster to run and resolving [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning, such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
-
+    
 
 ??? info "Tasks"
 
@@ -1921,9 +1921,9 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{muennighoff2022mteb,
       author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
       doi = {10.48550/ARXIV.2210.07316},
@@ -1933,9 +1933,9 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
       url = {https://arxiv.org/abs/2210.07316},
       year = {2022},
     }
-
+    
     ```
-
+    
 
 
 
@@ -1947,7 +1947,7 @@ to tasks in the original MTEB, and contains tasks that are not as frequently use
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
 The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
-
+    
 
 ??? info "Tasks"
 
@@ -1998,7 +1998,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{enevoldsen2025mmtebmassivemultilingualtext,
       author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
@@ -2010,7 +2010,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2090,18 +2090,18 @@ The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchma
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{zinvandi2025famteb,
       author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
       journal = {arXiv preprint arXiv:2502.11571},
       title = {Famteb: Massive text embedding benchmark in persian language},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2173,18 +2173,18 @@ The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchma
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{zinvandi2025famteb,
       author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
       journal = {arXiv preprint arXiv:2502.11571},
       title = {Famteb: Massive text embedding benchmark in persian language},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2229,9 +2229,9 @@ MTEB-French, a French expansion of the original benchmark with high-quality nati
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{ciancone2024mtebfrenchresourcesfrenchsentence,
       archiveprefix = {arXiv},
       author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -2241,9 +2241,9 @@ MTEB-French, a French expansion of the original benchmark with high-quality nati
       url = {https://arxiv.org/abs/2405.20468},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2330,18 +2330,18 @@ two novel clustering tasks.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{poswiata2024plmteb,
       author = {Rafał Poświata and Sławomir Dadas and Michał Perełkiewicz},
       journal = {arXiv preprint arXiv:2405.10138},
       title = {PL-MTEB: Polish Massive Text Embedding Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2384,9 +2384,9 @@ A Russian version of the Massive Text Embedding Benchmark with a number of novel
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       archiveprefix = {arXiv},
       author = {Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
@@ -2396,9 +2396,9 @@ A Russian version of the Massive Text Embedding Benchmark with a number of novel
       url = {https://arxiv.org/abs/2408.12503},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2434,7 +2434,7 @@ A benchmark to evaluate with subsets of BEIR datasets to use less computational 
 R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
     R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
     It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
-
+    
 
 [Learn more →](https://r2med.github.io/)
 
@@ -2456,18 +2456,18 @@ R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{li2025r2med,
       author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
       journal = {arXiv preprint arXiv:2505.14558},
       title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2504,18 +2504,18 @@ A benchmark to evaluate reasoning capabilities of retrievers.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{xiao2024rar,
       author = {Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
       journal = {arXiv preprint arXiv:2404.06347},
       title = {RAR-b: Reasoning as Retrieval Benchmark},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2539,7 +2539,7 @@ RTEB Code is a subset of RTEB containing retrieval tasks specifically focused on
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2547,7 +2547,7 @@ RTEB Code is a subset of RTEB containing retrieval tasks specifically focused on
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2567,7 +2567,7 @@ RTEB Healthcare is a subset of RTEB containing retrieval tasks specifically focu
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2575,7 +2575,7 @@ RTEB Healthcare is a subset of RTEB containing retrieval tasks specifically focu
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2598,7 +2598,7 @@ RTEB Legal is a subset of RTEB containing retrieval tasks specifically focused o
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2606,7 +2606,7 @@ RTEB Legal is a subset of RTEB containing retrieval tasks specifically focused o
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2651,7 +2651,7 @@ RTEB (ReTrieval Embedding Benchmark) is a comprehensive benchmark for evaluating
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2659,7 +2659,7 @@ RTEB (ReTrieval Embedding Benchmark) is a comprehensive benchmark for evaluating
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2679,7 +2679,7 @@ RTEB German is a subset of RTEB containing retrieval tasks in German across lega
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2687,7 +2687,7 @@ RTEB German is a subset of RTEB containing retrieval tasks in German across lega
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2723,7 +2723,7 @@ RTEB English is a subset of RTEB containing retrieval tasks in English across le
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2731,7 +2731,7 @@ RTEB English is a subset of RTEB containing retrieval tasks in English across le
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2754,7 +2754,7 @@ RTEB Finance is a subset of RTEB  containing retrieval tasks specifically focuse
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2762,7 +2762,7 @@ RTEB Finance is a subset of RTEB  containing retrieval tasks specifically focuse
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2781,7 +2781,7 @@ RTEB French is a subset of RTEB containing retrieval tasks in French across lega
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2789,7 +2789,7 @@ RTEB French is a subset of RTEB containing retrieval tasks in French across lega
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2807,7 +2807,7 @@ RTEB Japanese is a subset of RTEB  containing retrieval tasks in Japanese across
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
     @article{rteb2025,
       author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
@@ -2815,7 +2815,7 @@ RTEB Japanese is a subset of RTEB  containing retrieval tasks in Japanese across
       year = {2025},
     }
     ```
-
+    
 
 
 
@@ -2844,9 +2844,9 @@ RuSciBench is a benchmark designed for evaluating sentence encoders and language
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{vatolin2024ruscibench,
       author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
       doi = {10.1134/S1064562424602191},
@@ -2860,9 +2860,9 @@ RuSciBench is a benchmark designed for evaluating sentence encoders and language
       volume = {110},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2932,9 +2932,9 @@ A benchmark for text-embedding performance in Vietnamese.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @misc{pham2025vnmtebvietnamesemassivetext,
       archiveprefix = {arXiv},
       author = {Loc Pham and Tung Luu and Thu Vo and Minh Nguyen and Viet Hoang},
@@ -2944,9 +2944,9 @@ A benchmark for text-embedding performance in Vietnamese.
       url = {https://arxiv.org/abs/2507.21500},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -2976,18 +2976,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{faysse2024colpali,
       author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
       journal = {arXiv preprint arXiv:2407.01449},
       title = {ColPali: Efficient Document Retrieval with Vision Language Models},
       year = {2024},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3011,18 +3011,18 @@ Retrieve associated pages according to questions.
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-
+    
     ```
-
+    
 
 
 
@@ -3056,15 +3056,15 @@ A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2
 
 ??? quote "Citation"
 
-
+    
     ```bibtex
-
+    
     @article{mace2025vidorev2,
       author = {Macé, Quentin and Loison António and Faysse, Manuel},
       journal = {arXiv preprint arXiv:2505.17166},
       title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
       year = {2025},
     }
-
+    
     ```
 <!-- END TASK DESCRIPTION -->
