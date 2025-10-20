@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 import logging
-import os
+from pathlib import Path
 from typing import Optional
 
 from jsonlines import Reader
@@ -22,7 +20,7 @@ commit_exceptions = {
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    GitHub: constr(min_length=1)  # noqa
+    GitHub: constr(min_length=1)
     new_dataset: Optional[conint(ge=1)] = Field(alias="New dataset", default=None)  # noqa
     new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)  # noqa
     dataset_annotations: Optional[conint(ge=1)] = Field(  # noqa
@@ -44,32 +42,29 @@ def check_max_points(obj: JsonObject, commit_n: str):
 
 # Function to validate JSONL files in a folder
 def validate_jsonl_files(folder_path):
-    for filename in os.listdir(folder_path):
-        if filename.endswith(".jsonl"):
-            file_path = os.path.join(folder_path, filename)
-            commit_n = os.path.splitext(filename)[0]
-            with open(file_path, encoding="utf-8") as file:
+    folder_path = Path(folder_path)
+    for file_path in folder_path.glob("*.jsonl"):
+        commit_n = file_path.stem
+        with file_path.open(encoding="utf-8") as file:
+            try:
+                # Read JSONL file
+                reader = Reader(file)
+            except Exception:
+                raise Exception("Error reading file:", file_path)
+            for line in reader:
                 try:
-                    # Read JSONL file
-                    reader = Reader(file)
-                except Exception:
-                    raise Exception("Error reading file:", file_path)
-                for line in reader:
-                    try:
-                        # Validate JSON object against schema
-                        x = JsonObject(**line)
-                        logging.debug(x)
-                        check_max_points(x, commit_n)
+                    # Validate JSON object against schema
+                    x = JsonObject(**line)
+                    logging.debug(x)
+                    check_max_points(x, commit_n)
 
-                    except ValidationError as e:
-                        raise Exception(
-                            "Validation Error in file:", file_path, line
-                        ) from e
+                except ValidationError as e:
+                    raise Exception("Validation Error in file:", file_path, line) from e
 
 
 # Main function
 def main():
-    folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "points")
+    folder_path = Path(__file__).parent / "points"
     validate_jsonl_files(folder_path)
 
 

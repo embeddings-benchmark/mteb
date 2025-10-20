@@ -1,0 +1,126 @@
+{
+    "test": {
+        "num_samples": 4577,
+        "text_statistics": {
+            "total_text_length": 1144213,
+            "min_text_length": 20,
+            "average_text_length": 249.99191610225037,
+            "max_text_length": 1090,
+            "unique_texts": 3067
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 35,
+            "labels": {
+                "hvac": {
+                    "count": 150
+                },
+                "structural": {
+                    "count": 138
+                },
+                "electrical": {
+                    "count": 150
+                },
+                "building control": {
+                    "count": 126
+                },
+                "Built (Structural/Architectural)": {
+                    "count": 304
+                },
+                "Distribution (Mechanical/Electrical/Plumbing)": {
+                    "count": 310
+                },
+                "Furnishing": {
+                    "count": 78
+                },
+                "Transportation Device": {
+                    "count": 90
+                },
+                "Geotechnical": {
+                    "count": 48
+                },
+                "Control Element (Mechanical/Electrical/Plumbing)": {
+                    "count": 41
+                },
+                "Reinforcing Element (Structural)": {
+                    "count": 52
+                },
+                "Flow Element (Mechanical/Electrical/Plumbing)": {
+                    "count": 80
+                },
+                "Flow Fitting": {
+                    "count": 33
+                },
+                "Energy Conversion Device": {
+                    "count": 60
+                },
+                "Flow Storage Device": {
+                    "count": 38
+                },
+                "Flow Controller": {
+                    "count": 60
+                },
+                "Flow Moving Device": {
+                    "count": 32
+                },
+                "Flow Terminal": {
+                    "count": 60
+                },
+                "Flow Segment": {
+                    "count": 33
+                },
+                "Flow Treatment Device": {
+                    "count": 36
+                },
+                "skin": {
+                    "count": 200
+                },
+                "opening": {
+                    "count": 200
+                },
+                "covering and finishing": {
+                    "count": 200
+                },
+                "control": {
+                    "count": 184
+                },
+                "distribution": {
+                    "count": 200
+                },
+                "general": {
+                    "count": 138
+                },
+                "fastener": {
+                    "count": 100
+                },
+                "support and restraint": {
+                    "count": 100
+                },
+                "formless structure and general": {
+                    "count": 66
+                },
+                "sectional": {
+                    "count": 100
+                },
+                "signage": {
+                    "count": 156
+                },
+                "fittings": {
+                    "count": 268
+                },
+                "equipment": {
+                    "count": 243
+                },
+                "furnishings": {
+                    "count": 280
+                },
+                "sanitary fittings and accessories": {
+                    "count": 223
+                }
+            }
+        }
+    }
+}

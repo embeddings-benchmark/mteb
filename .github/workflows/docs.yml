@@ -1,11 +1,13 @@
 # GitHub action for the task table generation.
-
-name: documentation
+name: tables
 
 on:
   push:
     branches: [main]
   pull_request:
+
+permissions:
+  contents: write
 
 jobs:
   create-table-on-pr:
@@ -21,19 +23,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
+          python -m pip install --upgrade pip
+          pip install -e . --group docs
 
       - name: Create table
         run: |
-          make build-docs
+          make build-tables
 
   create-table-and-push:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.RELEASE }}
 
       - uses: actions/setup-python@v4
         with:
@@ -42,13 +43,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
+          python -m pip install --upgrade pip
+          pip install -e . --group docs
 
       - name: Create table
         run: |
-          make build-docs
+          make build-tables
 
       - name: Push table
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"

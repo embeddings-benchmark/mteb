@@ -1,0 +1,108 @@
+{
+    "test": {
+        "num_samples": 36454,
+        "number_of_characters": 32714442,
+        "num_texts_in_train": 9,
+        "text_statistics": {
+            "total_text_length": 32714442,
+            "min_text_length": 82,
+            "average_text_length": 897.4170735721732,
+            "max_text_length": 9554,
+            "unique_texts": 36454
+        },
+        "values_statistics": {
+            "min_score": 2007,
+            "avg_score": 2016.2122126515608,
+            "max_score": 2022
+        },
+        "hf_subset_descriptive_stats": {
+            "yearpubl_ru": {
+                "num_samples": 18227,
+                "number_of_characters": 16012993,
+                "num_texts_in_train": 4,
+                "text_statistics": {
+                    "total_text_length": 16012993,
+                    "min_text_length": 82,
+                    "average_text_length": 878.5314643111867,
+                    "max_text_length": 5718,
+                    "unique_texts": 18227
+                },
+                "values_statistics": {
+                    "min_score": 2007,
+                    "avg_score": 2016.2122126515608,
+                    "max_score": 2022
+                }
+            },
+            "yearpubl_en": {
+                "num_samples": 18227,
+                "number_of_characters": 16701449,
+                "num_texts_in_train": 5,
+                "text_statistics": {
+                    "total_text_length": 16701449,
+                    "min_text_length": 91,
+                    "average_text_length": 916.3026828331596,
+                    "max_text_length": 9554,
+                    "unique_texts": 18227
+                },
+                "values_statistics": {
+                    "min_score": 2007,
+                    "avg_score": 2016.2122126515608,
+                    "max_score": 2022
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 328074,
+        "number_of_characters": 294420801,
+        "num_texts_in_train": null,
+        "text_statistics": {
+            "total_text_length": 294420801,
+            "min_text_length": 58,
+            "average_text_length": 897.4219261508074,
+            "max_text_length": 14007,
+            "unique_texts": 328029
+        },
+        "values_statistics": {
+            "min_score": 2007,
+            "avg_score": 2016.212110682346,
+            "max_score": 2022
+        },
+        "hf_subset_descriptive_stats": {
+            "yearpubl_ru": {
+                "num_samples": 164037,
+                "number_of_characters": 143954384,
+                "num_texts_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 143954384,
+                    "min_text_length": 58,
+                    "average_text_length": 877.5726451959009,
+                    "max_text_length": 14007,
+                    "unique_texts": 164017
+                },
+                "values_statistics": {
+                    "min_score": 2007,
+                    "avg_score": 2016.212110682346,
+                    "max_score": 2022
+                }
+            },
+            "yearpubl_en": {
+                "num_samples": 164037,
+                "number_of_characters": 150466417,
+                "num_texts_in_train": null,
+                "text_statistics": {
+                    "total_text_length": 150466417,
+                    "min_text_length": 62,
+                    "average_text_length": 917.271207105714,
+                    "max_text_length": 11576,
+                    "unique_texts": 164012
+                },
+                "values_statistics": {
+                    "min_score": 2007,
+                    "avg_score": 2016.212110682346,
+                    "max_score": 2022
+                }
+            }
+        }
+    }
+}

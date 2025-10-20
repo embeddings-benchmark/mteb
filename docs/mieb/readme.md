@@ -11,7 +11,7 @@ MIEB intends to extend MTEB and MMTEB to cover image representation learning and
 
 ## 🚀 Running MIEB
 
-If you’re already familiar with how MTEB works, then run any benchmark, task, and model the same way! 
+If you’re already familiar with how MTEB works, then run any benchmark, task, and model the same way!
 
 
 ### Run MIEB in 2 lines via CLI
@@ -46,18 +46,17 @@ Or select tasks by categories:
 tasks = mteb.get_tasks(task_types=["Compositionality"])
 ```
 
-2. Load a Model: 
+2. Load a Model:
 
 ```python
 model_name = "laion/CLIP-ViT-L-14-laion2B-s32B-b82K"
 model = mteb.get_model(model_name=model_name)
 ```
 
-3. Run the Evaluation: 
+3. Run the Evaluation:
 
 ```python
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 
@@ -71,7 +70,7 @@ There are a few ways for anyone to contribute to MIEB:
   2.  Add a model. This could mean either: a) The model wrapper, e.g. `OpenCLIPWrapper`, already exists, and the effort is solely in adding a filled out `ModelMeta` object, and/or b) Add a new model wrapper.
   3. Add a new task type. This means that the existing task types do not cover this new task. An accompanying evaluator should also be implemented.
 
-Let's go through an example. 
+Let's go through an example.
 
 <details>
   <summary> Contribution Example (click to unfold) </summary>
@@ -130,8 +129,7 @@ model_name = "laion/CLIP-ViT-L-14-laion2B-s32B-b82K"
 model = mteb.get_model(model_name=model_name)
 
 tasks = mteb.get_tasks(tasks=["CIFAR10ZeroShot"])
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model)
+results = mteb.evaluate(model, tasks=tasks)
 ```
 
 By default, results will be under `results/laion__CLIP-ViT-L-14-laion2B-s32B-b82K/REVISION/CIFAR10ZeroShot.json`. Sometimes metrics can be a bit different than what the original paper claimed. This might be due to the resolution/layout difference of images in the remake of the dataset.

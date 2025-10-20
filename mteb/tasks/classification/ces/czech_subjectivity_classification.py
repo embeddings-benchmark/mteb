@@ -1,0 +1,41 @@
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class CzechSubjectivityClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CzechSubjectivityClassification",
+        description="An Czech dataset for subjectivity classification.",
+        reference="https://arxiv.org/abs/2009.08712",
+        dataset={
+            "path": "pauli31/czech-subjectivity-dataset",
+            "revision": "e387ddf167f3eba99936cff89909ed6264f17e1f",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        date=("2022-04-01", "2022-04-01"),
+        eval_splits=["validation", "test"],
+        eval_langs=["ces-Latn"],
+        main_score="accuracy",
+        domains=["Reviews", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{priban-steinberger-2022-czech,
+  address = {Marseille, France},
+  author = {P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
+Steinberger, Josef},
+  booktitle = {Proceedings of the Thirteenth Language Resources and Evaluation Conference},
+  month = jun,
+  pages = {1381--1391},
+  publisher = {European Language Resources Association},
+  title = {\{C\}zech Dataset for Cross-lingual Subjectivity Classification},
+  url = {https://aclanthology.org/2022.lrec-1.148},
+  year = {2022},
+}
+""",
+    )

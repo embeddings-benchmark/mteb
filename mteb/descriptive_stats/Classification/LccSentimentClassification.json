@@ -1,0 +1,60 @@
+{
+    "test": {
+        "num_samples": 150,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 17809,
+            "min_text_length": 15,
+            "average_text_length": 118.72666666666667,
+            "max_text_length": 255,
+            "unique_texts": 150
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "neutral": {
+                    "count": 83
+                },
+                "positiv": {
+                    "count": 39
+                },
+                "negativ": {
+                    "count": 28
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 349,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 39601,
+            "min_text_length": 16,
+            "average_text_length": 113.46991404011462,
+            "max_text_length": 253,
+            "unique_texts": 349
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 3,
+            "labels": {
+                "negativ": {
+                    "count": 66
+                },
+                "positiv": {
+                    "count": 90
+                },
+                "neutral": {
+                    "count": 193
+                }
+            }
+        }
+    }
+}

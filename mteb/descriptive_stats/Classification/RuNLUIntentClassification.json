@@ -1,0 +1,1341 @@
+{
+    "test": {
+        "num_samples": 10000,
+        "number_texts_intersect_with_train": 247,
+        "text_statistics": {
+            "total_text_length": 362048,
+            "min_text_length": 1,
+            "average_text_length": 36.2048,
+            "max_text_length": 228,
+            "unique_texts": 4797
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 68,
+            "labels": {
+                "qa__definition": {
+                    "count": 224
+                },
+                "music__query": {
+                    "count": 122
+                },
+                "general__praise": {
+                    "count": 308
+                },
+                "play__radio": {
+                    "count": 218
+                },
+                "lists__remove": {
+                    "count": 116
+                },
+                "lists__createoradd": {
+                    "count": 104
+                },
+                "weather__query": {
+                    "count": 408
+                },
+                "qa__currency": {
+                    "count": 140
+                },
+                "email__querycontact": {
+                    "count": 64
+                },
+                "general__repeat": {
+                    "count": 214
+                },
+                "calendar__query": {
+                    "count": 416
+                },
+                "calendar__set": {
+                    "count": 548
+                },
+                "general__quirky": {
+                    "count": 416
+                },
+                "email__query": {
+                    "count": 286
+                },
+                "takeaway__order": {
+                    "count": 80
+                },
+                "play__podcasts": {
+                    "count": 174
+                },
+                "email__sendemail": {
+                    "count": 290
+                },
+                "iot__coffee": {
+                    "count": 82
+                },
+                "general__negate": {
+                    "count": 322
+                },
+                "qa__factoid": {
+                    "count": 472
+                },
+                "alarm__remove": {
+                    "count": 56
+                },
+                "iot__wemo_on": {
+                    "count": 44
+                },
+                "news__query": {
+                    "count": 300
+                },
+                "play__audiobook": {
+                    "count": 100
+                },
+                "iot__hue_lighton": {
+                    "count": 18
+                },
+                "general__affirm": {
+                    "count": 220
+                },
+                "social__post": {
+                    "count": 214
+                },
+                "general__explain": {
+                    "count": 278
+                },
+                "transport__query": {
+                    "count": 150
+                },
+                "audio__volume_mute": {
+                    "count": 64
+                },
+                "recommendation__locations": {
+                    "count": 108
+                },
+                "music__likeness": {
+                    "count": 94
+                },
+                "play__music": {
+                    "count": 446
+                },
+                "iot__hue_lightup": {
+                    "count": 62
+                },
+                "audio__volume_up": {
+                    "count": 58
+                },
+                "calendar__remove": {
+                    "count": 222
+                },
+                "lists__query": {
+                    "count": 172
+                },
+                "datetime__query": {
+                    "count": 232
+                },
+                "qa__stock": {
+                    "count": 82
+                },
+                "alarm__set": {
+                    "count": 94
+                },
+                "iot__cleaning": {
+                    "count": 66
+                },
+                "general__commandstop": {
+                    "count": 94
+                },
+                "alarm__query": {
+                    "count": 88
+                },
+                "transport__taxi": {
+                    "count": 60
+                },
+                "iot__hue_lightoff": {
+                    "count": 94
+                },
+                "social__query": {
+                    "count": 60
+                },
+                "recommendation__events": {
+                    "count": 136
+                },
+                "audio__volume_other": {
+                    "count": 12
+                },
+                "transport__traffic": {
+                    "count": 88
+                },
+                "iot__hue_lightchange": {
+                    "count": 102
+                },
+                "email__addcontact": {
+                    "count": 26
+                },
+                "play__game": {
+                    "count": 106
+                },
+                "cooking__recipe": {
+                    "count": 150
+                },
+                "qa__maths": {
+                    "count": 54
+                },
+                "takeaway__query": {
+                    "count": 88
+                },
+                "general__dontcare": {
+                    "count": 190
+                },
+                "iot__hue_lightdim": {
+                    "count": 42
+                },
+                "general__confirm": {
+                    "count": 224
+                },
+                "music__settings": {
+                    "count": 36
+                },
+                "recommendation__movies": {
+                    "count": 42
+                },
+                "transport__ticket": {
+                    "count": 74
+                },
+                "general__joke": {
+                    "count": 40
+                },
+                "audio__volume_down": {
+                    "count": 30
+                },
+                "datetime__convert": {
+                    "count": 34
+                },
+                "music__dislikeness": {
+                    "count": 12
+                },
+                "iot__wemo_off": {
+                    "count": 20
+                },
+                "general__greet": {
+                    "count": 8
+                },
+                "cooking__query": {
+                    "count": 6
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "rus-eng": {
+                "num_samples": 5000,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 181024,
+                    "min_text_length": 1,
+                    "average_text_length": 36.2048,
+                    "max_text_length": 228,
+                    "unique_texts": 4797
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 68,
+                    "labels": {
+                        "qa__definition": {
+                            "count": 112
+                        },
+                        "music__query": {
+                            "count": 61
+                        },
+                        "general__praise": {
+                            "count": 154
+                        },
+                        "play__radio": {
+                            "count": 109
+                        },
+                        "lists__remove": {
+                            "count": 58
+                        },
+                        "lists__createoradd": {
+                            "count": 52
+                        },
+                        "weather__query": {
+                            "count": 204
+                        },
+                        "qa__currency": {
+                            "count": 70
+                        },
+                        "email__querycontact": {
+                            "count": 32
+                        },
+                        "general__repeat": {
+                            "count": 107
+                        },
+                        "calendar__query": {
+                            "count": 208
+                        },
+                        "calendar__set": {
+                            "count": 274
+                        },
+                        "general__quirky": {
+                            "count": 208
+                        },
+                        "email__query": {
+                            "count": 143
+                        },
+                        "takeaway__order": {
+                            "count": 40
+                        },
+                        "play__podcasts": {
+                            "count": 87
+                        },
+                        "email__sendemail": {
+                            "count": 145
+                        },
+                        "iot__coffee": {
+                            "count": 41
+                        },
+                        "general__negate": {
+                            "count": 161
+                        },
+                        "qa__factoid": {
+                            "count": 236
+                        },
+                        "alarm__remove": {
+                            "count": 28
+                        },
+                        "iot__wemo_on": {
+                            "count": 22
+                        },
+                        "news__query": {
+                            "count": 150
+                        },
+                        "play__audiobook": {
+                            "count": 50
+                        },
+                        "iot__hue_lighton": {
+                            "count": 9
+                        },
+                        "general__affirm": {
+                            "count": 110
+                        },
+                        "social__post": {
+                            "count": 107
+                        },
+                        "general__explain": {
+                            "count": 139
+                        },
+                        "transport__query": {
+                            "count": 75
+                        },
+                        "audio__volume_mute": {
+                            "count": 32
+                        },
+                        "recommendation__locations": {
+                            "count": 54
+                        },
+                        "music__likeness": {
+                            "count": 47
+                        },
+                        "play__music": {
+                            "count": 223
+                        },
+                        "iot__hue_lightup": {
+                            "count": 31
+                        },
+                        "audio__volume_up": {
+                            "count": 29
+                        },
+                        "calendar__remove": {
+                            "count": 111
+                        },
+                        "lists__query": {
+                            "count": 86
+                        },
+                        "datetime__query": {
+                            "count": 116
+                        },
+                        "qa__stock": {
+                            "count": 41
+                        },
+                        "alarm__set": {
+                            "count": 47
+                        },
+                        "iot__cleaning": {
+                            "count": 33
+                        },
+                        "general__commandstop": {
+                            "count": 47
+                        },
+                        "alarm__query": {
+                            "count": 44
+                        },
+                        "transport__taxi": {
+                            "count": 30
+                        },
+                        "iot__hue_lightoff": {
+                            "count": 47
+                        },
+                        "social__query": {
+                            "count": 30
+                        },
+                        "recommendation__events": {
+                            "count": 68
+                        },
+                        "audio__volume_other": {
+                            "count": 6
+                        },
+                        "transport__traffic": {
+                            "count": 44
+                        },
+                        "iot__hue_lightchange": {
+                            "count": 51
+                        },
+                        "email__addcontact": {
+                            "count": 13
+                        },
+                        "play__game": {
+                            "count": 53
+                        },
+                        "cooking__recipe": {
+                            "count": 75
+                        },
+                        "qa__maths": {
+                            "count": 27
+                        },
+                        "takeaway__query": {
+                            "count": 44
+                        },
+                        "general__dontcare": {
+                            "count": 95
+                        },
+                        "iot__hue_lightdim": {
+                            "count": 21
+                        },
+                        "general__confirm": {
+                            "count": 112
+                        },
+                        "music__settings": {
+                            "count": 18
+                        },
+                        "recommendation__movies": {
+                            "count": 21
+                        },
+                        "transport__ticket": {
+                            "count": 37
+                        },
+                        "general__joke": {
+                            "count": 20
+                        },
+                        "audio__volume_down": {
+                            "count": 15
+                        },
+                        "datetime__convert": {
+                            "count": 17
+                        },
+                        "music__dislikeness": {
+                            "count": 6
+                        },
+                        "iot__wemo_off": {
+                            "count": 10
+                        },
+                        "general__greet": {
+                            "count": 4
+                        },
+                        "cooking__query": {
+                            "count": 3
+                        }
+                    }
+                }
+            },
+            "rus": {
+                "num_samples": 5000,
+                "number_texts_intersect_with_train": 247,
+                "text_statistics": {
+                    "total_text_length": 181024,
+                    "min_text_length": 1,
+                    "average_text_length": 36.2048,
+                    "max_text_length": 228,
+                    "unique_texts": 4797
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 68,
+                    "labels": {
+                        "qa__definition": {
+                            "count": 112
+                        },
+                        "music__query": {
+                            "count": 61
+                        },
+                        "general__praise": {
+                            "count": 154
+                        },
+                        "play__radio": {
+                            "count": 109
+                        },
+                        "lists__remove": {
+                            "count": 58
+                        },
+                        "lists__createoradd": {
+                            "count": 52
+                        },
+                        "weather__query": {
+                            "count": 204
+                        },
+                        "qa__currency": {
+                            "count": 70
+                        },
+                        "email__querycontact": {
+                            "count": 32
+                        },
+                        "general__repeat": {
+                            "count": 107
+                        },
+                        "calendar__query": {
+                            "count": 208
+                        },
+                        "calendar__set": {
+                            "count": 274
+                        },
+                        "general__quirky": {
+                            "count": 208
+                        },
+                        "email__query": {
+                            "count": 143
+                        },
+                        "takeaway__order": {
+                            "count": 40
+                        },
+                        "play__podcasts": {
+                            "count": 87
+                        },
+                        "email__sendemail": {
+                            "count": 145
+                        },
+                        "iot__coffee": {
+                            "count": 41
+                        },
+                        "general__negate": {
+                            "count": 161
+                        },
+                        "qa__factoid": {
+                            "count": 236
+                        },
+                        "alarm__remove": {
+                            "count": 28
+                        },
+                        "iot__wemo_on": {
+                            "count": 22
+                        },
+                        "news__query": {
+                            "count": 150
+                        },
+                        "play__audiobook": {
+                            "count": 50
+                        },
+                        "iot__hue_lighton": {
+                            "count": 9
+                        },
+                        "general__affirm": {
+                            "count": 110
+                        },
+                        "social__post": {
+                            "count": 107
+                        },
+                        "general__explain": {
+                            "count": 139
+                        },
+                        "transport__query": {
+                            "count": 75
+                        },
+                        "audio__volume_mute": {
+                            "count": 32
+                        },
+                        "recommendation__locations": {
+                            "count": 54
+                        },
+                        "music__likeness": {
+                            "count": 47
+                        },
+                        "play__music": {
+                            "count": 223
+                        },
+                        "iot__hue_lightup": {
+                            "count": 31
+                        },
+                        "audio__volume_up": {
+                            "count": 29
+                        },
+                        "calendar__remove": {
+                            "count": 111
+                        },
+                        "lists__query": {
+                            "count": 86
+                        },
+                        "datetime__query": {
+                            "count": 116
+                        },
+                        "qa__stock": {
+                            "count": 41
+                        },
+                        "alarm__set": {
+                            "count": 47
+                        },
+                        "iot__cleaning": {
+                            "count": 33
+                        },
+                        "general__commandstop": {
+                            "count": 47
+                        },
+                        "alarm__query": {
+                            "count": 44
+                        },
+                        "transport__taxi": {
+                            "count": 30
+                        },
+                        "iot__hue_lightoff": {
+                            "count": 47
+                        },
+                        "social__query": {
+                            "count": 30
+                        },
+                        "recommendation__events": {
+                            "count": 68
+                        },
+                        "audio__volume_other": {
+                            "count": 6
+                        },
+                        "transport__traffic": {
+                            "count": 44
+                        },
+                        "iot__hue_lightchange": {
+                            "count": 51
+                        },
+                        "email__addcontact": {
+                            "count": 13
+                        },
+                        "play__game": {
+                            "count": 53
+                        },
+                        "cooking__recipe": {
+                            "count": 75
+                        },
+                        "qa__maths": {
+                            "count": 27
+                        },
+                        "takeaway__query": {
+                            "count": 44
+                        },
+                        "general__dontcare": {
+                            "count": 95
+                        },
+                        "iot__hue_lightdim": {
+                            "count": 21
+                        },
+                        "general__confirm": {
+                            "count": 112
+                        },
+                        "music__settings": {
+                            "count": 18
+                        },
+                        "recommendation__movies": {
+                            "count": 21
+                        },
+                        "transport__ticket": {
+                            "count": 37
+                        },
+                        "general__joke": {
+                            "count": 20
+                        },
+                        "audio__volume_down": {
+                            "count": 15
+                        },
+                        "datetime__convert": {
+                            "count": 17
+                        },
+                        "music__dislikeness": {
+                            "count": 6
+                        },
+                        "iot__wemo_off": {
+                            "count": 10
+                        },
+                        "general__greet": {
+                            "count": 4
+                        },
+                        "cooking__query": {
+                            "count": 3
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 10000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 350229,
+            "min_text_length": 2,
+            "average_text_length": 35.0229,
+            "max_text_length": 153,
+            "unique_texts": 9771
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 67,
+            "labels": {
+                "qa__stock": {
+                    "count": 126
+                },
+                "weather__query": {
+                    "count": 406
+                },
+                "qa__factoid": {
+                    "count": 354
+                },
+                "alarm__set": {
+                    "count": 116
+                },
+                "general__negate": {
+                    "count": 398
+                },
+                "lists__createoradd": {
+                    "count": 104
+                },
+                "transport__query": {
+                    "count": 164
+                },
+                "datetime__query": {
+                    "count": 244
+                },
+                "qa__definition": {
+                    "count": 176
+                },
+                "play__music": {
+                    "count": 482
+                },
+                "general__quirky": {
+                    "count": 384
+                },
+                "takeaway__query": {
+                    "count": 74
+                },
+                "qa__currency": {
+                    "count": 164
+                },
+                "calendar__query": {
+                    "count": 374
+                },
+                "calendar__set": {
+                    "count": 626
+                },
+                "music__likeness": {
+                    "count": 94
+                },
+                "transport__ticket": {
+                    "count": 96
+                },
+                "email__sendemail": {
+                    "count": 286
+                },
+                "alarm__query": {
+                    "count": 90
+                },
+                "general__praise": {
+                    "count": 334
+                },
+                "iot__cleaning": {
+                    "count": 66
+                },
+                "general__commandstop": {
+                    "count": 108
+                },
+                "play__audiobook": {
+                    "count": 92
+                },
+                "iot__coffee": {
+                    "count": 76
+                },
+                "email__query": {
+                    "count": 330
+                },
+                "audio__volume_down": {
+                    "count": 36
+                },
+                "general__confirm": {
+                    "count": 206
+                },
+                "news__query": {
+                    "count": 302
+                },
+                "music__query": {
+                    "count": 102
+                },
+                "play__radio": {
+                    "count": 226
+                },
+                "cooking__recipe": {
+                    "count": 158
+                },
+                "play__podcasts": {
+                    "count": 160
+                },
+                "general__affirm": {
+                    "count": 206
+                },
+                "alarm__remove": {
+                    "count": 44
+                },
+                "iot__hue_lightoff": {
+                    "count": 74
+                },
+                "general__explain": {
+                    "count": 266
+                },
+                "social__post": {
+                    "count": 208
+                },
+                "iot__hue_lightchange": {
+                    "count": 102
+                },
+                "takeaway__order": {
+                    "count": 78
+                },
+                "recommendation__events": {
+                    "count": 144
+                },
+                "lists__remove": {
+                    "count": 134
+                },
+                "general__dontcare": {
+                    "count": 174
+                },
+                "iot__wemo_on": {
+                    "count": 22
+                },
+                "transport__traffic": {
+                    "count": 76
+                },
+                "social__query": {
+                    "count": 72
+                },
+                "qa__maths": {
+                    "count": 64
+                },
+                "calendar__remove": {
+                    "count": 154
+                },
+                "lists__query": {
+                    "count": 162
+                },
+                "play__game": {
+                    "count": 90
+                },
+                "general__repeat": {
+                    "count": 236
+                },
+                "iot__hue_lightdim": {
+                    "count": 38
+                },
+                "music__settings": {
+                    "count": 22
+                },
+                "music__dislikeness": {
+                    "count": 12
+                },
+                "email__addcontact": {
+                    "count": 40
+                },
+                "iot__hue_lighton": {
+                    "count": 14
+                },
+                "iot__wemo_off": {
+                    "count": 50
+                },
+                "recommendation__locations": {
+                    "count": 106
+                },
+                "email__querycontact": {
+                    "count": 76
+                },
+                "recommendation__movies": {
+                    "count": 42
+                },
+                "iot__hue_lightup": {
+                    "count": 46
+                },
+                "audio__volume_up": {
+                    "count": 40
+                },
+                "audio__volume_mute": {
+                    "count": 60
+                },
+                "transport__taxi": {
+                    "count": 76
+                },
+                "general__joke": {
+                    "count": 66
+                },
+                "datetime__convert": {
+                    "count": 32
+                },
+                "general__greet": {
+                    "count": 12
+                },
+                "audio__volume_other": {
+                    "count": 8
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "rus-eng": {
+                "num_samples": 5000,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 172389,
+                    "min_text_length": 2,
+                    "average_text_length": 34.4778,
+                    "max_text_length": 142,
+                    "unique_texts": 5000
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 67,
+                    "labels": {
+                        "qa__stock": {
+                            "count": 63
+                        },
+                        "weather__query": {
+                            "count": 203
+                        },
+                        "qa__factoid": {
+                            "count": 177
+                        },
+                        "alarm__set": {
+                            "count": 58
+                        },
+                        "general__negate": {
+                            "count": 199
+                        },
+                        "lists__createoradd": {
+                            "count": 52
+                        },
+                        "transport__query": {
+                            "count": 82
+                        },
+                        "datetime__query": {
+                            "count": 122
+                        },
+                        "qa__definition": {
+                            "count": 88
+                        },
+                        "play__music": {
+                            "count": 241
+                        },
+                        "general__quirky": {
+                            "count": 192
+                        },
+                        "takeaway__query": {
+                            "count": 37
+                        },
+                        "qa__currency": {
+                            "count": 82
+                        },
+                        "calendar__query": {
+                            "count": 187
+                        },
+                        "calendar__set": {
+                            "count": 313
+                        },
+                        "music__likeness": {
+                            "count": 47
+                        },
+                        "transport__ticket": {
+                            "count": 48
+                        },
+                        "email__sendemail": {
+                            "count": 143
+                        },
+                        "alarm__query": {
+                            "count": 45
+                        },
+                        "general__praise": {
+                            "count": 167
+                        },
+                        "iot__cleaning": {
+                            "count": 33
+                        },
+                        "general__commandstop": {
+                            "count": 54
+                        },
+                        "play__audiobook": {
+                            "count": 46
+                        },
+                        "iot__coffee": {
+                            "count": 38
+                        },
+                        "email__query": {
+                            "count": 165
+                        },
+                        "audio__volume_down": {
+                            "count": 18
+                        },
+                        "general__confirm": {
+                            "count": 103
+                        },
+                        "news__query": {
+                            "count": 151
+                        },
+                        "music__query": {
+                            "count": 51
+                        },
+                        "play__radio": {
+                            "count": 113
+                        },
+                        "cooking__recipe": {
+                            "count": 79
+                        },
+                        "play__podcasts": {
+                            "count": 80
+                        },
+                        "general__affirm": {
+                            "count": 103
+                        },
+                        "alarm__remove": {
+                            "count": 22
+                        },
+                        "iot__hue_lightoff": {
+                            "count": 37
+                        },
+                        "general__explain": {
+                            "count": 133
+                        },
+                        "social__post": {
+                            "count": 104
+                        },
+                        "iot__hue_lightchange": {
+                            "count": 51
+                        },
+                        "takeaway__order": {
+                            "count": 39
+                        },
+                        "recommendation__events": {
+                            "count": 72
+                        },
+                        "lists__remove": {
+                            "count": 67
+                        },
+                        "general__dontcare": {
+                            "count": 87
+                        },
+                        "iot__wemo_on": {
+                            "count": 11
+                        },
+                        "transport__traffic": {
+                            "count": 38
+                        },
+                        "social__query": {
+                            "count": 36
+                        },
+                        "qa__maths": {
+                            "count": 32
+                        },
+                        "calendar__remove": {
+                            "count": 77
+                        },
+                        "lists__query": {
+                            "count": 81
+                        },
+                        "play__game": {
+                            "count": 45
+                        },
+                        "general__repeat": {
+                            "count": 118
+                        },
+                        "iot__hue_lightdim": {
+                            "count": 19
+                        },
+                        "music__settings": {
+                            "count": 11
+                        },
+                        "music__dislikeness": {
+                            "count": 6
+                        },
+                        "email__addcontact": {
+                            "count": 20
+                        },
+                        "iot__hue_lighton": {
+                            "count": 7
+                        },
+                        "iot__wemo_off": {
+                            "count": 25
+                        },
+                        "recommendation__locations": {
+                            "count": 53
+                        },
+                        "email__querycontact": {
+                            "count": 38
+                        },
+                        "recommendation__movies": {
+                            "count": 21
+                        },
+                        "iot__hue_lightup": {
+                            "count": 23
+                        },
+                        "audio__volume_up": {
+                            "count": 20
+                        },
+                        "audio__volume_mute": {
+                            "count": 30
+                        },
+                        "transport__taxi": {
+                            "count": 38
+                        },
+                        "general__joke": {
+                            "count": 33
+                        },
+                        "datetime__convert": {
+                            "count": 16
+                        },
+                        "general__greet": {
+                            "count": 6
+                        },
+                        "audio__volume_other": {
+                            "count": 4
+                        }
+                    }
+                }
+            },
+            "rus": {
+                "num_samples": 5000,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 177840,
+                    "min_text_length": 2,
+                    "average_text_length": 35.568,
+                    "max_text_length": 153,
+                    "unique_texts": 4781
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 67,
+                    "labels": {
+                        "qa__stock": {
+                            "count": 63
+                        },
+                        "weather__query": {
+                            "count": 203
+                        },
+                        "qa__factoid": {
+                            "count": 177
+                        },
+                        "alarm__set": {
+                            "count": 58
+                        },
+                        "general__negate": {
+                            "count": 199
+                        },
+                        "lists__createoradd": {
+                            "count": 52
+                        },
+                        "transport__query": {
+                            "count": 82
+                        },
+                        "datetime__query": {
+                            "count": 122
+                        },
+                        "qa__definition": {
+                            "count": 88
+                        },
+                        "play__music": {
+                            "count": 241
+                        },
+                        "general__quirky": {
+                            "count": 192
+                        },
+                        "takeaway__query": {
+                            "count": 37
+                        },
+                        "qa__currency": {
+                            "count": 82
+                        },
+                        "calendar__query": {
+                            "count": 187
+                        },
+                        "calendar__set": {
+                            "count": 313
+                        },
+                        "music__likeness": {
+                            "count": 47
+                        },
+                        "transport__ticket": {
+                            "count": 48
+                        },
+                        "email__sendemail": {
+                            "count": 143
+                        },
+                        "alarm__query": {
+                            "count": 45
+                        },
+                        "general__praise": {
+                            "count": 167
+                        },
+                        "iot__cleaning": {
+                            "count": 33
+                        },
+                        "general__commandstop": {
+                            "count": 54
+                        },
+                        "play__audiobook": {
+                            "count": 46
+                        },
+                        "iot__coffee": {
+                            "count": 38
+                        },
+                        "email__query": {
+                            "count": 165
+                        },
+                        "audio__volume_down": {
+                            "count": 18
+                        },
+                        "general__confirm": {
+                            "count": 103
+                        },
+                        "news__query": {
+                            "count": 151
+                        },
+                        "music__query": {
+                            "count": 51
+                        },
+                        "play__radio": {
+                            "count": 113
+                        },
+                        "cooking__recipe": {
+                            "count": 79
+                        },
+                        "play__podcasts": {
+                            "count": 80
+                        },
+                        "general__affirm": {
+                            "count": 103
+                        },
+                        "alarm__remove": {
+                            "count": 22
+                        },
+                        "iot__hue_lightoff": {
+                            "count": 37
+                        },
+                        "general__explain": {
+                            "count": 133
+                        },
+                        "social__post": {
+                            "count": 104
+                        },
+                        "iot__hue_lightchange": {
+                            "count": 51
+                        },
+                        "takeaway__order": {
+                            "count": 39
+                        },
+                        "recommendation__events": {
+                            "count": 72
+                        },
+                        "lists__remove": {
+                            "count": 67
+                        },
+                        "general__dontcare": {
+                            "count": 87
+                        },
+                        "iot__wemo_on": {
+                            "count": 11
+                        },
+                        "transport__traffic": {
+                            "count": 38
+                        },
+                        "social__query": {
+                            "count": 36
+                        },
+                        "qa__maths": {
+                            "count": 32
+                        },
+                        "calendar__remove": {
+                            "count": 77
+                        },
+                        "lists__query": {
+                            "count": 81
+                        },
+                        "play__game": {
+                            "count": 45
+                        },
+                        "general__repeat": {
+                            "count": 118
+                        },
+                        "iot__hue_lightdim": {
+                            "count": 19
+                        },
+                        "music__settings": {
+                            "count": 11
+                        },
+                        "music__dislikeness": {
+                            "count": 6
+                        },
+                        "email__addcontact": {
+                            "count": 20
+                        },
+                        "iot__hue_lighton": {
+                            "count": 7
+                        },
+                        "iot__wemo_off": {
+                            "count": 25
+                        },
+                        "recommendation__locations": {
+                            "count": 53
+                        },
+                        "email__querycontact": {
+                            "count": 38
+                        },
+                        "recommendation__movies": {
+                            "count": 21
+                        },
+                        "iot__hue_lightup": {
+                            "count": 23
+                        },
+                        "audio__volume_up": {
+                            "count": 20
+                        },
+                        "audio__volume_mute": {
+                            "count": 30
+                        },
+                        "transport__taxi": {
+                            "count": 38
+                        },
+                        "general__joke": {
+                            "count": 33
+                        },
+                        "datetime__convert": {
+                            "count": 16
+                        },
+                        "general__greet": {
+                            "count": 6
+                        },
+                        "audio__volume_other": {
+                            "count": 4
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
