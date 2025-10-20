@@ -251,23 +251,6 @@ convention = "google"
 mypy-init-return = true
 suppress-none-returning = true
 
-[tool.semantic_release]
-branch = "main"
-version_toml = ["pyproject.toml:project.version"]
-build_command = "python -m pip install build; python -m build"
-tag_format = "{version}"
-
-[tool.semantic_release.commit_parser_options]
-major_tags = ["breaking"]
-minor_tags = ["minor", "feat"]
-patch_tags = [
-    "patch",
-    "fix",
-    "perf",
-    "model",
-    "dataset",
-]
-
 [tool.pytest.ini_options]
 addopts = """
             --reruns 3
