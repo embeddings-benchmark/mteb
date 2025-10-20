@@ -1,0 +1,228 @@
+from __future__ import annotations
+
+from collections.abc import Iterable
+from functools import partial
+from typing import Any
+
+import numpy as np
+import torch
+import torchaudio
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+from mteb._requires_package import requires_package
+from mteb.models import ModelMeta
+from mteb.models.models_protocols import AudioBatch
+from mteb.types import Array, PromptType
+
+
+class MuQMuLanWrapper:
+    def __init__(
+        self,
+        model_name: str = "OpenMuQ/MuQ-MuLan-large",
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        max_audio_length_s: float = 30.0,
+        **kwargs: Any,
+    ):
+        requires_package(self, "muq", "pip install 'mteb[muq]'")
+        from muq import MuQMuLan
+
+        self.model_name = model_name
+        self.device = device
+        self.target_sampling_rate = 24000
+        self.max_audio_length_s = max_audio_length_s
+
+        # Load the model
+        self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
+
+    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+        """Process audio batch and return list of tensors."""
+        processed_audio = []
+
+        if isinstance(audio, DataLoader):
+            for batch in audio:
+                processed_audio.extend(self._handle_batch(batch))
+        else:
+            processed_audio = self._handle_batch(audio)
+
+        return processed_audio
+
+    def _handle_batch(
+        self, batch: Array | Iterable[tuple[Array, str]]
+    ) -> list[torch.Tensor]:
+        """Handle a single batch of audio data."""
+        waveforms = []
+
+        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
+            for audio, _ in batch:
+                waveforms.append(self._convert_audio(audio))
+        else:
+            for item in batch:
+                if isinstance(item, dict):
+                    if "array" in item:
+                        audio = item["array"]
+                        # Convert to torch tensor and ensure float32
+                        if isinstance(audio, np.ndarray):
+                            waveform = torch.from_numpy(audio).float()
+                        elif isinstance(audio, list):
+                            waveform = torch.tensor(audio, dtype=torch.float32)
+                        else:
+                            waveform = (
+                                audio.float()
+                            )  # assume it's already a torch.Tensor
+                        # Resample if needed
+                        if (
+                            item.get("sampling_rate", self.target_sampling_rate)
+                            != self.target_sampling_rate
+                        ):
+                            resampler = torchaudio.transforms.Resample(
+                                item["sampling_rate"], self.target_sampling_rate
+                            )
+                            waveform = resampler(waveform)
+                        waveforms.append(self._convert_audio(waveform))
+                    elif "path" in item:
+                        waveforms.append(self._load_audio_file(item["path"]))
+                elif isinstance(item, (np.ndarray, torch.Tensor)):
+                    waveforms.append(self._convert_audio(item))
+                elif isinstance(item, str):
+                    waveforms.append(self._load_audio_file(item))
+
+        return waveforms
+
+    def _convert_audio(self, audio: Array) -> torch.Tensor:
+        """Convert audio data to torch tensor."""
+        if isinstance(audio, np.ndarray):
+            audio = torch.from_numpy(audio)
+        audio = audio.squeeze().float()  # Ensure float32
+
+        # Apply audio truncation (30 seconds max)
+        max_length_samples = int(self.max_audio_length_s * self.target_sampling_rate)
+        if audio.shape[-1] > max_length_samples:
+            audio = audio[..., :max_length_samples]
+
+        return audio
+
+    def _load_audio_file(self, path: str) -> torch.Tensor:
+        """Load audio file and resample to target sampling rate."""
+        waveform, sample_rate = torchaudio.load(path)
+        waveform = waveform.float()  # Ensure float32
+
+        if sample_rate != self.target_sampling_rate:
+            resampler = torchaudio.transforms.Resample(
+                sample_rate, self.target_sampling_rate
+            )
+            waveform = resampler(waveform)
+
+        return waveform.squeeze()
+
+    def get_audio_embeddings(
+        self,
+        audio: AudioBatch,
+        *,
+        show_progress_bar: bool = True,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 4,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        """Get audio embeddings using MuQ-MuLan."""
+        all_features = []
+
+        processed_audio = self._process_audio(audio)
+
+        for i in tqdm(
+            range(0, len(processed_audio), batch_size),
+            desc="Processing audio batches",
+            disable=not show_progress_bar,
+        ):
+            batch = processed_audio[i : i + batch_size]
+            batch_features = self._process_audio_batch(batch)
+            all_features.extend(batch_features)
+
+        return np.vstack(all_features)
+
+    def _process_audio_batch(self, batch: list[torch.Tensor]) -> list[np.ndarray]:
+        """Process a batch of audio tensors efficiently."""
+        try:
+            # Try batch processing first
+            # Find max length and pad all tensors
+            max_length = max(tensor.shape[-1] for tensor in batch)
+            batch_tensor = torch.zeros(len(batch), max_length, dtype=torch.float32)
+
+            for idx, tensor in enumerate(batch):
+                length = tensor.shape[-1]
+                batch_tensor[idx, :length] = tensor
+
+            batch_tensor = batch_tensor.to(self.device)
+
+            with torch.no_grad():
+                # Process entire batch at once
+                audio_embeds = self.model(wavs=batch_tensor)
+                return [embed.cpu().numpy().reshape(1, -1) for embed in audio_embeds]
+
+        except Exception:
+            # Fallback to individual processing if batch processing fails
+            batch_features = []
+            for tensor in batch:
+                wavs = tensor.unsqueeze(0).to(self.device)
+                with torch.no_grad():
+                    audio_embeds = self.model(wavs=wavs)
+                    batch_features.append(audio_embeds.cpu().numpy())
+            return batch_features
+
+    def get_text_embeddings(
+        self,
+        texts: list[str],
+        **kwargs: Any,
+    ) -> np.ndarray:
+        """Get text embeddings using MuQ-MuLan."""
+        with torch.no_grad():
+            text_embeds = self.model(texts=texts)
+
+        return text_embeds.cpu().numpy()
+
+    def encode(
+        self,
+        inputs: list[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        """Encode inputs (audio or text) into embeddings."""
+        return self.get_text_embeddings(inputs, **kwargs)
+
+    def calc_similarity(
+        self, audio_embeds: np.ndarray, text_embeds: np.ndarray
+    ) -> np.ndarray:
+        """Calculate similarity between audio and text embeddings."""
+        audio_tensor = torch.from_numpy(audio_embeds).to(self.device)
+        text_tensor = torch.from_numpy(text_embeds).to(self.device)
+
+        with torch.no_grad():
+            similarity = self.model.calc_similarity(audio_tensor, text_tensor)
+
+        return similarity.cpu().numpy()
+
+
+muq_mulan_large = ModelMeta(
+    loader=partial(MuQMuLanWrapper, model_name="OpenMuQ/MuQ-MuLan-large"),
+    name="OpenMuQ/MuQ-MuLan-large",
+    languages=["eng-Latn", "zho-Hans"],  # English and Chinese support
+    revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",
+    release_date="2025-01-01",
+    modalities=["audio", "text"],
+    n_parameters=630_000_000,
+    memory_usage_mb=2530,
+    max_tokens=None,
+    embed_dim=512,
+    license="cc-by-nc-4.0",
+    open_weights=True,
+    public_training_code="https://github.com/tencent-ailab/MuQ",
+    public_training_data="https://github.com/tencent-ailab/MuQ",
+    framework=["PyTorch"],
+    reference="https://huggingface.co/OpenMuQ/MuQ-MuLan-large",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={},
+)

@@ -70,6 +70,42 @@ TaskSubtype = Literal[
     "Duplicate Detection",
     "Rendered semantic textual similarity",
     "Intent classification",
+    "Accent identification",
+    "Environment Sound Classification",
+    "Gunshot Audio Classification",
+    "Keyword Spotting",
+    "Instrument Source Classification",
+    "Music Genre Classification",
+    "Music Instrument Recognition",
+    "Spoken Language Identification",
+    "Stroke Classification of Musical Instrument",
+    "Tonic Classification of Musical Instrument",
+    "Speaker Count Identification",
+    "Species Classification",
+    "Spoken Digit Classification",
+    "Gender Clustering",
+    "Vocal Sound Classification",
+    "Music Clustering",
+    "Accent Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
+    "Sentiment Analysis",
+    "Vehicle Clustering",
+    "Environment Sound Clustering",
+    "Environment Sound Reranking",
+    "Emotion Reranking",
+    "Music Genre Reranking",
+    "Gender Classification",
+    "Age Classification",
+    "Song Lyrics Retrieval",
+    "Natural Sound Retrieval",
+    "Music Caption Retrieval",
+    "Speech Transcription Retrieval",
+    "Emotional Speech Retrieval",
+    "Environment Sound Retrieval",
+    "Speech Retrieval",
+    "Question Answering Retrieval",
+    "Reading Comprehension",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -98,6 +134,9 @@ TaskDomain = Literal[
     "Chemistry",
     "Financial",
     "Entertainment",
+    "AudioScene",
+    "Speech",
+    "Spoken",
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -134,20 +173,36 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
+MAEB_TASK_TYPE = (
+    "AudioClustering",
+    "AudioMultilabelClassification",
+    "AudioReranking",
+    "AudioZeroshotClassification",
+    "AudioClassification",
+    "AudioCrossFoldClassification",
+    "AudioPairClassification",
+    "Any2AnyRetrieval",
+)
+
+
 _TASK_TYPE = (
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Regression",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "InstructionReranking",
-) + MIEB_TASK_TYPE
+    (
+        "BitextMining",
+        "Classification",
+        "MultilabelClassification",
+        "Clustering",
+        "PairClassification",
+        "Regression",
+        "Reranking",
+        "Retrieval",
+        "STS",
+        "Summarization",
+        "InstructionRetrieval",
+        "InstructionReranking",
+    )
+    + MIEB_TASK_TYPE
+    + MAEB_TASK_TYPE
+)
 
 TaskType = Literal[_TASK_TYPE]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
@@ -165,6 +220,14 @@ TaskCategory = Literal[
     "i2it",
     "t2it",
     "it2it",
+    "a2a",
+    "a2t",
+    "t2a",
+    "at2t",
+    "at2a",
+    "a2at",
+    "t2at",
+    "at2at",
 ]
 """The category of the task.
 
@@ -179,6 +242,14 @@ TaskCategory = Literal[
 9. i2it: image to image+text
 10. t2it: text to image+text
 11. it2it: image+text to image+text
+12. a2a: audio to audio
+13. a2t: audio to text
+14. t2a: text to audio
+15. at2t: audio+text to text
+16. at2a: audio+text to audio
+17. a2at: audio to audio+text
+18. t2at: text to audio+text
+19. at2at: audio+text to audio+text
 """
 
 AnnotatorType = Literal[
@@ -187,6 +258,9 @@ AnnotatorType = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
+    "automatic",  # any postprocessing using (Audio/Image/Video) models
+    "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
 """The type of the annotators. Is often important for understanding the quality of a dataset."""
 
