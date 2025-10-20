@@ -205,7 +205,7 @@ hubert_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets={},  # "LibriSpeech": ["train"]},
+    training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
@@ -231,6 +231,6 @@ hubert_large_ft = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets={},  # "LibriSpeech": ["train"]},
+    training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )

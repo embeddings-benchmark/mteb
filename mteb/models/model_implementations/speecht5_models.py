@@ -268,7 +268,7 @@ speecht5_asr = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="https://www.openslr.org/12",
-    training_datasets={},  # {"LibriSpeech": ["train"]},
+    training_datasets=set(),  # {"LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
@@ -294,7 +294,7 @@ speecht5_tts = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="https://www.openslr.org/12",
-    training_datasets={},  # {"LibriTTS": ["train"]},
+    training_datasets=set(),  # {"LibriTTS": ["train"]},
     modalities=["text"],
 )
 
@@ -320,6 +320,6 @@ speecht5_multimodal = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/microsoft/SpeechT5",
     public_training_data="http://www.festvox.org/cmu_arctic/",
-    training_datasets={},
+    training_datasets=set(),
     modalities=["audio", "text"],
 )

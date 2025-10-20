@@ -12,7 +12,7 @@ import tqdm
 from datasets import Dataset, Features, Value, concatenate_datasets, load_dataset
 from PIL import Image
 
-from mteb import AbsTask
+from mteb.abstastks import AbsTask, EncoderProtocol
 from mteb.evaluation.evaluators.image.any2any_retrieval_evaluator import (
     Any2AnyRetrievalEvaluator,
 )

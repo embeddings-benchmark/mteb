@@ -240,6 +240,6 @@ ast_audioset = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/YuanGongND/ast",
     public_training_data="https://research.google.com/audioset/dataset/index.html",
-    training_datasets={},  # "AudioSet": ["train"]},
+    training_datasets=set(),  # "AudioSet": ["train"]},
     modalities=["audio"],
 )

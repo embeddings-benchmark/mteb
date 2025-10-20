@@ -9,9 +9,9 @@ import torch
 from sklearn import metrics
 from torch.utils.data import DataLoader
 
-from evaluators.dataset_utils import Arrayset, custom_collate_fn
-from mteb import EncoderProtocol
 from mteb._evaluators import Evaluator
+from mteb.evaluation.evaluators.dataset_utils import AudioDataset, custom_collate_fn
+from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
             **kwargs: Additional keyword arguments
         """
         super().__init__(**kwargs)
-        self.dataset = Arrayset(
+        self.dataset = AudioDataset(
             dataset, audio_column_name=audio_column_name, transform=transform
         )
         self.labels = dataset[label_column_name]

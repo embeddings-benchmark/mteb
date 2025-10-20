@@ -13,8 +13,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb import AbsTask
 from mteb.abstasks.task_metadata import HFSubset
+from mteb.abstastks import AbsTask
 from mteb.models.models_protocols import AudioEncoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -243,10 +242,7 @@ class MCTCTWrapper(AbsEncoder):
 
 
 mctct_large = ModelMeta(
-    loader=partial(
-        MCTCTWrapper,
-        model_name="speechbrain/m-ctc-t-large",
-    ),
+    loader=MCTCTWrapper,
     name="speechbrain/m-ctc-t-large",
     languages=COMMON_VOICE_LANGUAGES,  # Supports 60 languages
     open_weights=True,
@@ -263,6 +259,6 @@ mctct_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data="https://github.com/speechbrain/speechbrain",
-    training_datasets={"Common Voice": ["train"], "VoxPopuli": ["train"]},
+    training_datasets={"Common Voice", "VoxPopuli"},
     modalities=["audio"],
 )

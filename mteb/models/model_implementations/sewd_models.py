@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -182,10 +181,7 @@ class SewDWrapper(AbsEncoder):
 
 
 sewd_base = ModelMeta(
-    loader=partial(
-        SewDWrapper,
-        model_name="asapp/sew-d-base-plus-400k-ft-ls100h",
-    ),
+    loader=SewDWrapper,
     name="asapp/sew-d-base-plus-400k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
@@ -202,15 +198,12 @@ sewd_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
+    training_datasets={"LibriSpeech"},
     modalities=["audio"],
 )
 
 sewd_tiny = ModelMeta(
-    loader=partial(
-        SewDWrapper,
-        model_name="asapp/sew-d-tiny-100k-ft-ls100h",
-    ),
+    loader=SewDWrapper,
     name="asapp/sew-d-tiny-100k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
@@ -227,15 +220,12 @@ sewd_tiny = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
+    training_datasets={"LibriSpeech"},
     modalities=["audio"],
 )
 
 sewd_mid = ModelMeta(
-    loader=partial(
-        SewDWrapper,
-        model_name="asapp/sew-d-mid-400k-ft-ls100h",
-    ),
+    loader=SewDWrapper,
     name="asapp/sew-d-mid-400k-ft-ls100h",
     languages=["eng-Latn"],
     open_weights=True,
@@ -252,6 +242,6 @@ sewd_mid = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
+    training_datasets={"LibriSpeech"},
     modalities=["audio"],
 )

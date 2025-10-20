@@ -169,7 +169,7 @@ class ClapZeroShotWrapper:
 
 # Model metadata
 clap_htsat_fused = ModelMeta(
-    loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-fused"),
+    loader=ClapZeroShotWrapper,
     name="laion/clap-htsat-fused",
     languages=["eng-Latn"],
     revision="cca9e288ab447cee67d9ada1f85ddb46500f1401",
@@ -187,14 +187,14 @@ clap_htsat_fused = ModelMeta(
     reference="https://huggingface.co/laion/clap_htsat_fused",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },
+    ),
 )
 
 
 clap_htsat_unfused = ModelMeta(
-    loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-unfused"),
+    loader=ClapZeroShotWrapper,
     name="laion/clap-htsat-unfused",
     languages=["eng-Latn"],
     revision="8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
@@ -212,13 +212,13 @@ clap_htsat_unfused = ModelMeta(
     reference="https://huggingface.co/laion/clap_htsat_unfused",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },
+    ),
 )
 
 larger_clap_general = ModelMeta(
-    loader=partial(ClapZeroShotWrapper, model_name="laion/larger_clap_general"),
+    loader=ClapZeroShotWrapper,
     name="laion/larger_clap_general",
     languages=["eng-Latn"],
     revision="ada0c23a36c4e8582805bb38fec3905903f18b41",
@@ -236,13 +236,13 @@ larger_clap_general = ModelMeta(
     reference="https://huggingface.co/laion/larger_clap_general",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
 
 larger_clap_music = ModelMeta(
-    loader=partial(ClapZeroShotWrapper, model_name="laion/larger_clap_music"),
+    loader=ClapZeroShotWrapper,
     name="laion/larger_clap_music",
     languages=["eng-Latn"],
     revision="a0b4534a14f58e20944452dff00a22a06ce629d1",
@@ -260,9 +260,9 @@ larger_clap_music = ModelMeta(
     reference="https://huggingface.co/laion/larger_clap_music",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
 
 larger_clap_music_and_speech = ModelMeta(
@@ -286,7 +286,7 @@ larger_clap_music_and_speech = ModelMeta(
     reference="https://huggingface.co/laion/larger_clap_music_and_speech",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
+    training_datasets=set(
         # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
 )

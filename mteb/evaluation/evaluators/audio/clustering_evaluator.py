@@ -10,7 +10,7 @@ from distlib.markers import Evaluator
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
-from mteb import EncoderProtocol
+from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
 

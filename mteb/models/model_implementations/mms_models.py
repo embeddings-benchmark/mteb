@@ -230,7 +230,7 @@ mms_1b_all = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets={},
+    training_datasets=set(),
     modalities=["audio"],
 )
 
@@ -255,7 +255,7 @@ mms_1b_fl102 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets={},
+    training_datasets=set(),
     modalities=["audio"],
 )
 
@@ -280,6 +280,6 @@ mms_1b_l1107 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
     public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets={},
+    training_datasets=set(),
     modalities=["audio"],
 )

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -206,7 +205,7 @@ class MuQMuLanWrapper:
 
 
 muq_mulan_large = ModelMeta(
-    loader=partial(MuQMuLanWrapper, model_name="OpenMuQ/MuQ-MuLan-large"),
+    loader=MuQMuLanWrapper,
     name="OpenMuQ/MuQ-MuLan-large",
     languages=["eng-Latn", "zho-Hans"],  # English and Chinese support
     revision="8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe8a081dbcf84edd47ea7db3c4ecb8fd1ec1ddacfe",
@@ -224,5 +223,5 @@ muq_mulan_large = ModelMeta(
     reference="https://huggingface.co/OpenMuQ/MuQ-MuLan-large",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={},
+    training_datasets=set(),
 )

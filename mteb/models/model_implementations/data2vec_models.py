@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -185,10 +184,7 @@ class Data2VecAudioWrapper(AbsEncoder):
 
 # Base model
 data2vec_audio_base = ModelMeta(
-    loader=partial(
-        Data2VecAudioWrapper,
-        model_name="facebook/data2vec-audio-base-960h",
-    ),
+    loader=Data2VecAudioWrapper,
     name="facebook/data2vec-audio-base-960h",
     languages=["eng-Latn"],
     open_weights=True,
@@ -205,15 +201,12 @@ data2vec_audio_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets={},  # "LibriSpeech": ["train"]},
+    training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
 data2vec_audio_large = ModelMeta(
-    loader=partial(
-        Data2VecAudioWrapper,
-        model_name="facebook/data2vec-audio-large-960h",
-    ),
+    loader=Data2VecAudioWrapper,
     name="facebook/data2vec-audio-large-960h",
     languages=["eng-Latn"],
     open_weights=True,
@@ -230,6 +223,6 @@ data2vec_audio_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets={},  # "LibriSpeech": ["train"]},
+    training_datasets=set(),  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )

@@ -16,8 +16,8 @@ from sklearn.metrics import (
 from torch.utils.data import DataLoader
 from torchaudio import transforms
 
-from evaluators.dataset_utils import Arrayset, custom_collate_fn
 from mteb._evaluators import Evaluator
+from mteb.evaluation.evaluators.dataset_utils import AudioDataset, custom_collate_fn
 
 logger = logging.getLogger(__name__)
 
@@ -52,12 +52,12 @@ class AudiologRegClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = Arrayset(
+        self.dataset_train = AudioDataset(
             dataset_train, audio_column_name=audio_column_name, transform=None
         )
 
         self.y_train = dataset_train[label_column_name]
-        self.dataset_test = Arrayset(
+        self.dataset_test = AudioDataset(
             dataset_test, audio_column_name=audio_column_name, transform=None
         )
         self.y_test = dataset_test[label_column_name]

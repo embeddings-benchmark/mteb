@@ -4,7 +4,7 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb import AbsTask
+from mteb.abstastks import AbsTask
 from mteb.evaluation.evaluators.audio.audio_reranking_evaluator import (
     AudioRerankingEvaluator,
 )

@@ -12,8 +12,8 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb import EncoderProtocol
 from mteb._evaluators import Evaluator
+from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)
 

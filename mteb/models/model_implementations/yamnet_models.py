@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -230,7 +229,7 @@ def yamnet_loader(**kwargs):
 
 
 yamnet = ModelMeta(
-    loader=partial(yamnet_loader),
+    loader=yamnet_loader,
     name="google/yamnet",
     languages=["eng-Latn"],
     open_weights=True,
@@ -247,6 +246,8 @@ yamnet = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/tensorflow/models/tree/master/research/audioset/yamnet",
     public_training_data="https://research.google.com/audioset/",
-    training_datasets={"AudioSet": ["train"]},
+    training_datasets={
+        "AudioSet",
+    },
     modalities=["audio"],
 )

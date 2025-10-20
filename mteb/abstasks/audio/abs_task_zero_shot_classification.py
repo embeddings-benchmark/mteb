@@ -5,8 +5,9 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb import AbsTask, EncoderProtocol
+from mteb.abstasks import AbsTask
 from mteb.evaluation.evaluators import AudioZeroshotClassificationEvaluator
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -224,7 +223,7 @@ class Wav2ClipZeroShotWrapper:
 
 
 wav2clip_zero = ModelMeta(
-    loader=partial(Wav2ClipZeroShotWrapper),
+    loader=Wav2ClipZeroShotWrapper,
     name="lyrebird/wav2clip",
     languages=["eng-Latn"],
     revision="N/A",
@@ -242,9 +241,9 @@ wav2clip_zero = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/descriptinc/lyrebird-wav2clip",
     public_training_data="https://github.com/descriptinc/lyrebird-wav2clip#data",
-    training_datasets={
+    training_datasets=set(
         # "AudioSet": ["https://research.google.com/audioset/"],
         # "FreeSound": ["https://freesound.org/"],
         # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
-    },
+    ),
 )

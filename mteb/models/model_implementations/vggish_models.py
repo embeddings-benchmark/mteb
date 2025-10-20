@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -220,7 +219,7 @@ def vggish_loader(**kwargs):
 
 
 vggish = ModelMeta(
-    loader=partial(vggish_loader),
+    loader=vggish_loader,
     name="google/vggish",
     languages=["eng-Latn"],
     open_weights=True,
@@ -237,6 +236,8 @@ vggish = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/tensorflow/models/tree/master/research/audioset/vggish",
     public_training_data="https://research.google.com/audioset/",
-    training_datasets={"AudioSet": ["train"]},
+    training_datasets={
+        "AudioSet",
+    },
     modalities=["audio"],
 )

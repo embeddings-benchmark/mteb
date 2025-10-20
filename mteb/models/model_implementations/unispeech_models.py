@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -186,10 +185,7 @@ class UniSpeechWrapper(AbsEncoder):
 
 
 unispeech_base = ModelMeta(
-    loader=partial(
-        UniSpeechWrapper,
-        model_name="microsoft/unispeech-sat-base-100h-libri-ft",
-    ),
+    loader=UniSpeechWrapper,
     name="microsoft/unispeech-sat-base-100h-libri-ft",
     languages=["eng-Latn"],
     open_weights=True,
@@ -206,6 +202,6 @@ unispeech_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={"LibriSpeech": ["train"]},
+    training_datasets={"LibriSpeech"},
     modalities=["audio"],
 )

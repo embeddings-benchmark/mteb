@@ -4,7 +4,7 @@ import logging
 
 from datasets import Dataset
 
-from mteb import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.evaluation.evaluators.audio.audio_pair_classification_evaluator import (
     AudioPairClassificationEvaluator,
 )

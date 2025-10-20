@@ -315,7 +315,7 @@ wav2vec2_xlsr_300m = ModelMeta(
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-300m",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={},
+    training_datasets=set(),
 )
 
 wav2vec2_xlsr_300m_phoneme = ModelMeta(

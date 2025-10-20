@@ -261,7 +261,7 @@ ms_clap_2022 = ModelMeta(
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={},
+    training_datasets=set(),
 )
 
 ms_clap_2023 = ModelMeta(
@@ -283,5 +283,5 @@ ms_clap_2023 = ModelMeta(
     reference="https://github.com/microsoft/CLAP",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={},
+    training_datasets=set(),
 )

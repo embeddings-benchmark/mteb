@@ -2,7 +2,6 @@ from .georeview_classification import GeoreviewClassification, GeoreviewClassifi
 from .headline_classification import HeadlineClassification, HeadlineClassificationV2
 from .inappropriateness_classification import (
     InappropriatenessClassification,
-    InappropriatenessClassificationV2,
     InappropriatenessClassificationv2,
 )
 from .kinopoisk_classification import KinopoiskClassification
@@ -27,7 +26,6 @@ __all__ = [
     "HeadlineClassification",
     "HeadlineClassificationV2",
     "InappropriatenessClassification",
-    "InappropriatenessClassificationV2",
     "InappropriatenessClassificationv2",
     "KinopoiskClassification",
     "RuReviewsClassification",

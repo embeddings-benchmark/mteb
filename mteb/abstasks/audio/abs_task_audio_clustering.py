@@ -8,9 +8,10 @@ from typing import Any
 import numpy as np
 from datasets import DatasetDict
 
-from mteb import AbsTask, EncoderProtocol
+from mteb.abstasks import AbsTask
 from mteb.abstasks.clustering import _evaluate_clustering_bootstrapped
 from mteb.abstasks.task_metadata import HFSubset
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)

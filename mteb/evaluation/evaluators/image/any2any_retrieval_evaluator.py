@@ -17,7 +17,8 @@ from distlib.markers import Evaluator
 from PIL import Image
 from torch.utils.data import DataLoader
 
-from mteb import EncoderProtocol
+from mteb.models.models_protocols import EncoderProtocol
+
 from mteb._evaluators._download import download
 from mteb._evaluators.retrieval_metrics import (
     confidence_scores,

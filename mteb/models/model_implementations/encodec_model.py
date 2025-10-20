@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -237,10 +236,7 @@ class EncodecWrapper(AbsEncoder):
 
 
 encodec_24khz = ModelMeta(
-    loader=partial(
-        EncodecWrapper,
-        model_name="facebook/encodec_24khz",
-    ),
+    loader=EncodecWrapper,
     name="facebook/encodec_24khz",
     languages=["eng-Latn"],
     open_weights=True,
