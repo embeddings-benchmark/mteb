@@ -1,5 +1,4 @@
 import logging
-from collections import defaultdict
 from typing import TypedDict
 
 from datasets import (
@@ -182,13 +181,13 @@ class RetrievalDatasetLoader:
             )
         )
 
+        qrels_ds = qrels_ds.to_polars()
         # filter queries with no qrels
-        qrels_dict: dict[str, dict[str, int]] = defaultdict(dict)
+        qrels_dict = {
+            query_id[0]: dict(zip(group["corpus-id"], group["score"]))
+            for query_id, group in qrels_ds.group_by("query-id", maintain_order=False)
+        }
 
-        def qrels_dict_init(row):
-            qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])
-
-        qrels_ds.map(qrels_dict_init, desc="Creating qrels dict")
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
         return qrels_dict
 
@@ -208,8 +207,12 @@ class RetrievalDatasetLoader:
             )
         ).select_columns(["query-id", "corpus-ids"])
 
-        top_ranked_dict = {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked_ds}
-        logger.info(f"Top ranked loaded: {len(top_ranked_ds) if top_ranked_ds else 0}")
+        top_ranked_ds = top_ranked_ds.to_polars()
+
+        queries = top_ranked_ds["query-id"].to_list()
+        corpus_lists = top_ranked_ds["corpus-ids"].to_list()
+        top_ranked_dict = dict(zip(queries, corpus_lists))
+        logger.info(f"Top ranked loaded: {len(top_ranked_ds)}")
         return top_ranked_dict
 
     def _load_instructions(self) -> InstructionDatasetType:
