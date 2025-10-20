@@ -1,4 +1,7 @@
-<h1 align="center">Massive Text Embedding Benchmark</h1>
+<h1 align="center">
+  <img src="docs/images/logos/mteb_logo/dots-icon.png" alt="MTEB" width="40" style="vertical-align: middle; margin-right: 10px;"/> MTEB
+</h1>
+<h2 align="center">Multimodal toolbox for evaluating embeddings and retrieval systems</h2>
 
 <p align="center">
     <a href="https://github.com/embeddings-benchmark/mteb/releases">
