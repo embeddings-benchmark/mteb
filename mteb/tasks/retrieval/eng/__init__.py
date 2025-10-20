@@ -177,6 +177,7 @@ from .temp_reason_l3_pure_retrieval import TempReasonL3Pure
 from .topi_ocqa_retrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
 from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
+from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .vidore_bench_retrieval import (
     VidoreArxivQARetrieval,
@@ -208,6 +209,8 @@ __all__ = [
     "SCIDOCS",
     "SIQA",
     "TRECCOVID",
+    "TRECDL2019",
+    "TRECDL2020",
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
