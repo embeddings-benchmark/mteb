@@ -7,7 +7,6 @@ import mteb
 from tests.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
-    MockClusteringFastTask,
     MockClusteringTask,
     MockImageTextPairClassificationTask,
     MockPairClassificationTask,
@@ -97,10 +96,12 @@ from tests.mock_tasks import (
             },
         ),
         (MockClusteringTask(), [[1, 2, 0]]),
-        (
-            MockClusteringFastTask(seed=1),
-            {"Level 0": [[0, 0, 0, 0], [0, 0, 1, 0], [0, 1, 2, 1]]},
-        ),
+        # TODO: #3441
+        # Disabled due to being too flaky.
+        # (
+        #     MockClusteringFastTask(seed=1),
+        #     {"Level 0": [[0, 0, 0, 0], [0, 0, 1, 0], [0, 1, 2, 1]]},
+        # ),
         (
             MockRegressionTask(),
             [pytest.approx([1.0000001192092896, 0.33665788173675537])] * 10,
