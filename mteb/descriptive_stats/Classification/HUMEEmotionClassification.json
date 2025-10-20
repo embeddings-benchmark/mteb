@@ -1,0 +1,78 @@
+{
+    "test": {
+        "num_samples": 48,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 4333,
+            "min_text_length": 18,
+            "average_text_length": 90.27083333333333,
+            "max_text_length": 261,
+            "unique_texts": 48
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "5": {
+                    "count": 8
+                },
+                "2": {
+                    "count": 8
+                },
+                "4": {
+                    "count": 8
+                },
+                "1": {
+                    "count": 8
+                },
+                "3": {
+                    "count": 8
+                },
+                "0": {
+                    "count": 8
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 16000,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 1549533,
+            "min_text_length": 7,
+            "average_text_length": 96.8458125,
+            "max_text_length": 300,
+            "unique_texts": 15969
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 6,
+            "labels": {
+                "0": {
+                    "count": 4666
+                },
+                "3": {
+                    "count": 2159
+                },
+                "2": {
+                    "count": 1304
+                },
+                "5": {
+                    "count": 572
+                },
+                "4": {
+                    "count": 1937
+                },
+                "1": {
+                    "count": 5362
+                }
+            }
+        }
+    }
+}

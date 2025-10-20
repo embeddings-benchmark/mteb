@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import logging
 import os
@@ -59,7 +57,7 @@ def load_leaderboard(
     )
 
     # Filter results for the selected benchmark
-    benchmark_results_filtered = benchmark.load_results(
+    benchmark_results_filtered = benchmark._load_results(
         base_results=benchmark_results
     ).join_revisions()
 

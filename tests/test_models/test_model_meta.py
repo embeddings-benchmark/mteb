@@ -1,37 +1,14 @@
-from __future__ import annotations
-
 import pytest
 
 import mteb
-from mteb import ModelMeta
-
-
-@pytest.mark.parametrize(
-    ("model_name", "expected_memory"),
-    [
-        ("intfloat/e5-mistral-7b-instruct", 13563),  # multiple safetensors
-        ("NovaSearch/jasper_en_vision_language_v1", 3802),  # bf16
-        ("intfloat/multilingual-e5-small", 449),  # safetensors
-        ("BAAI/bge-m3", 2167),  # pytorch_model.bin
-    ],
-)
-def test_model_memory_usage(model_name: str, expected_memory: int | None):
-    meta = mteb.get_model_meta(model_name)
-    assert meta.memory_usage_mb is not None
-    used_memory = round(meta.memory_usage_mb)
-    assert used_memory == expected_memory
-
-
-def test_model_memory_usage_api_model():
-    meta = mteb.get_model_meta("openai/text-embedding-3-large")
-    assert meta.memory_usage_mb is None
+from mteb.models.model_meta import ModelMeta
 
 
 @pytest.mark.parametrize(
     "training_datasets",
     [
-        {"Touche2020": []},  # parent task
-        {"Touche2020-NL": []},  # child task
+        {"Touche2020"},  # parent task
+        {"Touche2020-NL"},  # child task
     ],
 )
 def test_model_similar_tasks(training_datasets):
@@ -57,16 +34,25 @@ def test_model_similar_tasks(training_datasets):
         adapted_from=None,
         superseded_by=None,
     )
-    expected = [
-        "NanoTouche2020Retrieval",
-        "Touche2020",
-        "Touche2020-Fa",
-        "Touche2020-Fa.v2",
-        "Touche2020-NL",
-        "Touche2020-VN",
-        "Touche2020Retrieval.v3",
-    ]
-    assert sorted(dummy_model_meta.get_training_datasets().keys()) == expected
+    expected = sorted(
+        [
+            "NanoTouche2020Retrieval",
+            "Touche2020",
+            "Touche2020-Fa",
+            "Touche2020-Fa.v2",
+            "Touche2020-NL",
+            "Touche2020-VN",
+            "Touche2020-PL",
+            "Touche2020Retrieval.v3",
+        ]
+    )
+    assert sorted(dummy_model_meta.get_training_datasets()) == expected
+
+
+def test_similar_tasks_superseded_by():
+    """Banking77Classification in model training data, but Banking77Classification.v2 version not"""
+    model_meta = mteb.get_model_meta("BAAI/bge-multilingual-gemma2")
+    assert "Banking77Classification.v2" in model_meta.get_training_datasets()
 
 
 def test_model_name_without_prefix():
@@ -101,3 +87,30 @@ def test_model_training_dataset_adapted():
     # MIRACLRetrieval not in training_datasets of deepvk/USER-bge-m3, but in
     # training_datasets of BAAI/bge-m3
     assert "MIRACLRetrieval" in model_meta.get_training_datasets()
+
+
+@pytest.mark.parametrize(
+    ("model_name", "expected_memory"),
+    [
+        ("intfloat/e5-mistral-7b-instruct", 13563),  # multiple safetensors
+        ("NovaSearch/jasper_en_vision_language_v1", 3802),  # bf16
+        ("intfloat/multilingual-e5-small", 449),  # safetensors
+        ("BAAI/bge-m3", 2167),  # pytorch_model.bin
+    ],
+)
+def test_model_memory_usage(model_name: str, expected_memory: int | None):
+    meta = mteb.get_model_meta(model_name)
+    assert meta.memory_usage_mb is not None
+    used_memory = round(meta.memory_usage_mb)
+    assert used_memory == expected_memory
+
+
+def test_model_memory_usage_api_model():
+    meta = mteb.get_model_meta("openai/text-embedding-3-large")
+    assert meta.memory_usage_mb is None
+
+
+@pytest.mark.parametrize("model_meta", mteb.get_model_metas())
+def test_check_model_name_and_revision(model_meta: ModelMeta):
+    assert model_meta.name is not None
+    assert model_meta.revision is not None

@@ -1,0 +1,92 @@
+{
+    "validation": {
+        "num_samples": 2000,
+        "number_of_characters": 190695,
+        "number_texts_intersect_with_train": 5,
+        "min_text_length": 11,
+        "average_text_length": 95.3475,
+        "max_text_length": 295,
+        "unique_text": 1998,
+        "unique_labels": 6,
+        "labels": {
+            "0": {
+                "count": 550
+            },
+            "2": {
+                "count": 178
+            },
+            "3": {
+                "count": 275
+            },
+            "1": {
+                "count": 704
+            },
+            "4": {
+                "count": 212
+            },
+            "5": {
+                "count": 81
+            }
+        }
+    },
+    "test": {
+        "num_samples": 2000,
+        "number_of_characters": 193173,
+        "number_texts_intersect_with_train": 11,
+        "min_text_length": 14,
+        "average_text_length": 96.5865,
+        "max_text_length": 296,
+        "unique_text": 2000,
+        "unique_labels": 6,
+        "labels": {
+            "0": {
+                "count": 581
+            },
+            "1": {
+                "count": 695
+            },
+            "4": {
+                "count": 224
+            },
+            "3": {
+                "count": 275
+            },
+            "2": {
+                "count": 159
+            },
+            "5": {
+                "count": 66
+            }
+        }
+    },
+    "train": {
+        "num_samples": 16000,
+        "number_of_characters": 1549533,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 7,
+        "average_text_length": 96.8458125,
+        "max_text_length": 300,
+        "unique_text": 15969,
+        "unique_labels": 6,
+        "labels": {
+            "0": {
+                "count": 4666
+            },
+            "3": {
+                "count": 2159
+            },
+            "2": {
+                "count": 1304
+            },
+            "5": {
+                "count": 572
+            },
+            "4": {
+                "count": 1937
+            },
+            "1": {
+                "count": 5362
+            }
+        }
+    }
+}

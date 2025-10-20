@@ -2,21 +2,33 @@
     "test": {
         "num_samples": 51534,
         "number_of_characters": 8659940,
-        "min_sentence1_length": 24,
-        "avg_sentence1_length": 79.48919160166103,
-        "max_sentence1_length": 126,
-        "unique_sentence1": 4329,
-        "min_sentence2_length": 6,
-        "avg_sentence2_length": 88.5540419916948,
-        "max_sentence2_length": 608,
-        "unique_sentence2": 41304,
-        "unique_labels": 2,
-        "labels": {
-            "0": {
-                "count": 38546
-            },
-            "1": {
-                "count": 12988
+        "unique_pairs": 44352,
+        "text1_statistics": {
+            "total_text_length": 4096396,
+            "min_text_length": 24,
+            "average_text_length": 79.48919160166103,
+            "max_text_length": 126,
+            "unique_texts": 4329
+        },
+        "text2_statistics": {
+            "total_text_length": 4563544,
+            "min_text_length": 6,
+            "average_text_length": 88.5540419916948,
+            "max_text_length": 608,
+            "unique_texts": 41304
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 38546
+                },
+                "1": {
+                    "count": 12988
+                }
             }
         }
     }

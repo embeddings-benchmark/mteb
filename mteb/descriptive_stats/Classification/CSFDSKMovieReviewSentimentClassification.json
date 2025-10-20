@@ -1,0 +1,62 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_of_characters": 763379,
+        "number_texts_intersect_with_train": 13,
+        "min_text_length": 3,
+        "average_text_length": 372.74365234375,
+        "max_text_length": 3640,
+        "unique_text": 2045,
+        "unique_labels": 6,
+        "labels": {
+            "5": {
+                "count": 364
+            },
+            "3": {
+                "count": 340
+            },
+            "1": {
+                "count": 346
+            },
+            "0": {
+                "count": 337
+            },
+            "2": {
+                "count": 333
+            },
+            "4": {
+                "count": 328
+            }
+        }
+    },
+    "train": {
+        "num_samples": 25000,
+        "number_of_characters": 9188752,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 2,
+        "average_text_length": 367.55008,
+        "max_text_length": 11278,
+        "unique_text": 24905,
+        "unique_labels": 6,
+        "labels": {
+            "2": {
+                "count": 4208
+            },
+            "5": {
+                "count": 4166
+            },
+            "1": {
+                "count": 4125
+            },
+            "4": {
+                "count": 4163
+            },
+            "3": {
+                "count": 4168
+            },
+            "0": {
+                "count": 4170
+            }
+        }
+    }
+}

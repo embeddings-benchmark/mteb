@@ -1,0 +1,126 @@
+{
+    "test": {
+        "num_samples": 18084,
+        "text_statistics": {
+            "total_text_length": 12006204,
+            "min_text_length": 79,
+            "average_text_length": 663.9130723291307,
+            "max_text_length": 4878,
+            "unique_texts": 18084
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 35,
+            "labels": {
+                "Literatur & Unterhaltung": {
+                    "count": 10480
+                },
+                "Sachbuch": {
+                    "count": 2359
+                },
+                "Ratgeber": {
+                    "count": 1975
+                },
+                "Kinderbuch & Jugendbuch": {
+                    "count": 1461
+                },
+                "Ganzheitliches Bewusstsein": {
+                    "count": 799
+                },
+                "Architektur & Garten": {
+                    "count": 175
+                },
+                "K\u00fcnste": {
+                    "count": 175
+                },
+                "Glaube & Ethik": {
+                    "count": 608
+                },
+                "Science Fiction": {
+                    "count": 3
+                },
+                "Fantasy": {
+                    "count": 3
+                },
+                "Frauenunterhaltung": {
+                    "count": 4
+                },
+                "Romane & Erz\u00e4hlungen": {
+                    "count": 4
+                },
+                "Krimi & Thriller": {
+                    "count": 9
+                },
+                "Historische Romane": {
+                    "count": 2
+                },
+                "Literatur & Unterhaltung Satire": {
+                    "count": 1
+                },
+                "Klassiker & Lyrik": {
+                    "count": 1
+                },
+                "Lebenshilfe & Psychologie": {
+                    "count": 1
+                },
+                "Freizeit & Hobby": {
+                    "count": 2
+                },
+                "Essen & Trinken": {
+                    "count": 1
+                },
+                "Gesundheit & Ern\u00e4hrung": {
+                    "count": 1
+                },
+                "Sachbuch Philosophie": {
+                    "count": 1
+                },
+                "(Zeit-) Geschichte": {
+                    "count": 3
+                },
+                "Biographien & Autobiographien": {
+                    "count": 1
+                },
+                "Glaube und Grenzerfahrungen": {
+                    "count": 1
+                },
+                "Politik & Gesellschaft": {
+                    "count": 1
+                },
+                "Gemeindearbeit": {
+                    "count": 2
+                },
+                "Abenteuer": {
+                    "count": 1
+                },
+                "Krimis und Thriller": {
+                    "count": 2
+                },
+                "Liebe, Beziehung und Freundschaft": {
+                    "count": 1
+                },
+                "Fantasy und Science Fiction": {
+                    "count": 1
+                },
+                "Echtes Leben, Realistischer Roman": {
+                    "count": 1
+                },
+                "Energieheilung": {
+                    "count": 2
+                },
+                "Ganzheitlich Leben": {
+                    "count": 1
+                },
+                "Architektur": {
+                    "count": 1
+                },
+                "Handwerk Farbe": {
+                    "count": 1
+                }
+            }
+        }
+    }
+}

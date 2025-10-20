@@ -1,7 +1,5 @@
 """Example script for benchmarking all datasets constituting the MTEB English leaderboard & average scores"""
 
-from __future__ import annotations
-
 import logging
 
 from mteb import MTEB, get_model

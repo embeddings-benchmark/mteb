@@ -1,0 +1,198 @@
+{
+    "test": {
+        "num_samples": 924,
+        "number_texts_intersect_with_train": 0,
+        "text_statistics": {
+            "total_text_length": 700217,
+            "min_text_length": 113,
+            "average_text_length": 757.810606060606,
+            "max_text_length": 3918,
+            "unique_texts": 924
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "survey": {
+                    "count": 230
+                },
+                "article": {
+                    "count": 232
+                },
+                "conference_proceedings": {
+                    "count": 230
+                },
+                "short_message": {
+                    "count": 232
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "pub_type_ru": {
+                "num_samples": 462,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 348518,
+                    "min_text_length": 113,
+                    "average_text_length": 754.3679653679653,
+                    "max_text_length": 3540,
+                    "unique_texts": 462
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "survey": {
+                            "count": 115
+                        },
+                        "article": {
+                            "count": 116
+                        },
+                        "conference_proceedings": {
+                            "count": 115
+                        },
+                        "short_message": {
+                            "count": 116
+                        }
+                    }
+                }
+            },
+            "pub_type_en": {
+                "num_samples": 462,
+                "number_texts_intersect_with_train": 0,
+                "text_statistics": {
+                    "total_text_length": 351699,
+                    "min_text_length": 133,
+                    "average_text_length": 761.2532467532468,
+                    "max_text_length": 3918,
+                    "unique_texts": 462
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "survey": {
+                            "count": 115
+                        },
+                        "article": {
+                            "count": 116
+                        },
+                        "conference_proceedings": {
+                            "count": 115
+                        },
+                        "short_message": {
+                            "count": 116
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 8300,
+        "number_texts_intersect_with_train": null,
+        "text_statistics": {
+            "total_text_length": 6280736,
+            "min_text_length": 84,
+            "average_text_length": 756.7151807228915,
+            "max_text_length": 11576,
+            "unique_texts": 8300
+        },
+        "image_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 4,
+            "labels": {
+                "article": {
+                    "count": 2074
+                },
+                "survey": {
+                    "count": 2076
+                },
+                "conference_proceedings": {
+                    "count": 2076
+                },
+                "short_message": {
+                    "count": 2074
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "pub_type_ru": {
+                "num_samples": 4150,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 3089334,
+                    "min_text_length": 86,
+                    "average_text_length": 744.4178313253012,
+                    "max_text_length": 4984,
+                    "unique_texts": 4150
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "article": {
+                            "count": 1037
+                        },
+                        "survey": {
+                            "count": 1038
+                        },
+                        "conference_proceedings": {
+                            "count": 1038
+                        },
+                        "short_message": {
+                            "count": 1037
+                        }
+                    }
+                }
+            },
+            "pub_type_en": {
+                "num_samples": 4150,
+                "number_texts_intersect_with_train": null,
+                "text_statistics": {
+                    "total_text_length": 3191402,
+                    "min_text_length": 84,
+                    "average_text_length": 769.012530120482,
+                    "max_text_length": 11576,
+                    "unique_texts": 4150
+                },
+                "image_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 4,
+                    "labels": {
+                        "article": {
+                            "count": 1037
+                        },
+                        "survey": {
+                            "count": 1038
+                        },
+                        "conference_proceedings": {
+                            "count": 1038
+                        },
+                        "short_message": {
+                            "count": 1037
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from datasets import create_repo, load_dataset
 
 repo_id = "mteb/xnli2.0-multi-pair"
