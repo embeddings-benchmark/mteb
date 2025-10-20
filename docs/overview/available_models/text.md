@@ -1311,16 +1311,6 @@
 
 
 
-####  [`Youtu-RAG/CoDi-Embedding-V1`](https://huggingface.co/Youtu-RAG/CoDi-Embedding-V1)
-
- **License:** apache-2.0
-
-
-| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
-|-------|-------|-------|-------|-------|-------|
-| 4.1K | 2.3K | 2.7B | not specified | 2025-08-20 | zho-Hans |
-
-
 ####  [`ai-forever/FRIDA`](https://huggingface.co/ai-forever/FRIDA)
 
  **License:** mit
@@ -2169,6 +2159,16 @@
 | Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
 |-------|-------|-------|-------|-------|-------|
 | 32.8K | 4.1K | 7.8B | 14.6 GB | 2024-09-09 | eng-Latn |
+
+
+####  [`nvidia/llama-embed-nemotron-8b`](https://huggingface.co/nvidia/llama-embed-nemotron-8b)
+
+ **License:** https://huggingface.co/nvidia/llama-embed-nemotron-8b/blob/main/LICENSE
+
+
+| Max Tokens | Embedding dimension | Parameters | Required Memory (Mb) | Release date | Languages |
+|-------|-------|-------|-------|-------|-------|
+| 32.8K | 4.1K | 7.5B | 28.0 GB | 2025-10-23 | afr-Latn, amh-Ethi, ara-Arab, arq-Arab, ary-Arab, ... (66) |
 
 
 ####  [`opensearch-project/opensearch-neural-sparse-encoding-doc-v1`](https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-doc-v1)

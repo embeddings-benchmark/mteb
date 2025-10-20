@@ -74,7 +74,7 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 
 :::mteb.abstasks.text.bitext_mining.AbsTaskBitextMining
 
-:::mteb.abstasks.text.pair_classification.AbsTaskPairClassification
+:::mteb.abstasks.pair_classification.AbsTaskPairClassification
 
 :::mteb.abstasks.text.summarization.AbsTaskSummarization
 

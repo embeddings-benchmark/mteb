@@ -77,7 +77,7 @@ A translated dataset from AskUbuntu Question Dataset - Questions from AskUbuntu 
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
-**Dataset:** [`GreenNode/askubuntudupquestions-reranking-vn`](https://huggingface.co/datasets/GreenNode/askubuntudupquestions-reranking-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/taolei87/askubuntu)
+**Dataset:** [`mteb/AskUbuntuDupQuestions-VN`](https://huggingface.co/datasets/mteb/AskUbuntuDupQuestions-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://github.com/taolei87/askubuntu)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -646,18 +646,6 @@ Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Re
     ```bibtex
     
     @inproceedings{wu-etal-2020-mind,
-      abstract = {News recommendation is an important technique for personalized news
-    service. Compared with product and movie recommendations which have been comprehensively studied,
-    the research on news recommendation is much more limited, mainly due to the lack of a high-quality benchmark
-    dataset. In this paper, we present a large-scale dataset named MIND for news recommendation. Constructed from
-    the user click logs of Microsoft News, MIND contains 1 million users and more than 160k English news
-    articles, each of which has rich textual content such as title, abstract and body. We demonstrate MIND a good
-    testbed for news recommendation through a comparative study of several state-of-the-art news recommendation
-    methods which are originally developed on different proprietary datasets. Our results show the performance of
-    news recommendation highly relies on the quality of news content understanding and user interest modeling.
-    Many natural language processing techniques such as effective text representation methods and pre-trained
-    language models can effectively improve the performance of news recommendation. The MIND dataset will be
-    available at https://msnews.github.io.},
       address = {Online},
       author = {Wu, Fangzhao  and Qiao, Ying  and Chen, Jiun-Hung  and Wu, Chuhan  and Qi,
     Tao  and Lian, Jianxun  and Liu, Danyang  and Xie, Xing  and Gao, Jianfeng  and Wu, Winnie  and Zhou, Ming},
@@ -945,7 +933,6 @@ Ranking of related scientific papers based on their title.
     ```bibtex
     
     @inproceedings{cohan-etal-2020-specter,
-      abstract = {Representation learning is a critical ingredient for natural language processing systems. Recent Transformer language models like BERT learn powerful textual representations, but these models are targeted towards token- and sentence-level training objectives and do not leverage information on inter-document relatedness, which limits their document-level representation power. For applications on scientific documents, such as classification and recommendation, accurate embeddings of documents are a necessity. We propose SPECTER, a new method to generate document-level embedding of scientific papers based on pretraining a Transformer language model on a powerful signal of document-level relatedness: the citation graph. Unlike existing pretrained language models, Specter can be easily applied to downstream applications without task-specific fine-tuning. Additionally, to encourage further research on document-level models, we introduce SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. We show that Specter outperforms a variety of competitive baselines on the benchmark.},
       address = {Online},
       author = {Cohan, Arman  and
     Feldman, Sergey  and
@@ -979,7 +966,7 @@ A translated dataset from Ranking of related scientific papers based on their ti
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
-**Dataset:** [`GreenNode/scidocs-reranking-vn`](https://huggingface.co/datasets/GreenNode/scidocs-reranking-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/scidocs)
+**Dataset:** [`mteb/SciDocsRR-VN`](https://huggingface.co/datasets/mteb/SciDocsRR-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://allenai.org/data/scidocs)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|
@@ -1045,7 +1032,7 @@ A translated dataset from Stack Overflow Duplicate Questions Task for questions 
             - Applies advanced embedding models to filter the translations.
             - Use LLM-as-a-judge to scoring the quality of the samples base on multiple criteria.
 
-**Dataset:** [`GreenNode/stackoverflowdupquestions-reranking-vn`](https://huggingface.co/datasets/GreenNode/stackoverflowdupquestions-reranking-vn) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf)
+**Dataset:** [`mteb/StackOverflowDupQuestions-VN`](https://huggingface.co/datasets/mteb/StackOverflowDupQuestions-VN) • **License:** cc-by-sa-4.0 • [Learn more →](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf)
 
 | Task category | Score | Languages | Domains | Annotations Creators | Sample Creation |
 |-------|-------|-------|-------|-------|-------|

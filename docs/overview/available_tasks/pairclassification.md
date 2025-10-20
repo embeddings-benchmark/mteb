@@ -116,7 +116,6 @@ Compositional Distributional Semantics Corpus for textual entailment.
     ```bibtex
     
     @inproceedings{wroblewska-krasnowska-kieras-2017-polish,
-      abstract = {The paper presents a procedure of building an evaluation dataset. for the validation of compositional distributional semantics models estimated for languages other than English. The procedure generally builds on steps designed to assemble the SICK corpus, which contains pairs of English sentences annotated for semantic relatedness and entailment, because we aim at building a comparable dataset. However, the implementation of particular building steps significantly differs from the original SICK design assumptions, which is caused by both lack of necessary extraneous resources for an investigated language and the need for language-specific transformation rules. The designed procedure is verified on Polish, a fusional language with a relatively free word order, and contributes to building a Polish evaluation dataset. The resource consists of 10K sentence pairs which are human-annotated for semantic relatedness and entailment. The dataset may be used for the evaluation of compositional distributional semantics models of Polish.},
       address = {Vancouver, Canada},
       author = {Wr{\'o}blewska, Alina  and
     Krasnowska-Kiera{\'s}, Katarzyna},
@@ -320,7 +319,6 @@ A dataset to identify False Friends / false cognates between English and German.
     ```bibtex
     
     @misc{Chibb_2022,
-      abstract = {{This paper explores the robustness of multilingual language models against false friends. False friends are words that sound or are written the same in two different languages but have different meaning. Generally, it is argued that multilingual models, such as XLM-RoBERTA, can outperform monolingual models in most tasks on conventional datasets. However, false friends are not considered in these tests. In this paper, experiments with a false friends dataset show that multilingual models are not robust against false friends; they have problems creating monolingual representations and differentiating between meanings of similarly written words in different languages. An attempt of word-based finetuning multilingual models on false friends pairs is promising, however the results do not generally solve the presented problem and still, monolingual models are more robust against false friends.}},
       author = {Chibb, Aaron},
       month = {Sep},
       title = {{German-English False Friends in Multilingual Transformer Models: An Evaluation on Robustness and Word-to-Word Fine-Tuning}},
@@ -600,7 +598,6 @@ Polish Summaries Corpus
     ```bibtex
     
     @inproceedings{ogrodniczuk-kopec-2014-polish,
-      abstract = {This article presents the Polish Summaries Corpus, a new resource created to support the development and evaluation of the tools for automated single-document summarization of Polish. The Corpus contains a large number of manual summaries of news articles, with many independently created summaries for a single text. Such approach is supposed to overcome the annotator bias, which is often described as a problem during the evaluation of the summarization algorithms against a single gold standard. There are several summarizers developed specifically for Polish language, but their in-depth evaluation and comparison was impossible without a large, manually created corpus. We present in detail the process of text selection, annotation process and the contents of the corpus, which includes both abstract free-word summaries, as well as extraction-based summaries created by selecting text spans from the original document. Finally, we describe how that resource could be used not only for the evaluation of the existing summarization tools, but also for studies on the human summarization process in Polish language.},
       address = {Reykjavik, Iceland},
       author = {Ogrodniczuk, Maciej  and
     Kope{\'c}, Mateusz},
@@ -1050,7 +1047,6 @@ Polish version of SICK dataset for textual entailment.
     ```bibtex
     
     @inproceedings{dadas-etal-2020-evaluation,
-      abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
       address = {Marseille, France},
       author = {Dadas, Slawomir  and
     Pere{\l}kiewicz, Micha{\l}  and
@@ -1103,7 +1099,6 @@ Duplicate questions from the Sprint community.
     ```bibtex
     
     @inproceedings{shah-etal-2018-adversarial,
-      abstract = {We address the problem of detecting duplicate questions in forums, which is an important step towards automating the process of answering new questions. As finding and annotating such potential duplicates manually is very tedious and costly, automatic methods based on machine learning are a viable alternative. However, many forums do not have annotated data, i.e., questions labeled by experts as duplicates, and thus a promising solution is to use domain adaptation from another forum that has such annotations. Here we focus on adversarial domain adaptation, deriving important findings about when it performs well and what properties of the domains are important in this regard. Our experiments with StackExchange data show an average improvement of 5.6{\%} over the best baseline across multiple pairs of domains.},
       address = {Brussels, Belgium},
       author = {Shah, Darsh  and
     Lei, Tao  and
@@ -1401,7 +1396,6 @@ Paraphrase-Pairs of Tweets.
     ```bibtex
     
     @inproceedings{lan-etal-2017-continuously,
-      abstract = {A major challenge in paraphrase research is the lack of parallel corpora. In this paper, we present a new method to collect large-scale sentential paraphrases from Twitter by linking tweets through shared URLs. The main advantage of our method is its simplicity, as it gets rid of the classifier or human in the loop needed to select data before annotation and subsequent application of paraphrase identification algorithms in the previous work. We present the largest human-labeled paraphrase corpus to date of 51,524 sentence pairs and the first cross-domain benchmarking for automatic paraphrase identification. In addition, we show that more than 30,000 new sentential paraphrases can be easily and continuously captured every month at {\textasciitilde}70{\%} precision, and demonstrate their utility for downstream NLP tasks through phrasal paraphrase extraction. We make our code and data freely available.},
       address = {Copenhagen, Denmark},
       author = {Lan, Wuwei  and
     Qiu, Siyu  and
