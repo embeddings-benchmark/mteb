@@ -32,7 +32,6 @@ def _load_xflickrco_data(
         lang_corpus = lang_data.map(
             lambda x: {
                 "id": "corpus-" + x["id"],
-                "text": None,
                 "modality": "image",
                 "image": x["image"],
             },
@@ -45,7 +44,6 @@ def _load_xflickrco_data(
                 "id": "query-" + x["id"],
                 "text": x["sentences"],
                 "modality": "text",
-                "image": None,
             },
             remove_columns=["sentences"],
         )

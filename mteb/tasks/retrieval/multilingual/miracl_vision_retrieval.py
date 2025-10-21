@@ -65,9 +65,7 @@ def _load_miracl_data(
         images_data = images_data.map(
             lambda x: {
                 "id": imgid2docid[str(x["file_name"])],
-                # "modality": "text",
                 "modality": "image",
-                "text": None,
             },
             remove_columns=["file_name"],
         )
@@ -86,7 +84,6 @@ def _load_miracl_data(
                 "id": str(x["_id"]),
                 "text": x["text"],
                 "modality": "text",
-                "image": None,
             },
             remove_columns=["_id"],
         )

@@ -61,7 +61,6 @@ def _load_xm3600_data(
         lang_corpus = lang_data.map(
             lambda x: {
                 "id": "corpus-" + x["image_id"],
-                "text": None,
                 "modality": "image",
                 "image": x["image"],
             },
@@ -91,7 +90,6 @@ def _load_xm3600_data(
                         "id": query_id,
                         "text": caption,
                         "modality": "text",
-                        "image": None,
                     }
                 )
                 if query_id not in relevant_docs[lang][split]:

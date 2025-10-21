@@ -37,7 +37,6 @@ def _load_data(
             lambda x: {
                 "id": f"query-{split}-{x['query-id']}",
                 "text": x["query"],
-                "image": None,
                 "modality": "text",
             },
             remove_columns=["query-id", "query"],
@@ -52,7 +51,6 @@ def _load_data(
         corpus_ds = corpus_ds.map(
             lambda x: {
                 "id": f"corpus-{split}-{x['corpus-id']}",
-                "text": None,
                 "modality": "image",
             },
             remove_columns=["corpus-id"],
