@@ -6,10 +6,10 @@ from typing import Any
 import sklearn
 import sklearn.cluster
 from datasets import Audio
-from distlib.markers import Evaluator
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
+from mteb._evaluators import Evaluator
 from mteb.models.models_protocols import EncoderProtocol
 
 logger = logging.getLogger(__name__)

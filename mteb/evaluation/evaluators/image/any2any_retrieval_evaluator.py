@@ -13,10 +13,10 @@ import numpy as np
 import pytrec_eval
 import torch
 from datasets import Dataset
-from distlib.markers import Evaluator
 from PIL import Image
 from torch.utils.data import DataLoader
 
+from mteb._evaluators import Evaluator
 from mteb.models.models_protocols import EncoderProtocol
 
 from mteb._evaluators._download import download
