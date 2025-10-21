@@ -36,9 +36,6 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         superseded_by="FinancialPhrasebankClassification.v2",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sentence", "text")
-
 
 class FinancialPhrasebankClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
