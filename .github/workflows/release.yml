@@ -57,7 +57,7 @@ jobs:
           bump="none"
           if [[ $low == breaking:* ]]; then
             bump="major"
-          elif [[ $low == feat:* ]]; then
+          elif [[ $low == feat:* ]] || [[ $low == benchmark:* ]]; then
             bump="minor"
           elif [[ $low == fix:* ]] || [[ $low == dataset:* ]] || [[ $low == model:* ]]; then
             bump="patch"
@@ -98,7 +98,6 @@ jobs:
 
           # push changes and tag safely
           git push origin HEAD:main
-          git push origin "$tag"
 
       - name: Create GitHub Release
         env:
