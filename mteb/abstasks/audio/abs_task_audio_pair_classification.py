@@ -60,7 +60,7 @@ class AbsTaskAudioPairClassification(AbsTask):
         self._add_main_score(scores)
         return scores
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> None:
         pass
