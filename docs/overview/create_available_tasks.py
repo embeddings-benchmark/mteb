@@ -119,6 +119,8 @@ def format_task_entry(task: mteb.AbsTask) -> str:
 
 
 def main(folder: Path) -> None:
+    folder.mkdir(exist_ok=True)
+
     tasks = mteb.get_tasks(exclude_superseded=False, exclude_aggregate=True)
     task_types = sorted({task.metadata.type for task in tasks})
 
@@ -142,5 +144,6 @@ def main(folder: Path) -> None:
 
 
 if __name__ == "__main__":
-    root = Path(__file__).parent / ".." / ".."
-    main(root / "docs" / "overview" / "available_tasks")
+    root = Path(__file__).parent
+    tasks_path = root / "available_tasks"
+    main(tasks_path)
