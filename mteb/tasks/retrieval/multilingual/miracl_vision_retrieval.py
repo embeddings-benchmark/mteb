@@ -30,7 +30,7 @@ _LANGUAGES = {
 def _load_miracl_data(
     path: str,
     langs: list,
-    splits: str,
+    splits: list[str],
     revision: str | None = None,
 ):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
@@ -108,10 +108,6 @@ def _load_miracl_data(
                 relevant_docs[lang][split][query_id] = {}
             relevant_docs[lang][split][query_id][doc_id] = score
 
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
     return corpus, queries, relevant_docs
 
 
@@ -156,7 +152,7 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits[0],
+            splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
             revision=self.metadata.dataset["revision"],
         )
