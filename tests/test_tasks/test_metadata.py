@@ -226,13 +226,11 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
     )
 
     # --- Test is descriptive stats are present for all datasets ---
-    if "image" in task.metadata.modalities:
-        return
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
         return
 
-    # TODO add descriptive_stat for CodeRAGStackoverflowPosts. Required > 128GB of RAM
-    if task.metadata.name in ["CodeRAGStackoverflowPosts"]:
+    # TODO https://github.com/embeddings-benchmark/mteb/issues/3279
+    if task.metadata.name in ["MIRACLVisionRetrieval", "VDRMultilingualRetrieval"]:
         return
 
     assert task.metadata.descriptive_stats is not None, (
