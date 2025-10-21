@@ -1,7 +1,7 @@
 import pytest
-from mteb.abstastks import AbsTask, EncoderProtocol
 
 import mteb
+from mteb.abstasks import AbsTask, EncoderProtocol
 from mteb.models import SearchEncoderWrapper
 from tests.mock_tasks import (
     MockBitextMiningTask,

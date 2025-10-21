@@ -170,9 +170,9 @@ Music Information Retrieval Conference},
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_jam_alt_data(
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
-            dataset_args=self.metadata_dict["dataset"],
+            dataset_args=self.metadata.dataset,
             query_column="audio",
             corpus_column="audio",
             qrels_column="artist",
@@ -228,9 +228,9 @@ Music Information Retrieval Conference},
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_jam_alt_data(
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
-            dataset_args=self.metadata_dict["dataset"],
+            dataset_args=self.metadata.dataset,
             query_column="text",
             corpus_column="audio",
             qrels_column="text",
@@ -288,9 +288,9 @@ Music Information Retrieval Conference},
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_jam_alt_data(
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
-            dataset_args=self.metadata_dict["dataset"],
+            dataset_args=self.metadata.dataset,
             query_column="audio",
             corpus_column="text",
             qrels_column="text",

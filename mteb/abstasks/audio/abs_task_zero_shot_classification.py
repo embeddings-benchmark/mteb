@@ -17,7 +17,7 @@ class AbsTaskAudioZeroshotClassification(AbsTask):
     """Abstract class for ZeroshotClassification tasks
     The similarity between audio and candidate text prompts, such as as an audio wav of a dog barking and candidate text prompts like "Sound of a dog barking" or "Sound of a airplane".
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         image: list of Image.Image
         labels: list of int
     """

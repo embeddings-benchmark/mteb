@@ -66,7 +66,7 @@ Xavier Serra},
         self.dataset = {}
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
-                name=lang, **self.metadata_dict["dataset"]
+                name=lang, **self.metadata.dataset
             )
 
         self.dataset_transform()

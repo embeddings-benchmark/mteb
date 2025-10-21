@@ -21,7 +21,7 @@ class AbsTaskAudioClustering(AbsTask):
     """Abstract class for AudioClustering tasks that is based on the AbsTaskClusteringFast class.
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         audio: datasets.Audio
         label: int
     """

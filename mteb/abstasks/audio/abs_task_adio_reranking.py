@@ -4,7 +4,7 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.abstastks import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.evaluation.evaluators.audio.audio_reranking_evaluator import (
     AudioRerankingEvaluator,
 )
@@ -62,7 +62,7 @@ class AudioRerankingDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskAudioReranking(AbsTask):
     """Abstract class for audio re-ranking experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         query: Audio object with 'array' and 'sampling_rate' fields
         positive: list of Audio objects (relevant audio samples)
         negative: list of Audio objects (irrelevant audio samples)

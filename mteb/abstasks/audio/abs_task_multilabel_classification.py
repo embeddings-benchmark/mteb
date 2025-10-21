@@ -13,8 +13,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import HFSubset
-from mteb.abstastks import AbsTask
 from mteb.models.models_protocols import AudioEncoder
 from mteb.types import ScoresDict
 from mteb.types.statistics import DescriptiveStatistics
@@ -84,7 +84,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
     """Abstract class for audio multioutput classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         audio: List[datasets.Audio]
         labels: list[Hashable]
 

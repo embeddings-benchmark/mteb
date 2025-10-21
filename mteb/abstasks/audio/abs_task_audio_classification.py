@@ -20,7 +20,7 @@ class AbsTaskAudioClassification(AbsTask):
     """Abstract class for audio classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
         audio: datasets.Audio
         label: int
@@ -43,16 +43,8 @@ class AbsTaskAudioClassification(AbsTask):
         self.method = method
 
         # Bootstrap parameters
-        self.n_experiments: int = (  # type: ignore
-            n_experiments
-            if n_experiments is not None
-            else self.metadata_dict.get("n_experiments", 5)
-        )
-        self.samples_per_label: int = (  # type: ignore
-            samples_per_label
-            if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 16)
-        )
+        self.n_experiments: int = 5
+        self.samples_per_label: int = 16
 
         # kNN parameters
         self.k = k
