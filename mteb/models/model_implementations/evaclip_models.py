@@ -11,6 +11,13 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import Array, BatchedInput, PromptType
 
+EVA_CLIP_CITATION = """@article{EVA-CLIP,
+      title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
+      author={Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue},
+      journal={arXiv preprint arXiv:2303.15389},
+      year={2023}
+}"""
+
 
 def evaclip_loader(model_name, **kwargs):
     try:
@@ -148,6 +155,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=training_datasets,
+    citation=EVA_CLIP_CITATION,
 )
 
 EVA02_CLIP_L_14 = ModelMeta(
@@ -170,6 +178,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=training_datasets,
+    citation=EVA_CLIP_CITATION,
 )
 
 EVA02_CLIP_bigE_14 = ModelMeta(
@@ -192,6 +201,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=laion_2b,
+    citation=EVA_CLIP_CITATION,
 )
 
 
@@ -215,4 +225,5 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=laion_2b,
+    citation=EVA_CLIP_CITATION,
 )

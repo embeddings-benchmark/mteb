@@ -12,6 +12,13 @@ from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
 
+HAKIM_CITATION = """@article{sarmadi2025hakim,
+      title={Hakim: Farsi Text Embedding Model},
+      author={Sarmadi, Mehran and Alikhani, Morteza and Zinvandi, Erfan and Pourbahman, Zahra},
+      journal={arXiv preprint arXiv:2505.08435},
+      year={2025}
+}"""
+
 MODEL_API_NAMES = {
     "hakim": "Hakim",
     "hakim-small": "Hakim_small",
@@ -396,6 +403,7 @@ hakim = ModelMeta(
         "SynPerSTS",
         "Query2Query",
     },
+    citation=HAKIM_CITATION,
 )
 
 
@@ -462,6 +470,7 @@ hakim_small = ModelMeta(
         "SynPerSTS",
         "Query2Query",
     },
+    citation=HAKIM_CITATION,
 )
 
 hakim_unsup = ModelMeta(
@@ -491,4 +500,5 @@ hakim_unsup = ModelMeta(
         "MSMARCO-Fa",
         "Query2Query",
     },
+    citation=HAKIM_CITATION,
 )
