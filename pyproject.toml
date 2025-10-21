@@ -18,14 +18,14 @@ maintainers = [
     { name = "Roman Solomatin", email = "risolomatin@gmail.com" },
     { name = "Isaac Chung", email = "chungisaac1217@gmail.com" },
 ]
-license = { file = "LICENSE" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 keywords = ["deep learning", "text embeddings", "embeddings", "multimodal", "benchmark", "retrieval", "information retrieval"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
