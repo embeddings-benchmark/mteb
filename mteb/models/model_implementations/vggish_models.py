@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -23,6 +22,7 @@ def vggish_loader(**kwargs):
         "google/vggish",
         "pip install 'mteb[torch-vggish-yamnet]'",
     )
+    import torchaudio
     from torch_vggish_yamnet import vggish
     from torch_vggish_yamnet.input_proc import WaveformToInput
 

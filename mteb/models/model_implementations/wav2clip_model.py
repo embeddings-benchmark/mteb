@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import CLIPModel, CLIPProcessor
@@ -42,6 +41,8 @@ class Wav2ClipZeroShotWrapper:
     def _handle_batch(
         self, batch: Array | Iterable[tuple[Array, str]]
     ) -> list[torch.Tensor]:
+        import torchaudio
+
         waveforms: list[torch.Tensor] = []
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
