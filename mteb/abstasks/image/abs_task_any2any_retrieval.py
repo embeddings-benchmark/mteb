@@ -17,7 +17,7 @@ from mteb.evaluation.evaluators.image.any2any_retrieval_evaluator import (
     Any2AnyRetrievalEvaluator,
 )
 from mteb.types import ScoresDict
-from mteb.types.statistics import DescriptiveStatistics
+from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -441,7 +441,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _calculate_metrics_from_split(
+    def _calculate_descriptive_statistics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> Any2AnyRetrievalDescriptiveStatistics:
         if hf_subset:
