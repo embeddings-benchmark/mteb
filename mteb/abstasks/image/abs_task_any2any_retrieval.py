@@ -275,9 +275,6 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     skip_first_result: bool = False
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def load_data(self, **kwargs):
         """Pass"""
         if self.data_loaded:
