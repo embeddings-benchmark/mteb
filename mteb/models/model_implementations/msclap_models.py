@@ -7,7 +7,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -68,6 +67,8 @@ class MSClapWrapper:
     def _handle_batch(
         self, batch: Array | Iterable[tuple[Array, str]]
     ) -> list[torch.Tensor]:
+        import torchaudio
+
         waveforms = []
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
@@ -135,6 +136,8 @@ class MSClapWrapper:
         return audio.squeeze()  # final shape [num_samples]
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
+        import torchaudio
+
         waveform, sample_rate = torchaudio.load(path)
         waveform = waveform.float()
 

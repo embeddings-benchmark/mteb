@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import WhisperModel, WhisperProcessor
@@ -50,6 +49,8 @@ class WhisperAudioWrapper(AbsEncoder):
     def _handle_batch(
         self, batch: Array | Iterable[tuple[Array, str]]
     ) -> list[torch.Tensor]:
+        import torchaudio
+
         waveforms = []
 
         if isinstance(batch, tuple):
@@ -87,6 +88,8 @@ class WhisperAudioWrapper(AbsEncoder):
         return audio.squeeze()
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
+        import torchaudio
+
         waveform, sample_rate = torchaudio.load(path)
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)

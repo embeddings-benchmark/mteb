@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -50,6 +49,8 @@ class MuQMuLanWrapper:
         self, batch: Array | Iterable[tuple[Array, str]]
     ) -> list[torch.Tensor]:
         """Handle a single batch of audio data."""
+        import torchaudio
+
         waveforms = []
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
@@ -103,6 +104,8 @@ class MuQMuLanWrapper:
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         """Load audio file and resample to target sampling rate."""
+        import torchaudio
+
         waveform, sample_rate = torchaudio.load(path)
         waveform = waveform.float()  # Ensure float32
 

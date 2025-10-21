@@ -3,7 +3,6 @@ from __future__ import annotations
 import io
 
 import torch
-import torchaudio
 
 
 class AudioDataset(torch.utils.data.Dataset):
@@ -19,6 +18,8 @@ class AudioDataset(torch.utils.data.Dataset):
         return len(self.dataset)
 
     def __getitem__(self, idx):
+        import torchaudio
+
         if self.is_raw_audio_list:
             # Handle raw list of audio objects
             audio = self.dataset[idx]

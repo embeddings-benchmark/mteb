@@ -14,7 +14,6 @@ from sklearn.metrics import (
     f1_score,
 )
 from torch.utils.data import DataLoader
-from torchaudio import transforms
 
 from mteb._evaluators import Evaluator
 from mteb.evaluation.evaluators.dataset_utils import AudioDataset, custom_collate_fn
@@ -23,6 +22,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_resample_transform(original_sample_rate: int, target_sample_rate: int):
+    from torchaudio import transforms
+
     return transforms.Resample(original_sample_rate, target_sample_rate)
 
 

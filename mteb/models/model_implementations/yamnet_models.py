@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -45,6 +44,8 @@ def yamnet_loader(**kwargs):
 
         def _resample_audio(self, audio, source_rate):
             """Resample audio to target sampling rate."""
+            import torchaudio
+
             if source_rate != self.sampling_rate:
                 resampler = torchaudio.transforms.Resample(
                     source_rate, self.sampling_rate
@@ -122,6 +123,8 @@ def yamnet_loader(**kwargs):
 
         def _load_audio_file(self, path):
             """Load and process audio file."""
+            import torchaudio
+
             waveform, sample_rate = torchaudio.load(path)
             waveform = self._resample_audio(waveform.squeeze().float(), sample_rate)
             return self._normalize_audio(waveform)

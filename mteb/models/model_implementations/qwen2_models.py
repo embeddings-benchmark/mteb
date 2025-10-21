@@ -6,7 +6,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
@@ -52,6 +51,8 @@ class Qwen2AudioWrapper(AbsEncoder):
         self, batch: Array | Iterable[tuple[Array, str]]
     ) -> list[torch.Tensor]:
         waveforms: list[torch.Tensor] = []
+        import torchaudio
+
         if isinstance(batch, tuple):
             for audio, _ in batch:
                 waveforms.append(self._convert_audio_from_numpy(audio))
@@ -90,6 +91,8 @@ class Qwen2AudioWrapper(AbsEncoder):
         return audio
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
+        import torchaudio
+
         waveform, sr = torchaudio.load(path)
         if waveform.ndim == 2:
             waveform = waveform.mean(dim=0)
