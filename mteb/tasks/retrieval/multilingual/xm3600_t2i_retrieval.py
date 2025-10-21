@@ -1,4 +1,4 @@
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, DatasetDict, Image, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -63,7 +63,7 @@ def _load_xm3600_data(
                 "id": "corpus-" + x["image_id"],
                 "text": None,
                 "modality": "image",
-                "image": x["image"]["bytes"],
+                "image": x["image"],
             },
             remove_columns=[
                 "captions",
@@ -73,6 +73,7 @@ def _load_xm3600_data(
                 "image_id",
             ],
         )
+        lang_corpus = lang_corpus.cast_column("image", Image())
 
         corpus[lang][split] = lang_corpus
 
