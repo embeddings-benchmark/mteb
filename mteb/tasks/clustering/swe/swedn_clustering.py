@@ -8,14 +8,14 @@ class SwednClustering(AbsTaskClusteringLegacy):
         name="SwednClustering",
         dataset={
             "path": "mteb/SwednClustering",
-            "revision": "7125017ead5797297f46e17b31bf78b56d12c2b2",
+            "revision": "45d2a99c3f1b6ee6189a6bb762ed74b7ef45dd9d",
         },
         description="The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.",
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Clustering",
         category="t2c",
         modalities=["text"],
-        eval_splits=["all"],
+        eval_splits=["test"],
         eval_langs=["swe-Latn"],
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess

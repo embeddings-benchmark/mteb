@@ -44,18 +44,6 @@ class KorHateClassification(AbsTaskClassification):
         superseded_by="KorHateClassification.v2",
     )
 
-    def dataset_transform(self):
-        keep_cols = ["comments", "hate"]
-        rename_dict = dict(zip(keep_cols, ["text", "label"]))
-        remove_cols = [
-            col for col in self.dataset["test"].column_names if col not in keep_cols
-        ]
-        self.dataset = self.dataset.rename_columns(rename_dict)
-        self.dataset = self.dataset.remove_columns(remove_cols)
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
-
 
 class KorHateClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
