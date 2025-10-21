@@ -47,6 +47,8 @@ def _load_xflickrco_data(
             },
             remove_columns=["sentences"],
         )
+        # None values
+        lang_queries = lang_queries.remove_columns(["image"])
 
         relevant_docs[lang][split] = {}
         for row in lang_data:
