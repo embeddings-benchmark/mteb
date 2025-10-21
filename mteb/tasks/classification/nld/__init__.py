@@ -2,13 +2,15 @@ from .dutch_book_review_sentiment_classification import (
     DutchBookReviewSentimentClassification,
     DutchBookReviewSentimentClassificationV2,
 )
-from .DutchColaClassification import DutchColaClassification
-from .DutchGovernmentBiasClassification import DutchGovernmentBiasClassification
-from .DutchNewsArticlesClassification import DutchNewsArticlesClassification
-from .DutchSarcasticHeadlinesClassification import DutchSarcasticHeadlinesClassification
-from .IconclassClassification import IconclassClassification
-from .OpenTenderClassification import OpenTenderClassification
-from .VaccinChatNLClassification import VaccinChatNLClassification
+from .dutch_cola_classification import DutchColaClassification
+from .dutch_government_bias_classification import DutchGovernmentBiasClassification
+from .dutch_news_articles_classification import DutchNewsArticlesClassification
+from .dutch_sarcastic_headlines_classification import (
+    DutchSarcasticHeadlinesClassification,
+)
+from .iconclass_classification import IconclassClassification
+from .open_tender_classification import OpenTenderClassification
+from .vaccin_chat_nl_classification import VaccinChatNLClassification
 
 __all__ = [
     "DutchBookReviewSentimentClassification",
