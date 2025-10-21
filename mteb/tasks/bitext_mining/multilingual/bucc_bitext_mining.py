@@ -21,7 +21,7 @@ class BUCCBitextMining(AbsTaskBitextMining):
         name="BUCC",
         dataset={
             "path": "mteb/BUCC",
-            "revision": "39f20d5ac4a82e59dbcecaabdd599b82cbefa666",
+            "revision": "414572247440f0ccacf7eb0bb70a31533a0e5443",
         },
         description="BUCC bitext mining dataset",
         reference="https://comparable.limsi.fr/bucc2018/bucc2018-task.html",
