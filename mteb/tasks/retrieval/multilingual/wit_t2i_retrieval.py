@@ -34,7 +34,6 @@ def _load_wit_data(path: str, langs: list, splits: str, revision: str | None = N
         lang_corpus = lang_data.map(
             lambda x: {
                 "id": "corpus-" + x["image_id"],
-                "text": None,
                 "modality": "image",
                 "image": x["image"],
             },
@@ -60,7 +59,6 @@ def _load_wit_data(path: str, langs: list, splits: str, revision: str | None = N
                         "id": query_id,
                         "text": caption,
                         "modality": "text",
-                        "image": None,
                     }
                 )
                 if query_id not in relevant_docs[lang][split]:

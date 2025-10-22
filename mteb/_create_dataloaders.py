@@ -277,6 +277,8 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
             # Leave the images as a list to avoid stacking errors.
             collated[key] = [item[key] for item in batch]
         else:
+            if any(item[key] is None for item in batch):
+                raise ValueError(f"Found None in batch for key '{key}'")
             collated[key] = default_collate([item[key] for item in batch])
     return collated
 
