@@ -491,6 +491,11 @@ class AbsTask(ABC):
                 if lang_scripts.contains_languages(langs):
                     subsets_to_keep.append(hf_subset)
 
+        if len(subsets_to_keep) == 0:
+            logger.warning(
+                "No matching languages found for the specified filters. The task will be empty."
+            )
+
         self.hf_subsets = subsets_to_keep
         return self
 
