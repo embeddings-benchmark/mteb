@@ -23,7 +23,6 @@ repos:
     rev: v1.38.1
     hooks:
     - id: typos
-      args: [--force-exclude]
 
   - repo: local
     hooks:
